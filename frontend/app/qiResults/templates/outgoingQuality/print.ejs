@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Outgoing quality</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      color: #000;
+      text-align: center;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      line-height: 1;
+      text-rendering: geometricPrecision;
+    }
+    .page {
+      position: relative;
+      width: 100%;
+    }
+    .page + .page {
+      page-break-before: always;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: left;
+    }
+    .date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 24px;
+      text-align: right;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+    #where-what {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 5px 5px;
+      border: 1px solid #ccc;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-left {
+      text-align: left;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .is-number {
+      font-family: Consolas, monospace;
+      text-align: right;
+    }
+    .overflow {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 310px;
+    }
+    .small {
+      font-weight: normal;
+      font-size: 12px;
+    }
+    #results {
+      margin-top: 10px;
+      display: flex;
+      text-align: left;
+    }
+    .result {
+      flex: 1 1 auto;
+      padding-right: 10px;
+      border-right: 1px solid #ccc;
+    }
+    .result:last-child {
+      padding-right: 0;
+      border-right: none;
+    }
+    .result + .result {
+      margin-left: 10px;
+    }
+    .props {
+      display: flex;
+      line-height: 1.2;
+    }
+    .props + .props {
+      margin-top: 8px;
+    }
+    .prop + .prop {
+      margin-left: 15px;
+    }
+    .prop-name {
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .prop-value {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .prop-value.small {
+      font-size: 10px;
+    }
+    ol {
+      list-style-position: inside;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="title"><%- t('BREADCRUMBS:reports:outgoingQuality') %></div>
+  <div class="date"><%- week %></div>
+  <div>
+    <h3><%- helpers.t('report:oql:title:ppm') %></h3>
+    <img src="data:image/png;base64,<%- charts.ppm %>" width="1031" height="250">
+    <table>
+      <thead>
+      <tr>
+        <th class="text-right"></th>
+        <% tables.ppm.forEach(function(d) { %>
+        <th class="text-center"><%- d.week %></th>
+        <% }) %>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th class="text-right"><%- helpers.t('report:oql:series:oqlTarget') %></th>
+        <% tables.ppm.forEach(function(d) { %>
+        <td class="is-number"><%- d.target %></td>
+        <% }) %>
+      </tr>
+      <tr>
+        <th class="text-right"><%- helpers.t('report:oql:series:oql') %></th>
+        <% tables.ppm.forEach(function(d) { %>
+        <td class="is-number"><%- d.oql %></td>
+        <% }) %>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="where-what">
+    <div>
+      <h3><%- helpers.t('report:oql:title:where') %></h3>
+      <img src="data:image/png;base64,<%- charts.where %>">
+      <table>
+        <thead>
+        <tr>
+          <th class="text-right"><%- helpers.t('report:oql:' + tables.where.property) %></th>
+          <% tables.where.weeks.forEach(function(week) { %>
+          <th class="text-center"><%- week %></th>
+          <% }) %>
+          <th class="text-center"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% tables.where.rows.forEach(function(row) { %>
+        <tr>
+          <th class="text-right">
+            <span class="overflow"><%= row.label %>: <span class="small"><%= row.title %></span></span>
+          </th>
+          <% row.data.forEach(function(d) { %>
+          <td class="is-number" style="width: 46px">
+            <% if (d.relative) { %>
+            <%- d.relative %>%
+            <% } %>
+          </td>
+          <% }) %>
+          <th class="is-number"><%- row.total.relative %>%</th>
+        </tr>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3><%- helpers.t('report:oql:title:what') %></h3>
+      <img src="data:image/png;base64,<%- charts.what %>">
+      <table>
+        <thead>
+        <tr>
+          <th class="text-right"><%- helpers.t('report:oql:' + tables.what.property) %></th>
+          <% tables.what.weeks.forEach(function(week) { %>
+          <th class="text-center"><%- week %></th>
+          <% }) %>
+          <th class="text-center"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% tables.what.rows.forEach(function(row) { %>
+        <tr>
+          <th class="text-right">
+            <span class="overflow"><%= row.label %>: <span class="small"><%= row.title %></span></span>
+          </th>
+          <% row.data.forEach(function(d) { %>
+          <td class="is-number" style="width: 46px">
+            <% if (d.relative) { %>
+            <%- d.relative %>%
+            <% } %>
+          </td>
+          <% }) %>
+          <th class="is-number"><%- row.total.relative %>%</th>
+        </tr>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% if (results.length) { %>
+<div class="page">
+  <div class="title"><%- t('BREADCRUMBS:reports:outgoingQuality') %></div>
+  <div class="date"><%- week %></div>
+  <h3><%- helpers.t('report:oql:title:results') %></h3>
+  <div id="results">
+    <% results.forEach(function(result) { %>
+    <div class="result">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:rid') %></div>
+          <div class="prop-value"><%- result.rid %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:kpi') %></div>
+          <div class="prop-value"><%= result.kpi %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:site') %></div>
+          <div class="prop-value"><%= result.site %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:date') %></div>
+          <div class="prop-value"><%- result.date %></div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:pareto') %></div>
+          <div class="prop-value"><%= result.pareto %></div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:concern') %></div>
+          <div class="prop-value"><%= result.concern %></div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:rootCause') %></div>
+          <div class="prop-value small">
+            <%- result.rootCause %>
+          </div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:problem') %></div>
+          <div class="prop-value small">
+            <%= result.problem %>
+          </div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:countermeasure') %></div>
+          <div class="prop-value small">
+            <%= result.countermeasure %>
+          </div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:check') %></div>
+          <div class="prop-value"><%= result.check || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:standard') %></div>
+          <div class="prop-value"><%= result.standard || '-' %></div>
+        </div>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:who') %></div>
+          <div class="prop-value"><%- result.who || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('PROPERTY:when') %></div>
+          <div class="prop-value"><%- result.when || '-' %></div>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+<% } %>
+</body>
+</html>

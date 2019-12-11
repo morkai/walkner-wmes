@@ -2,28 +2,30 @@
 
 define([
   'underscore',
+  'jquery',
   'highcharts',
-  'highcharts.exporting',
-  'highcharts.no-data-to-display',
-  'highcharts.grouped-categories',
+  'highcharts/modules/exporting',
+  'highcharts/modules/no-data-to-display',
+  'highcharts/modules/grouped-categories',
   './i18n',
   './time',
   './broker',
+  './viewport',
   'i18n!app/nls/core'
 ], function(
   _,
+  $,
   Highcharts,
   exporting,
   noDataToDisplay,
   groupedCategories,
   t,
   time,
-  broker
+  broker,
+  viewport
 ) {
   'use strict';
 
-  exporting(Highcharts);
-  noDataToDisplay(Highcharts);
   groupedCategories(Highcharts);
 
   var oldGetTooltipPosition = Highcharts.Tooltip.prototype.getPosition;
@@ -38,6 +40,51 @@ define([
     }
 
     return pos;
+  };
+
+  Highcharts.Chart.prototype.exportChart = function(exportingOptions, chartOptions)
+  {
+    var svg = this.getSVGForExport(exportingOptions, chartOptions);
+
+    exportingOptions = Highcharts.merge(this.options.exporting, exportingOptions);
+
+    var data = _.assign(
+      {
+        filename: exportingOptions.filename || this.getFilename(),
+        type: exportingOptions.type,
+        width: exportingOptions.width,
+        scale: exportingOptions.scale,
+        svg: svg
+      },
+      exportingOptions.formAttributes
+    );
+
+    var req = $.ajax({
+      method: 'POST',
+      url: exportingOptions.url,
+      dataType: null,
+      dataFilter: function(data) { return data; },
+      data: JSON.stringify(data)
+    });
+
+    if (exportingOptions.handleResponse !== false)
+    {
+      req.fail(function()
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('core', 'MSG:EXPORTING_FAILURE')
+        });
+      });
+
+      req.done(function(key)
+      {
+        window.open('/reports;download?key=' + key);
+      });
+    }
+
+    return req;
   };
 
   _.assign(Highcharts.Axis.prototype.defaultYAxisOptions, {
@@ -193,7 +240,7 @@ define([
       scale: 1,
       sourceWidth: 842,
       sourceHeight: 595,
-      url: '/reports;export'
+      url: '/reports;export?delay=1&inline=0'
     },
     loading: {
       labelStyle: {

@@ -15,8 +15,11 @@ module.exports = (app, express) =>
   const MODULES = JSON.stringify(app.options.modules.map(m => m.id || m));
   const DASHBOARD_URL_AFTER_LOG_IN = JSON.stringify(app.options.dashboardUrlAfterLogIn || '/');
 
-  let requirejsPaths = null;
-  let requirejsShim = null;
+  const requirejs = {
+    packages: null,
+    paths: null,
+    shim: null
+  };
 
   app.broker
     .subscribe('updater.newVersion', reloadRequirejsConfig)
@@ -68,8 +71,9 @@ module.exports = (app, express) =>
     res.type('js');
     res.render('config.js.ejs', {
       cache: false,
-      paths: requirejsPaths,
-      shim: requirejsShim
+      packages: requirejs.packages,
+      paths: requirejs.paths,
+      shim: requirejs.shim
     });
   }
 
@@ -81,8 +85,9 @@ module.exports = (app, express) =>
 
     const requirejsConfig = require(configPath);
 
-    requirejsPaths = JSON.stringify(requirejsConfig.paths);
-    requirejsShim = JSON.stringify(requirejsConfig.shim);
+    requirejs.packages = JSON.stringify(requirejsConfig.packages);
+    requirejs.paths = JSON.stringify(requirejsConfig.paths);
+    requirejs.shim = JSON.stringify(requirejsConfig.shim);
   }
 
   function setUpFrontendVersionUpdater()

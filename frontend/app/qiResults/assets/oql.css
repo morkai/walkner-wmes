@@ -38,30 +38,3 @@
 .qi-oqlReport-results-editor select {
   width: 150px;
 }
-.qi-oqlReport-printable {
-  margin: auto;
-  width: 715px;
-  text-align: center;
-}
-.qi-oqlReport-printable .filter-container {
-  display: none;
-}
-.qi-oqlReport-printable h3 {
-  font-size: 18px;
-}
-.qi-oqlReport-printable .table {
-  font-size: 11px;
-}
-.qi-oqlReport-printable th,
-.qi-oqlReport-printable td {
-  padding: 2px!important;
-}
-.qi-oqlReport-printable .is-number {
-  font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
-}
-.qi-oqlReport-printable .row {
-  margin-top: 0;
-}
-.qi-oqlReport-printable .row + h3 {
-  margin-top: 0;
-}

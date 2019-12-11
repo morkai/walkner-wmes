@@ -2,6 +2,7 @@ appLocale = (localStorage.getItem('LOCALE') || (navigator.languages ? navigator.
 appLocale = appLocale === 'pl' ? 'pl' : 'en';
 require = {
   baseUrl: '/',
+  packages: <%- packages %>,
   paths: <%- paths %>,
   shim: <%- shim %>,
   waitSeconds: 20,

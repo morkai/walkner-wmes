@@ -9,8 +9,7 @@ define([
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/qiResults/dictionaries',
-  'app/core/templates/userInfo',
-  'app/qiResults/templates/outgoingQuality/resultListPrint'
+  'app/core/templates/userInfo'
 ], function(
   _,
   $,
@@ -20,22 +19,13 @@ define([
   orgUnits,
   prodFunctions,
   dictionaries,
-  userInfoTemplate,
-  printTemplate
+  userInfoTemplate
 ) {
   'use strict';
 
   return ListView.extend({
 
-    className: function()
-    {
-      return this.isPrintable() ? '' : 'is-clickable';
-    },
-
-    template: function(context)
-    {
-      return (this.isPrintable() ? printTemplate : ListView.prototype.template)(context);
-    },
+    className: 'is-clickable',
 
     remoteTopics: {},
 
@@ -91,9 +81,7 @@ define([
 
     canManage: function()
     {
-      var report = this.collection.report;
-
-      return !report.get('printable') && report.canManage();
+      return this.collection.report.canManage();
     },
 
     showResultsEditor: function(td)
@@ -326,28 +314,21 @@ define([
       $el.html(html);
     },
 
-    isPrintable: function()
-    {
-      return this.collection.report.get('printable');
-    },
-
     serializeColumns: function()
     {
-      var printable = this.isPrintable();
-
       return [
-        {id: 'rid', tdClassName: 'is-min is-number', visible: !printable},
+        {id: 'rid', tdClassName: 'is-min is-number'},
         {id: 'kpi', className: 'is-min'},
         {id: 'site', className: 'is-min'},
         {id: 'date', className: 'is-min'},
         {id: 'pareto'},
         {id: 'concern'},
-        {id: 'rootCause', visible: !printable},
+        {id: 'rootCause'},
         {id: 'problem'},
         {id: 'countermeasure'},
-        {id: 'check', className: printable ? '' : 'is-min'},
+        {id: 'check', className: 'is-min'},
         {id: 'standard', className: 'is-min'},
-        {id: 'who', className: printable ? '' : 'is-min'},
+        {id: 'who', className: 'is-min'},
         {id: 'when', className: 'is-min'}
       ];
     },
@@ -378,7 +359,6 @@ define([
         }
       });
 
-      var printable = this.isPrintable();
       var maxLength = 200;
       var ridToRow = {};
       var allRows = results.map(function(result)
@@ -388,35 +368,9 @@ define([
         obj.rootCause = obj.rootCause
           .map(function(rootCause)
           {
-            if (printable)
-            {
-              return rootCause.map(function(s, i) { return (i + 1) + '. ' + _.escape(s); }).join('; ');
-            }
-
             return '<ol><li>' + rootCause.map(function(s) { return _.escape(s); }).join('<li>') + '</ol>';
           })
           .join('');
-
-        if (printable)
-        {
-          obj.check = obj.check.slice(0, 1);
-          obj.who = obj.who.slice(0, 1);
-
-          if (obj.rootCause.length > maxLength + 5)
-          {
-            obj.rootCause = obj.rootCause.substring(0, maxLength) + '...';
-          }
-
-          if (obj.problem.length > maxLength + 5)
-          {
-            obj.problem = obj.problem.substring(0, maxLength) + '...';
-          }
-
-          if (obj.countermeasure.length > maxLength + 5)
-          {
-            obj.countermeasure = obj.countermeasure.substring(0, maxLength) + '...';
-          }
-        }
 
         obj.kpi = 'OQ';
         obj.site = 'Kętrzyn';
@@ -436,11 +390,6 @@ define([
           obj.pareto += ': ' + mrpController.get('description');
         }
 
-        if (printable && obj.pareto.length > 95)
-        {
-          obj.pareto = obj.pareto.substring(0, 90) + '...';
-        }
-
         obj.fault = obj.concern;
         obj.weight = 0;
 
@@ -449,11 +398,7 @@ define([
         if (fault)
         {
           obj.weight = fault.get('weight');
-
-          if (!printable)
-          {
-            obj.concern += ': ' + fault.get('name');
-          }
+          obj.concern += ': ' + fault.get('name');
         }
 
         var standard = dictionaries.standards.get(obj.standard);

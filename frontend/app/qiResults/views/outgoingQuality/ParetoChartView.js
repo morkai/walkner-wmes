@@ -66,13 +66,12 @@ define([
     {
       var view = this;
       var chartData = view.serializeChartData();
-      var printable = view.model.get('printable');
 
       view.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
-          height: printable ? 200 : 400,
+          height: 400,
           zoomType: undefined
         },
         exporting: {
@@ -87,7 +86,7 @@ define([
           },
           buttons: {
             contextButton: {
-              enabled: !printable
+              enabled: true
             }
           }
         },
@@ -133,7 +132,7 @@ define([
               valueSuffix: 'PCE'
             },
             dataLabels: {
-              enabled: !printable,
+              enabled: true,
               y: 15,
               style: {
                 color: '#000',
@@ -184,7 +183,6 @@ define([
       }];
 
       var report = view.model;
-      var printable = report.get('printable');
       var topCount = report.getTopCount();
       var group = _.last(report.get('groups'));
       var values = group[property] || [];
@@ -201,7 +199,7 @@ define([
 
         var category = value[0];
 
-        if (!printable && view.options.resolveTitle)
+        if (view.options.resolveTitle)
         {
           category += ': ' + view.options.resolveTitle(category, true);
         }

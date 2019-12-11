@@ -304,7 +304,7 @@ define([
 
       req.done(function(key)
       {
-        window.location.href = '/reports;download?key=' + key;
+        window.open('/reports;download?key=' + key);
       });
 
       req.always(function()

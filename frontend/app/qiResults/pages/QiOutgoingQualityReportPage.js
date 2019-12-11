@@ -2,9 +2,12 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
+  'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/html2pdf',
   'app/data/orgUnits',
   'app/reports/util/formatTooltipHeader',
   '../dictionaries',
@@ -15,12 +18,16 @@ define([
   '../views/outgoingQuality/ParetoChartView',
   '../views/outgoingQuality/ParetoTableView',
   '../views/outgoingQuality/ResultListView',
-  'app/qiResults/templates/outgoingQuality/page'
+  'app/qiResults/templates/outgoingQuality/page',
+  'app/qiResults/templates/outgoingQuality/print'
 ], function(
   _,
+  $,
   t,
+  viewport,
   View,
   bindLoadingMessage,
+  html2pdf,
   orgUnits,
   formatTooltipHeader,
   qiDictionaries,
@@ -31,7 +38,8 @@ define([
   ParetoChartView,
   ParetoTableView,
   ResultListView,
-  template
+  template,
+  printTemplate
 ) {
   'use strict';
 
@@ -58,25 +66,10 @@ define([
 
     actions: function()
     {
-      var page = this;
-
       return [{
         icon: 'print',
         label: this.t('report:oql:printable'),
-        className: page.model.get('printable') ? 'active' : '',
-        callback: function()
-        {
-          var printable = !page.model.get('printable');
-
-          page.model.set('printable', printable);
-
-          this.querySelector('.btn').classList.toggle('active', printable);
-
-          if (printable)
-          {
-            setTimeout(function() { window.print(); }, 1);
-          }
-        }
+        callback: this.print.bind(this)
       }, {
         label: this.t('PAGE_ACTION:settings'),
         icon: 'cogs',
@@ -87,41 +80,54 @@ define([
 
     initialize: function()
     {
-      var report = bindLoadingMessage(this.model, this);
+      this.defineModels();
+      this.defineViews();
+      this.defineBindings();
 
-      bindLoadingMessage(report.results, this);
+      this.setView('#-filter', this.filterView);
+      this.setView('#-ppm-chart', this.ppmChartView);
+      this.setView('#-ppm-table', this.ppmTableView);
+      this.setView('#-where-chart', this.whereChartView);
+      this.setView('#-where-table', this.whereTableView);
+      this.setView('#-what-chart', this.whatChartView);
+      this.setView('#-what-table', this.whatTableView);
+      this.setView('#-results', this.resultsListView);
+    },
 
-      this.setView('#-filter', new FilterView({model: report}));
+    defineModels: function()
+    {
+      bindLoadingMessage(this.model, this);
+      bindLoadingMessage(this.model.results, this);
+    },
 
-      this.setView('#-ppm-chart', new PpmChartView({model: report}));
-      this.setView('#-ppm-table', new PpmTableView({model: report}));
+    defineViews: function()
+    {
+      var report = this.model;
 
-      this.setView('#-where-chart', new ParetoChartView({
+      this.filterView = new FilterView({model: report});
+      this.ppmChartView = new PpmChartView({model: report});
+      this.ppmTableView = new PpmTableView({model: report});
+      this.whereChartView = new ParetoChartView({
         model: report,
         property: 'where',
         resolveTitle: resolveWhereTitle
-      }));
-      this.setView('#-where-table', new ParetoTableView({
+      });
+      this.whereTableView = new ParetoTableView({
         model: report,
         property: 'where',
         resolveTitle: resolveWhereTitle
-      }));
-
-      this.setView('#-what-chart', new ParetoChartView({
+      });
+      this.whatChartView = new ParetoChartView({
         model: report,
         property: 'what',
         resolveTitle: resolveWhatTitle
-      }));
-      this.setView('#-what-table', new ParetoTableView({
+      });
+      this.whatTableView = new ParetoTableView({
         model: report,
         property: 'what',
         resolveTitle: resolveWhatTitle
-      }));
-
-      this.setView('#-results', new ResultListView({collection: report.results}));
-
-      this.listenTo(report, 'filtered', this.onFiltered);
-      this.listenTo(report, 'change:printable', this.onPrintableChange);
+      });
+      this.resultsListView = new ResultListView({collection: report.results});
 
       function resolveWhereTitle(id)
       {
@@ -151,16 +157,14 @@ define([
       }
     },
 
+    defineBindings: function()
+    {
+      this.listenTo(this.model, 'filtered', this.onFiltered);
+    },
+
     load: function(when)
     {
       return when(this.model.fetch());
-    },
-
-    getTemplateData: function()
-    {
-      return {
-        printable: this.model.get('printable')
-      };
     },
 
     onFiltered: function()
@@ -174,9 +178,101 @@ define([
       });
     },
 
-    onPrintableChange: function()
+    print: function()
     {
-      this.render();
+      var page = this;
+
+      viewport.msg.loading();
+
+      var req = $.when(
+        page.exportChart(page.ppmChartView.chart, 1040, 250, {
+          plotOptions: {
+            line: {
+              dataLabels: {
+                enabled: true
+              }
+            }
+          }
+        }),
+        page.exportChart(page.whereChartView.chart, 525, 200, {
+          xAxis: [{
+            labels: {
+              formatter: function()
+              {
+                var point = this.chart.series[0].data[this.value];
+
+                return point ? point.name : '';
+              }
+            }
+          }]
+        }),
+        page.exportChart(page.whatChartView.chart, 525, 200, {
+          xAxis: [{
+            labels: {
+              formatter: function()
+              {
+                var point = this.chart.series[0].data[this.value];
+
+                return point ? point.name : '';
+              }
+            }
+          }]
+        })
+      );
+
+      req.always(function()
+      {
+        viewport.msg.loaded();
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('core', 'MSG:EXPORTING_FAILURE')
+        });
+      });
+
+      req.done(function(ppmRes, whereRes, whatRes)
+      {
+        var charts = {
+          ppm: ppmRes[0],
+          where: whereRes[0],
+          what: whatRes[0]
+        };
+
+        var html = page.renderPartialHtml(printTemplate, {
+          week: page.model.get('week'),
+          charts: charts,
+          tables: {
+            ppm: page.ppmTableView.serialize().data,
+            where: page.whereTableView.serialize(),
+            what: page.whatTableView.serialize()
+          },
+          results: page.resultsListView.serialize().rows
+        });
+
+        html2pdf(html, {orientation: 'landscape'});
+      });
+    },
+
+    exportChart: function(chart, w, h, chartOptions)
+    {
+      var exportingOptions = {
+        handleResponse: false,
+        scale: 1,
+        sourceWidth: w,
+        sourceHeight: h,
+        formAttributes: {
+          inline: '1',
+          base64: '1'
+        }
+      };
+
+      chartOptions = _.assign({title: false}, chartOptions);
+
+      return chart.exportChart(exportingOptions, chartOptions);
     }
 
   });

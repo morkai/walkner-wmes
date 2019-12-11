@@ -70,13 +70,12 @@ define([
     {
       var view = this;
       var series = view.serializeChartSeries();
-      var printable = view.model.get('printable');
 
       view.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
-          height: printable ? 200 : 400,
+          height: 400,
           zoomType: undefined
         },
         exporting: {
@@ -91,7 +90,7 @@ define([
           },
           buttons: {
             contextButton: {
-              enabled: !printable
+              enabled: true
             }
           }
         },
@@ -116,7 +115,7 @@ define([
         plotOptions: {
           column: {
             dataLabels: {
-              enabled: !printable,
+              enabled: true,
               y: 15,
               style: {
                 color: '#000',

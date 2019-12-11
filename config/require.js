@@ -1,5 +1,13 @@
 'use strict';
 
+exports.packages = [
+  {
+    name: 'highcharts',
+    main: 'highcharts',
+    location: 'vendor/highcharts'
+  }
+];
+
 exports.paths = {
   'text': 'vendor/require/text',
   'i18n': 'vendor/require/i18n',
@@ -28,10 +36,6 @@ exports.paths = {
   'd3': 'vendor/d3/d3.v3',
   'd3.timeline': 'vendor/d3/d3.timeline',
   'visibly': 'vendor/visibly',
-  'highcharts': 'vendor/highcharts/highcharts.src',
-  'highcharts.exporting': 'vendor/highcharts/modules/exporting.src',
-  'highcharts.grouped-categories': 'vendor/highcharts/modules/grouped-categories.src',
-  'highcharts.no-data-to-display': 'vendor/highcharts/modules/no-data-to-display.src',
   'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard',
   'screenfull': 'vendor/screenfull',
   'datatables': 'vendor/datatables/media/js/jquery.dataTables',
