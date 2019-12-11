@@ -10,6 +10,7 @@
   "PROPERTY:stations:lampIp": "Adres lampy",
 
   "type:inveo": "INVEO",
+  "type:luma2": "LUMA2",
 
   "stations:title": "Stanowisko {no}",
   "form:stations:add": "Dodaj stanowisko"

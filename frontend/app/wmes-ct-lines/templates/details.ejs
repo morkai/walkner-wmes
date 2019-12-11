@@ -8,6 +8,8 @@
   <% model.stations.forEach(function(station, stationIndex) { %>
   <% if (type === 'inveo') { %>
   <% include _inveoDetails.ejs %>
+  <% } else if (type === 'luma2') { %>
+  <% include _luma2Details.ejs %>
   <% } %>
   <% }) %>
 </div>

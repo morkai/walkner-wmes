@@ -52,7 +52,8 @@ exports.updater = {
 exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   broadcastTopics: [
     'events.saved',
-    'luma2.events.saved'
+    'luma2.events.saved',
+    'ct.todos.saved'
   ]
 });
 

@@ -16,10 +16,12 @@
       <div class="form-group">
         <label class="control-label is-required"><%- helpers.t('PROPERTY:type') %></label>
         <br>
+        <% ['inveo', 'luma2'].forEach(function(type) { %>
         <label class="radio-inline">
-          <input type="radio" name="type" value="inveo" required>
-          <%- t('type:inveo') %>
+          <input type="radio" name="type" value="<%- type %>" required>
+          <%- t('type:' + type) %>
         </label>
+        <% }) %>
       </div>
       <div id="<%- idPrefix %>-stations" class="ct-lines-form-stations" style="margin-bottom: 20px"></div>
       <div class="form-group">

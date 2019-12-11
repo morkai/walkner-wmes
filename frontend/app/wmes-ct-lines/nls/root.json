@@ -11,6 +11,7 @@
     "PROPERTY:stations:lampIp": "Lamp IP address",
 
     "type:inveo": "INVEO",
+    "type:luma2": "LUMA2",
 
     "stations:title": "Station {no}",
     "form:stations:add": "Add station"

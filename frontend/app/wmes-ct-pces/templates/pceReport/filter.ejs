@@ -1,7 +1,7 @@
 <form class="well filter-form ct-report-pce-filter" autocomplete="off">
   <div class="form-group">
-    <label for="<%- idPrefix %>-orders" class="control-label is-required"><%- t('pceReport:filter:orders') %></label>
-    <input id="<%- idPrefix %>-orders" name="orders" class="form-control" type="text" required maxlength="12" style="width: 125px">
+    <label for="<%- idPrefix %>-orders" class="control-label"><%- t('pceReport:filter:orders') %></label>
+    <input id="<%- idPrefix %>-orders" name="orders" class="form-control" type="text" maxlength="12" style="width: 125px">
   </div>
   <%- forms.dateTimeRange({
     idPrefix: idPrefix

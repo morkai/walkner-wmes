@@ -8,7 +8,8 @@ define([
   'app/data/orgUnits',
   'app/orgUnits/util/setUpOrgUnitSelect2',
   'app/wmes-ct-lines/templates/form',
-  'app/wmes-ct-lines/templates/_inveoForm'
+  'app/wmes-ct-lines/templates/_inveoForm',
+  'app/wmes-ct-lines/templates/_luma2Form'
 ], function(
   _,
   $,
@@ -17,12 +18,14 @@ define([
   orgUnits,
   setUpOrgUnitSelect2,
   template,
-  inveoTemplate
+  inveoTemplate,
+  luma2Template
 ) {
   'use strict';
 
   var TYPE_TO_TEMPLATE = {
-    inveo: inveoTemplate
+    inveo: inveoTemplate,
+    luma2: luma2Template
   };
 
   return FormView.extend({
@@ -162,6 +165,16 @@ define([
       {
         this.innerText = view.t('stations:title', {no: i + 1});
       });
+    },
+
+    serializeForm: function(formData)
+    {
+      if (!Array.isArray(formData.stations))
+      {
+        formData.stations = this.$id('stations').children().map(function() { return {}; }).get();
+      }
+
+      return formData;
     }
 
   });
