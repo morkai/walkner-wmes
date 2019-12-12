@@ -23,6 +23,7 @@ define([
 
     events: {
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
+      'change': 'toggleValidity',
       'submit': function()
       {
         this.changeFilter();
@@ -42,6 +43,8 @@ define([
         placeholder: ' ',
         data: this.lines.map(idAndLabel)
       });
+
+      this.toggleValidity();
     },
 
     serializeFormData: function()
@@ -67,7 +70,7 @@ define([
         to: range.to ? range.to.valueOf() : 0,
         orders: view.$id('orders')
           .val()
-          .split(',')
+          .split(/[,\s]+/)
           .map(function(v) { return v.trim(); })
           .filter(function(v) { return /^([0-9]{9}|[0-9]{12}|[A-Za-z0-9]{7})$/.test(v); }),
         lines: view.$id('lines').val().split(',').filter(function(v) { return !!v; })
@@ -75,6 +78,16 @@ define([
 
       view.model.set(query);
       view.model.trigger('filtered');
+    },
+
+    toggleValidity: function()
+    {
+      var hasOrders = this.$id('orders').val().trim().length >= 7;
+      var hasFromDate = this.$id('from-date').val().length > 0;
+      var hasLines = this.$id('lines').val().length > 0;
+      var valid = hasOrders || (hasFromDate && hasLines);
+
+      this.$id('orders')[0].setCustomValidity(valid ? '' : this.t('pceReport:filter:invalid'));
     }
 
   });

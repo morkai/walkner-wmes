@@ -26,6 +26,7 @@
 
   "pceReport:filter:orders": "Zlecenie/Wyrób",
   "pceReport:filter:lines": "Linia",
+  "pceReport:filter:invalid": "Podaj zlecenie/wyrób lub datę oraz linię.",
   "pceReport:column:line": "Linia",
   "pceReport:column:order": "Zlecenie",
   "pceReport:column:shift": "Zmiana",

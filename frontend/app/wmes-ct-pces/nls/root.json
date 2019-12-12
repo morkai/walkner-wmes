@@ -27,6 +27,7 @@
 
     "pceReport:filter:orders": "Order/Product",
     "pceReport:filter:lines": "Line",
+    "pceReport:filter:invalid": "Specify an order/product or a date and a line.",
     "pceReport:column:line": "Line",
     "pceReport:column:order": "Order",
     "pceReport:column:shift": "Shift",
