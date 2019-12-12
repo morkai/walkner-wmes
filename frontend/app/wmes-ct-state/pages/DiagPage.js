@@ -119,6 +119,11 @@ define([
 
     addTodo: function(todo)
     {
+      if (!todo.action)
+      {
+        return;
+      }
+
       this.todos.push(todo);
       this.renderTodo(todo, true);
     },
