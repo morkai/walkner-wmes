@@ -3,48 +3,35 @@
 
 'use strict';
 
-let todos = [];
+var doneOrders = {};
 
-function insertTodo(todo)
+db.paintshoporders.find({date: {$gt: new Date(Date.now() - 60 * 24 * 3600 * 1000)}}, {order: 1}).forEach(psOrder =>
 {
-  if (todo)
-  {
-    todos.push(todo);
-  }
+  var sapOrder = db.orders.findOne({_id: psOrder.order}, {changes: 1});
+  var newChanges = [];
+  var lastPsComment = '';
 
-  if (!todo || todos.length === 200)
+  sapOrder.changes.forEach(change =>
   {
-    db.cttodos.insertMany(todos);
-    todos = [];
-  }
-}
+    if (change.source !== 'ps')
+    {
+      newChanges.push(change);
 
-['LM-41', 'LM-42'].forEach(line =>
-{
-  db.ctlines.deleteOne({_id: line});
-  db.ctlines.insertOne({
-    _id: line,
-    active: false,
-    type: 'luma2',
-    stations: [{}, {}, {}, {}, {}, {}, {}],
-    __v: 1
-  });
-  db.cttodos.deleteMany({line});
-  db.ctpces.deleteMany({line});
+      return;
+    }
 
-  db.luma2events.find({type: {$in: ['pce-started', 'pce-finished']}, line}).sort({time: 1}).forEach(event =>
-  {
-    insertTodo({
-      time: event.time,
-      line,
-      station: event.station,
-      action: event.type,
-      data: {
-        orderNo: event.order,
-        pce: event.pce
-      }
-    });
+    if (!lastPsComment && !change.user.id && change.comment === 'Zresetowano.')
+    {
+      return;
+    }
+
+    if (!lastPsComment || lastPsComment !== change.comment)
+    {
+      lastPsComment = change.comment;
+
+      newChanges.push(change);
+    }
   });
 
-  insertTodo();
+  db.orders.updateOne({_id: sapOrder._id}, {$set: {changes: newChanges}});
 });
