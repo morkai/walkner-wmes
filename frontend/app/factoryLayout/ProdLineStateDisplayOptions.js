@@ -19,6 +19,8 @@ define([
 
   return Model.extend({
 
+    nlsDomain: 'factoryLayout',
+
     defaults: function()
     {
       return {

@@ -1,11 +1,11 @@
 <form class="well filter-form">
   <div class="form-group">
     <div id="<%- idPrefix %>-statuses" class="btn-group filter-btn-group" data-toggle="buttons">
-      <label class="btn btn-default" title="<%- t('factoryLayout', 'statuses:online:title') %>">
-        <input type="checkbox" name="statuses[]" value="online"> <i class="fa fa-plug"></i><span><%- t('factoryLayout', 'statuses:online') %></span>
+      <label class="btn btn-default" title="<%- t('statuses:online:title') %>">
+        <input type="checkbox" name="statuses[]" value="online"> <i class="fa fa-plug"></i><span><%- t('statuses:online') %></span>
       </label>
-      <label class="btn btn-default" title="<%- t('factoryLayout', 'statuses:offline:title') %>">
-        <input type="checkbox" name="statuses[]" value="offline"> <i class="fa fa-power-off"></i><span><%- t('factoryLayout', 'statuses:offline') %></span>
+      <label class="btn btn-default" title="<%- t('statuses:offline:title') %>">
+        <input type="checkbox" name="statuses[]" value="offline"> <i class="fa fa-power-off"></i><span><%- t('statuses:offline') %></span>
       </label>
     </div>
   </div>
@@ -13,15 +13,15 @@
     <div id="<%- idPrefix %>-states" class="btn-group filter-btn-group" data-toggle="buttons">
       <label class="btn btn-default factoryLayout-displayOptions-idle">
         <input type="checkbox" name="states[]" value="idle">
-        <i class="fa fa-cloud"></i><span><%- t('factoryLayout', 'states:idle') %></span>
+        <i class="fa fa-cloud"></i><span><%- t('states:idle') %></span>
       </label>
       <label class="btn btn-default factoryLayout-displayOptions-working">
         <input type="checkbox" name="states[]" value="working">
-        <i class="fa fa-cog"></i><span><%- t('factoryLayout', 'states:working') %></span>
+        <i class="fa fa-cog"></i><span><%- t('states:working') %></span>
       </label>
       <label class="btn btn-default factoryLayout-displayOptions-downtime">
         <input type="checkbox" name="states[]" value="downtime">
-        <i class="fa fa-bell"></i><span><%- t('factoryLayout', 'states:downtime') %></span>
+        <i class="fa fa-bell"></i><span><%- t('states:downtime') %></span>
       </label>
     </div>
   </div>
@@ -29,20 +29,20 @@
     <div id="<%- idPrefix %>-blacklisted" class="btn-group filter-btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input type="checkbox" name="blacklisted" value="1">
-        <i class="fa fa-ban"></i><span><%- t('factoryLayout', 'options:blacklisted') %></span>
+        <i class="fa fa-ban"></i><span><%- t('options:blacklisted') %></span>
       </label>
     </div>
   </div>
   <div class="form-group">
-    <button id="<%- idPrefix %>-showPicker" type="button" class="btn btn-default"><i class="fa fa-list-ol"></i><span><%- t('factoryLayout', 'options:picker') %></span></button>
+    <button id="<%- idPrefix %>-showPicker" type="button" class="btn btn-default"><i class="fa fa-list-ol"></i><span><%- t('options:picker') %></span></button>
   </div>
   <div class="form-group">
-    <button id="<%- idPrefix %>-save" type="button" class="btn btn-primary"><i class="fa fa-save"></i><span><%- t('factoryLayout', 'options:save') %></span></button>
+    <button id="<%- idPrefix %>-save" type="button" class="btn btn-primary"><i class="fa fa-save"></i><span><%- t('options:save') %></span></button>
   </div>
   <hr>
   <div class="form-group factoryLayout-displayOptions-history">
-    <label><input id="<%- idPrefix %>-from" class="form-control" type="date" name="from" required placeholder="YYYY-MM-DD"></label>
-    <label>- <input id="<%- idPrefix %>-to" class="form-control" type="date" name="to" required placeholder="YYYY-MM-DD"></label>
+    <label><input id="<%- idPrefix %>-from" class="form-control" type="date" name="from" required placeholder="YYYY-MM-DD" min="<%- minDate %>" max="<%- maxDate %>"></label>
+    <label>- <input id="<%- idPrefix %>-to" class="form-control" type="date" name="to" required placeholder="YYYY-MM-DD" min="<%- minDate %>" max="<%- maxDate %>"></label>
     <div id="<%- idPrefix %>-shifts" class="btn-group filter-btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input type="checkbox" name="shifts[]" value="1"> <%- t('core', 'SHIFT:1') %>
@@ -55,8 +55,8 @@
       </label>
     </div>
     <div class="btn-group">
-      <button id="<%- idPrefix %>-loadHistory" type="submit" class="btn btn-primary"><i class="fa fa-calendar"></i><span><%- t('factoryLayout', 'options:loadHistory') %></span></button>
-      <button id="<%- idPrefix %>-resetHistory" type="button" class="btn btn-danger" title="<%- t('factoryLayout', 'options:resetHistory') %>"><i class="fa fa-times"></i></button>
+      <button id="<%- idPrefix %>-loadHistory" type="submit" class="btn btn-primary"><i class="fa fa-calendar"></i><span><%- t('options:loadHistory') %></span></button>
+      <button id="<%- idPrefix %>-resetHistory" type="button" class="btn btn-danger" title="<%- t('options:resetHistory') %>"><i class="fa fa-times"></i></button>
     </div>
   </div>
 </form>

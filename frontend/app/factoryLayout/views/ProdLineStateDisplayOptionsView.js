@@ -9,6 +9,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/buttonGroup',
+  'app/core/util/getShiftStartInfo',
   'app/factoryLayout/views/OrgUnitPickerView',
   'app/factoryLayout/templates/displayOptions'
 ], function(
@@ -20,6 +21,7 @@ define([
   viewport,
   View,
   buttonGroup,
+  getShiftStartInfo,
   OrgUnitPickerView,
   displayOptionsTemplate
 ) {
@@ -67,7 +69,7 @@ define([
           });
         });
 
-        viewport.showDialog(orgUnitPickerView, t('factoryLayout', 'picker:title'));
+        viewport.showDialog(orgUnitPickerView, this.t('picker:title'));
       },
       'click #-save': function()
       {
@@ -76,7 +78,7 @@ define([
         viewport.msg.show({
           type: 'success',
           time: 1000,
-          text: t('factoryLayout', 'options:saved')
+          text: this.t('options:saved')
         });
       },
       'click #-resetHistory': function()
@@ -93,6 +95,14 @@ define([
           shifts: ['1', '2', '3']
         });
       }
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        minDate: window.PRODUCTION_DATA_START_DATE || '',
+        maxDate: getShiftStartInfo(Date.now()).moment.format('YYYY-MM-DD')
+      };
     },
 
     afterRender: function()
@@ -153,7 +163,7 @@ define([
         return viewport.msg.show({
           type: 'warning',
           time: 2500,
-          text: t('factoryLayout', 'msg:historyDataRange')
+          text: this.t('msg:historyDataRange')
         });
       }
 
