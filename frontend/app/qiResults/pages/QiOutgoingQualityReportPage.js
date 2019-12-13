@@ -250,7 +250,7 @@ define([
             where: page.whereTableView.serialize(),
             what: page.whatTableView.serialize()
           },
-          results: page.resultsListView.serialize().rows
+          results: page.resultsListView.serializeResults()
         });
 
         html2pdf(html, {

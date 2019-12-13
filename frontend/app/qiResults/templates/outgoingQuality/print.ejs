@@ -84,44 +84,6 @@
       font-weight: normal;
       font-size: 12px;
     }
-    #results {
-      margin-top: 10px;
-      display: flex;
-      text-align: left;
-    }
-    .result {
-      flex: 1 1 auto;
-      padding-right: 10px;
-      border-right: 1px solid #ccc;
-    }
-    .result:last-child {
-      padding-right: 0;
-      border-right: none;
-    }
-    .result + .result {
-      margin-left: 10px;
-    }
-    .props {
-      display: flex;
-      line-height: 1.2;
-    }
-    .props + .props {
-      margin-top: 8px;
-    }
-    .prop + .prop {
-      margin-left: 15px;
-    }
-    .prop-name {
-      margin-bottom: 4px;
-      font-weight: bold;
-    }
-    .prop-value {
-      font-size: 12px;
-      line-height: 1.4;
-    }
-    .prop-value.small {
-      font-size: 10px;
-    }
     ol {
       list-style-position: inside;
     }
@@ -163,11 +125,40 @@
       border-bottom: 8px solid #ccc;
     }
     .legend-bot .legend-arrow {
-     border-top: 8px solid #ccc;
-   }
+      border-top: 8px solid #ccc;
+    }
+    <% include ../../assets/oql.css %>
+    .qi-oql-results {
+      margin-top: 10px;
+      text-align: left;
+    }
+    .qi-oql-result {
+      flex: 1 1 auto;
+      min-width: 33.3%;
+    }
+    .qi-oql-props {
+      line-height: 1.2;
+    }
+    .qi-oql-props + .qi-oql-props {
+      margin-top: 8px;
+    }
+    .qi-oql-prop + .qi-oql-prop {
+      margin-left: 15px;
+    }
+    .qi-oql-prop-name {
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .qi-oql-prop-value {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .text-lines {
+      font-size: 10px;
+    }
   </style>
 </head>
-<body>
+<body class="qi-oql-printable">
 <div class="page">
   <div class="title"><%- t('BREADCRUMBS:reports:outgoingQuality') %></div>
   <div class="date"><%- week %></div>
@@ -309,86 +300,8 @@
   <div class="title"><%- t('BREADCRUMBS:reports:outgoingQuality') %></div>
   <div class="date"><%- week %></div>
   <h3><%- t('report:oql:title:results') %></h3>
-  <div id="results">
-    <% results.forEach(function(result) { %>
-    <div class="result">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:rid') %></div>
-          <div class="prop-value"><%- result.rid %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:kpi') %></div>
-          <div class="prop-value"><%= result.kpi %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:site') %></div>
-          <div class="prop-value"><%= result.site %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:date') %></div>
-          <div class="prop-value"><%- result.date %></div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:pareto') %></div>
-          <div class="prop-value"><%= result.pareto %></div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:concern') %></div>
-          <div class="prop-value"><%= result.concern %></div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:rootCause') %></div>
-          <div class="prop-value small">
-            <%- result.rootCause %>
-          </div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:problem') %></div>
-          <div class="prop-value small">
-            <%= result.problem %>
-          </div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:countermeasure') %></div>
-          <div class="prop-value small">
-            <%= result.countermeasure %>
-          </div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:check') %></div>
-          <div class="prop-value"><%= result.check || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:standard') %></div>
-          <div class="prop-value"><%= result.standard || '-' %></div>
-        </div>
-      </div>
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:who') %></div>
-          <div class="prop-value"><%- result.who || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('PROPERTY:when') %></div>
-          <div class="prop-value"><%- result.when || '-' %></div>
-        </div>
-      </div>
-    </div>
-    <% }) %>
-  </div>
+  <% canManage = false %>
+  <% include results.ejs %>
 </div>
 <% } %>
 </body>

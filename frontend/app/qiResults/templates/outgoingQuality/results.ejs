@@ -1,0 +1,81 @@
+<div class="qi-oql-results">
+  <% results.forEach(function(result) { %>
+  <div class="qi-oql-result" data-id="<%- result._id %>">
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop" data-id="rid">
+        <div class="qi-oql-prop-name">
+          <%- t('PROPERTY:rid') %>
+          <% if (canManage) { %>
+          <a href="javascript:void(0)" data-action="editResults"><i class="fa fa-edit"></i></a>
+          <% } %>
+        </div>
+        <div class="qi-oql-prop-value"><%- result.rid %></div>
+      </div>
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:kpi') %></div>
+        <div class="qi-oql-prop-value"><%= result.kpi %></div>
+      </div>
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:site') %></div>
+        <div class="qi-oql-prop-value"><%= result.site %></div>
+      </div>
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:date') %></div>
+        <div class="qi-oql-prop-value"><%- result.date %></div>
+      </div>
+    </div>
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:family') %></div>
+        <div class="qi-oql-prop-value"><%= result.family %></div>
+      </div>
+    </div>
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:concern') %></div>
+        <div class="qi-oql-prop-value"><%= result.concern %></div>
+      </div>
+    </div>
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:problem') %></div>
+        <div class="qi-oql-prop-value text-lines"><%= result.problem %></div>
+      </div>
+    </div>
+    <% result.rootCause.forEach(function(rootCause, i) { %>
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:rootCauseN', {n: i + 1}) %></div>
+        <div class="qi-oql-prop-value">
+          <ol>
+            <% rootCause.forEach(function(why) { %>
+            <li class="text-lines"><%= why %></li>
+            <% }) %>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop" data-id="standard">
+        <div class="qi-oql-prop-name">
+          <%- t('PROPERTY:standard') %>
+          <% if (canManage) { %>
+          <a href="javascript:void(0)" data-action="editStandard"><i class="fa fa-edit"></i></a>
+          <% } %>
+        </div>
+        <div class="qi-oql-prop-value"><%= result.standard || '-' %></div>
+      </div>
+    </div>
+    <% result.correctiveActions.forEach(function(action, i) { %>
+    <div class="qi-oql-props">
+      <div class="qi-oql-prop">
+        <div class="qi-oql-prop-name"><%- t('PROPERTY:correctiveActionN', {n: i + 1}) %></div>
+        <div class="qi-oql-prop-value text-small"><%- action.when || '-' %> | <%- action.who.join(', ') || '' %></div>
+        <div class="qi-oql-prop-value text-lines"><%= action.what %></div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <% }) %>
+</div>

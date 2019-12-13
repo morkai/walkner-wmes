@@ -1,40 +1,79 @@
-.qi-oqlReport h3 {
+.qi-oql h3 {
   margin: 20px 0 0 0;
   text-align: center;
 }
-.qi-oqlReport .row {
+.qi-oql .row {
   display: flex;
   margin-top: 10px;
 }
-.qi-oqlReport-table-container {
+.qi-oql-table-container {
   text-align: center;
 }
-.qi-oqlReport-table-container .table {
+.qi-oql-table-container .table {
   margin: 0 auto;
   width: auto;
 }
-.qi-oqlReport-table-ppm td[data-key] {
+.qi-oql-table-ppm td[data-key] {
   position: relative;
   cursor: pointer;
   color: #337ab7;
 }
-.qi-oqlReport-table-ppm td[data-key]:hover {
+.qi-oql-table-ppm td[data-key]:hover {
   color: #23527c;
 }
-.qi-oqlReport-table-ppm form {
+.qi-oql-table-ppm form {
   position: absolute;
   top: -2px;
   left: -1px;
   display: flex;
   z-index: 1;
 }
-.qi-oqlReport-table-ppm input {
+.qi-oql-table-ppm input {
   width: 75px;
 }
-.qi-oqlReport-results-editor {
+
+.qi-oql-prop[data-id] {
+  position: relative;
+}
+.qi-oql-results-editor {
   display: flex;
   text-align: left;
+  box-shadow: 0 0 16px #ccc;
+  position: absolute;
+  top: 17px;
+  left: 0;
 }
-.qi-oqlReport-results-editor select {
+.qi-oql-results-editor select {
   width: 150px;
+}
+
+.qi-oql-results {
+  display: flex;
+}
+.qi-oql-result {
+  flex: 1 1 auto;
+  padding-right: 15px;
+  border-right: 1px solid #ccc;
+}
+.qi-oql-result:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+.qi-oql-result + .qi-oql-result {
+  margin-left: 15px;
+}
+.qi-oql-props {
+  display: flex;
+}
+.qi-oql-props + .qi-oql-props {
+  margin-top: 12px;
+}
+.qi-oql-prop + .qi-oql-prop {
+  margin-left: 15px;
+}
+.qi-oql-prop-name {
+  font-weight: bold;
+}
+.qi-oql-prop-value {
+
 }

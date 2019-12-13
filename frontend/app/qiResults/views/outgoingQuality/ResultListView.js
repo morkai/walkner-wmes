@@ -5,53 +5,53 @@ define([
   'jquery',
   'app/time',
   'app/viewport',
-  'app/core/views/ListView',
+  'app/core/View',
+  'app/core/templates/userInfo',
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/qiResults/dictionaries',
-  'app/core/templates/userInfo'
+  'app/qiResults/templates/outgoingQuality/results'
 ], function(
   _,
   $,
   time,
   viewport,
-  ListView,
+  View,
+  userInfoTemplate,
   orgUnits,
   prodFunctions,
   dictionaries,
-  userInfoTemplate
+  template
 ) {
   'use strict';
 
-  return ListView.extend({
+  function trim(str)
+  {
+    return (str || '').replace(/\n+/g, '\n').trim();
+  }
 
-    className: 'is-clickable',
+  return View.extend({
 
-    remoteTopics: {},
+    template: template,
 
-    events: _.assign(ListView.prototype.events, {
-      'click td[data-id="rid"]': function(e)
+    events: {
+      'click a[data-action="editResults"]': function(e)
       {
-        if (this.canManage())
-        {
-          this.showResultsEditor(e.currentTarget);
+        this.showResultsEditor(e.currentTarget);
 
-          return false;
-        }
+        return false;
       },
-      'click td[data-id="standard"]': function(e)
+      'click a[data-action="editStandard"]': function(e)
       {
-        if (this.canManage())
-        {
-          this.showStandardEditor(e.currentTarget);
+        this.showStandardEditor(e.currentTarget);
 
-          return false;
-        }
+        return false;
       }
-    }),
+    },
 
     initialize: function()
     {
+      this.listenTo(this.collection, 'reset', this.render);
       this.listenTo(this.collection.report, 'change:oqlWeek', this.onOqlWeekChanged);
 
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
@@ -62,11 +62,18 @@ define([
       $(window).off('.' + this.idPrefix);
     },
 
+    getTemplateData: function()
+    {
+      return {
+        canManage: this.canManage(),
+        results: this.serializeResults()
+      };
+    },
+
     onKeyDown: function(e)
     {
       if (e.key === 'Escape')
       {
-        this.hideEditors();
         this.hideEditors();
       }
     },
@@ -84,14 +91,14 @@ define([
       return this.collection.report.canManage();
     },
 
-    showResultsEditor: function(td)
+    showResultsEditor: function(a)
     {
       var view = this;
-      var $td = view.$(td);
+      var $prop = view.$(a).closest('.qi-oql-prop');
 
-      if ($td.find('form').length)
+      if ($prop.find('form').length)
       {
-        return false;
+        return;
       }
 
       view.hideEditors();
@@ -101,14 +108,11 @@ define([
 
       if (!oqlWeek)
       {
-        return false;
+        return;
       }
 
-      var oldHtml = $td.html();
-      var $form = $('<form class="qi-oqlReport-results-editor"></form>').css({
-        position: 'absolute',
-        marginTop: '-17px'
-      });
+      var oldHtml = $prop.html();
+      var $form = $('<form class="qi-oql-results-editor"></form>');
       var $select = $('<input>').val(oqlWeek.results.join(','));
       var $submit = $('<button class="btn btn-primary"><i class="fa fa-save"></i></button>');
 
@@ -131,7 +135,7 @@ define([
 
         viewport.msg.saving();
 
-        $td.css({textAlign: 'center'}).html('<i class="fa fa-spinner fa-spin"></i>');
+        $prop.find('.qi-oql-prop-value').html('<i class="fa fa-spinner fa-spin"></i>');
 
         var req = view.ajax({
           method: 'POST',
@@ -142,22 +146,22 @@ define([
         req.fail(function()
         {
           viewport.msg.savingFailed();
+
+          $prop.html(oldHtml);
         });
 
         req.done(function()
         {
           viewport.msg.saved();
-        });
 
-        req.always(function()
-        {
-          $td.css({textAlign: ''}).html(oldHtml);
+          view.hideEditors();
         });
 
         return false;
       });
 
-      $td.html('').append($form);
+      $prop.append($form);
+
       $select.select2({
         width: '300px',
         allowClear: true,
@@ -182,10 +186,10 @@ define([
         {
           return '<span class="text-mono">'
             + item.id
-            + '; '
-            + item.result.get('pareto')
-            + '; '
-            + item.result.get('concern')
+            + ' | '
+            + item.result.get('mrp')
+            + ' | '
+            + item.result.get('faultCode')
             + '</span>';
         }
       });
@@ -193,23 +197,21 @@ define([
       setTimeout(function() { $select.focus(); }, 1);
     },
 
-    showStandardEditor: function(td)
+    showStandardEditor: function(a)
     {
       var view = this;
-      var $td = view.$(td);
+      var $prop = view.$(a).closest('.qi-oql-prop');
 
-      if ($td.find('form').length)
+      if ($prop.find('form').length)
       {
-        $td.find('select').focus();
-
-        return false;
+        return;
       }
 
       view.hideEditors();
 
-      var result = view.collection.get($td.closest('tr').attr('data-id'));
-      var oldLabel = $td.text();
-      var $form = $('<form class="qi-oqlReport-results-editor"></form>');
+      var result = view.collection.get($prop.closest('.qi-oql-result').attr('data-id'));
+      var oldLabel = $prop.find('.qi-oql-prop-value').text();
+      var $form = $('<form class="qi-oql-results-editor"></form>');
       var $select = $('<select class="form-control"><option></option></select>');
       var $submit = $('<button class="btn btn-primary"><i class="fa fa-save"></i></button>');
 
@@ -243,7 +245,7 @@ define([
 
         viewport.msg.saving();
 
-        $td.css({textAlign: 'center'}).html('<i class="fa fa-spinner fa-spin"></i>');
+        $prop.find('.qi-oql-prop-value').html('<i class="fa fa-spinner fa-spin"></i>');
 
         var req = view.ajax({
           method: 'PUT',
@@ -255,7 +257,7 @@ define([
         {
           viewport.msg.savingFailed();
 
-          $td.text(oldLabel);
+          $prop.find('.qi-oql-prop-value').text(oldLabel);
         });
 
         req.done(function()
@@ -264,83 +266,69 @@ define([
 
           result.set('standard', newValue);
 
-          $td.text(standard ? standard.get('name') : '');
-        });
-
-        req.always(function()
-        {
-          $td.css({textAlign: ''});
+          view.hideEditors();
         });
 
         return false;
       });
 
-      $td.html('').append($form);
+      $prop.append($form);
 
       setTimeout(function() { $select.focus(); }, 1);
     },
 
     hideEditors: function()
     {
-      var $el = this.$('form').parent();
-      var result = this.collection.get($el.closest('tr').attr('data-id'));
-      var html = '';
+      var $form = this.$('form');
 
-      if (result)
+      if (!$form.length)
       {
-        if ($el[0].dataset.id === 'rid')
+        return;
+      }
+
+      var $prop = $form.closest('.qi-oql-prop');
+
+      $form.remove();
+
+      var result = this.collection.get($prop.closest('.qi-oql-result').attr('data-id'));
+
+      if (!result)
+      {
+        return;
+      }
+
+      var prop = $prop.attr('data-id');
+      var html = '-';
+
+      if (prop === 'rid')
+      {
+        var rid = result.get('rid');
+        var results = this.collection.report.getSpecifiedResults();
+
+        html = rid.toString();
+
+        if (_.includes(results, rid))
         {
-          var rid = result.get('rid');
-          var results = this.collection.report.getSpecifiedResults();
-
-          html = rid.toString();
-
-          if (_.includes(results, rid))
-          {
-            html = '<strong>' + rid + '</strong>';
-          }
+          html = '<strong>' + rid + '</strong>';
         }
-        else
-        {
-          var standard = dictionaries.standards.get(result.get('standard'));
+      }
+      else if (prop === 'standard')
+      {
+        var standard = dictionaries.standards.get(result.get('standard'));
 
-          if (standard)
-          {
-            html = _.escape(standard.get('name'));
-          }
+        if (standard)
+        {
+          html = _.escape(standard.get('name'));
         }
       }
 
-      $el.html(html);
+      $prop.find('.qi-oql-prop-value').html(html);
     },
 
-    serializeColumns: function()
+    serializeResults: function()
     {
-      return [
-        {id: 'rid', tdClassName: 'is-min is-number'},
-        {id: 'kpi', className: 'is-min'},
-        {id: 'site', className: 'is-min'},
-        {id: 'date', className: 'is-min'},
-        {id: 'pareto'},
-        {id: 'concern'},
-        {id: 'rootCause'},
-        {id: 'problem'},
-        {id: 'countermeasure'},
-        {id: 'check', className: 'is-min'},
-        {id: 'standard', className: 'is-min'},
-        {id: 'who', className: 'is-min'},
-        {id: 'when', className: 'is-min'}
-      ];
-    },
-
-    serializeActions: function()
-    {
-      return null;
-    },
-
-    serializeRows: function(filter)
-    {
-      var results = this.collection;
+      var view = this;
+      var results = view.collection;
 
       if (!results.length)
       {
@@ -359,67 +347,13 @@ define([
         }
       });
 
-      var maxLength = 200;
-      var ridToRow = {};
-      var allRows = results.map(function(result)
-      {
-        var obj = result.toJSON();
-
-        obj.rootCause = obj.rootCause
-          .map(function(rootCause)
-          {
-            return '<ol><li>' + rootCause.map(function(s) { return _.escape(s); }).join('<li>') + '</ol>';
-          })
-          .join('');
-
-        obj.kpi = 'OQ';
-        obj.site = 'Kętrzyn';
-        obj.date = time.format(obj.date, 'L');
-        obj.check = obj.check
-          .map(function(id) { return prodFunctions.get(id) ? prodFunctions.get(id).getLabel() : id; })
-          .join('; ');
-        obj.who = obj.who
-          .map(function(user) { return userInfoTemplate({userInfo: user}); })
-          .join('<br>');
-        obj.when = time.format(obj.when, 'L');
-
-        var mrpController = orgUnits.getByTypeAndId('mrpController', obj.pareto);
-
-        if (mrpController)
+      var ridMap = {};
+      var allResults = results
+        .map(function(result) { return ridMap[result.get('rid')] = view.serializeResult(result); })
+        .filter(function(result) { return !!topWhat[result.faultCode]; })
+        .sort(function(a, b)
         {
-          obj.pareto += ': ' + mrpController.get('description');
-        }
-
-        obj.fault = obj.concern;
-        obj.weight = 0;
-
-        var fault = dictionaries.faults.get(obj.concern);
-
-        if (fault)
-        {
-          obj.weight = fault.get('weight');
-          obj.concern += ': ' + fault.get('name');
-        }
-
-        var standard = dictionaries.standards.get(obj.standard);
-
-        if (standard)
-        {
-          obj.standard = standard.get('name');
-        }
-
-        ridToRow[obj.rid] = obj;
-
-        return obj;
-      });
-
-      if (filter !== false)
-      {
-        allRows = allRows.filter(function(result) { return !!topWhat[result.fault]; });
-
-        allRows.sort(function(a, b)
-        {
-          var cmp = topWhat[b.fault] - topWhat[a.fault];
+          var cmp = topWhat[b.faultCode] - topWhat[a.faultCode];
 
           if (cmp === 0)
           {
@@ -428,40 +362,105 @@ define([
 
           return cmp;
         });
-      }
 
-      var rows = [];
+      var selectedResults = [];
 
       report.getSpecifiedResults().forEach(function(rid)
       {
-        var row = ridToRow[rid];
+        var result = ridMap[rid];
 
-        if (row)
+        if (result)
         {
-          row.rid = '<strong>' + row.rid + '</strong>';
+          result.rid = '<strong>' + result.rid + '</strong>';
 
-          rows.push(row);
+          selectedResults.push(result);
 
-          delete ridToRow[rid];
+          delete ridMap[rid];
         }
       });
 
       for (var i = 0; i < topCount; ++i)
       {
-        if (rows.length === topCount)
+        if (selectedResults.length === topCount)
         {
           break;
         }
 
-        var row = allRows.shift();
+        var result = allResults.shift();
 
-        if (row && ridToRow[row.rid])
+        if (result && ridMap[result.rid])
         {
-          rows.push(row);
+          selectedResults.push(result);
         }
       }
 
-      return rows;
+      return selectedResults;
+    },
+
+    serializeResult: function(result)
+    {
+      var obj = result.toJSON();
+
+      obj.kpi = 'OQ';
+      obj.site = 'Kętrzyn';
+      obj.date = time.format(obj.inspectedAt, 'L');
+      obj.problem = trim(obj.problem);
+      obj.family = obj.mrp;
+
+      var mrpController = orgUnits.getByTypeAndId('mrpController', obj.mrp);
+
+      if (mrpController)
+      {
+        obj.family += ': ' + mrpController.get('description');
+      }
+
+      obj.weight = 0;
+      obj.concern = obj.faultCode;
+
+      var fault = dictionaries.faults.get(obj.faultCode);
+
+      if (fault)
+      {
+        obj.weight = fault.get('weight');
+        obj.concern += ': ' + fault.get('name');
+      }
+
+      var standard = dictionaries.standards.get(obj.standard);
+
+      if (standard)
+      {
+        obj.standard = standard.get('name');
+      }
+
+      obj.rootCause.forEach(function(rootCause)
+      {
+        rootCause.forEach(function(why, i)
+        {
+          rootCause[i] = trim(why);
+        });
+      });
+
+      obj.correctiveActions = obj.correctiveActions.map(function(action)
+      {
+        return {
+          when: time.format(action.when, 'L'),
+          who: action.who.map(function(user)
+          {
+            var userInfo = userInfoTemplate({userInfo: user});
+            var prodFunction = prodFunctions.get(user.prodFunction);
+
+            if (prodFunction)
+            {
+              userInfo += ' (' + prodFunction.getLabel() + ')';
+            }
+
+            return userInfo;
+          }),
+          what: trim(action.what)
+        };
+      });
+
+      return obj;
     }
 
   });

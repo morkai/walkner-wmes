@@ -102,7 +102,22 @@ define([
 
     getCurrentWeek: function()
     {
-      return _.last(this.attributes.options.oqlWeeks) || null;
+      var currentWeek = _.last(this.attributes.options.oqlWeeks);
+
+      if (!currentWeek)
+      {
+        return null;
+      }
+
+      if (time.format(currentWeek._id, 'GGGG-[W]WW') !== this.attributes.week)
+      {
+        currentWeek = _.clone(currentWeek);
+        currentWeek._id = time.getMoment(this.attributes.week, 'GGGG-[W]WW').valueOf();
+
+        this.attributes.options.oqlWeeks.push(currentWeek);
+      }
+
+      return currentWeek;
     },
 
     getSpecifiedResults: function()
@@ -122,16 +137,15 @@ define([
         return;
       }
 
-      if (newOqlWeek._id < options.fromTime || newOqlWeek._id >= options.toTime)
-      {
-        return;
-      }
-
       var oqlWeek = _.find(oqlWeeks, function(w) { return w._id === newOqlWeek._id; });
 
       if (oqlWeek)
       {
         newOqlWeek = _.assign(oqlWeek, newOqlWeek);
+      }
+      else if (newOqlWeek._id < options.fromTime || newOqlWeek._id >= options.toTime)
+      {
+        return;
       }
       else
       {
