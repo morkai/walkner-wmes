@@ -22,6 +22,19 @@ define([
       this.settings = options && options.settings ? options.settings : null;
     },
 
+    comparator: function(a, b)
+    {
+      var aLabel = a.getLabel();
+      var bLabel = b.getLabel();
+
+      if (aLabel === bLabel)
+      {
+        return Date.parse(a.get('prodShift').get('date')) - Date.parse(b.get('prodShift').get('date'));
+      }
+
+      return aLabel.localeCompare(bLabel, undefined, {numeric: true, ignorePunctuation: true});
+    },
+
     /**
      * @param {Object} res
      * @returns {Array.<Object>}

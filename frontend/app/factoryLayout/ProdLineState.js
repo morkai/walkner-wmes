@@ -51,14 +51,22 @@ define([
 
     getLabel: function()
     {
-      var label = this.getProdLineId().toUpperCase().replace(/(_+|~.*?)$/, '').replace(/[_-]+/g, ' ');
-
-      if (label.length > 10)
+      if (!this.attributes.label)
       {
-        label = label.replace(/ +/g, '');
+        var label = this.getProdLineId()
+          .toUpperCase()
+          .replace(/(_+|~.*?)$/, '')
+          .replace(/[_-]+/g, ' ');
+
+        if (label.length > 10)
+        {
+          label = label.replace(/ +/g, '');
+        }
+
+        this.attributes.label = label;
       }
 
-      return label;
+      return this.attributes.label;
     },
 
     getProdLineId: function()
