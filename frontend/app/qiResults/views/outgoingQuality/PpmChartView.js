@@ -153,7 +153,7 @@ define([
         type: 'line',
         name: this.t('report:oql:series:oqlTarget'),
         data: [],
-        color: '#f0ad4e'
+        color: '#f00'
       }];
 
       _.forEach(this.model.get('groups'), function(group)

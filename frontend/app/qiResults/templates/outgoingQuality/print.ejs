@@ -125,6 +125,46 @@
     ol {
       list-style-position: inside;
     }
+    .legend {
+      position: absolute;
+      text-align: left;
+    }
+    .legend-top {
+      top: -10px;
+      left: 10px;
+    }
+    .legend-bot {
+      top: 30px;
+      right: 10px;
+      align-self: end;
+    }
+    .legend-items {
+      padding: 4px 0;
+      border: 1px solid #ccc;
+    }
+    .legend-item {
+      padding: 4px 8px;
+    }
+    .legend-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #000;
+    }
+    .legend-arrow {
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+    }
+    .legend-top .legend-arrow {
+      margin-left: auto;
+      text-align: right;
+      border-bottom: 8px solid #ccc;
+    }
+    .legend-bot .legend-arrow {
+     border-top: 8px solid #ccc;
+   }
   </style>
 </head>
 <body>
@@ -132,41 +172,79 @@
   <div class="title"><%- t('BREADCRUMBS:reports:outgoingQuality') %></div>
   <div class="date"><%- week %></div>
   <div>
-    <h3><%- helpers.t('report:oql:title:ppm') %></h3>
+    <h3><%- t('report:oql:title:ppm') %></h3>
     <img src="data:image/png;base64,<%- charts.ppm %>" width="1031" height="250">
-    <table>
-      <thead>
-      <tr>
-        <th class="text-right"></th>
-        <% tables.ppm.forEach(function(d) { %>
-        <th class="text-center"><%- d.week %></th>
-        <% }) %>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <th class="text-right"><%- helpers.t('report:oql:series:oqlTarget') %></th>
-        <% tables.ppm.forEach(function(d) { %>
-        <td class="is-number"><%- d.target %></td>
-        <% }) %>
-      </tr>
-      <tr>
-        <th class="text-right"><%- helpers.t('report:oql:series:oql') %></th>
-        <% tables.ppm.forEach(function(d) { %>
-        <td class="is-number"><%- d.oql %></td>
-        <% }) %>
-      </tr>
-      </tbody>
-    </table>
+    <div style="display: flex; position: relative">
+      <div class="legend legend-top">
+        <div class="legend-arrow"></div>
+        <div class="legend-items">
+          <div class="legend-item">
+            <span class="legend-indicator" style="background: #d9534f"></span>
+            <span class="legend-label"><%- t('report:oql:ppmOver') %></span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-indicator" style="background: #5cb85c"></span>
+            <span class="legend-label"><%- t('report:oql:ppmUnder') %></span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-indicator" style="background: #f00"></span>
+            <span class="legend-label"><%- t('report:oql:target') %></span>
+          </div>
+        </div>
+      </div>
+      <table>
+        <thead>
+        <tr>
+          <th class="text-right"></th>
+          <% tables.ppm.forEach(function(d) { %>
+          <th class="text-center"><%- d.week %></th>
+          <% }) %>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th class="text-right"><%- t('report:oql:series:oqlTarget') %></th>
+          <% tables.ppm.forEach(function(d) { %>
+          <td class="is-number"><%- d.target %></td>
+          <% }) %>
+        </tr>
+        <tr>
+          <th class="text-right"><%- t('report:oql:series:oql') %></th>
+          <% tables.ppm.forEach(function(d) { %>
+          <td class="is-number"><%- d.oql %></td>
+          <% }) %>
+        </tr>
+        </tbody>
+      </table>
+      <div class="legend legend-bot">
+        <div class="legend-items">
+          <div class="legend-item">
+            <span class="legend-indicator" style="background: #337ab7"></span>
+            <span class="legend-label">
+              <%- t('report:oql:where') %>/<%- t('report:oql:what') %>
+            </span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-indicator" style="background: #f0ad4e"></span>
+            <span class="legend-label"><%- t('report:oql:pareto') %></span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-indicator" style="background: #f00"></span>
+            <span class="legend-label"><%- t('report:oql:series:oqlTarget') %></span>
+          </div>
+        </div>
+        <div class="legend-arrow"></div>
+      </div>
+    </div>
   </div>
   <div id="where-what">
     <div>
-      <h3><%- helpers.t('report:oql:title:where') %></h3>
+      <h3><%- t('report:oql:title:where') %></h3>
       <img src="data:image/png;base64,<%- charts.where %>">
       <table>
         <thead>
         <tr>
-          <th class="text-right"><%- helpers.t('report:oql:' + tables.where.property) %></th>
+          <th class="text-right"><%- t('report:oql:' + tables.where.property) %></th>
           <% tables.where.weeks.forEach(function(week) { %>
           <th class="text-center"><%- week %></th>
           <% }) %>
@@ -193,12 +271,12 @@
       </table>
     </div>
     <div>
-      <h3><%- helpers.t('report:oql:title:what') %></h3>
+      <h3><%- t('report:oql:title:what') %></h3>
       <img src="data:image/png;base64,<%- charts.what %>">
       <table>
         <thead>
         <tr>
-          <th class="text-right"><%- helpers.t('report:oql:' + tables.what.property) %></th>
+          <th class="text-right"><%- t('report:oql:' + tables.what.property) %></th>
           <% tables.what.weeks.forEach(function(week) { %>
           <th class="text-center"><%- week %></th>
           <% }) %>
@@ -230,7 +308,7 @@
 <div class="page">
   <div class="title"><%- t('BREADCRUMBS:reports:outgoingQuality') %></div>
   <div class="date"><%- week %></div>
-  <h3><%- helpers.t('report:oql:title:results') %></h3>
+  <h3><%- t('report:oql:title:results') %></h3>
   <div id="results">
     <% results.forEach(function(result) { %>
     <div class="result">

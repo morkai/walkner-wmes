@@ -192,6 +192,9 @@
     "report:oql:qtyNok": "NOK quantity",
     "report:oql:pareto": "Pareto",
     "report:oql:printable": "Printable version",
+    "report:oql:ppmUnder": "PPM under Target",
+    "report:oql:ppmOver": "PPM over Target",
+    "report:oql:target": "Target",
 
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",
