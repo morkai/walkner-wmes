@@ -241,9 +241,9 @@ define([
           where: whereRes[0],
           what: whatRes[0]
         };
-
+        var week = page.model.get('week');
         var html = page.renderPartialHtml(printTemplate, {
-          week: page.model.get('week'),
+          week: week,
           charts: charts,
           tables: {
             ppm: page.ppmTableView.serialize().data,
@@ -253,7 +253,12 @@ define([
           results: page.resultsListView.serialize().rows
         });
 
-        html2pdf(html, {orientation: 'landscape'});
+        html2pdf(html, {
+          orientation: 'landscape',
+          filename: page.t('report:filenames:outgoingQuality', {
+            week: week.replace('-', '_')
+          })
+        });
       });
     },
 

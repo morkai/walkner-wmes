@@ -171,6 +171,7 @@
     "report:filenames:okRatio": "WMES_QI_OkGoods",
     "report:filenames:nokRatio:total": "WMES_QI_NokGoods_Total",
     "report:filenames:nokRatio:division": "WMES_QI_NokGoods_Divisions",
+    "report:filenames:outgoingQuality": "WMES_QI_OutgoingQuality_{week}",
     "report:column:division": "Division",
     "report:column:nok": "NOK",
     "report:column:all": "All",

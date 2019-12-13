@@ -60,16 +60,16 @@ define([
     });
   };
 
-  function printInBrowser(msg, windowOptions, hash)
+  function printInBrowser(msg, options, hash)
   {
     var width = Math.min(window.screen.availWidth - 200, 1400);
 
-    windowOptions = _.assign({
+    var windowOptions = _.assign({
       top: 80,
       width: width,
       height: Math.min(window.screen.availHeight - 160, 800),
       left: window.screen.availWidth - width - 80
-    }, _.pick(windowOptions, ['top', 'left', 'width', 'height']));
+    }, _.pick(options, ['top', 'left', 'width', 'height']));
 
     var features = [];
 
@@ -78,7 +78,16 @@ define([
       features.push(k + '=' + windowOptions[k]);
     });
 
-    var win = window.open('/html2pdf/' + hash + '.pdf', '_blank', features.join(','));
+    var href = '/html2pdf/' + hash;
+
+    if (options.filename)
+    {
+      href += '/' + options.filename;
+    }
+
+    href += '.pdf';
+
+    var win = window.open(href, '_blank', features.join(','));
 
     if (!win)
     {

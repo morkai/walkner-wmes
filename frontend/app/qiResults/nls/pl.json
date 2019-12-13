@@ -171,6 +171,7 @@
   "report:filenames:okRatio": "WMES_QI_ProcentZgodnych",
   "report:filenames:nokRatio:total": "WMES_QI_ProcentNiezgodnych_ML",
   "report:filenames:nokRatio:division": "WMES_QI_ProcentNiezgodnych_Centra",
+  "report:filenames:outgoingQuality": "WMES_QI_OutgoingQuality_{week}",
   "report:column:division": "Centrum",
   "report:column:nok": "Wadliwe",
   "report:column:all": "Wszystkie",
