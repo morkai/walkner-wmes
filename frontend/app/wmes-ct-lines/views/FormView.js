@@ -8,8 +8,10 @@ define([
   'app/data/orgUnits',
   'app/orgUnits/util/setUpOrgUnitSelect2',
   'app/wmes-ct-lines/templates/form',
-  'app/wmes-ct-lines/templates/_inveoForm',
-  'app/wmes-ct-lines/templates/_luma2Form'
+  'app/wmes-ct-lines/templates/_inveoCommonForm',
+  'app/wmes-ct-lines/templates/_inveoStationForm',
+  'app/wmes-ct-lines/templates/_luma2CommonForm',
+  'app/wmes-ct-lines/templates/_luma2StationForm'
 ], function(
   _,
   $,
@@ -18,14 +20,22 @@ define([
   orgUnits,
   setUpOrgUnitSelect2,
   template,
-  inveoTemplate,
-  luma2Template
+  inveoCommonForm,
+  inveoStationForm,
+  luma2CommonForm,
+  luma2StationForm
 ) {
   'use strict';
 
-  var TYPE_TO_TEMPLATE = {
-    inveo: inveoTemplate,
-    luma2: luma2Template
+  var TYPE_TO_TEMPLATES = {
+    inveo: {
+      common: inveoCommonForm,
+      station: inveoStationForm
+    },
+    luma2: {
+      common: luma2CommonForm,
+      station: luma2StationForm
+    }
   };
 
   return FormView.extend({
@@ -80,6 +90,7 @@ define([
       'change input[name="type"]': function()
       {
         this.$id('stations').empty();
+        this.renderCommon();
       }
 
     }, FormView.prototype.events),
@@ -94,6 +105,8 @@ define([
     afterRender: function()
     {
       var view = this;
+
+      view.renderCommon();
 
       _.forEach(view.model.get('stations'), function(station)
       {
@@ -131,21 +144,34 @@ define([
       view.recalcStationNo();
     },
 
+    getSelectedType: function()
+    {
+      return this.$('[name="type"]:checked').val() || this.model.get('type') || 'inveo';
+    },
+
+    renderCommon: function()
+    {
+      var template = TYPE_TO_TEMPLATES[this.getSelectedType()].common;
+      var html = this.renderPartialHtml(template);
+
+      this.$id('common').html(html);
+    },
+
     addStation: function(type)
     {
       if (!type)
       {
-        type = this.$('[name="type"]:checked').val();
+        type = this.getSelectedType();
       }
 
-      var stationTemplate = TYPE_TO_TEMPLATE[type];
+      var templates = TYPE_TO_TEMPLATES[type];
 
-      if (!stationTemplate)
+      if (!templates)
       {
         throw new Error('Invalid type: ' + type);
       }
 
-      var $station = this.renderPartial(stationTemplate, {
+      var $station = this.renderPartial(templates.station, {
         idPrefix: this.idPrefix + '-' + this.nextStationIndex,
         stationIndex: this.nextStationIndex
       });

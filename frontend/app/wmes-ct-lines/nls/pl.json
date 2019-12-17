@@ -6,8 +6,11 @@
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:type": "Typ",
   "PROPERTY:stationCount": "Ilość stanowisk",
+  "PROPERTY:common:lampControllerIp": "Adres IP sterownika lamp",
   "PROPERTY:stations": "Stanowiska pracy",
-  "PROPERTY:stations:lampIp": "Adres lampy",
+  "PROPERTY:stations:lampIp": "Adres IP lampy",
+  "PROPERTY:stations:redLampI": "Indeks czerwonej lampy",
+  "PROPERTY:stations:orangeLampI": "Indeks pomarańczowej lampy",
 
   "type:inveo": "INVEO",
   "type:luma2": "LUMA2",

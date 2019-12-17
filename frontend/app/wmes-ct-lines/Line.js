@@ -25,7 +25,9 @@ define([
     {
       return {
         active: true,
-        type: 'inveo'
+        type: 'inveo',
+        common: {},
+        stations: []
       };
     },
 

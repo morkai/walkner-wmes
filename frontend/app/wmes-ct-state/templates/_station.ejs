@@ -1,4 +1,4 @@
-<div class="ct-state-station <%- station.lamp ? 'is-lamp-on' : 'is-lamp-off' %>" data-id="<%- station._id %>">
+<div class="ct-state-station" data-id="<%- station._id %>" data-lamp="<%- station.lamp %>">
   <div class="ct-state-station-row ct-state-station-orderInfo">
     <span title="<%- t('PROPERTY:order:_id') %>"><%- station.order._id %></span>
     <span title="<%- t('PROPERTY:order:nc12') %>"><%- station.order.nc12 %></span>

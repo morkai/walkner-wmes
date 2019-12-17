@@ -1,4 +1,4 @@
-<form method="post" action="<%- formAction %>">
+<form method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
@@ -23,6 +23,7 @@
         </label>
         <% }) %>
       </div>
+      <div id="<%- idPrefix %>-common" class="ct-lines-form-common"></div>
       <div id="<%- idPrefix %>-stations" class="ct-lines-form-stations" style="margin-bottom: 20px"></div>
       <div class="form-group">
         <button id="<%- idPrefix %>-addStation" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('form:stations:add') %></span></button>

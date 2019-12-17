@@ -75,6 +75,7 @@ define([
         'app/core/pages/AddFormPage',
         model,
         'app/wmes-ct-lines/views/FormView',
+        'css!app/wmes-ct-lines/assets/form.css',
         nls
       ],
       function(AddFormPage, Line, FormView)
@@ -96,6 +97,7 @@ define([
         'app/core/pages/EditFormPage',
         model,
         'app/wmes-ct-lines/views/FormView',
+        'css!app/wmes-ct-lines/assets/form.css',
         nls
       ],
       function(EditFormPage, Line, FormView)

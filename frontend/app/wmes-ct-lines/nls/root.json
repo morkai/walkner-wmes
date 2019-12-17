@@ -7,8 +7,11 @@
     "PROPERTY:active": "Active?",
     "PROPERTY:type": "Type",
     "PROPERTY:stationCount": "Stations",
+    "PROPERTY:common:lampControllerIp": "Lamp controller IP address",
     "PROPERTY:stations": "Stations",
     "PROPERTY:stations:lampIp": "Lamp IP address",
+    "PROPERTY:stations:redLampI": "Red lamp index",
+    "PROPERTY:stations:orangeLampI": "Orange lamp index",
 
     "type:inveo": "INVEO",
     "type:luma2": "LUMA2",

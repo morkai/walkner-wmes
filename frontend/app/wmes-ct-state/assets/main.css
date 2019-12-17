@@ -25,8 +25,11 @@
 .ct-state-station:last-child {
   border-right: none;
 }
-.ct-state-station.is-lamp-on {
+.ct-state-station[data-lamp="red"] {
   background-color: #f2dede;
+}
+.ct-state-station[data-lamp="orange"] {
+  background-color: #fcf8e3;
 }
 .ct-state-station-row {
   display: flex;

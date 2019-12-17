@@ -1,0 +1,6 @@
+.ct-lines-form-common:empty {
+  display: none;
+}
+.ct-lines-form-common > .form-group:last-child {
+  margin-bottom: 15px;
+}
