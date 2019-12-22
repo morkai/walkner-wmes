@@ -217,6 +217,8 @@
   "TEXT:prodDowntimes.confirmedEdited": "Zmodyfikowano potwierdzony przestój: <a href='\\#prodDowntimes/{_id}'>{rid}</a>",
   "TYPE:orderDocuments.synced": "Zlecenia produkcyjne: synchronizacja dokumentów",
   "TEXT:orderDocuments.synced": "Zmodyfikowano <em>{updateCount}</em> {updateCount, plural, one{zlecenie} few{zlecenia} other{zleceń}} z danych pobranych <em>{timestamp}</em>.",
+  "TEXT:orderDocuments.synced:date": "Zmodyfikowano <em>{updateCount}</em> {updateCount, plural, one{zlecenie} few{zlecenia} other{zleceń}} dla daty {minDate} z danych pobranych <em>{timestamp}</em>.",
+  "TEXT:orderDocuments.synced:minMax": "Zmodyfikowano <em>{updateCount}</em> {updateCount, plural, one{zlecenie} few{zlecenia} other{zleceń}} dla dat {minDate}-{maxDate} z danych pobranych <em>{timestamp}</em>.",
   "TYPE:orderDocuments.syncFailed": "Zlecenia produkcyjne: nieudana synchronizacja dokumentów",
   "TEXT:orderDocuments.syncFailed": "Nie udało się zaimportować danych z <em>{timestamp}</em>: {error}",
   "TYPE:orderDocuments.eto.synced": "Zlecenia produkcyjne: synchronizacja ETO",

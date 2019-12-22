@@ -43,6 +43,9 @@
 <ul>
   <li>Poprawiono błąd powodujący duplikację ostatniego komentarza zmiany statusu malarnii po dowolnej zmianie
     zlecenia malarnii podczas generowania kolejki.</li>
+  <li>Zmieniono proces zrzutów listy dokumentów z SAP tak, aby pobierał najpierw daty, dla których
+    istnieją zlecenia a nie odpytywał o każdy kolejny dzień oddzielnie i zatrzymywał się, jeżeli pięc kolejnych
+    dni jest bez zleceń (mimo że późniejsze dni mają zlecenia).</li>
   <li>Dodano listę przestojów na stronie szczegółów zlecenia.</li>
 </ul>
 <h3>WorkCentra</h3>

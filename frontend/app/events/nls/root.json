@@ -218,6 +218,8 @@
     "TEXT:prodDowntimes.confirmedEdited": "Edited a confirmed downtime: <a href='\\#prodDowntimes/{_id}'>{rid}</a>",
     "TYPE:orderDocuments.synced": "Production orders: document sync",
     "TEXT:orderDocuments.synced": "Updated <em>{updateCount}</em> {updateCount, plural, one{order} other{orders}} from data downloaded at <em>{timestamp}</em>.",
+    "TEXT:orderDocuments.synced:date": "Updated <em>{updateCount}</em> {updateCount, plural, one{order} other{orders}} for date {minDate} from data downloaded at <em>{timestamp}</em>.",
+    "TEXT:orderDocuments.synced:minMax": "Updated <em>{updateCount}</em> {updateCount, plural, one{order} other{orders}} for dates {minDate}-{maxDate} from data downloaded at <em>{timestamp}</em>.",
     "TYPE:orderDocuments.syncFailed": "Production orders: document sync failure",
     "TEXT:orderDocuments.syncFailed": "Failed to import documents from data downloaded at <em>{timestamp}</em>: {error}",
     "TYPE:orderDocuments.eto.synced": "Production orders: ETO sync",

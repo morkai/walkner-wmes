@@ -57,7 +57,7 @@ define([
             time: time.format(event.get('time'), 'L, LTS'),
             user: userInfoTemplate({userInfo: userInfo}),
             type: t('events', 'TYPE:' + type),
-            text: t('events', 'TEXT:' + type, t.flatten(data))
+            text: t('events', 'TEXT:' + data.$text, t.flatten(data))
           };
         })
       };
@@ -83,6 +83,7 @@ define([
       }
 
       data.$prepared = true;
+      data.$text = type;
 
       if (data.date)
       {
@@ -127,6 +128,22 @@ define([
         case 'orders.synced':
           data.removed = data.removed || 0;
           break;
+
+        case 'orderDocuments.synced':
+          if (data.minDate)
+          {
+            if (data.minDate === data.maxDate)
+            {
+              data.$text += ':date';
+            }
+            else
+            {
+              data.$text += ':minMax';
+            }
+
+            data.minDate = time.format(data.minDate, 'L');
+            data.maxDate = time.format(data.maxDate, 'L');
+          }
       }
 
       return data;
