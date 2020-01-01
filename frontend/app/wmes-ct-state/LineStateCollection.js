@@ -15,6 +15,11 @@ define([
 
     paginate: false,
 
+    comparator: function(a, b)
+    {
+      return a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true});
+    },
+
     parse: function(res)
     {
       return res;
