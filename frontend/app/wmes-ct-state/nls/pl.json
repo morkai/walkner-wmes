@@ -27,7 +27,8 @@
   "PROPERTY:durations:scheduled": "Czas planowanych przestojów",
   "PROPERTY:taktTime:order": "Czas taktu SAP dla zlecenia",
   "PROPERTY:taktTime:target": "Czas taktu SAP dla stanowiska",
-  "PROPERTY:taktTime:actual": "Rzeczywisty czas cyklu stanowiska",
+  "PROPERTY:taktTime:actual": "Średnia czasu cyklu stanowiska",
+  "PROPERTY:taktTime:median": "Mediana czasu cyklu stanowiska",
 
   "todo:time": "Czas",
   "todo:line": "Linia",

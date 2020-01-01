@@ -69,6 +69,10 @@ define([
         actual: {
           short: '-',
           full: '-'
+        },
+        median: {
+          short: station.median ? Math.ceil(station.median / 1000) : '-',
+          full: station.median ? this.formatFullDuration(station.median) : '-'
         }
       };
 
@@ -81,6 +85,8 @@ define([
       }
 
       taktTime.title = [
+        t(this.nlsDomain, 'PROPERTY:taktTime:median'),
+        '  ' + taktTime.median.full,
         t(this.nlsDomain, 'PROPERTY:taktTime:actual'),
         '  ' + taktTime.actual.full,
         t(this.nlsDomain, 'PROPERTY:taktTime:order'),

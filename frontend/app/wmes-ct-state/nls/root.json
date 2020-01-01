@@ -27,8 +27,9 @@
     "PROPERTY:durations:downtime": "Total downtime duration",
     "PROPERTY:durations:scheduled": "Scheduled downtime duration",
     "PROPERTY:taktTime:order": "Order Takt Time",
-    "PROPERTY:taktTime:target": "Station Takt Time",
-    "PROPERTY:taktTime:actual": "Station Cycle Time",
+    "PROPERTY:taktTime:target": "Target station Takt Time",
+    "PROPERTY:taktTime:actual": "Average station Cycle Time",
+    "PROPERTY:taktTime:median": "Median station Cycle Time",
 
     "diag:time": "Time",
     "diag:line": "Line",
