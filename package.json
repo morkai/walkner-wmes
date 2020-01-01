@@ -2,11 +2,11 @@
   "private": true,
   "guid": "A0974235-9E21-49BB-8D01-CA7A932A6EEB",
   "name": "walkner-wmes",
-  "version": "0.144.0",
+  "version": "0.145.0",
   "updater": {
     "wmes": {
-      "backend": 499,
-      "frontend": 673,
+      "backend": 500,
+      "frontend": 674,
       "reports": 102,
       "attachments": 3,
       "importer-sap": 54,
@@ -29,7 +29,7 @@
       "luca": 7,
       "drilling": 8,
       "wiring": 1,
-      "ct": 9
+      "ct": 10
     },
     "pos": {
       "backend": 89,
