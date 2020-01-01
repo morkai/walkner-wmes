@@ -125,6 +125,9 @@
 
     function doStartApp()
     {
+      startBroker.destroy();
+      startBroker = broker.sandbox();
+
       broker.subscribe('i18n.reloaded', function(message)
       {
         localStorage.setItem('LOCALE', message.newLocale);

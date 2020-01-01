@@ -61,7 +61,9 @@ define([
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return this.$('[data-setting="' + setting.id + '"]')[0].dataset.setting === undefined;
+      var $setting = this.$('[data-setting="' + setting.id + '"]');
+
+      return !$setting.length || $setting[0].dataset.setting === undefined;
     },
 
     updateSettingField: function(setting)

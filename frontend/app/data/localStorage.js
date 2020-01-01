@@ -83,7 +83,11 @@ define(function()
     switch (msg.action)
     {
       case 'read':
-        return src.postMessage({type: 'localStorage', data: remoteData}, '*');
+        if (src)
+        {
+          return src.postMessage({type: 'localStorage', data: remoteData}, '*');
+        }
+        break;
 
       case 'setItem':
         return setRemoteItem(msg.key, msg.value);

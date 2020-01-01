@@ -808,7 +808,7 @@ define([
       var view = this;
       var $orderNo = view.$id('orderNo');
 
-      if ($orderNo.prop('disabled'))
+      if (!$orderNo.length || $orderNo.prop('disabled'))
       {
         this.updateLines([]);
         this.updateLeaders([]);

@@ -175,6 +175,9 @@
 
     function doStartApp()
     {
+      startBroker.destroy();
+      startBroker = broker.sandbox();
+
       var userReloadTimer = null;
 
       broker.subscribe('i18n.reloaded', function(message)

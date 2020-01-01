@@ -93,10 +93,9 @@ define([
         className: '',
         replaceFn: function(match)
         {
-          var url = match.getUrl();
           var tag = match.buildTag();
 
-          if (match.getType() === 'url' && url.indexOf(window.location.host) !== -1)
+          if (match.getType() === 'url' && match.getUrl().indexOf(window.location.host) !== -1)
           {
             var parts = tag.innerHTML.split('?');
 
