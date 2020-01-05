@@ -1,0 +1,20 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Cycle time",
+    "BREADCRUMBS:reports": "Reports",
+    "BREADCRUMBS:reports:groups": "Product groups",
+    "BREADCRUMBS:browse": "Groups",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:name": "Group name",
+    "PROPERTY:nameInclude": "Product name (include)",
+    "PROPERTY:nameExclude": "Product name (exclude)",
+    "PROPERTY:nc12Include": "Product 12NC (include)",
+    "PROPERTY:nc12Exclude": "Product 12NC (exclude)",
+    "PROPERTY:bomInclude": "Component (include)",
+    "PROPERTY:bomExclude": "Component (exclude)",
+
+    "or": "or"
+  },
+  "pl": true
+}

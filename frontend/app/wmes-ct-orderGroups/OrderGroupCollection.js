@@ -2,20 +2,20 @@
 
 define([
   '../core/Collection',
-  './Line'
+  './OrderGroup'
 ], function(
   Collection,
-  Line
+  OrderGroup
 ) {
   'use strict';
 
   return Collection.extend({
 
-    model: Line,
+    model: OrderGroup,
 
     comparator: function(a, b)
     {
-      return a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true});
+      return a.get('name').localeCompare(b.get('name'), undefined, {numeric: true, ignorePunctuation: true});
     }
 
   });

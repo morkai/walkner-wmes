@@ -1,0 +1,27 @@
+.ct-report-groups-product + .ct-report-groups-product {
+  margin-top: 30px;
+}
+.ct-report-groups-maxDuration {
+  color: #e00;
+  text-align: center;
+}
+.ct-report-groups-minDuration {
+  color: #009900;
+  text-align: center;
+}
+.ct-report-groups-maxStation {
+  background: #f2dede;
+}
+tr:hover .ct-report-groups-maxStation {
+  background: #ebcccc!important;
+}
+.ct-report-groups-minStation {
+  background: #dff0d8;
+}
+tr:hover .ct-report-groups-minStation {
+  background: #d0e9c6!important;
+}
+.ct-report-groups-metric-label {
+  text-align: right;
+  font-weight: bold;
+}

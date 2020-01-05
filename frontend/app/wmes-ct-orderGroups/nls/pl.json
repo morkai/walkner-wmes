@@ -1,0 +1,24 @@
+{
+  "BREADCRUMBS:base": "Czas cyklu",
+  "BREADCRUMBS:reports": "Raporty",
+  "BREADCRUMBS:reports:groups": "Grupy wyrobów",
+  "BREADCRUMBS:browse": "Grupy",
+
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:name": "Nazwa grupy",
+  "PROPERTY:nameInclude": "Nazwa wyrobu zawiera",
+  "PROPERTY:nameExclude": "Nazwa wyrobu nie zawiera",
+  "PROPERTY:nc12Include": "12NC wyrobu równa się",
+  "PROPERTY:nc12Exclude": "12NC wyrobu inne niż",
+  "PROPERTY:bomInclude": "Zawiera komponent",
+  "PROPERTY:bomExclude": "Nie zawiera komponentu",
+
+  "or": "lub",
+
+  "FORM:help:nameInclude": "W każdej linii podaj ciągi znaków jakie muszą wystąpić w nazwie lub opisie wyrobu.<br>Oddzielne frazy, które muszą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Nazwa musi pasować do warunków z przynajmniej jednej linii.",
+  "FORM:help:nameExclude": "W każdej linii podaj ciągi znaków jakie nie mogą wystąpić w nazwie lub opisie wyrobu.<br>Oddzielne frazy, które nie mogą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Nazwa nie może pasować do żadnego z warunków.",
+  "FORM:help:nc12Include": "Podaj 12NC wyrobu jakie musi mieć zlecenie, aby było zaliczone do tej grupy.",
+  "FORM:help:nc12Exclude": "Podaj 12NC wyrobu jakie nie może mieć zlecenie, aby było zaliczone do tej grupy.",
+  "FORM:help:bomInclude": "W każdej linii podaj komponenty jakie muszą wystąpić w BOM zlecenia.<br>Komponenty, które muszą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Komponenty zlecenia muszą pasować do warunków z przynajmniej jednej linii.<br>Jako komponent można podać 4-cyfrowy nr pozycji, 12-cyfrowy kod komponentu (12NC) lub ciąg znaków występujący w nazwie.",
+  "FORM:help:bomExclude": "W każdej linii podaj komponenty jakie nie mogą wystąpić w BOM zlecenia.<br>Komponenty, które nie mogą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Komponenty zlecenia nie mogą pasować do żadnego z warunków.<br>Jako komponent można podać 4-cyfrowy nr pozycji, 12-cyfrowy kod komponentu (12NC) lub ciąg znaków występujący w nazwie."
+}

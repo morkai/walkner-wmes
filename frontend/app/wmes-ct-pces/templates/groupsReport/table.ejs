@@ -1,0 +1,42 @@
+<table class="table table-bordered table-condensed table-hover">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('groupsReport:column:order') %></th>
+    <th class="is-min"><%- t('groupsReport:column:nc12') %></th>
+    <th class="is-min"><%- t('groupsReport:column:name') %></th>
+    <th class="is-min" colspan="3"><%- t('groupsReport:column:qty') %></th>
+    <th class="is-min"></th>
+    <% for (var stationNo = 1; stationNo <= stationCount; ++stationNo) { %>
+    <th class="is-min text-center"><%- t('groupsReport:column:station', {no: stationNo}) %></th>
+    <% } %>
+    <th class="is-min"></th>
+    <th class="is-min text-center"><%- t('groupsReport:column:total') %></th>
+    <th class="is-min text-center"><%- t('groupsReport:column:min') %></th>
+    <th class="is-min text-center"><%- t('groupsReport:column:max') %></th>
+    <th class="is-min text-center"><%- t('groupsReport:column:target') %></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% rows.forEach(function(row) { %>
+  <tr>
+    <td class="is-min text-mono"><a href="#orders/<%- row.orderNo %>"><%- row.orderNo %></a></td>
+    <td class="is-min text-mono"><%= row.nc12 %></td>
+    <td class="is-min" title="<%= row.description %>"><%= row.name %></td>
+    <td class="is-min is-number" title="<%- t('groupsReport:column:qtyMatched') %>"><%- row.qtyMatched %></td>
+    <td class="is-min is-number" title="<%- t('groupsReport:column:qtyDone') %>"><%- row.qtyDone %></td>
+    <td class="is-min is-number" title="<%- t('groupsReport:column:qtyTodo') %>"><%- row.qtyTodo %></td>
+    <td class="is-min"></td>
+    <% row.stations.forEach(function(station, stationI) { %>
+    <td class="is-min <%- stationI === row.minStationI ? 'ct-report-groups-minStation' : '' %> <%- stationI === row.maxStationI ? 'ct-report-groups-maxStation' : '' %>" title="<%- t('groupsReport:column:station:title', station) %>"><%- station.med %></td>
+    <% }) %>
+    <td class="is-min"></td>
+    <td class="is-min" title="<%- t('groupsReport:column:station:title', row.total) %>"><%- row.total.med %></td>
+    <td class="is-min ct-report-groups-minDuration"><%- row.minDuration %></td>
+    <td class="is-min ct-report-groups-maxDuration"><%- row.maxDuration %></td>
+    <td class="is-min"><%= row.total.target %></td>
+    <th></th>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

@@ -1,0 +1,29 @@
+<form class="well filter-form ct-report-groups-filter" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    required: true
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-lines" class="control-label"><%- t('groupsReport:filter:lines') %></label>
+    <input id="<%- idPrefix %>-lines" name="lines" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-minQty" class="control-label"><%- t('groupsReport:filter:minMaxQty') %></label>
+    <div style="display: flex">
+      <input id="<%- idPrefix %>-minQty" name="minQty" class="form-control" type="number" min="0" style="width: 65px" title="<%- t('groupsReport:filter:minQty') %>">
+      <span style="padding: 0 4px; align-self: center">–</span>
+      <input id="<%- idPrefix %>-maxQty" name="maxQty" class="form-control" type="number" min="0" style="width: 65px" title="<%- t('groupsReport:filter:maxQty') %>">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-minT" class="control-label"><%- t('groupsReport:filter:minMaxT') %></label>
+    <div style="display: flex">
+      <input id="<%- idPrefix %>-minT" name="minT" class="form-control" type="text" style="width: 60px" title="<%- t('groupsReport:filter:minT') %>">
+      <span style="padding: 0 4px; align-self: center">–</span>
+      <input id="<%- idPrefix %>-maxT" name="maxT" class="form-control" type="text" style="width: 60px" title="<%- t('groupsReport:filter:maxT') %>">
+    </div>
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
+  </div>
+</form>

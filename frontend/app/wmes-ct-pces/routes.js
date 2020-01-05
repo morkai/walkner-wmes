@@ -55,4 +55,23 @@ define([
       }
     );
   });
+
+  router.map('/ct/reports/groups', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/wmes-ct-pces/GroupsReport',
+        'app/wmes-ct-pces/pages/GroupsReportPage',
+        'css!app/wmes-ct-pces/assets/groupsReport',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(Report, ReportPage)
+      {
+        return new ReportPage({
+          model: Report.fromQuery(req.query)
+        });
+      }
+    );
+  });
 });

@@ -3,9 +3,13 @@
   "BREADCRUMBS:diag": "Diagnostyka",
 
   "PAGE_ACTIONS:pceReport": "Raport",
-  "PAGE_ACTIONS:pces": "Sztuki",
-  "PAGE_ACTIONS:lines": "Linie",
-  "PAGE_ACTIONS:carts": "Wózki",
+  "PAGE_ACTIONS:pces": "Historia sztuk",
+  "PAGE_ACTIONS:reports": "Raporty",
+  "PAGE_ACTIONS:reports:pce": "Sztuki",
+  "PAGE_ACTIONS:reports:groups": "Grupy wyrobów",
+  "PAGE_ACTIONS:dictionaries": "Słowniki",
+  "PAGE_ACTIONS:dictionaries:lines": "Linie",
+  "PAGE_ACTIONS:dictionaries:carts": "Wózki",
   "PAGE_ACTIONS:diag": "Diagnostyka",
 
   "PROPERTY:cart": "Wózek",

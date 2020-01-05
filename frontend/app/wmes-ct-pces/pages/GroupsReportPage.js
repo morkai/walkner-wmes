@@ -6,19 +6,19 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/wmes-ct-lines/LineCollection',
-  '../PceReport',
-  '../views/pceReport/FilterView',
-  '../views/pceReport/ProductView',
-  'app/wmes-ct-pces/templates/pceReport/page'
+  '../GroupsReport',
+  '../views/groupsReport/FilterView',
+  '../views/groupsReport/GroupView',
+  'app/wmes-ct-pces/templates/groupsReport/page'
 ], function(
   _,
   t,
   View,
   bindLoadingMessage,
   LineCollection,
-  PceReport,
+  Report,
   FilterView,
-  ProductView,
+  GroupView,
   template
 ) {
   'use strict';
@@ -35,7 +35,17 @@ define([
     {
       return [
         {href: '#ct', label: this.t('BREADCRUMBS:base')},
-        this.t('BREADCRUMBS:reports:pce')
+        this.t('BREADCRUMBS:reports:groups')
+      ];
+    },
+
+    actions: function()
+    {
+      return [
+        {
+          label: this.t('PAGE_ACTIONS:orderGroups'),
+          href: '#ct/orderGroups'
+        }
       ];
     },
 
@@ -53,7 +63,7 @@ define([
 
       this.listenToOnce(this, 'afterRender', function()
       {
-        this.listenTo(this.model.products, 'reset', function() { this.renderProducts(true); });
+        this.listenTo(this.model.groups, 'reset', function() { this.renderGroups(true); });
       });
     },
 
@@ -78,27 +88,27 @@ define([
 
     beforeRender: function()
     {
-      this.renderProducts(false);
+      this.renderGroups(false);
     },
 
-    renderProducts: function(render)
+    renderGroups: function(render)
     {
       var page = this;
 
-      page.removeView('#-products');
+      page.removeView('#-groups');
 
-      page.model.products.forEach(function(product)
+      page.model.groups.forEach(function(group)
       {
-        var productView = new ProductView({
+        var groupView = new GroupView({
           model: page.model,
-          product: product
+          group: group
         });
 
-        page.insertView('#-products', productView);
+        page.insertView('#-groups', groupView);
 
         if (render)
         {
-          productView.render();
+          groupView.render();
         }
       });
     }

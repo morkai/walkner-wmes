@@ -1,0 +1,10 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <span><%- t('PAGE_ACTIONS:reports') %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu pull-right">
+    <% ['pce', 'groups'].forEach(function(report) { %>
+    <li><a href="#ct/reports/<%- report %>"><%- t('PAGE_ACTIONS:reports:' + report) %></a></li>
+    <% }) %>
+  </ul>
+</div>

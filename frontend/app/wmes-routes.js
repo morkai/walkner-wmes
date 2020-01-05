@@ -113,6 +113,7 @@ define([
   './wmes-ct-pces/routes',
   './wmes-ct-lines/routes',
   './wmes-ct-carts/routes',
+  './wmes-ct-orderGroups/routes',
   './wmes-ct-state/routes'
 ], function()
 {

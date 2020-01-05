@@ -1,0 +1,32 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input id="<%- idPrefix %>-active" type="checkbox" name="active" value="true">
+            <%- t('PROPERTY:active') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" autocomplete="new-password" required maxlength="200">
+      </div>
+      <% ['nameInclude', 'nameExclude', 'nc12Include', 'nc12Exclude', 'bomInclude', 'bomExclude'].forEach(function(prop) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- helpers.t('PROPERTY:' + prop) %></label>
+        <% if (t.has('FORM:help:' + prop)) { %>
+        <p class="help-block"><%- t('FORM:help:' + prop) %></p>
+        <% } %>
+        <textarea id="<%- idPrefix %>-<%- prop %>" class="form-control text-mono" rows="5" name="<%- prop %>"></textarea>
+      </div>
+      <% }) %>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

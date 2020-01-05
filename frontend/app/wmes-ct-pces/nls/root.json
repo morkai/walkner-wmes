@@ -1,8 +1,12 @@
 {
   "root": {
     "BREADCRUMBS:base": "Cycle time",
-    "BREADCRUMBS:browse": "PCE",
-    "BREADCRUMBS:pceReport": "Report",
+    "BREADCRUMBS:browse": "PCE history",
+    "BREADCRUMBS:reports": "Reports",
+    "BREADCRUMBS:reports:pce": "PCEs",
+    "BREADCRUMBS:reports:groups": "Product groups",
+
+    "PAGE_ACTIONS:orderGroups": "Groups",
 
     "PROPERTY:line": "Line",
     "PROPERTY:station": "Station",
@@ -46,7 +50,35 @@
     "pceReport:metric:avg": "Average",
     "pceReport:metric:stt": "Takt Time SAP",
     "pceReport:chart:title": "Cycle time",
-    "pceReport:chart:filename": "WMES_CycleTime"
+    "pceReport:chart:filename": "WMES_CycleTime",
+
+    "groupsReport:filter:lines": "Line",
+    "groupsReport:filter:minMaxQty": "Quantity",
+    "groupsReport:filter:minQty": "Minimum total quantity todo in a production order",
+    "groupsReport:filter:maxQty": "Maximum total quantity todo in a production order",
+    "groupsReport:filter:minMaxT": "Cycle time",
+    "groupsReport:filter:minT": "n - cycle time greater than or equal to n\nn% - cycle time greater than or equal to n percent of the SAP Takt Time\n~n - absolute value of difference between SAP Takt Time and actual cycle time is greater than or equal to n",
+    "groupsReport:filter:maxT": "n - cycle time less than or equal to n\nn% - cycle time less than or equal to n percent of the SAP Takt Time\n~n - absolute value of difference between SAP Takt Time and actual cycle time is less than or equal to n",
+    "groupsReport:column:order": "Order",
+    "groupsReport:column:nc12": "12NC",
+    "groupsReport:column:name": "Product name",
+    "groupsReport:column:qty": "Quantity",
+    "groupsReport:column:qtyMatched": "Quantity done with the Cycle time filter",
+    "groupsReport:column:qtyDone": "Quantity done without the Cycle time filter",
+    "groupsReport:column:qtyTodo": "Total quantity todo in the production order",
+    "groupsReport:column:target": "Target",
+    "groupsReport:column:station": "{no}",
+    "groupsReport:column:station:title": "SAP Takt Time: {target}\nMedian: {med}\nAverage: {avg}\nMinimum: {min}\nMaximum: {max}",
+    "groupsReport:column:total": "Sum",
+    "groupsReport:column:min": "Min.",
+    "groupsReport:column:max": "Max.",
+    "groupsReport:metric:min": "Minimum",
+    "groupsReport:metric:max": "Maximum",
+    "groupsReport:metric:med": "Median",
+    "groupsReport:metric:avg": "Average",
+    "groupsReport:metric:stt": "SAP Takt Time",
+    "groupsReport:chart:title": "Cycle time",
+    "groupsReport:chart:filename": "WMES_CycleTime"
   },
   "pl": true
 }

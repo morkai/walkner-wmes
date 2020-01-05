@@ -4,12 +4,16 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   '../views/LineStateView',
-  'app/wmes-ct-state/templates/listPage'
+  'app/wmes-ct-state/templates/listPage',
+  'app/wmes-ct-state/templates/reportsAction',
+  'app/wmes-ct-state/templates/dictionariesAction'
 ], function(
   View,
   bindLoadingMessage,
   LineStateView,
-  template
+  template,
+  reportsActionTemplate,
+  dictionariesActionTemplate,
 ) {
   'use strict';
 
@@ -26,23 +30,25 @@ define([
 
     actions: function()
     {
+      var page = this;
+
       return [
-        {
-          href: '#ct/reports/pce',
-          label: this.t('PAGE_ACTIONS:pceReport')
-        },
         {
           href: '#ct/pces',
           label: this.t('PAGE_ACTIONS:pces')
         },
         {
-          href: '#ct/lines',
-          label: this.t('PAGE_ACTIONS:lines'),
+          template: function()
+          {
+            return page.renderPartialHtml(reportsActionTemplate);
+          },
           privileges: 'PROD_DATA:MANAGE'
         },
         {
-          href: '#ct/carts',
-          label: this.t('PAGE_ACTIONS:carts'),
+          template: function()
+          {
+            return page.renderPartialHtml(dictionariesActionTemplate);
+          },
           privileges: 'PROD_DATA:MANAGE'
         },
         {

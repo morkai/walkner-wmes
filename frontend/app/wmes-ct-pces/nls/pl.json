@@ -1,7 +1,11 @@
 {
   "BREADCRUMBS:base": "Czas cyklu",
-  "BREADCRUMBS:browse": "Sztuki",
-  "BREADCRUMBS:pceReport": "Raport",
+  "BREADCRUMBS:browse": "Historia sztuk",
+  "BREADCRUMBS:reports": "Raporty",
+  "BREADCRUMBS:reports:pce": "Sztuki",
+  "BREADCRUMBS:reports:groups": "Grupy wyrobów",
+
+  "PAGE_ACTIONS:orderGroups": "Grupy",
 
   "PROPERTY:line": "Linia",
   "PROPERTY:station": "Stanowisko",
@@ -45,5 +49,33 @@
   "pceReport:metric:avg": "Średnia",
   "pceReport:metric:stt": "Takt Time SAP",
   "pceReport:chart:title": "Czas cyklu",
-  "pceReport:chart:filename": "WMES_CzasCyklu"
+  "pceReport:chart:filename": "WMES_CzasCyklu",
+
+  "groupsReport:filter:lines": "Linia",
+  "groupsReport:filter:minMaxQty": "Ilość sztuk",
+  "groupsReport:filter:minQty": "Minimalna całkowita ilość sztuk do zrobienia w zleceniu produkcyjnym",
+  "groupsReport:filter:maxQty": "Maksymalna całkowita ilość sztuk do zrobienia w zleceniu produkcyjnym",
+  "groupsReport:filter:minMaxT": "Czas cyklu",
+  "groupsReport:filter:minT": "n - czas cyklu sztuki jest większy lub równy n\nn% - czas cyklu sztuki jest większy lub równy n procentowi wartości Takt Time SAP\n~n - wartość bezwzględna różnicy między Takt Time SAP a czasem cyklu sztuki jest większa lub równa n",
+  "groupsReport:filter:maxT": "n - czas cyklu sztuki jest mniejszy lub równy n\nn% - czas cyklu sztuki jest mniejszy lub równy n procentowi wartości Takt Time SAP\n~n - wartość bezwzględna różnicy między Takt Time SAP a czasem cyklu sztuki jest mniejsza lub równa n",
+  "groupsReport:column:order": "Zlecenie",
+  "groupsReport:column:nc12": "12NC",
+  "groupsReport:column:name": "Nazwa wyrobu",
+  "groupsReport:column:qty": "Ilość",
+  "groupsReport:column:qtyMatched": "Ilość zrobiona z filtrem Czas cyklu",
+  "groupsReport:column:qtyDone": "Ilość zrobiona bez filtra Czas cyklu",
+  "groupsReport:column:qtyTodo": "Całkowita ilość do zrobienia w zleceniu produkcyjnym",
+  "groupsReport:column:target": "Cel",
+  "groupsReport:column:station": "{no}",
+  "groupsReport:column:station:title": "Takt Time SAP: {target}\nMediana: {med}\nŚrednia: {avg}\nMinimum: {min}\nMaksimum: {max}",
+  "groupsReport:column:total": "Suma",
+  "groupsReport:column:min": "Min.",
+  "groupsReport:column:max": "Maks.",
+  "groupsReport:metric:min": "Minimum",
+  "groupsReport:metric:max": "Maksimum",
+  "groupsReport:metric:med": "Mediana",
+  "groupsReport:metric:avg": "Średnia",
+  "groupsReport:metric:stt": "Takt Time SAP",
+  "groupsReport:chart:title": "Czas cyklu",
+  "groupsReport:chart:filename": "WMES_CzasCyklu"
 }

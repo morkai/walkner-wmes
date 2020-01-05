@@ -4,9 +4,13 @@
     "BREADCRUMBS:diag": "Diagnostics",
 
     "PAGE_ACTIONS:pceReport": "Report",
-    "PAGE_ACTIONS:pces": "PCEs",
-    "PAGE_ACTIONS:lines": "Lines",
-    "PAGE_ACTIONS:carts": "Carts",
+    "PAGE_ACTIONS:pces": "PCE history",
+    "PAGE_ACTIONS:reports": "Raporty",
+    "PAGE_ACTIONS:reports:pce": "PCEs",
+    "PAGE_ACTIONS:reports:groups": "Product groups",
+    "PAGE_ACTIONS:dictionaries": "Dictionaries",
+    "PAGE_ACTIONS:dictionaries:lines": "Lines",
+    "PAGE_ACTIONS:dictionaries:carts": "Carts",
     "PAGE_ACTIONS:diag": "Diagnostics",
 
     "PROPERTY:cart": "Cart",

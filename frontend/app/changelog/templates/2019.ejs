@@ -1,4 +1,107 @@
 <div class="hidden">
+  <h1>v0.145.0</h1>
+  <h2><%- time.format('2019-12-31', 'LL') %></h2>
+  <h3>FAP</h3>
+  <ul>
+    <li>Zmieniono sprawdzanie uprawnień do zmiany kategorii zgłoszenia tak, aby lista uprawnionych Funkcji produkcyjnych
+      była definiowana w ustawieniach.</li>
+    <li>Zmieniono Kod komponentu tak, aby podany komponent nie musiał istnieć w bazie danych.</li>
+    <li>Zmieniono określanie wymaganych pól przy dodawaniu zgłoszenia tak, aby były określane na podstawie wybranej
+      kategorii. Każda kategoria/podkategoria może mieć własną kombinację pól.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono pole Przyczyna źródłowa tak, aby można było definiować wiele przyczyn.</li>
+    <li>Zmieniono tabele pareto w raporcie Outgoing quality tak, aby nie wyświetlane były rodziny/wady, które
+      nie wystąpiły w ostatnim tygodniu.</li>
+    <li>Zmieniono wykresy pareto w raporcie Outgoing quality tak, aby wyświetlane były wartości tylko z ostatniego
+      tygodnia.</li>
+    <li>Zmieniono wersję do druku raportu Outgoing quality tak, aby generoiwany był dokument PDF z większą ilością
+      danych na kilku poziomych stronach A4.</li>
+    <li>Zmieniono kolumnę 'Przyczyna' na 'Opis błędu' w raporcie Outgoing quality.</li>
+    <li>Dodano kolumnę 'Przyczyna źródłowa' do raportu Outgoing quality.</li>
+  </ul>
+  <h3>Monitoring > Czas cyklu</h3>
+  <ul>
+    <li>Zmieniono rozpoczynanie pierwszej sztuki na pierwszym stanowisku tak, aby zaczynała się wraz z rozpoczęciem
+      zlecenia na Formatce operatora. Jeżeli w ciągu następnych 60s otrzymany zostanie sygnał z windy, to czas
+      rozpoczęcia pierwszej sztuki jest aktualizowany.</li>
+    <li>Zmieniono sterowanie lampami tak, aby pod uwagę brana była mediana czasu cyklu dla zleceń, w których zrobione
+      więcej niż 3 sztuki, a nie średnia arytmetyczna czasu cyklu.</li>
+    <li>Dodano wsparcie dla wielu kart RFID na jednym wózku.</li>
+    <li>Dodano nowy raport: Sztuki wg wyrobów.</li>
+    <li>Dodano ekran diagnostyczny pokazujący wszystkie akcje, które serwer otrzymał do przerobienia.</li>
+    <li>Dodano nowy typ linii: LUMA2 - dane o sztukach zaciągane są z modułu Luma gen. 2.</li>
+    <li>Dodano wsparcie dla dwóch kolorów lamp: czerwonej - powyżej taktu oraz pomarańczowej - poniżej taktu.
+      W danym momencie może być włączona tylko jedna czerwona (największy procent powyżej taktu) i jedna pomarańczowa
+      (największy procent poniżej taktu).</li>
+  </ul>
+  <h3>Monitoring > Linie produkcyjne</h3>
+  <ul>
+    <li>Zmieniono historię linii produkcyjnych tak, aby była sortowana wg ID linii i zmiany produkcyjnej.</li>
+  </ul>
+  <h3>Wydajność godzinowa</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie komunikatu o zarejestrowaniu zeskanowanego numeru seryjnego
+      w przypadku, gdy rejestrowanie nie powiodło się ze względu na błędy sieci.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący duplikację ostatniego komentarza zmiany statusu malarnii po dowolnej zmianie
+      zlecenia malarnii podczas generowania kolejki.</li>
+    <li>Zmieniono proces zrzutów listy dokumentów z SAP tak, aby pobierał najpierw daty, dla których
+      istnieją zlecenia a nie odpytywał o każdy kolejny dzień oddzielnie i zatrzymywał się, jeżeli pięc kolejnych
+      dni jest bez zleceń (mimo że późniejsze dni mają zlecenia).</li>
+    <li>Dodano listę przestojów na stronie szczegółów zlecenia.</li>
+  </ul>
+  <h3>WorkCentra</h3>
+  <h3>Linie produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie nadrzędnej jednostki na stronie ze szczegółami.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono tekstowe pole 'Podjęte działania korygujące' na dwa checkboxy: 'Powrót do standardu' oraz
+      'Powiązane usprawnienie'.</li>
+    <li>Zmieniono Pomoc tak, aby odzwierciedlała najnowszy stan faktyczny.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Zmieniono Pomoc tak, aby odzwierciedlała najnowszy stan faktyczny.</li>
+    <li>Zmieniono formularz tak, aby nie można było zapisać zgłoszenia jeżeli
+      'Osoba zatwierdzająca' znajduje się także na liście 'Osób zgłaszających'
+      lub 'Osób wykonujących'.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący w niektórych przypadkach niedodawanie do historii zlecenia komentarzy
+      z Malarnii.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Dodano możliwość wyeksportowania do XLSX planu dla robotnika transportu.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Zmieniono sortowanie głównej listy zleceń tak, aby zlecenia były pogrupowane wg MRP,
+      jeżeli wybrano filtr farby.</li>
+    <li>Zmieniono wyświetlanie zakładek MRP tak, aby były wyszarzone, jeżeli nie mają żadnych
+      zleceń z wybraną farbą.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący usuwanie zewnętrznych dokumentów z listy po odświeżeniu
+      klienta aplikacji.</li>
+    <li>Zmieniono wyszukiwanie zewnętrznego dokumentu tak, aby przy wyszukiwaniu brana była pod
+      uwagę data dostępności aktualnie wybranego zlecenia. Dodatkowo usprawniono komunikaty błędów
+      podczas wyszukiwania dokumentu.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący ukrywanie menu w przeglądarce Firefox Mobile.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.144.0</h1>
   <h2><%- time.format('2019-10-27', 'LL') %></h2>
   <h3>FAP</h3>

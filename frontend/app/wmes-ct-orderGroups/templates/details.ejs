@@ -1,0 +1,17 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'active',
+        'name',
+        '!nameInclude',
+        '!nameExclude',
+        '!nc12Include',
+        '!nc12Exclude',
+        '!bomInclude',
+        '!bomExclude'
+      ]) %>
+    </div>
+  </div>
+</div>
