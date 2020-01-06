@@ -17,26 +17,6 @@ define([
 
     template: template,
 
-    events: _.assign({
-
-
-
-    }, FormView.prototype.events),
-
-    initialize: function()
-    {
-      FormView.prototype.initialize.apply(this, arguments);
-
-
-    },
-
-    afterRender: function()
-    {
-      var view = this;
-
-      FormView.prototype.afterRender.apply(view, arguments);
-    },
-
     serializeToForm: function()
     {
       var formData = this.model.toJSON();

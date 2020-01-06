@@ -12,7 +12,7 @@ define([
   'app/core/templates/listPage'
 ], function(
   _,
-  jquery,
+  $,
   t,
   bindLoadingMessage,
   pageActions,

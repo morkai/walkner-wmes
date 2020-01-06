@@ -13,7 +13,7 @@ define([
   LineStateView,
   template,
   reportsActionTemplate,
-  dictionariesActionTemplate,
+  dictionariesActionTemplate
 ) {
   'use strict';
 
