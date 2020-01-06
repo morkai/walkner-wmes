@@ -1,1 +1,1 @@
-define(["../core/Collection","./Line"],function(e,n){"use strict";return e.extend({model:n})});
+define(["../core/Collection","./Line"],function(e,n){"use strict";return e.extend({model:n,comparator:function(e,n){return e.id.localeCompare(n.id,void 0,{numeric:!0,ignorePunctuation:!0})}})});

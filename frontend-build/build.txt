@@ -763,6 +763,14 @@ app/wmes-ct-lines/assets/form.css
 ----------------
 app/wmes-ct-lines/assets/form.css
 
+app/wmes-ct-orderGroups/assets/form.css
+----------------
+app/wmes-ct-orderGroups/assets/form.css
+
+app/wmes-ct-pces/assets/groupsReport.css
+----------------
+app/wmes-ct-pces/assets/groupsReport.css
+
 app/wmes-ct-pces/assets/pceReport.css
 ----------------
 app/wmes-ct-pces/assets/pceReport.css
@@ -1894,6 +1902,7 @@ app/wmes-wiring/routes.js
 app/wmes-ct-pces/routes.js
 app/wmes-ct-lines/routes.js
 app/wmes-ct-carts/routes.js
+app/wmes-ct-orderGroups/routes.js
 app/wmes-ct-state/routes.js
 app/wmes-routes.js
 app/nls/core.js

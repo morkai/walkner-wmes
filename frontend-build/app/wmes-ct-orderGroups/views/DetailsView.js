@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","app/wmes-ct-orderGroups/templates/details"],function(e,t){"use strict";return e.extend({template:t})});
