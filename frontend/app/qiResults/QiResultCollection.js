@@ -24,8 +24,7 @@ define([
       return rql.Query.fromObject({
         fields: {},
         sort: {
-          inspectedAt: -1,
-          rid: -1
+          inspectedAt: -1
         },
         limit: -1337,
         selector: {
