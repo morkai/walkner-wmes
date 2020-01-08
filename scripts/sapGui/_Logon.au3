@@ -270,5 +270,7 @@ EndIf
 
 $session = $freeSession
 
+LogDebug("SESSION_ID=" & $session.Id)
+
 $session.TestToolMode = 1
 $session.LockSessionUI()
