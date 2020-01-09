@@ -184,7 +184,7 @@ define([
 
       var report = view.model;
       var topCount = report.getTopCount();
-      var group = _.last(report.get('groups'));
+      var group = _.last(report.get('groups')) || {};
       var values = group[property] || [];
       var pareto = 0;
 

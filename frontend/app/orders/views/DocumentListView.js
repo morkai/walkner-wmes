@@ -3,10 +3,12 @@
 define([
   'app/user',
   'app/core/View',
+  'app/data/loadedModules',
   'app/orders/templates/documentList'
 ], function(
   user,
   View,
+  loadedModules,
   template
 ) {
   'use strict';
@@ -68,7 +70,9 @@ define([
       return {
         orderNo: this.model.id,
         documents: this.model.get('documents').toJSON(),
-        canView: !window.IS_EMBEDDED && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
+        canView: !window.IS_EMBEDDED
+          && loadedModules.isLoaded('orderDocuments')
+          && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
       };
     },
 

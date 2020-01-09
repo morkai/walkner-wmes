@@ -173,7 +173,12 @@ exports.updater = {
         SHIFT_LENGTH: 8,
         OFFICE365_TENANT: 'Microsoft',
         CORS_PING_URL: 'https://test.wmes.pl/ping',
-        SERVICE_WORKER: '/sw.js'
+        SERVICE_WORKER: '/sw.js',
+        NAVBAR_ITEMS: {
+          fixedAssets: true,
+          invalidOrders: true,
+          iptCheck: true
+        }
       },
       dictionaryModules: frontendDictionaryModules
     },

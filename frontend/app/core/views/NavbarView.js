@@ -392,7 +392,7 @@ define([
    * @param {HTMLLIElement} liEl
    * @param {boolean} useAnchor
    * @param {boolean} [clientModule]
-   * @returns {string|null}
+   * @returns {string}
    */
   NavbarView.prototype.getModuleNameFromLi = function(liEl, useAnchor, clientModule)
   {
@@ -400,7 +400,7 @@ define([
 
     if (module === undefined && !useAnchor)
     {
-      return null;
+      return '';
     }
 
     if (module)
@@ -412,14 +412,14 @@ define([
 
     if (!aEl)
     {
-      return null;
+      return '';
     }
 
     var href = aEl.getAttribute('href');
 
     if (!href)
     {
-      return null;
+      return '';
     }
 
     return this.getModuleNameFromPath(href);
@@ -516,7 +516,7 @@ define([
 
     if (href && href[0] === '#')
     {
-      var moduleName = this.getModuleNameFromLi($navItem[0], true, true);
+      var moduleName = this.getModuleNameFromLi($navItem[0], true, true).split(' ')[0];
 
       this.navItems[moduleName] = $navItem;
     }
@@ -526,7 +526,7 @@ define([
 
       $navItem.find('.dropdown-menu > li').each(function()
       {
-        var moduleName = view.getModuleNameFromLi(this, true, true);
+        var moduleName = view.getModuleNameFromLi(this, true, true).split(' ')[0];
 
         view.navItems[moduleName] = $navItem;
       });
@@ -616,6 +616,11 @@ define([
 
     function isEntryVisible($li)
     {
+      if (window.NAVBAR_ITEMS && window.NAVBAR_ITEMS[$li.attr('data-item')] === false)
+      {
+        return false;
+      }
+
       var loggedIn = $li.attr('data-loggedin');
 
       if (typeof loggedIn === 'string')
@@ -630,9 +635,9 @@ define([
 
       var moduleName = navbarView.getModuleNameFromLi($li[0], false);
 
-      if (moduleName !== null
+      if (moduleName !== ''
         && $li.attr('data-no-module') === undefined
-        && !navbarView.options.loadedModules[moduleName])
+        && _.some(moduleName.split(' '), function(n) { return !navbarView.options.loadedModules[n]; }))
       {
         return false;
       }
@@ -1197,8 +1202,11 @@ define([
       users.slice(0, 5).reverse().forEach(function(user)
       {
         var $user = $tpl.clone();
+        var name = user.lastName || user.firstName
+          ? (user.lastName + ' ' + user.firstName).trim()
+          : user.login;
 
-        $user.find('a').attr('href', '#users/' + user._id).text(user.lastName + ' ' + user.firstName);
+        $user.find('a').attr('href', '#users/' + user._id).text(name);
 
         $user.insertAfter($hd);
       });

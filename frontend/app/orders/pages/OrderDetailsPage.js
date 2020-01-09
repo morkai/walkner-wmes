@@ -7,6 +7,7 @@ define([
   'app/user',
   'app/core/util/bindLoadingMessage',
   'app/core/pages/DetailsPage',
+  'app/data/loadedModules',
   'app/delayReasons/storage',
   'app/printers/views/PrinterPickerView',
   'app/wmes-fap-entries/dictionaries',
@@ -34,6 +35,7 @@ define([
   user,
   bindLoadingMessage,
   DetailsPage,
+  loadedModules,
   delayReasonsStorage,
   PrinterPickerView,
   fapDictionaries,
@@ -62,19 +64,25 @@ define([
 
     actions: function()
     {
+      var actions = [];
       var orderNo = this.model.id;
 
-      return [
-        {
+      if (loadedModules.isLoaded('wmes-ct'))
+      {
+        actions.push({
           label: this.t('PAGE_ACTION:cycleTime'),
           icon: 'clock-o',
-          href: '#ct/reports/pce?orders=' + orderNo
-        },
-        PrinterPickerView.pageAction({view: this, tag: 'orders'}, function(printer)
-        {
-          openOrderPrint([orderNo], printer);
-        })
-      ];
+          href: '#ct/reports/pce?orders=' + orderNo,
+          privileges: 'PROD_DATA:VIEW'
+        });
+      }
+
+      actions.push(PrinterPickerView.pageAction({view: this, tag: 'orders'}, function(printer)
+      {
+        openOrderPrint([orderNo], printer);
+      }));
+
+      return actions;
     },
 
     remoteTopics: function()
@@ -113,29 +121,16 @@ define([
 
     initialize: function()
     {
-      this.defineModels();
-      this.defineViews();
-      this.defineBindings();
+      var page = this;
 
-      this.insertView(this.detailsView);
+      page.defineModels();
+      page.defineViews();
+      page.defineBindings();
 
-      if (this.fapEntriesView)
+      _.forEach(page.views_, function(view)
       {
-        this.insertView(this.fapEntriesView);
-      }
-
-      if (this.downtimesView)
-      {
-        this.insertView(this.downtimesView);
-      }
-
-      this.insertView(this.childOrdersView);
-      this.insertView(this.operationsView);
-      this.insertView(this.documentsView);
-      this.insertView(this.componentsView);
-      this.insertView(this.paintComponentsView);
-      this.insertView(this.etoView);
-      this.insertView(this.changesView);
+        page.insertView(view);
+      });
     },
 
     destroy: function()
@@ -148,17 +143,21 @@ define([
     {
       this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
 
-      this.downtimes = !user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')
-        ? null
-        : bindLoadingMessage(new ProdDowntimeCollection(null, {
+      if (loadedModules.isLoaded('prodDowntimes') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW'))
+      {
+        this.downtimes = bindLoadingMessage(new ProdDowntimeCollection(null, {
           rqlQuery: 'exclude(changes)&sort(prodLine,startedAt)&orderId=string:' + this.model.id
         }), this);
+      }
 
       this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
-      this.fapEntries = !user.isAllowedTo('USER') ? null : bindLoadingMessage(new FapEntryCollection(null, {
-        rqlQuery: 'exclude(changes)&sort(_id)&orderNo=string:' + this.model.id
-      }), this);
+      if (loadedModules.isLoaded('wmes-fap') && user.isAllowedTo('USER'))
+      {
+        this.fapEntries = bindLoadingMessage(new FapEntryCollection(null, {
+          rqlQuery: 'exclude(changes)&sort(_id)&orderNo=string:' + this.model.id
+        }), this);
+      }
 
       this.childOrders = bindLoadingMessage(new OrderCollection(null, {
         paginate: false,
@@ -168,31 +167,36 @@ define([
           + '&leadingOrder=' + this.model.id
       }), this);
 
-      this.paintOrders = bindLoadingMessage(new OrderCollection(null, {
-        rqlQuery: 'select(mrp,bom)&limit(0)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
-      }), this);
+      if (loadedModules.isLoaded('paintShop'))
+      {
+        this.paintOrders = bindLoadingMessage(new OrderCollection(null, {
+          rqlQuery: 'select(mrp,bom)&limit(0)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
+        }), this);
 
-      this.paintOrder = new Order({
-        bom: new ComponentCollection()
-      });
+        this.paintOrder = new Order({
+          bom: new ComponentCollection()
+        });
+      }
     },
 
     defineViews: function()
     {
-      this.detailsView = new OrderDetailsView({
+      this.views_ = {};
+
+      this.views_.details = new OrderDetailsView({
         model: this.model,
         delayReasons: this.delayReasons
       });
 
-      this.downtimesView = !this.downtimes ? null : new DowntimeListView({
+      this.views_.downtimes = !this.downtimes ? null : new DowntimeListView({
         collection: this.downtimes
       });
 
-      this.fapEntriesView = !this.fapEntries ? null : new FapEntryListView({
+      this.views_.fapEntries = !this.fapEntries ? null : new FapEntryListView({
         collection: this.fapEntries
       });
 
-      this.childOrdersView = new OrderListView({
+      this.views_.childOrders = new OrderListView({
         tableClassName: 'table-bordered table-hover table-condensed table-striped',
         collection: this.childOrders,
         delayReasons: this.delayReasons,
@@ -202,32 +206,32 @@ define([
         }
       });
 
-      this.operationsView = new OperationListView({
+      this.views_.operations = new OperationListView({
         model: this.model,
         showQtyMax: true
       });
 
-      this.documentsView = new DocumentListView({
+      this.views_.documents = new DocumentListView({
         model: this.model
       });
 
-      this.componentsView = new ComponentListView({
+      this.views_.components = new ComponentListView({
         model: this.model,
         linkDocuments: true,
         linkPfep: true
       });
 
-      this.paintComponentsView = new ComponentListView({
+      this.views_.paintComponents = !this.paintOrder ? null : new ComponentListView({
         model: this.paintOrder,
         paint: true,
         linkPfep: true
       });
 
-      this.etoView = new EtoView({
+      this.views_.eto = new EtoView({
         model: this.model
       });
 
-      this.changesView = new OrderChangesView({
+      this.views_.changes = new OrderChangesView({
         model: this.model,
         delayReasons: this.delayReasons
       });
@@ -236,20 +240,20 @@ define([
     defineBindings: function()
     {
       this.listenTo(this.paintOrders, 'reset', this.onPaintOrdersReset);
-      this.listenTo(this.documentsView, 'documentOpened', this.onDocumentOpened);
-      this.listenTo(this.documentsView, 'documentClosed', this.onDocumentClosed);
-      this.listenTo(this.componentsView, 'bestDocumentRequested', this.onBestDocumentRequested);
+      this.listenTo(this.views_.documents, 'documentOpened', this.onDocumentOpened);
+      this.listenTo(this.views_.documents, 'documentClosed', this.onDocumentClosed);
+      this.listenTo(this.views_.components, 'bestDocumentRequested', this.onBestDocumentRequested);
     },
 
     load: function(when)
     {
       return when(
         this.model.fetch(),
-        fapDictionaries.load(),
+        this.fapEntries ? fapDictionaries.load() : null,
         this.fapEntries ? this.fapEntries.fetch({reset: true}) : null,
         this.downtimes ? this.downtimes.fetch({reset: true}) : null,
         this.childOrders.fetch({reset: true}),
-        this.paintOrders.fetch({reset: true}),
+        this.paintOrders ? this.paintOrders.fetch({reset: true}) : null,
         this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
       );
     },
@@ -258,7 +262,10 @@ define([
     {
       delayReasonsStorage.acquire();
 
-      fapDictionaries.load();
+      if (this.fapEntries)
+      {
+        fapDictionaries.load();
+      }
 
       this.renderJumpList();
     },
@@ -351,17 +358,17 @@ define([
 
     onDocumentOpened: function(nc15, win)
     {
-      this.componentsView.markDocument(nc15, win);
+      this.views_.components.markDocument(nc15, win);
     },
 
     onDocumentClosed: function(nc15, win)
     {
-      this.componentsView.unmarkDocument(nc15, win);
+      this.views_.components.unmarkDocument(nc15, win);
     },
 
     onBestDocumentRequested: function(item, contents)
     {
-      this.documentsView.openBestDocument(item, contents);
+      this.views_.documents.openBestDocument(item, contents);
     }
 
   });

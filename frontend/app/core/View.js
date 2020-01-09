@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'backbone',
   'backbone.layout',
   'app/broker',
   'app/socket',
@@ -13,6 +14,7 @@ define([
 function(
   _,
   $,
+  Backbone,
   Layout,
   broker,
   socket,
@@ -136,6 +138,22 @@ function(
     }, this);
   };
 
+  View.prototype.listenTo = function(obj)
+  {
+    if (obj)
+    {
+      return Layout.prototype.listenTo.apply(this, arguments);
+    }
+  };
+
+  View.prototype.listenToOnce = function(obj)
+  {
+    if (obj)
+    {
+      return Layout.prototype.listenToOnce.apply(this, arguments);
+    }
+  };
+
   View.prototype.getViews = function(fn)
   {
     if (typeof fn === 'string' && /^#-/.test(fn))
@@ -151,6 +169,11 @@ function(
     if (typeof name === 'string' && /^#-/.test(name))
     {
       name = name.replace('#-', '#' + this.idPrefix + '-');
+    }
+
+    if (!(name instanceof Backbone.View) && !(view instanceof Backbone.View))
+    {
+      return null;
     }
 
     return Layout.prototype.setView.call(this, name, view, insert, insertOptions);

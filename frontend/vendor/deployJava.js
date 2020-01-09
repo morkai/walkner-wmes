@@ -1141,7 +1141,7 @@ var deployJava = function() {
     },
 
     FFInstall: function() {
-        if (/Chrome\/[4-9][0-9]/.test(navigator.userAgent)) return;
+        return false;
         location.href = constructGetJavaURL(
             ((this.returnPage != null) ?
             ('&returnPage=' + this.returnPage) : '') +
