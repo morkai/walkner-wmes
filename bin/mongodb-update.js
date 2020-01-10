@@ -3,35 +3,32 @@
 
 'use strict';
 
-var doneOrders = {};
+var subdivisionTypes = {};
 
-db.paintshoporders.find({date: {$gt: new Date(Date.now() - 60 * 24 * 3600 * 1000)}}, {order: 1}).forEach(psOrder =>
+db.subdivisions.find({}).forEach(sd =>
 {
-  var sapOrder = db.orders.findOne({_id: psOrder.order}, {changes: 1});
-  var newChanges = [];
-  var lastPsComment = '';
+  subdivisionTypes[sd._id] = sd.type;
+});
 
-  sapOrder.changes.forEach(change =>
+db.pressworksheets.find({}).forEach(pw =>
+{
+  pw.orders.forEach(o =>
   {
-    if (change.source !== 'ps')
-    {
-      newChanges.push(change);
+    var so = db.prodshiftorders.findOne({_id: o.prodShiftOrder}, {subdivision: 1});
 
-      return;
-    }
-
-    if (!lastPsComment && !change.user.id && change.comment === 'Zresetowano.')
+    if (!so)
     {
       return;
     }
 
-    if (!lastPsComment || lastPsComment !== change.comment)
-    {
-      lastPsComment = change.comment;
+    db.prodshiftorders.updateOne(
+      {_id: o.prodShiftOrder},
+      {$set: {subdivisionType: subdivisionTypes[so.subdivision]}}
+    );
 
-      newChanges.push(change);
-    }
+    db.proddowntimes.updateOne(
+      {_id: {$in: o.downtimes.map(d => d.prodDowntime)}},
+      {$set: {subdivisionType: subdivisionTypes[so.subdivision]}}
+    );
   });
-
-  db.orders.updateOne({_id: sapOrder._id}, {$set: {changes: newChanges}});
 });
