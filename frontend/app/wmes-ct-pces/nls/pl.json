@@ -4,6 +4,7 @@
   "BREADCRUMBS:reports": "Raporty",
   "BREADCRUMBS:reports:pce": "Sztuki",
   "BREADCRUMBS:reports:groups": "Grupy wyrobów",
+  "BREADCRUMBS:reports:results": "Wyniki",
 
   "PAGE_ACTIONS:orderGroups": "Grupy",
 
@@ -28,6 +29,8 @@
   "PROPERTY:durations:downtime": "Czas wszystkich przestojów",
   "PROPERTY:durations:scheduled": "Czas planowanych przestojów",
 
+  "pceReport:chart:title": "Czas cyklu",
+  "pceReport:chart:filename": "WMES_CzasCyklu",
   "pceReport:filter:orders": "Zlecenie/Wyrób",
   "pceReport:filter:lines": "Linia",
   "pceReport:filter:invalid": "Podaj zlecenie/wyrób lub datę oraz linię.",
@@ -48,9 +51,9 @@
   "pceReport:metric:med": "Mediana",
   "pceReport:metric:avg": "Średnia",
   "pceReport:metric:stt": "Takt Time SAP",
-  "pceReport:chart:title": "Czas cyklu",
-  "pceReport:chart:filename": "WMES_CzasCyklu",
 
+  "groupsReport:chart:title": "Czas cyklu",
+  "groupsReport:chart:filename": "WMES_CzasCyklu",
   "groupsReport:filter:lines": "Linia",
   "groupsReport:filter:minMaxQty": "Ilość sztuk",
   "groupsReport:filter:minQty": "Minimalna całkowita ilość sztuk do zrobienia w zleceniu produkcyjnym",
@@ -76,6 +79,47 @@
   "groupsReport:metric:med": "Mediana",
   "groupsReport:metric:avg": "Średnia",
   "groupsReport:metric:stt": "Takt Time SAP",
-  "groupsReport:chart:title": "Czas cyklu",
-  "groupsReport:chart:filename": "WMES_CzasCyklu"
+
+  "resultsReport:filter:minLineWorkDuration": "Min. czas pracy [h]",
+  "resultsReport:filter:minUpphWorkDuration": "Min. UPPH",
+  "resultsReport:filter:shiftCount": "Ilość zmian",
+  "resultsReport:filter:availableWorkDuration": "Czas zmiany [h]",
+  "resultsReport:filter:minMrpUnbalance": "Min. unbalance [%]",
+  "resultsReport:filter:minMrpBottleneck": "Min. wąskie gardło",
+  "resultsReport:filter:minMrpEfficiency": "Min. wydajność [%]",
+
+  "resultsReport:vs:title": "Performance vs Bottleneck",
+  "resultsReport:vs:filename": "WMES_PerfVsBneck",
+  "resultsReport:workingLineCount:category": "Ilość pracujących linii",
+  "resultsReport:workingLineCount:series": "Ilość linii",
+  "resultsReport:availableLineUsage:category": "Wykorzystanie dostępnych linii",
+  "resultsReport:availableLineUsage:series": "Wykorzystanie linii",
+  "resultsReport:mrpCount:category": "Ilość wszystkich rodzin",
+  "resultsReport:mrpCount:series": "Ilość rodzin",
+  "resultsReport:unbalancedMrpCount:category": "Ilość rodzin z unbalancem",
+  "resultsReport:unbalancedMrpCount:series": "Ilość rodzin",
+  "resultsReport:bottleneckedMrpCount:category": "Ilość rodzin z wąskim gardłem",
+  "resultsReport:bottleneckedMrpCount:series": "Ilość rodzin",
+  "resultsReport:efficientMrpCount:category": "Ilość wydajnych rodzin",
+  "resultsReport:efficientMrpCount:series": "Ilość rodzin",
+
+  "resultsReport:avgOutput:title": "Weekly Average Output [Units Per Person Hour]",
+  "resultsReport:avgOutput:filename": "WMES_AvgOutput",
+  "resultsReport:avgOutput:series": "UPPH",
+
+  "resultsReport:table:mrps": "Rodziny",
+  "resultsReport:table:lines": "Linie",
+  "resultsReport:table:mrp": "MRP",
+  "resultsReport:table:efficiency": "Wydajność",
+  "resultsReport:table:unbalance": "Unbalance",
+  "resultsReport:table:bottleneck": "Wąskie gardło",
+  "resultsReport:table:mrpLines": "Linie",
+  "resultsReport:table:lineMrps": "MRP",
+  "resultsReport:table:workDuration": "Czas pracy",
+  "resultsReport:table:breakDuration": "Czas przerw",
+  "resultsReport:table:usage": "Wykorzystanie",
+  "resultsReport:table:quantityDone": "Ilość zrobiona",
+  "resultsReport:table:st": "St.",
+  "resultsReport:table:ct": "Czas cyklu",
+  "resultsReport:table:bn": "Ilość wąskich gardeł"
 }

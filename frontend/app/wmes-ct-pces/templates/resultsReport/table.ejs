@@ -1,0 +1,66 @@
+<div class="ct-report-results-table">
+  <ul class="nav nav-tabs">
+    <% ['mrps', 'lines'].forEach(function(tab) { %>
+    <li class="<%- tab === selectedTab ? 'active' : '' %>"><a href="#<%- tab %>" data-toggle="tab" data-tab="<%- tab %>"><%- t('resultsReport:table:' + tab) %></a></li>
+    <% }) %>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane" data-tab="mrps">
+      <table class="table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+          <th class="is-min"><%- t('resultsReport:table:mrp') %></th>
+          <th class="is-min"><%- t('resultsReport:table:efficiency') %></th>
+          <th class="is-min"><%- t('resultsReport:table:unbalance') %></th>
+          <th class="is-min"><%- t('resultsReport:table:bottleneck') %></th>
+          <th><%- t('resultsReport:table:mrpLines') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% report.mrps.forEach(function(mrp, i) { %>
+        <tr data-i="<%- i %>">
+          <td class="is-min text-fixed"><%- mrp._id %></td>
+          <td class="is-min is-number <%- mrp.efficiency > report.options.minMrpEfficiency ? 'ct-report-results-ok' : 'ct-report-results-nok' %>"><%- mrp.efficiency %>%</td>
+          <td class="is-min is-number" data-id="unbalance"><% if (mrp.unbalance.value) { %><%- mrp.unbalance.value %>%<% } %></td>
+          <td class="is-min" data-id="bottleneck"><%- mrp.bottleneck.map(function(b) { return b.station; }).join(' &gt; ') %></td>
+          <td class="text-fixed"><%- mrp.lines.join('; ') %></td>
+        </tr>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div class="tab-pane active" data-tab="lines">
+      <table class="table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+          <th class="is-min"><%- t('resultsReport:table:mrp') %></th>
+          <th class="is-min"><%- t('resultsReport:table:efficiency') %></th>
+          <th class="is-min"><%- t('resultsReport:table:unbalance') %></th>
+          <th class="is-min"><%- t('resultsReport:table:bottleneck') %></th>
+          <th class="is-min"><%- t('resultsReport:table:workDuration') %></th>
+          <th class="is-min"><%- t('resultsReport:table:breakDuration') %></th>
+          <th class="is-min"><%- t('resultsReport:table:usage') %></th>
+          <th class="is-min"><%- t('resultsReport:table:quantityDone') %></th>
+          <th><%- t('resultsReport:table:lineMrps') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% report.lines.forEach(function(line, i) { %>
+        <tr data-i="<%- i %>">
+          <td class="is-min text-fixed"><%- line._id %></td>
+          <td class="is-min is-number <%- line.efficiency > report.options.minMrpEfficiency ? 'ct-report-results-ok' : 'ct-report-results-nok' %>"><%- line.efficiency %>%</td>
+          <td class="is-min is-number <%- line.unbalance.value > report.options.minMrpUnbalance ? 'ct-report-results-nok' : 'ct-report-results-ok' %>" data-id="unbalance"><% if (line.unbalance.value) { %><%- line.unbalance.value %>%<% } %></td>
+          <td class="is-min" data-id="bottleneck"><%- line.bottleneck.map(function(b) { return b.station; }).join(' &gt; ') %></td>
+          <td class="is-min"><%- time.toString(line.workDuration * 3600) %></td>
+          <td class="is-min"><%- line.breakDuration ? time.toString(line.breakDuration * 3600) : '' %></td>
+          <td class="is-min is-number"><%- (line.usage < 1 ? line.usage : Math.round(line.usage)).toLocaleString() %>%</td>
+          <td class="is-min is-number"><%- line.quantityDone.toLocaleString() %></td>
+          <td class="text-fixed"><%- line.mrps.join('; ') %></td>
+        </tr>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

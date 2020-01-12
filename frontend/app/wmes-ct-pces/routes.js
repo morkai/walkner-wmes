@@ -74,4 +74,23 @@ define([
       }
     );
   });
+
+  router.map('/ct/reports/results', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/wmes-ct-pces/ResultsReport',
+        'app/wmes-ct-pces/pages/ResultsReportPage',
+        'css!app/wmes-ct-pces/assets/resultsReport',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(Report, ReportPage)
+      {
+        return new ReportPage({
+          model: Report.fromQuery(req.query)
+        });
+      }
+    );
+  });
 });

@@ -5,6 +5,7 @@
     "BREADCRUMBS:reports": "Reports",
     "BREADCRUMBS:reports:pce": "PCEs",
     "BREADCRUMBS:reports:groups": "Product groups",
+    "BREADCRUMBS:reports:results": "Results",
 
     "PAGE_ACTIONS:orderGroups": "Groups",
 
@@ -29,6 +30,8 @@
     "PROPERTY:durations:downtime": "Total downtime duration",
     "PROPERTY:durations:scheduled": "Scheduled downtime duration",
 
+    "pceReport:chart:title": "Cycle time",
+    "pceReport:chart:filename": "WMES_CycleTime",
     "pceReport:filter:orders": "Order/Product",
     "pceReport:filter:lines": "Line",
     "pceReport:filter:invalid": "Specify an order/product or a date and a line.",
@@ -49,9 +52,9 @@
     "pceReport:metric:med": "Median",
     "pceReport:metric:avg": "Average",
     "pceReport:metric:stt": "Takt Time SAP",
-    "pceReport:chart:title": "Cycle time",
-    "pceReport:chart:filename": "WMES_CycleTime",
 
+    "groupsReport:chart:title": "Cycle time",
+    "groupsReport:chart:filename": "WMES_CycleTime",
     "groupsReport:filter:lines": "Line",
     "groupsReport:filter:minMaxQty": "Quantity",
     "groupsReport:filter:minQty": "Minimum total quantity todo in a production order",
@@ -77,8 +80,49 @@
     "groupsReport:metric:med": "Median",
     "groupsReport:metric:avg": "Average",
     "groupsReport:metric:stt": "SAP Takt Time",
-    "groupsReport:chart:title": "Cycle time",
-    "groupsReport:chart:filename": "WMES_CycleTime"
+
+    "resultsReport:filter:minLineWorkDuration": "Min. work duration [h]",
+    "resultsReport:filter:minUpphWorkDuration": "Min. UPPH",
+    "resultsReport:filter:shiftCount": "Shift count",
+    "resultsReport:filter:availableWorkDuration": "Shift duration [h]",
+    "resultsReport:filter:minMrpUnbalance": "Min. unbalance [%]",
+    "resultsReport:filter:minMrpBottleneck": "Min. bottleneck",
+    "resultsReport:filter:minMrpEfficiency": "Min. efficiency [%]",
+
+    "resultsReport:vs:title": "Performance vs Bottleneck",
+    "resultsReport:vs:filename": "WMES_PerfVsBneck",
+    "resultsReport:workingLineCount:category": "Working line count",
+    "resultsReport:workingLineCount:series": "Line count",
+    "resultsReport:availableLineUsage:category": "Available line usage",
+    "resultsReport:availableLineUsage:series": "Line usage",
+    "resultsReport:mrpCount:category": "All family count",
+    "resultsReport:mrpCount:series": "Family count",
+    "resultsReport:unbalancedMrpCount:category": "Unbalanced family count",
+    "resultsReport:unbalancedMrpCount:series": "Family count",
+    "resultsReport:bottleneckedMrpCount:category": "Bottlenecked family count",
+    "resultsReport:bottleneckedMrpCount:series": "Family count",
+    "resultsReport:efficientMrpCount:category": "Efficient family count",
+    "resultsReport:efficientMrpCount:series": "Family count",
+
+    "resultsReport:avgOutput:title": "Weekly Average Output [Units Per Person Hour]",
+    "resultsReport:avgOutput:filename": "WMES_AvgOutput",
+    "resultsReport:avgOutput:series": "UPPH",
+
+    "resultsReport:table:mrps": "Families",
+    "resultsReport:table:lines": "Lines",
+    "resultsReport:table:mrp": "MRP",
+    "resultsReport:table:efficiency": "Efficiency",
+    "resultsReport:table:unbalance": "Unbalance",
+    "resultsReport:table:bottleneck": "Bottleneck",
+    "resultsReport:table:mrpLines": "Lines",
+    "resultsReport:table:lineMrps": "MRP",
+    "resultsReport:table:workDuration": "Work duration",
+    "resultsReport:table:breakDuration": "Break duration",
+    "resultsReport:table:usage": "Usage",
+    "resultsReport:table:quantityDone": "Quantity done",
+    "resultsReport:table:st": "St.",
+    "resultsReport:table:ct": "Cycle time",
+    "resultsReport:table:bn": "Bottleneck count"
   },
   "pl": true
 }

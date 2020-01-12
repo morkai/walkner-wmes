@@ -3,7 +3,7 @@
     <span><%- t('PAGE_ACTIONS:reports') %></span> <span class="caret"></span>
   </button>
   <ul class="dropdown-menu pull-right">
-    <% ['pce', 'groups'].forEach(function(report) { %>
+    <% ['pce', 'groups', 'results'].forEach(function(report) { %>
     <li><a href="#ct/reports/<%- report %>"><%- t('PAGE_ACTIONS:reports:' + report) %></a></li>
     <% }) %>
   </ul>

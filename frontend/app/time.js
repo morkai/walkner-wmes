@@ -167,6 +167,8 @@ define([
       return compact ? '00:00:00' : '0s';
     }
 
+    time = Math.round(time * 1000) / 1000;
+
     var str = '';
     var hours = Math.floor(time / 3600);
 
