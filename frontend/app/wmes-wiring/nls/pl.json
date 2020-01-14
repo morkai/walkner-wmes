@@ -12,7 +12,7 @@
   "msg:clipboard:mrps": "MRP skopiowane do schowka.",
   "msg:clipboard:leadingOrders": "Numery zleceń skopiowane do schowka.",
 
-  "PAGE_ACTIONS:settings": "Ustawienia",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "prop:nc12": "12NC",
   "prop:name": "Nazwa",

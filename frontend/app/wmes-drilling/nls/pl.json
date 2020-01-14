@@ -11,8 +11,8 @@
   "MSG:cancel:failure": "Nie udało się zignorować zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
 
-  "PAGE_ACTIONS:paintShop": "Malarnia",
-  "PAGE_ACTIONS:settings": "Ustawienia",
+  "PAGE_ACTION:paintShop": "Malarnia",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:nc12": "12NC wyrobu",

@@ -6,7 +6,8 @@
   "BREADCRUMBS:reports:groups": "Grupy wyrobów",
   "BREADCRUMBS:reports:results": "Wyniki",
 
-  "PAGE_ACTIONS:orderGroups": "Grupy",
+  "PAGE_ACTION:orderGroups": "Grupy",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "PROPERTY:line": "Linia",
   "PROPERTY:station": "Stanowisko",
@@ -80,13 +81,13 @@
   "groupsReport:metric:avg": "Średnia",
   "groupsReport:metric:stt": "Takt Time SAP",
 
-  "resultsReport:filter:minLineWorkDuration": "Min. czas pracy [h]",
+  "resultsReport:filter:minLineWorkDuration": "Min. czas pracy",
   "resultsReport:filter:minUpphWorkDuration": "Min. UPPH",
   "resultsReport:filter:shiftCount": "Ilość zmian",
-  "resultsReport:filter:availableWorkDuration": "Czas zmiany [h]",
-  "resultsReport:filter:minMrpUnbalance": "Min. unbalance [%]",
+  "resultsReport:filter:availableWorkDuration": "Czas zmiany",
+  "resultsReport:filter:minMrpUnbalance": "Min. unbalance",
   "resultsReport:filter:minMrpBottleneck": "Min. wąskie gardło",
-  "resultsReport:filter:minMrpEfficiency": "Min. wydajność [%]",
+  "resultsReport:filter:minMrpEfficiency": "Min. wydajność",
 
   "resultsReport:vs:title": "Performance vs Bottleneck",
   "resultsReport:vs:filename": "WMES_PerfVsBneck",

@@ -33,9 +33,16 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      this.listenTo(this.settings, 'change', this.onSettingChange);
+    },
+
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
+
+      this.updatePlaceholders();
     },
 
     serializeFormData: function()
@@ -79,6 +86,36 @@ define([
 
       view.model.set(query);
       view.model.trigger('filtered');
+    },
+
+    updatePlaceholders: function()
+    {
+      var view = this;
+
+      view.$('input[placeholder]').each(function()
+      {
+        var setting = view.settings.get('ct.reports.results.' + this.name);
+
+        if (!setting)
+        {
+          return;
+        }
+
+        var value = setting.getValue();
+
+        if (typeof value === 'number')
+        {
+          this.placeholder = value.toLocaleString();
+        }
+      });
+    },
+
+    onSettingChange: function(setting)
+    {
+      if (/^ct.reports.results/.test(setting.id))
+      {
+        this.updatePlaceholders();
+      }
     }
 
   });

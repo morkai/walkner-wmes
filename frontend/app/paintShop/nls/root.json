@@ -14,11 +14,11 @@
     "MSG:deliver:failure": "Failed to deliver order.",
     "MSG:search:failure": "Order not found.",
 
-    "PAGE_ACTIONS:drilling": "Drilling",
-    "PAGE_ACTIONS:load": "Load",
-    "PAGE_ACTIONS:paints": "Paints",
-    "PAGE_ACTIONS:settings": "Settings",
-    "PAGE_ACTIONS:exportPlanExecution": "Export plan",
+    "PAGE_ACTION:drilling": "Drilling",
+    "PAGE_ACTION:load": "Load",
+    "PAGE_ACTION:paints": "Paints",
+    "PAGE_ACTION:settings": "Settings",
+    "PAGE_ACTION:exportPlanExecution": "Export plan",
 
     "PROPERTY:order": "Order",
     "PROPERTY:nc12": "Product 12NC",

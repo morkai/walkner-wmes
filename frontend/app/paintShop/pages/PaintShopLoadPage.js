@@ -60,7 +60,7 @@ define([
       {
         href: '#paintShop;settings?tab=load',
         icon: 'cogs',
-        label: t.bound('paintShop', 'PAGE_ACTIONS:settings'),
+        label: t.bound('paintShop', 'PAGE_ACTION:settings'),
         privileges: 'PAINT_SHOP:MANAGE'
       }
     ],

@@ -5,27 +5,42 @@
   }) %>
   <div class="form-group">
     <label for="<%- idPrefix %>-minLineWorkDuration" class="control-label"><%- t('resultsReport:filter:minLineWorkDuration') %></label>
-    <input id="<%- idPrefix %>-minLineWorkDuration" name="minLineWorkDuration" class="form-control" type="number" min="0" step="0.1" placeholder="0" style="width: 100px">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-minUpphWorkDuration" class="control-label"><%- t('resultsReport:filter:minUpphWorkDuration') %></label>
-    <input id="<%- idPrefix %>-minUpphWorkDuration" name="minUpphWorkDuration" class="form-control" type="number" min="0" max="8" placeholder="0" style="width: 100px">
+    <div class="input-group">
+      <input id="<%- idPrefix %>-minLineWorkDuration" name="minLineWorkDuration" class="form-control" type="number" min="0" step="0.1" placeholder="0" style="width: 75px">
+      <div class="input-group-addon">h</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-shiftCount" class="control-label"><%- t('resultsReport:filter:shiftCount') %></label>
-    <input id="<%- idPrefix %>-shiftCount" name="shiftCount" class="form-control" type="number" min="1" max="3" placeholder="3" style="width: 100px">
+    <input id="<%- idPrefix %>-shiftCount" name="shiftCount" class="form-control" type="number" min="1" max="3" placeholder="3" style="width: 80px">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-availableWorkDuration" class="control-label"><%- t('resultsReport:filter:availableWorkDuration') %></label>
-    <input id="<%- idPrefix %>-availableWorkDuration" name="availableWorkDuration" class="form-control" type="number" min="0.1" max="8" step="0.1" placeholder="<%- (7.5).toLocaleString() %>" style="width: 100px">
+    <div class="input-group">
+      <input id="<%- idPrefix %>-availableWorkDuration" name="availableWorkDuration" class="form-control" type="number" min="0.1" max="8" step="0.1" placeholder="<%- (7.5).toLocaleString() %>" style="width: 75px">
+      <div class="input-group-addon">h</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-minMrpUnbalance" class="control-label"><%- t('resultsReport:filter:minMrpUnbalance') %></label>
-    <input id="<%- idPrefix %>-minMrpUnbalance" name="minMrpUnbalance" class="form-control" type="number" min="0" max="100" placeholder="50" style="width: 100px">
+    <div class="input-group">
+      <input id="<%- idPrefix %>-minMrpUnbalance" name="minMrpUnbalance" class="form-control" type="number" min="0" max="100" placeholder="50" style="width: 75px">
+      <div class="input-group-addon">%</div>
+    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-minMrpEfficiency" class="control-label"><%- t('resultsReport:filter:minMrpEfficiency') %></label>
-    <input id="<%- idPrefix %>-minMrpEfficiency" name="minMrpEfficiency" class="form-control" type="number" min="0" max="100" placeholder="75" style="width: 100px">
+    <div class="input-group">
+      <input id="<%- idPrefix %>-minMrpEfficiency" name="minMrpEfficiency" class="form-control" type="number" min="0" max="100" placeholder="75" style="width: 75px">
+      <div class="input-group-addon">%</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-minUpphWorkDuration" class="control-label"><%- t('resultsReport:filter:minUpphWorkDuration') %></label>
+    <div class="input-group">
+      <input id="<%- idPrefix %>-minUpphWorkDuration" name="minUpphWorkDuration" class="form-control" type="number" min="0" max="480" placeholder="0" style="width: 60px">
+      <div class="input-group-addon">min</div>
+    </div>
   </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>

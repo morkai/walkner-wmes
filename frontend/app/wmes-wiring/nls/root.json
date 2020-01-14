@@ -11,7 +11,7 @@
     "MSG:reset:failure": "Failed to reset order.",
     "MSG:cancel:failure": "Failed to cancel order.",
 
-    "PAGE_ACTIONS:settings": "Settings",
+    "PAGE_ACTION:settings": "Settings",
 
     "PROPERTY:nc12": "Product 12NC",
     "PROPERTY:name": "Product/component name",

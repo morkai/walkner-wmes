@@ -101,7 +101,7 @@ define([
         }, {
           href: '#wiring;settings?tab=planning',
           icon: 'cogs',
-          label: page.t('PAGE_ACTIONS:settings'),
+          label: page.t('PAGE_ACTION:settings'),
           privileges: 'WIRING:MANAGE'
         });
       }

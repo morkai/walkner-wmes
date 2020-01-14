@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../pubsub'
+  'app/pubsub',
+  'app/core/util/bindLoadingMessage',
 ], function(
-  pubsub
+  pubsub,
+  bindLoadingMessage
 ) {
   'use strict';
 
@@ -28,6 +30,21 @@ define([
     }
 
     return {
+      bind: function(view, options)
+      {
+        view.settings = bindLoadingMessage(this.acquire(options), view);
+
+        view.on('beforeLoad', function(page, requests)
+        {
+          requests.unshift(view.settings.fetchIfEmpty());
+        });
+
+        view.once('afterRender', this.acquire.bind(this, null));
+
+        view.once('remove', this.release.bind(this));
+
+        return view.settings;
+      },
       acquire: function(options)
       {
         if (releaseTimer !== null)

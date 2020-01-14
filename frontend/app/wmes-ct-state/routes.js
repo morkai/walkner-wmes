@@ -48,4 +48,14 @@ define([
       }
     );
   });
+
+  router.map('/ct/settings', canManage, function(req)
+  {
+    viewport.loadPage(['app/wmes-ct-state/pages/SettingsPage', nls], function(SettingsPage)
+    {
+      return new SettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
 });

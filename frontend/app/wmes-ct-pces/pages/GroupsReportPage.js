@@ -43,7 +43,7 @@ define([
     {
       return [
         {
-          label: this.t('PAGE_ACTIONS:orderGroups'),
+          label: this.t('PAGE_ACTION:orderGroups'),
           href: '#ct/orderGroups'
         }
       ];

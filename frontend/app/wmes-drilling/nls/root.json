@@ -12,8 +12,8 @@
     "MSG:cancel:failure": "Failed to cancel order.",
     "MSG:search:failure": "Order not found.",
 
-    "PAGE_ACTIONS:paintShop": "Paint shop",
-    "PAGE_ACTIONS:settings": "Settings",
+    "PAGE_ACTION:paintShop": "Paint shop",
+    "PAGE_ACTION:settings": "Settings",
 
     "PROPERTY:order": "Order",
     "PROPERTY:nc12": "Product 12NC",

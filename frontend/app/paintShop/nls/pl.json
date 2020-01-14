@@ -13,11 +13,11 @@
   "MSG:deliver:failure": "Nie udało się dostarczyć zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
 
-  "PAGE_ACTIONS:drilling": "Wiercenie",
-  "PAGE_ACTIONS:load": "Obciążenie",
-  "PAGE_ACTIONS:paints": "Farby",
-  "PAGE_ACTIONS:settings": "Ustawienia",
-  "PAGE_ACTIONS:exportPlanExecution": "Eksportuj plan",
+  "PAGE_ACTION:drilling": "Wiercenie",
+  "PAGE_ACTION:load": "Obciążenie",
+  "PAGE_ACTION:paints": "Farby",
+  "PAGE_ACTION:settings": "Ustawienia",
+  "PAGE_ACTION:exportPlanExecution": "Eksportuj plan",
 
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:nc12": "12NC wyrobu",

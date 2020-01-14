@@ -140,10 +140,10 @@ define([
         }, {
           icon: 'download',
           privileges: 'PAINT_SHOP:VIEW',
-          label: page.t('PAGE_ACTIONS:exportPlanExecution'),
+          label: page.t('PAGE_ACTION:exportPlanExecution'),
           callback: page.exportPlanExecution.bind(page)
         }, {
-          label: page.t('PAGE_ACTIONS:drilling'),
+          label: page.t('PAGE_ACTION:drilling'),
           icon: 'circle-o',
           privileges: 'DRILLING:VIEW',
           href: '#drilling/' + page.orders.getDateFilter()
@@ -151,18 +151,18 @@ define([
           icon: 'balance-scale',
           href: '#paintShop/load',
           privileges: 'PAINT_SHOP:VIEW',
-          label: page.t('PAGE_ACTIONS:load'),
+          label: page.t('PAGE_ACTION:load'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
           icon: 'paint-brush',
           href: '#paintShop/paints',
           privileges: 'PAINT_SHOP:MANAGE',
-          label: page.t('PAGE_ACTIONS:paints'),
+          label: page.t('PAGE_ACTION:paints'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
           href: '#paintShop;settings?tab=planning',
           icon: 'cogs',
-          label: page.t('PAGE_ACTIONS:settings'),
+          label: page.t('PAGE_ACTION:settings'),
           privileges: 'PAINT_SHOP:MANAGE'
         });
       }

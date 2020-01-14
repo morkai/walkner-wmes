@@ -3,7 +3,7 @@
 define([
   'underscore',
   'jquery',
-  '../core/Collection',
+  'app/core/Collection',
   './Setting'
 ], function(
   _,
@@ -145,21 +145,43 @@ define([
         .filter(function(id) { return id.length > 0; });
     },
 
-    prepareNumericValue: function(newValue, min, max)
+    prepareNumericValue: function(newValue, min, max, defaultValue)
     {
       var value = parseInt(newValue, 10);
 
       if (isNaN(value))
       {
-        return;
+        return defaultValue;
       }
 
-      if (value < min)
+      if (min != null && value < min)
       {
         return min;
       }
 
-      if (value > max)
+      if (max != null && value > max)
+      {
+        return max;
+      }
+
+      return value;
+    },
+
+    prepareFloatValue: function(newValue, min, max, defaultValue)
+    {
+      var value = parseFloat(newValue);
+
+      if (isNaN(value))
+      {
+        return defaultValue;
+      }
+
+      if (min != null && value < min)
+      {
+        return min;
+      }
+
+      if (max != null && value > max)
       {
         return max;
       }

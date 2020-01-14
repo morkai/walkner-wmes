@@ -2,17 +2,18 @@
   "root": {
     "BREADCRUMBS:base": "Cycle time",
     "BREADCRUMBS:diag": "Diagnostics",
+    "BREADCRUMBS:settings": "Settings",
 
-    "PAGE_ACTIONS:pceReport": "Report",
-    "PAGE_ACTIONS:pces": "PCE history",
-    "PAGE_ACTIONS:reports": "Raporty",
-    "PAGE_ACTIONS:reports:pce": "PCEs",
-    "PAGE_ACTIONS:reports:groups": "Product groups",
-    "PAGE_ACTIONS:reports:results": "Results",
-    "PAGE_ACTIONS:dictionaries": "Dictionaries",
-    "PAGE_ACTIONS:dictionaries:lines": "Lines",
-    "PAGE_ACTIONS:dictionaries:carts": "Carts",
-    "PAGE_ACTIONS:diag": "Diagnostics",
+    "PAGE_ACTION:pceReport": "Report",
+    "PAGE_ACTION:pces": "PCE history",
+    "PAGE_ACTION:reports": "Raporty",
+    "PAGE_ACTION:reports:pce": "PCEs",
+    "PAGE_ACTION:reports:groups": "Product groups",
+    "PAGE_ACTION:reports:results": "Results",
+    "PAGE_ACTION:dictionaries": "Dictionaries",
+    "PAGE_ACTION:dictionaries:lines": "Lines",
+    "PAGE_ACTION:dictionaries:carts": "Carts",
+    "PAGE_ACTION:diag": "Diagnostics",
 
     "PROPERTY:cart": "Cart",
     "PROPERTY:order": "Order",
@@ -47,7 +48,23 @@
     "todo:action:reset": "Line state reset",
     "todo:action:changeOrder": "Order change",
     "todo:action:correctOrder": "Order correction",
-    "diag:clear": "Clear"
+    "diag:clear": "Clear",
+
+    "settings:tab:resultsReport": "Results report",
+    "settings:resultsReport:minLineWorkDuration": "Minimum line work duration",
+    "settings:resultsReport:minLineWorkDuration:help": "",
+    "settings:resultsReport:shiftCount": "Shift count",
+    "settings:resultsReport:shiftCount:help": "",
+    "settings:resultsReport:availableWorkDuration": "Available work duration",
+    "settings:resultsReport:availableWorkDuration:help": "",
+    "settings:resultsReport:minMrpUnbalance": "Minimum family unbalance",
+    "settings:resultsReport:minMrpUnbalance:help": "",
+    "settings:resultsReport:minMrpEfficiency": "Minimum family efficiency",
+    "settings:resultsReport:minMrpEfficiency:help": "",
+    "settings:resultsReport:minUpphWorkDuration": "Minimum order work duration",
+    "settings:resultsReport:minUpphWorkDuration:help": "",
+    "settings:resultsReport:ignoredMrps": "Ignored families",
+    "settings:resultsReport:ignoredMrps:help": ""
   },
   "pl": true
 }

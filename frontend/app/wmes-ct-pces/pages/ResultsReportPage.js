@@ -5,6 +5,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/wmes-ct-state/settings',
   '../ResultsReport',
   '../views/resultsReport/FilterView',
   '../views/resultsReport/VsChartView',
@@ -16,6 +17,7 @@ define([
   t,
   View,
   bindLoadingMessage,
+  settings,
   Report,
   FilterView,
   VsChartView,
@@ -41,14 +43,28 @@ define([
 
     actions: function()
     {
-      return [];
+      var page = this;
+
+      return [
+        {
+          label: page.t('PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'PROD_DATA:MANAGE',
+          href: '#ct/settings?tab=resultsReport'
+        }
+      ];
     },
 
     initialize: function()
     {
+      settings.bind(this);
+
       this.model = bindLoadingMessage(this.model, this);
 
-      this.setView('#-filter', new FilterView({model: this.model}));
+      this.setView('#-filter', new FilterView({
+        model: this.model,
+        settings: this.settings
+      }));
       this.setView('#-vs', new VsChartView({model: this.model}));
       this.setView('#-avgOutput', new AvgOutputChartView({model: this.model}));
       this.setView('#-table', new TableView({model: this.model}));
@@ -59,9 +75,7 @@ define([
 
     load: function(when)
     {
-      return when(
-        this.model.fetch()
-      );
+      return when(this.model.fetch());
     },
 
     onFiltered: function()

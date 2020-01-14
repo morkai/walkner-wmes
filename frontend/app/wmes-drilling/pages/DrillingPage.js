@@ -124,14 +124,14 @@ define([
           icon: 'arrows-alt',
           callback: page.toggleFullscreen.bind(page)
         }, {
-          label: page.t('PAGE_ACTIONS:paintShop'),
+          label: page.t('PAGE_ACTION:paintShop'),
           icon: 'paint-brush',
           privileges: 'PAINT_SHOP:VIEW',
           href: '#paintShop/' + page.orders.getDateFilter()
         }, {
           href: '#drilling;settings?tab=planning',
           icon: 'cogs',
-          label: page.t('PAGE_ACTIONS:settings'),
+          label: page.t('PAGE_ACTION:settings'),
           privileges: 'DRILLING:MANAGE'
         });
       }

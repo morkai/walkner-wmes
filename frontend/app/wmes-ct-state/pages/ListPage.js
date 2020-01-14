@@ -35,7 +35,7 @@ define([
       return [
         {
           href: '#ct/pces',
-          label: this.t('PAGE_ACTIONS:pces')
+          label: this.t('PAGE_ACTION:pces')
         },
         {
           template: function()
@@ -53,7 +53,7 @@ define([
         },
         {
           href: '#ct/diag',
-          label: this.t('PAGE_ACTIONS:diag'),
+          label: this.t('PAGE_ACTION:diag'),
           privileges: 'PROD_DATA:MANAGE'
         }
       ];
