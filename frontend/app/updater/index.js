@@ -137,10 +137,9 @@ define([
     viewport.showDialog(new BrowserUpdateDialogView(), t('updater', 'browserUpdate:title'));
   }
 
-  function showAddressUpdateDialog(page)
+  function showAddressUpdateDialog()
   {
-    if (page.pageId !== 'dashboard'
-      || /\.wmes\.pl$/.test(window.location.hostname)
+    if (/\.wmes\.pl$/.test(window.location.hostname)
       || window.location.hostname === 'localhost'
       || window.sessionStorage.getItem('WMES_ADDRESS_UPDATE') === '1'
       || window.document.body.classList.contains('is-embedded'))
