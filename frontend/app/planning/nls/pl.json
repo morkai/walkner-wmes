@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "Planowanie",
-  "BREADCRUMBS:wh": "Magazyn (stary)",
-  "BREADCRUMBS:settings": "Ustawienia",
-  "BREADCRUMBS:changes": "Historia zmian",
+  "BREADCRUMB:base": "Planowanie",
+  "BREADCRUMB:wh": "Magazyn (stary)",
+  "BREADCRUMB:settings": "Ustawienia",
+  "BREADCRUMB:changes": "Historia zmian",
 
   "MSG:LOADING_FAILURE:plan": "Nie udało się załadować planu.",
   "MSG:LOADING_FAILURE:settings": "Nie udało się załadować ustawień planu.",

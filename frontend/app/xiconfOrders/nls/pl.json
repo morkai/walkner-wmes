@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Zlecenia",
+  "BREADCRUMB:base": "Xiconf",
+  "BREADCRUMB:browse": "Zlecenia",
 
   "PANEL:TITLE:details:parentOrder": "Szczegóły zlecenia wyrobu",
   "PANEL:TITLE:details:order": "Szczegóły zlecenia Xiconf",

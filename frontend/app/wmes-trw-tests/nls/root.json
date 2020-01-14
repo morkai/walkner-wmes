@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "TRW",
-    "BREADCRUMBS:browse": "Results",
+    "BREADCRUMB:base": "TRW",
+    "BREADCRUMB:browse": "Results",
 
     "testing:noWorkstation": "choose workstation",
     "testing:noOrder": "choose order",

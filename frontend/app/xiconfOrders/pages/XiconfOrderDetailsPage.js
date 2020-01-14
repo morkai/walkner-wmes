@@ -50,9 +50,9 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('xiconfOrders', 'BREADCRUMBS:base'),
+        t.bound('xiconfOrders', 'BREADCRUMB:base'),
         {
-          label: t.bound('xiconfOrders', 'BREADCRUMBS:browse'),
+          label: t.bound('xiconfOrders', 'BREADCRUMB:browse'),
           href: this.model.genClientUrl('base')
         },
         this.model.id

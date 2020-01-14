@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Production orders",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:browse": "Production orders",
+    "BREADCRUMB:settings": "Settings",
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:print": "Print order",

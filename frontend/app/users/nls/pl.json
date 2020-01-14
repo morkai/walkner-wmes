@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:browse": "Użytkownicy",
-  "BREADCRUMBS:myAccount": "Moje konto",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:browse": "Użytkownicy",
+  "BREADCRUMB:myAccount": "Moje konto",
+  "BREADCRUMB:settings": "Ustawienia",
   "breadcrumbs:logIn": "Logowanie do systemu",
 
   "MSG:SYNCED": "Użytkownicy zostali zsynchronizowani.",

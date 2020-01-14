@@ -32,7 +32,7 @@ define([
     pageId: 'fteMasterEntryList',
 
     breadcrumbs: [
-      t.bound('fte', 'BREADCRUMBS:master:browse')
+      t.bound('fte', 'BREADCRUMB:master:browse')
     ],
 
     actions: function(layout)

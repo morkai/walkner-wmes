@@ -1,13 +1,13 @@
 {
   "root": {
-    "BREADCRUMBS:base": "FTE",
-    "BREADCRUMBS:leader:browse": "FTE (other)",
-    "BREADCRUMBS:wh:browse": "FTE (warehouse)",
-    "BREADCRUMBS:master:browse": "FTE (production)",
-    "BREADCRUMBS:addForm": "Choosing",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:details": "Resources",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "FTE",
+    "BREADCRUMB:leader:browse": "FTE (other)",
+    "BREADCRUMB:wh:browse": "FTE (warehouse)",
+    "BREADCRUMB:master:browse": "FTE (production)",
+    "BREADCRUMB:addForm": "Choosing",
+    "BREADCRUMB:editForm": "Editing",
+    "BREADCRUMB:details": "Resources",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:LOADING_FAILURE": "Failed to load the FTE data.",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the specific FTE data.",

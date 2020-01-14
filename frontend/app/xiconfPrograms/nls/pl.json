@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Programy",
+  "BREADCRUMB:base": "Xiconf",
+  "BREADCRUMB:browse": "Programy",
 
   "PAGE_ACTION:toggle": "Pokaż/ukryj szczegóły",
 

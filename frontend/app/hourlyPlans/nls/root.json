@@ -1,11 +1,11 @@
 {
   "root": {
-    "BREADCRUMBS:main": "Planning",
-    "BREADCRUMBS:browse": "Hourly plans",
-    "BREADCRUMBS:addForm": "Choosing",
-    "BREADCRUMBS:editForm": "Planning",
-    "BREADCRUMBS:settings": "Settings",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMB:main": "Planning",
+    "BREADCRUMB:browse": "Hourly plans",
+    "BREADCRUMB:addForm": "Choosing",
+    "BREADCRUMB:editForm": "Planning",
+    "BREADCRUMB:settings": "Settings",
+    "BREADCRUMB:ACTION_FORM:delete": "Deleting",
 
     "PAGE_ACTION:print": "Print plan",
     "PAGE_ACTION:add": "Plan",

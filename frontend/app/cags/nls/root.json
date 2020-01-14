@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Planned line utilization",
-    "BREADCRUMBS:browse": "CAG",
+    "BREADCRUMB:base": "Planned line utilization",
+    "BREADCRUMB:browse": "CAG",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name"

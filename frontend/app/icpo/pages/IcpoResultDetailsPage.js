@@ -25,10 +25,10 @@ define([
     {
       return [
         {
-          label: t.bound('icpo', 'BREADCRUMBS:browse'),
+          label: t.bound('icpo', 'BREADCRUMB:browse'),
           href: this.model.genClientUrl('base')
         },
-        t.bound('icpo', 'BREADCRUMBS:details')
+        t.bound('icpo', 'BREADCRUMB:details')
       ];
     },
 

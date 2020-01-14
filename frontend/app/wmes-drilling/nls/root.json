@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Drilling",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Drilling",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:date:failure": "Failed to find date.",
     "MSG:date:empty": "No orders.",

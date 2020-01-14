@@ -1,5 +1,5 @@
 {
-  "BREADCRUMBS:browse": "Sprawdzacz Labor Time",
+  "BREADCRUMB:browse": "Sprawdzacz Labor Time",
 
   "MSG:drop:invalidFile": "Importować można tylko pliki .xls lub .xlsx!",
 

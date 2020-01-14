@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Pola odkładcze",
-  "BREADCRUMBS:events": "Zdarzenia",
-  "BREADCRUMBS:requests": "Żądania",
+  "BREADCRUMB:base": "Pola odkładcze",
+  "BREADCRUMB:events": "Zdarzenia",
+  "BREADCRUMB:requests": "Żądania",
 
   "actions:shiftPersonnel": "Zmień personel",
   "actions:responderFilter": "Filtruj wg magazyniera",

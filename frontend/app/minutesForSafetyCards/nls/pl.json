@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Minuty dla Bezpieczeństwa",
-  "BREADCRUMBS:browse": "Karty",
-  "BREADCRUMBS:reports:count": "Ilość minutek",
+  "BREADCRUMB:base": "Minuty dla Bezpieczeństwa",
+  "BREADCRUMB:browse": "Karty",
+  "BREADCRUMB:reports:count": "Ilość minutek",
 
   "PAGE_ACTION:print": "Wersja do druku",
 

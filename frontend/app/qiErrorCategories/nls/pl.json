@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Inspekcja Jakości",
-  "BREADCRUMBS:browse": "Kategorie błędów",
+  "BREADCRUMB:base": "Inspekcja Jakości",
+  "BREADCRUMB:browse": "Kategorie błędów",
 
   "PROPERTY:name": "Nazwa"
 }

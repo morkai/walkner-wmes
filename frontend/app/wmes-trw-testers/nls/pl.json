@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "TRW",
-  "BREADCRUMBS:browse": "Sterowniki",
+  "BREADCRUMB:base": "TRW",
+  "BREADCRUMB:browse": "Sterowniki",
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:io": "I/O",

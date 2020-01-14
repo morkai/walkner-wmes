@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "TRW",
-    "BREADCRUMBS:browse": "Controllers",
+    "BREADCRUMB:base": "TRW",
+    "BREADCRUMB:browse": "Controllers",
 
     "PROPERTY:name": "Name",
     "PROPERTY:io": "I/O",

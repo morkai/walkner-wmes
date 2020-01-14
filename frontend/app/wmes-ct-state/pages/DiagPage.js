@@ -29,8 +29,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        {href: '#ct', label: this.t('BREADCRUMBS:base')},
-        this.t('BREADCRUMBS:diag')
+        {href: '#ct', label: this.t('BREADCRUMB:base')},
+        this.t('BREADCRUMB:diag')
       ];
     },
 

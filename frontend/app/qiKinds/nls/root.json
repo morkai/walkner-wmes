@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "QI",
-    "BREADCRUMBS:browse": "Kinds",
+    "BREADCRUMB:base": "QI",
+    "BREADCRUMB:browse": "Kinds",
 
     "PROPERTY:name": "Name",
     "PROPERTY:division": "Division",

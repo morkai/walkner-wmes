@@ -3,7 +3,7 @@
     "MSG:LOADING_FAILURE": "Failed to load the events.",
     "MSG:LOADING_TYPES_FAILURE": "Failed to load the event types.",
 
-    "BREADCRUMBS:browse": "Events",
+    "BREADCRUMB:browse": "Events",
 
     "filter:placeholder:type": "Any type",
     "filter:submit": "Filter events",

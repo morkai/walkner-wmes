@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Dokumentacja",
-  "BREADCRUMBS:browse": "Potwierdzenia",
+  "BREADCRUMB:base": "Dokumentacja",
+  "BREADCRUMB:browse": "Potwierdzenia",
 
   "PROPERTY:user": "Użytkownik",
   "PROPERTY:time": "Czas potwierdzenia",

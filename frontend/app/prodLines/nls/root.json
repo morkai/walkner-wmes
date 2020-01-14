@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Production lines",
+    "BREADCRUMB:browse": "Production lines",
 
     "PAGE_ACTION:toggleDeactivated": "Hide deactivated",
 

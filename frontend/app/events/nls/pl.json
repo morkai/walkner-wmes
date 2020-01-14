@@ -2,7 +2,7 @@
   "MSG:LOADING_FAILURE": "Ładowanie zdarzeń nie powiodło się.",
   "MSG:LOADING_TYPES_FAILURE": "Ładowanie typów zdarzeń nie powiodło się.",
 
-  "BREADCRUMBS:browse": "Zdarzenia",
+  "BREADCRUMB:browse": "Zdarzenia",
 
   "filter:placeholder:type": "Dowolny typ",
   "filter:submit": "Filtruj zdarzenia",

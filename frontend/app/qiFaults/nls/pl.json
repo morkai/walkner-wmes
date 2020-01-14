@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Inspekcja Jakości",
-  "BREADCRUMBS:browse": "Wady",
+  "BREADCRUMB:base": "Inspekcja Jakości",
+  "BREADCRUMB:browse": "Wady",
 
   "PROPERTY:_id": "Kod wady",
   "PROPERTY:name": "Klasyfikacja wady",

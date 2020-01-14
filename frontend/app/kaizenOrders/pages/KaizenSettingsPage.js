@@ -23,10 +23,10 @@ define([
     {
       return [
         {
-          label: t.bound('kaizenOrders', 'BREADCRUMBS:base'),
+          label: t.bound('kaizenOrders', 'BREADCRUMB:base'),
           href: '#kaizenOrders'
         },
-        t.bound('kaizenOrders', 'BREADCRUMBS:settings')
+        t.bound('kaizenOrders', 'BREADCRUMB:settings')
       ];
     },
 

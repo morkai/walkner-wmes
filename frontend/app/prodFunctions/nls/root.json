@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Functions",
+    "BREADCRUMB:browse": "Functions",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:label": "Label",

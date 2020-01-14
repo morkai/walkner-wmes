@@ -39,7 +39,7 @@ define([
     },
 
     breadcrumbs: [
-      t.bound('users', 'BREADCRUMBS:browse')
+      t.bound('users', 'BREADCRUMB:browse')
     ],
 
     actions: function()

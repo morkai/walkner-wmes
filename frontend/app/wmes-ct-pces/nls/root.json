@@ -1,11 +1,11 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Cycle time",
-    "BREADCRUMBS:browse": "PCE history",
-    "BREADCRUMBS:reports": "Reports",
-    "BREADCRUMBS:reports:pce": "PCEs",
-    "BREADCRUMBS:reports:groups": "Product groups",
-    "BREADCRUMBS:reports:results": "Results",
+    "BREADCRUMB:base": "Cycle time",
+    "BREADCRUMB:browse": "PCE history",
+    "BREADCRUMB:reports": "Reports",
+    "BREADCRUMB:reports:pce": "PCEs",
+    "BREADCRUMB:reports:groups": "Product groups",
+    "BREADCRUMB:reports:results": "Results",
 
     "PAGE_ACTION:orderGroups": "Groups",
     "PAGE_ACTION:settings": "Settings",

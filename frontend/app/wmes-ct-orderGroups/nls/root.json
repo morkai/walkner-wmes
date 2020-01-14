@@ -1,9 +1,9 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Cycle time",
-    "BREADCRUMBS:reports": "Reports",
-    "BREADCRUMBS:reports:groups": "Product groups",
-    "BREADCRUMBS:browse": "Groups",
+    "BREADCRUMB:base": "Cycle time",
+    "BREADCRUMB:reports": "Reports",
+    "BREADCRUMB:reports:groups": "Product groups",
+    "BREADCRUMB:browse": "Groups",
 
     "PROPERTY:active": "Active?",
     "PROPERTY:name": "Group name",

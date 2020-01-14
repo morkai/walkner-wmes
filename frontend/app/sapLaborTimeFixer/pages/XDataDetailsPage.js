@@ -30,7 +30,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        {label: this.t('BREADCRUMBS:browse'), href: this.model.genClientUrl('base')},
+        {label: this.t('BREADCRUMB:browse'), href: this.model.genClientUrl('base')},
         this.model.getLabel()
       ];
     },

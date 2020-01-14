@@ -27,7 +27,7 @@ define([
       }
 
       return [
-        this.t('BREADCRUMBS:base'),
+        this.t('BREADCRUMB:base'),
         this.model.get('rid') + ''
       ];
     },

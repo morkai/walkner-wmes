@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Improvements",
-    "BREADCRUMBS:browse": "Risks",
+    "BREADCRUMB:base": "Improvements",
+    "BREADCRUMB:browse": "Risks",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

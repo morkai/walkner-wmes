@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Behavior observations",
-    "BREADCRUMBS:browse": "Cards",
-    "BREADCRUMBS:reports:count": "Observation count",
+    "BREADCRUMB:base": "Behavior observations",
+    "BREADCRUMB:browse": "Cards",
+    "BREADCRUMB:reports:count": "Observation count",
 
     "PANEL:TITLE:where": "Place of observation",
     "PANEL:TITLE:observations": "Observations",

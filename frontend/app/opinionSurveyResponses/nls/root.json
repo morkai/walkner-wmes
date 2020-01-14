@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Opinion survey",
-    "BREADCRUMBS:browse": "Responses",
-    "BREADCRUMBS:details": "Response",
+    "BREADCRUMB:base": "Opinion survey",
+    "BREADCRUMB:browse": "Responses",
+    "BREADCRUMB:details": "Response",
 
     "PANEL:TITLE:answers": "Answers",
     "PANEL:TITLE:comment": "Comment",

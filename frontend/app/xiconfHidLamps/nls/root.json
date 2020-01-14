@@ -1,10 +1,10 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Xiconf",
-    "BREADCRUMBS:browse": "HID lamps",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMB:base": "Xiconf",
+    "BREADCRUMB:browse": "HID lamps",
+    "BREADCRUMB:addForm": "Adding",
+    "BREADCRUMB:editForm": "Editing",
+    "BREADCRUMB:ACTION_FORM:delete": "Deleting",
 
     "MSG:LOADING_FAILURE": "Failed to load the HID lamps.",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the HID lamp.",

@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Pracodawcy",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Pracodawcy",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:full": "Pełna nazwa",

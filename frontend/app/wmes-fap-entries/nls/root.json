@@ -1,10 +1,10 @@
 {
   "root": {
-    "BREADCRUMBS:base": "FAP",
-    "BREADCRUMBS:browse": "FAP",
-    "BREADCRUMBS:settings": "Settings",
-    "BREADCRUMBS:history": "Changelog",
-    "BREADCRUMBS:reports:count": "Count report",
+    "BREADCRUMB:base": "FAP",
+    "BREADCRUMB:browse": "FAP",
+    "BREADCRUMB:settings": "Settings",
+    "BREADCRUMB:history": "Changelog",
+    "BREADCRUMB:reports:count": "Count report",
 
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:jump:title": "Jump to entry by ID",

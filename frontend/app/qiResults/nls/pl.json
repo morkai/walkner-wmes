@@ -1,11 +1,11 @@
 {
-  "BREADCRUMBS:base": "Inspekcja Jakości",
-  "BREADCRUMBS:browse": "Wyniki",
-  "BREADCRUMBS:reports:count": "Ilości",
-  "BREADCRUMBS:reports:okRatio": "% wyrobów zgodnych",
-  "BREADCRUMBS:reports:nokRatio": "Jakość wyrobu gotowego",
-  "BREADCRUMBS:reports:outgoingQuality": "Outgoing quality",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Inspekcja Jakości",
+  "BREADCRUMB:browse": "Wyniki",
+  "BREADCRUMB:reports:count": "Ilości",
+  "BREADCRUMB:reports:okRatio": "% wyrobów zgodnych",
+  "BREADCRUMB:reports:nokRatio": "Jakość wyrobu gotowego",
+  "BREADCRUMB:reports:outgoingQuality": "Outgoing quality",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:comment:failure": "Nie udało się skomentować zgłoszenia.",
 

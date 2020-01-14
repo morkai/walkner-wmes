@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Shifts",
+    "BREADCRUMB:browse": "Shifts",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
 

@@ -25,8 +25,8 @@ define([
   function baseBreadcrumb()
   {
     return [
-      {href: '#ct', label: this.t('BREADCRUMBS:base')},
-      {href: '#ct/reports/groups', label: this.t('BREADCRUMBS:reports:groups')}
+      {href: '#ct', label: this.t('BREADCRUMB:base')},
+      {href: '#ct/reports/groups', label: this.t('BREADCRUMB:reports:groups')}
     ];
   }
 

@@ -85,7 +85,7 @@ define([
     pageId: 'isa',
 
     title: [
-      t.bound('isa', 'BREADCRUMBS:base')
+      t.bound('isa', 'BREADCRUMB:base')
     ],
 
     actions: [],

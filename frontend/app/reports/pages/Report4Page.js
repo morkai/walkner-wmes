@@ -35,7 +35,7 @@ define([
 
     template: report4PageTemplate,
 
-    breadcrumbs: [t.bound('reports', 'BREADCRUMBS:4')],
+    breadcrumbs: [t.bound('reports', 'BREADCRUMB:4')],
 
     initialize: function()
     {

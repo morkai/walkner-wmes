@@ -24,9 +24,9 @@ define([
       return [
         {
           href: '#drilling/' + (window.WMES_LAST_DRILLING_DATE || '0d'),
-          label: this.t('BREADCRUMBS:base')
+          label: this.t('BREADCRUMB:base')
         },
-        this.t('BREADCRUMBS:settings')
+        this.t('BREADCRUMB:settings')
       ];
     },
 

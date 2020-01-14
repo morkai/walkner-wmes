@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "8D",
-    "BREADCRUMBS:browse": "Areas",
+    "BREADCRUMB:base": "8D",
+    "BREADCRUMB:browse": "Areas",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

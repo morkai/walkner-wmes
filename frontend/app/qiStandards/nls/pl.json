@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Inspekcja Jakości",
-  "BREADCRUMBS:browse": "Standardy",
+  "BREADCRUMB:base": "Inspekcja Jakości",
+  "BREADCRUMB:browse": "Standardy",
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:description": "Opis",

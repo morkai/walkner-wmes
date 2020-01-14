@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Baza Komponentów",
-  "BREADCRUMBS:browse": "Rodzaje pojemników",
+  "BREADCRUMB:base": "Baza Komponentów",
+  "BREADCRUMB:browse": "Rodzaje pojemników",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

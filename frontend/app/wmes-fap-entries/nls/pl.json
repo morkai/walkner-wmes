@@ -1,9 +1,9 @@
 {
-  "BREADCRUMBS:base": "FAP",
-  "BREADCRUMBS:browse": "FAP",
-  "BREADCRUMBS:settings": "Ustawienia",
-  "BREADCRUMBS:history": "Historia zmian",
-  "BREADCRUMBS:reports:count": "Ilości",
+  "BREADCRUMB:base": "FAP",
+  "BREADCRUMB:browse": "FAP",
+  "BREADCRUMB:settings": "Ustawienia",
+  "BREADCRUMB:history": "Historia zmian",
+  "BREADCRUMB:reports:count": "Ilości",
 
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",

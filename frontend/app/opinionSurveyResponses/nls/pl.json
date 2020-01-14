@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Odpowiedzi",
-  "BREADCRUMBS:details": "Odpowiedź",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Odpowiedzi",
+  "BREADCRUMB:details": "Odpowiedź",
 
   "PANEL:TITLE:answers": "Odpowiedzi do ankiety",
   "PANEL:TITLE:comment": "Komentarz",

@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "8D",
-    "BREADCRUMBS:browse": "Entry sources",
+    "BREADCRUMB:base": "8D",
+    "BREADCRUMB:browse": "Entry sources",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Opinion survey",
-    "BREADCRUMBS:browse": "Questions",
+    "BREADCRUMB:base": "Opinion survey",
+    "BREADCRUMB:browse": "Questions",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:full": "Full text",

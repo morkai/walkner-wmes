@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Operation log",
-    "BREADCRUMBS:browse:shift": "Operation log from {shift}",
-    "BREADCRUMBS:browse:order": "Operation log from {order}",
+    "BREADCRUMB:browse": "Operation log",
+    "BREADCRUMB:browse:shift": "Operation log from {shift}",
+    "BREADCRUMB:browse:order": "Operation log from {order}",
 
     "filter:submit": "Filter",
     "filter:placeholder:type": "Any type",

@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Malarnia",
-  "BREADCRUMBS:load": "Obciążenie",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Malarnia",
+  "BREADCRUMB:load": "Obciążenie",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",

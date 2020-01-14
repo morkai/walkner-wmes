@@ -50,9 +50,9 @@ define([
       return [
         {
           href: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
-          label: t.bound('paintShop', 'BREADCRUMBS:base')
+          label: t.bound('paintShop', 'BREADCRUMB:base')
         },
-        t.bound('paintShop', 'BREADCRUMBS:load')
+        t.bound('paintShop', 'BREADCRUMB:load')
       ];
     },
 

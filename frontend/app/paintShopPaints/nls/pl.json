@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Malarnia",
-  "BREADCRUMBS:browse": "Farby",
+  "BREADCRUMB:base": "Malarnia",
+  "BREADCRUMB:browse": "Farby",
 
   "PAGE_ACTION:jump:placeholder": "12NC...",
 

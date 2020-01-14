@@ -27,8 +27,8 @@ define([
     },
 
     breadcrumbs: [
-      t.bound('xiconfHidLamps', 'BREADCRUMBS:base'),
-      t.bound('xiconfHidLamps', 'BREADCRUMBS:browse')
+      t.bound('xiconfHidLamps', 'BREADCRUMB:base'),
+      t.bound('xiconfHidLamps', 'BREADCRUMB:browse')
     ]
 
   });

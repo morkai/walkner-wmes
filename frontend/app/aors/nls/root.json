@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Areas of responsibility",
+    "BREADCRUMB:browse": "Areas of responsibility",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

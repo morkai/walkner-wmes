@@ -1,9 +1,9 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Planning",
-    "BREADCRUMBS:wh": "WH (old)",
-    "BREADCRUMBS:settings": "Settings",
-    "BREADCRUMBS:changes": "Change history",
+    "BREADCRUMB:base": "Planning",
+    "BREADCRUMB:wh": "WH (old)",
+    "BREADCRUMB:settings": "Settings",
+    "BREADCRUMB:changes": "Change history",
 
     "MSG:LOADING_FAILURE:plan": "Failed to load the plan.",
     "MSG:LOADING_FAILURE:settings": "Failed to load the plan settings.",

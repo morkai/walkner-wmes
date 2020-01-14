@@ -141,7 +141,7 @@ define([
     '/fte/master/:id;delete',
     canManageMaster,
     _.partial(showDeleteFormPage, 'app/fte/FteMasterEntry', _, _, {
-      browseBreadcrumb: 'BREADCRUMBS:master:browse'
+      browseBreadcrumb: 'BREADCRUMB:master:browse'
     })
   );
 
@@ -250,7 +250,7 @@ define([
     '/fte/leader/:id;delete',
     canManageLeader,
     _.partial(showDeleteFormPage, 'app/fte/FteLeaderEntry', _, _, {
-      browseBreadcrumb: 'BREADCRUMBS:leader:browse'
+      browseBreadcrumb: 'BREADCRUMB:leader:browse'
     })
   );
 
@@ -359,7 +359,7 @@ define([
     '/fte/wh/:id;delete',
     canManageWh,
     _.partial(showDeleteFormPage, 'app/fte/FteWhEntry', _, _, {
-      browseBreadcrumb: 'BREADCRUMBS:wh:browse'
+      browseBreadcrumb: 'BREADCRUMB:wh:browse'
     })
   );
 });

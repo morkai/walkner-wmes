@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Tool calibration",
-    "BREADCRUMBS:browse": "Tool calibration",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Tool calibration",
+    "BREADCRUMB:browse": "Tool calibration",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:comment:failure": "Failed to comment.",
 

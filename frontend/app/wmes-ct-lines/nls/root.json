@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Cycle time",
-    "BREADCRUMBS:browse": "Lines",
+    "BREADCRUMB:base": "Cycle time",
+    "BREADCRUMB:browse": "Lines",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:active": "Active?",

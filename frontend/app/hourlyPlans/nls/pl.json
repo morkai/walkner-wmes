@@ -1,10 +1,10 @@
 {
-  "BREADCRUMBS:main": "Planowanie",
-  "BREADCRUMBS:browse": "Plany godzinowe",
-  "BREADCRUMBS:addForm": "Wybieranie planu",
-  "BREADCRUMBS:editForm": "Planowanie",
-  "BREADCRUMBS:settings": "Ustawienia",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMB:main": "Planowanie",
+  "BREADCRUMB:browse": "Plany godzinowe",
+  "BREADCRUMB:addForm": "Wybieranie planu",
+  "BREADCRUMB:editForm": "Planowanie",
+  "BREADCRUMB:settings": "Ustawienia",
+  "BREADCRUMB:ACTION_FORM:delete": "Usuwanie",
 
   "PAGE_ACTION:print": "Drukuj plan",
   "PAGE_ACTION:add": "Planuj",

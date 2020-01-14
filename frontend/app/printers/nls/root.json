@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Printers",
+    "BREADCRUMB:browse": "Printers",
 
     "PROPERTY:name": "Name",
     "PROPERTY:label": "Label",

@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Downtime reasons",
+    "BREADCRUMB:browse": "Downtime reasons",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:label": "Label",

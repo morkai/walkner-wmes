@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Przewody",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Przewody",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",

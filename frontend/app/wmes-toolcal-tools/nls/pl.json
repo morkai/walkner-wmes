@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Narzędzia pomiarowe",
-  "BREADCRUMBS:browse": "Narzędzia pomiarowe",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Narzędzia pomiarowe",
+  "BREADCRUMB:browse": "Narzędzia pomiarowe",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:comment:failure": "Nie udało się skomentować urządzenia.",
 

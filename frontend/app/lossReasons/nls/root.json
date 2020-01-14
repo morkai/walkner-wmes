@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Loss reasons",
+    "BREADCRUMB:browse": "Loss reasons",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:label": "Label",

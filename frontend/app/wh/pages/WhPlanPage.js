@@ -63,7 +63,7 @@ define([
     {
       return [
         {
-          label: t.bound('wh', 'BREADCRUMBS:base')
+          label: t.bound('wh', 'BREADCRUMB:base')
         },
         {
           href: '#wh/plans/' + this.plan.id,
@@ -76,7 +76,7 @@ define([
           }
         },
         {
-          label: t.bound('wh', 'BREADCRUMBS:pickup')
+          label: t.bound('wh', 'BREADCRUMB:pickup')
         }
       ];
     },

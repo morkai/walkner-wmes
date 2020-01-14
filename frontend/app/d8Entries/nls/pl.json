@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "8D",
-  "BREADCRUMBS:browse": "Zgłoszenia",
+  "BREADCRUMB:base": "8D",
+  "BREADCRUMB:browse": "Zgłoszenia",
 
   "MSG:markAsSeen:failure": "Nie udało się oznaczyć zgłoszenia jako przeczytane.",
   "MSG:observe:failure": "Nie udało się rozpocząć obserwacji zgłoszenia.",

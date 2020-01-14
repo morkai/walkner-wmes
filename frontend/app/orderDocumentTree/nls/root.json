@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Documentation",
-    "BREADCRUMBS:root": "Documents",
+    "BREADCRUMB:base": "Documentation",
+    "BREADCRUMB:root": "Documents",
 
     "MSG:LOADING_FAILURE:folders": "Failed to load folders.",
     "MSG:LOADING_FAILURE:files": "Failed to load files.",

@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Logi",
-  "BREADCRUMBS:browse": "Błędy klientów",
+  "BREADCRUMB:base": "Logi",
+  "BREADCRUMB:browse": "Błędy klientów",
 
   "PROPERTY:time": "Czas wystąpienia",
   "PROPERTY:user": "Użytkownik",

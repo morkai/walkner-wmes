@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Baza Komponentów",
-  "BREADCRUMBS:browse": "Obszary zaopatrzenia",
+  "BREADCRUMB:base": "Baza Komponentów",
+  "BREADCRUMB:browse": "Obszary zaopatrzenia",
 
   "PROPERTY:name": "Supply area (SAP)",
   "PROPERTY:workCenter": "WorkCenter",

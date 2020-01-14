@@ -1,10 +1,10 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Suggestions",
-    "BREADCRUMBS:browse": "Entries",
-    "BREADCRUMBS:reports:count": "Number of entries",
-    "BREADCRUMBS:reports:summary": "Summary",
-    "BREADCRUMBS:reports:engagement": "Engagement",
+    "BREADCRUMB:base": "Suggestions",
+    "BREADCRUMB:browse": "Entries",
+    "BREADCRUMB:reports:count": "Number of entries",
+    "BREADCRUMB:reports:summary": "Summary",
+    "BREADCRUMB:reports:engagement": "Engagement",
 
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",

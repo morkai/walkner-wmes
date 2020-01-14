@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "ICPO results",
-    "BREADCRUMBS:details": "Result",
+    "BREADCRUMB:browse": "ICPO results",
+    "BREADCRUMB:details": "Result",
 
     "PAGE_ACTION:download": "Download configuration",
     "PAGE_ACTION:download:orderData": "Order configuration",

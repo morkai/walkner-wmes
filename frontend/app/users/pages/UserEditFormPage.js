@@ -28,10 +28,10 @@ define([
 
       return [
         {
-          label: this.t('BREADCRUMBS:myAccount'),
+          label: this.t('BREADCRUMB:myAccount'),
           href: this.model.genClientUrl()
         },
-        this.t('core', 'BREADCRUMBS:editForm')
+        this.t('core', 'BREADCRUMB:editForm')
       ];
     }
 

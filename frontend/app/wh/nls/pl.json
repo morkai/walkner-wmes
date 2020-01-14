@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "Magazyn (nowy)",
-  "BREADCRUMBS:pickup": "Kompletacja",
-  "BREADCRUMBS:problems": "Problemy",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Magazyn (nowy)",
+  "BREADCRUMB:pickup": "Kompletacja",
+  "BREADCRUMB:problems": "Problemy",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
 

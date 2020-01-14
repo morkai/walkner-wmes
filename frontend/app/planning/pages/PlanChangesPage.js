@@ -31,7 +31,7 @@ define([
     {
       return [
         {
-          label: t.bound('planning', 'BREADCRUMBS:base'),
+          label: t.bound('planning', 'BREADCRUMB:base'),
           href: '#planning/plans'
         },
         {
@@ -39,7 +39,7 @@ define([
           href: '#planning/plans/' + this.collection.getDate('YYYY-MM-DD')
         },
         {
-          label: t.bound('planning', 'BREADCRUMBS:changes')
+          label: t.bound('planning', 'BREADCRUMB:changes')
         }
       ];
     },

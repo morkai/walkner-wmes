@@ -38,7 +38,7 @@ define([
       }
 
       return [
-        t.bound('suggestions', 'BREADCRUMBS:base'),
+        t.bound('suggestions', 'BREADCRUMB:base'),
         this.model.get('rid') + ''
       ];
     },

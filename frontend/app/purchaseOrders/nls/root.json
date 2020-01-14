@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Purchase orders",
+    "BREADCRUMB:browse": "Purchase orders",
 
     "panel:props": "Order details",
     "panel:items": "Order items",

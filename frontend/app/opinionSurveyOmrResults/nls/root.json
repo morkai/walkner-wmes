@@ -1,9 +1,9 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Opinion survey",
-    "BREADCRUMBS:browse": "OMR results",
-    "BREADCRUMBS:details": "OMR result",
-    "BREADCRUMBS:ACTION_FORM:delete": "Ignoring",
+    "BREADCRUMB:base": "Opinion survey",
+    "BREADCRUMB:browse": "OMR results",
+    "BREADCRUMB:details": "OMR result",
+    "BREADCRUMB:ACTION_FORM:delete": "Ignoring",
 
     "MSG:DELETED": "OMR result <em>{label}</em> was ignored.",
 

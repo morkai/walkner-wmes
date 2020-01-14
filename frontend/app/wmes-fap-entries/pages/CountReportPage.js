@@ -30,8 +30,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        this.t('BREADCRUMBS:base'),
-        this.t('BREADCRUMBS:reports:count')
+        this.t('BREADCRUMB:base'),
+        this.t('BREADCRUMB:reports:count')
       ];
     },
 

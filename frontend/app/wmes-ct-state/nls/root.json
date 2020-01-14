@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Cycle time",
-    "BREADCRUMBS:diag": "Diagnostics",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Cycle time",
+    "BREADCRUMB:diag": "Diagnostics",
+    "BREADCRUMB:settings": "Settings",
 
     "PAGE_ACTION:pceReport": "Report",
     "PAGE_ACTION:pces": "PCE history",

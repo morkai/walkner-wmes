@@ -81,7 +81,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        this.t('BREADCRUMBS:base'),
+        this.t('BREADCRUMB:base'),
         {
           href: '#drilling/' + this.orders.getDateFilter(),
           label: this.orders.getDateFilter('L'),

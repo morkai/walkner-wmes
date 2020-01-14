@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Luma gen. 2",
-  "BREADCRUMBS:browse": "Zdarzenia",
+  "BREADCRUMB:base": "Luma gen. 2",
+  "BREADCRUMB:browse": "Zdarzenia",
 
   "PAGE_ACTION:lines": "Linie",
   "PAGE_ACTION:settings": "Ustawienia",

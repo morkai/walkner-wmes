@@ -29,7 +29,7 @@ define([
 
   return DrillingReportPage.extend({
 
-    rootBreadcrumbKey: 'BREADCRUMBS:1',
+    rootBreadcrumbKey: 'BREADCRUMB:1',
 
     pageId: 'report1',
 

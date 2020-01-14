@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Pallet kinds",
+    "BREADCRUMB:browse": "Pallet kinds",
 
     "PROPERTY:shortName": "Short name",
     "PROPERTY:fullName": "Full name"

@@ -33,9 +33,9 @@
     "LIST:ACTION:delete": "Delete",
     "LIST:ACTION:print": "Print",
 
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMB:addForm": "Adding",
+    "BREADCRUMB:editForm": "Editing",
+    "BREADCRUMB:ACTION_FORM:delete": "Deleting",
 
     "ERROR:notify:message": "Click here to notify the admin about the error.",
     "ERROR:notify:success": "The admin was notified!",

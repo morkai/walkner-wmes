@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "SNF",
-    "BREADCRUMBS:browse": "Results",
+    "BREADCRUMB:base": "SNF",
+    "BREADCRUMB:browse": "Results",
 
     "PANEL:TITLE:details": "Result details",
     "PANEL:TITLE:charts": "Charts",

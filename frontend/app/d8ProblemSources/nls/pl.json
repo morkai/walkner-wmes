@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "8D",
-  "BREADCRUMBS:browse": "Źródła problemów",
+  "BREADCRUMB:base": "8D",
+  "BREADCRUMB:browse": "Źródła problemów",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

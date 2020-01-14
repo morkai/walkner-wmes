@@ -1,9 +1,9 @@
 {
-  "BREADCRUMBS:base": "ZPW",
-  "BREADCRUMBS:browse": "Zgłoszenia",
-  "BREADCRUMBS:settings": "Ustawienia",
-  "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
-  "BREADCRUMBS:reports:summary": "Zestawienie informacji",
+  "BREADCRUMB:base": "ZPW",
+  "BREADCRUMB:browse": "Zgłoszenia",
+  "BREADCRUMB:settings": "Ustawienia",
+  "BREADCRUMB:reports:count": "Ilość zgłoszeń",
+  "BREADCRUMB:reports:summary": "Zestawienie informacji",
 
   "MSG:markAsSeen:failure": "Nie udało się oznaczyć zgłoszenia jako przeczytane.",
   "MSG:observe:failure": "Nie udało się rozpocząć obserwacji zgłoszenia.",
@@ -201,7 +201,7 @@
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)",
 
-  "BREADCRUMBS:reports:metrics": "Wskaźniki",
+  "BREADCRUMB:reports:metrics": "Wskaźniki",
   "report:title:ipr": "Wskaźnik IPR",
   "report:title:ips": "Wskaźnik IP Structure",
   "report:title:ipc": "Wskaźnik IP Coverage",

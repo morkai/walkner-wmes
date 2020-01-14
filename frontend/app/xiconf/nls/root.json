@@ -1,9 +1,9 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Xiconf",
-    "BREADCRUMBS:browse": "Results",
-    "BREADCRUMBS:details": "Result",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Xiconf",
+    "BREADCRUMB:browse": "Results",
+    "BREADCRUMB:details": "Result",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:drop:filesOnly": "Only update archives can be dropped!",
     "MSG:drop:invalidFile": "The dropped file is not an update archive!",

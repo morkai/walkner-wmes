@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Usprawnienia",
-  "BREADCRUMBS:browse": "Miejsca zdarzeń",
+  "BREADCRUMB:base": "Usprawnienia",
+  "BREADCRUMB:browse": "Miejsca zdarzeń",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

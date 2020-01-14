@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "8D",
-    "BREADCRUMBS:browse": "Entries",
+    "BREADCRUMB:base": "8D",
+    "BREADCRUMB:browse": "Entries",
 
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",

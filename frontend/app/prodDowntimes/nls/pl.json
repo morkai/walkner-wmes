@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:browse": "Przestoje",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:browse": "Przestoje",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:alerts": "Alarmy",

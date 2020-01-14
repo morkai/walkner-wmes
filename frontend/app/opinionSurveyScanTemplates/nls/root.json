@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Opinion survey",
-    "BREADCRUMBS:browse": "Scan templates",
+    "BREADCRUMB:base": "Opinion survey",
+    "BREADCRUMB:browse": "Scan templates",
 
     "PANEL:TITLE:params": "OMR parameters",
 

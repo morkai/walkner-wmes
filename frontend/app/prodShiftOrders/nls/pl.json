@@ -1,5 +1,5 @@
 {
-  "BREADCRUMBS:browse": "Zlecenia",
+  "BREADCRUMB:browse": "Zlecenia",
 
   "PAGE_ACTION:prodLogEntries": "Historia operacji",
   "PAGE_ACTION:cycleTime": "Czas cyklu",

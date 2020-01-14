@@ -33,7 +33,7 @@ define([
 
     template: template,
 
-    breadcrumbs: [t.bound('reports', 'BREADCRUMBS:3')],
+    breadcrumbs: [t.bound('reports', 'BREADCRUMB:3')],
 
     actions: function()
     {

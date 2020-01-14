@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:operator": "Operator",
-  "BREADCRUMBS:browse": "Sprawdzanie komponentów",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:operator": "Operator",
+  "BREADCRUMB:browse": "Sprawdzanie komponentów",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "filter:submit": "Filtruj",
 

@@ -20,7 +20,7 @@ define([
     layoutName: 'page',
 
     breadcrumbs: [
-      t.bound('vis', 'BREADCRUMBS:structure')
+      t.bound('vis', 'BREADCRUMB:structure')
     ],
 
     actions: function()

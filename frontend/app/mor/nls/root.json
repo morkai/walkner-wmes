@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Matrix of responsibility",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Matrix of responsibility",
+    "BREADCRUMB:settings": "Settings",
 
     "PAGE_ACTION:editMode": "Edit mode",
     "PAGE_ACTION:addSection": "Add group",

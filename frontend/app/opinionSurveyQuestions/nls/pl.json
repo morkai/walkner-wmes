@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Pytania",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Pytania",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:full": "Pełna treść pytania",

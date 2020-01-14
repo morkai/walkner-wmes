@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Wiercenie",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Wiercenie",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",

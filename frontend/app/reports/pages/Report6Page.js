@@ -58,9 +58,9 @@ define([
       {
         var title;
 
-        if (t.has('reports', 'BREADCRUMBS:6:' + parent))
+        if (t.has('reports', 'BREADCRUMB:6:' + parent))
         {
-          title = t.bound('reports', 'BREADCRUMBS:6:' + parent);
+          title = t.bound('reports', 'BREADCRUMB:6:' + parent);
         }
         else
         {
@@ -71,7 +71,7 @@ define([
 
         breadcrumbs.push(
           {
-            label: t.bound('reports', 'BREADCRUMBS:6'),
+            label: t.bound('reports', 'BREADCRUMB:6'),
             href: this.getReportUrl(null).replace('/', '#')
           },
           title
@@ -79,7 +79,7 @@ define([
       }
       else
       {
-        breadcrumbs.push(t.bound('reports', 'BREADCRUMBS:6'));
+        breadcrumbs.push(t.bound('reports', 'BREADCRUMB:6'));
       }
 
       return breadcrumbs;

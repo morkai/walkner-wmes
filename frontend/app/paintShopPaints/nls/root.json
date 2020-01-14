@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Paint shop",
-    "BREADCRUMBS:browse": "Paints",
+    "BREADCRUMB:base": "Paint shop",
+    "BREADCRUMB:browse": "Paints",
 
     "PAGE_ACTION:jump:placeholder": "12NC...",
 

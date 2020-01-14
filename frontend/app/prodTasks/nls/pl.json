@@ -1,5 +1,5 @@
 {
-  "BREADCRUMBS:browse": "Zadania produkcyjne",
+  "BREADCRUMB:browse": "Zadania produkcyjne",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:parent": "Nadrzędne zadanie",

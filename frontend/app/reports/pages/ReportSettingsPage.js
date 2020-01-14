@@ -30,8 +30,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('reports', 'BREADCRUMBS:reports'),
-        t.bound('reports', 'BREADCRUMBS:settings')
+        t.bound('reports', 'BREADCRUMB:reports'),
+        t.bound('reports', 'BREADCRUMB:settings')
       ];
     },
 

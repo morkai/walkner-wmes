@@ -30,7 +30,7 @@ define([
     pageId: 'collection',
 
     breadcrumbs: [
-      t.bound('pressWorksheets', 'BREADCRUMBS:browse')
+      t.bound('pressWorksheets', 'BREADCRUMB:browse')
     ],
 
     actions: function(layout)

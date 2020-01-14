@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Czas cyklu",
-  "BREADCRUMBS:browse": "Wózki",
+  "BREADCRUMB:base": "Czas cyklu",
+  "BREADCRUMB:browse": "Wózki",
 
   "PROPERTY:description": "Opis",
   "PROPERTY:cards": "Karty"

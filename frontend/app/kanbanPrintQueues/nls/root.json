@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Component DB",
-    "BREADCRUMBS:browse": "Print queues",
+    "BREADCRUMB:base": "Component DB",
+    "BREADCRUMB:browse": "Print queues",
 
     "msg:printNext:expand": "Select a print queue.",
     "msg:printNext:todo": "The select queue is already done.",

@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:browse": "Zlecenia produkcyjne",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:browse": "Zlecenia produkcyjne",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:print": "Drukuj zlecenie",

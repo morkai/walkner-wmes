@@ -61,8 +61,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t('orderDocumentTree', 'BREADCRUMBS:base'),
-        t('orderDocumentTree', 'BREADCRUMBS:root')
+        t('orderDocumentTree', 'BREADCRUMB:base'),
+        t('orderDocumentTree', 'BREADCRUMB:root')
       ];
     },
 

@@ -30,7 +30,7 @@ define([
     layoutName: 'page',
 
     breadcrumbs: [
-      t.bound('icpo', 'BREADCRUMBS:browse')
+      t.bound('icpo', 'BREADCRUMB:browse')
     ],
 
     actions: function(layout)

@@ -54,8 +54,8 @@ define([
     template: template,
 
     breadcrumbs: [
-      t.bound('opinionSurveys', 'BREADCRUMBS:base'),
-      t.bound('opinionSurveys', 'BREADCRUMBS:report')
+      t.bound('opinionSurveys', 'BREADCRUMB:base'),
+      t.bound('opinionSurveys', 'BREADCRUMB:report')
     ],
 
     actions: function()

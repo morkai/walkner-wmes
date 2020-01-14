@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Subdivisions",
+    "BREADCRUMB:browse": "Subdivisions",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:division": "Division",

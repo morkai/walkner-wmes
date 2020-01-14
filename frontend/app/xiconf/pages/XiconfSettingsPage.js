@@ -23,9 +23,9 @@ define([
     {
       return [
         {
-          label: t.bound('xiconf', 'BREADCRUMBS:base')
+          label: t.bound('xiconf', 'BREADCRUMB:base')
         },
-        t.bound('xiconf', 'BREADCRUMBS:settings')
+        t.bound('xiconf', 'BREADCRUMB:settings')
       ];
     },
 

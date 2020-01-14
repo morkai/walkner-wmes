@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Near miss",
-    "BREADCRUMBS:browse": "Behaviours",
+    "BREADCRUMB:base": "Near miss",
+    "BREADCRUMB:browse": "Behaviours",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

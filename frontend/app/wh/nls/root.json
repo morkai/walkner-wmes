@@ -1,9 +1,9 @@
 {
   "root": {
-    "BREADCRUMBS:base": "WH (new)",
-    "BREADCRUMBS:pickup": "Pickup",
-    "BREADCRUMBS:problems": "Problems",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "WH (new)",
+    "BREADCRUMB:pickup": "Pickup",
+    "BREADCRUMB:problems": "Problems",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generating the plan...</span>",
 

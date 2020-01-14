@@ -36,8 +36,8 @@ define([
       }
 
       return [
-        this.t('BREADCRUMBS:base'),
-        this.t('core', 'BREADCRUMBS:addForm')
+        this.t('BREADCRUMB:base'),
+        this.t('core', 'BREADCRUMB:addForm')
       ];
     },
 

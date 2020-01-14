@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Planowane obciążenie linii",
-  "BREADCRUMBS:browse": "CAG",
+  "BREADCRUMB:base": "Planowane obciążenie linii",
+  "BREADCRUMB:browse": "CAG",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa"

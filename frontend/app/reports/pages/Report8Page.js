@@ -43,7 +43,7 @@ define([
 
     template: report8PageTemplate,
 
-    breadcrumbs: [t.bound('reports', 'BREADCRUMBS:8')],
+    breadcrumbs: [t.bound('reports', 'BREADCRUMB:8')],
 
     actions: function()
     {

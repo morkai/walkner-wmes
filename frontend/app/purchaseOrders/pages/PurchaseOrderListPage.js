@@ -26,7 +26,7 @@ define([
     layoutName: 'page',
 
     breadcrumbs: [
-      t.bound('purchaseOrders', 'BREADCRUMBS:browse')
+      t.bound('purchaseOrders', 'BREADCRUMB:browse')
     ],
 
     actions: [],

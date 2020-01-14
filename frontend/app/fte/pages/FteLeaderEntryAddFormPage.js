@@ -25,10 +25,10 @@ define([
     {
       return [
         {
-          label: t.bound('fte', 'BREADCRUMBS:' + this.model.TYPE + ':browse'),
+          label: t.bound('fte', 'BREADCRUMB:' + this.model.TYPE + ':browse'),
           href: this.model.genClientUrl('base')
         },
-        t.bound('fte', 'BREADCRUMBS:addForm')
+        t.bound('fte', 'BREADCRUMB:addForm')
       ];
     },
 

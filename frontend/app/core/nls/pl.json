@@ -33,9 +33,9 @@
   "LIST:ACTION:delete": "Usuń",
   "LIST:ACTION:print": "Drukuj",
 
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMB:addForm": "Dodawanie",
+  "BREADCRUMB:editForm": "Edycja",
+  "BREADCRUMB:ACTION_FORM:delete": "Usuwanie",
 
   "ERROR:notify:message": "Kliknij tutaj, aby poinformować administratora o błędzie.",
   "ERROR:notify:success": "Administrator został powiadomiony o błędzie!",

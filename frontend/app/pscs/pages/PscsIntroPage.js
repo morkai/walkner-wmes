@@ -19,7 +19,7 @@ define([
 
     template: template,
 
-    title: t.bound('pscs', 'BREADCRUMBS:base'),
+    title: t.bound('pscs', 'BREADCRUMB:base'),
 
     destroy: function()
     {

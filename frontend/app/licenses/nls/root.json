@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Licenses",
+    "BREADCRUMB:browse": "Licenses",
 
     "PROPERTY:_id": "License ID",
     "PROPERTY:appId": "App ID",

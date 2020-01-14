@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Baza Komponentów",
-  "BREADCRUMBS:browse": "Kolejki drukowania",
+  "BREADCRUMB:base": "Baza Komponentów",
+  "BREADCRUMB:browse": "Kolejki drukowania",
 
   "msg:printNext:expand": "Wybierz kolejkę drukowania.",
   "msg:printNext:todo": "Wybrana kolejka jest zrobiona.",

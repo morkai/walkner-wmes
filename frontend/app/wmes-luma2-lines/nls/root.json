@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Luma gen. 2",
-    "BREADCRUMBS:browse": "Lines",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Luma gen. 2",
+    "BREADCRUMB:browse": "Lines",
+    "BREADCRUMB:settings": "Settings",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:active": "Active?",

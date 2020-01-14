@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Production tasks",
+    "BREADCRUMB:browse": "Production tasks",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:parent": "Parent task",

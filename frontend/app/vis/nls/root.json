@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:structure": "Org Unit structure",
+    "BREADCRUMB:structure": "Org Unit structure",
 
     "PAGE_ACTION:toggleDeactivated": "Hide deactivated"
   },

@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "PFEP DB",
-    "BREADCRUMBS:browse": "Entries",
+    "BREADCRUMB:base": "PFEP DB",
+    "BREADCRUMB:browse": "Entries",
 
     "MSG:comment:failure": "Failed to comment the entry.",
 

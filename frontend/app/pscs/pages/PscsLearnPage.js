@@ -20,8 +20,8 @@ define([
     template: template,
 
     breadcrumbs: [
-      {href: '#pscs', label: t.bound('pscs', 'BREADCRUMBS:base')},
-      t.bound('pscs', 'BREADCRUMBS:learn')
+      {href: '#pscs', label: t.bound('pscs', 'BREADCRUMB:base')},
+      t.bound('pscs', 'BREADCRUMB:learn')
     ],
 
     initialize: function()

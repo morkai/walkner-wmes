@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "TRW",
-  "BREADCRUMBS:browse": "Programy",
+  "BREADCRUMB:base": "TRW",
+  "BREADCRUMB:browse": "Programy",
 
   "PAGE_ACTION:copy": "Kopiuj",
 

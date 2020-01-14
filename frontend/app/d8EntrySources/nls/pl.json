@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "8D",
-  "BREADCRUMBS:browse": "Źródła zgłoszeń",
+  "BREADCRUMB:base": "8D",
+  "BREADCRUMB:browse": "Źródła zgłoszeń",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

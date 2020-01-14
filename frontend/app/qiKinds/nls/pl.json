@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Inspekcja Jakości",
-  "BREADCRUMBS:browse": "Rodzaje inspekcji",
+  "BREADCRUMB:base": "Inspekcja Jakości",
+  "BREADCRUMB:browse": "Rodzaje inspekcji",
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:division": "Wydział",

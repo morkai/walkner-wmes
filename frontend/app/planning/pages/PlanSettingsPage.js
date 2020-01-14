@@ -20,7 +20,7 @@ define([
     {
       return [
         {
-          label: t.bound('planning', 'BREADCRUMBS:base'),
+          label: t.bound('planning', 'BREADCRUMB:base'),
           href: '#planning/plans'
         },
         {
@@ -28,7 +28,7 @@ define([
           href: '#planning/plans/' + this.model.id
         },
         {
-          label: t.bound('planning', 'BREADCRUMBS:settings')
+          label: t.bound('planning', 'BREADCRUMB:settings')
         }
       ];
     },

@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Luma gen. 2",
-    "BREADCRUMBS:browse": "Events",
+    "BREADCRUMB:base": "Luma gen. 2",
+    "BREADCRUMB:browse": "Events",
 
     "PAGE_ACTION:lines": "Lines",
     "PAGE_ACTION:settings": "Settings",

@@ -43,7 +43,7 @@ define([
     },
 
     breadcrumbs: [
-      t.bound('emptyOrders', 'BREADCRUMBS:browse')
+      t.bound('emptyOrders', 'BREADCRUMB:browse')
     ],
 
     initialize: function()

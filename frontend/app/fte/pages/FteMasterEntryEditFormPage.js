@@ -27,14 +27,14 @@ define([
     {
       return [
         {
-          label: t.bound('fte', 'BREADCRUMBS:master:browse'),
+          label: t.bound('fte', 'BREADCRUMB:master:browse'),
           href: this.model.genClientUrl('base')
         },
         {
-          label: t.bound('fte', 'BREADCRUMBS:details'),
+          label: t.bound('fte', 'BREADCRUMB:details'),
           href: this.model.genClientUrl()
         },
-        t.bound('fte', 'BREADCRUMBS:editForm')
+        t.bound('fte', 'BREADCRUMB:editForm')
       ];
     },
 

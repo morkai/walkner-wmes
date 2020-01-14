@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Baza PFEP",
-  "BREADCRUMBS:browse": "Wpisy",
+  "BREADCRUMB:base": "Baza PFEP",
+  "BREADCRUMB:browse": "Wpisy",
 
   "MSG:comment:failure": "Nie udało się skomentować wpisu.",
 

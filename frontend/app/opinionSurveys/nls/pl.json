@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Badania",
-  "BREADCRUMBS:report": "Raport",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Badania",
+  "BREADCRUMB:report": "Raport",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "PAGE_ACTION:print": "Wersja do druku",
   "PAGE_ACTION:edit": "Edytuj badanie",

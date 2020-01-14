@@ -47,7 +47,7 @@ define([
 
     template: report7PageTemplate,
 
-    breadcrumbs: [t.bound('reports', 'BREADCRUMBS:7')],
+    breadcrumbs: [t.bound('reports', 'BREADCRUMB:7')],
 
     events: {
       'mouseup .highcharts-title': function(e)

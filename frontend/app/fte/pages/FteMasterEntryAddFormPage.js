@@ -23,10 +23,10 @@ define([
 
     breadcrumbs: [
       {
-        label: t.bound('fte', 'BREADCRUMBS:master:browse'),
+        label: t.bound('fte', 'BREADCRUMB:master:browse'),
         href: '#fte/master'
       },
-      t.bound('fte', 'BREADCRUMBS:addForm')
+      t.bound('fte', 'BREADCRUMB:addForm')
     ],
 
     initialize: function()

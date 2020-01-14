@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Downtimes",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:browse": "Downtimes",
+    "BREADCRUMB:settings": "Settings",
 
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:alerts": "Alerts",

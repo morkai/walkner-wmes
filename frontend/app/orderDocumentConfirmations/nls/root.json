@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Documentation",
-    "BREADCRUMBS:browse": "Clients",
+    "BREADCRUMB:base": "Documentation",
+    "BREADCRUMB:browse": "Clients",
 
     "PROPERTY:user": "User",
     "PROPERTY:time": "Time",

@@ -25,9 +25,9 @@ define([
     {
       return [
         {
-          label: t.bound('fte', 'BREADCRUMBS:base')
+          label: t.bound('fte', 'BREADCRUMB:base')
         },
-        t.bound('fte', 'BREADCRUMBS:settings')
+        t.bound('fte', 'BREADCRUMB:settings')
       ];
     },
 

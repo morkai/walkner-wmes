@@ -22,7 +22,7 @@ define([
 
     breadcrumbs: function()
     {
-      return [t.bound('planning', 'BREADCRUMBS:base')];
+      return [t.bound('planning', 'BREADCRUMB:base')];
     }
 
   });

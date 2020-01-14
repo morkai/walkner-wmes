@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Szablony skanowania",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Szablony skanowania",
 
   "PANEL:TITLE:params": "Parametry rozpoznawania odpowiedzi",
 

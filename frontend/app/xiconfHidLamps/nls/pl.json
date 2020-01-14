@@ -1,9 +1,9 @@
 {
-  "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Oprawy HID",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMB:base": "Xiconf",
+  "BREADCRUMB:browse": "Oprawy HID",
+  "BREADCRUMB:addForm": "Dodawanie",
+  "BREADCRUMB:editForm": "Edycja",
+  "BREADCRUMB:ACTION_FORM:delete": "Usuwanie",
 
   "MSG:LOADING_FAILURE": "Ładowanie opraw HID nie powiodło się.",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie oprawy HID nie powiodło się.",

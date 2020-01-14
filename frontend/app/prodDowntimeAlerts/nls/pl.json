@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Przestoje",
-  "BREADCRUMBS:browse": "Alarmy",
+  "BREADCRUMB:base": "Przestoje",
+  "BREADCRUMB:browse": "Alarmy",
 
   "filter:submit": "Filtruj",
 

@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Czas cyklu",
-  "BREADCRUMBS:diag": "Diagnostyka",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Czas cyklu",
+  "BREADCRUMB:diag": "Diagnostyka",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "PAGE_ACTION:pceReport": "Raport",
   "PAGE_ACTION:pces": "Historia sztuk",

@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Paint shop",
-    "BREADCRUMBS:load": "Load",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Paint shop",
+    "BREADCRUMB:load": "Load",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:date:failure": "Failed to find date.",
     "MSG:date:empty": "No orders.",

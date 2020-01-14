@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Usprawnienia",
-  "BREADCRUMBS:browse": "Przyczyny",
+  "BREADCRUMB:base": "Usprawnienia",
+  "BREADCRUMB:browse": "Przyczyny",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

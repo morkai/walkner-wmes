@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "TRW",
-  "BREADCRUMBS:browse": "Wyniki",
+  "BREADCRUMB:base": "TRW",
+  "BREADCRUMB:browse": "Wyniki",
 
   "testing:noWorkstation": "wybierz stanowisko",
   "testing:noOrder": "wybierz zlecenie",

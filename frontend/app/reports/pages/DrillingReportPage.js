@@ -54,7 +54,7 @@ define([
       }
       else
       {
-        title.push(t.bound('reports', 'BREADCRUMBS:divisions'));
+        title.push(t.bound('reports', 'BREADCRUMB:divisions'));
       }
 
       return title;

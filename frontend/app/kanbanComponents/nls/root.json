@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Component DB",
-    "BREADCRUMBS:browse": "Components",
+    "BREADCRUMB:base": "Component DB",
+    "BREADCRUMB:browse": "Components",
 
     "PAGE_ACTION:jump:placeholder": "12NC",
 

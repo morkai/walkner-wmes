@@ -1,9 +1,9 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Opinion survey",
-    "BREADCRUMBS:browse": "Surveys",
-    "BREADCRUMBS:report": "Report",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "Opinion survey",
+    "BREADCRUMB:browse": "Surveys",
+    "BREADCRUMB:report": "Report",
+    "BREADCRUMB:settings": "Settings",
 
     "PAGE_ACTION:print": "Print version",
     "PAGE_ACTION:edit": "Edit survey",

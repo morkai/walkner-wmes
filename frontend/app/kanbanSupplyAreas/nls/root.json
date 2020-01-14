@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Component DB",
-    "BREADCRUMBS:browse": "Supply areas",
+    "BREADCRUMB:base": "Component DB",
+    "BREADCRUMB:browse": "Supply areas",
 
     "PROPERTY:name": "Supply area (SAP)",
     "PROPERTY:workCenter": "WorkCenter",

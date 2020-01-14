@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "QI",
-    "BREADCRUMBS:browse": "Faults",
+    "BREADCRUMB:base": "QI",
+    "BREADCRUMB:browse": "Faults",
 
     "PROPERTY:_id": "Fault code",
     "PROPERTY:name": "Classification",

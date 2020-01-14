@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "SNF",
-  "BREADCRUMBS:browse": "Programy",
+  "BREADCRUMB:base": "SNF",
+  "BREADCRUMB:browse": "Programy",
 
   "PANEL:TITLE:details": "Szczegóły programu",
   "PANEL:TITLE:gallery": "Galeria",

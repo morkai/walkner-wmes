@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:browse": "Wyniki ICPO",
-  "BREADCRUMBS:details": "Wynik",
+  "BREADCRUMB:browse": "Wyniki ICPO",
+  "BREADCRUMB:details": "Wynik",
 
   "PAGE_ACTION:download": "Pobierz konfigurację",
   "PAGE_ACTION:download:orderData": "Konfiguracja zlecenia",

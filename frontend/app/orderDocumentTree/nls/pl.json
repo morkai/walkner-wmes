@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Dokumentacja",
-  "BREADCRUMBS:root": "Dokumenty",
+  "BREADCRUMB:base": "Dokumentacja",
+  "BREADCRUMB:root": "Dokumenty",
 
   "MSG:LOADING_FAILURE:folders": "Ładowanie folderów nie powiodło się.",
   "MSG:LOADING_FAILURE:files": "Ładowanie plików nie powiodło się.",

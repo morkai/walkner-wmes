@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Czas cyklu",
-  "BREADCRUMBS:browse": "Linie",
+  "BREADCRUMB:base": "Czas cyklu",
+  "BREADCRUMB:browse": "Linie",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:active": "Aktywna?",

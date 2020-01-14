@@ -30,7 +30,7 @@ define([
       {
         return [{
           href: this.prodShift.genClientUrl(),
-          label: this.t('BREADCRUMBS:browse:shift', {
+          label: this.t('BREADCRUMB:browse:shift', {
             shift: this.prodShift.getLabel()
           })
         }];
@@ -40,7 +40,7 @@ define([
       {
         return [{
           href: this.prodShiftOrder.genClientUrl(),
-          label: this.t('BREADCRUMBS:browse:order', {
+          label: this.t('BREADCRUMB:browse:order', {
             order: this.prodShiftOrder.getLabel()
           })
         }];

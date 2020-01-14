@@ -32,13 +32,13 @@ define([
         if (typeof breadcrumb === 'string')
         {
           return {
-            label: breadcrumb[0] === ':' ? i18n(nlsDomain, 'BREADCRUMBS' + breadcrumb) : breadcrumb
+            label: breadcrumb[0] === ':' ? i18n(nlsDomain, 'BREADCRUMB' + breadcrumb) : breadcrumb
           };
         }
 
         if (typeof breadcrumb.label === 'string' && breadcrumb.label[0] === ':')
         {
-          breadcrumb.label = i18n(nlsDomain, 'BREADCRUMBS' + breadcrumb.label);
+          breadcrumb.label = i18n(nlsDomain, 'BREADCRUMB' + breadcrumb.label);
         }
 
         return breadcrumb;
@@ -83,14 +83,14 @@ define([
       }
 
       breadcrumbs.unshift({
-        label: i18n(nlsDomain, _.result(page, 'browseBreadcrumb') || 'BREADCRUMBS:browse'),
+        label: i18n(nlsDomain, _.result(page, 'browseBreadcrumb') || 'BREADCRUMB:browse'),
         href: href
       });
     }
 
     if (page.baseBreadcrumb === true)
     {
-      breadcrumbs.unshift(i18n(nlsDomain, 'BREADCRUMBS:base'));
+      breadcrumbs.unshift(i18n(nlsDomain, 'BREADCRUMB:base'));
     }
     else if (page.baseBreadcrumb)
     {
@@ -103,7 +103,7 @@ define([
       else
       {
         breadcrumbs.unshift({
-          label: i18n(nlsDomain, 'BREADCRUMBS:base'),
+          label: i18n(nlsDomain, 'BREADCRUMB:base'),
           href: String(baseBreadcrumbs)
         });
       }

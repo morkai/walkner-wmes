@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Minutes for Safety",
-    "BREADCRUMBS:browse": "Cards",
-    "BREADCRUMBS:reports:count": "Minutes count",
+    "BREADCRUMB:base": "Minutes for Safety",
+    "BREADCRUMB:browse": "Cards",
+    "BREADCRUMB:reports:count": "Minutes count",
 
     "PAGE_ACTION:print": "Print version",
 

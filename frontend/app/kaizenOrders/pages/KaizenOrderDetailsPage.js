@@ -38,7 +38,7 @@ define([
       }
 
       return [
-        t.bound('kaizenOrders', 'BREADCRUMBS:base'),
+        t.bound('kaizenOrders', 'BREADCRUMB:base'),
         this.model.get('rid') + ''
       ];
     },

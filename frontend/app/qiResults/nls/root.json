@@ -1,12 +1,12 @@
 {
   "root": {
-    "BREADCRUMBS:base": "QI",
-    "BREADCRUMBS:browse": "Results",
-    "BREADCRUMBS:reports:count": "Count report",
-    "BREADCRUMBS:reports:okRatio": "% of OK goods report",
-    "BREADCRUMBS:reports:nokRatio": "% of NOK goods report",
-    "BREADCRUMBS:reports:outgoingQuality": "Outgoing quality",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:base": "QI",
+    "BREADCRUMB:browse": "Results",
+    "BREADCRUMB:reports:count": "Count report",
+    "BREADCRUMB:reports:okRatio": "% of OK goods report",
+    "BREADCRUMB:reports:nokRatio": "% of NOK goods report",
+    "BREADCRUMB:reports:outgoingQuality": "Outgoing quality",
+    "BREADCRUMB:settings": "Settings",
 
     "MSG:comment:failure": "Failed to comment the entry.",
 

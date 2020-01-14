@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:operator": "Operator",
-    "BREADCRUMBS:browse": "Component checking",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:operator": "Operator",
+    "BREADCRUMB:browse": "Component checking",
+    "BREADCRUMB:settings": "Settings",
 
     "filter:submit": "Filter",
 

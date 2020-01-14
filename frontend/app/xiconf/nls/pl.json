@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Wyniki",
-  "BREADCRUMBS:details": "Wynik",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Xiconf",
+  "BREADCRUMB:browse": "Wyniki",
+  "BREADCRUMB:details": "Wynik",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "MSG:drop:filesOnly": "Upuszczać można tylko pliki!",
   "MSG:drop:invalidFile": "Nieprawidłowy plik aktualizacji oprogramowania!",

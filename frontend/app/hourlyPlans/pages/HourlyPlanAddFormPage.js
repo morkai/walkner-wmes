@@ -23,10 +23,10 @@ define([
     {
       return [
         {
-          label: t.bound('hourlyPlans', 'BREADCRUMBS:browse'),
+          label: t.bound('hourlyPlans', 'BREADCRUMB:browse'),
           href: this.model.genClientUrl('base')
         },
-        t.bound('hourlyPlans', 'BREADCRUMBS:addForm')
+        t.bound('hourlyPlans', 'BREADCRUMB:addForm')
       ];
     },
 

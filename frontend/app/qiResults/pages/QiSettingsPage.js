@@ -23,9 +23,9 @@ define([
     {
       return [
         {
-          label: t.bound('qiResults', 'BREADCRUMBS:base')
+          label: t.bound('qiResults', 'BREADCRUMB:base')
         },
-        t.bound('qiResults', 'BREADCRUMBS:settings')
+        t.bound('qiResults', 'BREADCRUMB:settings')
       ];
     },
 

@@ -40,8 +40,8 @@ define([
     template: template,
 
     breadcrumbs: [
-      t.bound('qiResults', 'BREADCRUMBS:base'),
-      t.bound('qiResults', 'BREADCRUMBS:reports:count')
+      t.bound('qiResults', 'BREADCRUMB:base'),
+      t.bound('qiResults', 'BREADCRUMB:reports:count')
     ],
 
     actions: function()

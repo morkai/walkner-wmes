@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "FAP",
-    "BREADCRUMBS:browse": "Categories",
+    "BREADCRUMB:base": "FAP",
+    "BREADCRUMB:browse": "Categories",
 
     "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",

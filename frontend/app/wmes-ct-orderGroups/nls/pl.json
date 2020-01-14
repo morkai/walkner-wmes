@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "Czas cyklu",
-  "BREADCRUMBS:reports": "Raporty",
-  "BREADCRUMBS:reports:groups": "Grupy wyrobów",
-  "BREADCRUMBS:browse": "Grupy",
+  "BREADCRUMB:base": "Czas cyklu",
+  "BREADCRUMB:reports": "Raporty",
+  "BREADCRUMB:reports:groups": "Grupy wyrobów",
+  "BREADCRUMB:browse": "Grupy",
 
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:name": "Nazwa grupy",

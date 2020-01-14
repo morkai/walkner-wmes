@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Klienci",
+  "BREADCRUMB:base": "Xiconf",
+  "BREADCRUMB:browse": "Klienci",
 
   "MSG:NO_APPS_TO_UPDATE": "Nie ma żadnych aplikacji do zaktualizowania.",
 

@@ -27,7 +27,7 @@ define([
     {
       return createPageBreadcrumbs(this, [
         {
-          label: this.model.getLabel() || t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:details'),
+          label: this.model.getLabel() || t.bound(this.model.getNlsDomain(), 'BREADCRUMB:details'),
           href: this.model.genClientUrl()
         },
         ':editForm'

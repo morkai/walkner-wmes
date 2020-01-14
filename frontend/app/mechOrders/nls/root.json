@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Mechanical orders",
+    "BREADCRUMB:browse": "Mechanical orders",
 
     "PAGE_ACTION:import": "Import orders",
 

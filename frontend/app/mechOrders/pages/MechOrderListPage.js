@@ -32,7 +32,7 @@ define([
     pageId: 'mechOrderList',
 
     breadcrumbs: [
-      t.bound('mechOrders', 'BREADCRUMBS:browse')
+      t.bound('mechOrders', 'BREADCRUMB:browse')
     ],
 
     actions: [{

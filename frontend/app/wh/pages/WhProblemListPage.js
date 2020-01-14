@@ -55,10 +55,10 @@ define([
     {
       return [
         {
-          label: this.t('BREADCRUMBS:base')
+          label: this.t('BREADCRUMB:base')
         },
         {
-          label: this.t('BREADCRUMBS:problems')
+          label: this.t('BREADCRUMB:problems')
         }
       ];
     },

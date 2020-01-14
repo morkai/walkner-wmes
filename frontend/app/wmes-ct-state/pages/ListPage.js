@@ -24,7 +24,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        this.t('BREADCRUMBS:base')
+        this.t('BREADCRUMB:base')
       ];
     },
 

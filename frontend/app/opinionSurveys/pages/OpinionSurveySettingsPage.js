@@ -23,9 +23,9 @@ define([
     {
       return [
         {
-          label: t.bound('opinionSurveys', 'BREADCRUMBS:base')
+          label: t.bound('opinionSurveys', 'BREADCRUMB:base')
         },
-        t.bound('opinionSurveys', 'BREADCRUMBS:settings')
+        t.bound('opinionSurveys', 'BREADCRUMB:settings')
       ];
     },
 

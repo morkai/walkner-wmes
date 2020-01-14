@@ -27,8 +27,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('orderDocumentClients', 'BREADCRUMBS:base'),
-        t.bound('orderDocumentClients', 'BREADCRUMBS:browse')
+        t.bound('orderDocumentClients', 'BREADCRUMB:base'),
+        t.bound('orderDocumentClients', 'BREADCRUMB:browse')
       ];
     },
 

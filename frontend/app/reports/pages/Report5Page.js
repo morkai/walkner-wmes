@@ -25,7 +25,7 @@ define([
 
   return DrillingReportPage.extend({
 
-    rootBreadcrumbKey: 'BREADCRUMBS:5',
+    rootBreadcrumbKey: 'BREADCRUMB:5',
     initialSettingsTab: 'hr',
     maxOrgUnitLevel: 'subdivision',
 

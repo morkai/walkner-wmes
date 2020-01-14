@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "ZPW",
-  "BREADCRUMBS:browse": "Zachowania",
+  "BREADCRUMB:base": "ZPW",
+  "BREADCRUMB:browse": "Zachowania",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

@@ -31,8 +31,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('xiconfClients', 'BREADCRUMBS:base'),
-        t.bound('xiconfClients', 'BREADCRUMBS:browse')
+        t.bound('xiconfClients', 'BREADCRUMB:base'),
+        t.bound('xiconfClients', 'BREADCRUMB:browse')
       ];
     },
 

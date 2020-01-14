@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Matryca odpowiedzialności",
-  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMB:base": "Matryca odpowiedzialności",
+  "BREADCRUMB:settings": "Ustawienia",
 
   "PAGE_ACTION:editMode": "Tryb edycji",
   "PAGE_ACTION:addSection": "Dodaj grupę",

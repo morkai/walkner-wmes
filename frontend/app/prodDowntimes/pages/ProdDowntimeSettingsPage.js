@@ -23,10 +23,10 @@ define([
     {
       return [
         {
-          label: t.bound('prodDowntimes', 'BREADCRUMBS:browse'),
+          label: t.bound('prodDowntimes', 'BREADCRUMB:browse'),
           href: '#prodDowntimes'
         },
-        t.bound('prodDowntimes', 'BREADCRUMBS:settings')
+        t.bound('prodDowntimes', 'BREADCRUMB:settings')
       ];
     },
 

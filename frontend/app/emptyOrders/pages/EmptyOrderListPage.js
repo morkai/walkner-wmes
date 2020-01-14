@@ -28,7 +28,7 @@ define([
     pageId: 'emptyOrderList',
 
     breadcrumbs: [
-      t.bound('emptyOrders', 'BREADCRUMBS:browse')
+      t.bound('emptyOrders', 'BREADCRUMB:browse')
     ],
 
     actions: [

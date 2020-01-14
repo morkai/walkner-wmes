@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Orders",
+    "BREADCRUMB:browse": "Orders",
 
     "PAGE_ACTION:prodLogEntries": "Operation log",
     "PAGE_ACTION:cycleTime": "Cycle time",

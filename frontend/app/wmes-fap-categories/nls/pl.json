@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "FAP",
-  "BREADCRUMBS:browse": "Kategorie",
+  "BREADCRUMB:base": "FAP",
+  "BREADCRUMB:browse": "Kategorie",
 
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:name": "Nazwa",

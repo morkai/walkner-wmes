@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Vendors",
+    "BREADCRUMB:browse": "Vendors",
 
     "PROPERTY:_id": "Vendor no",
     "PROPERTY:name": "Name",

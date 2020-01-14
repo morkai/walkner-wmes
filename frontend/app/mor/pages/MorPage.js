@@ -21,7 +21,7 @@ define([
 
     layoutName: 'page',
 
-    title: t.bound('mor', 'BREADCRUMBS:base'),
+    title: t.bound('mor', 'BREADCRUMB:base'),
 
     className: function()
     {

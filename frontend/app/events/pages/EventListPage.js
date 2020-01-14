@@ -32,7 +32,7 @@ define([
     pageId: 'eventList',
 
     breadcrumbs: [
-      t.bound('events', 'BREADCRUMBS:browse')
+      t.bound('events', 'BREADCRUMB:browse')
     ],
 
     initialize: function()

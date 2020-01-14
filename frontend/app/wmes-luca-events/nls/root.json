@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "LUCA PbL",
-    "BREADCRUMBS:browse": "Events",
+    "BREADCRUMB:base": "LUCA PbL",
+    "BREADCRUMB:browse": "Events",
 
     "PAGE_ACTION:settings": "Settings",
 

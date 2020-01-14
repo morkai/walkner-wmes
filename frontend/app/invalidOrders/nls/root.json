@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Invalid orders",
+    "BREADCRUMB:browse": "Invalid orders",
 
     "PAGE_ACTION:check": "Check orders",
     "PAGE_ACTION:notify": "Notify responsible persons",

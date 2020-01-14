@@ -45,12 +45,12 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('xiconf', 'BREADCRUMBS:base'),
+        t.bound('xiconf', 'BREADCRUMB:base'),
         {
-          label: t.bound('xiconf', 'BREADCRUMBS:browse'),
+          label: t.bound('xiconf', 'BREADCRUMB:browse'),
           href: this.model.genClientUrl('base')
         },
-        t.bound('xiconf', 'BREADCRUMBS:details')
+        t.bound('xiconf', 'BREADCRUMB:details')
       ];
     },
 

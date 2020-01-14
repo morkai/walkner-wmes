@@ -59,8 +59,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        this.t('BREADCRUMBS:base'),
-        this.t('BREADCRUMBS:reports:outgoingQuality')
+        this.t('BREADCRUMB:base'),
+        this.t('BREADCRUMB:reports:outgoingQuality')
       ];
     },
 

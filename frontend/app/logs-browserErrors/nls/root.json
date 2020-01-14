@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Logs",
-    "BREADCRUMBS:browse": "Client-side errors",
+    "BREADCRUMB:base": "Logs",
+    "BREADCRUMB:browse": "Client-side errors",
 
     "PROPERTY:time": "Time",
     "PROPERTY:user": "User",

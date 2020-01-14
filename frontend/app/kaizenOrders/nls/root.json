@@ -1,10 +1,10 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Near miss",
-    "BREADCRUMBS:browse": "Entries",
-    "BREADCRUMBS:settings": "Settings",
-    "BREADCRUMBS:reports:count": "Entry count",
-    "BREADCRUMBS:reports:summary": "Summary",
+    "BREADCRUMB:base": "Near miss",
+    "BREADCRUMB:browse": "Entries",
+    "BREADCRUMB:settings": "Settings",
+    "BREADCRUMB:reports:count": "Entry count",
+    "BREADCRUMB:reports:summary": "Summary",
 
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",
@@ -201,7 +201,7 @@
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)",
 
-    "BREADCRUMBS:reports:metrics": "Metrics",
+    "BREADCRUMB:reports:metrics": "Metrics",
     "report:title:ipr": "IPR",
     "report:title:ips": "IP Structure",
     "report:title:ipc": "IP Coverage",

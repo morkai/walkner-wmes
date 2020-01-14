@@ -36,7 +36,7 @@ define([
     pageId: 'orderList',
 
     breadcrumbs: [
-      t.bound('orders', 'BREADCRUMBS:browse')
+      t.bound('orders', 'BREADCRUMB:browse')
     ],
 
     actions: function(layout)

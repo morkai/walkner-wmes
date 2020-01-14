@@ -35,7 +35,7 @@ define([
 
     browseBreadcrumb: function()
     {
-      return 'BREADCRUMBS:' + this.model.TYPE + ':browse';
+      return 'BREADCRUMB:' + this.model.TYPE + ':browse';
     },
 
     breadcrumbs: function()

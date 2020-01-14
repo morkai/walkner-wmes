@@ -38,8 +38,8 @@ define([
         return new FilteredListPage({
           navbarModuleName: 'production',
           baseBreadcrumb: [
-            t('orderBomMatchers', 'BREADCRUMBS:operator'),
-            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMBS:settings')}
+            t('orderBomMatchers', 'BREADCRUMB:operator'),
+            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMB:settings')}
           ],
           FilterView: FilterView,
           ListView: ListView,
@@ -63,8 +63,8 @@ define([
         return new DetailsPage({
           navbarModuleName: 'production',
           baseBreadcrumb: [
-            t('orderBomMatchers', 'BREADCRUMBS:operator'),
-            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMBS:settings')}
+            t('orderBomMatchers', 'BREADCRUMB:operator'),
+            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMB:settings')}
           ],
           detailsTemplate: template,
           model: new OrderBomMatcher({_id: req.params.id})
@@ -87,8 +87,8 @@ define([
         return new AddFormPage({
           navbarModuleName: 'production',
           baseBreadcrumb: [
-            t('orderBomMatchers', 'BREADCRUMBS:operator'),
-            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMBS:settings')}
+            t('orderBomMatchers', 'BREADCRUMB:operator'),
+            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMB:settings')}
           ],
           FormView: FormView,
           model: new OrderBomMatcher()
@@ -111,8 +111,8 @@ define([
         return new EditFormPage({
           navbarModuleName: 'production',
           baseBreadcrumb: [
-            t('orderBomMatchers', 'BREADCRUMBS:operator'),
-            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMBS:settings')}
+            t('orderBomMatchers', 'BREADCRUMB:operator'),
+            {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMB:settings')}
           ],
           FormView: FormView,
           model: new OrderBomMatcher({_id: req.params.id})
@@ -127,8 +127,8 @@ define([
     _.partial(showDeleteFormPage, 'app/orderBomMatchers/OrderBomMatcher', _, _, {
       navbarModuleName: 'production',
       baseBreadcrumb: [
-        t.bound('orderBomMatchers', 'BREADCRUMBS:operator'),
-        {href: '#production;settings', label: t.bound('orderBomMatchers', 'BREADCRUMBS:settings')}
+        t.bound('orderBomMatchers', 'BREADCRUMB:operator'),
+        {href: '#production;settings', label: t.bound('orderBomMatchers', 'BREADCRUMB:settings')}
       ]
     })
   );

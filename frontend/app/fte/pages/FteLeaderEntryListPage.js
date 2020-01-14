@@ -36,7 +36,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('fte', 'BREADCRUMBS:' + this.collection.TYPE + ':browse')
+        t.bound('fte', 'BREADCRUMB:' + this.collection.TYPE + ':browse')
       ];
     },
 

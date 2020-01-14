@@ -20,8 +20,8 @@ define([
     ListView: XiconfComponentWeightListView,
 
     breadcrumbs: [
-      t.bound('xiconfComponentWeights', 'BREADCRUMBS:base'),
-      t.bound('xiconfComponentWeights', 'BREADCRUMBS:browse')
+      t.bound('xiconfComponentWeights', 'BREADCRUMB:base'),
+      t.bound('xiconfComponentWeights', 'BREADCRUMB:browse')
     ]
 
   });

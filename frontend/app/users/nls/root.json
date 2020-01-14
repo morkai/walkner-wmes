@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Users",
-    "BREADCRUMBS:myAccount": "My account",
-    "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMB:browse": "Users",
+    "BREADCRUMB:myAccount": "My account",
+    "BREADCRUMB:settings": "Settings",
     "breadcrumbs:logIn": "Log in form",
 
     "MSG:SYNCED": "Users were synchronized successfully.",

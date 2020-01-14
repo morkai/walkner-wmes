@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Baza Komponentów",
-  "BREADCRUMBS:browse": "Komponenty",
+  "BREADCRUMB:base": "Baza Komponentów",
+  "BREADCRUMB:browse": "Komponenty",
 
   "PAGE_ACTION:jump:placeholder": "12NC",
 

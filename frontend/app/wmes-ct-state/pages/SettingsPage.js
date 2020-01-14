@@ -23,10 +23,10 @@ define([
     {
       return [
         {
-          label: this.t('BREADCRUMBS:base'),
+          label: this.t('BREADCRUMB:base'),
           href: '#ct'
         },
-        this.t('BREADCRUMBS:settings')
+        this.t('BREADCRUMB:settings')
       ];
     },
 

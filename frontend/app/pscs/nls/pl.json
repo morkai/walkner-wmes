@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "PSCS",
-  "BREADCRUMBS:learn": "Szkolenie",
-  "BREADCRUMBS:exam": "Test",
-  "BREADCRUMBS:browse": "Wyniki",
+  "BREADCRUMB:base": "PSCS",
+  "BREADCRUMB:learn": "Szkolenie",
+  "BREADCRUMB:exam": "Test",
+  "BREADCRUMB:browse": "Wyniki",
 
   "header:title": "PSCS",
   "header:subtitle": "Philips Supply Chain Security",

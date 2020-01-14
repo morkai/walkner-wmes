@@ -28,8 +28,8 @@ define([
     template: template,
 
     breadcrumbs: [
-      t.bound('suggestions', 'BREADCRUMBS:base'),
-      t.bound('suggestions', 'BREADCRUMBS:reports:count')
+      t.bound('suggestions', 'BREADCRUMB:base'),
+      t.bound('suggestions', 'BREADCRUMB:reports:count')
     ],
 
     initialize: function()

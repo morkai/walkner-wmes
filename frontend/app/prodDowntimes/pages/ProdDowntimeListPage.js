@@ -34,7 +34,7 @@ define([
     pageId: 'prodDowntimeList',
 
     breadcrumbs: [
-      t.bound('prodDowntimes', 'BREADCRUMBS:browse')
+      t.bound('prodDowntimes', 'BREADCRUMB:browse')
     ],
 
     actions: function(layout)

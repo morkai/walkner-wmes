@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Production data change requests",
+    "BREADCRUMB:browse": "Production data change requests",
 
     "LIST:ACTION:confirm": "Confirm change request",
 

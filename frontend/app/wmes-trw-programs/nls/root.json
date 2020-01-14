@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "TRW",
-    "BREADCRUMBS:browse": "Programs",
+    "BREADCRUMB:base": "TRW",
+    "BREADCRUMB:browse": "Programs",
 
     "PAGE_ACTION:copy": "Copy",
 

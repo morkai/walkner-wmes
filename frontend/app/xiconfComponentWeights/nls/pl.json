@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Xiconf",
-  "BREADCRUMBS:browse": "Wagi komponentów",
+  "BREADCRUMB:base": "Xiconf",
+  "BREADCRUMB:browse": "Wagi komponentów",
 
   "filter:submit": "Filtruj",
 

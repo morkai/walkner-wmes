@@ -24,10 +24,10 @@ define([
     {
       return [
         {
-          label: t.bound('isa', 'BREADCRUMBS:base'),
+          label: t.bound('isa', 'BREADCRUMB:base'),
           href: '#isa'
         },
-        t.bound('isa', 'BREADCRUMBS:events')
+        t.bound('isa', 'BREADCRUMB:events')
       ];
     },
 

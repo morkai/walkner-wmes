@@ -44,7 +44,7 @@ define([
   return DrillingReportPage.extend({
 
     template: template,
-    rootBreadcrumbKey: 'BREADCRUMBS:2',
+    rootBreadcrumbKey: 'BREADCRUMB:2',
     initialSettingsTab: 'clip',
     maxOrgUnitLevel: 'prodFlow',
     pageId: 'clipReport',

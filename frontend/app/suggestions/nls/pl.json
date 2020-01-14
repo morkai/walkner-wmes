@@ -1,9 +1,9 @@
 {
-  "BREADCRUMBS:base": "Usprawnienia",
-  "BREADCRUMBS:browse": "Zgłoszenia",
-  "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
-  "BREADCRUMBS:reports:summary": "Zestawienie informacji",
-  "BREADCRUMBS:reports:engagement": "Zaangażowanie",
+  "BREADCRUMB:base": "Usprawnienia",
+  "BREADCRUMB:browse": "Zgłoszenia",
+  "BREADCRUMB:reports:count": "Ilość zgłoszeń",
+  "BREADCRUMB:reports:summary": "Zestawienie informacji",
+  "BREADCRUMB:reports:engagement": "Zaangażowanie",
 
   "MSG:markAsSeen:failure": "Nie udało się oznaczyć zgłoszenia jako przeczytane.",
   "MSG:observe:failure": "Nie udało się rozpocząć obserwacji zgłoszenia.",

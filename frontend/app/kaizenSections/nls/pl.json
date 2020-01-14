@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Usprawnienia",
-  "BREADCRUMBS:browse": "Działy",
+  "BREADCRUMB:base": "Usprawnienia",
+  "BREADCRUMB:browse": "Działy",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

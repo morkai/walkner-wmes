@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Delay reasons",
+    "BREADCRUMB:browse": "Delay reasons",
 
     "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",

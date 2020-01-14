@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Component DB",
-    "BREADCRUMBS:browse": "Containers",
+    "BREADCRUMB:base": "Component DB",
+    "BREADCRUMB:browse": "Containers",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

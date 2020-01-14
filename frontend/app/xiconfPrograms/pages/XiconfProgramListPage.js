@@ -20,8 +20,8 @@ define([
     ListView: XiconfProgramListView,
 
     breadcrumbs: [
-      t.bound('xiconfPrograms', 'BREADCRUMBS:base'),
-      t.bound('xiconfPrograms', 'BREADCRUMBS:browse')
+      t.bound('xiconfPrograms', 'BREADCRUMB:base'),
+      t.bound('xiconfPrograms', 'BREADCRUMB:browse')
     ]
 
   });

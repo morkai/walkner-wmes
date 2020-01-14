@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Usprawnienia",
-  "BREADCRUMBS:browse": "Rodziny produktów",
+  "BREADCRUMB:base": "Usprawnienia",
+  "BREADCRUMB:browse": "Rodziny produktów",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

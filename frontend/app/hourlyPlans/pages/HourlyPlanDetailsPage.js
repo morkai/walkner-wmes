@@ -35,7 +35,7 @@ define([
     {
       return [
         {
-          label: t.bound('hourlyPlans', 'BREADCRUMBS:browse'),
+          label: t.bound('hourlyPlans', 'BREADCRUMB:browse'),
           href: this.model.genClientUrl('base')
         },
         this.model.getLabel()

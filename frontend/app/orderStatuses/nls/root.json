@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:browse": "Order statuses",
+    "BREADCRUMB:browse": "Order statuses",
 
     "PROPERTY:_id": "Label",
     "PROPERTY:label": "Description",

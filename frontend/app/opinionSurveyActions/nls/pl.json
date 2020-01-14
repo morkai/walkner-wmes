@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Akcje naprawcze",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Akcje naprawcze",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:creator": "Dodana przez",

@@ -25,14 +25,14 @@ define([
     {
       return [
         {
-          label: t.bound('hourlyPlans', 'BREADCRUMBS:browse'),
+          label: t.bound('hourlyPlans', 'BREADCRUMB:browse'),
           href: this.model.genClientUrl('base')
         },
         {
           label: this.model.getLabel(),
           href: this.model.genClientUrl()
         },
-        t.bound('hourlyPlans', 'BREADCRUMBS:editForm')
+        t.bound('hourlyPlans', 'BREADCRUMB:editForm')
       ];
     },
 

@@ -23,10 +23,10 @@ define([
     {
       return [
         {
-          label: t.bound('users', 'BREADCRUMBS:browse'),
+          label: t.bound('users', 'BREADCRUMB:browse'),
           href: '#users'
         },
-        t.bound('users', 'BREADCRUMBS:settings')
+        t.bound('users', 'BREADCRUMB:settings')
       ];
     },
 

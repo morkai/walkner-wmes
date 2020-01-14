@@ -57,8 +57,8 @@ define([
         return new View({
           layoutName: 'blank',
           breadcrumbs: [
-            {href: '#pscs', label: t.bound('pscs', 'BREADCRUMBS:base')},
-            t.bound('pscs', 'BREADCRUMBS:exam')
+            {href: '#pscs', label: t.bound('pscs', 'BREADCRUMB:base')},
+            t.bound('pscs', 'BREADCRUMB:exam')
           ],
           view: new ExamView({
             editMode: false,

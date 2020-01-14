@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "Narzędzia pomiarowe",
-  "BREADCRUMBS:browse": "Typy urządzeń",
+  "BREADCRUMB:base": "Narzędzia pomiarowe",
+  "BREADCRUMB:browse": "Typy urządzeń",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",

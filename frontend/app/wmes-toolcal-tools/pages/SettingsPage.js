@@ -23,10 +23,10 @@ define([
     {
       return [
         {
-          label: this.t('BREADCRUMBS:browse'),
+          label: this.t('BREADCRUMB:browse'),
           href: '#toolcal/tools'
         },
-        t.bound(this.model.getNlsDomain(), 'BREADCRUMBS:settings')
+        t.bound(this.model.getNlsDomain(), 'BREADCRUMB:settings')
       ];
     },
 

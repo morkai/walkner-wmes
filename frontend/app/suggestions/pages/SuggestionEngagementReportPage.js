@@ -30,8 +30,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound(this.options.baseBreadcrumbNls || 'suggestions', 'BREADCRUMBS:base'),
-        t.bound('suggestions', 'BREADCRUMBS:reports:engagement')
+        t.bound(this.options.baseBreadcrumbNls || 'suggestions', 'BREADCRUMB:base'),
+        t.bound('suggestions', 'BREADCRUMB:reports:engagement')
       ];
     },
 

@@ -1,10 +1,10 @@
 {
-  "BREADCRUMBS:base": "Czas cyklu",
-  "BREADCRUMBS:browse": "Historia sztuk",
-  "BREADCRUMBS:reports": "Raporty",
-  "BREADCRUMBS:reports:pce": "Sztuki",
-  "BREADCRUMBS:reports:groups": "Grupy wyrobów",
-  "BREADCRUMBS:reports:results": "Wyniki",
+  "BREADCRUMB:base": "Czas cyklu",
+  "BREADCRUMB:browse": "Historia sztuk",
+  "BREADCRUMB:reports": "Raporty",
+  "BREADCRUMB:reports:pce": "Sztuki",
+  "BREADCRUMB:reports:groups": "Grupy wyrobów",
+  "BREADCRUMB:reports:results": "Wyniki",
 
   "PAGE_ACTION:orderGroups": "Grupy",
   "PAGE_ACTION:settings": "Ustawienia",

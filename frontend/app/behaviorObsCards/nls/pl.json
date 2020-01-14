@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:base": "Obserwacje zachowań",
-  "BREADCRUMBS:browse": "Karty",
-  "BREADCRUMBS:reports:count": "Ilość obserwacji",
+  "BREADCRUMB:base": "Obserwacje zachowań",
+  "BREADCRUMB:browse": "Karty",
+  "BREADCRUMB:reports:count": "Ilość obserwacji",
 
   "PANEL:TITLE:details": "Szczegóły karty obserwacji",
   "PANEL:TITLE:where": "Miejsce obserwacji",

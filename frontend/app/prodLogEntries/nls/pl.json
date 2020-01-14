@@ -1,7 +1,7 @@
 {
-  "BREADCRUMBS:browse": "Historia operacji na liniach produkcyjnych",
-  "BREADCRUMBS:browse:shift": "Historia operacji z {shift}",
-  "BREADCRUMBS:browse:order": "Historia operacji z {order}",
+  "BREADCRUMB:browse": "Historia operacji na liniach produkcyjnych",
+  "BREADCRUMB:browse:shift": "Historia operacji z {shift}",
+  "BREADCRUMB:browse:order": "Historia operacji z {order}",
 
   "filter:submit": "Filtruj",
   "filter:placeholder:type": "Dowolny typ",

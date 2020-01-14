@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "QI",
-    "BREADCRUMBS:browse": "Action statuses",
+    "BREADCRUMB:base": "QI",
+    "BREADCRUMB:browse": "Action statuses",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",

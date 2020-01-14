@@ -23,8 +23,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('xiconfOrders', 'BREADCRUMBS:base'),
-        t.bound('xiconfOrders', 'BREADCRUMBS:browse')
+        t.bound('xiconfOrders', 'BREADCRUMB:base'),
+        t.bound('xiconfOrders', 'BREADCRUMB:browse')
       ];
     },
 

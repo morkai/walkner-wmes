@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Xiconf",
-    "BREADCRUMBS:browse": "Orders",
+    "BREADCRUMB:base": "Xiconf",
+    "BREADCRUMB:browse": "Orders",
 
     "PANEL:TITLE:details:parentOrder": "Product order details",
     "PANEL:TITLE:details:order": "Xiconf order details",

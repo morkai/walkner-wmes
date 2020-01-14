@@ -1,8 +1,8 @@
 {
-  "BREADCRUMBS:base": "Badanie Opinia",
-  "BREADCRUMBS:browse": "Wyniki skanowania",
-  "BREADCRUMBS:details": "Wynik skanowania",
-  "BREADCRUMBS:ACTION_FORM:delete": "Ignorowanie",
+  "BREADCRUMB:base": "Badanie Opinia",
+  "BREADCRUMB:browse": "Wyniki skanowania",
+  "BREADCRUMB:details": "Wynik skanowania",
+  "BREADCRUMB:ACTION_FORM:delete": "Ignorowanie",
 
   "MSG:DELETED": "Wynik <em>{label}</em> został zignorowany.",
 

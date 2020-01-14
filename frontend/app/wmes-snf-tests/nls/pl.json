@@ -1,6 +1,6 @@
 {
-  "BREADCRUMBS:base": "SNF",
-  "BREADCRUMBS:browse": "Wyniki",
+  "BREADCRUMB:base": "SNF",
+  "BREADCRUMB:browse": "Wyniki",
 
   "PANEL:TITLE:details": "Szczegóły wyniku",
   "PANEL:TITLE:charts": "Wykresy",

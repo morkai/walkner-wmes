@@ -32,7 +32,7 @@ define([
       var model = this[this.modelProperty];
 
       return createPageBreadcrumbs(this, [
-        model.getLabel() || t.bound(model.getNlsDomain(), 'BREADCRUMBS:details')
+        model.getLabel() || t.bound(model.getNlsDomain(), 'BREADCRUMB:details')
       ]);
     },
 

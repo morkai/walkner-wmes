@@ -1,8 +1,8 @@
 {
   "root": {
-    "BREADCRUMBS:base": "ISA",
-    "BREADCRUMBS:events": "Events",
-    "BREADCRUMBS:requests": "Requests",
+    "BREADCRUMB:base": "ISA",
+    "BREADCRUMB:events": "Events",
+    "BREADCRUMB:requests": "Requests",
 
     "actions:shiftPersonnel": "Change available personnel",
     "actions:responderFilter": "Filter by warehouseman",

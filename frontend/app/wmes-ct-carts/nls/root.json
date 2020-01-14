@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Cycle time",
-    "BREADCRUMBS:browse": "Carts",
+    "BREADCRUMB:base": "Cycle time",
+    "BREADCRUMB:browse": "Carts",
 
     "PROPERTY:description": "Description",
     "PROPERTY:cards": "Cards"
