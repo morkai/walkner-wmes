@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"Czas cyklu"},"BREADCRUMBS:browse":function(n){return"Wózki"},"PROPERTY:description":function(n){return"Opis"},"PROPERTY:cards":function(n){return"Karty"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"Czas cyklu"},"BREADCRUMB:browse":function(n){return"Wózki"},"PROPERTY:description":function(n){return"Opis"},"PROPERTY:cards":function(n){return"Karty"}}});

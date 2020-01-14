@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:browse":function(n){return"Order statuses"},"PROPERTY:_id":function(n){return"Label"},"PROPERTY:label":function(n){return"Description"},"PROPERTY:color":function(n){return"Color"}},pl:!0}});
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:browse":function(n){return"Order statuses"},"PROPERTY:_id":function(n){return"Label"},"PROPERTY:label":function(n){return"Description"},"PROPERTY:color":function(n){return"Color"}},pl:!0}});

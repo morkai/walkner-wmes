@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:browse":function(n){return"Rodzaje palet"},"PROPERTY:shortName":function(n){return"Krótka nazwa"},"PROPERTY:fullName":function(n){return"Pełna nazwa"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:browse":function(n){return"Rodzaje palet"},"PROPERTY:shortName":function(n){return"Krótka nazwa"},"PROPERTY:fullName":function(n){return"Pełna nazwa"}}});

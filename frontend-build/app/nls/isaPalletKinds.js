@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:browse":function(n){return"Pallet kinds"},"PROPERTY:shortName":function(n){return"Short name"},"PROPERTY:fullName":function(n){return"Full name"}},pl:!0}});
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:browse":function(n){return"Pallet kinds"},"PROPERTY:shortName":function(n){return"Short name"},"PROPERTY:fullName":function(n){return"Full name"}},pl:!0}});

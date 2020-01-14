@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"Planowane obciążenie linii"},"BREADCRUMBS:browse":function(n){return"CAG"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Nazwa"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"Planowane obciążenie linii"},"BREADCRUMB:browse":function(n){return"CAG"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Nazwa"}}});

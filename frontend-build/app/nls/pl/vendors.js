@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:browse":function(n){return"Dostawcy"},"PROPERTY:_id":function(n){return"Nr dostawcy"},"PROPERTY:name":function(n){return"Nazwa"},"select2:placeholder":function(n){return"Dowolny dostawca"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:browse":function(n){return"Dostawcy"},"PROPERTY:_id":function(n){return"Nr dostawcy"},"PROPERTY:name":function(n){return"Nazwa"},"select2:placeholder":function(n){return"Dowolny dostawca"}}});

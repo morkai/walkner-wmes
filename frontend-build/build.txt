@@ -1657,6 +1657,7 @@ app/users/views/LogInFormView.js
 app/core/util/showDeleteFormPage.js
 app/aors/routes.js
 app/companies/routes.js
+app/core/util/bindLoadingMessage.js
 app/data/createSettings.js
 app/kaizenSections/KaizenSection.js
 app/kaizenSections/KaizenSectionCollection.js
@@ -1777,7 +1778,6 @@ app/prodChangeRequests/routes.js
 app/core/templates/jumpAction.js
 app/core/templates/exportAction.js
 app/core/util/pageActions.js
-app/core/util/bindLoadingMessage.js
 app/core/pages/createPageBreadcrumbs.js
 app/core/templates/listPage.js
 app/core/pages/FilteredListPage.js
@@ -2292,6 +2292,7 @@ app/isaPalletKinds/IsaPalletKindCollection.js
 app/data/isaPalletKinds.js
 app/isa/IsaRequest.js
 app/isa/IsaRequestCollection.js
+app/core/util/bindLoadingMessage.js
 app/data/createSettings.js
 app/settings/Setting.js
 app/settings/SettingCollection.js

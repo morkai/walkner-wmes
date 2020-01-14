@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:base":function(n){return"Planned line utilization"},"BREADCRUMBS:browse":function(n){return"CAG"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Name"}},pl:!0}});
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:base":function(n){return"Planned line utilization"},"BREADCRUMB:browse":function(n){return"CAG"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Name"}},pl:!0}});

@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(e){return{root:{"BREADCRUMBS:base":function(e){return"Labor Time Fixer"}},pl:!0}});
+define(["app/nls/locale/en"],function(e){return{root:{"BREADCRUMB:base":function(e){return"Labor Time Fixer"}},pl:!0}});

@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:browse":function(n){return"Loss reasons"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:label":function(n){return"Label"},"PROPERTY:position":function(n){return"Position in Worksheet"}},pl:!0}});
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:browse":function(n){return"Loss reasons"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:label":function(n){return"Label"},"PROPERTY:position":function(n){return"Position in Worksheet"}},pl:!0}});

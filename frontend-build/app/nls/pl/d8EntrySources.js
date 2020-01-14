@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"8D"},"BREADCRUMBS:browse":function(n){return"Źródła zgłoszeń"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Nazwa"},"PROPERTY:position":function(n){return"Pozycja"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"8D"},"BREADCRUMB:browse":function(n){return"Źródła zgłoszeń"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Nazwa"},"PROPERTY:position":function(n){return"Pozycja"}}});

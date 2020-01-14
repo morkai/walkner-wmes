@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:browse":function(n){return"Powody strat materiałowych"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:label":function(n){return"Opis"},"PROPERTY:position":function(n){return"Pozycja na karcie pracy"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:browse":function(n){return"Powody strat materiałowych"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:label":function(n){return"Opis"},"PROPERTY:position":function(n){return"Pozycja na karcie pracy"}}});

@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"Inspekcja Jakości"},"BREADCRUMBS:browse":function(n){return"Kategorie błędów"},"PROPERTY:name":function(n){return"Nazwa"}}});
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"Inspekcja Jakości"},"BREADCRUMB:browse":function(n){return"Kategorie błędów"},"PROPERTY:name":function(n){return"Nazwa"}}});
