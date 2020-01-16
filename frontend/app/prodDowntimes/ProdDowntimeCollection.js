@@ -120,6 +120,7 @@ define([
       var prodDowntime = new ProdDowntime({
         division: prodShift.get('division'),
         subdivision: prodShift.get('subdivision'),
+        subdivisionType: prodShift.prodShiftOrder.get('subdivisionType'),
         mrpControllers: prodShift.get('mrpControllers'),
         prodFlow: prodShift.get('prodFlow'),
         workCenter: prodShift.get('workCenter'),

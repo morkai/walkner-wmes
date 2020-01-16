@@ -10,25 +10,39 @@ db.subdivisions.find({}).forEach(sd =>
   subdivisionTypes[sd._id] = sd.type;
 });
 
-db.pressworksheets.find({}).forEach(pw =>
+var startDate = new Date('2014-11-30T23:00:00.000Z');
+var endDate = new Date(Date.now() + 7 * 24 * 3600 * 1000);
+
+while (startDate < endDate)
 {
-  pw.orders.forEach(o =>
+  print(startDate.toLocaleString());
+
+  var from = startDate;
+
+  startDate = new Date(startDate.getTime() + 24 * 3600 * 1000);
+
+  var to = startDate;
+  var psoCount = 0;
+
+  db.prodshiftorders.find({startedAt: {$gte: from, $lt: to}, subdivisionType: null}, {subdivision: 1}).forEach(pso =>
   {
-    var so = db.prodshiftorders.findOne({_id: o.prodShiftOrder}, {subdivision: 1});
+    pso.subdivisionType = subdivisionTypes[pso.subdivision.toString()];
 
-    if (!so)
+    if (pso.subdivisionType)
     {
-      return;
+      db.prodshiftorders.updateOne({_id: pso._id}, {$set: {subdivisionType: pso.subdivisionType}});
+      db.proddowntimes.updateOne({prodShiftOrder: pso._id}, {$set: {subdivisionType: pso.subdivisionType}});
+
+      ++psoCount;
     }
-
-    db.prodshiftorders.updateOne(
-      {_id: o.prodShiftOrder},
-      {$set: {subdivisionType: subdivisionTypes[so.subdivision]}}
-    );
-
-    db.proddowntimes.updateOne(
-      {_id: {$in: o.downtimes.map(d => d.prodDowntime)}},
-      {$set: {subdivisionType: subdivisionTypes[so.subdivision]}}
-    );
   });
-});
+
+  print(psoCount);
+
+  var h = startDate.getHours();
+
+  if (h !== 0)
+  {
+    startDate = new Date(startDate.getTime() - 3600 * 1000 * h);
+  }
+}
