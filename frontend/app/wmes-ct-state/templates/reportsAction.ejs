@@ -4,7 +4,7 @@
   </button>
   <ul class="dropdown-menu pull-right">
     <% ['pce', 'groups', 'results'].forEach(function(report) { %>
-    <li class="<%- report === 'results' ? 'disabled' : '' %>"><a href="#ct/reports/<%- report %>"><%- t('PAGE_ACTION:reports:' + report) %></a></li>
+    <li><a href="#ct/reports/<%- report %>"><%- t('PAGE_ACTION:reports:' + report) %></a></li>
     <% }) %>
   </ul>
 </div>
