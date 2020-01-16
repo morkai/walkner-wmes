@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/ct/mrpConfigs",clientUrlRoot:"#ct/mrpConfigs",topicPrefix:"ct.mrpConfigs",privilegePrefix:"PROD_DATA",nlsDomain:"wmes-ct-pces"})});
