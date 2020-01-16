@@ -35,6 +35,7 @@ define([
 
     initialize: function()
     {
+      this.listenTo(this.model, 'mrpConfigChanged', this.onMrpConfigChanged);
       this.listenTo(this.settings, 'change', this.onSettingChange);
     },
 
@@ -116,6 +117,11 @@ define([
       {
         this.updatePlaceholders();
       }
+    },
+
+    onMrpConfigChanged: function()
+    {
+      this.$('.btn[type="submit"]').first().focus();
     }
 
   });

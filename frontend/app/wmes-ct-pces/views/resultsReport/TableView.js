@@ -2,11 +2,19 @@
 
 define([
   'app/time',
+  'app/user',
+  'app/viewport',
   'app/core/View',
+  '../../MrpConfig',
+  './MrpConfigDialogView',
   'app/wmes-ct-pces/templates/resultsReport/table'
 ], function(
   time,
+  user,
+  viewport,
   View,
+  MrpConfig,
+  MrpConfigDialogView,
   template
 ) {
   'use strict';
@@ -68,17 +76,35 @@ define([
       'click a[data-tab]': function(e)
       {
         this.model.set('tab', e.currentTarget.dataset.tab);
+      },
+      'click a[data-mrp]': function(e)
+      {
+        var dialogView = new MrpConfigDialogView({
+          model: new MrpConfig({_id: e.currentTarget.dataset.mrp})
+        });
+
+        this.listenTo(dialogView.model, 'save', function()
+        {
+          this.model.trigger('mrpConfigChanged');
+        });
+
+        viewport.showDialog(dialogView, this.t('mrpConfig:title'));
       }
     },
 
     initialize: function()
     {
       this.listenTo(this.model, 'change:tab', this.toggleTab);
+      this.listenToOnce(this, 'afterRender', function()
+      {
+        this.listenTo(this.model, 'change:report', this.render);
+      });
     },
 
     getTemplateData: function()
     {
       return {
+        canManage: user.isAllowedTo('PROD_DATA:MANAGE'),
         selectedTab: this.model.get('tab'),
         report: this.model.get('report')
       };

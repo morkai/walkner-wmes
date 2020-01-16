@@ -326,6 +326,7 @@
 
     "FORM:ACTION:add": "Add",
     "FORM:ACTION:edit": "Edit",
+    "FORM:ACTION:save": "Save",
     "FORM:ERROR:addFailure": "Adding failed.",
     "FORM:ERROR:editFailure": "Editing failed.",
 

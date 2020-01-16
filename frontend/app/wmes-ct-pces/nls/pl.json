@@ -111,6 +111,7 @@
   "resultsReport:table:mrps": "Rodziny",
   "resultsReport:table:lines": "Linie",
   "resultsReport:table:mrp": "MRP",
+  "resultsReport:table:line": "Linia",
   "resultsReport:table:efficiency": "Wydajność",
   "resultsReport:table:unbalance": "Unbalance",
   "resultsReport:table:bottleneck": "Wąskie gardło",
@@ -122,5 +123,12 @@
   "resultsReport:table:quantityDone": "Ilość zrobiona",
   "resultsReport:table:st": "St.",
   "resultsReport:table:ct": "Czas cyklu",
-  "resultsReport:table:bn": "Ilość wąskich gardeł"
+  "resultsReport:table:bn": "Ilość wąskich gardeł",
+
+  "mrpConfig:title": "Edycja rodziny",
+  "mrpConfig:_id": "MRP",
+  "mrpConfig:date": "Data obowiązywania",
+  "mrpConfig:unbalance": "Unbalance %",
+  "mrpConfig:bottleneck": "St. z wąskim gardłem",
+  "mrpConfig:add": "Dodaj nową datę"
 }

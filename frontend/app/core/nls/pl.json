@@ -333,6 +333,7 @@
 
   "FORM:ACTION:add": "Dodaj",
   "FORM:ACTION:edit": "Edytuj",
+  "FORM:ACTION:save": "Zapisz",
   "FORM:ERROR:addFailure": "Dodawanie nie powiodło się.",
   "FORM:ERROR:editFailure": "Edycja nie powiodła się.",
 

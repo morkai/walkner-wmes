@@ -19,11 +19,17 @@
         <tbody>
         <% report.mrps.forEach(function(mrp, i) { %>
         <tr data-i="<%- i %>">
-          <td class="is-min text-fixed"><%- mrp._id %></td>
+          <td class="is-min text-fixed">
+            <% if (canManage) { %>
+            <a data-mrp="<%= mrp._id %>" href="javascript:void(0)"><%= mrp._id %></a>
+            <% } else { %>
+            <%= mrp._id %>
+            <% } %>
+          </td>
           <td class="is-min is-number <%- mrp.efficiency > report.options.minMrpEfficiency ? 'ct-report-results-ok' : 'ct-report-results-nok' %>"><%- mrp.efficiency %>%</td>
           <td class="is-min is-number" data-id="unbalance"><% if (mrp.unbalance.value) { %><%- mrp.unbalance.value %>%<% } %></td>
           <td class="is-min" data-id="bottleneck"><%- mrp.bottleneck.map(function(b) { return b.station; }).join(' &gt; ') %></td>
-          <td class="text-fixed"><%- mrp.lines.join('; ') %></td>
+          <td class="text-fixed"><%= mrp.lines.join('; ') %></td>
         </tr>
         <% }) %>
         </tbody>
@@ -33,7 +39,7 @@
       <table class="table table-bordered table-condensed table-hover">
         <thead>
         <tr>
-          <th class="is-min"><%- t('resultsReport:table:mrp') %></th>
+          <th class="is-min"><%- t('resultsReport:table:line') %></th>
           <th class="is-min"><%- t('resultsReport:table:efficiency') %></th>
           <th class="is-min"><%- t('resultsReport:table:unbalance') %></th>
           <th class="is-min"><%- t('resultsReport:table:bottleneck') %></th>
@@ -47,7 +53,7 @@
         <tbody>
         <% report.lines.forEach(function(line, i) { %>
         <tr data-i="<%- i %>">
-          <td class="is-min text-fixed"><%- line._id %></td>
+          <td class="is-min text-fixed"><%= line._id %></td>
           <td class="is-min is-number <%- line.efficiency > report.options.minMrpEfficiency ? 'ct-report-results-ok' : 'ct-report-results-nok' %>"><%- line.efficiency %>%</td>
           <td class="is-min is-number <%- line.unbalance.value > report.options.minMrpUnbalance ? 'ct-report-results-nok' : 'ct-report-results-ok' %>" data-id="unbalance"><% if (line.unbalance.value) { %><%- line.unbalance.value %>%<% } %></td>
           <td class="is-min" data-id="bottleneck"><%- line.bottleneck.map(function(b) { return b.station; }).join(' &gt; ') %></td>
@@ -55,7 +61,7 @@
           <td class="is-min"><%- line.breakDuration ? time.toString(line.breakDuration * 3600) : '' %></td>
           <td class="is-min is-number"><%- (line.usage < 1 ? line.usage : Math.round(line.usage)).toLocaleString() %>%</td>
           <td class="is-min is-number"><%- line.quantityDone.toLocaleString() %></td>
-          <td class="text-fixed"><%- line.mrps.join('; ') %></td>
+          <td class="text-fixed"><%= line.mrps.join('; ') %></td>
         </tr>
         <% }) %>
         </tbody>

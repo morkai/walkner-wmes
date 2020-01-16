@@ -1,0 +1,31 @@
+<form autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('mrpConfig:_id') %></label>
+    <input id="<%- idPrefix %>-id" type="text" autocomplete="new-password" name="_id" required>
+  </div>
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('mrpConfig:date') %></th>
+      <th class="is-min"><%- t('mrpConfig:unbalance') %></th>
+      <th class="is-min"><%- t('mrpConfig:bottleneck') %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody id="<%- idPrefix %>-configs" data-role="configs">
+    <tr>
+      <td class="is-min"><input class="form-control" name="configs[].date" type="date" min="<%- minDate %>" max="<%- maxDate %>"></td>
+      <td class="is-min"><input class="form-control" name="configs[].unbalance" type="number" min="0" max="100"></td>
+      <td class="is-min"><input class="form-control" name="configs[].bottleneck" type="number" min="0" max="10"></td>
+      <td><button type="button" class="btn btn-default" data-role="remove"><i class="fa fa-times"></i></button></td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="form-group">
+    <button data-role="add" class="btn btn-default" type="button" disabled><i class="fa fa-plus"></i><span><%- helpers.t('mrpConfig:add') %></span></button>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('core', 'FORM:ACTION:save') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

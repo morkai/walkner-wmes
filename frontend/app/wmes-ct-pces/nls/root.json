@@ -112,6 +112,7 @@
     "resultsReport:table:mrps": "Families",
     "resultsReport:table:lines": "Lines",
     "resultsReport:table:mrp": "MRP",
+    "resultsReport:table:line": "Line",
     "resultsReport:table:efficiency": "Efficiency",
     "resultsReport:table:unbalance": "Unbalance",
     "resultsReport:table:bottleneck": "Bottleneck",
@@ -123,7 +124,14 @@
     "resultsReport:table:quantityDone": "Quantity done",
     "resultsReport:table:st": "St.",
     "resultsReport:table:ct": "Cycle time",
-    "resultsReport:table:bn": "Bottleneck count"
+    "resultsReport:table:bn": "Bottleneck count",
+
+    "mrpConfig:title": "Editing family",
+    "mrpConfig:_id": "MRP",
+    "mrpConfig:date": "Effective date",
+    "mrpConfig:unbalance": "Unbalance %",
+    "mrpConfig:bottleneck": "Bottlenecked st.",
+    "mrpConfig:add": "Add new date"
   },
   "pl": true
 }
