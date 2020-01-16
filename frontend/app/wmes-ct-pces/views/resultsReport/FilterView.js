@@ -71,7 +71,7 @@ define([
         to: range.to ? range.to.valueOf() : 0,
         minLineWorkDuration: parseFloat(view.$id('minLineWorkDuration').val()),
         minUpphWorkDuration: parseFloat(view.$id('minUpphWorkDuration').val()),
-        shiftCount: parseInt(view.$id('minLineWorkDuration').val(), 10),
+        shiftCount: parseInt(view.$id('shiftCount').val(), 10),
         availableWorkDuration: parseFloat(view.$id('availableWorkDuration').val()),
         minMrpUnbalance: parseInt(view.$id('minMrpUnbalance').val(), 10),
         minMrpEfficiency: parseInt(view.$id('minMrpEfficiency').val(), 10)
