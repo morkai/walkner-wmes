@@ -41,6 +41,7 @@ define([
         aors: {},
         reasons: {},
         extremes: 'none',
+        skipEmpty: false,
         maxQuantityDone: null,
         maxPercentCoeff: null,
         maxDowntimesByAor: null,
@@ -161,7 +162,13 @@ define([
       var visibleReferences = this.get('references');
       var visibleAors = this.get('aors');
       var visibleReasons = this.get('reasons');
-      var parts = [extremes === 'none' ? 0 : extremes === 'siblings' ? 1 : 2, '', '', ''];
+      var parts = [
+        extremes === 'none' ? 0 : extremes === 'siblings' ? 1 : 2,
+        '',
+        '',
+        '',
+        this.get('skipEmpty') ? '1' : '0'
+      ];
 
       SERIES.forEach(function(series)
       {
@@ -191,7 +198,7 @@ define([
       var Report1DisplayOptions = this;
       var parts = str.split('&');
 
-      if (parts.length !== 4)
+      if (parts.length < 4)
       {
         return new Report1DisplayOptions(null, options);
       }
@@ -201,7 +208,8 @@ define([
         series: {},
         aors: {},
         reasons: {},
-        references: {}
+        references: {},
+        skipEmpty: false
       };
 
       var i;
@@ -255,6 +263,10 @@ define([
           attrs.reasons[reason.id] = true;
         }
       }
+
+      attrs.skipEmpty = parts[4] === '1';
+
+      console.log(parts, attrs);
 
       return new Report1DisplayOptions(attrs, options);
     }

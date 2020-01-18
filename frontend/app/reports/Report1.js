@@ -29,6 +29,16 @@ define([
         isParent: false,
         orgUnitType: null,
         orgUnit: null,
+        categorizedCoeffs: {
+          categories: [],
+          quantityDone: [],
+          downtime: [],
+          scheduledDowntime: [],
+          unscheduledDowntime: [],
+          efficiency: [],
+          productivity: [],
+          productivityNoWh: []
+        },
         coeffs: {
           quantityDone: [],
           downtime: [],
@@ -89,6 +99,17 @@ define([
     parse: function(report)
     {
       var attributes = {
+        categorizedCoeffs: {
+          categories: [],
+          quantityDone: [],
+          downtime: [],
+          scheduledDowntime: [],
+          unscheduledDowntime: [],
+          efficiency: [],
+          productivity: [],
+          productivityNoWh: [],
+          mmh: []
+        },
         coeffs: {
           quantityDone: [],
           downtime: [],
@@ -121,29 +142,58 @@ define([
       return attributes;
     },
 
-    parseCoeffs: function(coeffsList, attributes)
+    parseCoeffs: function(coeffsList, attrs)
     {
-      var series = attributes.coeffs;
-      var extremes = attributes.maxCoeffs;
+      var categorized = attrs.categorizedCoeffs;
+      var uncategorized = attrs.coeffs;
+      var extremes = attrs.maxCoeffs;
+      var subdivision = orgUnits.getSubdivisionFor(this.get('orgUnit'));
+      var assembly = subdivision && subdivision.get('type') === 'assembly';
 
       for (var i = 0, l = coeffsList.length; i < l; ++i)
       {
         var coeffs = coeffsList[i];
+        var orderCount = coeffs.orderCount || 0;
+        var quantityDone = coeffs.quantityDone || 0;
+        var mmh = coeffs.mmh || 0;
         var time = Date.parse(coeffs.key);
 
-        pushValue('quantityDone', time, coeffs.quantityDone || 0);
-        pushPercentValue('downtime', time, coeffs.downtime);
-        pushPercentValue('scheduledDowntime', time, coeffs.scheduledDowntime);
-        pushPercentValue('unscheduledDowntime', time, coeffs.unscheduledDowntime);
-        pushPercentValue('efficiency', time, coeffs.efficiency);
-        pushPercentValue('productivity', time, coeffs.productivity);
-        pushPercentValue('productivityNoWh', time, coeffs.productivityNoWh);
-        pushValue('mmh', time, coeffs.mmh || 0);
+        pushValue(uncategorized, 'quantityDone', time, quantityDone);
+        pushPercentValue(uncategorized, 'downtime', time, coeffs.downtime);
+        pushPercentValue(uncategorized, 'scheduledDowntime', time, coeffs.scheduledDowntime);
+        pushPercentValue(uncategorized, 'unscheduledDowntime', time, coeffs.unscheduledDowntime);
+        pushPercentValue(uncategorized, 'efficiency', time, coeffs.efficiency);
+        pushPercentValue(uncategorized, 'productivity', time, coeffs.productivity);
+        pushPercentValue(uncategorized, 'productivityNoWh', time, coeffs.productivityNoWh);
+        pushValue(uncategorized, 'mmh', time, mmh);
+
+        if (orderCount === 0 || (assembly && quantityDone === 0))
+        {
+          continue;
+        }
+
+        categorized.categories.push(time);
+
+        pushValue(categorized, 'quantityDone', time, quantityDone);
+        pushPercentValue(categorized, 'downtime', time, coeffs.downtime);
+        pushPercentValue(categorized, 'scheduledDowntime', time, coeffs.scheduledDowntime);
+        pushPercentValue(categorized, 'unscheduledDowntime', time, coeffs.unscheduledDowntime);
+        pushPercentValue(categorized, 'efficiency', time, coeffs.efficiency);
+        pushPercentValue(categorized, 'productivity', time, coeffs.productivity);
+        pushPercentValue(categorized, 'productivityNoWh', time, coeffs.productivityNoWh);
+        pushValue(categorized, 'mmh', time, mmh);
       }
 
-      function pushValue(coeff, time, value)
+      function pushValue(series, coeff, time, value)
       {
-        series[coeff].push({x: time, y: value});
+        if (series === categorized)
+        {
+          series[coeff].push({y: value, time: time});
+        }
+        else
+        {
+          series[coeff].push({x: time, y: value});
+        }
 
         if (value > extremes[coeff])
         {
@@ -151,9 +201,9 @@ define([
         }
       }
 
-      function pushPercentValue(coeff, time, value)
+      function pushPercentValue(series, coeff, time, value)
       {
-        pushValue(coeff, time, Math.round((value || 0) * 100));
+        pushValue(series, coeff, time, Math.round((value || 0) * 100));
       }
     },
 

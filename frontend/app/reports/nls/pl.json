@@ -179,6 +179,7 @@
   "options:prodTasks": "Zadania produkcyjne",
   "options:prodFunctions": "Funkcje na produkcji",
   "options:companies": "Firmy",
+  "options:skipEmpty": "Pomiń puste",
 
   "settings:tab:quantityDone": "Sztuki",
   "settings:tab:manHours": "Roboczogodziny",

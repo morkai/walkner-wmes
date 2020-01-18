@@ -12,7 +12,30 @@ function(
 
   return function formatTooltipHeader(ctx, short)
   {
-    var timeMoment = time.getMoment(typeof ctx === 'number' ? ctx : ctx.x);
+    var x = 0;
+
+    if (typeof ctx === 'number')
+    {
+      x = ctx;
+    }
+    else if (ctx)
+    {
+      if (typeof ctx.x === 'number')
+      {
+        x = ctx.x;
+      }
+      else if (ctx.x
+        && ctx.x.name
+        && ctx.points
+        && ctx.points[0]
+        && ctx.points[0].point
+        && ctx.points[0].point.time)
+      {
+        x = ctx.points[0].point.time;
+      }
+    }
+
+    var timeMoment = time.getMoment(x);
     var interval = (this.model.query ? this.model.query.get('interval') : this.model.get('interval')) || 'day';
     var data;
 

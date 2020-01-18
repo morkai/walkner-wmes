@@ -400,6 +400,9 @@
     if (axis.isGrouped && axis.options.labels.enabled) {
       tick.addGroupedLabels(category);
     }
+
+    tick.label.textPxLength = tick.label.getBBox().width;
+
     return true;
   };
 

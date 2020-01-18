@@ -52,9 +52,7 @@ define([
 
     afterRender: function()
     {
-      var formData = this.serializeFormData();
-
-      js2form(this.el, formData);
+      js2form(this.el, this.serializeFormData());
 
       this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
 

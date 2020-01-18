@@ -180,6 +180,7 @@
     "options:prodTasks": "Prod. tasks",
     "options:prodFunctions": "Prod. functions",
     "options:companies": "Companies",
+    "options:skipEmpty": "Skip empty",
 
     "settings:tab:quantityDone": "PCE",
     "settings:tab:manHours": "Man-hours",

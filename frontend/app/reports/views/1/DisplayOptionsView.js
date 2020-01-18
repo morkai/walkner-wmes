@@ -25,7 +25,7 @@ define([
     template: template,
 
     events: {
-      'submit form': function(e)
+      'submit': function(e)
       {
         e.preventDefault();
       },
@@ -52,7 +52,16 @@ define([
       'click #-showFilter': function()
       {
         this.trigger('showFilter');
+      },
+      'click #-skipEmpty': function()
+      {
+        this.model.set('skipEmpty', !this.model.get('skipEmpty'));
       }
+    },
+
+    initialize: function()
+    {
+      this.listenTo(this.model, 'change:skipEmpty', this.toggleSkipEmpty);
     },
 
     destroy: function()
@@ -60,10 +69,9 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         aors: aors.map(function(aor)
         {
           return {
@@ -88,11 +96,13 @@ define([
 
     afterRender: function()
     {
-      js2form(this.el.querySelector('form'), this.serializeFormData());
+      js2form(this.el, this.serializeFormData());
 
       this.$('.is-expandable').expandableSelect();
 
       this.$('[name=extremes]:checked').closest('.btn').addClass('active');
+
+      this.toggleSkipEmpty();
     },
 
     serializeFormData: function()
@@ -131,6 +141,11 @@ define([
     shown: function()
     {
       this.$id('series').focus();
+    },
+
+    toggleSkipEmpty: function()
+    {
+      this.$id('skipEmpty').toggleClass('active', this.model.get('skipEmpty'));
     }
 
   });

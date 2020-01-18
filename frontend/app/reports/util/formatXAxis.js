@@ -12,25 +12,41 @@ function(
 
   function formatXAxis(view, ctx)
   {
-    var timeMoment = time.getMoment(ctx.value);
-    var interval = (view.interval || (view.model.query ? view.model.query.get('interval') : view.model.get('interval')))
-      || 'day';
+    var moment = time.getMoment(ctx.value);
+    var interval;
     var data;
+
+    if (view.interval)
+    {
+      interval = view.interval;
+    }
+    else if (view.model.query)
+    {
+      interval = view.model.query.get('interval');
+    }
+    else
+    {
+      interval = view.model.get('interval');
+    }
 
     if (interval === 'shift')
     {
       data = {
-        shift: t('core', 'SHIFT:' + (timeMoment.hours() === 6 ? 1 : timeMoment.hours() === 14 ? 2 : 3))
+        shift: t('core', 'SHIFT:' + (moment.hours() === 6 ? 1 : moment.hours() === 14 ? 2 : 3))
       };
     }
     else if (interval === 'quarter')
     {
       data = {
-        quarter: t('core', 'QUARTER:' + timeMoment.quarter())
+        quarter: t('core', 'QUARTER:' + moment.quarter())
       };
     }
+    else
+    {
+      interval = 'day';
+    }
 
-    return timeMoment.format(t('reports', 'x:' + interval, data));
+    return moment.format(t('reports', 'x:' + interval, data));
   }
 
   formatXAxis.labels = function(view)

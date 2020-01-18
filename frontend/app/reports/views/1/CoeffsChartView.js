@@ -47,6 +47,7 @@ define([
           _.debounce(this.onDisplayOptionsChange, 1)
         );
         this.listenTo(this.displayOptions, 'change:references', this.onDisplayReferencesChange);
+        this.listenTo(this.displayOptions, 'change:skipEmpty', this.onSkipEmptyChange);
       }
     },
 
@@ -85,6 +86,14 @@ define([
       var series = this.chart.series;
 
       this.updateExtremes(false);
+
+      if (this.model.query.get('skipEmpty'))
+      {
+        this.chart.xAxis[0].update(
+          {categories: this.serializeCategories()},
+          false
+        );
+      }
 
       series.forEach(function(s)
       {
@@ -202,9 +211,24 @@ define([
       return this.settings.getReference(metric, this.model.getReferenceOrgUnitId());
     },
 
+    serializeCategories: function()
+    {
+      var view = this;
+
+      return this.model.get('categorizedCoeffs').categories.map(function(x)
+      {
+        return formatXAxis(view, {value: x});
+      });
+    },
+
     serializeChartData: function()
     {
-      return this.model.get('coeffs');
+      return this.model.get(this.isSkipEmpty() ? 'categorizedCoeffs' : 'coeffs');
+    },
+
+    isSkipEmpty: function()
+    {
+      return !!this.displayOptions && this.displayOptions.get('skipEmpty');
     },
 
     isSeriesVisible: function(series)
@@ -216,8 +240,6 @@ define([
     {
       return !this.displayOptions || this.displayOptions.isReferenceVisible(reference);
     },
-
-    formatTooltipHeader: formatTooltipHeader,
 
     getMarkerStyles: function(dataLength)
     {
@@ -326,29 +348,36 @@ define([
       }
     },
 
+    onSkipEmptyChange: function()
+    {
+      this.chart.destroy();
+      this.createChart();
+    },
+
     createChart: function()
     {
-      var chartData = this.serializeChartData();
-      var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
-      var paintShop = this.model.isPaintShop();
+      var view = this;
+      var chartData = view.serializeChartData();
+      var markerStyles = view.getMarkerStyles(chartData.quantityDone.length);
+      var paintShop = view.model.isPaintShop();
       var series = [
         {
           id: 'quantityDone',
           name: t.bound('reports', 'coeffs:quantityDone'),
-          color: this.getColor('quantityDone'),
+          color: view.getColor('quantityDone'),
           type: 'area',
           yAxis: 0,
           data: chartData.quantityDone,
           tooltip: {
             valueSuffix: t('reports', 'quantitySuffix')
           },
-          visible: !paintShop && this.isSeriesVisible('quantityDone'),
+          visible: !paintShop && view.isSeriesVisible('quantityDone'),
           zIndex: 1
         },
         {
           id: 'efficiency',
           name: t.bound('reports', 'coeffs:efficiency'),
-          color: this.getColor('efficiency'),
+          color: view.getColor('efficiency'),
           type: 'line',
           yAxis: 1,
           data: chartData.efficiency,
@@ -356,50 +385,50 @@ define([
             valueSuffix: '%'
           },
           events: {
-            show: this.updateReference.bind(this, 'efficiency'),
-            hide: this.updateReference.bind(this, 'efficiency')
+            show: view.updateReference.bind(view, 'efficiency'),
+            hide: view.updateReference.bind(view, 'efficiency')
           },
-          visible: this.isSeriesVisible('efficiency'),
+          visible: view.isSeriesVisible('efficiency'),
           zIndex: 2
         },
         {
           id: 'productivity',
           name: t.bound('reports', 'coeffs:productivity'),
-          color: this.getColor('productivity'),
+          color: view.getColor('productivity'),
           type: 'line',
           yAxis: 1,
           data: chartData.productivity,
           tooltip: {
             valueSuffix: '%'
           },
-          visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivity'),
+          visible: view.model.query.get('interval') !== 'hour' && view.isSeriesVisible('productivity'),
           events: {
-            show: this.updateReference.bind(this, 'productivity'),
-            hide: this.updateReference.bind(this, 'productivity')
+            show: view.updateReference.bind(view, 'productivity'),
+            hide: view.updateReference.bind(view, 'productivity')
           },
           zIndex: 3
         },
         {
           id: 'productivityNoWh',
           name: t.bound('reports', 'coeffs:productivityNoWh'),
-          color: this.getColor('productivityNoWh'),
+          color: view.getColor('productivityNoWh'),
           type: 'line',
           yAxis: 1,
           data: chartData.productivityNoWh,
           tooltip: {
             valueSuffix: '%'
           },
-          visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivityNoWh'),
+          visible: view.model.query.get('interval') !== 'hour' && view.isSeriesVisible('productivityNoWh'),
           events: {
-            show: this.updateReference.bind(this, 'productivityNoWh'),
-            hide: this.updateReference.bind(this, 'productivityNoWh')
+            show: view.updateReference.bind(view, 'productivityNoWh'),
+            hide: view.updateReference.bind(view, 'productivityNoWh')
           },
           zIndex: 4
         },
         {
           id: 'scheduledDowntime',
           name: t.bound('reports', 'coeffs:scheduledDowntime'),
-          color: this.getColor('scheduledDowntime', 0.75),
+          color: view.getColor('scheduledDowntime', 0.75),
           borderWidth: 0,
           type: 'column',
           yAxis: 1,
@@ -407,17 +436,17 @@ define([
           tooltip: {
             valueSuffix: '%'
           },
-          visible: this.isSeriesVisible('scheduledDowntime'),
+          visible: view.isSeriesVisible('scheduledDowntime'),
           events: {
-            show: this.updateReference.bind(this, 'scheduledDowntime'),
-            hide: this.updateReference.bind(this, 'scheduledDowntime')
+            show: view.updateReference.bind(view, 'scheduledDowntime'),
+            hide: view.updateReference.bind(view, 'scheduledDowntime')
           },
           zIndex: 5
         },
         {
           id: 'unscheduledDowntime',
           name: t.bound('reports', 'coeffs:unscheduledDowntime'),
-          color: this.getColor('unscheduledDowntime', 0.75),
+          color: view.getColor('unscheduledDowntime', 0.75),
           borderWidth: 0,
           type: 'column',
           yAxis: 1,
@@ -425,10 +454,10 @@ define([
           tooltip: {
             valueSuffix: '%'
           },
-          visible: this.isSeriesVisible('unscheduledDowntime'),
+          visible: view.isSeriesVisible('unscheduledDowntime'),
           events: {
-            show: this.updateReference.bind(this, 'unscheduledDowntime'),
-            hide: this.updateReference.bind(this, 'unscheduledDowntime')
+            show: view.updateReference.bind(view, 'unscheduledDowntime'),
+            hide: view.updateReference.bind(view, 'unscheduledDowntime')
           },
           zIndex: 6
         }
@@ -439,7 +468,7 @@ define([
         series.push({
           id: 'mmh',
           name: t.bound('reports', 'coeffs:mmh'),
-          color: this.getColor('mmh'),
+          color: view.getColor('mmh'),
           borderWidth: 0,
           type: 'line',
           yAxis: 2,
@@ -452,22 +481,34 @@ define([
         });
       }
 
-      this.chart = new Highcharts.Chart({
+      var xAxis = {};
+
+      if (view.isSkipEmpty())
+      {
+        xAxis.labels = {
+          autoRotation: [15]
+        };
+        xAxis.categories = view.serializeCategories();
+      }
+      else
+      {
+        xAxis.type = 'datetime';
+        xAxis.labels = formatXAxis.labels(view);
+      }
+
+      view.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.el,
+          renderTo: view.el,
           zoomType: null
         },
         exporting: {
           filename: t('reports', 'filenames:1:coeffs')
         },
         title: {
-          text: this.model.getOrgUnitTitle()
+          text: view.model.getOrgUnitTitle()
         },
         noData: {},
-        xAxis: {
-          type: 'datetime',
-          labels: formatXAxis.labels(this)
-        },
+        xAxis: xAxis,
         yAxis: [
           {
             title: false,
@@ -488,7 +529,10 @@ define([
         ],
         tooltip: {
           shared: true,
-          headerFormatter: this.formatTooltipHeader.bind(this),
+          headerFormatter: function(ctx)
+          {
+            return formatTooltipHeader.call(view, view.isSkipEmpty() ? ctx.points[0].point.time : ctx.x);
+          },
           valueDecimals: 0
         },
         legend: {

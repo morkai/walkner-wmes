@@ -146,9 +146,9 @@ define([
       this.defineViews();
       this.defineBindings();
 
-      this.setView('.reports-drillingHeader-container', this.headerView);
-      this.setView('.filter-container', this.filterView);
-      this.setView('.reports-displayOptions-container', this.displayOptionsView);
+      this.setView('#-header', this.headerView);
+      this.setView('#-filter', this.filterView);
+      this.setView('#-displayOptions', this.displayOptionsView);
       this.insertChartsViews();
     },
 
@@ -633,7 +633,7 @@ define([
       {
         if (chartsView !== chartsViewToSkip)
         {
-          this.insertView('.reports-drillingCharts-container', chartsView, doInsertAt ? {insertAt: i} : null);
+          this.insertView('#-charts', chartsView, doInsertAt ? {insertAt: i} : null);
         }
       }, this);
     },
