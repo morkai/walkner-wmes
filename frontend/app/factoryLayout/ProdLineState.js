@@ -117,7 +117,7 @@ define([
       }
 
       var actualTaktTime = currentProdShiftOrder.get('avgTaktTime') / 1000;
-      var sapTaktTime = currentProdShiftOrder.getSapTaktTime(this.settings.production);
+      var sapTaktTime = currentProdShiftOrder.getSapTaktTime();
 
       return !actualTaktTime || actualTaktTime <= sapTaktTime;
     },

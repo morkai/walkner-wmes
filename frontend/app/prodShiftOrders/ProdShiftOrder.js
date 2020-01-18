@@ -9,8 +9,7 @@ define([
   '../core/Model',
   '../core/util/getShiftEndDate',
   '../orders/util/resolveProductName',
-  './util/decorateProdShiftOrder',
-  './util/calcOrderEfficiency'
+  './util/decorateProdShiftOrder'
 ], function(
   _,
   user,
@@ -20,8 +19,7 @@ define([
   Model,
   getShiftEndDate,
   resolveProductName,
-  decorateProdShiftOrder,
-  calcOrderEfficiency
+  decorateProdShiftOrder
 ) {
   'use strict';
 
@@ -311,7 +309,7 @@ define([
 
     getEfficiency: function()
     {
-      return calcOrderEfficiency(this.attributes);
+      return this.constructor.getEfficiency(this.attributes, false);
     },
 
     getTaktTimeEfficiency: function()
@@ -330,7 +328,7 @@ define([
       return actualTaktTime <= sapTaktTime;
     },
 
-    getSapTaktTime: function(settings)
+    getSapTaktTime: function()
     {
       var orderData = this.get('orderData');
       var operationNo = this.get('operationNo');
@@ -359,12 +357,7 @@ define([
         return 0;
       }
 
-      if (!settings)
-      {
-        settings = this.settings;
-      }
-
-      var coeff = settings ? settings.getTaktTimeCoeff(orderData.mrp, operation.workCenter) : 1;
+      var coeff = this.constructor.getTaktTimeCoeff(this.attributes);
 
       return Math.max(Math.round((operation.laborTime * coeff) / workerCount * 3600 / 100), 1);
     },
@@ -384,14 +377,14 @@ define([
       return Math.round((this.get('avgTaktTime') || 0) / 1000);
     },
 
-    getTaktTime: function(settings)
+    getTaktTime: function()
     {
       if (!this.get('orderData') || !this.get('operationNo'))
       {
         return '-';
       }
 
-      return this.getSapTaktTime(settings) || '?';
+      return this.getSapTaktTime() || '?';
     },
 
     getActualTaktTime: function()
@@ -707,6 +700,43 @@ define([
       });
 
       return data;
+    },
+
+    getEfficiency: function(pso)
+    {
+      var taktTimeCoeff = this.getTaktTimeCoeff(pso);
+      var efficiency = (pso.laborTime * taktTimeCoeff / 100 * pso.totalQuantity)
+        / (pso.workDuration * pso.workerCount);
+
+      return isNaN(efficiency) || !isFinite(efficiency) ? 0 : efficiency;
+    },
+
+    getOperation: function(pso)
+    {
+      return pso.orderData && pso.orderData.operations && pso.orderData.operations[pso.operationNo] || null;
+    },
+
+    // Check backend/node_modules/prodShiftOrders/models/prodShiftOrder.js#getTaktTimeCoeff
+    getTaktTimeCoeff: function(pso)
+    {
+      return this.getWcTaktTimeCoeff(
+        pso.orderData && pso.orderData.taktTimeCoeff,
+        this.getOperation(pso)
+      );
+    },
+
+    getWcTaktTimeCoeff: function(wcTaktTimeCoeffs, operation)
+    {
+      if (!wcTaktTimeCoeffs || !operation)
+      {
+        return 1;
+      }
+
+      return wcTaktTimeCoeffs[operation.workCenter + '/' + operation.no]
+        || wcTaktTimeCoeffs['*' + '/' + operation.no]
+        || wcTaktTimeCoeffs[operation.workCenter]
+        || wcTaktTimeCoeffs['*']
+        || 1;
     }
 
   });

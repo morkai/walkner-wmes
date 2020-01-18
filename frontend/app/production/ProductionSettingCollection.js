@@ -5,12 +5,14 @@ define([
   'jquery',
   '../data/localStorage',
   '../settings/SettingCollection',
+  '../prodShiftOrders/ProdShiftOrder',
   './ProductionSetting'
 ], function(
   _,
   $,
   localStorage,
   SettingCollection,
+  ProdShiftOrder,
   ProductionSetting
 ) {
   'use strict';
@@ -200,7 +202,7 @@ define([
       return !!this.getValue('taktTime.smiley');
     },
 
-    getTaktTimeCoeff: function(mrp, workCenter)
+    getTaktTimeCoeff: function(mrp, operation)
     {
       var mrpCoeffs = this.cache.taktTimeCoeffs;
 
@@ -209,16 +211,10 @@ define([
         mrpCoeffs = this.cache.taktTimeCoeffs = this.mapTaktTimeCoeffs(this.getValue('taktTime.coeffs'));
       }
 
-      var wcCoeffs = mrpCoeffs[mrp] || mrpCoeffs['*'] || {};
-
-      if (!wcCoeffs)
-      {
-        return 1;
-      }
-
-      return wcCoeffs[workCenter] || wcCoeffs['*'] || 1;
+      return ProdShiftOrder.getWcTaktTimeCoeff(mrpCoeffs[mrp] || mrpCoeffs['*'], operation);
     },
 
+    // Check backend/node_modules/production/orderFinder.js#mapTaktTimeCoeffs
     mapTaktTimeCoeffs: function(value)
     {
       var mrpCoeffs = {};
@@ -232,13 +228,16 @@ define([
       {
         var wcCoeffs = {};
         var remaining = line;
-        var re = /([A-Z0-9]+[A-Z0-9_\- ]*|\*)\s*=\s*([0-9]+(?:[.,][0-9]+)?)/ig;
+        var re = /([A-Z0-9]+[A-Z0-9_\- ]*|\*)(\/[0-9]{4})?\s*=\s*([0-9]+(?:[.,][0-9]+)?)/ig;
         var matchCount = 0;
         var match;
 
         while ((match = re.exec(line)) !== null) // eslint-disable-line no-cond-assign
         {
-          wcCoeffs[match[1].toUpperCase()] = parseFloat(match[2].replace(',', '.'));
+          var wc = match[1].toUpperCase();
+          var op = match[2] || '';
+
+          wcCoeffs[wc + op] = parseFloat(match[3].replace(',', '.'));
           remaining = remaining.replace(match[0], '');
           matchCount += 1;
         }

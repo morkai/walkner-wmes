@@ -612,7 +612,6 @@ define([
       }
 
       var downtime = prodLineState.getCurrentDowntime();
-      var productionSettings = prodLineState.settings && prodLineState.settings.production || null;
       var now = Date.now();
 
       return popoverTemplate({
@@ -624,7 +623,7 @@ define([
           quantityDone: order.getQuantityDone(),
           workerCount: order.getWorkerCount(),
           sapWorkerCount: order.getWorkerCountSap(),
-          taktTime: time.toString(order.getSapTaktTime(productionSettings)),
+          taktTime: time.toString(order.getSapTaktTime()),
           cycleTime: time.toString(order.getLastTaktTime()),
           iptCycleTime: time.toString(order.getIptTaktTime()),
           avgCycleTime: time.toString(order.getAvgTaktTime())
