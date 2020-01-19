@@ -1748,7 +1748,6 @@ app/prodTasks/ProdTaskCollection.js
 app/prodTasks/routes.js
 app/prodLogEntries/routes.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
-app/prodShiftOrders/util/calcOrderEfficiency.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
@@ -2039,7 +2038,6 @@ app/orders/util/resolveProductName.js
 app/orgUnits/util/renderOrgUnitPath.js
 app/core/templates/userInfo.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
-app/prodShiftOrders/util/calcOrderEfficiency.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/orderDocuments/templates/localOrderPicker.js
@@ -2282,7 +2280,6 @@ app/prodDowntimes/ProdDowntime.js
 app/orgUnits/util/limitOrgUnits.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
-app/prodShiftOrders/util/calcOrderEfficiency.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
