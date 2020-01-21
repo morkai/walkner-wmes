@@ -343,6 +343,7 @@ define([
       var manage = user.isAllowedTo('FAP:MANAGE');
       var manager = user.isAllowedTo('FN:manager');
       var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
+      var whEng = user.isAllowedTo('FN:warehouse-process-engineer');
       var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
@@ -359,7 +360,7 @@ define([
       var analysisNeed = this.get('analysisNeed');
       var analysisDone = this.get('analysisDone');
       var mainAnalyzerAuth = !pending && analysisNeed && !analysisDone && (manage || procEng || master);
-      var solver = manage || procEng || designer || master || leader || (wh && whman);
+      var solver = manage || procEng || whEng || designer || master || leader || (wh && whman);
       var category = dictionaries.settings.canChangeCategory();
 
       return {
