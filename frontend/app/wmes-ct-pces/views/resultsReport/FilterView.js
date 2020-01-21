@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/wmes-ct-pces/templates/resultsReport/filter'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   View,
   idAndLabel,
   dateTimeRange,
+  setUpMrpSelect2,
   template
 ) {
   'use strict';
@@ -44,6 +46,12 @@ define([
       js2form(this.el, this.serializeFormData());
 
       this.updatePlaceholders();
+
+      setUpMrpSelect2(this.$id('includedMrps'), {
+        width: '500px',
+        view: this,
+        own: true
+      });
     },
 
     serializeFormData: function()
@@ -53,6 +61,7 @@ define([
       return {
         'from-date': attrs.from ? time.format(attrs.from, 'YYYY-MM-DD') : '',
         'to-date': attrs.to ? time.format(attrs.to, 'YYYY-MM-DD') : '',
+        includedMrps: Array.isArray(attrs.includedMrps) ? attrs.includedMrps.join(',') : '',
         minLineWorkDuration: attrs.minLineWorkDuration == null ? '' : attrs.minLineWorkDuration,
         minUpphWorkDuration: attrs.minUpphWorkDuration == null ? '' : attrs.minUpphWorkDuration,
         shiftCount: attrs.shiftCount == null ? '' : attrs.shiftCount,
@@ -69,6 +78,7 @@ define([
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
+        includedMrps: view.$id('includedMrps').val().split(',').filter(function(v) { return !!v.length; }),
         minLineWorkDuration: parseFloat(view.$id('minLineWorkDuration').val()),
         minUpphWorkDuration: parseFloat(view.$id('minUpphWorkDuration').val()),
         shiftCount: parseInt(view.$id('shiftCount').val(), 10),
@@ -79,7 +89,7 @@ define([
 
       _.forEach(query, function(v, k)
       {
-        if (isNaN(v) || v == null)
+        if (v == null || (isNaN(v) && !Array.isArray(v)))
         {
           query[k] = null;
         }

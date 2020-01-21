@@ -25,6 +25,7 @@ define([
         from: 0,
         to: 0,
         ignoredMrps: null,
+        includedMrps: null,
         minLineWorkDuration: null,
         minUpphWorkDuration: null,
         shiftCount: null,
@@ -34,11 +35,6 @@ define([
         tab: 'mrps',
         report: null
       };
-    },
-
-    initialize: function()
-    {
-
     },
 
     fetch: function(options)
@@ -53,6 +49,7 @@ define([
         _.pick(this.attributes, [
           'from', 'to',
           'ignoredMrps',
+          'includedMrps',
           'minLineWorkDuration',
           'minUpphWorkDuration',
           'shiftCount',
@@ -82,7 +79,8 @@ define([
         + '&tab=' + attrs.tab;
 
       var props = {
-        ignoredMrps: 'im',
+        ignoredMrps: 'xm',
+        includedMrps: 'im',
         minLineWorkDuration: 'mlwd',
         minUpphWorkDuration: 'muwd',
         shiftCount: 'sc',
@@ -138,9 +136,14 @@ define([
         attrs.from = moment.subtract(4, 'weeks').valueOf();
       }
 
+      if (query.xm)
+      {
+        attrs.ignoredMrps = query.xm.split(',').filter(function(v) { return !!v.length; });
+      }
+
       if (query.im)
       {
-        attrs.ignoredMrps = query.im.split(',').filter(function(v) { return !!v.length; });
+        attrs.includedMrps = query.im.split(',').filter(function(v) { return !!v.length; });
       }
 
       var props = {
