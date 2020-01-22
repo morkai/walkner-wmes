@@ -139,13 +139,20 @@ define([
 
     serializeCategories: function()
     {
+      var report = this.model.get('report');
+
       return [
+        this.t('resultsReport:allLineCount:category'),
         this.t('resultsReport:workingLineCount:category'),
         this.t('resultsReport:availableLineUsage:category'),
         this.t('resultsReport:mrpCount:category'),
-        this.t('resultsReport:unbalancedMrpCount:category'),
+        this.t('resultsReport:unbalancedMrpCount:category', {
+          min: report && report.options.minMrpUnbalance || 0
+        }),
         this.t('resultsReport:bottleneckedMrpCount:category'),
-        this.t('resultsReport:efficientMrpCount:category')
+        this.t('resultsReport:efficientMrpCount:category', {
+          min: report && report.options.minMrpEfficiency || 0
+        })
       ];
     },
 
@@ -154,31 +161,35 @@ define([
       var report = this.model.get('report');
 
       return [{
+        name: this.t('resultsReport:allLineCount:series'),
+        data: [report.allLineCount || 0]
+      },
+      {
         name: this.t('resultsReport:workingLineCount:series'),
-        data: [report.workingLineCount || 0]
+        data: [null, report.workingLineCount || 0]
       },
       {
         name: this.t('resultsReport:availableLineUsage:series'),
         yAxis: 1,
-        data: [null, report.availableLineUsage || 0],
+        data: [null, null, report.availableLineUsage || 0],
         tooltip: {valueSuffix: '%'},
         dataLabels: {format: '{y}%'}
       },
       {
         name: this.t('resultsReport:mrpCount:series'),
-        data: [null, null, (report.mrps || []).length]
+        data: [null, null, null, (report.mrps || []).length]
       },
       {
         name: this.t('resultsReport:unbalancedMrpCount:series'),
-        data: [null, null, null, report.unbalancedMrpCount || 0]
+        data: [null, null, null, null, report.unbalancedMrpCount || 0]
       },
       {
         name: this.t('resultsReport:bottleneckedMrpCount:series'),
-        data: [null, null, null, null, report.bottleneckedMrpCount || 0]
+        data: [null, null, null, null, null, report.bottleneckedMrpCount || 0]
       },
       {
         name: this.t('resultsReport:efficientMrpCount:series'),
-        data: [null, null, null, null, null, report.efficientMrpCount || 0]
+        data: [null, null, null, null, null, null, report.efficientMrpCount || 0]
       }];
     },
 
