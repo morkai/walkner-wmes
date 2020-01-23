@@ -89,7 +89,7 @@
     "resultsReport:filter:minMrpUnbalance": "Min. unbalance",
     "resultsReport:filter:minMrpBottleneck": "Min. bottleneck",
     "resultsReport:filter:minMrpEfficiency": "Min. efficiency",
-    "resultsReport:filter:includedMrps": "MRP",
+    "resultsReport:filter:includedMrps": "UPPH families",
 
     "resultsReport:vs:title": "Performance vs Bottleneck",
     "resultsReport:vs:filename": "WMES_PerfVsBneck",

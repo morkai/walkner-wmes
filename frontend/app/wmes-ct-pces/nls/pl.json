@@ -88,7 +88,7 @@
   "resultsReport:filter:minMrpUnbalance": "Min. unbalance",
   "resultsReport:filter:minMrpBottleneck": "Min. wąskie gardło",
   "resultsReport:filter:minMrpEfficiency": "Min. wydajność",
-  "resultsReport:filter:includedMrps": "MRP",
+  "resultsReport:filter:includedMrps": "Rodziny UPPH",
 
   "resultsReport:vs:title": "Performance vs Bottleneck",
   "resultsReport:vs:filename": "WMES_PerfVsBneck",
