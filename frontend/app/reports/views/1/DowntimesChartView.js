@@ -87,8 +87,14 @@ define([
 
     updateChart: function(redraw)
     {
-      var chartData = this.serializeChartData();
       var chart = this.chart;
+
+      if (!chart)
+      {
+        return;
+      }
+
+      var chartData = this.serializeChartData();
 
       this.updateExtremes();
 
