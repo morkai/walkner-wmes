@@ -779,7 +779,10 @@ define([
 
     onWindowResize: function(e)
     {
-      this.broker.publish('planning.windowResized', e);
+      if (this.broker)
+      {
+        this.broker.publish('planning.windowResized', e);
+      }
     },
 
     onWindowKeyDown: function(e)
