@@ -444,7 +444,7 @@ define([
 
     var matches = path.match(/^([a-z0-9][a-z0-9\-]*[a-z0-9]*)/i);
 
-    return matches ? matches[1] : null;
+    return matches ? matches[1] : '';
   };
 
   /**
@@ -505,30 +505,35 @@ define([
    */
   NavbarView.prototype.cacheNavItem = function(i, navItemEl)
   {
-    var $navItem = this.$(navItemEl);
+    var view = this;
+    var $navItem = view.$(navItemEl);
 
-    if ($navItem.hasClass(this.options.activeItemClassName))
+    if ($navItem.hasClass(view.options.activeItemClassName))
     {
-      this.$activeNavItem = $navItem;
+      view.$activeNavItem = $navItem;
     }
 
-    var href = $navItem.find('a').attr('href');
+    var href = $navItem.find('a').first().attr('href');
 
     if (href && href[0] === '#')
     {
-      var moduleName = this.getModuleNameFromLi($navItem[0], true, true).split(' ')[0];
+      var moduleName = view.getModuleNameFromLi($navItem[0], true, true).split(' ')[0];
 
-      this.navItems[moduleName] = $navItem;
+      if (!view.navItems[moduleName])
+      {
+        view.navItems[moduleName] = $navItem;
+      }
     }
     else if ($navItem.hasClass('dropdown'))
     {
-      var view = this;
-
       $navItem.find('.dropdown-menu > li').each(function()
       {
         var moduleName = view.getModuleNameFromLi(this, true, true).split(' ')[0];
 
-        view.navItems[moduleName] = $navItem;
+        if (!view.navItems[moduleName])
+        {
+          view.navItems[moduleName] = $navItem;
+        }
       });
     }
   };
