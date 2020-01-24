@@ -377,7 +377,7 @@ define([
       }
       else if (this.removeExtraChart)
       {
-        this.views['.reports-drillingCharts-container'][1].remove();
+        this.getViews('#-charts').value()[1].remove();
 
         this.removeExtraChart = false;
       }
