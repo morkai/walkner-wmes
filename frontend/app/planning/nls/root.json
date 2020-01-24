@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMB:base": "Planning",
+    "BREADCRUMB:base": "Daily plans",
     "BREADCRUMB:wh": "WH (old)",
     "BREADCRUMB:settings": "Settings",
     "BREADCRUMB:changes": "Change history",
@@ -89,6 +89,13 @@
     "print:workerCounts": "{from}-{to} {to, plural, one{person} other{people}}",
 
     "list:generate": "Force<br>plan<br>creation",
+    "list:mrpCount": "{str} {num, plural, one{family} other{families}}",
+    "list:lineCount": "{str} {num, plural, one{line} other{lines}}",
+    "list:orderCount": "{str} {num, plural, one{order} other{orders}}",
+    "list:quantity": "{str} pce",
+    "list:manHours": "{str} mh",
+    "list:from": "from {time}",
+    "list:to": "to {time}",
 
     "empty": "No plan for the specified filters.",
     "locked": "MRP is locked!",

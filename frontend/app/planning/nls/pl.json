@@ -1,5 +1,5 @@
 {
-  "BREADCRUMB:base": "Planowanie",
+  "BREADCRUMB:base": "Plany dzienne",
   "BREADCRUMB:wh": "Magazyn (stary)",
   "BREADCRUMB:settings": "Ustawienia",
   "BREADCRUMB:changes": "Historia zmian",
@@ -88,6 +88,13 @@
   "print:workerCounts": "{from}-{to} {to, plural, one{osoba} few{osoby} other{osób}}",
 
   "list:generate": "Wymuś<br>utworzenie<br>planu",
+  "list:mrpCount": "{str} {num, plural, one{rodzina} few{rodziny} other{rodzin}}",
+  "list:lineCount": "{str} {num, plural, one{linia} few{linie} other{linii}}",
+  "list:orderCount": "{str} {num, plural, one{zlecenie} few{zlecenia} other{zleceń}}",
+  "list:quantity": "{str} {num, plural, one{sztuka} few{sztuki} other{sztuk}}",
+  "list:manHours": "{str} rbh",
+  "list:from": "od {time}",
+  "list:to": "do {time}",
 
   "empty": "Brak planu dla wybranych filtrów.",
   "locked": "MRP jest zablokowane!",

@@ -23,17 +23,9 @@ define([
 
     remoteTopics: {
 
-      'planning.settings.updated': function(message)
-      {
-        if (this.collection.get(message.date))
-        {
-          this.refreshCollection();
-        }
-      },
-
       'planning.generator.finished': function(message)
       {
-        if (this.$('.is-empty[data-id="' + message.date + '"]').length)
+        if (this.$('.planning-list-day[data-id="' + message.date + '"]').length)
         {
           this.refreshCollection();
         }
@@ -51,7 +43,7 @@ define([
       },
       'mouseup .planning-list-day': function(e)
       {
-        if (e.currentTarget.classList.contains('is-empty'))
+        if (e.currentTarget.classList.contains('planning-list-notExists'))
         {
           return;
         }
@@ -82,85 +74,42 @@ define([
         {
           $btn.prop('disabled', false);
         });
+      },
+      'click .planning-list-prev': function()
+      {
+        this.collection.prevMonth();
+      },
+      'click .planning-list-next': function()
+      {
+        this.collection.nextMonth();
       }
     },
 
-    serialize: function()
+    initialize: function()
     {
-      var data = ListView.prototype.serialize.apply(this, arguments);
-      var to = data.rows[0].moment.clone().subtract(1, 'days');
-      var from = to.clone().subtract(6, 'days');
-
-      data.prevLink = '#planning/plans'
-        + '?select(mrps._id,mrps.lines._id,mrps.lines.workerCount)'
-        + '&_id>=' + from.valueOf() + '&_id<=' + to.valueOf();
-
-      from = data.rows[6].moment.clone().add(1, 'days');
-      to = from.clone().add(6, 'days');
-
-      data.nextLink = '#planning/plans'
-        + '?select(mrps._id,mrps.lines._id,mrps.lines.workerCount)'
-        + '&_id>=' + from.valueOf() + '&_id<=' + to.valueOf();
-
-      return data;
-    },
-
-    serializeColumns: function()
-    {
-      return [];
-    },
-
-    serializeRows: function()
-    {
-      var from = _.find(
-        this.collection.rqlQuery.selector.args,
-        function(term) { return term.name === 'ge' && term.args[0] === '_id'; }
-      ).args[1];
-      var daysList = [];
-      var daysMap = {};
-
-      for (var i = 0; i < 7; ++i)
+      this.once('afterRender', function()
       {
-        var moment = time.utc.getMoment(from).add(i, 'days');
-        var day = {
-          moment: moment,
-          date: moment.format('YYYY-MM-DD'),
-          mrps: []
-        };
+        this.listenTo(this.collection, 'reset', this.render);
+      });
+    },
 
-        daysMap[day.moment.valueOf()] = day;
-        daysList.push(day);
+    getTemplateData: function()
+    {
+      var weekDays = [];
+      var moment = time.getMoment().startOf('isoWeek');
+
+      for (var d = 1; d <= 7; ++d)
+      {
+        weekDays.push(moment.format('dddd'));
+        moment.add(1, 'days');
       }
 
-      this.collection.forEach(function(planSettings)
-      {
-        var day = daysMap[Date.parse(planSettings.id)];
-
-        if (!day)
-        {
-          return;
-        }
-
-        planSettings.mrps.forEach(function(mrpSettings)
-        {
-          day.mrps.push({
-            _id: mrpSettings.id,
-            lines: mrpSettings.lines.map(function(mrpLineSettings)
-            {
-              return {
-                _id: mrpLineSettings.id
-              };
-            })
-          });
-        });
-      });
-
-      daysList.forEach(function(day)
-      {
-        day.mrps.sort(function(a, b) { return a._id.localeCompare(b._id); });
-      });
-
-      return daysList;
+      return {
+        canManage: user.isAllowedTo('PLANNING:MANAGE'),
+        weekDays: weekDays,
+        weeks: _.chunk(this.collection.toJSON(), 7)
+      };
     }
+
   });
 });

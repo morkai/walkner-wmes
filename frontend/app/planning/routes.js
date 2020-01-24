@@ -54,14 +54,11 @@ define([
   router.map('/planning/plans', canView, function(req)
   {
     viewport.loadPage(
-      ['app/planning/PlanSettingsCollection', 'app/planning/pages/PlanListPage', css[0], nls[0]],
-      function(PlanSettingsCollection, PlanListPage)
+      ['app/planning/PlanStatsCollection', 'app/planning/pages/PlanListPage'].concat(css, nls),
+      function(PlanStatsCollection, PlanListPage)
       {
         return new PlanListPage({
-          collection: new PlanSettingsCollection(null, {
-            rqlQuery: req.rql,
-            paginate: false
-          })
+          collection: PlanStatsCollection.fromQuery(req.query)
         });
       }
     );

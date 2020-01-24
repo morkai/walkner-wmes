@@ -39,6 +39,13 @@
 .paintShop-breadcrumb > .fa-chevron-right {
   padding: 0 0 0 20px;
 }
+.paintShop-breadcrumb.is-variable-width > .fa-chevron-left {
+  padding-right: 7px;
+}
+.paintShop-breadcrumb.is-variable-width > .fa-chevron-right {
+  padding-left: 7px;
+  margin-right: 14px;
+}
 
 .paintShop {
   display: flex;

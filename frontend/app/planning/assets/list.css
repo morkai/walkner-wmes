@@ -1,63 +1,98 @@
 .planning-list-container {
   display: flex;
+  justify-content: center;
+}
+.planning-list-prev,
+.planning-list-next {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  font-size: 84px;
+  padding: 15px;
+  cursor: pointer;
+  color: #337ab7;
+}
+.planning-list-container > .table {
+  max-width: 1620px;
+  margin-bottom: 0;
 }
 .planning-list-day {
-  flex: 1 1 auto;
-  width: 14.2857%;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
+  width: 14.3%;
+  color: #000;
 }
 .planning-list-day:hover {
   background: #ffffd6;
+  color: #000;
+  cursor: pointer;
 }
-.planning-list-day.is-empty {
+.planning-list-other-month {
+  background: #f6f6f6;
+}
+.planning-list-empty {
+  color: #999;
+}
+.planning-list-notExists:hover {
+  background: #fff;
   cursor: default;
-  text-align: center;
 }
-.planning-list-day.is-empty:hover {
-  background: #fff;
+.planning-list-notExists.planning-list-other-month:hover {
+  background: #fafafa;
 }
-.planning-list-hd {
-  padding: 3px 6px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  background: #fff;
-  border-top: 1px solid #ddd;
-  border-bottom: 2px solid #ddd;
+.planning-list-this-day {
+  background: #d9edf7;
 }
-.planning-list-mrp {
-  padding: 3px 6px;
-  color: inherit;
-  border-bottom: 1px dotted #ddd;
+.planning-list-this-day:hover {
+  background: #c4e3f3;
 }
-.planning-list-mrp:last-child {
-  border-bottom: 0;
+.planning-list-notExists.planning-list-this-day:hover {
+  background: #d9edf7;
 }
-.planning-list-prev + .planning-list-day {
-  border-left: 1px solid #ddd;
+.planning-list-flex {
+  display: flex;
+  width: 100%;
 }
-.planning-list-next,
-.planning-list-prev {
-  padding: 100px 15px 100px 30px;
-  font-size: 62px;
-}
-.planning-list-prev {
-  padding: 100px 30px 100px 15px;
-}
-.planning-list-mrp-id {
-  font-weight: bold;
-}
-.planning-list-mrp-lines {
+.planning-list-date {
+  flex: 0 0 auto;
   display: block;
-  font-size: 12px;
+  text-align: right;
   line-height: 1;
 }
-.planning-list-day > .btn {
-  display: none;
-  margin-top: 15px;
+.planning-list-date-day {
+  margin-bottom: 4px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 56px;
+  color: #5cb85c;
 }
-.planning-list-day:hover > .btn {
-  display: inline-block;
+.planning-list-empty .planning-list-date-day {
+  color: #d9534f;
 }
+.planning-list-notExists .planning-list-date-day {
+  color: inherit;
+}
+.planning-list-date-time {
+  line-height: 1.42857143;
+}
+.planning-list-empty .planning-list-date-time,
+.planning-list-notExists .planning-list-date-time {
+  visibility: hidden;
+}
+.planning-list-stats {
+  flex: 1 1 auto;
+  text-align: right;
+}
+.planning-list-empty .planning-list-stats {
+  visibility: hidden;
+}
+.planning-list-monthPicker {
+  max-width: none;
+  text-align: center;
+}
+.planning-list-monthPicker .popover-content {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+.planning-list-monthPicker a {
+  display: block;
+  padding: 0 7px;
+}
+

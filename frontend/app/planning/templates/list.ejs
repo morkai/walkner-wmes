@@ -1,29 +1,49 @@
 <div class="planning-list-container">
-  <a class="planning-list-prev" href="<%- prevLink %>"><i class="fa fa-caret-left"></i></a>
-  <% rows.forEach(function(day) { %>
-  <div class="planning-list-day <%- day.mrps.length ? '' : 'is-empty' %>" data-id="<%- day.date %>">
-    <div class="planning-list-hd">
-      <%- day.moment.format('llll').replace(day.moment.format('LT'), '') %>
-    </div>
-    <% day.mrps.forEach(function(mrp) { %>
-    <div class="planning-list-mrp">
-      <span class="planning-list-mrp-id"><%- mrp._id %></span>
-      <span class="planning-list-mrp-lines">
-        <% mrp.lines.forEach(function(line, i) { %>
-        <span class="planning-list-mrp-line"><%- line._id %><%- i === mrp.lines.length - 1 ? '' : ', '%></span>
-        <% }) %>
-        <% if (!mrp.lines.length) { %>
-        &nbsp;
-        <% } %>
-      </span>
-    </div>
+  <div class="planning-list-prev"><a href="javascript:void(0)"><i class="fa fa-caret-left"></i></a></div>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <% weekDays.forEach(function(weekDay) { %>
+      <th><%- weekDay %></th>
+      <% }) %>
+    </tr>
+    </thead>
+    <tbody class="planning-list-weeks">
+    <% weeks.forEach(function(week) { %>
+    <tr class="planning-list-week">
+      <% week.forEach(function(plan) { %>
+      <td data-id="<%- plan._id %>" class="
+        planning-list-day
+        <%- plan.currentMonth ? 'planning-list-this-month' : 'planning-list-other-month' %>
+        <%- plan.currentDay ? 'planning-list-this-day' : 'planning-list-other-day' %>
+        <%- plan.stats.length === 0 ? 'planning-list-notExists' : '' %>
+        <%- plan.stats.length && plan.stats[0].orderCount === 0 ? 'planning-list-empty' : '' %>
+      ">
+        <div class="planning-list-flex">
+          <div class="planning-list-date">
+            <div class="planning-list-date-day"><%- time.utc.format(plan._id, 'D') %></div>
+            <div class="planning-list-date-time"><%- t('list:from', {time: plan.from}) %></div>
+            <div class="planning-list-date-time"><%- t('list:to', {time: plan.to}) %></div>
+          </div>
+          <div class="planning-list-stats">
+            <% if (plan.stats.length === 0) { %>
+              <% if (canManage) { %>
+              <button type="button" class="btn btn-primary btn-lg"><%- t('list:generate') %></button>
+              <% } %>
+            <% } else { %>
+              <%- t('list:mrpCount', {str: plan.stats[0].mrpCount, num: plan.stats[0].mrpCount}) %><br>
+              <%- t('list:lineCount', {str: plan.stats[0].lineCount, num: plan.stats[0].lineCount}) %><br>
+              <%- t('list:orderCount', {str: plan.stats[0].orderCount.toLocaleString(), num: plan.stats[0].orderCount}) %><br>
+              <%- t('list:quantity', {str: plan.stats[0].quantity.toLocaleString(), num: plan.stats[0].quantity}) %><br>
+              <%- t('list:manHours', {str: Math[plan.stats[0].manHours < 10 ? 'ceil' : 'round'](plan.stats[0].manHours).toLocaleString(), num: plan.stats[0].manHours}) %>
+            <% } %>
+          </div>
+        </div>
+      </td>
+      <% }) %>
+    </tr>
     <% }) %>
-    <% if (!day.mrps.length && user.isAllowedTo('SUPER')) { %>
-    <button type="button" class="btn btn-primary btn-lg">
-      <%- t('planning', 'list:generate') %>
-    </button>
-    <% } %>
-  </div>
-  <% }) %>
-  <a class="planning-list-next" href="<%- nextLink %>"><i class="fa fa-caret-right"></i></a>
+    </tbody>
+  </table>
+  <div class="planning-list-next"><a href="javascript:void(0)"><i class="fa fa-caret-right"></i></a></div>
 </div>
