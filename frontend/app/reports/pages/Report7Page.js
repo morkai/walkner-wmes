@@ -144,10 +144,13 @@ define([
         simple: true,
         collection: this.prodDowntimes,
         replaceUrl: true,
-        columns: ProdDowntimeListView.prototype.columns.filter(function(column)
+        columns: function()
         {
-          return column !== 'aor' && column.id !== 'aor';
-        })
+          return ProdDowntimeListView.prototype.columns.apply(this, arguments).filter(function(column)
+          {
+            return column && column !== 'aor' && column.id !== 'aor';
+          });
+        }
       });
 
       this.downtimeTimesChartView = new InoutChartView({
