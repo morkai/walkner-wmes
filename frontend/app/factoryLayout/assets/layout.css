@@ -158,6 +158,9 @@
 .is-downtime .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-downtime);
 }
+.is-break .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-break);
+}
 .is-fullscreen .factoryLayout-area {
   stroke-width: 0;
 }
@@ -180,6 +183,9 @@
 }
 .is-downtime .factoryLayout-prodLine-name {
   background: linear-gradient(to bottom, #FF7672, #D9534F);
+}
+.is-downtime .factoryLayout-prodLine-name {
+  background: linear-gradient(to bottom, #CD00CD, #B300B3);
 }
 .factoryLayout-popover {
   max-width: none;

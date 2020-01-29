@@ -113,6 +113,11 @@ define([
       if (this.model.get('state'))
       {
         classNames.push('is-' + this.model.get('state'));
+
+        if (this.model.isBreak())
+        {
+          classNames.push('is-break');
+        }
       }
 
       if (this.model.get('extended'))
@@ -386,11 +391,12 @@ define([
 
     onStateChanged: function()
     {
-      this.$el.removeClass('is-idle is-working is-downtime');
+      this.$el.removeClass('is-idle is-working is-downtime is-break');
 
       if (this.model.get('state'))
       {
         this.$el.addClass('is-' + this.model.get('state'));
+        this.$el.toggleClass('is-break', this.model.isBreak());
       }
 
       this.toggleVisibility();

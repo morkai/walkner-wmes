@@ -68,6 +68,15 @@
 .prodShifts-timeline .timeline-item-downtime.is-highlighted {
   fill: #f00;
 }
+.prodShifts-timeline .timeline-item-downtime.is-break {
+  fill: #CD00CD;
+}
+.prodShifts-timeline .timeline-item-downtime.is-break:hover {
+  fill: #B300B3;
+}
+.prodShifts-timeline .timeline-item-downtime.is-break.is-highlighted {
+  fill: #f0f;
+}
 .prodShifts-timeline .timeline-item-wh {
   fill: transparent;
   stroke-width: 0;

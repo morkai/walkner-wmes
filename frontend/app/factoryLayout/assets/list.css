@@ -141,20 +141,17 @@
 .factoryLayout-prodLineList > .is-downtime:hover {
   background: #ff8682;
 }
+.factoryLayout-prodLineList > .is-break {
+  background: #e5cce5;
+}
+.factoryLayout-prodLineList > .is-downtime:hover {
+  background: #d8b2d8;
+}
 .factoryLayout-prodLineList > .is-extended {
-  -webkit-animation: factoryLayout-extendedDowntime 2s infinite;
   animation: factoryLayout-extendedDowntime 2s infinite;
 }
-@-webkit-keyframes factoryLayout-extendedDowntime {
-  0% {
-    background: #f2dede;
-  }
-  50% {
-    background: #f99;
-  }
-  100% {
-    background: #f2dede;
-  }
+.factoryLayout-prodLineList > .is-extended.is-break {
+  animation: factoryLayout-extendedBreak 2s infinite;
 }
 @keyframes factoryLayout-extendedDowntime {
   0% {
@@ -165,6 +162,17 @@
   }
   100% {
     background: #f2dede;
+  }
+}
+@keyframes factoryLayout-extendedBreak {
+  0% {
+    background: #e5cce5;
+  }
+  50% {
+    background: #d8b2d8;
+  }
+  100% {
+    background: #e5cce5;
   }
 }
 .factoryLayout-timeline-container > .prodShifts-timeline {

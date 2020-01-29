@@ -614,6 +614,11 @@ define([
             className += ' is-tt-nok';
           }
 
+          if (item.type === 'downtime' && item.model.isBreak())
+          {
+            className += ' is-break';
+          }
+
           return className;
         })
         .afterRender(function(item)

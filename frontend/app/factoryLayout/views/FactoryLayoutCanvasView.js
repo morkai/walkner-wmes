@@ -393,6 +393,7 @@ define([
         if (prodLineState.get('state') !== null)
         {
           prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
+          prodLineOuterContainer.classed('is-break', prodLineState.isBreak());
         }
       }
 
@@ -676,7 +677,8 @@ define([
       var stateClassNames = {
         'is-idle': false,
         'is-working': false,
-        'is-downtime': false
+        'is-downtime': false,
+        'is-break': prodLineState.isBreak()
       };
 
       stateClassNames['is-' + prodLineState.get('state')] = true;

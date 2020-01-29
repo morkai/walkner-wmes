@@ -122,6 +122,13 @@ define([
       return !actualTaktTime || actualTaktTime <= sapTaktTime;
     },
 
+    isBreak: function()
+    {
+      var downtime = this.getCurrentDowntime();
+
+      return !!downtime && downtime.isBreak();
+    },
+
     update: function(data)
     {
       data = _.clone(data);

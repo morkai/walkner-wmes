@@ -194,6 +194,13 @@ define([
       var endTime = Date.parse(this.get('finishedAt')) || currentTime || Date.now();
 
       return time.toString(Math.round((endTime - startTime) / 1000), compact);
+    },
+
+    isBreak: function()
+    {
+      var reason = downtimeReasons.get(this.get('reason'));
+
+      return reason && reason.get('type') === 'break';
     }
 
   }, {
