@@ -313,6 +313,18 @@
 
     "NAVBAR:mor": "Matrix of responsibility",
 
+    "NAVBAR:pila:osh": "OSH",
+    "NAVBAR:pila:help": "Help",
+    "NAVBAR:pila:reports": "Reports",
+    "NAVBAR:pila:nearMiss": "Near misses",
+    "NAVBAR:pila:nearMiss:entries": "Entries",
+    "NAVBAR:pila:suggestions": "Suggestions",
+    "NAVBAR:pila:suggestions:entries": "Entries",
+    "NAVBAR:pila:observations": "Observations",
+    "NAVBAR:pila:observations:entries": "Cards",
+    "NAVBAR:pila:mfs": "Minutes",
+    "NAVBAR:pila:mfs:entries": "Cards",
+
     "ACTION_FORM:BUTTON": "Perform action",
     "ACTION_FORM:BUTTON:cancel": "Cancel",
     "ACTION_FORM:MESSAGE": "Are you sure you want to perform the requested action?",

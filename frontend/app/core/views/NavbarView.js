@@ -8,11 +8,11 @@ define([
   'app/viewport',
   'app/data/orgUnits',
   'app/data/localStorage',
-  '../View',
+  'app/data/loadedModules',
+  'app/core/View',
   'app/mor/Mor',
   'app/mor/views/MorView',
   'app/users/util/setUpUserSelect2',
-  'app/core/templates/navbar',
   'app/core/templates/navbar/searchResults'
 ], function(
   _,
@@ -22,11 +22,11 @@ define([
   viewport,
   orgUnits,
   localStorage,
+  loadedModules,
   View,
   Mor,
   MorView,
   setUpUserSelect2,
-  navbarTemplate,
   searchResultsTemplate
 ) {
   'use strict';
@@ -44,8 +44,6 @@ define([
    * @param {Object} [options]
    */
   var NavbarView = View.extend({
-
-    template: navbarTemplate,
 
     nlsDomain: 'core',
 
@@ -926,6 +924,7 @@ define([
   NavbarView.prototype.renderSearchResults = function(results)
   {
     return this.renderPartial(searchResultsTemplate, {
+      loadedModules: loadedModules,
       results: results
     });
   };
@@ -936,6 +935,7 @@ define([
    */
   NavbarView.prototype.parseSearchPhrase = function(searchPhrase)
   {
+    var productionEnabled = loadedModules.isLoaded('production');
     var results = {
       fullOrderNo: null,
       partialOrderNo: null,
@@ -972,37 +972,43 @@ define([
       }
     });
 
-    // Full 15NC
-    matches = searchPhrase.match(/[^0-9A-Z]([0-9]{15})[^0-9A-Z]/);
-
-    if (matches)
+    if (loadedModules.isLoaded('orderDocuments'))
     {
-      results.fullNc15 = matches[1];
-      searchPhrase = searchPhrase.replace(results.fullNc15, '');
-    }
+      // Full 15NC
+      matches = searchPhrase.match(/[^0-9A-Z]([0-9]{15})[^0-9A-Z]/);
 
-    // Full 12NC
-    matches = searchPhrase.match(/[^0-9A-Z]([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})[^0-9A-Z]/);
-
-    if (matches && (matches[1].length === 12 || /[0-9]+/.test(matches[1])))
-    {
-      results.fullNc12 = matches[1].toUpperCase();
-      searchPhrase = searchPhrase.replace(/([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})/g, '');
-    }
-
-    // Full order no
-    matches = searchPhrase.match(/[^0-9](1[0-9]{8})[^0-9]/);
-
-    if (matches)
-    {
-      results.fullOrderNo = matches[1];
-
-      if (/^1111/.test(matches[1]))
+      if (matches)
       {
-        results.partialNc12 = matches[1];
+        results.fullNc15 = matches[1];
+        searchPhrase = searchPhrase.replace(results.fullNc15, '');
+      }
+    }
+
+    if (productionEnabled)
+    {
+      // Full 12NC
+      matches = searchPhrase.match(/[^0-9A-Z]([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})[^0-9A-Z]/);
+
+      if (matches && (matches[1].length === 12 || /[0-9]+/.test(matches[1])))
+      {
+        results.fullNc12 = matches[1].toUpperCase();
+        searchPhrase = searchPhrase.replace(/([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})/g, '');
       }
 
-      searchPhrase = searchPhrase.replace(/(1[0-9]{8})/g, '');
+      // Full order no
+      matches = searchPhrase.match(/[^0-9](1[0-9]{8})[^0-9]/);
+
+      if (matches)
+      {
+        results.fullOrderNo = matches[1];
+
+        if (/^1111/.test(matches[1]))
+        {
+          results.partialNc12 = matches[1];
+        }
+
+        searchPhrase = searchPhrase.replace(/(1[0-9]{8})/g, '');
+      }
     }
 
     // Shift
@@ -1097,7 +1103,7 @@ define([
 
     if (matches)
     {
-      if (/^1[0-9]*$/.test(matches[1]) && matches[1].length < 9)
+      if (productionEnabled && /^1[0-9]*$/.test(matches[1]) && matches[1].length < 9)
       {
         results.partialOrderNo = matches[1];
       }
@@ -1107,7 +1113,7 @@ define([
         results.entryId = matches[1];
       }
 
-      if (matches[1].length < 12)
+      if (productionEnabled && matches[1].length < 12)
       {
         results.partialNc12 = matches[1].toUpperCase();
       }

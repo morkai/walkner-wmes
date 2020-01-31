@@ -4,8 +4,33 @@
 
 const requirejsConfig = require('./config/require');
 
-module.exports = function(grunt)
+module.exports = grunt =>
 {
+  const include = [
+    'select2-lang/en',
+    'select2-lang/pl',
+    'moment-lang/en',
+    'moment-lang/pl'
+  ];
+  const modules = [
+    {name: 'pos-main', include},
+    {name: 'wmes-main', include},
+    {name: 'wmes-pila', include},
+    {name: 'wmes-docs', include},
+    {name: 'wmes-operator', include},
+    {name: 'wmes-heff', include},
+    {name: 'wmes-ps-queue', include},
+    {name: 'wmes-ps-load', include},
+    {name: 'wmes-wiring', include},
+    {name: 'wmes-drilling', include},
+    {name: 'wmes-wh-pickup', include},
+    {name: 'wmes-wh-problems', include},
+    // {name: 'wmes-wh-kitter', include},
+    // {name: 'wmes-wh-packer', include},
+    {name: 'wmes-isa', include},
+    {name: 'wmes-trw', include}
+  ];
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: {
@@ -105,23 +130,7 @@ module.exports = function(grunt)
           optimize: 'none',
           optimizeCss: 'standard',
           buildCSS: false,
-          modules: [
-            {name: 'pos-main'},
-            {name: 'wmes-main'},
-            {name: 'wmes-docs'},
-            {name: 'wmes-operator'},
-            {name: 'wmes-heff'},
-            {name: 'wmes-ps-queue'},
-            {name: 'wmes-ps-load'},
-            {name: 'wmes-wiring'},
-            {name: 'wmes-drilling'},
-            {name: 'wmes-wh-pickup'},
-            {name: 'wmes-wh-problems'},
-            // {name: 'wmes-wh-kitter'},
-            // {name: 'wmes-wh-packer'},
-            {name: 'wmes-isa'},
-            {name: 'wmes-trw'}
-          ],
+          modules,
           packages: requirejsConfig.packages,
           paths: requirejsConfig.buildPaths,
           shim: requirejsConfig.buildShim,

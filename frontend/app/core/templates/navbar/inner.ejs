@@ -1,0 +1,26 @@
+<div class="navbar-inner">
+  <% include left.ejs %>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+      <li><a href="#"><%- t('core', 'NAVBAR:DASHBOARD') %></a>
+      <% include fte.ejs %>
+      <% include planning.ejs %>
+      <% include prod.ejs %>
+      <% include reports.ejs %>
+      <% include testing.ejs %>
+      <% include qi.ejs %>
+      <% include kaizen.ejs %>
+      <% include suggestions.ejs %>
+      <% include opinionSurveys.ejs %>
+      <% include dictionaries.ejs %>
+      <% include tools.ejs %>
+    </ul>
+    <% include right.ejs %>
+    <% if (user.isAllowedTo('LOCAL', 'USER')) { %>
+    <% include search.ejs %>
+    <% } %>
+    <div class="navbar-right">
+      <a id="<%- idPrefix %>-mor" class="btn btn-link navbar-mor" href="#mor" title="<%- t('core', 'NAVBAR:mor') %>" style="width: 41px"><i class="fa fa-group"></i></a>
+    </div>
+  </div>
+</div>

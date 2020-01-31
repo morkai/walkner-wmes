@@ -320,6 +320,18 @@
 
   "NAVBAR:mor": "Matryca odpowiedzialności",
 
+  "NAVBAR:pila:osh": "BHP",
+  "NAVBAR:pila:help": "Pomoc",
+  "NAVBAR:pila:reports": "Raporty",
+  "NAVBAR:pila:nearMiss": "ZPW",
+  "NAVBAR:pila:nearMiss:entries": "Zgłoszenia",
+  "NAVBAR:pila:suggestions": "Usprawnienia",
+  "NAVBAR:pila:suggestions:entries": "Zgłoszenia",
+  "NAVBAR:pila:observations": "Obserwacje",
+  "NAVBAR:pila:observations:entries": "Karty",
+  "NAVBAR:pila:mfs": "Minutki",
+  "NAVBAR:pila:mfs:entries": "Karty",
+
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
   "ACTION_FORM:BUTTON:cancel": "Anuluj",
   "ACTION_FORM:MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",

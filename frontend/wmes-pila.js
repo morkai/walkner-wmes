@@ -30,7 +30,7 @@
       'app/core/layouts/PrintLayout',
       'app/core/layouts/BlankLayout',
       'app/core/views/NavbarView',
-      'app/core/templates/navbar/inner',
+      'app/core/templates/navbar/pila.wmes.pl/inner',
       'app/core/views/FormView',
       'app/users/views/LogInFormView',
       'app/time',

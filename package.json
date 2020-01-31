@@ -35,6 +35,11 @@
       "backend": 89,
       "frontend": 103,
       "importer": 2
+    },
+    "pila": {
+      "backend": 1,
+      "frontend": 1,
+      "reports": 1
     }
   },
   "description": "Wannabe MES application in Node.js.",

@@ -1,6 +1,7 @@
 'use strict';
 
-const DATA_PATH = `${__dirname}/../data`;
+const ROOT_PATH = `${__dirname}/..`;
+const DATA_PATH = `${ROOT_PATH}/data`;
 const KAIZEN_MULTI = false;
 
 const fs = require('fs');
@@ -129,9 +130,9 @@ exports.modules = [
 ];
 
 const manifestTemplates = {
-  main: fs.readFileSync(`${__dirname}/wmes-manifest.appcache`, 'utf8'),
-  ps: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8'),
-  wh: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
+  main: fs.readFileSync(`${ROOT_PATH}/config/wmes-manifest.appcache`, 'utf8'),
+  ps: fs.readFileSync(`${ROOT_PATH}/config/wmes-manifest-ps.appcache`, 'utf8'),
+  wh: fs.readFileSync(`${ROOT_PATH}/config/wmes-manifest-wh.appcache`, 'utf8')
 };
 const frontendDictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
@@ -149,12 +150,12 @@ const frontendDictionaryModules = {
 };
 
 exports.updater = {
-  manifestPath: `${__dirname}/wmes-manifest.appcache`,
-  packageJsonPath: `${__dirname}/../package.json`,
+  manifestPath: `${ROOT_PATH}/config/wmes-manifest.appcache`,
+  packageJsonPath: `${ROOT_PATH}/package.json`,
   restartDelay: 5000,
   pull: {
     exe: 'git.exe',
-    cwd: `${__dirname}/../`,
+    cwd: ROOT_PATH,
     timeout: 30000
   },
   versionsKey: 'wmes',
@@ -339,8 +340,8 @@ exports.httpServer = {
 exports.httpsServer = {
   host: '0.0.0.0',
   port: 443,
-  key: `${__dirname}/https.key`,
-  cert: `${__dirname}/https.crt`,
+  key: `${ROOT_PATH}/config/https.key`,
+  cert: `${ROOT_PATH}/config/https.crt`,
   availabilityTopics: exports.httpServer.availabilityTopics
 };
 
@@ -383,8 +384,8 @@ exports['mysql:ipt'] = {
 };
 
 exports.express = {
-  staticPath: `${__dirname}/../frontend`,
-  staticBuildPath: `${__dirname}/../frontend-build`,
+  staticPath: `${ROOT_PATH}/frontend`,
+  staticBuildPath: `${ROOT_PATH}/frontend-build`,
   sessionCookieKey: 'wmes.sid',
   sessionCookie: {
     httpOnly: true,
@@ -510,7 +511,7 @@ exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
   javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar',
-  nc12ToCagsJsonPath: `${__dirname}/../data/12nc_to_cags.json`,
+  nc12ToCagsJsonPath: `${DATA_PATH}/12nc_to_cags.json`,
   reports: require('./wmes-reports')
 };
 
