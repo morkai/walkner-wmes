@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/settings/views/SettingsView',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/wmes-ct-state/templates/settings'
 ], function(
+  _,
   SettingsView,
   setUpMrpSelect2,
   template

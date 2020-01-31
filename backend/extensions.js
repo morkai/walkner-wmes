@@ -46,9 +46,16 @@ console.bench = function(label, context, func)
   return result;
 };
 
-if (process.env.NODE_ENV === 'development')
+let chalk = null;
+
+try
 {
-  const chalk = require('chalk');
+  chalk = require('chalk');
+}
+catch (err) {} // eslint-disable-line no-empty
+
+if (chalk && process.env.NODE_ENV === 'development')
+{
   const SEVERITY_COLORS = {
     debug: chalk.bgRgb(255, 255, 255).rgb(0, 0, 0),
     info: chalk.bgRgb(0, 0, 255).rgb(255, 255, 255),

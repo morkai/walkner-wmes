@@ -2,7 +2,7 @@
 
 define([
   'app/pubsub',
-  'app/core/util/bindLoadingMessage',
+  'app/core/util/bindLoadingMessage'
 ], function(
   pubsub,
   bindLoadingMessage
