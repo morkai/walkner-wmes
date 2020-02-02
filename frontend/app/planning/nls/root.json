@@ -484,7 +484,10 @@
     "copySettings:what:workerCount": "Worker counts",
     "copySettings:what:activeTime": "Activity times",
     "copySettings:what:orderPriority": "Order priorities",
-    "copySettings:failure:fetchSettings": "Failed to fetch settings for {plan}."
+    "copySettings:failure:fetchSettings": "Failed to fetch settings for {plan}.",
+
+    "lockReason:mrp": "MRP {mrp} is locked directly.",
+    "lockReason:line": "Line {line} is assigned to a locked MRP: {mrps}"
   },
   "pl": true
 }

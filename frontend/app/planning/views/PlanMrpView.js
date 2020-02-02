@@ -35,6 +35,8 @@ define([
 
     template: template,
 
+    modelProperty: 'plan',
+
     events: {
 
       'mouseleave #-lineOrders': function()
@@ -147,13 +149,41 @@ define([
     getTemplateData: function()
     {
       return {
-        locked: this.plan.settings.isMrpLocked(this.mrp.id),
+        lockReason: this.serializeMrpLockReason(),
         mrp: {
           _id: this.mrp.id,
           name: this.mrp.id,
           description: this.mrp.get('description')
         }
       };
+    },
+
+    serializeMrpLockReason: function()
+    {
+      var view = this;
+      var lockReason = view.plan.settings.getMrpLockReason(view.mrp.id);
+
+      if (!lockReason)
+      {
+        return '';
+      }
+
+      var title = [];
+
+      if (lockReason.mrp)
+      {
+        title.push(view.t('lockReason:mrp', {mrp: view.mrp.id}));
+      }
+
+      lockReason.lines.forEach(function(lockedLine)
+      {
+        title.push(view.t('lockReason:line', {
+          line: lockedLine.line,
+          mrps: lockedLine.mrps.join(', ')
+        }));
+      });
+
+      return title.join('\n');
     },
 
     beforeRender: function()

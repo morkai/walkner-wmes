@@ -483,5 +483,8 @@
   "copySettings:what:workerCount": "Ilości pracowników",
   "copySettings:what:activeTime": "Czasy dostępności",
   "copySettings:what:orderPriority": "Priorytety zleceń",
-  "copySettings:failure:fetchSettings": "Nie udało się pobrać ustawień dla planu {plan}."
+  "copySettings:failure:fetchSettings": "Nie udało się pobrać ustawień dla planu {plan}.",
+
+  "lockReason:mrp": "MRP {mrp} zablokowane bezpośrednio.",
+  "lockReason:line": "Linia {line} znajduje się w zablokowanym MRP: {mrps}"
 }

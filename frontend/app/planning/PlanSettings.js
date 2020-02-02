@@ -283,6 +283,41 @@ define([
       return !!mrp && mrp.get('locked');
     },
 
+    getMrpLockReason: function(mrpId)
+    {
+      var settings = this;
+
+      if (!settings.isMrpLocked(mrpId))
+      {
+        return null;
+      }
+
+      var mrp = settings.isMrpLockedDirectly(mrpId);
+      var lines = [];
+
+      settings.mrps.get(mrpId).lines.forEach(function(mrpLine)
+      {
+        var line = settings.lines.get(mrpLine.id);
+        var lockedMrps = line.get('mrpPriority').filter(function(lockedMrpId)
+        {
+          return lockedMrpId !== mrpId && settings.isMrpLockedDirectly(lockedMrpId);
+        });
+
+        if (lockedMrps.length)
+        {
+          lines.push({
+            line: line.id,
+            mrps: lockedMrps
+          });
+        }
+      });
+
+      return {
+        mrp: mrp,
+        lines: lines
+      };
+    },
+
     cacheLocked: function()
     {
       var settings = this;
