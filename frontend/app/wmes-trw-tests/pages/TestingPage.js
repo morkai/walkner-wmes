@@ -1196,14 +1196,14 @@ define([
       var outputs = [];
       var allIo = page.model.get('allIo');
       var setIo = page.model.get('setIo');
-      var on = 0;
-      var off = 8000;
+      var on = 8000;
+      var off = 0;
 
       // TODO remove
-      if (page.model.get('line').includes('LM-42'))
+      if (page.model.get('line').includes('LM-41'))
       {
-        on = 8000;
-        off = 0;
+        on = 0;
+        off = 8000;
       }
 
       _.forEach(allIo, function(io)
