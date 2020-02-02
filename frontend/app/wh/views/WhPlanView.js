@@ -297,6 +297,12 @@ define([
       var td = e.currentTarget;
       var tr = td.parentNode;
       var whOrder = this.whOrders.get(tr.dataset.id);
+
+      if (!whOrder)
+      {
+        return;
+      }
+
       var orderNo = whOrder.get('order');
       var set = whOrder.get('set');
       var status = whOrder.get('status');
