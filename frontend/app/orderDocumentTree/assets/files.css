@@ -183,3 +183,8 @@
   background: #ffffa6;
   text-decoration: none;
 }
+@media (min-width: 992px) {
+  .orderDocuments-editFile-dialog .modal-dialog {
+    width: 750px;
+  }
+}

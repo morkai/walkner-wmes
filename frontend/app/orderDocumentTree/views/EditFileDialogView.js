@@ -27,6 +27,8 @@ define([
 
     template: template,
 
+    dialogClassName: 'orderDocuments-editFile-dialog',
+
     events: _.assign({
 
       'change input[name="folders[]"]': function()
@@ -73,6 +75,40 @@ define([
           .filter(function(v) { return v >= 1 && v <= 7; })
           .sort(function(a, b) { return a - b; })
           .join(', ');
+      },
+
+      'click .btn[data-action="forceConvert"]': function(e)
+      {
+        var view = this;
+        var btnEl = e.currentTarget;
+
+        btnEl.classList.add('active');
+        btnEl.disabled = true;
+
+        var req = view.ajax({
+          method: 'POST',
+          url: '/orderDocuments/uploads;forceConvert',
+          data: JSON.stringify({
+            nc15: this.model.id,
+            hash: btnEl.dataset.hash
+          })
+        });
+
+        req.fail(function()
+        {
+          btnEl.disabled = false;
+
+          viewport.msg.show({
+            type: 'error',
+            time: 2500,
+            text: view.t('editFile:forceConvert:failure')
+          });
+        });
+
+        req.always(function()
+        {
+          btnEl.classList.remove('active');
+        });
       }
 
     }, pasteDateEvents, FormView.prototype.events),

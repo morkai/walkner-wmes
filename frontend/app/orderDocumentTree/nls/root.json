@@ -108,6 +108,8 @@
     "editFile:submit": "Edit document",
     "editFile:cancel": "Cancel",
     "editFile:openFile": "Open file",
+    "editFile:forceConvert": "Force convert the PDF document to images again",
+    "editFile:forceConvert:failure": "Failed to force the conversion.",
     "editFile:msg:success": "Document edited successfully",
     "editFile:msg:failure": "Failed to edit the document",
 

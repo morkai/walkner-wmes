@@ -107,6 +107,8 @@
   "editFile:submit": "Edytuj dokument",
   "editFile:cancel": "Anuluj",
   "editFile:openFile": "Otwórz plik",
+  "editFile:forceConvert": "Wymuś ponowną konwersję dokumentu PDF na obrazki",
+  "editFile:forceConvert:failure": "Wymuszanie konwersji nie powiodło się.",
   "editFile:msg:success": "Dokument został zmieniony pomyślnie.",
   "editFile:msg:failure": "Nie udało się zmienić dokumentu.",
 
