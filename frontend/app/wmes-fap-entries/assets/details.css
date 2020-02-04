@@ -161,6 +161,14 @@
 .fap-details-panel {
   text-align: left;
 }
+.fap-details-panel-message {
+  display: none;
+  box-shadow: none;
+  margin-bottom: 5px;
+}
+.fap-details-panel-message-show .fap-details-panel-message {
+  display: block;
+}
 .fap-details-panel-hd {
   padding: 7px 0;
   text-align: center;

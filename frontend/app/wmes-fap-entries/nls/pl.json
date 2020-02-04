@@ -160,6 +160,7 @@
   "autolink:order": "Nr zlecenia",
   "autolink:entry": "Zgłoszenie",
 
+  "observers:message": "Dodatkowe osoby zostaną automatycznie dodane wg kategorii po eskalacji zgłoszenia.",
   "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
   "observers:placeholder:auth": "Zaloguj się, aby dodać nową osobę...",
 

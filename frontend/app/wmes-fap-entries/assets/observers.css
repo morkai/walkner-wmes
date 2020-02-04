@@ -1,6 +1,12 @@
 .fap-observers .fap-details-panel-bd {
   height: 298px;
 }
+.fap-observers .fap-details-panel-message {
+  height: 50px;
+}
+.fap-observers.fap-details-panel-message-show .fap-details-panel-bd {
+  height: 243px;
+}
 .fap-observer.fap-is-online .userInfo-label {
   font-weight: bold;
 }

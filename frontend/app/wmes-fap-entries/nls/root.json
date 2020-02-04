@@ -153,6 +153,7 @@
     "autolink:order": "Order no",
     "autolink:entry": "Entry",
 
+    "observers:message": "Additional users will be automatically added after entry escalation.",
     "observers:placeholder": "Add by last name or personnel ID...",
     "observers:placeholder:auth": "Log in to add a new participant...",
 

@@ -1,5 +1,6 @@
-<div class="fap-observers fap-details-panel">
+<div class="fap-observers fap-details-panel <%- showMessage ? 'fap-details-panel-message-show' : '' %>">
   <div class="fap-details-panel-hd"><%- helpers.t('PROPERTY:observers') %></div>
+  <div class="fap-details-panel-message message message-inline message-warning">Dodatkowe osoby zostaną automatycznie dodane po eskalacji zgłoszenia.</div>
   <div class="fap-details-panel-bd fap-details-list">
     <% observers.forEach(function(observer) { %>
     <div class="fap-observer fap-details-list-item <%- observer.online ? 'fap-is-online' : '' %>" data-observer-id="<%- observer._id %>">

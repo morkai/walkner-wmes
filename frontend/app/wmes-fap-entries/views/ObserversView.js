@@ -47,11 +47,13 @@ define([
     {
       this.listenTo(this.model, 'change:observers', _.debounce(this.onObserversChanged.bind(this), 1));
       this.listenTo(this.model, 'change:presence', this.onPresenceChanged);
+      this.listenTo(this.model, 'change:level', this.toggleMessage);
     },
 
     getTemplateData: function()
     {
       return {
+        showMessage: this.isMessageVisible(),
         observers: this.model.serializeDetails().observers
       };
     },
@@ -105,15 +107,29 @@ define([
       this.$('.userInfoPopover').prev().popover('destroy');
     },
 
+    isMessageVisible: function()
+    {
+      var details = this.model.serializeDetails();
+
+      return details.level === 0 && details.observers.length === 1;
+    },
+
+    toggleMessage: function()
+    {
+      this.$el.toggleClass('fap-details-panel-message-show', this.isMessageVisible());
+    },
+
     onObserversChanged: function()
     {
-      var $new = this.renderPartial(template, {observers: this.model.serializeObservers()})
+      var $new = this.renderPartial(template, {showMessage: false, observers: this.model.serializeObservers()})
         .find('.fap-details-panel-bd');
       var $old = this.$('.fap-details-panel-bd');
 
       $old.replaceWith($new);
 
       $new.on('scroll', this.hideUserInfoPopover.bind(this));
+
+      this.toggleMessage();
     },
 
     onPresenceChanged: function(entry, presence, options)
