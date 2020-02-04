@@ -23,6 +23,8 @@ define([
 
   return View.extend({
 
+    modelProperty: 'plan',
+
     template: template,
 
     events: {
@@ -39,6 +41,8 @@ define([
     initialize: function()
     {
       this.sortables = [];
+
+      this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
     },
 
     destroy: function()
@@ -53,13 +57,12 @@ define([
       this.sortables = [];
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var lineSettings = this.line.settings;
       var mrpLineSettings = this.line.mrpSettings(this.mrp.id);
 
       return {
-        idPrefix: this.idPrefix,
         mrp: this.mrp.getLabel(),
         line: this.line.getLabel(),
         mrpPriority: lineSettings.get('mrpPriority').join(','),
@@ -79,11 +82,25 @@ define([
 
     setUpMrpPriority: function()
     {
-      setUpMrpSelect2(this.$id('mrpPriority'), {
-        view: this,
+      var view = this;
+
+      setUpMrpSelect2(view.$id('mrpPriority'), {
+        view: view,
         sortable: true,
         width: '100%',
-        placeholder: t('planning', 'settings:mrpPriority:placeholder')
+        placeholder: view.t('settings:mrpPriority:placeholder'),
+        itemDecorator: function(item)
+        {
+          item.disabled = view.plan.settings.isMrpLocked(item.id);
+          item.locked = item.disabled;
+
+          if (item.locked)
+          {
+            item.icon = {id: 'fa-lock', color: '#e00'};
+          }
+
+          return item;
+        }
       });
     },
 
@@ -93,9 +110,9 @@ define([
         allowClear: true,
         multiple: true,
         data: [
-          {id: 'small', text: t('planning', 'orderPriority:small')},
-          {id: 'easy', text: t('planning', 'orderPriority:easy')},
-          {id: 'hard', text: t('planning', 'orderPriority:hard')}
+          {id: 'small', text: this.t('orderPriority:small')},
+          {id: 'easy', text: this.t('orderPriority:easy')},
+          {id: 'hard', text: this.t('orderPriority:hard')}
         ]
       });
 
@@ -182,7 +199,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'lines:menu:remove:failure')
+          text: view.t('lines:menu:remove:failure')
         });
 
         view.plan.settings.trigger('errored');
@@ -192,6 +209,29 @@ define([
     onDialogShown: function()
     {
       this.$id('mrpPriority').select2('focus');
+    },
+
+    onSettingsChanged: function(changes)
+    {
+      if (!changes.locked)
+      {
+        return;
+      }
+
+      var view = this;
+      var $mrpPriority = view.$id('mrpPriority');
+      var oldMrpPriority = view.line.settings.get('mrpPriority');
+      var newMrpPriority = $mrpPriority
+        .val()
+        .split(',')
+        .filter(function(mrp)
+        {
+          return mrp.length > 0 && (_.includes(oldMrpPriority, mrp) || !view.plan.settings.isMrpLocked(mrp));
+        });
+
+      $mrpPriority.select('destroy').val(newMrpPriority.join(','));
+
+      this.setUpMrpPriority();
     }
 
   });

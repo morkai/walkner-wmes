@@ -25,6 +25,8 @@ define([
 
   return View.extend({
 
+    modelProperty: 'plan',
+
     template: template,
 
     events: {
@@ -49,6 +51,11 @@ define([
         this.toggleSubmit();
       }
 
+    },
+
+    initialize: function()
+    {
+      this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
     },
 
     afterRender: function()
@@ -85,9 +92,13 @@ define([
             maxLineLength = prodLine.id.length;
           }
 
+          var disabled = view.plan.settings.isLineLocked(prodLine.id);
+
           return {
             id: prodLine.id,
-            text: _.escape(prodLine.get('description'))
+            text: prodLine.get('description'),
+            disabled: disabled,
+            locked: disabled
           };
         })
         .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
@@ -104,7 +115,7 @@ define([
         },
         formatSelection: function(item)
         {
-          return _.escape(item.id + ': ' + item.text);
+          return _.escape(item.id) + ': ' + _.escape(item.text);
         },
         formatResult: function(item)
         {
@@ -115,7 +126,15 @@ define([
             id += ' ';
           }
 
-          return '<span class="text-mono">' + id.replace(/ /g, '&nbsp;') + '</span>: ' + item.text;
+          var icon = '';
+
+          if (item.disabled)
+          {
+            icon = '<i class="fa fa-lock" style="color: #e00"></i> ';
+          }
+
+          return '<span class="text-mono">' + _.escape(id).replace(/ /g, '&nbsp;') + '</span>: '
+            + '<span class="text-small">' + icon + _.escape(item.text) + '</span>';
         }
       });
     },
@@ -133,34 +152,66 @@ define([
 
     addLine: function(lineId)
     {
-      if (this.$id(lineId).select2('focus').length)
+      var view = this;
+
+      if (view.$id(lineId).select2('focus').length)
       {
         return;
       }
 
-      var lineSettings = this.plan.settings.lines.get(lineId);
-      var mrpPriority = lineSettings ? lineSettings.get('mrpPriority') : [];
+      var lineSettings = view.plan.settings.lines.get(lineId);
+      var mrpPriority = lineSettings ? lineSettings.get('mrpPriority').concat([]) : [];
 
-      if (!_.includes(mrpPriority, this.mrp.id))
+      if (!_.includes(mrpPriority, view.mrp.id))
       {
-        mrpPriority.push(this.mrp.id);
+        mrpPriority.push(view.mrp.id);
       }
 
-      var id = this.idPrefix + '-' + lineId;
+      var id = view.idPrefix + '-' + lineId;
       var $group = $('<div class="form-group"></div>');
       var $label = $('<label></label>').attr('for', id).text(lineId);
-      var $input = $('<input type="text" autocomplete="new-password">').attr('id', id).attr('data-line-id', lineId).val(mrpPriority.join(','));
+      var $input = $('<input type="text" autocomplete="new-password">')
+        .attr('id', id)
+        .attr('data-line-id', lineId)
+        .val(mrpPriority.join(','));
 
-      $group.append($label).append($input).appendTo(this.$id('lines'));
+      $group.append($label).append($input).appendTo(view.$id('lines'));
+
+      view.setUpMrpPriority($input, true);
+    },
+
+    setUpMrpPriority: function($input, focus)
+    {
+      var view = this;
+      var lineId = $input.attr('data-line-id');
 
       setUpMrpSelect2($input, {
-        view: this,
+        view: view,
         sortable: true,
         width: '100%',
-        placeholder: t('planning', 'settings:mrpPriority:placeholder')
+        placeholder: view.t('settings:mrpPriority:placeholder'),
+        itemDecorator: function(item)
+        {
+          item.disabled = view.plan.settings.isMrpLocked(item.id);
+          item.locked = item.disabled;
+
+          if (item.locked)
+          {
+            item.icon = {id: 'fa-lock', color: '#e00'};
+          }
+
+          return item;
+        }
       });
 
-      $input.select2('focus');
+      if (view.plan.settings.isLineLocked(lineId))
+      {
+        $input.select2('readonly', true);
+      }
+      else if (focus)
+      {
+        $input.select2('focus');
+      }
     },
 
     submitForm: function()
@@ -200,7 +251,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'lines:menu:mrpPriority:failure')
+          text: view.t('lines:menu:mrpPriority:failure')
         });
 
         view.plan.settings.trigger('errored');
@@ -210,6 +261,36 @@ define([
     onDialogShown: function()
     {
       this.$id('line').select2('focus');
+    },
+
+    onSettingsChanged: function(changes)
+    {
+      if (!changes.locked)
+      {
+        return;
+      }
+
+      var view = this;
+
+      view.setUpLineSelect2();
+
+      view.$('input[data-line-id]').each(function()
+      {
+        var $mrpPriority = view.$(this);
+        var lineSettings = view.plan.settings.lines.get(this.dataset.lineId);
+        var oldMrpPriority = lineSettings.get('mrpPriority');
+        var newMrpPriority = $mrpPriority
+          .val()
+          .split(',')
+          .filter(function(mrp)
+          {
+            return mrp.length > 0 && (_.includes(oldMrpPriority, mrp) || !view.plan.settings.isMrpLocked(mrp));
+          });
+
+        $mrpPriority.select('destroy').val(newMrpPriority.join(','));
+
+        view.setUpMrpPriority($mrpPriority, false);
+      });
     }
 
   });

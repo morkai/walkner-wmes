@@ -68,6 +68,11 @@ define([
       throw new Error('Unspecified $input!');
     }
 
+    if (!options)
+    {
+      options = {};
+    }
+
     if (mrps === null)
     {
       reload();
@@ -77,7 +82,10 @@ define([
       width: '300px',
       allowClear: true,
       multiple: true,
-      data: mrps,
+      data: !options.itemDecorator ? mrps : mrps.map(function(item)
+      {
+        return options.itemDecorator(_.clone(item), false);
+      }),
       minimumResultsForSearch: 1,
       matcher: function(term, text, item)
       {
@@ -110,6 +118,12 @@ define([
         else
         {
           html.push('</span><span class="text-small">: ');
+
+          if (item.icon)
+          {
+            html.push('<i class="fa ' + item.icon.id + '" style="color: ' + (item.icon.color || '#000') + '"></i> ');
+          }
+
           select2.util.markMatch(item.text, query.term, html, e);
           html.push('</span>');
         }
@@ -119,23 +133,34 @@ define([
       tokenizer: function(input, selection, selectCallback)
       {
         var result = input;
-        var options = {};
+        var items = {};
 
         selection.forEach(function(item)
         {
-          options[item.id] = true;
+          items[item.id] = true;
         });
 
         (input.match(/[A-Z0-9]{3,}[^A-Z0-9]/ig) || []).forEach(function(mrp)
         {
           result = result.replace(mrp, '');
-
           mrp = mrp.toUpperCase().replace(/[^A-Z0-9]+/g, '');
 
-          if (!options[mrp])
+          if (items[mrp])
           {
-            selectCallback({id: mrp, text: mrp});
-            options[mrp] = true;
+            return;
+          }
+
+          var item = {id: mrp, text: mrp};
+
+          if (options.itemDecorator)
+          {
+            item = options.itemDecorator(item, true);
+          }
+
+          if (!item.locked && !item.disabled)
+          {
+            selectCallback(item);
+            items[mrp] = true;
           }
         });
 
@@ -143,7 +168,7 @@ define([
       }
     }, options));
 
-    if (options && options.sortable)
+    if (options.sortable)
     {
       var sortable = new Sortable($input.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
@@ -171,7 +196,7 @@ define([
       }
     }
 
-    if (options && options.own && options.view)
+    if (options.own && options.view)
     {
       ownMrps.attach(options.view, $input);
     }
@@ -182,7 +207,17 @@ define([
         .val()
         .split(',')
         .filter(function(mrp) { return mrp.length; })
-        .map(function(mrp) { return {id: mrp, text: mrp}; })
+        .map(function(mrp)
+        {
+          var item = {id: mrp, text: mrp};
+
+          if (options.itemDecorator)
+          {
+            item = options.itemDecorator(item, true);
+          }
+
+          return item;
+        })
     );
 
     return $input;
