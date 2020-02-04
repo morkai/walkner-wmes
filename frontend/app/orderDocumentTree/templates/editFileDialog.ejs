@@ -45,7 +45,8 @@
         <input type="hidden" name="files[<%- i %>].type" value="application/pdf">
         <input type="date" name="files[<%- i %>].date" class="form-control" required min="2000-01-01" max="<%- time.getMoment().startOf('day').add(1, 'year').format('YYYY-MM-DD') %>">
       </label>
-      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?pdf=1&hash=<%- file.hash %>" target="_blank" title="<%- helpers.t('editFile:openFile') %>"><i class="fa fa-file-o"></i></a>
+      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?pdf=1&hash=<%- file.hash %>" target="_blank" title="<%- helpers.t('editFile:openFile:pdf') %>"><i class="fa fa-file-pdf-o"></i></a>
+      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?hash=<%- file.hash %>" target="_blank" title="<%- helpers.t('editFile:openFile:img') %>"><i class="fa fa-file-image-o"></i></a>
       <button data-action="forceConvert" data-hash="<%- file.hash %>" class="btn btn-default" type="button" title="<%- helpers.t('editFile:forceConvert') %>"><i class="fa fa-wrench"></i></button>
       <% if (file.updatedAt && file.updater) { %>
       <span style="margin-left: 10px; line-height: 34px; vertical-align: middle">
