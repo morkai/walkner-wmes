@@ -161,7 +161,7 @@ define([
       },
       'planning.generator.started': function(message)
       {
-        if (message.date === this.plan.id)
+        if (message.date === this.plan.id && !this.$msg)
         {
           this.$msg = viewport.msg.show({
             type: 'info',
