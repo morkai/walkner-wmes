@@ -23,6 +23,17 @@
     </div>
   </div>
   <div class="form-group">
+    <label><%- helpers.t('filter:anyHard') %></label>
+    <div id="<%- idPrefix %>-anyHard" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="checkbox" name="anyHard[]" value="observations"> <%- helpers.t('filter:anyHard:observations') %>
+      </label>
+      <label class="btn btn-default">
+        <input type="checkbox" name="anyHard[]" value="risks"> <%- helpers.t('filter:anyHard:risks') %>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-company"><%- helpers.t('FORM:company') %></label>
     <input id="<%- idPrefix %>-company" name="company" type="text" autocomplete="new-password">
   </div>

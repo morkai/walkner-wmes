@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'js2form',
   'app/time',
   'app/core/View',
@@ -12,6 +13,7 @@ define([
   'app/kaizenOrders/dictionaries',
   'app/behaviorObsCards/templates/countReportFilter'
 ], function(
+  _,
   js2form,
   time,
   View,
@@ -45,6 +47,7 @@ define([
 
       buttonGroup.toggle(this.$id('interval'));
       buttonGroup.toggle(this.$id('shift'));
+      buttonGroup.toggle(this.$id('anyHard'));
 
       this.$id('sections').select2({
         width: '306px',
@@ -61,7 +64,7 @@ define([
       });
 
       this.$id('company').select2({
-        width: '434px',
+        width: '350px',
         allowClear: true,
         multiple: true,
         data: companies.map(idAndLabel)
@@ -78,6 +81,17 @@ define([
       var model = this.model;
       var from = +model.get('from');
       var to = +model.get('to');
+      var anyHard = [];
+
+      if (model.get('anyHardObservations'))
+      {
+        anyHard.push('observations');
+      }
+
+      if (model.get('anyHardRisks'))
+      {
+        anyHard.push('risks');
+      }
 
       return {
         interval: model.get('interval'),
@@ -87,13 +101,15 @@ define([
         observerSections: model.get('observerSections').join(','),
         superior: model.get('superior'),
         company: model.get('company').join(','),
-        shift: model.get('shift')
+        shift: model.get('shift'),
+        anyHard: anyHard
       };
     },
 
     changeFilter: function()
     {
       var range = dateTimeRange.serialize(this);
+      var anyHard = buttonGroup.getValue(this.$id('anyHard'));
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
@@ -102,7 +118,9 @@ define([
         observerSections: this.$id('observerSections').val(),
         superior: this.$id('superior').val(),
         company: this.$id('company').val(),
-        shift: +buttonGroup.getValue(this.$id('shift'))
+        shift: +buttonGroup.getValue(this.$id('shift')),
+        anyHardObservations: _.includes(anyHard, 'observations') ? 1 : 0,
+        anyHardRisks: _.includes(anyHard, 'risks') ? 1 : 0
       };
 
       query.sections = query.sections === '' ? [] : query.sections.split(',');

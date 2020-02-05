@@ -43,7 +43,9 @@ define([
         observerSections: [],
         superior: '',
         company: [],
-        shift: 0
+        shift: 0,
+        anyHardObservations: 0,
+        anyHardRisks: 0
       };
     },
 
@@ -57,7 +59,13 @@ define([
       options.data = _.assign(
         options.data || {},
         _.pick(this.attributes, [
-          'from', 'to', 'interval', 'sections', 'observerSections', 'superior', 'company', 'shift'
+          'from', 'to', 'interval',
+          'sections',
+          'observerSections',
+          'superior',
+          'company',
+          'shift',
+          'anyHardObservations', 'anyHardRisks'
         ])
       );
 
@@ -78,7 +86,9 @@ define([
         + '&observerSections=' + this.get('observerSections')
         + '&superior=' + this.get('superior')
         + '&company=' + this.get('company')
-        + '&shift=' + this.get('shift');
+        + '&shift=' + this.get('shift')
+        + '&anyHardObservations=' + this.get('anyHardObservations')
+        + '&anyHardRisks=' + this.get('anyHardRisks');
     },
 
     parse: function(report)
@@ -285,7 +295,9 @@ define([
         observerSections: _.isEmpty(query.observerSections) ? [] : query.observerSections.split(','),
         superior: query.superior || '',
         company: _.isEmpty(query.company) ? [] : query.company.split(','),
-        shift: +query.shift || 0
+        shift: +query.shift || 0,
+        anyHardObservations: +query.anyHardObservations || 0,
+        anyHardRisks: +query.anyHardRisks || 0
       });
     }
 
