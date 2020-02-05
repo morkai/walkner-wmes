@@ -437,6 +437,8 @@ define([
 
     onFileLoaded: function()
     {
+      this.controlsView.checkNotes();
+
       // PDF Viewer memory leak was fixed in Chrome v49
       if (BROWSER_VERSION[1] !== 'Chrome' || BROWSER_VERSION[2] >= 49)
       {

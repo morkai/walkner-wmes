@@ -7,6 +7,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/embedded',
+  'app/core/util/getShiftStartInfo',
   'app/data/localStorage',
   'app/production/snManager',
   './LocalOrderPickerView',
@@ -21,6 +22,7 @@ define([
   viewport,
   View,
   embedded,
+  getShiftStartInfo,
   localStorage,
   snManager,
   LocalOrderPickerView,
@@ -288,7 +290,8 @@ define([
       {
         this.control(e, this.lockUi);
       },
-      'click #-confirm': 'confirmDocument'
+      'click #-confirm': 'confirmDocument',
+      'click #-notes': 'confirmNotes'
     },
 
     localTopics: {
@@ -1145,6 +1148,82 @@ define([
         .find('.fa-spinner')
         .removeClass('fa-spinner fa-spin')
         .addClass('fa-thumbs-up');
+    },
+
+    checkNotes: function()
+    {
+      var view = this;
+
+      if (view.model.getOverallConfirmationStatus() !== 'confirmed')
+      {
+        return;
+      }
+
+      var currentOrder = view.model.getCurrentOrder();
+
+      if (!currentOrder.no)
+      {
+        return;
+      }
+
+      if (!currentOrder.notes.length)
+      {
+        return;
+      }
+
+      var notesState = JSON.parse(localStorage.getItem('WMES_DOCS_NOTES') || 'null') || {
+        order: '',
+        shift: 0
+      };
+      var currentShift = getShiftStartInfo(Date.now()).startTime;
+
+      if (notesState.order === currentOrder.no && notesState.shift === currentShift)
+      {
+        return;
+      }
+
+      this.showNotes();
+    },
+
+    showNotes: function()
+    {
+      this.hideNotes();
+
+      var $notes = this.$id('notes');
+      var html = '<ul>';
+
+      this.model.getCurrentOrder().notes.forEach(function(note)
+      {
+        html += '<li>► ' + _.escape(note);
+      });
+
+      html += '</ul>';
+
+      $notes.find('.orderDocuments-notes-bd').html(html);
+
+      $notes.removeClass('hidden');
+
+      var $content = $notes.find('.orderDocuments-notes-content');
+
+      $content.css({
+        marginTop: ($content.outerHeight() / 2 * -1) + 'px',
+        marginLeft: ($content.outerWidth() / 2 * -1) + 'px'
+      });
+    },
+
+    hideNotes: function()
+    {
+      this.$id('notes').addClass('hidden');
+    },
+
+    confirmNotes: function()
+    {
+      localStorage.setItem('WMES_DOCS_NOTES', JSON.stringify({
+        order: this.model.getCurrentOrder().no,
+        shift: getShiftStartInfo(Date.now()).startTime
+      }));
+
+      this.hideNotes();
     }
 
   });

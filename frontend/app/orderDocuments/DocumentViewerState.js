@@ -40,7 +40,8 @@ define([
       name: '',
       documents: {},
       confirmations: {},
-      nc15: null
+      nc15: null,
+      notes: []
     };
   }
 
@@ -79,7 +80,7 @@ define([
         window.WMES_LINE_ID = (this.get('prodLine') || {_id: null})._id;
       });
 
-      this.on('change:prodLine', function()
+      this.on('change:station', function()
       {
         window.WMES_STATION = this.get('station');
       });
@@ -336,7 +337,8 @@ define([
         name: orderData.name,
         documents: {},
         confirmations: {},
-        nc15: null
+        nc15: null,
+        notes: orderData.notes || []
       };
 
       newOrder.documents.ORDER = t('orderDocuments', 'order');

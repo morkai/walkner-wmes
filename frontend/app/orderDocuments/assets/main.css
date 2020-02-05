@@ -2,6 +2,7 @@
 @import url(../../production/assets/taktTime.css);
 @import url(../../production/assets/bomChecker.css);
 @import url(./bom.css);
+@import url(./notes.css);
 
 .orderDocuments {
   background-color: #ccc;
@@ -387,6 +388,7 @@
   left: 0;
   right: 0;
   user-select: none;
+  z-index: 4000;
 }
 .orderDocuments-uiLock-inner {
   display: flex;

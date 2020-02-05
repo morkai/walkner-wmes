@@ -217,6 +217,7 @@
 .orderDocuments-bom-documentPages-more {
 
 }
+.is-embedded .orderDocuments-bom-documentPages-more-menu,
 .orderDocuments-bom-documentPages-more-menu {
   display: flex;
   flex-wrap: wrap;
@@ -230,6 +231,7 @@
 .orderDocuments-bom-documentPages-more-menu > li {
   flex: 0 0 auto;
 }
+.is-embedded .orderDocuments-bom-documentPages-more-menu > li > a,
 .orderDocuments-bom-documentPages-more-menu > li > a {
   padding: 0;
   width: 75px;

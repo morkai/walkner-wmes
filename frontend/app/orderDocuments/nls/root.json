@@ -83,7 +83,10 @@
     "spigot:request": "Scan a valid Spigot:<br>{component}",
     "spigot:checking": "<i class='fa fa-spinner fa-spin'></i> Checking the Spigot...",
     "spigot:failure": "Scanned an invalid Spigot.",
-    "spigot:success": "Scanned a valid Spigot."
+    "spigot:success": "Scanned a valid Spigot.",
+
+    "notes:hd": "Order notes",
+    "notes:ft": "Touch anywhere to close this message."
   },
   "pl": true
 }

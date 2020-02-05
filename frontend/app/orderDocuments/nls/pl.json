@@ -82,5 +82,8 @@
   "spigot:request": "Zeskanuj Spigot:<br>{component}",
   "spigot:checking": "<i class='fa fa-spinner fa-spin'></i> Sprawdzanie Spigota...",
   "spigot:failure": "Zeskanowano nieprawidłowy Spigot.",
-  "spigot:success": "Zeskanowano prawidłowy Spigot."
+  "spigot:success": "Zeskanowano prawidłowy Spigot.",
+
+  "notes:hd": "Uwagi do zlecenia",
+  "notes:ft": "Dotknij w dowolnym miejscu, aby ukryć ten komunikat."
 }
