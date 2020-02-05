@@ -102,6 +102,15 @@ define([
         attrs.localOrder.confirmations = {};
       }
 
+      var client = window.WMES_CLIENT;
+
+      if (client)
+      {
+        attrs.prodLine._id = client.config.line;
+        attrs.prodLine.name = client.config.line.replace(/[_\s]+/g, ' ').replace(/~.*?$/, '').trim();
+        attrs.station = client.config.station;
+      }
+
       this.set(attrs);
     },
 

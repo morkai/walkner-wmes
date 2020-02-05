@@ -57,6 +57,7 @@ define([
 
     syncingLogEntries = null;
 
+    localStorage.setItem(SYNCING_KEY, ''); // TODO Remove after all clients are updated with removeItem() fix!
     localStorage.removeItem(SYNCING_KEY);
 
     broker.publish('production.synced', {message: 'DISCONNECT'});
@@ -71,14 +72,14 @@ define([
       return;
     }
 
-    syncingLogEntries = localStorage.getItem(STORAGE_KEY);
+    syncingLogEntries = localStorage.getItem(STORAGE_KEY) || null;
 
     if (syncingLogEntries === null)
     {
       return;
     }
 
-    var unsyncedLogEntries = localStorage.getItem(SYNCING_KEY);
+    var unsyncedLogEntries = localStorage.getItem(SYNCING_KEY) || null;
 
     if (unsyncedLogEntries !== null)
     {
@@ -86,6 +87,7 @@ define([
     }
 
     localStorage.setItem(SYNCING_KEY, syncingLogEntries);
+    localStorage.setItem(STORAGE_KEY, ''); // TODO Remove after all clients are updated with removeItem() fix!
     localStorage.removeItem(STORAGE_KEY);
 
     broker.publish('production.syncing');
@@ -100,7 +102,7 @@ define([
 
     req.fail(function(jqXhr)
     {
-      var currentLogEntries = localStorage.getItem(STORAGE_KEY);
+      var currentLogEntries = localStorage.getItem(STORAGE_KEY) || null;
 
       if (currentLogEntries === null)
       {
@@ -112,6 +114,7 @@ define([
       }
 
       localStorage.setItem(STORAGE_KEY, currentLogEntries);
+      localStorage.setItem(SYNCING_KEY, ''); // TODO Remove after all clients are updated with removeItem() fix!
       localStorage.removeItem(SYNCING_KEY);
 
       syncingLogEntries = null;
@@ -125,6 +128,7 @@ define([
 
     req.done(function(data)
     {
+      localStorage.setItem(SYNCING_KEY, ''); // TODO Remove after all clients are updated with removeItem() fix!
       localStorage.removeItem(SYNCING_KEY);
 
       syncingLogEntries = null;

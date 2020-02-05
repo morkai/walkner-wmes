@@ -60,6 +60,16 @@ define([
     events: {
       'click #-line': function()
       {
+        if (window.WMES_CLIENT)
+        {
+          if (embedded.isEnabled())
+          {
+            embedded.actions.config();
+          }
+
+          return;
+        }
+
         var dialogView = new UnlockDialogView({
           model: this.model
         });

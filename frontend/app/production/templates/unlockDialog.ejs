@@ -1,4 +1,5 @@
 <form class="production-<%- type %>Dialog" autocomplete="off">
+  <input id="<%- idPrefix %>-apiKey" type="hidden" value="<%- apiKey %>">
   <% if (type === 'unlock') { %>
   <div class="production-form-btn-group">
     <label class="control-label is-required"><%- t('unlockDialog:prodLine') %></label>
@@ -20,6 +21,7 @@
     </div>
   </div>
   <% } %>
+  <% if (!apiKey) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('unlockDialog:login') %></label>
     <input id="<%- idPrefix %>-login" class="form-control is-embedded" type="text" autocomplete="new-password" required data-vkb="alpha numeric">
@@ -28,6 +30,7 @@
     <label for="<%- idPrefix %>-password" class="control-label is-required"><%- t('unlockDialog:password') %></label>
     <input id="<%- idPrefix %>-password" class="form-control is-embedded" type="password" autocomplete="new-password" required data-vkb="alpha numeric extended">
   </div>
+  <% } %>
   <div class="form-actions">
     <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit"><%- t('unlockDialog:' + type) %></button>
     <button class="btn btn-lg btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>

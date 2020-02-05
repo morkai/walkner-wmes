@@ -190,6 +190,8 @@
     "PRIVILEGE:TRW:PROGRAM": "TRW: programming",
     "PRIVILEGE:LUCA:VIEW": "Luca: view",
     "PRIVILEGE:LUCA:MANAGE": "Luca: manage",
+    "PRIVILEGE:WMES:CLIENTS:VIEW": "WMES clients: view",
+    "PRIVILEGE:WMES:CLIENTS:MANAGE": "WMES clients: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

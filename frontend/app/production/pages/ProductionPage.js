@@ -596,6 +596,18 @@ define([
         return page.listenToOnce(model, 'change:_id', page.delayProductionJoin);
       }
 
+      var config = window.WMES_CLIENT && window.WMES_CLIENT.config || {};
+
+      if (config.line && config.station)
+      {
+        if (model.prodLine.id !== config.line || model.prodLine.station !== config.station)
+        {
+          page.lock();
+
+          return;
+        }
+      }
+
       if (!this.pendingIsaChanges)
       {
         this.pendingIsaChanges = [];
@@ -718,6 +730,12 @@ define([
         },
         333
       );
+    },
+
+    lock: function()
+    {
+      this.model.setSecretKey(null);
+      window.location.reload();
     },
 
     subscribeForShiftChanges: function()

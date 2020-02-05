@@ -303,14 +303,18 @@ function(
 
   View.prototype.$id = function(idSuffix)
   {
-    var id = '#';
+    var selector = '#';
 
     if (_.isString(this.idPrefix))
     {
-      id += this.idPrefix + '-';
+      selector += this.idPrefix + '-';
     }
 
-    return $(id + idSuffix);
+    selector += idSuffix;
+
+    var $el = this.$el.find(selector);
+
+    return $el.length ? $el : $(selector);
   };
 
   View.prototype.getDefaultModel = function()

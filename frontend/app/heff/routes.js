@@ -19,8 +19,18 @@ define([
 
   router.map('/', function()
   {
-    window.WMES_LINE_ID = localStorage.getItem('HEFF:LINE');
-    window.WMES_STATION = localStorage.getItem('HEFF:STATION');
+    var line = localStorage.getItem('HEFF:LINE');
+    var station = localStorage.getItem('HEFF:STATION');
+    var client = window.WMES_CLIENT;
+
+    if (client && client.config && client.config.line && client.config.station)
+    {
+      line = client.config.line;
+      station = client.config.station;
+    }
+
+    window.WMES_LINE_ID = line;
+    window.WMES_STATION = station;
 
     viewport.showPage(new View({
       layoutName: 'blank',

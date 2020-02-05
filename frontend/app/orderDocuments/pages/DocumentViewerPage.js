@@ -165,9 +165,7 @@ define([
 
     load: function(when)
     {
-      this.model.load();
-
-      return when();
+      return when(this.model.load());
     },
 
     afterRender: function()

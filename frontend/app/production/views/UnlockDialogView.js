@@ -52,6 +52,7 @@ define([
         var req = {
           prodLine: line,
           station: +station,
+          apiKey: this.$id('apiKey').val(),
           login: this.$id('login').val(),
           password: this.$id('password').val()
         };
@@ -91,6 +92,7 @@ define([
     {
       return {
         type: 'unlock',
+        apiKey: window.WMES_CLIENT && window.WMES_CLIENT.apiKey || '',
         prodLine: ''
       };
     },
@@ -128,10 +130,18 @@ define([
       req.done(function(res)
       {
         var html = '';
+        var config = window.WMES_CLIENT && window.WMES_CLIENT.config || {};
 
         _.forEach(res.collection, function(line)
         {
-          html += '<button type="button" class="btn btn-lg btn-default">' + _.escape(line._id) + '</button>';
+          var className = 'btn btn-lg btn-default';
+
+          if (line._id === config.line)
+          {
+            className += ' active';
+          }
+
+          html += '<button type="button" class="' + className + '">' + _.escape(line._id) + '</button>';
         });
 
         view.$id('list').html(html);
@@ -140,6 +150,15 @@ define([
         if (view.options.vkb)
         {
           view.options.vkb.reposition();
+        }
+
+        var selectedLineEl = view.$id('list').find('.active')[0];
+
+        if (selectedLineEl && config.station)
+        {
+          selectedLineEl.scrollIntoView();
+          view.$('input[name="station"][value="' + config.station + '"]').click();
+          view.$id('submit').click();
         }
       });
     },

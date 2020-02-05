@@ -102,6 +102,7 @@ define([
       });
 
       reqData.station = parseInt(reqData.station, 10) || 0;
+      reqData.apiKey = this.options.apiKey;
 
       var req = view.ajax({
         type: 'POST',
@@ -150,6 +151,16 @@ define([
     setUpProdLineSelect2: function()
     {
       var view = this;
+
+      if (window.WMES_CLIENT)
+      {
+        this.$id('prodLineId').prop('readOnly', true).addClass('form-control');
+        this.$id('prodLineName').prop('readOnly', true);
+        this.$id('station').prop('readOnly', true);
+
+        return;
+      }
+
       var prodLineCollection = new ProdLineCollection(null, {
         rqlQuery: 'deactivatedAt=null&sort(_id)'
       });
@@ -177,7 +188,8 @@ define([
           {
             term = term.toUpperCase();
 
-            return text.toUpperCase().indexOf(term) !== -1 || option.description.toUpperCase().indexOf(term) !== -1;
+            return text.toUpperCase().indexOf(term) !== -1
+              || option.description.toUpperCase().indexOf(term) !== -1;
           },
           formatResult: function(result)
           {
@@ -201,11 +213,6 @@ define([
         .replace(/\s+/, ' ')
         .replace(/~.*?$/, '')
         .trim();
-    },
-
-    onDialogShown: function()
-    {
-      this.$id('prodLineId').focus();
     }
 
   });

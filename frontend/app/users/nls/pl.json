@@ -191,6 +191,8 @@
   "PRIVILEGE:TRW:PROGRAM": "TRW: programowanie",
   "PRIVILEGE:LUCA:VIEW": "Luca: przeglądanie",
   "PRIVILEGE:LUCA:MANAGE": "Luca: zarządzanie",
+  "PRIVILEGE:WMES:CLIENTS:VIEW": "Klienci WMES: przeglądanie",
+  "PRIVILEGE:WMES:CLIENTS:MANAGE": "Klienci WMES: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

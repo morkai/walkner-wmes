@@ -176,6 +176,18 @@
   if (window.IS_EMBEDDED)
   {
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
+
+    window.addEventListener('message', function onInit(e)
+    {
+      var msg = e.data;
+
+      if (msg && msg.type === 'init')
+      {
+        window.removeEventListener('message', onInit);
+
+        window.WMES_CLIENT = msg.data;
+      }
+    });
   }
 
   if (window.SERVICE_WORKER)

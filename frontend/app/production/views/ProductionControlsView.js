@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/embedded',
   'app/mor/Mor',
   'app/mor/views/MorView',
   './UnlockDialogView',
@@ -15,6 +16,7 @@ define([
   user,
   viewport,
   View,
+  embedded,
   Mor,
   MorView,
   UnlockDialogView,
@@ -72,8 +74,34 @@ define([
       'click a.production-controls-addNearMiss': 'addNearMiss',
       'click a.production-controls-addSuggestion': 'addSuggestion',
       'click a.production-controls-addObservation': 'addObservation',
-      'click a.production-controls-lock': 'lock',
-      'click a.production-controls-unlock': 'unlock',
+      'click a.production-controls-lock': function()
+      {
+        if (window.WMES_CLIENT)
+        {
+          if (embedded.isEnabled())
+          {
+            embedded.actions.config();
+          }
+        }
+        else
+        {
+          this.lock();
+        }
+      },
+      'click a.production-controls-unlock': function()
+      {
+        if (window.WMES_CLIENT)
+        {
+          if (embedded.isEnabled())
+          {
+            embedded.actions.config();
+          }
+        }
+        else
+        {
+          this.unlock();
+        }
+      },
       'mouseover a.production-controls-lock': function(e)
       {
         this.$(e.target).removeClass('fa-unlock').addClass('fa-lock');

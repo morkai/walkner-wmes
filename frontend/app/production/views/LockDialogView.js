@@ -63,6 +63,7 @@ define([
     {
       return {
         type: 'lock',
+        apiKey: '',
         prodLine: this.model.prodLine.id
       };
     },

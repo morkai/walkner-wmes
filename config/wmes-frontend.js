@@ -107,6 +107,7 @@ exports.modules = [
   'wmes-drilling',
   'wmes-wiring',
   'wmes-ct-frontend',
+  'wmes-clients',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
