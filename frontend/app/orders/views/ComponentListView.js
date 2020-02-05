@@ -102,26 +102,41 @@ define([
       this.document = null;
       this.window = null;
       this.contents = null;
+
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change:bom', this.render);
+      });
     },
 
     getTemplateData: function()
     {
+      var notes = [];
+      var components = [];
+
+      this.model.get('bom').forEach(function(component)
+      {
+        component = component.toJSON();
+
+        if (!component.nc12)
+        {
+          notes.push(component);
+        }
+        else
+        {
+          components.push(component);
+        }
+      });
+
       return {
         paint: !!this.options.paint,
         linkPfep: !!this.options.linkPfep && user.isAllowedTo('PFEP:VIEW'),
-        bom: this.model.get('bom').toJSON()
+        bom: notes.concat(components)
       };
-    },
-
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'change:bom', this.render);
     },
 
     afterRender: function()
     {
-      this.listenToOnce(this.model, 'change:bom', this.render);
-
       this.$el.toggleClass('hidden', this.model.get('bom').length === 0);
 
       this.updateItems();
@@ -159,7 +174,9 @@ define([
         return;
       }
 
-      view.loadContentsReq = view.ajax({url: '/orders/' + view.model.id + '/documentContents'});
+      view.loadContentsReq = view.ajax({
+        url: '/orders/' + view.model.id + '/documentContents'
+      });
 
       view.loadContentsReq.always(function()
       {
