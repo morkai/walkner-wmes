@@ -42,6 +42,9 @@
 .page[data-id="orderDetails"] .is-clickable .table-responsive {
   max-height: 388px;
 }
+.page[data-id="orderDetails"] .is-expanded .table-responsive {
+  max-height: none;
+}
 .orders-change + .orders-change {
   margin-top: 15px;
   padding-top: 15px;

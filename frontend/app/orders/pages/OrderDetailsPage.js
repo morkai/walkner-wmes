@@ -6,8 +6,10 @@ define([
   'app/i18n',
   'app/user',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/embedded',
   'app/core/pages/DetailsPage',
   'app/data/loadedModules',
+  'app/data/localStorage',
   'app/delayReasons/storage',
   'app/printers/views/PrinterPickerView',
   'app/wmes-fap-entries/dictionaries',
@@ -34,8 +36,10 @@ define([
   t,
   user,
   bindLoadingMessage,
+  embedded,
   DetailsPage,
   loadedModules,
+  localStorage,
   delayReasonsStorage,
   PrinterPickerView,
   fapDictionaries,
@@ -116,6 +120,21 @@ define([
         $('html, body').stop(true, false).animate({scrollTop: y});
 
         return false;
+      },
+      'click .btn[data-action="togglePanel"]': function(e)
+      {
+        var $action = this.$(e.currentTarget);
+        var $panel = $action.closest('.panel');
+        var panelId = $panel[0].dataset.id;
+        var panelToggles = JSON.parse(localStorage.getItem('WMES_ORDERS_PANEL_TOGGLES') || '{}');
+        var expanded = !$panel.hasClass('is-expanded');
+
+        panelToggles[panelId] = expanded;
+
+        localStorage.setItem('WMES_ORDERS_PANEL_TOGGLES', JSON.stringify(panelToggles));
+
+        $panel.toggleClass('is-expanded', expanded);
+        $action.toggleClass('active', expanded);
       }
     },
 
@@ -127,7 +146,7 @@ define([
       page.defineViews();
       page.defineBindings();
 
-      _.forEach(page.views_, function(view)
+      _.forEach(page.views_, function(view, id)
       {
         page.insertView(view);
       });
@@ -268,6 +287,7 @@ define([
       }
 
       this.renderJumpList();
+      this.renderPanelToggles();
     },
 
     onOrderUpdated: function(message)
@@ -304,6 +324,7 @@ define([
       changes.push(message.change);
       order.set(attrs);
       order.trigger('push:change', message.change);
+      this.renderPanelToggles();
     },
 
     onQuantityDoneChanged: function(qtyDone)
@@ -335,6 +356,72 @@ define([
       });
 
       page.$el.append($jumpList);
+    },
+
+    renderPanelToggles: function()
+    {
+      if (embedded.isEnabled())
+      {
+        return;
+      }
+
+      var page = this;
+      var panelToggles = JSON.parse(localStorage.getItem('WMES_ORDERS_PANEL_TOGGLES') || '{}');
+
+      page.getViews().forEach(function(view)
+      {
+        if (view === page.views_.changes)
+        {
+          return;
+        }
+
+        var $scrollable = view.$('.table-responsive');
+
+        if (!$scrollable.length)
+        {
+          return;
+        }
+
+        var $panel = $scrollable.closest('.panel');
+        var panelId = $panel.attr('class').match(/orders-([a-zA-Z]+)/)[1];
+        var $hd = $panel.find('.panel-heading');
+        var $tbody = $scrollable.find('tbody');
+
+        $panel.attr('data-id', panelId);
+
+        if (!$panel.hasClass('is-with-actions'))
+        {
+          var title = $hd.text();
+
+          $hd.html('<div class="panel-heading-title"></div><div class="panel-heading-actions"></div>');
+          $hd.find('.panel-heading-title').text(title);
+
+          $panel.addClass('is-with-actions');
+        }
+
+        var $actions = $hd.find('.panel-heading-actions');
+        var $action = $actions.find('.btn[data-action="togglePanel"]');
+        var expanded = panelToggles[panelId] === true;
+
+        $panel.toggleClass('is-expanded', expanded);
+
+        if ($tbody[0].childElementCount > 10)
+        {
+          if (!$action.length)
+          {
+            $action = $('<button class="btn btn-default" type="button" data-action="togglePanel">'
+              + '<i class="fa fa-expand"></i></button>');
+
+            $action.appendTo($actions);
+          }
+
+          $action.toggleClass('active', expanded);
+        }
+        else
+        {
+          $action.remove();
+        }
+      });
     },
 
     onPaintOrdersReset: function()

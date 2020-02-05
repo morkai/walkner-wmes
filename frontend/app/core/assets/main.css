@@ -220,6 +220,22 @@ code.multiline {
   right: 3px;
   font-weight: normal;
 }
+.is-with-actions > .panel-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 41px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 3px;
+}
+.is-with-actions > .panel-heading > .panel-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: auto;
+  font-weight: normal;
+}
 .panel-actions > p {
   padding: 10px 10px 0 0;
   line-height: 1;
@@ -255,7 +271,7 @@ code.multiline {
 
 .dropdown-menu {
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: 90vh;
 }
 .is-embedded .dropdown-menu {
   overflow-y: initial;
