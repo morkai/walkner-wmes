@@ -17,7 +17,7 @@ define([
 
     setUpPubsub: function(pubsub)
     {
-      pubsub.subscribe('wh.users.*', this.handleMessage.bind(this));
+      pubsub.subscribe('old.wh.users.*', this.handleMessage.bind(this));
     },
 
     handleMessage: function(message, topic)
@@ -26,15 +26,15 @@ define([
 
       switch (topic)
       {
-        case 'wh.users.deleted':
+        case 'old.wh.users.deleted':
           if (whUser)
           {
             this.remove(whUser);
           }
           break;
 
-        case 'wh.users.added':
-        case 'wh.users.edited':
+        case 'old.wh.users.added':
+        case 'old.wh.users.edited':
           if (whUser)
           {
             whUser.set(message.model);

@@ -11,7 +11,7 @@ define([
 
     nlsDomain: 'wh',
 
-    urlRoot: '/wh/settings'
+    urlRoot: '/old/wh/settings'
 
   });
 });

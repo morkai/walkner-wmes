@@ -114,7 +114,7 @@ define([
 
         sapOrder.set(attrs);
       },
-      'wh.orders.changed.*': function(message)
+      'old.wh.orders.changed.*': function(message)
       {
         var page = this;
 
@@ -148,7 +148,7 @@ define([
           page.whOrders.remove(id);
         });
       },
-      'wh.orders.updated': function(message)
+      'old.wh.orders.updated': function(message)
       {
         var page = this;
 

@@ -67,10 +67,10 @@ define([
     {
       if (!this.date)
       {
-        return '/wh/orders';
+        return '/old/wh/orders';
       }
 
-      return '/wh/orders'
+      return '/old/wh/orders'
         + '?sort(group,line,startTime)'
         + '&date=' + time.utc.getMoment(this.date, 'YYYY-MM-DD').valueOf();
     },

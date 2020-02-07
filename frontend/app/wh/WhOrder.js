@@ -51,9 +51,9 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/wh/orders',
+    urlRoot: '/old/wh/orders',
 
-    topicPrefix: 'wh.orders',
+    topicPrefix: 'old.wh.orders',
 
     privilegePrefix: 'WH',
 

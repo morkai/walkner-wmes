@@ -248,7 +248,7 @@ define([
           order.set(DrillingOrder.parse(changes));
         }
       },
-      'wh.orders.changed.*': function(message)
+      'old.wh.orders.changed.*': function(message)
       {
         var currentDate = this.whOrders.getDateFilter();
         var importedDate = time.utc.format(message.date, 'YYYY-MM-DD');
@@ -258,7 +258,7 @@ define([
           this.promised(this.whOrders.fetch({reset: true}));
         }
       },
-      'wh.orders.updated': function(message)
+      'old.wh.orders.updated': function(message)
       {
         this.whOrders.update(message.orders);
       }

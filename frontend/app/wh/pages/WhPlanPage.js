@@ -187,14 +187,14 @@ define([
       {
         this.plan.shiftOrders.update(message);
       },
-      'wh.orders.changed.*': function(message)
+      'old.wh.orders.changed.*': function(message)
       {
         if (this.plan.getMoment().isSame(message.date))
         {
           this.promised(this.whOrders.fetch({reset: true}));
         }
       },
-      'wh.orders.updated': function(message)
+      'old.wh.orders.updated': function(message)
       {
         var newOrders = message.orders;
 
@@ -756,7 +756,7 @@ define([
       var page = this;
       var date = +page.plan.getMoment().valueOf();
       var month = 30 * 24 * 3600 * 1000;
-      var url = '/wh/orders?limit(1)&select(date)';
+      var url = '/old/wh/orders?limit(1)&select(date)';
 
       if (dir === 'prev')
       {
