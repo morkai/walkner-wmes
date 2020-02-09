@@ -1,1 +1,1 @@
-define(["../i18n","../core/Model"],function(e,i){"use strict";return i.extend({urlRoot:"/wh/users",topicPrefix:"wh.users",privilegePrefix:"WH",nlsDomain:"wh",labelAttribute:"label"})});
+define(["../i18n","../core/Model"],function(e,i){"use strict";return i.extend({urlRoot:"/old/wh/users",topicPrefix:"old.wh.users",privilegePrefix:"WH",nlsDomain:"wh",labelAttribute:"label"})});

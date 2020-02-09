@@ -1,1 +1,1 @@
-define(["../settings/Setting"],function(t){"use strict";return t.extend({nlsDomain:"wh",urlRoot:"/wh/settings"})});
+define(["../settings/Setting"],function(t){"use strict";return t.extend({nlsDomain:"wh",urlRoot:"/old/wh/settings"})});

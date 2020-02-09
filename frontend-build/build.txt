@@ -350,7 +350,12 @@ app/orderDocuments/assets/../../production/assets/modal.css
 app/orderDocuments/assets/../../production/assets/taktTime.css
 app/orderDocuments/assets/../../production/assets/bomChecker.css
 app/orderDocuments/assets/./bom.css
+app/orderDocuments/assets/./notes.css
 app/orderDocuments/assets/main.css
+
+app/orderDocuments/assets/notes.css
+----------------
+app/orderDocuments/assets/notes.css
 
 app/orderDocuments/assets/viewer.css
 ----------------
