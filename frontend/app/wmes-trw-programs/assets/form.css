@@ -11,8 +11,8 @@
   width: 375px;
 }
 .trw-programs-steps-list {
-  overflow-y: scroll;
-  height: 940px;
+  overflow-y: auto;
+  max-height: 940px;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }

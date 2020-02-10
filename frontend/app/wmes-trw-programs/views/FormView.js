@@ -1020,11 +1020,11 @@ define([
 
     findStepIndex: function(stepEl)
     {
-      for (var i = 1; i < stepEl.parentNode.childElementCount; ++i)
+      for (var i = 0; i < stepEl.parentNode.childElementCount; ++i)
       {
         if (stepEl.parentNode.children[i] === stepEl)
         {
-          return i - 1;
+          return i;
         }
       }
 
