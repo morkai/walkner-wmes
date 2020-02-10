@@ -42,7 +42,7 @@ define([
       })
       .map(function(mrp)
       {
-        if (mrp.id.length > maxMrpLength)
+        if (mrp.id.length > maxMrpLength && mrp.id.length < 6)
         {
           maxMrpLength = mrp.id.length;
         }
@@ -101,15 +101,20 @@ define([
       formatResult: function(item, $container, query, e)
       {
         var id = item.id;
+        var noId = id.length >= 6 && item.text.length >= 6;
+        var html = [];
 
-        while (id.length < maxMrpLength)
+        if (!noId)
         {
-          id += ' ';
+          while (id.length < maxMrpLength)
+          {
+            id += ' ';
+          }
+
+          html.push('<span class="text-mono">');
+
+          select2.util.markMatch(id, query.term, html, e);
         }
-
-        var html = ['<span class="text-mono">'];
-
-        select2.util.markMatch(id, query.term, html, e);
 
         if (item.text === '')
         {
@@ -117,7 +122,17 @@ define([
         }
         else
         {
-          html.push('</span><span class="text-small">: ');
+          if (!noId)
+          {
+            html.push('</span>');
+          }
+
+          html.push('<span class="text-small">');
+
+          if (!noId)
+          {
+            html.push(': ');
+          }
 
           if (item.icon)
           {
