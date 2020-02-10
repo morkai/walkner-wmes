@@ -4235,6 +4235,7 @@ app/planning/util/contextMenu.js
 app/wmes-trw-testers/Tester.js
 app/wmes-trw-bases/Base.js
 app/wmes-trw-bases/templates/cluster.js
+app/wmes-trw-bases/templates/message.js
 app/wmes-trw-programs/Program.js
 app/wmes-trw-tests/Test.js
 app/wmes-trw-tests/templates/workstationPicker.js

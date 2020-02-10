@@ -5,8 +5,8 @@
   "version": "0.146.0",
   "updater": {
     "wmes": {
-      "backend": 511,
-      "frontend": 688,
+      "backend": 512,
+      "frontend": 689,
       "reports": 112,
       "attachments": 3,
       "importer-sap": 54,
@@ -25,7 +25,7 @@
       "wh-packer": 6,
       "isa": 6,
       "luma2": 9,
-      "trw": 14,
+      "trw": 15,
       "luca": 7,
       "drilling": 8,
       "wiring": 1,
