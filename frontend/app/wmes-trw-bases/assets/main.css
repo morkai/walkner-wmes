@@ -259,6 +259,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   line-height: 1.2;
   white-space: pre-line;
 }

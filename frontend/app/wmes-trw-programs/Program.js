@@ -233,6 +233,15 @@ define([
         'justify-content: ' + message.hAlign
       ];
 
+      if (message.hAlign === 'top')
+      {
+        innerStyle.push('text-align: left');
+      }
+      else if (message.hAlign === 'end')
+      {
+        innerStyle.push('text-align: right');
+      }
+
       if (editable)
       {
         className.push('is-editable');
