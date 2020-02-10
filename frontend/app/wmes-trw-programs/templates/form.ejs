@@ -26,7 +26,7 @@
             <% }) %>
           </div>
         </div>
-        <div id="<%- idPrefix %>-steps" class="trw-programs-steps">
+        <div class="trw-programs-steps">
           <div class="btn-toolbar">
             <div class="btn-group">
               <button id="<%- idPrefix %>-steps-add" class="btn btn-default" type="button" title="<%- helpers.t('form:steps:add') %>"><i class="fa fa-plus"></i></button>
@@ -39,6 +39,7 @@
               <button id="<%- idPrefix %>-steps-delete" class="btn btn-default" type="button" title="<%- helpers.t('form:steps:delete') %>"><i class="fa fa-trash"></i></button>
             </div>
           </div>
+          <div id="<%- idPrefix %>-steps" class="trw-programs-steps-list"></div>
         </div>
       </div>
     </div>

@@ -32,7 +32,8 @@ define([
     defaults: function()
     {
       return {
-        steps: []
+        steps: [],
+        messages: []
       };
     },
 
@@ -121,6 +122,11 @@ define([
       }
 
       return _.find(base.clusters, function(cluster) { return cluster._id === clusterId; });
+    },
+
+    getMessage: function(id)
+    {
+      return _.find(this.attributes.messages, function(message) { return message._id === id; });
     }
 
   }, {
@@ -216,6 +222,87 @@ define([
     formatEndpointUuid: function(endpoint)
     {
       return [endpoint.cluster, endpoint.row, endpoint.col, endpoint.endpoint].join(':');
+    },
+
+    formatMessage: function(message, editable)
+    {
+      var className = [];
+      var outerStyle = [];
+      var innerStyle = [
+        'align-items: ' + message.vAlign,
+        'justify-content: ' + message.hAlign
+      ];
+
+      if (editable)
+      {
+        className.push('is-editable');
+      }
+
+      if (message.top === null)
+      {
+        className.push('is-centered-top');
+      }
+      else
+      {
+        outerStyle.push('top: ' + message.top + 'px');
+      }
+
+      if (message.left === null)
+      {
+        className.push('is-centered-left');
+      }
+      else
+      {
+        outerStyle.push('left: ' + message.left + 'px');
+      }
+
+      if (message.width !== null)
+      {
+        innerStyle.push('width: ' + message.width + 'px');
+      }
+
+      if (message.height !== null)
+      {
+        innerStyle.push('height: ' + message.height + 'px');
+      }
+
+      if (message.fontSize)
+      {
+        innerStyle.push('font-size: ' + message.fontSize + 'px');
+      }
+
+      if (message.fontColor)
+      {
+        innerStyle.push('color: ' + message.fontColor);
+      }
+
+      if (message.bgColor)
+      {
+        innerStyle.push('background: ' + message.bgColor);
+      }
+
+      if (message.borderColor)
+      {
+        innerStyle.push('border-color: ' + message.borderColor);
+      }
+
+      if (message.borderWidth)
+      {
+        outerStyle.push('outline-offset: -' + message.borderWidth + 'px');
+        innerStyle.push(
+          'border-width: ' + message.borderWidth + 'px',
+          'border-style: solid'
+        );
+      }
+
+      return {
+        id: message._id,
+        text: message.text,
+        className: className.join(' '),
+        outerStyle: outerStyle.join('; '),
+        innerStyle: innerStyle.join('; '),
+        editable: editable
+      };
     }
 
   });

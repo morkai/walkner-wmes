@@ -1,0 +1,8 @@
+<div class="trw-base-message <%- className %>" style="<%- outerStyle %>" data-id="<%- id %>">
+  <div class="trw-base-message-inner" style="<%- innerStyle %>">
+    <div class="trw-base-message-text"><%- text %></div>
+  </div>
+  <% if (editable) { %>
+  <div class="trw-base-message-resize"></div>
+  <% } %>
+</div>

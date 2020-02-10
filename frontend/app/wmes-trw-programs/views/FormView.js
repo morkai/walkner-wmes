@@ -13,7 +13,9 @@ define([
   'app/wmes-trw-tests/dictionaries',
   'app/wmes-trw-bases/Base',
   'app/wmes-trw-bases/templates/cluster',
+  'app/wmes-trw-bases/templates/message',
   '../Program',
+  './MessageEditFormView',
   'app/wmes-trw-programs/templates/form'
 ], function(
   _,
@@ -28,10 +30,34 @@ define([
   dictionaries,
   Base,
   clusterTemplate,
+  messageTemplate,
   Program,
+  MessageEditFormView,
   template
 ) {
   'use strict';
+
+  function getRelativeCoordinates(e, el)
+  {
+    var offset = {
+      left: el.offsetLeft,
+      top: el.offsetTop
+    };
+
+    el = el.offsetParent;
+
+    while (el)
+    {
+      offset.left += el.offsetLeft;
+      offset.top += el.offsetTop;
+      el = el.offsetParent;
+    }
+
+    return {
+      x: e.pageX - offset.left,
+      y: e.pageY - offset.top
+    };
+  }
 
   return FormView.extend({
 
@@ -70,7 +96,7 @@ define([
 
         this.model.attributes.steps.push(step);
 
-        this.addStep(step, true);
+        this.addStep(step).click();
       },
       'click #-steps-delete': function()
       {
@@ -111,9 +137,401 @@ define([
       'mouseleave .trw-base-cluster': function()
       {
         this.hideClusterPopover();
+      },
+      'mousedown #-canvas': function(e)
+      {
+        if (e.target.classList.contains('trw-base-canvas-inner'))
+        {
+          this.onMsgCreateStart(e);
+        }
+      },
+      'mousedown .trw-base-message': function(e)
+      {
+        if (e.button === 0)
+        {
+          this.selectMsg(e);
+        }
+      },
+      'dblclick .trw-base-message': function(e)
+      {
+        if (e.button === 0)
+        {
+          this.selectMsg(e);
+          this.showEditMessageDialog();
+        }
+      },
+      'contextmenu .trw-base-message': function(e)
+      {
+        this.selectMsg(e);
+        this.showMsgMenu(e);
+
+        return false;
       }
 
     }, FormView.prototype.events),
+
+    onMsgCreateStart: function(e)
+    {
+      var view = this;
+
+      view.cancelMsg();
+
+      var msg = view.msg;
+      var $canvas = view.$id('canvas');
+      var startPos = getRelativeCoordinates(e.originalEvent, $canvas[0]);
+
+      msg.startPos = startPos;
+      msg.$canvas = $canvas;
+      msg.$ghost = $('<div class="trw-programs-msg-ghost"></div>')
+        .css({
+          top: startPos.y + 'px',
+          left: startPos.x + 'px',
+          width: '0px',
+          height: '0px'
+        })
+        .appendTo($canvas);
+
+      $canvas
+        .on('mousemove.msg' + view.idPrefix, view.onMsgCreateMove.bind(view));
+
+      $(window)
+        .on('mouseup.msg' + view.idPrefix, view.onMsgCreateEnd.bind(view));
+    },
+
+    onMsgCreateMove: function(e)
+    {
+      var view = this;
+      var msg = view.msg;
+
+      msg.endPos = getRelativeCoordinates(e.originalEvent, msg.$canvas[0]);
+
+      var box = view.calcMsgBox(msg.startPos, msg.endPos);
+
+      msg.$ghost.css({
+        top: box.top + 'px',
+        left: box.left + 'px',
+        width: box.width + 'px',
+        height: box.height + 'px'
+      });
+    },
+
+    calcMsgBox: function(startPos, endPos)
+    {
+      var startX = Math.min(startPos.x, endPos.x);
+      var startY = Math.min(startPos.y, endPos.y);
+      var endX = Math.max(startPos.x, endPos.x);
+      var endY = Math.max(startPos.y, endPos.y);
+
+      return {
+        top: startY,
+        left: startX,
+        width: endX - startX,
+        height: endY - startY
+      };
+    },
+
+    onMsgCreateEnd: function(e)
+    {
+      if (this.msg.endPos
+        && this.$(e.target).closest(this.msg.$canvas[0]).length)
+      {
+        this.addMsg(this.msg.startPos, this.msg.endPos);
+      }
+
+      this.cancelMsg();
+    },
+
+    addMsg: function(startPos, endPos)
+    {
+      var msg = {
+        _id: uuid(),
+        steps: [this.model.getStepIndex(this.selectedStep) + 1],
+        text: '',
+        hAlign: 'center',
+        vAlign: 'center',
+        fontSize: 24,
+        fontColor: '#FF0000',
+        bgColor: null,
+        borderColor: '#FF0000',
+        borderWidth: 4
+      };
+
+      Object.assign(msg, this.calcMsgBox(startPos, endPos));
+
+      if (msg.width < 10 || msg.height < 10)
+      {
+        return;
+      }
+
+      this.model.get('messages').push(msg);
+      this.recountStepMessages();
+      this.updateMessages();
+      this.selectMsg(msg._id);
+      this.showEditMessageDialog();
+    },
+
+    deleteMsg: function()
+    {
+      var msg = this.msg;
+
+      if (!msg.selected)
+      {
+        return;
+      }
+
+      this.model.attributes.messages = this.model.attributes.messages.filter(function(message)
+      {
+        return message._id !== msg.selected.id;
+      });
+
+      var $el = msg.selected.$el;
+
+      this.unselectMsg();
+
+      $el.remove();
+
+      this.recountStepMessages();
+    },
+
+    cancelMsg: function()
+    {
+      var msg = this.msg;
+
+      if (!msg.startPos)
+      {
+        return;
+      }
+
+      $(window).off('.msg' + this.idPrefix);
+      msg.$canvas.off('.msg' + this.idPrefix);
+      msg.$ghost.remove();
+
+      msg.$canvas = null;
+      msg.$ghost = null;
+      msg.startPos = null;
+      msg.endPos = null;
+    },
+
+    selectMsg: function(e)
+    {
+      if (typeof e === 'string')
+      {
+        e = {currentTarget: this.$('.trw-base-message[data-id="' + e + '"]')[0]};
+      }
+
+      var view = this;
+
+      view.unselectMsg();
+
+      var msg = view.msg;
+      var $canvas = view.$id('canvas');
+      var $el = view.$(e.currentTarget).addClass('is-selected');
+      var id = $el[0].dataset.id;
+      var sel = msg.selected = {
+        id: id,
+        model: _.find(view.model.get('messages'), function(m) { return m._id === id; }),
+        $canvas: $canvas,
+        $el: $el,
+        offset: null,
+        startPos: {
+          x: $el[0].offsetLeft,
+          y: $el[0].offsetTop
+        },
+        endPos: {
+          x: 0,
+          y: 0
+        },
+        lastPos: null,
+        resizing: false,
+        dragging: false
+      };
+
+      var outer = $el[0];
+      var inner = outer.firstElementChild;
+
+      outer.style.top = outer.offsetTop + 'px';
+      outer.style.left = outer.offsetLeft + 'px';
+      outer.style.marginTop = '0';
+      outer.style.marginLeft = '0';
+      inner.style.width = inner.offsetWidth + 'px';
+      inner.style.height = inner.offsetHeight + 'px';
+
+      $el.removeClass('is-centered-top is-centered-left');
+
+      if (e.button !== 0)
+      {
+        return;
+      }
+
+      sel.offset = {
+        x: e.target.offsetWidth - e.offsetX,
+        y: e.target.offsetHeight - e.offsetY
+      };
+
+      sel.lastPos = {
+        x: e.pageX,
+        y: e.pageY
+      };
+
+      if (e.target.classList.contains('trw-base-message-resize'))
+      {
+        sel.resizing = true;
+        sel.endPos = getRelativeCoordinates(e.originalEvent, $canvas[0]);
+
+        $canvas
+          .addClass('trw-programs-resizing')
+          .on('mousemove.msg' + view.idPrefix, view.onMsgResizeMove.bind(view));
+
+        $(window)
+          .on('mouseup.msg' + view.idPrefix, view.onMsgResizeEnd.bind(view));
+      }
+      else
+      {
+        sel.dragging = true;
+        sel.endPos.x = sel.startPos.x;
+        sel.endPos.y = sel.startPos.y;
+
+        $canvas
+          .addClass('trw-programs-dragging')
+          .on('mousemove.msg' + view.idPrefix, view.onMsgDragMove.bind(view));
+
+        $(window)
+          .on('mouseup.msg' + view.idPrefix, view.onMsgDragEnd.bind(view));
+      }
+    },
+
+    onMsgResizeMove: function(e)
+    {
+      var sel = this.msg.selected;
+
+      sel.endPos = getRelativeCoordinates(e.originalEvent, sel.$canvas[0]);
+      sel.endPos.x += sel.offset.x;
+      sel.endPos.y += sel.offset.y;
+
+      var box = this.calcMsgBox(sel.startPos, sel.endPos);
+      var outer = sel.$el[0];
+      var inner = outer.firstElementChild;
+
+      outer.style.top = box.top + 'px';
+      outer.style.left = box.left + 'px';
+      inner.style.width = box.width + 'px';
+      inner.style.height = box.height + 'px';
+    },
+
+    onMsgResizeEnd: function()
+    {
+      var sel = this.msg.selected;
+      var box = this.calcMsgBox(sel.startPos, sel.endPos);
+
+      Object.assign(sel.model, box);
+
+      this.unselectMsg();
+    },
+
+    onMsgDragMove: function(e)
+    {
+      var sel = this.msg.selected;
+
+      sel.endPos.x += e.pageX - sel.lastPos.x;
+      sel.endPos.y += e.pageY - sel.lastPos.y;
+      sel.lastPos.x = e.pageX;
+      sel.lastPos.y = e.pageY;
+
+      var outer = sel.$el[0];
+
+      outer.style.top = sel.endPos.y + 'px';
+      outer.style.left = sel.endPos.x + 'px';
+    },
+
+    onMsgDragEnd: function()
+    {
+      this.stopMsgDrag();
+
+      var sel = this.msg.selected;
+
+      if (sel.model.top === sel.endPos.y && sel.model.left === sel.endPos.x)
+      {
+        return;
+      }
+
+      sel.model.top = sel.endPos.y;
+      sel.model.left = sel.endPos.x;
+
+      this.unselectMsg();
+    },
+
+    stopMsgDrag: function()
+    {
+      var sel = this.msg.selected;
+
+      if (!sel || !sel.dragging)
+      {
+        return;
+      }
+
+      sel.dragging = false;
+
+      sel.$canvas.removeClass('trw-programs-dragging');
+
+      $(window).off('.msg' + this.idPrefix);
+      sel.$canvas.off('.msg' + this.idPrefix);
+    },
+
+    unselectMsg: function()
+    {
+      var sel = this.msg.selected;
+
+      if (!sel)
+      {
+        return;
+      }
+
+      sel.$canvas.removeClass('trw-programs-resizing trw-programs-dragging');
+      sel.$canvas.find('.trw-base-message.is-selected').removeClass('is-selected');
+
+      $(window).off('.msg' + this.idPrefix);
+      sel.$canvas.off('.msg' + this.idPrefix);
+
+      sel.model = null;
+      sel.$canvas = null;
+      sel.$el = null;
+      this.msg.selected = null;
+    },
+
+    showMsgMenu: function(e)
+    {
+      var options = {
+        menu: [
+          {
+            label: this.t('form:messages:menu:edit'),
+            handler: this.showEditMessageDialog.bind(this)
+          },
+          {
+            label: this.t('form:messages:menu:delete'),
+            handler: this.deleteMsg.bind(this)
+          }
+        ]
+      };
+
+      contextMenu.show(this, e.pageY, e.pageX, options);
+    },
+
+    showEditMessageDialog: function()
+    {
+      var message = new Model(this.msg.selected.model);
+      var dialogView = new MessageEditFormView({
+        model: message
+      });
+
+      this.listenTo(message, 'change', function()
+      {
+        Object.assign(this.model.getMessage(message.id), message.attributes);
+        this.recountStepMessages();
+        this.updateMessages();
+      });
+
+      viewport.showDialog(dialogView, this.t('form:messages:title'));
+    },
 
     initialize: function()
     {
@@ -122,6 +540,12 @@ define([
       this.jsPlumb = null;
       this.base = null;
       this.selectedStep = null;
+      this.msg = {
+        startPos: null,
+        endPos: null,
+        $canvas: null,
+        $ghost: null
+      };
 
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
     },
@@ -188,7 +612,13 @@ define([
     {
       if (e.key === 'Escape')
       {
+        this.cancelMsg();
+        this.unselectMsg();
         this.hideEditor();
+      }
+      else if (e.key === 'Delete')
+      {
+        this.deleteMsg();
       }
     },
 
@@ -197,7 +627,7 @@ define([
       var view = this;
 
       view.jsPlumb = jsPlumb.getInstance({
-        Container: this.$('.trw-base-canvas-inner')[0],
+        Container: this.$id('canvas')[0],
         ConnectionOverlays: [
           ['Arrow', {
             id: 'ARROW',
@@ -365,6 +795,9 @@ define([
 
     resetCanvas: function(unbind)
     {
+      this.cancelMsg();
+      this.unselectMsg();
+
       if (this.jsPlumb)
       {
         this.jsPlumb.reset(!unbind);
@@ -382,12 +815,14 @@ define([
         return;
       }
 
-      var html = view.base.clusters.map(function(cluster)
+      var html = [];
+
+      view.base.clusters.forEach(function(cluster)
       {
-        return view.renderPartialHtml(clusterTemplate, {cluster: cluster});
+        html.push(view.renderPartialHtml(clusterTemplate, {cluster: cluster}));
       });
 
-      view.$id('canvas').html(html);
+      view.$id('canvas').html(html.join(''));
 
       view.base.clusters.forEach(function(cluster)
       {
@@ -425,33 +860,48 @@ define([
       });
     },
 
+    renderMessage: function(message)
+    {
+      return this.renderPartialHtml(messageTemplate, Program.formatMessage(message, true));
+    },
+
     renderSteps: function()
     {
       var view = this;
 
-      view.$('.trw-programs-step').remove();
+      view.$id('steps').html('');
 
       view.model.get('steps').forEach(function(step)
       {
-        view.addStep(step, false);
+        view.addStep(step);
       });
     },
 
-    addStep: function(step, select)
+    stepHasAnyMessage: function(stepNo)
+    {
+      return _.any(this.model.get('messages'), function(message)
+      {
+        return message.steps.indexOf(stepNo) !== -1;
+      });
+    },
+
+    addStep: function(step)
     {
       var $steps = this.$id('steps');
-      var stepNo = $steps[0].childElementCount;
+      var stepNo = $steps[0].childElementCount + 1;
 
       var $step = $('<div class="trw-programs-step"></div>')
-        .attr('data-id', step._id)
-        .text(this.formatDescription(stepNo, step));
+        .attr('data-id', step._id);
+      var $label = $('<span class="trw-programs-step-label">' + this.formatDescription(stepNo, step) + '</span>');
+      var $messages = $('<i class="fa fa-comments-o trw-programs-step-messages"></i>')
+        .toggleClass('hidden', !this.stepHasAnyMessage(stepNo));
 
-      $steps.append($step);
+      $step
+        .append($label)
+        .append($messages)
+        .appendTo($steps);
 
-      if (select)
-      {
-        $step.click();
-      }
+      return $step;
     },
 
     deleteStep: function(stepId)
@@ -484,7 +934,8 @@ define([
 
       view.$('.trw-programs-step').each(function(i)
       {
-        this.textContent = this.textContent.replace(/^[0-9]+\./, (i + 1) + '.');
+        this.firstElementChild.textContent = this.firstElementChild.textContent.replace(/^[0-9]+\./, (i + 1) + '.');
+        this.querySelector('.trw-programs-step-messages').classList.toggle('hidden', !view.stepHasAnyMessage(i + 1));
       });
 
       view.jsPlumb.getConnections().forEach(function(connection)
@@ -492,6 +943,16 @@ define([
         var stepIndex = view.model.getStepIndex(connection.getParameter('step'));
 
         connection.getOverlay('LABEL').setLabel((stepIndex + 1).toString());
+      });
+    },
+
+    recountStepMessages: function()
+    {
+      var view = this;
+
+      view.$('.trw-programs-step').each(function(i)
+      {
+        this.querySelector('.trw-programs-step-messages').classList.toggle('hidden', !view.stepHasAnyMessage(i + 1));
       });
     },
 
@@ -523,6 +984,7 @@ define([
       }
 
       this.recountSteps();
+      this.updateMessages();
     },
 
     moveStepDown: function(stepId)
@@ -553,6 +1015,7 @@ define([
       }
 
       this.recountSteps();
+      this.updateMessages();
     },
 
     findStepIndex: function(stepEl)
@@ -601,6 +1064,7 @@ define([
 
       this.updateSelectedStep();
       this.updateConnections();
+      this.updateMessages();
     },
 
     updateConnections: function()
@@ -642,12 +1106,51 @@ define([
       var step = this.model.getStep(stepId);
       var $step = this.$step(stepId);
 
-      $step.text(this.formatDescription(this.model.getStepIndex(stepId) + 1, step));
+      $step.find('.trw-programs-step-label').text(
+        this.formatDescription(this.model.getStepIndex(stepId) + 1, step)
+      );
 
       if (stepId === this.selectedStep)
       {
         this.updateSelectedStep();
       }
+    },
+
+    updateMessages: function()
+    {
+      var view = this;
+      var stepIndex = view.model.getStepIndex(view.selectedStep);
+      var stepNo = stepIndex + 1;
+      var html = [];
+
+      view.model.get('messages').forEach(function(message)
+      {
+        if (message.steps.indexOf(stepNo) !== -1)
+        {
+          html.push(view.renderMessage(message));
+        }
+      });
+
+      var $canvas = view.$id('canvas');
+
+      $canvas.find('.trw-base-message').remove();
+      $canvas.append(html.join(''));
+      $canvas.find('.trw-base-message').each(function()
+      {
+        var box = this.getBoundingClientRect();
+
+        if (this.classList.contains('is-centered-top'))
+        {
+          this.style.top = '50%';
+          this.style.marginTop = Math.round((box.height / 2) * -1) + 'px';
+        }
+
+        if (this.classList.contains('is-centered-left'))
+        {
+          this.style.left = '50%';
+          this.style.marginLeft = Math.round((box.width / 2) * -1) + 'px';
+        }
+      });
     },
 
     updateSelectedStep: function()

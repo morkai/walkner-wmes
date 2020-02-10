@@ -12,6 +12,19 @@
   "PROPERTY:steps.color": "Kolor",
   "PROPERTY:steps.source": "Od",
   "PROPERTY:steps.target": "Do",
+  "PROPERTY:messages.steps": "Przypisane kroki",
+  "PROPERTY:messages.text": "Tekst",
+  "PROPERTY:messages.width": "Szerokość",
+  "PROPERTY:messages.height": "Wysokość",
+  "PROPERTY:messages.top": "Pozycja y",
+  "PROPERTY:messages.left": "Pozycja x",
+  "PROPERTY:messages.fontSize": "Rozmiar czcionki",
+  "PROPERTY:messages.fontColor": "Kolor czcionki",
+  "PROPERTY:messages.bgColor": "Kolor tła",
+  "PROPERTY:messages.borderWidth": "Szerokość ramki",
+  "PROPERTY:messages.borderColor": "Kolor ramki",
+  "PROPERTY:messages.hAlign": "Wyrównanie x",
+  "PROPERTY:messages.vAlign": "Wyrównanie y",
 
   "form:steps:play": "Odtwórz kroki",
   "form:steps:stop": "Zatrzymaj odtwarzanie",
@@ -22,6 +35,15 @@
   "form:steps:description": "{no}. {length} {color} od {source} do {target}",
 
   "form:connectorEdit:menuItem": "Edytuj połączenie",
+
+  "form:messages:menu:edit": "Edytuj komunikat",
+  "form:messages:menu:delete": "Usuń komunikat",
+  "form:messages:title": "Edycja komunikatu",
+  "form:messages:submit": "Zapisz zmiany",
+
+  "align:start": "Początek",
+  "align:center": "Środek",
+  "align:end": "Koniec",
 
   "colors:white": "biały",
   "colors:white:multi": "biało",

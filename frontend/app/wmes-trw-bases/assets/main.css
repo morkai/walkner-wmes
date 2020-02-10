@@ -12,9 +12,10 @@
 }
 .trw-base-cluster {
   position: absolute;
+  z-index: 4;
 }
 .trw-base-cluster.jtk-dragged {
-  z-index: 1;
+  z-index: 5;
 }
 .trw-base-cluster-label {
   position: absolute;
@@ -247,4 +248,25 @@
 }
 .trw-base-clusterForm-image[src=""]:hover {
   background: #23527c;
+}
+
+.trw-base-message {
+  position: absolute;
+  z-index: 3;
+  overflow: hidden;
+}
+.trw-base-message-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  white-space: pre-line;
+}
+.trw-base-message-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  cursor: se-resize;
 }

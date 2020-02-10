@@ -16,6 +16,7 @@ define([
   'app/wmes-trw-testers/Tester',
   'app/wmes-trw-bases/Base',
   'app/wmes-trw-bases/templates/cluster',
+  'app/wmes-trw-bases/templates/message',
   'app/wmes-trw-programs/Program',
   '../Test',
   '../views/WorkstationPickerDialogView',
@@ -40,6 +41,7 @@ define([
   Tester,
   Base,
   clusterTemplate,
+  messageTemplate,
   Program,
   Test,
   WorkstationPickerDialogView,
@@ -294,7 +296,8 @@ define([
         workstation: parseInt(localStorage.getItem('TRW:WORKSTATION'), 10) || 0,
         order: sessionStorage.getItem('TRW:ORDER') || '',
         qtyTodo: parseInt(sessionStorage.getItem('TRW:QTY_TODO'), 10) || 0,
-        qtyDone: -1
+        qtyDone: -1,
+        checkInterval: CHECK_INTERVAL
       }), {
         nlsDomain: 'wmes-trw-tests',
         tester: new Tester({_id: localStorage.getItem('TRW:TESTER') || null}),
@@ -574,12 +577,11 @@ define([
     {
       var page = this;
       var clusters = page.model.base.get('clusters');
-      var html = clusters.map(function(cluster)
+
+      page.$id('canvas').html(clusters.map(function(cluster)
       {
         return page.renderPartialHtml(clusterTemplate, {cluster: cluster});
-      });
-
-      page.$id('canvas').html(html);
+      }));
 
       clusters.forEach(function(cluster)
       {
@@ -772,6 +774,17 @@ define([
       {
         localStorage.removeItem('TRW:TESTER');
       }
+
+      var devices = {};
+
+      this.model.tester.get('io').forEach(function(io)
+      {
+        devices[io.device] = 1;
+      });
+
+      var deviceCount = Object.keys(devices).length || 1;
+
+      this.model.set('checkInterval', Math.ceil(CHECK_INTERVAL / deviceCount));
 
       this.model.base.clear();
       this.model.program.clear();
@@ -1125,6 +1138,8 @@ define([
       var checkIo = {};
       var missingEndpoints = [];
 
+      this.updateMessages();
+
       if (this.model.get('debug'))
       {
         console.log('runStep', {stepNo: stepNo, step: step});
@@ -1187,7 +1202,7 @@ define([
         this.updateConnections();
       }
 
-      this.setIo(false, this.checkIo, CHECK_INTERVAL);
+      this.setIo(false, this.checkIo, this.model.get('checkInterval'));
     },
 
     setIo: function(reset, nextAction, delay)
@@ -1313,7 +1328,7 @@ define([
         {
           page.model.set('lastValidCheckAt', 0);
 
-          page.scheduleAction(page.checkIo, CHECK_INTERVAL);
+          page.scheduleAction(page.checkIo, page.model.get('checkInterval'));
 
           return;
         }
@@ -1327,7 +1342,7 @@ define([
           page.model.set('lastValidCheckAt', validCheckAt);
         }
 
-        var minValidDuration = CHECK_INTERVAL * (anyAnalog ? 6 : 3);
+        var minValidDuration = page.model.get('checkInterval') * (anyAnalog ? 6 : 3);
 
         if (page.model.get('pass') > 1)
         {
@@ -1336,7 +1351,7 @@ define([
 
         if (testing && (!lastValidCheckAt || validDuration < minValidDuration))
         {
-          page.scheduleAction(page.checkIo, CHECK_INTERVAL);
+          page.scheduleAction(page.checkIo, page.model.get('checkInterval'));
 
           return;
         }
@@ -1587,6 +1602,45 @@ define([
           label.addClass('trw-base-canvas-faded');
         }
       }
+    },
+
+    updateMessages: function()
+    {
+      var view = this;
+      var stepNo = view.model.get('step');
+      var messages = _.filter(view.model.program.get('messages'), function(message)
+      {
+        return _.includes(message.steps, stepNo);
+      });
+
+      view.$('.trw-base-message').remove();
+
+      if (view.model.get('state') !== 'test' || !messages.length)
+      {
+        return;
+      }
+
+      var html = messages.map(function(message)
+      {
+        return view.renderPartialHtml(messageTemplate, Program.formatMessage(message, false));
+      });
+
+      this.$id('canvas').append(html.join('')).find('.trw-base-message').each(function()
+      {
+        var box = this.getBoundingClientRect();
+
+        if (this.classList.contains('is-centered-top'))
+        {
+          this.style.top = '50%';
+          this.style.marginTop = Math.round((box.height / 2) * -1) + 'px';
+        }
+
+        if (this.classList.contains('is-centered-left'))
+        {
+          this.style.left = '50%';
+          this.style.marginLeft = Math.round((box.width / 2) * -1) + 'px';
+        }
+      });
     },
 
     ioSet: function(device, channel, value, done)

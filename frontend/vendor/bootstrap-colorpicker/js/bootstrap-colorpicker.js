@@ -117,9 +117,8 @@
         this.format = CPGlobal.translateFormats[format];
         this.isInput = this.element.is('input');
         this.component = this.element.is('.colorpicker-component') ? this.element.find('.add-on, .input-group-addon') : false;
-
         this.picker = $(CPGlobal.template).attr('data-colorpicker-guid', _guid)
-                .appendTo('body')
+                .appendTo(options.container || 'body')
                 .on('mousedown.colorpicker', $.proxy(this.mousedown, this));
 
         if (this.isInput) {
@@ -215,7 +214,14 @@
             });
         },
         place: function() {
-            var offset = this.component ? this.component.offset() : this.element.offset();
+            var offset;
+            if (this.container) {
+
+            } else if (this.component) {
+              offset = this.component.offset();
+            } else {
+              offset = this.element.offset();
+            }
             this.picker.css({
                 top: offset.top + this.height,
                 left: offset.left

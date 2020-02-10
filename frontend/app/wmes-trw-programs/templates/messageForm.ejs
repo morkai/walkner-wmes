@@ -1,0 +1,67 @@
+<form autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-steps" class="control-label is-required"><%- t('PROPERTY:messages.steps') %></label>
+    <input id="<%- idPrefix %>-steps" name="steps" type="text" class="form-control" required autocomplete="off">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-text" class="control-label"><%- t('PROPERTY:messages.text') %></label>
+    <textarea id="<%- idPrefix %>-text" name="text" class="form-control"></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-left" class="control-label"><%- t('PROPERTY:messages.left') %></label>
+      <input id="<%- idPrefix %>-left" name="left" type="number" class="form-control" style="width: 85px">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-top" class="control-label"><%- t('PROPERTY:messages.top') %></label>
+      <input id="<%- idPrefix %>-top" name="top" type="number" class="form-control" style="width: 85px">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-width" class="control-label"><%- t('PROPERTY:messages.width') %></label>
+      <input id="<%- idPrefix %>-width" name="width" type="number" class="form-control" min="10" style="width: 85px">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-height" class="control-label"><%- t('PROPERTY:messages.height') %></label>
+      <input id="<%- idPrefix %>-height" name="height" type="number" class="form-control" min="10" style="width: 85px">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('PROPERTY:messages.hAlign') %></label>
+    <br>
+    <% ['start', 'center', 'end'].forEach(function(align) { %>
+    <label class="radio-inline">
+      <input name="hAlign" type="radio" value="<%- align %>" required>
+      <%- t('align:' + align) %>
+    </label>
+    <% }) %>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('PROPERTY:messages.vAlign') %></label>
+    <br>
+    <% ['start', 'center', 'end'].forEach(function(align) { %>
+    <label class="radio-inline">
+      <input name="vAlign" type="radio" value="<%- align %>" required>
+      <%- t('align:' + align) %>
+    </label>
+    <% }) %>
+  </div>
+  <%- renderColorPicker({idPrefix: idPrefix, property: 'bgColor', label: t('PROPERTY:messages.bgColor'), value: model.bgColor}) %>
+  <div class="form-row">
+    <%- renderColorPicker({idPrefix: idPrefix, property: 'fontColor', label: t('PROPERTY:messages.fontColor'), value: model.fontColor}) %>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-fontSize" class="control-label"><%- t('PROPERTY:messages.fontSize') %></label>
+      <input id="<%- idPrefix %>-fontSize" name="fontSize" type="number" class="form-control" min="0" style="width: 85px">
+    </div>
+  </div>
+  <div class="form-row">
+    <%- renderColorPicker({idPrefix: idPrefix, property: 'borderColor', label: t('PROPERTY:messages.borderColor'), value: model.borderColor}) %>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-borderWidth" class="control-label"><%- t('PROPERTY:messages.borderWidth') %></label>
+      <input id="<%- idPrefix %>-borderWidth" name="borderWidth" type="number" class="form-control" min="0" style="width: 85px">
+    </div>
+  </div>
+  <div class="form-actions" style="margin-top: 0">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- t('form:messages:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>
