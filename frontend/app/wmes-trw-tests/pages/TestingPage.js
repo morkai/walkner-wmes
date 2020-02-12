@@ -285,6 +285,16 @@ define([
     initialize: function()
     {
       var page = this;
+      var line = localStorage.getItem('TRW:LINE') || '';
+      var workstation = parseInt(localStorage.getItem('TRW:WORKSTATION'), 10) || 0;
+      var client = window.WMES_CLIENT;
+
+      if (client && client.config.line && client.config.station)
+      {
+        line = client.config.line;
+        workstation = client.config.station;
+      }
+
       var model = page.model = Object.assign(new Model({
         debug: false,
         ready: false,
@@ -292,8 +302,8 @@ define([
         error: null,
         step: 1,
         test: null,
-        line: localStorage.getItem('TRW:LINE') || '',
-        workstation: parseInt(localStorage.getItem('TRW:WORKSTATION'), 10) || 0,
+        line: line,
+        workstation: workstation,
         order: sessionStorage.getItem('TRW:ORDER') || '',
         qtyTodo: parseInt(sessionStorage.getItem('TRW:QTY_TODO'), 10) || 0,
         qtyDone: -1,
@@ -673,6 +683,13 @@ define([
 
     showWorkstationPickerDialog: function()
     {
+      if (window.WMES_CLIENT)
+      {
+        embedded.actions.config();
+
+        return;
+      }
+
       var dialogView = new WorkstationPickerDialogView({
         model: this.model,
         vkb: this.vkbView
@@ -1520,9 +1537,16 @@ define([
         },
         body: JSON.stringify(data)
       };
-      var url = window.ENV === 'development'
-        ? 'https://dev.wmes.pl'
-        : 'http://localhost';
+      var url = 'http://localhost';
+
+      if (window.ENV === 'development')
+      {
+        url = 'https://dev.wmes.pl';
+      }
+      else if (window.WMES_CLIENT)
+      {
+        url = 'https://local.wmes.pl';
+      }
 
       fetch(url + '/trw/' + cmd, init)
         .then(function(res)
