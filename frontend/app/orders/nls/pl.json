@@ -26,6 +26,7 @@
   "PANEL:TITLE:bom:paint": "Lista komponentów z malarni",
   "PANEL:TITLE:eto": "ETO",
   "PANEL:TITLE:changes": "Historia zmian",
+  "PANEL:TITLE:messages": "Komunikaty",
 
   "PROPERTY:_id": "Nr zlecenia",
   "PROPERTY:sapCreatedAt": "Czas utworzenia",
@@ -85,6 +86,9 @@
   "PROPERTY:changedBy": "Zmienione przez",
   "PROPERTY:m4": "4M",
   "PROPERTY:etoCont": "Kontynuacja pilota ETO",
+  "PROPERTY:messages.nc12": "12NC wyrobu",
+  "PROPERTY:messages.source": "Źródło",
+  "PROPERTY:messages.text": "Treść",
 
   "m4:man": "Człowiek",
   "m4:machine": "Maszyna",
@@ -102,10 +106,11 @@
   "psStatus:finished": "Zakończone",
   "psStatus:cancelled": "Anulowane",
 
-  "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
-  "DOCUMENTS:NO_DATA": "Zlecenie nie ma dołączonych żadnych dokumentów.",
-  "BOM:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych komponentów.",
-  "ETO:NO_DATA": "Nie ma dokumentu ETO dla 12NC zlecenia.",
+  "OPERATIONS:NO_DATA": "Brak operacji.",
+  "DOCUMENTS:NO_DATA": "Brak dokumentów.",
+  "BOM:NO_DATA": "Brak komponentów.",
+  "ETO:NO_DATA": "Brak ETO.",
+  "MESSAGES:NO_DATA": "Brak komunikatów.",
 
   "changes:NO_DATA": "Zlecenie nie było modyfikowane.",
   "changes:operations": "{count, plural, one{1 operacja} few{# operacje} other{# operacji}}",
@@ -167,9 +172,14 @@
   "jumpList:childOrders": "Podzlecenia",
   "jumpList:operations": "Operacje",
   "jumpList:documents": "Dokumenty",
+  "jumpList:messages": "Komunikaty",
   "jumpList:bom": "Komponenty",
   "jumpList:eto": "ETO",
   "jumpList:changes": "Zmiany",
 
-  "changeQtyMax:link": "zmień"
+  "changeQtyMax:link": "zmień",
+
+  "messages:source:bom": "BOM",
+  "messages:source:nc12": "Wyrób",
+  "messages:source:order": "Zlecenie"
 }

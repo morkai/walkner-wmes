@@ -1,4 +1,4 @@
-<div class="panel panel-default orders-bom">
+<div class="panel panel-default orders-bom <%- empty ? 'hidden' : true %>">
   <div class="panel-heading"><%- t('PANEL:TITLE:bom' + (paint ? ':paint' : '')) %></div>
   <% if (_.isEmpty(bom)) { %>
   <div class="panel-body">
@@ -31,9 +31,6 @@
             <td class="is-min is-number"><a href="#orders/<%- component.orderNo %>"><%- component.orderNo %></a>
             <td class="is-min"><%= component.mrp %>
             <% } %>
-            <% if (!component.nc12) { %>
-            <td colspan="8"><%= component.name  %>
-            <% } else { %>
             <td class="is-min is-number orders-bom-item"><%- component.item %>
             <td class="is-min is-number">
               <% if (component.nc12) { %>
@@ -49,7 +46,6 @@
             <td class="is-min"><%= component.supplyArea || '' %>
             <td class="is-min"><%= component.distStrategy || '' %>
             <td>
-            <% } %>
           </tr>
           <% }) %>
         </tbody>

@@ -1,4 +1,4 @@
-<div class="panel panel-default orders-documents">
+<div class="panel panel-default orders-documents <%- documents.length ? '' : 'hidden' %>">
   <div class="panel-heading"><%- helpers.t('PANEL:TITLE:documents') %></div>
   <% if (documents.length) { %>
   <div class="list">

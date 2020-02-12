@@ -1,0 +1,29 @@
+<div class="panel panel-default orders-messages">
+  <div class="panel-heading"><%- t('PANEL:TITLE:messages') %></div>
+  <% if (_.isEmpty(messages)) { %>
+  <div class="panel-body">
+    <%- t('MESSAGES:NO_DATA') %>
+  </div>
+  <% } else { %>
+  <div class="list">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="is-min"><%- t('PROPERTY:messages.source') %>
+            <th><%- t('PROPERTY:messages.text') %>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.forEach(messages, function(message) { %>
+          <tr>
+            <td class="is-min"><%- t('messages:source:' + message.source) %>
+            <td class="text-lines"><%= message.text %>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } %>
+</div>

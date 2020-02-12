@@ -61,7 +61,7 @@ define([
     {
       this.once('afterRender', function()
       {
-        this.listenTo(this.model, 'change:documents', this.render);
+        this.listenTo(this.model, 'change:documents', this.onChange);
       });
     },
 
@@ -218,6 +218,18 @@ define([
       });
 
       view.$('tr[data-nc15="' + bestNc15 + '"]').find('a').click();
+    },
+
+    onChange: function()
+    {
+      var oldState = this.$el.hasClass('hidden');
+      var newState = this.model.get('documents').length === 0;
+
+      if (oldState !== newState)
+      {
+        this.render();
+        this.model.trigger('panelToggle');
+      }
     }
 
   });

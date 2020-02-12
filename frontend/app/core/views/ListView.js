@@ -110,6 +110,11 @@ define([
         this.lastRefreshAt = Date.now();
       });
 
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.collection, 'reset', this.onReset);
+      });
+
       if (this.collection.paginationData)
       {
         this.paginationView = new PaginationView(_.assign(
@@ -385,16 +390,6 @@ define([
       return model.toJSON();
     },
 
-    beforeRender: function()
-    {
-      this.stopListening(this.collection, 'reset', this.render);
-    },
-
-    afterRender: function()
-    {
-      this.listenToOnce(this.collection, 'reset', this.render);
-    },
-
     onModelDeleted: function(message)
     {
       if (!message)
@@ -412,6 +407,11 @@ define([
       this.$('.list-item[data-id="' + model._id + '"]').addClass('is-deleted');
 
       this.refreshCollection(model);
+    },
+
+    onReset: function()
+    {
+      this.render();
     },
 
     $row: function(rowId)

@@ -26,7 +26,17 @@ define([
         shiftColumn: true
       }));
 
-      this.listenTo(this.collection, 'reset change', this.updateTotals);
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.collection, 'reset change', this.onChange);
+      });
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        empty: this.collection.length === 0
+      };
     },
 
     afterRender: function()
@@ -61,6 +71,15 @@ define([
       });
 
       this.$id('totals').text(totals.join(' | '));
+    },
+
+    onChange: function()
+    {
+      this.updateTotals();
+
+      this.$el.toggleClass('hidden', this.collection.length === 0);
+
+      this.model.trigger('panelToggle');
     }
 
   });

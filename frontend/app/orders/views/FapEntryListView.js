@@ -21,6 +21,18 @@ define([
         collection: this.collection,
         orderDetails: true
       }));
+
+      this.listenTo(this.collection, 'sync', function()
+      {
+        this.$el.toggleClass('hidden', this.collection.length === 0);
+      });
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        empty: this.collection.length === 0
+      };
     }
 
   });

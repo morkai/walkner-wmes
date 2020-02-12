@@ -27,6 +27,7 @@
     "PANEL:TITLE:bom:paint": "Paint-shop components",
     "PANEL:TITLE:eto": "ETO",
     "PANEL:TITLE:changes": "History",
+    "PANEL:TITLE:messages": "Messages",
 
     "PROPERTY:_id": "Order no",
     "PROPERTY:sapCreatedAt": "Created at",
@@ -86,6 +87,9 @@
     "PROPERTY:changedBy": "Changed by",
     "PROPERTY:m4": "4M",
     "PROPERTY:etoCont": "ETO Pilot continuation",
+    "PROPERTY:messages.nc12": "Product 12NC",
+    "PROPERTY:messages.source": "Source",
+    "PROPERTY:messages.text": "Text",
 
     "m4:man": "Man",
     "m4:machine": "Machine",
@@ -103,10 +107,11 @@
     "psStatus:finished": "Finished",
     "psStatus:cancelled": "Cancelled",
 
-    "OPERATIONS:NO_DATA": "Order does not have any operations.",
-    "DOCUMENTS:NO_DATA": "Order does not have any linked documents.",
-    "BOM:NO_DATA": "Order does not have any components.",
-    "ETO:NO_DATA": "There is no ETO for this order's 12NC.",
+    "OPERATIONS:NO_DATA": "No operations.",
+    "DOCUMENTS:NO_DATA": "No documents.",
+    "BOM:NO_DATA": "No components.",
+    "ETO:NO_DATA": "No ETO.",
+    "MESSAGES:NO_DATA": "No messages.",
 
     "changes:NO_DATA": "Order was not modified.",
     "changes:operations": "{count, plural, one{1 operation} other{# operations}}",
@@ -168,11 +173,16 @@
     "jumpList:childOrders": "Child orders",
     "jumpList:operations": "Operations",
     "jumpList:documents": "Documents",
+    "jumpList:messages": "Messages",
     "jumpList:bom": "Components",
     "jumpList:eto": "ETO",
     "jumpList:changes": "Changes",
 
-    "changeQtyMax:link": "change"
+    "changeQtyMax:link": "change",
+
+    "messages:source:bom": "BOM",
+    "messages:source:nc12": "Product",
+    "messages:source:order": "Order"
   },
   "pl": true
 }

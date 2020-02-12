@@ -162,6 +162,14 @@ define([
 
     },
 
+    initialize: function()
+    {
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change:operations change:qtyMax change:qtyDone', this.onChange);
+      });
+    },
+
     getTemplateData: function()
     {
       return {
@@ -227,16 +235,17 @@ define([
         .sort(function(a, b) { return a.no - b.no; });
     },
 
-    beforeRender: function()
+    onChange: function()
     {
-      this.stopListening(this.model);
-    },
+      var oldState = this.$el.hasClass('hidden');
+      var newState = this.model.get('operations').length === 0;
 
-    afterRender: function()
-    {
-      this.listenToOnce(this.model, 'change:operations change:qtyMax change:qtyDone', this.render);
+      this.render();
 
-      this.$el.toggleClass('hidden', this.model.get('operations').length === 0);
+      if (oldState !== newState)
+      {
+        this.model.trigger('panelToggle');
+      }
     }
 
   });

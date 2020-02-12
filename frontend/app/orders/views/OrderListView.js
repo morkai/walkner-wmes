@@ -132,6 +132,18 @@ define([
       {
         return model.serialize(options);
       });
+    },
+
+    onReset: function()
+    {
+      var hidden = this.$el.hasClass('hidden');
+
+      this.render();
+
+      if (hidden !== this.$el.hasClass('hidden'))
+      {
+        this.model.trigger('panelToggle');
+      }
     }
 
   });

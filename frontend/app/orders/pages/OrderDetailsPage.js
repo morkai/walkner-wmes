@@ -28,6 +28,7 @@ define([
   '../views/EtoView',
   '../views/FapEntryListView',
   '../views/DowntimeListView',
+  '../views/MessageListView',
   'app/orders/templates/detailsJumpList',
   'i18n!app/nls/wmes-fap-entries'
 ], function(
@@ -58,6 +59,7 @@ define([
   EtoView,
   FapEntryListView,
   DowntimeListView,
+  MessageListView,
   jumpListTemplate
 ) {
   'use strict';
@@ -95,7 +97,8 @@ define([
         'orders.updated.*': 'onOrderUpdated',
         'orders.synced': 'onSynced',
         'orders.*.synced': 'onSynced',
-        'orderDocuments.synced': 'onSynced'
+        'orderDocuments.synced': 'onSynced',
+        'orders.productMessages.**': 'onProductMessageSynced'
       };
 
       topics['orders.quantityDone.' + this.model.id] = 'onQuantityDoneChanged';
@@ -146,7 +149,7 @@ define([
       page.defineViews();
       page.defineBindings();
 
-      _.forEach(page.views_, function(view, id)
+      _.forEach(page.views_, function(view)
       {
         page.insertView(view);
       });
@@ -208,20 +211,24 @@ define([
       });
 
       this.views_.downtimes = !this.downtimes ? null : new DowntimeListView({
+        model: this.model,
         collection: this.downtimes
       });
 
       this.views_.fapEntries = !this.fapEntries ? null : new FapEntryListView({
+        model: this.model,
         collection: this.fapEntries
       });
 
       this.views_.childOrders = new OrderListView({
         tableClassName: 'table-bordered table-hover table-condensed table-striped',
+        model: this.model,
         collection: this.childOrders,
         delayReasons: this.delayReasons,
         panel: {
           title: this.t('PANEL:TITLE:childOrders'),
-          className: 'orders-childOrders'
+          className: 'orders-childOrders',
+          hideEmpty: true
         }
       });
 
@@ -231,6 +238,10 @@ define([
       });
 
       this.views_.documents = new DocumentListView({
+        model: this.model
+      });
+
+      this.views_.messages = new MessageListView({
         model: this.model
       });
 
@@ -262,6 +273,7 @@ define([
       this.listenTo(this.views_.documents, 'documentOpened', this.onDocumentOpened);
       this.listenTo(this.views_.documents, 'documentClosed', this.onDocumentClosed);
       this.listenTo(this.views_.components, 'bestDocumentRequested', this.onBestDocumentRequested);
+      this.listenTo(this.model, 'panelToggle', this.renderJumpList);
     },
 
     load: function(when)
@@ -456,6 +468,11 @@ define([
     onBestDocumentRequested: function(item, contents)
     {
       this.views_.documents.openBestDocument(item, contents);
+    },
+
+    onProductMessageSynced: function(message)
+    {
+      console.log(message); // TODO
     }
 
   });

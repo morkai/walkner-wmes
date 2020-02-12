@@ -105,41 +105,45 @@ define([
 
       this.once('afterRender', function()
       {
-        this.listenTo(this.model, 'change:bom', this.render);
+        this.listenTo(this.model, 'change:bom', this.onChange);
       });
     },
 
     getTemplateData: function()
     {
-      var notes = [];
-      var components = [];
+      var bom = [];
 
       this.model.get('bom').forEach(function(component)
       {
-        component = component.toJSON();
-
-        if (!component.nc12)
+        if (component.get('nc12'))
         {
-          notes.push(component);
-        }
-        else
-        {
-          components.push(component);
+          bom.push(component.toJSON());
         }
       });
 
       return {
+        empty: bom.length === 0,
         paint: !!this.options.paint,
         linkPfep: !!this.options.linkPfep && user.isAllowedTo('PFEP:VIEW'),
-        bom: notes.concat(components)
+        bom: bom
       };
     },
 
     afterRender: function()
     {
-      this.$el.toggleClass('hidden', this.model.get('bom').length === 0);
-
       this.updateItems();
+    },
+
+    onChange: function()
+    {
+      var oldState = this.$el.hasClass('hidden');
+      var newState = this.model.get('bom').length === 0;
+
+      if (oldState !== newState)
+      {
+        this.render();
+        this.model.trigger('panelToggle');
+      }
     },
 
     markDocument: function(nc15, win)

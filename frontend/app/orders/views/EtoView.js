@@ -87,7 +87,9 @@ define([
           }
           else
           {
-            view.$('.panel-body').text(t('orders', 'ETO:NO_DATA'));
+            view.$('.panel-body').text(view.t('ETO:NO_DATA'));
+            view.$el.addClass('hidden');
+            view.model.trigger('panelToggle');
           }
         })
         .done(function()
@@ -102,6 +104,9 @@ define([
 
       this.$el.addClass('orders-eto-loaded');
       this.$('.panel-body').empty().append($iframe);
+      this.$el.removeClass('hidden');
+
+      this.model.trigger('panelToggle');
     }
 
   });
