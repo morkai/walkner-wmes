@@ -27,7 +27,7 @@
     "PANEL:TITLE:bom:paint": "Paint-shop components",
     "PANEL:TITLE:eto": "ETO",
     "PANEL:TITLE:changes": "History",
-    "PANEL:TITLE:messages": "Messages",
+    "PANEL:TITLE:notes": "Notes",
 
     "PROPERTY:_id": "Order no",
     "PROPERTY:sapCreatedAt": "Created at",
@@ -87,9 +87,7 @@
     "PROPERTY:changedBy": "Changed by",
     "PROPERTY:m4": "4M",
     "PROPERTY:etoCont": "ETO Pilot continuation",
-    "PROPERTY:messages.nc12": "Product 12NC",
-    "PROPERTY:messages.source": "Source",
-    "PROPERTY:messages.text": "Text",
+    "PROPERTY:notes": "Notes",
 
     "m4:man": "Man",
     "m4:machine": "Machine",
@@ -111,12 +109,13 @@
     "DOCUMENTS:NO_DATA": "No documents.",
     "BOM:NO_DATA": "No components.",
     "ETO:NO_DATA": "No ETO.",
-    "MESSAGES:NO_DATA": "No messages.",
+    "NOTES:NO_DATA": "No messages.",
 
     "changes:NO_DATA": "Order was not modified.",
     "changes:operations": "{count, plural, one{1 operation} other{# operations}}",
     "changes:documents": "{count, plural, one{1 document} other{# documents}}",
     "changes:bom": "{count, plural, one{1 component} other{# components}}",
+    "changes:notes": "{count, plural, one{1 note} other{# notes}}",
     "changes:change": "Change #{no}",
     "changes:time": "Time",
     "changes:user": "User",
@@ -167,22 +166,25 @@
     "settings:iptChecker:toBusinessDays": "Number of days to check",
     "settings:iptChecker:mrps": "MRPs to check",
 
-    "jumpList:details": "Details",
-    "jumpList:fap": "FAP entries",
-    "jumpList:downtimes": "Downtimes",
-    "jumpList:childOrders": "Child orders",
-    "jumpList:operations": "Operations",
-    "jumpList:documents": "Documents",
-    "jumpList:messages": "Messages",
-    "jumpList:bom": "Components",
-    "jumpList:eto": "ETO",
-    "jumpList:changes": "Changes",
+    "jumpList:details": "Details_1",
+    "jumpList:fap": "FAP entries_2",
+    "jumpList:downtimes": "Downtimes_3",
+    "jumpList:childOrders": "Child orders_4",
+    "jumpList:operations": "Operations_5",
+    "jumpList:documents": "Documents_Q",
+    "jumpList:notes": "Notes_W",
+    "jumpList:bom": "Components_E",
+    "jumpList:eto": "ETO_R",
+    "jumpList:changes": "Changes_T",
 
     "changeQtyMax:link": "change",
 
-    "messages:source:bom": "BOM",
-    "messages:source:nc12": "Product",
-    "messages:source:order": "Order"
+    "notes:edit:button": "Assign notes to order",
+    "notes:edit:title": "Assigning notes to order",
+    "notes:edit:submit": "Save notes",
+    "notes:edit:text": "Note text",
+    "notes:edit:add": "Add note",
+    "notes:edit:clear": "Clear all"
   },
   "pl": true
 }

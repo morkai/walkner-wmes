@@ -55,10 +55,14 @@
 }
 .orders-changes .orders-operations,
 .orders-changes .orders-documents,
-.orders-changes .orders-bom {
+.orders-changes .orders-bom,
+.orders-changes .orders-notes {
   position: absolute;
-  width: 100%;
   z-index: 10002;
+  box-shadow: 0 0 30px #999;
+}
+.orders-changes > .panel:last-child .panel-heading-actions {
+  display: none;
 }
 .orders-changes > .table > tbody + tbody {
   border-top-width: 1px;
@@ -75,7 +79,8 @@
 }
 .orders-changes-operations,
 .orders-changes-documents,
-.orders-changes-bom {
+.orders-changes-bom,
+.orders-changes-notes {
   cursor: pointer;
 }
 .orders-changes-comment {
@@ -104,8 +109,8 @@
 .orders-changes .userInfo-cname {
   display: block;
 }
-.orders-changes .table-responsive {
-  max-height: none!important;
+.orders-changes > .list > .table-responsive {
+  max-height: none;
 }
 .table > tfoot > tr > td.orders-commentForm-container {
   padding: 15px;
@@ -118,7 +123,7 @@
   width: auto;
   box-shadow: 3px 3px 12px #999;
   border-radius: 6px;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 .orders-jumpList:hover {
   opacity: 1;
@@ -135,6 +140,9 @@
 }
 .orders-jumpList > .list-group-item:last-child {
   border-bottom-left-radius: 6px;
+}
+.orders-jumpList kbd {
+  margin-left: 5px;
 }
 .orders-eto > .panel-body > iframe {
   display: block;
@@ -158,6 +166,20 @@
 
 .orders-childOrders td[data-id="statusLabels"] {
   white-space: nowrap;
+}
+
+.orders-notes-form table {
+  width: 100%;
+}
+.orders-notes-form td {
+  padding-top: 7px;
+}
+.orders-notes-form td:first-child {
+  padding-right: 7px;
+  vertical-align: top;
+}
+.orders-notes-form td:last-child {
+
 }
 
 .page[data-parent-app-id="docs"] {

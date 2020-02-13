@@ -4,11 +4,13 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/decimalSeparator',
   'app/orders/templates/componentList'
 ], function(
   user,
   viewport,
   View,
+  decimalSeparator,
   template
 ) {
   'use strict';
@@ -117,7 +119,16 @@ define([
       {
         if (component.get('nc12'))
         {
-          bom.push(component.toJSON());
+          component = component.toJSON();
+
+          var qty = component.qty.toString().split('.');
+
+          component.qty = [
+            qty[0].toString(),
+            qty[1] ? (decimalSeparator + qty[1]) : ''
+          ];
+
+          bom.push(component);
         }
       });
 

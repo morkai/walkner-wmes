@@ -14,6 +14,7 @@ define([
   './OperationListView',
   './DocumentListView',
   './ComponentListView',
+  './NoteListView',
   '../Order',
   '../OperationCollection',
   '../DocumentCollection',
@@ -36,6 +37,7 @@ define([
   OperationListView,
   DocumentListView,
   ComponentListView,
+  NoteListView,
   Order,
   OperationCollection,
   DocumentCollection,
@@ -55,6 +57,7 @@ define([
       'click .orders-changes-operations': 'toggleOperations',
       'click .orders-changes-documents': 'toggleDocuments',
       'click .orders-changes-bom': 'toggleComponents',
+      'click .orders-changes-notes': 'toggleNotes',
       'mouseover .orders-changes-noTimeAndUser': function(e)
       {
         var $tr = this.$(e.target).closest('tbody').children().first();
@@ -92,9 +95,12 @@ define([
       this.renderValueChange = this.renderValueChange.bind(this);
 
       this.$lastToggle = null;
-      this.operationListView = null;
-      this.documentListView = null;
-      this.componentListView = null;
+      this.toggleViews = {
+        operations: null,
+        documents: null,
+        bom: null,
+        notes: null
+      };
 
       this.setView('#-commentForm', new OrderCommentFormView({
         model: this.model,
@@ -238,6 +244,12 @@ define([
             + this.t('changes:bom', {count: value.length})
             + '</a>';
 
+        case 'notes':
+          return '<a class="orders-changes-notes" '
+            + 'data-i="' + i + '" data-property="' + valueProperty + '">'
+            + this.t('changes:notes', {count: value.length})
+            + '</a>';
+
         case 'statuses':
           return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join(' ');
 
@@ -286,32 +298,25 @@ define([
         return true;
       }
 
-      if (this.$lastToggle[0] !== e.target)
+      if (!e || this.$lastToggle[0] !== e.target)
       {
         this.$lastToggle.click();
 
         return true;
       }
 
-      if (this.operationListView !== null)
-      {
-        this.operationListView.remove();
-        this.operationListView = null;
-      }
-
-      if (this.documentListView !== null)
-      {
-        this.documentListView.remove();
-        this.documentListView = null;
-      }
-
-      if (this.componentListView !== null)
-      {
-        this.componentListView.remove();
-        this.componentListView = null;
-      }
-
       this.$lastToggle = null;
+
+      var views = this.toggleViews;
+
+      _.forEach(views, function(view, id)
+      {
+        if (view !== null)
+        {
+          view.remove();
+          views[id] = null;
+        }
+      });
 
       return false;
     },
@@ -320,7 +325,7 @@ define([
     {
       if (this.hideLastToggle(e))
       {
-        this.showLastToggle(e, OperationCollection, OperationListView, 'operations', 'operationListView');
+        this.showLastToggle(e, OperationCollection, OperationListView, 'operations');
       }
     },
 
@@ -328,7 +333,7 @@ define([
     {
       if (this.hideLastToggle(e))
       {
-        this.showLastToggle(e, DocumentCollection, DocumentListView, 'documents', 'documentListView');
+        this.showLastToggle(e, DocumentCollection, DocumentListView, 'documents');
       }
     },
 
@@ -336,16 +341,25 @@ define([
     {
       if (this.hideLastToggle(e))
       {
-        this.showLastToggle(e, ComponentCollection, ComponentListView, 'bom', 'componentListView');
+        this.showLastToggle(e, ComponentCollection, ComponentListView, 'bom');
       }
     },
 
-    showLastToggle: function(e, Collection, ListView, collectionProperty, listViewProperty)
+    toggleNotes: function(e)
+    {
+      if (this.hideLastToggle(e))
+      {
+        this.showLastToggle(e, null, NoteListView, 'notes');
+      }
+    },
+
+    showLastToggle: function(e, Collection, ListView, collectionProperty)
     {
       var $lastToggle = this.$(e.target);
       var i = $lastToggle.attr('data-i');
       var property = $lastToggle.attr('data-property') + 's';
-      var collection = new Collection(this.model.get('changes')[i][property][collectionProperty]);
+      var value = this.model.get('changes')[i][property][collectionProperty];
+      var collection = Collection ? new Collection(value) : value;
       var orderData = {};
       orderData[collectionProperty] = collection;
       var listView = new ListView({model: new Order(orderData)});
@@ -355,12 +369,23 @@ define([
         + (this.options.showPanel !== false ? this.$('.panel-heading').first().outerHeight() : 0);
 
       listView.render();
-      listView.$el.css('top', top);
+      listView.$el.css('top', top + 'px');
 
       this.$el.append(listView.$el);
 
+      var rect = $lastToggle.closest('td')[0].getBoundingClientRect();
+      var width = listView.$el.outerWidth();
+      var left = Math.round(rect.left - width / 2);
+
+      if (left < 0)
+      {
+        left = 0;
+      }
+
+      listView.$el.css('left', left + 'px');
+
       this.$lastToggle = $lastToggle;
-      this[listViewProperty] = listView;
+      this.toggleViews[collectionProperty] = listView;
     },
 
     onChangePush: function(change)
@@ -435,6 +460,7 @@ define([
       if (e.key === 'Escape')
       {
         this.hideTimeEditor();
+        this.hideLastToggle();
       }
     },
 

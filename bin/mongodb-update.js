@@ -3,4 +3,4 @@
 
 'use strict';
 
-db.orders.updateMany({scheduledStartDate: {$gte: new Date('2020-02-01T00:00:00')}}, {$set: {messages: []}});
+db.orders.updateMany({scheduledStartDate: {$gte: new Date('2020-02-01T00:00:00')}}, {$set: {notes: []}});

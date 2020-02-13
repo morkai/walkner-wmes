@@ -1,0 +1,21 @@
+<div class="panel panel-default is-with-actions orders-notes">
+  <div class="panel-heading">
+    <div class="panel-heading-title"><%- t('PANEL:TITLE:notes') %></div>
+    <div class="panel-heading-actions">
+      <% if (user.isAllowedTo('ORDERS:MANAGE')) { %>
+      <button id="<%- idPrefix %>-edit" class="btn btn-default" type="button" title="<%- t('notes:edit:button') %>"><i class="fa fa-edit"></i></button>
+      <% } %>
+    </div>
+  </div>
+  <div class="panel-body">
+    <% if (_.isEmpty(notes)) { %>
+    <%- t('NOTES:NO_DATA') %>
+    <% } else { %>
+    <ol style="list-style: none; margin: 0; padding: 0">
+      <% notes.forEach(function(text) { %>
+      <li class="text-lines">► <%= text %></li>
+      <% }) %>
+    </ol>
+    <% } %>
+  </div>
+</div>

@@ -1,5 +1,10 @@
 <div id="<%- idPrefix %>-jumpList" class="list-group orders-jumpList">
-  <% ['details', 'fap', 'downtimes', 'childOrders', 'operations', 'documents', 'messages', 'bom', 'eto', 'changes'].forEach(function(section) { %>
-  <a href="#orders-<%- section %>" class="list-group-item" data-section="<%- section %>"><%- t('orders', 'jumpList:' + section) %></a>
+  <% sections.forEach(function(section) { %>
+  <a href="javascript:void(0)" class="list-group-item" data-section="<%- section.id %>" data-hotkey="<%- section.hotkey %>">
+    <%- section.label %>
+    <% if (section.hotkey) { %>
+    <kbd><%- section.hotkey %></kbd>
+    <% } %>
+  </a>
   <% }) %>
 </div>

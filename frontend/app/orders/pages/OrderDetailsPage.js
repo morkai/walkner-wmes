@@ -28,7 +28,7 @@ define([
   '../views/EtoView',
   '../views/FapEntryListView',
   '../views/DowntimeListView',
-  '../views/MessageListView',
+  '../views/NoteListView',
   'app/orders/templates/detailsJumpList',
   'i18n!app/nls/wmes-fap-entries'
 ], function(
@@ -59,7 +59,7 @@ define([
   EtoView,
   FapEntryListView,
   DowntimeListView,
-  MessageListView,
+  NoteListView,
   jumpListTemplate
 ) {
   'use strict';
@@ -97,8 +97,7 @@ define([
         'orders.updated.*': 'onOrderUpdated',
         'orders.synced': 'onSynced',
         'orders.*.synced': 'onSynced',
-        'orderDocuments.synced': 'onSynced',
-        'orders.productMessages.**': 'onProductMessageSynced'
+        'orderDocuments.synced': 'onSynced'
       };
 
       topics['orders.quantityDone.' + this.model.id] = 'onQuantityDoneChanged';
@@ -109,8 +108,8 @@ define([
     events: {
       'click #-jumpList > a': function(e)
       {
-        var section = e.currentTarget.getAttribute('href').substring(1);
-        var $section = this.$('.' + section);
+        var section = e.currentTarget.dataset.section;
+        var $section = this.$('.orders-' + section);
 
         var y = $section.offset().top - 14;
         var $navbar = $('.navbar-fixed-top');
@@ -159,6 +158,7 @@ define([
     {
       delayReasonsStorage.release();
       fapDictionaries.unload();
+      $(window).off('.' + this.idPrefix);
     },
 
     defineModels: function()
@@ -241,7 +241,7 @@ define([
         model: this.model
       });
 
-      this.views_.messages = new MessageListView({
+      this.views_.notes = new NoteListView({
         model: this.model
       });
 
@@ -274,6 +274,8 @@ define([
       this.listenTo(this.views_.documents, 'documentClosed', this.onDocumentClosed);
       this.listenTo(this.views_.components, 'bestDocumentRequested', this.onBestDocumentRequested);
       this.listenTo(this.model, 'panelToggle', this.renderJumpList);
+
+      $(window).on('keypress.' + this.idPrefix, this.onKeyPress.bind(this));
     },
 
     load: function(when)
@@ -355,16 +357,37 @@ define([
 
       page.$id('jumpList').remove();
 
-      var $jumpList = page.renderPartial(jumpListTemplate);
-
-      $jumpList.find('[data-section]').each(function()
-      {
-        var $section = page.$('.orders-' + this.dataset.section).first();
-
-        if (!$section.length || $section.hasClass('hidden'))
+      var sections = [
+        'details',
+        'fap',
+        'downtimes',
+        'childOrders',
+        'operations',
+        'documents',
+        'notes',
+        'bom',
+        'eto',
+        'changes'
+      ];
+      var isEmbedded = embedded.isEnabled();
+      var $jumpList = page.renderPartial(jumpListTemplate, {
+        sections: sections.map(function(id)
         {
-          this.parentNode.removeChild(this);
-        }
+          var parts = page.t('jumpList:' + id).split('_');
+          var label = parts[0];
+          var hotkey = !!parts[1] && !isEmbedded ? parts[1] : '';
+
+          return {
+            id: id,
+            label: label,
+            hotkey: hotkey
+          };
+        }).filter(function(section)
+        {
+          var $section = page.$('.orders-' + section.id).first();
+
+          return !!$section.length && !$section.hasClass('hidden');
+        })
       });
 
       page.$el.append($jumpList);
@@ -470,9 +493,16 @@ define([
       this.views_.documents.openBestDocument(item, contents);
     },
 
-    onProductMessageSynced: function(message)
+    onKeyPress: function(e)
     {
-      console.log(message); // TODO
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')
+      {
+        return;
+      }
+
+      var key = e.key.toUpperCase();
+
+      this.$id('jumpList').find('a[data-hotkey="' + key + '"]').click();
     }
 
   });
