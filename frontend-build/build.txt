@@ -2577,6 +2577,10 @@ app/core/views/FormView.js
 app/core/util/idAndLabel.js
 app/orders/templates/commentForm.js
 app/orders/views/OrderCommentFormView.js
+app/orders/templates/notesForm.js
+app/orders/views/NotesEditFormView.js
+app/orders/templates/noteList.js
+app/orders/views/NoteListView.js
 app/orders/templates/change.js
 app/orders/templates/changes.js
 app/orders/views/OrderChangesView.js
