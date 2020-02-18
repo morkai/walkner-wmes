@@ -91,6 +91,29 @@ define([
       this.$el.removeClass(this.options.isExpandedClassName);
     },
 
+    toggleSelection: function()
+    {
+      var options = this.$el[0].options;
+      var anyUnselected = false;
+
+      for (var i = 0; i < options.length; ++i)
+      {
+        if (anyUnselected || !options[i].selected)
+        {
+          options[i].selected = true;
+          anyUnselected = true;
+        }
+      }
+
+      if (!anyUnselected)
+      {
+        for (var j = 0; j < options.length; ++j)
+        {
+          options[j].selected = false;
+        }
+      }
+    },
+
     onWindowResize: function()
     {
       this.collapse();
@@ -112,9 +135,16 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.keyCode === 27)
+      if (e.key === 'Escape')
       {
         this.$el.blur();
+
+        return false;
+      }
+
+      if (e.key.toLowerCase() === 'a')
+      {
+        this.toggleSelection();
 
         return false;
       }
