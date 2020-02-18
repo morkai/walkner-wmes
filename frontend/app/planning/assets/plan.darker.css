@@ -96,6 +96,9 @@
   background: #d9534f;
   color: #fff;
 }
+.planning-darker .planning-mrp-popover {
+  color: #333;
+}
 .planning-darker .planning-mrp-popover .is-incomplete {
   color: darkorange;
 }

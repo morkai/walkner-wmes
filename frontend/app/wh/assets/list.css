@@ -101,6 +101,9 @@ td.wh-list-icon {
   background: #ffc000;
   color: #000;
 }
+.planning-darker .wh-list-item .planning-mrp-comment-popover {
+  color: #333;
+}
 
 .wh-list-popover {
   max-width: 400px;
