@@ -72,6 +72,11 @@ For $sessionI = 1 To ($connection.Children.Length - 1)
 
   $session = $connection.Children($sessionI)
 
+  If Not IsObj($session) Then
+    LogDebug("SESSION_NOT_OBJECT")
+    ContinueLoop
+  EndIf
+
   If $session.Busy Then
     LogDebug("SESSION_BUSY")
     ContinueLoop
@@ -80,6 +85,11 @@ For $sessionI = 1 To ($connection.Children.Length - 1)
   $sessionId = $session.Id
 
   LogDebug("SESSION_ID=" & $sessionId)
+
+  If Not IsObj($connection) Then
+    LogDebug("CONNECTION_NOT_OBJECT")
+    ContinueLoop
+  EndIf
 
   If $sessionIds.Count = 0 Or $sessionIds.Exists($session.Id) Then
     LogDebug("CLOSING_SESSION=" & $sessionId)
