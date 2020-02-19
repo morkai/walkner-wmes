@@ -478,6 +478,7 @@ exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planni
     'paintShop.generator.requested',
     'drilling.generator.requested',
     'wiring.generator.requested',
+    'old.wh.generator.requested',
     'wh.generator.requested',
     'settings.updated.orders.operations.groups',
     'settings.updated.wh.**'
@@ -639,6 +640,10 @@ exports['wmes-wiring'] = {
 };
 
 exports.wh = {
+  generator: false
+};
+
+exports['wmes-wh'] = {
   generator: false
 };
 

@@ -26,6 +26,14 @@
   background-color: #ffffa6;
   color: #333;
 }
+.planning-menu > li > a:focus {
+  background: #fff;
+  color: #333;
+  outline: 2px solid #0af;
+}
+.planning-menu > li > a:focus:hover {
+  background: #ffffa6;
+}
 .planning-menu > li > a > .fa {
   min-width: 14px;
   font-size: 14px;
@@ -39,11 +47,13 @@
   cursor: default!important;
   color: #777!important;
   background-color: #fff!important;
+  outline: none!important;
 }
 .planning-menu-loading {
   cursor: wait!important;
   color: #777!important;
   background-color: #fff!important;
+  outline: none!important;
 }
 .planning-menu .divider {
   margin: 5px 0;

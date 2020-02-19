@@ -38,7 +38,7 @@ exports.events = {
 exports.mongoose = {
   uri: mongodb.uri,
   mongoClient: Object.assign(mongodb.mongoClient, {
-    poolSize: 5,
+    poolSize: 10,
     readPreference: 'secondaryPreferred'
   }),
   maxConnectTries: 10,
@@ -58,13 +58,12 @@ exports.updater = {
 exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   broadcastTopics: [
     'events.saved',
-    'planning.generator.started',
-    'planning.generator.finished',
-    'planning.changes.created',
+    'planning.generator.started', 'planning.generator.finished', 'planning.changes.created',
     'paintShop.orders.changed.*',
     'drilling.orders.changed.*',
     'wiring.orders.changed.*',
-    'wh.orders.changed.*'
+    'old.wh.generator.started', 'old.wh.generator.finished', 'old.wh.orders.changed.*',
+    'wh.generator.started', 'wh.generator.finished', 'wh.orders.changed.*'
   ]
 });
 
@@ -87,6 +86,10 @@ exports.paintShop = {
 };
 
 exports.wh = {
+  generator: true
+};
+
+exports['wmes-wh'] = {
   generator: true
 };
 

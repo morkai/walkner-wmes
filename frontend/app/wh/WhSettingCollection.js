@@ -1,13 +1,17 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   '../user',
+  '../data/orgUnits',
   '../settings/SettingCollection',
   './WhSetting'
 ], function(
+  _,
   $,
   user,
+  orgUnits,
   SettingCollection,
   WhSetting
 ) {
@@ -49,7 +53,7 @@ define([
         return newValue;
       }
 
-      if (/ignoredMrps/.test(id))
+      if (/Mrps$/.test(id))
       {
         return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
       }
@@ -58,6 +62,80 @@ define([
       {
         return !!newValue;
       }
+
+      if (/lineGroups$/.test(id))
+      {
+        return this.prepareLineGroups(newValue);
+      }
+    },
+
+    prepareFormValue: function(id, value)
+    {
+      if (/lineGroups$/.test(id))
+      {
+        return this.formatLineGroups(value);
+      }
+
+      return SettingCollection.prototype.prepareFormValue.apply(this, arguments);
+    },
+
+    prepareLineGroups: function(rawValue)
+    {
+      var lineGroupMap = {};
+
+      (rawValue || '').split('\n').forEach(function(line)
+      {
+        var parts = line.trim().split(':');
+
+        if (parts.length !== 2)
+        {
+          return;
+        }
+
+        var id = parts[0].trim();
+
+        if (!id.length)
+        {
+          return;
+        }
+
+        if (!lineGroupMap[id])
+        {
+          lineGroupMap[id] = {};
+        }
+
+        parts[1].split(/[,;]+/).forEach(function(line)
+        {
+          var prodLine = orgUnits.getByTypeAndId('prodLine', line.trim());
+
+          if (prodLine)
+          {
+            lineGroupMap[id][prodLine.id] = 1;
+          }
+        });
+      });
+
+      var lineGroupList = [];
+
+      Object.keys(lineGroupMap).forEach(function(groupId)
+      {
+        lineGroupList.push({
+          _id: groupId,
+          lines: Object.keys(lineGroupMap[groupId])
+        });
+      });
+
+      return lineGroupList;
+    },
+
+    formatLineGroups: function(lineGroups)
+    {
+      return lineGroups
+        .map(function(lineGroup)
+        {
+          return _.escape(lineGroup._id) + ': ' + lineGroup.lines.join(', ');
+        })
+        .join('\n');
     }
 
   });

@@ -86,6 +86,14 @@ define([
         view: this
       });
 
+      setUpMrpSelect2(view.$id('planning-enabledMrps'), {
+        width: '100%',
+        placeholder: ' ',
+        sortable: true,
+        own: false,
+        view: this
+      });
+
       this.$('input[data-user-func]').each(function()
       {
         setUpUserSelect2(view.$(this), {
@@ -118,17 +126,19 @@ define([
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return setting.id !== 'wh.planning.ignoredMrps';
+      return !/Mrps$/.test(setting.id);
     },
 
     updateSettingField: function(setting)
     {
-      if (setting && setting.id === 'wh.planning.ignoredMrps')
+      if (setting && /Mrps$/.test(setting.id))
       {
-        this.$id('planning-ignoredMrps').select2('data', setting.getValue().map(function(mrp)
+        var data = setting.getValue().map(function(mrp)
         {
           return {id: mrp, text: mrp};
-        }));
+        });
+
+        this.$('input[name="' + setting.id + '"]').select2('data', data);
       }
     },
 
