@@ -845,7 +845,7 @@ define([
 
       var devices = {};
 
-      this.model.tester.get('io').forEach(function(io)
+      (this.model.tester.get('io') || []).forEach(function(io)
       {
         devices[io.device] = 1;
       });
