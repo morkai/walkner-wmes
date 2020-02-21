@@ -671,6 +671,11 @@ define([
 
     updateScreen: function()
     {
+      if (window.ENV === 'production')
+      {
+        return;
+      }
+
       var page = this;
       var state = page.model.get('state');
       var screen = {
