@@ -1166,7 +1166,7 @@ define([
         return;
       }
 
-      if (!currentOrder.notes.length)
+      if (!Array.isArray(currentOrder.notes) || !currentOrder.notes.length)
       {
         return;
       }
