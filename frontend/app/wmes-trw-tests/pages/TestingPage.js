@@ -659,6 +659,57 @@ define([
       }
 
       this.$id('message').html(html);
+
+      this.scheduleScreenUpdate(100);
+    },
+
+    scheduleScreenUpdate: function(delay)
+    {
+      clearTimeout(this.timers.updateScreen);
+      this.timers.updateScreen = setTimeout(this.updateScreen.bind(this), delay);
+    },
+
+    updateScreen: function()
+    {
+      var page = this;
+      var state = page.model.get('state');
+      var screen = {
+        state: state,
+        message: page.t.has('state:' + state) ? page.t('state:' + state) : undefined
+      };
+
+      if (state === 'test')
+      {
+        var program = this.model.test.get('program');
+        var stepNo = this.model.get('step');
+        var step = program.steps[stepNo - 1];
+
+        if (step)
+        {
+          screen.step = this.t('state:step', {no: stepNo});
+          screen.source = Program.formatEndpoint(step.source, program.base);
+          screen.target = Program.formatEndpoint(step.target, program.base);
+          screen.color = Program.formatColor(step.color, '?');
+          screen.length = Program.formatLength(step.length, '?');
+        }
+        else
+        {
+          screen.state = 'error';
+        }
+      }
+
+      page.runCommand('screen', screen, function(err)
+      {
+        if (err)
+        {
+          if (page.model.get('debug'))
+          {
+            console.warn('Failed to update screen:', err);
+          }
+
+          return page.scheduleScreenUpdate(10000);
+        }
+      });
     },
 
     updateStepMessage: function()
@@ -1553,6 +1604,11 @@ define([
         {
           if (res.ok)
           {
+            if (res.status === 204)
+            {
+              return {};
+            }
+
             return res.json();
           }
 
@@ -1682,6 +1738,47 @@ define([
         }
 
         console.info('IO %s:%s set to: %s', device, channel, value);
+      });
+    },
+
+    ioSetAll: function(value, type)
+    {
+      var page = this;
+
+      if (typeof value === 'string')
+      {
+        type = value;
+        value = null;
+      }
+
+      if (!type)
+      {
+        type = 'input';
+      }
+
+      if (value == null)
+      {
+        value = true;
+      }
+
+      if (typeof value !== 'number')
+      {
+        if (value)
+        {
+          value = type === 'input' ? 1024 : 8000;
+        }
+        else
+        {
+          value = 0;
+        }
+      }
+
+      Object.values(page.model.get('allIo')).forEach(io =>
+      {
+        if (io.type === type)
+        {
+          page.ioSet(io.device, io.channel, value);
+        }
       });
     },
 
