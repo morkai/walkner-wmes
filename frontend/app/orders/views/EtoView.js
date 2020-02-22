@@ -35,6 +35,12 @@ define([
       'click #-toggle': function()
       {
         var $iframe = this.$('iframe');
+
+        if (!$iframe.length)
+        {
+          return;
+        }
+
         var expanded = !!$iframe.data('expanded');
         var bodyEl = $iframe[0].contentWindow.document.body;
         var height = bodyEl.parentNode.getClientRects()[0].height;
