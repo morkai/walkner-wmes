@@ -329,7 +329,7 @@ define([
         comment: comment
       }, data);
 
-      return this.model.collection.act(reqData, function(err)
+      return this.orders.act(reqData, function(err)
       {
         if (err)
         {
