@@ -357,8 +357,15 @@ define([
     {
       var $lastToggle = this.$(e.target);
       var i = $lastToggle.attr('data-i');
+      var change = this.model.get('changes')[i];
+
+      if (!change)
+      {
+        return;
+      }
+
       var property = $lastToggle.attr('data-property') + 's';
-      var value = this.model.get('changes')[i][property][collectionProperty];
+      var value = change[property][collectionProperty];
       var collection = Collection ? new Collection(value) : value;
       var orderData = {};
       orderData[collectionProperty] = collection;
