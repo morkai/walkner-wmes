@@ -495,14 +495,14 @@ define([
 
     onKeyPress: function(e)
     {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')
+      if (e.target.tagName === 'INPUT'
+        || e.target.tagName === 'TEXTAREA'
+        || !e.key)
       {
         return;
       }
 
-      var key = e.key.toUpperCase();
-
-      this.$id('jumpList').find('a[data-hotkey="' + key + '"]').click();
+      this.$id('jumpList').find('a[data-hotkey="' + e.key.toUpperCase() + '"]').click();
     }
 
   });
