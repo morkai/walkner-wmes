@@ -292,17 +292,14 @@ define([
         htmlAttrs.push('class="' + className + '"');
       }
 
-      if (!attrs.title)
+      if (!column.titleProperty && prefix === 'td' && className.indexOf('is-overflow') !== -1)
       {
-        if (!column.titleProperty && prefix === 'td' && className.indexOf('is-overflow') !== -1)
-        {
-          column.titleProperty = column.id;
-        }
+        column.titleProperty = column.id;
+      }
 
-        if (column.titleProperty)
-        {
-          attrs.title = row[column.titleProperty];
-        }
+      if (column.titleProperty)
+      {
+        attrs.title = row[column.titleProperty];
       }
 
       if (attrs.title)

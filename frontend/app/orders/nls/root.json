@@ -9,6 +9,7 @@
     "PAGE_ACTION:jump:title": "Jump to order by no",
     "PAGE_ACTION:jump:placeholder": "Order no",
     "PAGE_ACTION:cycleTime": "Cycle time",
+    "PAGE_ACTION:notes": "Notes",
 
     "LIST:ACTION:print": "Print",
 
@@ -183,8 +184,11 @@
     "notes:edit:title": "Assigning notes to order",
     "notes:edit:submit": "Save notes",
     "notes:edit:text": "Note text",
+    "notes:edit:priority": "Priority",
     "notes:edit:add": "Add note",
-    "notes:edit:clear": "Clear all"
+    "notes:edit:clear": "Clear all",
+    "notes:target:docs": "Documentation",
+    "notes:target:ps": "Paint-shop"
   },
   "pl": true
 }

@@ -3,18 +3,26 @@
 
 'use strict';
 
-db.oldwhorders.find({}).forEach(whOrder =>
+const cond = {
+  scheduledStartDate: {$gt: new Date('2020-01-31T00:00:00Z')},
+  notes: {$exists: true, $ne: []}
+};
+
+db.orders.find(cond, {notes: 1}).forEach(o =>
 {
-  if (Array.isArray(whOrder.lines) && whOrder.lines.length > 1)
+  if (typeof o.notes[0] !== 'string')
   {
     return;
   }
 
-  const lines = [{
-    _id: whOrder.line,
-    qty: whOrder.qty,
-    pceTime: Math.ceil((whOrder.finishTime - whOrder.startTime) / whOrder.qty)
-  }];
+  o.notes = o.notes.map(text => ({target: 'docs', priority: 'warning', text}));
 
-  db.oldwhorders.updateOne({_id: whOrder._id}, {$set: {lines}});
+  db.orders.updateOne({_id: o._id}, {$set: {notes: o.notes}});
+});
+
+db.paintshoporders.find({notes: {$exists: false}}).forEach(pso =>
+{
+  pso.childOrders.forEach(c => c.notes = []);
+
+  db.paintshoporders.updateOne({_id: pso._id}, {$set: {notes: [], childOrders: pso.childOrders}});
 });

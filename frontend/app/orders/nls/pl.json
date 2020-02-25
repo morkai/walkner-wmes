@@ -8,6 +8,7 @@
   "PAGE_ACTION:jump:title": "Skocz do zlecenia po nr",
   "PAGE_ACTION:jump:placeholder": "Nr zlecenia",
   "PAGE_ACTION:cycleTime": "Czas cyklu",
+  "PAGE_ACTION:notes": "Uwagi",
 
   "LIST:ACTION:print": "Drukuj",
 
@@ -182,6 +183,9 @@
   "notes:edit:title": "Zmiana uwag do zlecenia",
   "notes:edit:submit": "Zapisz uwagi",
   "notes:edit:text": "Treść uwagi",
+  "notes:edit:priority": "Priorytet",
   "notes:edit:add": "Dodaj uwagę",
-  "notes:edit:clear": "Usuń wszystkie"
+  "notes:edit:clear": "Usuń wszystkie",
+  "notes:target:docs": "Dokumentacja",
+  "notes:target:ps": "Malarnia"
 }

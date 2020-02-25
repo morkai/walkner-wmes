@@ -168,6 +168,9 @@
   white-space: nowrap;
 }
 
+.orders-notes h5:first-child {
+  margin-top: 0;
+}
 .orders-notes-form table {
   width: 100%;
 }
@@ -178,8 +181,25 @@
   padding-right: 7px;
   vertical-align: top;
 }
-.orders-notes-form td:last-child {
-
+.orders-notes-priority > option[value="default"],
+.orders-notes-priority[data-value="default"] {
+  background: #FFF;
+}
+.orders-notes-priority > option[value="info"],
+.orders-notes-priority[data-value="info"] {
+  background: #E8F6FF;
+}
+.orders-notes-priority > option[value="warning"],
+.orders-notes-priority[data-value="warning"] {
+  background: #F9EDBE;
+}
+.orders-notes-priority > option[value="success"],
+.orders-notes-priority[data-value="success"] {
+  background: #EAF7D9;
+}
+.orders-notes-priority > option[value="danger"],
+.orders-notes-priority[data-value="danger"] {
+  background: #FFD1D1;
 }
 
 .page[data-parent-app-id="docs"] {

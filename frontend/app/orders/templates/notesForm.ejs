@@ -1,16 +1,34 @@
 <form class="orders-notes-form">
+  <div class="form-group">
+    <div class="btn-group">
+      <% ['docs', 'ps'].forEach(function(target) { %>
+      <button type="button" class="btn btn-default" data-target="<%- target %>">
+        <%- t('notes:target:' + target) %>
+        (<span class="orders-notes-count">0</span>)
+      </button>
+      <% }) %>
+    </div>
+  </div>
   <table class="table table-bordered table-condensed">
     <thead>
     <tr>
-      <th><%- t('core', '#') %></th>
+      <th class="is-min"><%- t('core', '#') %></th>
       <th><%- t('notes:edit:text') %></th>
-      <th><%- t('core', 'LIST:COLUMN:actions') %></th>
+      <th class="is-min"><%- t('notes:edit:priority') %></th>
+      <th class="is-min"><%- t('core', 'LIST:COLUMN:actions') %></th>
     </tr>
     </thead>
     <tbody id="<%- idPrefix %>-notes" class="orders-notes">
     <tr>
       <td class="is-min"></td>
-      <td><textarea name="notes[]" class="form-control" rows="2"></textarea></td>
+      <td><textarea name="text" class="form-control" rows="2"></textarea></td>
+      <td class="is-min">
+        <select name="priority" class="form-control orders-notes-priority">
+          <% ['default', 'info', 'warning', 'success', 'danger'].forEach(function(priority) { %>
+          <option value="<%- priority %>"></option>
+          <% }) %>
+        </select>
+      </td>
       <td class="actions">
         <div class="actions-group">
           <button data-action="up" class="btn btn-default" type="button"><i class="fa fa-arrow-up"></i></button>

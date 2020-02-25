@@ -1194,7 +1194,7 @@ define([
 
       this.model.getCurrentOrder().notes.forEach(function(note)
       {
-        html += '<li>► ' + _.escape(note);
+        html += '<li>► ' + _.escape(note.text);
       });
 
       html += '</ul>';

@@ -42,8 +42,23 @@ define([
 
     getTemplateData: function()
     {
+      var targets = [];
+
+      this.model.get('notes').forEach(function(note)
+      {
+        if (targets.length === 0 || targets[targets.length - 1]._id !== note.target)
+        {
+          targets.push({
+            _id: note.target,
+            notes: []
+          });
+        }
+
+        targets[targets.length - 1].notes.push(note);
+      });
+
       return {
-        notes: this.model.get('notes')
+        targets: targets
       };
     }
 

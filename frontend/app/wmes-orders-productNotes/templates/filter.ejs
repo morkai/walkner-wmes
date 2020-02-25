@@ -1,0 +1,18 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-nc12"><%- t('PROPERTY:nc12') %></label>
+    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-target"><%- t('PROPERTY:target') %></label>
+    <select id="<%- idPrefix %>-target" class="form-control is-expandable" name="target" multiple size="1">
+      <% ['docs', 'ps'].forEach(function(target) { %>
+      <option value="<%- target %>"><%- t('target:' + target) %>
+      <% }) %>
+    </select>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

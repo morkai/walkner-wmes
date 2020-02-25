@@ -1,0 +1,12 @@
+{
+  "BREADCRUMB:base": "Zlecenia produkcyjne",
+  "BREADCRUMB:browse": "Uwagi",
+
+  "PROPERTY:nc12": "12NC",
+  "PROPERTY:target": "Cel",
+  "PROPERTY:priority": "Priorytet",
+  "PROPERTY:text": "Treść",
+
+  "target:docs": "Dokumentacja",
+  "target:ps": "Malarnia"
+}

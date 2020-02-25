@@ -152,6 +152,11 @@ td.paintShop-property {
 .is-paint > td.paintShop-property {
   font-weight: bold;
 }
+td.paintShop-order-notes {
+  vertical-align: top;
+  padding: 0 5px 5px 0;
+  border-right: none!important;
+}
 .paintShop-orderDetails-message {
   display: block;
   padding: 5px;
@@ -160,6 +165,30 @@ td.paintShop-property {
   box-shadow: 0 1px 3px #666;
   text-shadow: 1px 1px 1px #333;
   font-weight: bold;
+  line-height: 1.2;
+}
+.paintShop-orderDetails-message + .paintShop-orderDetails-message {
+  margin-top: 5px;
+}
+.paintShop-orderDetails-message > .fa {
+  width: 14px;
+}
+.paintShop-orderDetails-message[data-priority="default"] {
+  background: #fff;
+  color: #333;
+  text-shadow: none;
+}
+.paintShop-orderDetails-message[data-priority="info"] {
+  background: #5bc0de;
+}
+.paintShop-orderDetails-message[data-priority="warning"] {
+  background: #f0ad4e;
+}
+.paintShop-orderDetails-message[data-priority="success"] {
+  background: #5cb85c;
+}
+.paintShop-orderDetails-message[data-priority="danger"] {
+  background: #d9534f;
 }
 .paintShop-orderDetails-drilling {
   background: #f0ad4e;

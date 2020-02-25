@@ -114,7 +114,8 @@ define([
   './wmes-ct-lines/routes',
   './wmes-ct-carts/routes',
   './wmes-ct-orderGroups/routes',
-  './wmes-ct-state/routes'
+  './wmes-ct-state/routes',
+  './wmes-orders-productNotes/routes'
 ], function()
 {
   'use strict';

@@ -1,0 +1,15 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Production orders",
+    "BREADCRUMB:browse": "Notes",
+
+    "PROPERTY:nc12": "12NC",
+    "PROPERTY:target": "Target",
+    "PROPERTY:priority": "Priority",
+    "PROPERTY:text": "Text",
+
+    "target:docs": "Documentation",
+    "target:ps": "Paint-shop"
+  },
+  "pl": true
+}

@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/i18n',
   'app/user',
+  'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/embedded',
   'app/core/pages/DetailsPage',
@@ -36,6 +37,7 @@ define([
   $,
   t,
   user,
+  viewport,
   bindLoadingMessage,
   embedded,
   DetailsPage,
@@ -318,7 +320,7 @@ define([
 
       if (!Array.isArray(changes))
       {
-        attrs.changes = changes = [];
+        changes = order.attributes.changes = [];
       }
 
       _.forEach(message.change.newValues, function(newValue, property)
@@ -495,7 +497,8 @@ define([
 
     onKeyPress: function(e)
     {
-      if (e.target.tagName === 'INPUT'
+      if (viewport.currentDialog
+        || e.target.tagName === 'INPUT'
         || e.target.tagName === 'TEXTAREA'
         || !e.key)
       {

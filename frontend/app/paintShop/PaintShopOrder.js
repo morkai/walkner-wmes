@@ -15,6 +15,14 @@ define([
 
   var DRILLING_MRP = 'KSJ';
 
+  var DRILLING_STATUS_PRIORITY = {
+    new: 'warning',
+    started: 'info',
+    partial: 'warning',
+    finished: 'success',
+    cancelled: 'danger'
+  };
+
   var COMPONENT_BLACKLIST = {
     '777777777777': true
   };
@@ -82,8 +90,13 @@ define([
       var childOrderCount = obj.childOrders.length;
       var lastChildOrderI = childOrderCount - 1;
 
-      obj.rowSpan = childOrderCount + 1;
-      obj.rowSpanDetails = obj.rowSpan;
+      obj.rowSpanDetails = childOrderCount + 1;
+
+      if (obj.notes.length)
+      {
+        obj.rowSpanDetails += 1;
+      }
+
       obj.paints = {};
       obj.mrps = {};
       obj.mrps[obj.mrp] = 1;
@@ -103,6 +116,7 @@ define([
 
         childOrder.paints = {};
         childOrder.paintList = [];
+        childOrder.noteList = childOrder.nc12 === obj.nc12 ? [] : Array.prototype.slice.call(childOrder.notes);
         childOrder.paintCount = 0;
         childOrder.drilling = order.getDrillingStatus(childOrder, drillingOrders);
 
@@ -147,16 +161,45 @@ define([
           components.push(component);
         });
 
-        var rowSpan = components.length;
-        var rowSpanDetails = rowSpan
-          + (childOrder.paintCount !== 1 ? 1 : 0)
-          + (childOrder.drilling ? 1 : 0);
+        var rowSpanDetails = components.length;
 
-        obj.rowSpan += rowSpan;
+        if (childOrder.paintCount !== 1)
+        {
+          if (childOrder.paintCount === 0)
+          {
+            childOrder.noteList.unshift({
+              icon: 'fa-circle-o',
+              priority: 'warning',
+              text: t('paintShop', 'drilling')
+            });
+          }
+          else
+          {
+            childOrder.noteList.unshift({
+              icon: 'fa-paint-brush',
+              priority: 'danger',
+              text: t('paintShop', 'multiPaint', {count: childOrder.paintCount})
+            });
+          }
+        }
+
+        if (childOrder.drilling)
+        {
+          childOrder.noteList.unshift({
+            icon: 'fa-circle-o',
+            priority: DRILLING_STATUS_PRIORITY[childOrder.drilling],
+            text: t('paintShop', 'drilling:' + childOrder.drilling)
+          });
+        }
+
+        if (childOrder.noteList.length)
+        {
+          rowSpanDetails += 1;
+        }
+
         obj.rowSpanDetails += rowSpanDetails;
 
         return _.assign({
-          rowSpan: rowSpan + 1,
           rowSpanDetails: rowSpanDetails + 1,
           last: i === lastChildOrderI
         }, childOrder, {

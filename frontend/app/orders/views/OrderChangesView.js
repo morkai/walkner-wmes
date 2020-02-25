@@ -456,7 +456,7 @@ define([
         renderPropertyLabel: view.renderPropertyLabel,
         renderValueChange: view.renderValueChange,
         change: view.serializeChange(change),
-        i: changes.length
+        i: changes.length - 1
       });
 
       $change.appendTo($table).find('td').addClass('highlight');

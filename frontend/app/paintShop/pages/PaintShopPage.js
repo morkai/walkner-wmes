@@ -260,7 +260,7 @@ define([
       },
       'old.wh.orders.updated': function(message)
       {
-        this.whOrders.update(message.orders);
+        this.whOrders.update(message.updated);
       }
     },
 

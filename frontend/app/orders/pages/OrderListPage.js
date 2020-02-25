@@ -56,6 +56,12 @@ define([
           }
         },
         {
+          label: page.t('PAGE_ACTION:notes'),
+          icon: 'sticky-note-o',
+          privileges: 'ORDERS:MANAGE',
+          href: '#productNotes'
+        },
+        {
           label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'ORDERS:MANAGE',

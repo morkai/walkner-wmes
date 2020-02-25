@@ -8,14 +8,17 @@
     </div>
   </div>
   <div class="panel-body">
-    <% if (_.isEmpty(notes)) { %>
+    <% if (_.isEmpty(targets)) { %>
     <%- t('NOTES:NO_DATA') %>
     <% } else { %>
+    <% targets.forEach(function(target) { %>
+    <h5><%- t('notes:target:' + target._id) %></h5>
     <ol style="list-style: none; margin: 0; padding: 0">
-      <% notes.forEach(function(text) { %>
-      <li class="text-lines">► <%= text %></li>
+      <% target.notes.forEach(function(note) { %>
+      <li class="text-lines text-<%- note.priority %>">► <%= note.text %></li>
       <% }) %>
     </ol>
+    <% }) %>
     <% } %>
   </div>
 </div>

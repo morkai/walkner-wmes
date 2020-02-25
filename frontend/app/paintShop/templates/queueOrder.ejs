@@ -84,6 +84,17 @@
       <% } %>
     </td>
   </tr>
+  <% if (order.notes.length) { %>
+  <tr class="paintShop-properties paintShop-order-order">
+    <td class="paintShop-order-notes" colspan="6">
+      <% order.notes.forEach(function(note) { %>
+      <span class="paintShop-orderDetails-message" data-priority="<%- note.priority %>">
+        <i class="fa fa-chevron-right"></i> <%= note.text %>
+      </span>
+      <% }) %>
+    </td>
+  </tr>
+  <% } %>
   <% order.childOrders.forEach(function(childOrder, i) { %>
   <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
     <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>">
@@ -96,29 +107,14 @@
     <td class="paintShop-property" data-property="name"><%= childOrder.name %></td>
     <td class="paintShop-property"></td>
   </tr>
-  <% if (childOrder.paintCount > 1) { %>
-  <tr class="paintShop-properties paintShop-order-component">
-    <td class="paintShop-property" colspan="5">
-      <span class="paintShop-orderDetails-message paintShop-orderDetails-multiPaint">
-        <i class="fa fa-paint-brush"></i> <%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %>
+  <% if (childOrder.noteList.length) { %>
+  <tr class="paintShop-properties paintShop-order-childOrder">
+    <td class="paintShop-order-notes" colspan="5">
+      <% childOrder.noteList.forEach(function(note) { %>
+      <span class="paintShop-orderDetails-message" data-priority="<%- note.priority %>">
+        <i class="fa <%- note.icon || 'fa-chevron-right' %>"></i> <%= note.text %>
       </span>
-    </td>
-  </tr>
-  <% } else if (childOrder.paintCount === 0) { %>
-  <tr class="paintShop-properties paintShop-order-component">
-    <td class="paintShop-property" colspan="5">
-      <span class="paintShop-orderDetails-message paintShop-orderDetails-drilling">
-        <i class="fa fa-circle-o"></i> <%- t('paintShop', 'drilling') %>
-      </span>
-    </td>
-  </tr>
-  <% } %>
-  <% if (childOrder.drilling) { %>
-  <tr class="paintShop-properties paintShop-order-component">
-    <td class="paintShop-property" colspan="5">
-      <span class="paintShop-orderDetails-message paintShop-orderDetails-drilling" data-drilling-status="<%- childOrder.drilling %>">
-        <i class="fa fa-circle-o"></i> <%- t('paintShop', 'drilling:' + childOrder.drilling) %>
-      </span>
+      <% }) %>
     </td>
   </tr>
   <% } %>
