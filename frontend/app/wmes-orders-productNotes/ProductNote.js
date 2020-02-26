@@ -71,7 +71,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.nc12 = obj.nc12.join(', ');
+      obj.nc12 = obj.nc12 ? obj.nc12.join(', ') : '';
 
       return obj;
     }
