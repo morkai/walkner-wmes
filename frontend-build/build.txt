@@ -1797,6 +1797,7 @@ app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
 app/data/prodLog.js
+app/core/util/matchesEquals.js
 app/orgUnits/util/limitOrgUnits.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodDowntimes/routes.js
@@ -1809,7 +1810,6 @@ app/prodTasks/routes.js
 app/prodLogEntries/routes.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrder.js
-app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/prodShiftOrders/routes.js
@@ -2207,6 +2207,7 @@ app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
 app/data/prodLog.js
+app/core/util/matchesEquals.js
 app/orgUnits/util/limitOrgUnits.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodDowntimes/routes.js
@@ -2219,7 +2220,6 @@ app/prodTasks/routes.js
 app/prodLogEntries/routes.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrder.js
-app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/prodShiftOrders/routes.js
@@ -2760,11 +2760,11 @@ app/orders/util/resolveProductName.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
+app/core/util/matchesEquals.js
 app/orgUnits/util/limitOrgUnits.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrder.js
-app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
 app/isaPalletKinds/IsaPalletKind.js
