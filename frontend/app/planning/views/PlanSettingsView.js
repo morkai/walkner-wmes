@@ -877,7 +877,7 @@ define([
         $property = this.$('[name="' + property + '"]');
       }
 
-      if (!$property.length)
+      if (!$property.length && property !== 'group')
       {
         return;
       }
