@@ -120,6 +120,11 @@ define([
 
       var category = Date.parse(this.model.get('date'));
 
+      if (!category)
+      {
+        return chartData;
+      }
+
       for (var i = 0; i < 8; ++i)
       {
         chartData.categories.push(time.format(category, 'LT'));
