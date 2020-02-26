@@ -44,7 +44,7 @@ define([
     {
       var targets = [];
 
-      this.model.get('notes').forEach(function(note)
+      (this.model.get('notes') || []).forEach(function(note)
       {
         if (targets.length === 0 || targets[targets.length - 1]._id !== note.target)
         {
