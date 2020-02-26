@@ -1,0 +1,1 @@
+define(["../core/Collection","./ProductNote"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)"})});
