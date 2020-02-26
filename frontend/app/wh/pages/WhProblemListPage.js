@@ -54,12 +54,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        {
-          label: this.t('BREADCRUMB:base')
-        },
-        {
-          label: this.t('BREADCRUMB:problems')
-        }
+        this.t('BREADCRUMB:base'),
+        this.t('BREADCRUMB:problems')
       ];
     },
 
@@ -152,17 +148,17 @@ define([
       {
         var page = this;
 
-        message.orders.forEach(function(newWhOrder)
+        message.updated.forEach(function(newWhOrder)
         {
           var oldWhOrder = page.whOrders.get(newWhOrder._id);
-          var readd = false;
+          var reAdd = false;
 
           if (!oldWhOrder
             && viewport.currentDialog instanceof WhProblemDetailsView
             && viewport.currentDialog.model.id === newWhOrder._id)
           {
             oldWhOrder = viewport.currentDialog.model;
-            readd = true;
+            reAdd = true;
           }
 
           if (oldWhOrder)
@@ -173,7 +169,7 @@ define([
             {
               page.whOrders.remove(oldWhOrder);
             }
-            else if (readd)
+            else if (reAdd)
             {
               page.whOrders.add(oldWhOrder);
             }

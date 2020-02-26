@@ -51,11 +51,20 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
+  var DEV_PERSONNEL = {
+    fmx: '13370001',
+    fmx2: '110404',
+    kit: '13370002',
+    kit2: '100307',
+    pac: '13370003',
+    pac2: '115006'
+  };
 
   return View.extend({
 
     template: pageTemplate,
+
+    modelProperty: 'whOrders',
 
     layoutName: 'page',
 
@@ -63,7 +72,7 @@ define([
     {
       return [
         {
-          label: t.bound('wh', 'BREADCRUMB:base')
+          label: this.t('BREADCRUMB:base')
         },
         {
           href: '#wh/plans/' + this.plan.id,
@@ -76,7 +85,7 @@ define([
           }
         },
         {
-          label: t.bound('wh', 'BREADCRUMB:pickup')
+          label: this.t('BREADCRUMB:pickup')
         }
       ];
     },
@@ -95,11 +104,11 @@ define([
         }
       };
 
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
         return [
           {
-            label: t('wh', 'PAGE_ACTION:problems'),
+            label: page.t('PAGE_ACTION:problems'),
             icon: 'bug',
             privileges: 'WH:VIEW',
             href: '/wh-problems'
@@ -112,7 +121,9 @@ define([
         {
           template: function()
           {
-            return resolveActionTemplate({});
+            return page.renderPartialHtml(resolveActionTemplate, {
+              pattern: window.ENV === 'development' ? '' : '^[0-9]{5,}$'
+            });
           },
           afterRender: function($action)
           {
@@ -125,13 +136,13 @@ define([
           }
         },
         {
-          label: page.t('PAGE_ACTION:wh:old'),
+          label: page.t('PAGE_ACTION:old'),
           icon: 'truck',
           privileges: 'WH:VIEW',
           href: '#planning/wh/' + page.plan.id
         },
         {
-          label: t('wh', 'PAGE_ACTION:problems'),
+          label: page.t('PAGE_ACTION:problems'),
           icon: 'bug',
           privileges: 'WH:VIEW',
           href: '#wh/problems'
@@ -196,7 +207,7 @@ define([
       },
       'old.wh.orders.updated': function(message)
       {
-        var newOrders = message.orders;
+        var newOrders = message.updated;
 
         if (newOrders.length && this.whOrders.get(newOrders[0]._id))
         {
@@ -410,7 +421,7 @@ define([
     {
       var plan = this.plan;
 
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
         sessionStorage.WMES_WH_PICKUP_DATE = plan.id;
       }
@@ -528,6 +539,11 @@ define([
         return;
       }
 
+      if (window.ENV === 'development' && DEV_PERSONNEL[personnelId])
+      {
+        personnelId = DEV_PERSONNEL[personnelId];
+      }
+
       page.acting = true;
 
       page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
@@ -543,18 +559,18 @@ define([
         {
           error = 'connectionFailure';
         }
-        else if (t.has('wh', 'msg:resolveAction:' + req.status))
+        else if (page.t.has('msg:resolveAction:' + req.status))
         {
           error = 'resolveAction:' + req.status;
         }
-        else if (!t.has('wh', 'msg:' + error))
+        else if (!page.t.has('msg:' + error))
         {
           error = 'genericFailure';
         }
 
         page.showMessage('error', 5000, 'text', {
-          text: t('wh', 'msg:' + error, {
-            errorCode: code,
+          text: page.t('msg:' + error, {
+            errorCode: code || '?',
             personnelId: personnelId
           })
         });

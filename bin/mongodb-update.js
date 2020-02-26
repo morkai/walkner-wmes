@@ -26,3 +26,6 @@ db.paintshoporders.find({notes: {$exists: false}}).forEach(pso =>
 
   db.paintshoporders.updateOne({_id: pso._id}, {$set: {notes: [], childOrders: pso.childOrders}});
 });
+
+db.oldwhorders.deleteMany({});
+db.oldwhevents.deleteMany({});

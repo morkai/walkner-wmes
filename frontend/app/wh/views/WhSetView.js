@@ -65,6 +65,8 @@ define([
 
     dialogClassName: 'wh-set-dialog modal-no-keyboard',
 
+    modelProperty: 'whOrders',
+
     events: {
       'click .is-clickable': function(e)
       {
@@ -121,7 +123,7 @@ define([
           var req = view.whOrders.act('printLabels', {
             order: order,
             qty: qty,
-            func: view.model.user ? view.model.user.func : 'fmx'
+            funcId: view.model.user ? view.model.user.func : 'fmx'
           });
 
           req.fail(function()
@@ -375,8 +377,7 @@ define([
       var view = this;
       var newData = JSON.parse(JSON.stringify(whOrder.attributes));
 
-      view.$('.wh-set-item[data-id="' + whOrder.id + '"]')
-        .find('.wh-set-action[data-prop="' + prop + '"]' + (func ? ('[data-func="' + func + '"]') : ''))
+      view.$action(whOrder.id, prop, func)
         .removeClass('is-clickable')
         .find('.fa')
         .removeClass()
@@ -391,11 +392,8 @@ define([
           return view.onOrderChanged(whOrder);
         }
 
-        var events = [];
-        var req = view.promised(view.whOrders.act('updateOrder', {
-          order: update(JSON.parse(JSON.stringify(whOrder.attributes)), events),
-          events: events
-        }));
+        var data = update(JSON.parse(JSON.stringify(whOrder.attributes)), []);
+        var req = view.promised(view.whOrders.act(prop, data));
 
         req.fail(function()
         {
@@ -404,15 +402,18 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 2500,
-            text: t('wh', 'update:failure')
+            text: view.t('update:failure')
           });
         });
 
         req.done(function(res)
         {
-          whOrder.set(res.order);
+          if (res.order)
+          {
+            whOrder.set(res.order);
+          }
 
-          if (!whOrder.hasChanged())
+          if (!view.$action(whOrder.id, prop, func).hasClass('is-clickable'))
           {
             view.onOrderChanged(whOrder);
           }
@@ -420,124 +421,39 @@ define([
       });
     },
 
+    $order: function(id)
+    {
+      return this.$('.wh-set-item[data-id="' + id + '"]');
+    },
+
+    $action: function(orderId, prop, func)
+    {
+      return this.$order(orderId)
+        .find('.wh-set-action[data-prop="' + prop + '"]' + (func ? ('[data-func="' + func + '"]') : ''));
+    },
+
     updateHandlers: {
 
       picklistDone: function(newData, newValue, propFunc, done)
       {
-        done(function(newData, events)
+        done(function(newData)
         {
-          var oldValue = newData.picklistDone;
-
-          newData.picklistDone = newValue;
-
-          if (newValue === false)
-          {
-            newData.status = 'problem';
-            newData.problem = '';
-          }
-          else
-          {
-            newData.status = 'started';
-            newData.problem = '';
-          }
-
-          var picklistFunc = null;
-
-          newData.funcs.forEach(function(func)
-          {
-            if (newData.picklistFunc === func._id)
-            {
-              picklistFunc = func;
-            }
-
-            if (newValue)
-            {
-              if (newData.picklistFunc === func._id)
-              {
-                func.status = 'picklist';
-                func.startedAt = new Date();
-              }
-              else if (func.user)
-              {
-                func.status = 'picklist';
-              }
-            }
-            else
-            {
-              func.status = 'pending';
-              func.startedAt = null;
-            }
-
-            func.finishedAt = null;
-            func.picklist = 'pending';
-            func.pickup = 'pending';
-            func.carts = [];
-            func.problemArea = '';
-          });
-
-          events.push({
-            type: 'picklistDone',
-            order: newData._id,
-            data: {
-              oldValue: oldValue,
-              newValue: newValue,
-              func: picklistFunc ? picklistFunc._id : null,
-              user: picklistFunc ? picklistFunc.user : null
-            }
-          });
-
-          return newData;
+          return {
+            whOrderId: newData._id,
+            newValue: newValue
+          };
         });
       },
 
       picklist: function(newData, newValue, propFunc, done)
       {
-        var view = this;
-
-        done(function(newData, events)
+        done(function(newData)
         {
-          var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
-          var oldValue = func.picklist;
-
-          func.picklist = newValue;
-          func.carts = [];
-          func.problemArea = '';
-          func.comment = '';
-          func.finishedAt = null;
-
-          switch (newValue)
-          {
-            case 'pending':
-              func.status = 'picklist';
-              func.pickup = 'pending';
-              break;
-
-            case 'require':
-              func.status = 'pickup';
-              func.pickup = 'pending';
-              break;
-
-            case 'ignore':
-              func.status = 'finished';
-              func.pickup = 'ignore';
-              func.finishedAt = new Date();
-
-              view.updateHandlers.finalizeOrder.call(view, newData);
-              break;
-          }
-
-          events.push({
-            type: 'picklist',
-            order: newData._id,
-            data: {
-              oldValue: oldValue,
-              newValue: newValue,
-              func: func._id,
-              user: func.user
-            }
-          });
-
-          return newData;
+          return {
+            whOrderId: newData._id,
+            funcId: propFunc,
+            newValue: newValue
+          };
         });
       },
 
@@ -545,46 +461,29 @@ define([
       {
         var view = this;
 
-        switch (newValue)
+        if (newValue === 'pending')
         {
-          case 'pending':
-            done(function(newData, events)
-            {
-              var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
-              var oldValue = newData.func.pickup;
-
-              func.status = 'pickup';
-              func.pickup = 'pending';
-              func.carts = [];
-              func.problemArea = '';
-              func.comment = '';
-              func.finishedAt = null;
-
-              view.updateHandlers.finalizeOrder.call(view, newData);
-
-              events.push({
-                type: 'pickup',
-                order: newData._id,
-                data: {
-                  oldValue: oldValue,
-                  newValue: newValue,
-                  func: func._id,
-                  user: func.user
-                }
-              });
-
-              return newData;
-            });
-            break;
-
-          case 'success':
-            view.updateHandlers.handlePickupSuccess.call(view, newData, propFunc, done);
-            break;
-
-          case 'failure':
-            view.updateHandlers.handlePickupFailure.call(view, newData, propFunc, done);
-            break;
+          return done(function(newData)
+          {
+            return {
+              whOrderId: newData._id,
+              funcId: propFunc,
+              newValue: newValue
+            };
+          });
         }
+
+        if (newValue === 'success')
+        {
+          return view.updateHandlers.handlePickupSuccess.call(view, newData, propFunc, done);
+        }
+
+        if (newValue === 'failure')
+        {
+          return view.updateHandlers.handlePickupFailure.call(view, newData, propFunc, done);
+        }
+
+        throw new Error('Invalid pickup value.');
       },
 
       handlePickupSuccess: function(newData, propFunc, done)
@@ -592,43 +491,24 @@ define([
         var view = this;
         var $item = view.$('.wh-set-item[data-id="' + newData._id + '"]');
         var $prop = $item.find('.wh-set-action[data-prop="pickup"][data-func="' + propFunc + '"]');
-        var $editor = $(cartsEditorTemplate({
+        var $editor = view.renderPartial(cartsEditorTemplate, {
           carts: newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]].carts.join(' ')
-        }));
+        });
 
         $editor.on('submit', function()
         {
-          done(function(newData, events)
+          done(function(newData)
           {
-            var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
-            var oldValue = func.pickup;
-
-            func.status = 'finished';
-            func.pickup = 'success';
-            func.carts = $editor.find('.form-control')
-              .val()
-              .split(/[^0-9]+/)
-              .filter(function(v) { return !!v.length; })
-              .map(function(v) { return +v; });
-            func.problemArea = '';
-            func.comment = '';
-            func.finishedAt = new Date();
-
-            view.updateHandlers.finalizeOrder.call(view, newData);
-
-            events.push({
-              type: 'pickup',
-              order: newData._id,
-              data: {
-                oldValue: oldValue,
-                newValue: func.pickup,
-                func: func._id,
-                user: func.user,
-                carts: func.carts
-              }
-            });
-
-            return newData;
+            return {
+              whOrderId: newData._id,
+              funcId: propFunc,
+              newValue: 'success',
+              carts: $editor.find('.form-control')
+                .val()
+                .split(/[^0-9]+/)
+                .filter(function(v) { return !!v.length; })
+                .map(function(v) { return +v; })
+            };
           });
 
           return false;
@@ -652,34 +532,15 @@ define([
 
         $editor.on('submit', function()
         {
-          done(function(newData, events)
+          done(function(newData)
           {
-            var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
-            var oldValue = func.pickup;
-
-            func.status = 'problem';
-            func.pickup = 'failure';
-            func.carts = [];
-            func.problemArea = $editor.find('input').val().trim();
-            func.comment = $editor.find('textarea').val().trim();
-            func.finishedAt = new Date();
-
-            view.updateHandlers.finalizeOrder.call(view, newData);
-
-            events.push({
-              type: 'pickup',
-              order: newData._id,
-              data: {
-                oldValue: oldValue,
-                newValue: func.pickup,
-                func: func._id,
-                user: func.user,
-                problemArea: func.problemArea,
-                comment: func.comment
-              }
-            });
-
-            return newData;
+            return {
+              whOrderId: newData._id,
+              funcId: propFunc,
+              newValue: 'failure',
+              problemArea: $editor.find('input').val().trim(),
+              comment: $editor.find('textarea').val().trim()
+            };
           });
 
           return false;
@@ -688,11 +549,6 @@ define([
         view.showEditor($editor, $prop[0]);
 
         $editor.find('input').select();
-      },
-
-      finalizeOrder: function(newData)
-      {
-        WhOrder.finalizeOrder(newData);
       }
 
     },

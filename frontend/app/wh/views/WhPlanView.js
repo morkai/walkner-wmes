@@ -39,6 +39,8 @@ define([
 
     template: whListTemplate,
 
+    modelProperty: 'whOrders',
+
     events: {
       'contextmenu td[data-column-id]': function(e)
       {
@@ -71,6 +73,7 @@ define([
           trigger: 'manual',
           placement: 'left',
           html: true,
+          className: 'planning-mrp-comment-popover',
           content: lineOrderCommentsTemplate({
             comments: comments.map(function(comment)
             {
@@ -80,11 +83,7 @@ define([
                 text: PlanSapOrder.formatCommentWithIcon(comment)
               };
             })
-          }),
-          template: '<div class="popover planning-mrp-comment-popover">'
-            + '<div class="arrow"></div>'
-            + '<div class="popover-content"></div>'
-            + '</div>'
+          })
         }).popover('show');
       },
       'mouseup .planning-mrp-lineOrders-comment': function(e)
@@ -130,10 +129,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         renderRow: whListRowTemplate,
         rows: this.serializeRows()
       };
@@ -147,6 +145,8 @@ define([
     beforeRender: function()
     {
       clearTimeout(this.timers.render);
+
+      $('.planning-mrp-comment-popover, .wh-list-popover').popover('destroy');
     },
 
     afterRender: function()
@@ -184,9 +184,10 @@ define([
         placement: 'top auto',
         trigger: 'hover',
         html: true,
+        className: 'wh-list-popover',
         title: function()
         {
-          return t('wh', 'list:popover:' + this.dataset.columnId);
+          return view.t('list:popover:' + this.dataset.columnId);
         },
         content: function()
         {
@@ -208,22 +209,23 @@ define([
           if (this.dataset.columnId === 'picklist')
           {
             var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
+            var picklistDone = whOrder.get('picklistDone');
 
-            if (picklistFunc)
+            if (picklistDone !== null)
             {
-              templateData.user = picklistFunc.user.label;
-              templateData.status = t('wh', 'status:picklistDone:' + whOrder.get('picklistDone'));
+              templateData.user = picklistFunc ? picklistFunc.user.label : null;
+              templateData.status = view.t('status:picklistDone:' + whOrder.get('picklistDone'));
             }
             else
             {
-              templateData.status = t('wh', 'status:pending');
+              templateData.status = view.t('status:pending');
             }
           }
           else
           {
             var func = whOrder.getFunc(this.dataset.columnId);
 
-            templateData.status = t('wh', 'status:' + func.status);
+            templateData.status = view.t('status:' + func.status);
             templateData.carts = func.carts;
             templateData.problemArea = func.problemArea;
             templateData.comment = func.comment;
@@ -235,10 +237,6 @@ define([
           }
 
           return view.renderPartial(whListPopoverTemplate, templateData);
-        },
-        template: function(defaultTemplate)
-        {
-          return $(defaultTemplate).addClass('wh-list-popover');
         }
       });
     },
@@ -340,6 +338,7 @@ define([
 
         if (status === 'cancelled')
         {
+          /*
           menu.push({
             icon: 'fa-recycle',
             label: t('wh', 'menu:restoreOrder'),
@@ -353,6 +352,7 @@ define([
               handler: this.handleRestoreAction.bind(this, {set: set})
             });
           }
+          */
         }
         else
         {
@@ -517,17 +517,29 @@ define([
 
     handleResetAction: function(filter)
     {
-      this.promised(this.whOrders.act('resetOrders', filter));
+      viewport.msg.saving();
+
+      this.promised(this.whOrders.act('resetOrders', filter))
+        .done(function() { viewport.msg.saved(); })
+        .fail(function() { viewport.msg.savingFailed(); });
     },
 
     handleCancelAction: function(filter)
     {
-      this.promised(this.whOrders.act('cancelOrders', filter));
+      viewport.msg.saving();
+
+      this.promised(this.whOrders.act('cancelOrders', filter))
+        .done(function() { viewport.msg.saved(); })
+        .fail(function() { viewport.msg.savingFailed(); });
     },
 
     handleRestoreAction: function(filter)
     {
-      this.promised(this.whOrders.act('restoreOrders', filter));
+      viewport.msg.saving();
+
+      this.promised(this.whOrders.act('restoreOrders', filter))
+        .done(function() { viewport.msg.saved(); })
+        .fail(function() { viewport.msg.savingFailed(); });
     },
 
     onCommentChange: function(sapOrder)

@@ -206,57 +206,27 @@ define([
       $editor.on('submit', function()
       {
         var $fields = $editor.find('input, textarea, button').prop('disabled', true);
-        var carts = ($editor.find('[name="carts"]').val() || '')
+        var $carts = $editor.find('[name="carts"]');
+        var carts = ($carts.val() || '')
           .split(/[^0-9]+/)
           .filter(function(v) { return !!v.length; })
           .map(function(v) { return +v; });
-        var comment = $editor.find('[name="comment"]').val();
+        var comment = $editor.find('[name="comment"]').val().trim();
 
-        viewport.msg.saving();
-
-        var newData = JSON.parse(JSON.stringify(view.model.attributes));
-
-        if (funcId === 'lp10')
+        if (funcId !== 'lp10' && !carts.length)
         {
-          newData.picklistDone = true;
-
-          newData.funcs.forEach(function(func)
-          {
-            if (func.user)
-            {
-              func.status = 'picklist';
-              func.startedAt = newData.startedAt;
-            }
-          });
-        }
-        else if (!carts.length)
-        {
-          $editor.find('[name="carts"]').select();
+          $fields.prop('disabled', false);
+          $carts.select();
 
           return false;
         }
-        else
-        {
-          var func = newData.funcs[WhOrder.FUNC_TO_INDEX[funcId]];
 
-          func.status = 'finished';
-          func.pickup = 'success';
-          func.carts = carts;
-          func.finishedAt = new Date();
-        }
+        viewport.msg.saving();
 
-        WhOrder.finalizeOrder(newData);
-
-        var req = WhOrderCollection.act(view.model.get('date'), 'updateOrder', {
-          order: newData,
-          events: [{
-            type: 'problemResolved',
-            order: newData._id,
-            data: {
-              func: funcId,
-              carts: carts
-            }
-          }]
+        var req = WhOrderCollection.act(view.model.get('date'), 'solveProblem', {
+          whOrderId: view.model.id,
+          funcId: funcId,
+          carts: carts
         });
 
         req.fail(function()
