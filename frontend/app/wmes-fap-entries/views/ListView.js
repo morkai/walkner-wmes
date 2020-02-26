@@ -32,7 +32,7 @@ define([
       var topics = {};
       var topicPrefix = this.collection.getTopicPrefix();
 
-      if (topicPrefix)
+      if (topicPrefix && this.options.autoRefresh !== false)
       {
         topics[topicPrefix + '.added'] = 'refreshCollection';
         topics[topicPrefix + '.updated.*'] = 'onModelUpdated';

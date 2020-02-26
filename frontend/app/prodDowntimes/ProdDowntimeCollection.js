@@ -6,6 +6,7 @@ define([
   '../user',
   '../data/prodLog',
   '../core/Collection',
+  '../core/util/matchesEquals',
   '../data/orgUnits',
   '../orgUnits/util/limitOrgUnits',
   './ProdDowntime'
@@ -15,6 +16,7 @@ define([
   user,
   prodLog,
   Collection,
+  matchesEquals,
   orgUnits,
   limitOrgUnits,
   ProdDowntime
@@ -174,165 +176,59 @@ define([
         }
       }
 
-      return this.matchStatus(data)
-        && this.matchAor(data)
-        && this.matchReason(data)
-        && this.matchOrgUnit(data)
-        && this.matchProdShift(data)
-        && this.matchProdShiftOrder(data);
+      return matchesEquals(this.rqlQuery, 'status', data.status)
+        && this.matchProp('aor', data)
+        && this.matchProp('reason', data)
+        && this.matchProp(orgUnits.TYPES, data)
+        && matchesEquals(this.rqlQuery, 'prodShift', data.prodShift)
+        && matchesEquals(this.rqlQuery, 'prodShiftOrder', data.prodShiftOrder)
+        && matchesEquals(this.rqlQuery, 'orderId', data.orderId);
     },
 
-    matchStatus: function(data)
+    matchProp: function(props, data)
     {
-      var statusTerm = _.find(this.rqlQuery.selector.args, function(term)
+      if (typeof props === 'string')
       {
-        return (term.name === 'eq' || term.name === 'in') && term.args[0] === 'status';
-      });
-
-      if (statusTerm)
-      {
-        if (statusTerm.name === 'eq')
-        {
-          return data.status === statusTerm.args[1];
-        }
-
-        return statusTerm.args[1].indexOf(data.status) !== -1;
+        var k = props;
+        props = {};
+        props[k] = true;
       }
 
-      return true;
-    },
-
-    matchAor: function(data)
-    {
-      var aorTerm = _.find(this.rqlQuery.selector.args, function(term)
-      {
-        return term.args[0] === 'aor' && VALID_TERM_NAMES[term.name];
-      });
-
-      if (!aorTerm)
-      {
-        return true;
-      }
-
-      if (aorTerm.name === 'eq')
-      {
-        return data.aor === aorTerm.args[1];
-      }
-
-      if (aorTerm.name === 'ne')
-      {
-        return data.aor !== aorTerm.args[1];
-      }
-
-      if (aorTerm.name === 'in')
-      {
-        return aorTerm.args[1].indexOf(data.aor) !== -1;
-      }
-
-      if (aorTerm.name === 'nin')
-      {
-        return aorTerm.args[1].indexOf(data.aor) === -1;
-      }
-
-      return true;
-    },
-
-    matchReason: function(data)
-    {
-      var reasonTerm = _.find(this.rqlQuery.selector.args, function(term)
-      {
-        return term.args[0] === 'reason' && VALID_TERM_NAMES[term.name];
-      });
-
-      if (!reasonTerm)
-      {
-        return true;
-      }
-
-      if (reasonTerm.name === 'eq')
-      {
-        return data.reason === reasonTerm.args[1];
-      }
-
-      if (reasonTerm.name === 'ne')
-      {
-        return data.reason !== reasonTerm.args[1];
-      }
-
-      if (reasonTerm.name === 'in')
-      {
-        return reasonTerm.args[1].indexOf(data.reason) !== -1;
-      }
-
-      if (reasonTerm.name === 'nin')
-      {
-        return reasonTerm.args[1].indexOf(data.reason) === -1;
-      }
-
-      return true;
-    },
-
-    /**
-     * @param {Object} data
-     * @returns {boolean}
-     */
-    matchOrgUnit: function(data) // eslint-disable-line no-unused-vars
-    {
-      var orgUnitTerm = _.find(this.rqlQuery.selector.args, function(term)
-      {
-        return orgUnits.TYPES[term.args[0]] && VALID_TERM_NAMES[term.name];
-      });
-
-      if (!orgUnitTerm)
-      {
-        return true;
-      }
-
-      var orgUnitType = orgUnitTerm.args[0];
-      var requiredId = orgUnitTerm.args[1];
-      var actualId = data[orgUnitType];
-
-      if (orgUnitTerm.name === 'eq')
-      {
-        return actualId === requiredId;
-      }
-
-      if (orgUnitTerm.name === 'ne')
-      {
-        return actualId !== requiredId;
-      }
-
-      if (orgUnitTerm.name === 'in')
-      {
-        return requiredId.indexOf(actualId) !== -1;
-      }
-
-      if (orgUnitTerm.name === 'nin')
-      {
-        return requiredId.indexOf(actualId) === -1;
-      }
-
-      return true;
-    },
-
-    matchProdShift: function(data)
-    {
       var term = _.find(this.rqlQuery.selector.args, function(term)
       {
-        return term.name === 'eq' && term.args[0] === 'prodShift';
+        return VALID_TERM_NAMES[term.name] && props[term.args[0]];
       });
 
-      return !term || data.prodShift === term.args[1];
-    },
-
-    matchProdShiftOrder: function(data)
-    {
-      var term = _.find(this.rqlQuery.selector.args, function(term)
+      if (!term)
       {
-        return term.name === 'eq' && term.args[0] === 'prodShiftOrder';
-      });
+        return true;
+      }
 
-      return !term || data.prodShiftOrder === term.args[1];
+      var prop = term.args[0];
+      var required = term.args[1];
+      var actual = data[prop];
+
+      if (term.name === 'eq')
+      {
+        return actual === required;
+      }
+
+      if (term.name === 'ne')
+      {
+        return actual !== required;
+      }
+
+      if (term.name === 'in')
+      {
+        return required.indexOf(actual) !== -1;
+      }
+
+      if (term.name === 'nin')
+      {
+        return required.indexOf(actual) === -1;
+      }
+
+      return true;
     },
 
     refresh: function(newDowntimes)

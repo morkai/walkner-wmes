@@ -2,10 +2,12 @@
 
 define([
   'app/core/View',
+  'app/core/util/embedded',
   'app/wmes-fap-entries/views/ListView',
   'app/orders/templates/fapEntryList'
 ], function(
   View,
+  embedded,
   FapEntryListView,
   template
 ) {
@@ -19,7 +21,8 @@ define([
     {
       this.insertView('.orders-fap', new FapEntryListView({
         collection: this.collection,
-        orderDetails: true
+        orderDetails: true,
+        autoRefresh: !embedded.isEnabled()
       }));
 
       this.listenTo(this.collection, 'sync', function()

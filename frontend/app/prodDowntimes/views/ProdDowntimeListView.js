@@ -21,10 +21,18 @@ define([
 
     className: 'is-colored is-clickable prodDowntimes-list',
 
-    remoteTopics: {
-      'prodDowntimes.created.*': 'refreshIfMatches',
-      'prodDowntimes.updated.*': 'refreshIfMatches',
-      'prodDowntimes.deleted.*': 'refreshIfMatches'
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      if (this.options.autoRefresh !== false)
+      {
+        topics['prodDowntimes.created.*'] = 'refreshIfMatches';
+        topics['prodDowntimes.updated.*'] = 'refreshIfMatches';
+        topics['prodDowntimes.deleted.*'] = 'refreshIfMatches';
+      }
+
+      return topics;
     },
 
     columns: function()

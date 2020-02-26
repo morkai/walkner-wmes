@@ -3,12 +3,14 @@
 define([
   'app/time',
   'app/core/View',
+  'app/core/util/embedded',
   'app/prodDowntimes/views/ProdDowntimeListView',
   'app/orders/templates/downtimeList',
   'i18n!app/nls/prodDowntimes'
 ], function(
   time,
   View,
+  embedded,
   ProdDowntimeListView,
   template
 ) {
@@ -23,7 +25,8 @@ define([
       this.insertView('.orders-downtimes', new ProdDowntimeListView({
         collection: this.collection,
         simple: true,
-        shiftColumn: true
+        shiftColumn: true,
+        autoRefresh: !embedded.isEnabled()
       }));
 
       this.once('afterRender', function()
