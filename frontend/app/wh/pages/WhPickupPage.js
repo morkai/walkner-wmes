@@ -20,6 +20,7 @@ define([
   '../views/WhFilterView',
   '../views/WhPlanView',
   '../views/WhSetView',
+  '../views/DowntimePickerView',
   '../templates/messages',
   'app/wh/templates/planPage',
   'app/wh/templates/resolveAction',
@@ -44,6 +45,7 @@ define([
   WhFilterView,
   WhPlanView,
   WhSetView,
+  DowntimePickerView,
   messageTemplates,
   pageTemplate,
   resolveActionTemplate,
@@ -75,7 +77,7 @@ define([
           label: this.t('BREADCRUMB:base')
         },
         {
-          href: '#wh/plans/' + this.plan.id,
+          href: '#wh/pickup/' + this.plan.id,
           label: this.plan.getLabel(),
           template: function(breadcrumb)
           {
@@ -134,24 +136,6 @@ define([
               return false;
             });
           }
-        },
-        {
-          label: page.t('PAGE_ACTION:old'),
-          icon: 'truck',
-          privileges: 'WH:VIEW',
-          href: '#planning/wh/' + page.plan.id
-        },
-        {
-          label: page.t('PAGE_ACTION:problems'),
-          icon: 'bug',
-          privileges: 'WH:VIEW',
-          href: '#wh/problems'
-        },
-        {
-          label: page.t('PAGE_ACTION:dailyPlan'),
-          icon: 'calculator',
-          privileges: 'PLANNING:VIEW',
-          href: '#planning/plans/' + page.plan.id
         },
         {
           label: page.t('PAGE_ACTION:settings'),
@@ -428,7 +412,7 @@ define([
       else
       {
         this.broker.publish('router.navigate', {
-          url: '/wh/plans/' + plan.id
+          url: '/wh/pickup/' + plan.id
             + '?from=' + encodeURIComponent(plan.displayOptions.get('from'))
             + '&to=' + encodeURIComponent(plan.displayOptions.get('to'))
             + '&whStatuses=' + plan.displayOptions.get('whStatuses')
@@ -530,7 +514,7 @@ define([
       this.keyBuffer = '';
     },
 
-    resolveAction: function(personnelId)
+    resolveAction: function(personnelId, data)
     {
       var page = this;
 
@@ -548,7 +532,7 @@ define([
 
       page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
 
-      var req = page.promised(page.whOrders.act('resolveAction', {personnelId: personnelId}));
+      var req = page.promised(page.whOrders.act('resolveAction', Object.assign({personnelId: personnelId}, data)));
 
       req.fail(function()
       {
@@ -605,6 +589,14 @@ define([
         case 'continueSet':
           this.continueSet(res.user, res.set);
           break;
+
+        case 'pickDowntimeReason':
+          this.pickDowntimeReason(res.personnelId, res.user, res.startedAt);
+          break;
+
+        default:
+          console.warn('Unknown action result: %s', res.result, res);
+          break;
       }
     },
 
@@ -644,10 +636,28 @@ define([
         plan: this.plan
       });
 
-      viewport.showDialog(dialogView, t('wh', 'set:title', {
+      viewport.showDialog(dialogView, this.t('set:title', {
         set: set,
         line: orders[0].get('line')
       }));
+    },
+
+    pickDowntimeReason: function(personnelId, user, startedAt)
+    {
+      var page = this;
+      var dialogView = new DowntimePickerView({
+        model: {
+          user: user,
+          startedAt: startedAt
+        }
+      });
+
+      viewport.showDialog(dialogView, page.t('downtimePicker:title'));
+
+      page.listenTo(dialogView, 'picked', function(result)
+      {
+        page.resolveAction(personnelId, result);
+      });
     },
 
     focusOrder: function(id, smooth)

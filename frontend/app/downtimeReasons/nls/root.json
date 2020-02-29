@@ -29,7 +29,9 @@
     "subdivisionType:none": "None",
     "subdivisionType:assembly": "Assembly",
     "subdivisionType:press": "Press",
-    "subdivisionType:paintShop": "Paint shop"
+    "subdivisionType:paintShop": "Paint-shop",
+    "subdivisionType:wh-pickup": "Pickup",
+    "subdivisionType:wh-dist": "Distribution"
   },
   "pl": true
 }

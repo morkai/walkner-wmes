@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   '../core/Collection',
   './DowntimeReason'
 ], function(
+  _,
   Collection,
   DowntimeReason
 ) {
@@ -19,6 +21,17 @@ define([
 
     findBySubdivisionType: function(subdivisionType)
     {
+      if (Array.isArray(subdivisionType))
+      {
+        return this.filter(function(downtimeReason)
+        {
+          return _.some(
+            downtimeReason.get('subdivisionTypes'),
+            function(actual) { return _.includes(subdivisionType, actual); }
+          );
+        });
+      }
+
       return this.filter(function(downtimeReason)
       {
         return downtimeReason.get('subdivisionTypes').indexOf(subdivisionType) !== -1;

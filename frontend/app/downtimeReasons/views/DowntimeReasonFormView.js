@@ -7,6 +7,7 @@ define([
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
   'app/core/templates/colorPicker',
+  '../DowntimeReason',
   'app/downtimeReasons/templates/form',
   'bootstrap-colorpicker'
 ], function(
@@ -16,6 +17,7 @@ define([
   FormView,
   idAndLabel,
   colorPickerTemplate,
+  DowntimeReason,
   formTemplate
 ) {
   'use strict';
@@ -39,7 +41,8 @@ define([
     serialize: function()
     {
       return _.assign(FormView.prototype.serialize.call(this), {
-        renderColorPicker: colorPickerTemplate
+        renderColorPicker: colorPickerTemplate,
+        SUBDIVISION_TYPES: DowntimeReason.SUBDIVISION_TYPES
       });
     },
 

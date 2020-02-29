@@ -1,0 +1,11 @@
+{
+  "BREADCRUMB:base": "Magazyn (nowy)",
+  "BREADCRUMB:browse": "Przestoje",
+
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:user": "Użytkownik",
+  "PROPERTY:reason": "Powód przestoju",
+  "PROPERTY:comment": "Komentarz"
+}

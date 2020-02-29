@@ -364,6 +364,11 @@ define([
 
     serializeActions: function()
     {
+      if (this.actions !== undefined)
+      {
+        return _.result(this, 'actions');
+      }
+
       return ListView.actions.viewEditDelete(this.collection);
     },
 

@@ -28,5 +28,7 @@
   "subdivisionType:none": "Żadne",
   "subdivisionType:assembly": "Montaż",
   "subdivisionType:press": "Tłocznia",
-  "subdivisionType:paintShop": "Malarnia"
+  "subdivisionType:paintShop": "Malarnia",
+  "subdivisionType:wh-pickup": "Kompletacja",
+  "subdivisionType:wh-dist": "Dystrybucja"
 }

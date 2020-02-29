@@ -54,7 +54,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        this.t('BREADCRUMB:base'),
+        {label: this.t('BREADCRUMB:base'), href: IS_EMBEDDED ? null : '#wh/pickup/0d'},
         this.t('BREADCRUMB:problems')
       ];
     },

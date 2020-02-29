@@ -1,0 +1,14 @@
+{
+  "root": {
+    "BREADCRUMB:base": "WH (new)",
+    "BREADCRUMB:browse": "Downtimes",
+
+    "PROPERTY:startedAt": "Started at ",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:duration": "Duration",
+    "PROPERTY:user": "User",
+    "PROPERTY:reason": "Reason",
+    "PROPERTY:comment": "Comment"
+  },
+  "pl": true
+}

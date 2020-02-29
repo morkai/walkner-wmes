@@ -26,7 +26,7 @@ define([
       return [
         {
           label: this.t('BREADCRUMB:base'),
-          href: '#wh/plans/0d'
+          href: '#wh/pickup/0d'
         },
         this.t('BREADCRUMB:settings')
       ];

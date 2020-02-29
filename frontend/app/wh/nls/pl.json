@@ -105,6 +105,8 @@
   "settings:planning:maxSetDuration:help": "Czas trwania zestawu zleceń nie może przekraczać podanej ilości minut.",
   "settings:planning:maxSetDifference": "Maksymalny czas odstępu w zestawie zleceń [min]",
   "settings:planning:maxSetDifference:help": "Tworzenie zestawu zleceń zostanie zakończone, jeżeli różnica czasu rozpoczęcia następnego potencjalnego zlecenia do czasu zakończenia ostatniego zlecenia dodanego do zestawu jest większa od podanej ilości minut.",
+  "settings:planning:minPickupDowntime": "Maksymalny czas między kompletacjami [s]",
+  "settings:planning:minPickupDowntime:help": "Minimalny czas jaki musi upłynać między zakończeniem ostatniej kompletacji a rozpoczęciem kolejnej, aby zarejestrowany został przestój.",
   "settings:tab:users": "Użytkownicy",
   "settings:users:fmx": "FMX",
   "settings:users:kitter": "Kitter",
@@ -146,5 +148,11 @@
   "problem:editor:cancelOrder:message": "Anulowano kompletację {qty} szt. na linię {line}.",
   "problem:editor:solveProblem:yes": "Rozwiąż problem",
   "problem:editor:solveProblem:no": "Nie rozwiązuj",
-  "problem:editor:solveProblem:message": "Rozwiązano problem {func, select, fmx{FMX} kitter{Kittera} packer{Opakowań} other{LP10}} z kompletacją {qty} szt. na linię {line}."
+  "problem:editor:solveProblem:message": "Rozwiązano problem {func, select, fmx{FMX} kitter{Kittera} packer{Opakowań} other{LP10}} z kompletacją {qty} szt. na linię {line}.",
+
+  "downtimePicker:title": "Przestój",
+  "downtimePicker:submit": "Wybierz powód przestoju",
+  "downtimePicker:cancel": "Anuluj",
+  "downtimePicker:reason": "Powód przestoju",
+  "downtimePicker:comment": "Komentarz"
 }

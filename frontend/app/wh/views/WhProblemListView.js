@@ -91,7 +91,7 @@ define([
       }
       else
       {
-        urls.pickup = '#wh/plans/' + date + '?focus=' + whOrder.id;
+        urls.pickup = '#wh/pickup/' + date + '?focus=' + whOrder.id;
       }
 
       return {

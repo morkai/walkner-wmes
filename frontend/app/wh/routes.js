@@ -20,7 +20,7 @@ define([
   var canView = user.auth('LOCAL', 'WH:VIEW');
   var canManage = user.auth('WH:MANAGE', 'WH:MANAGE:USERS');
 
-  router.map('/wh/plans/:id', canView, function(req)
+  router.map('/wh/pickup/:id', canView, function(req)
   {
     if (/^-?[0-9]+d$/.test(req.params.id))
     {
@@ -31,7 +31,7 @@ define([
         .format('YYYY-MM-DD');
 
       broker.publish('router.navigate', {
-        url: '/wh/plans/' + req.params.id,
+        url: '/wh/pickup/' + req.params.id,
         replace: true,
         trigger: false
       });
@@ -52,10 +52,10 @@ define([
     });
 
     viewport.loadPage(
-      ['app/wh/pages/WhPlanPage'].concat(css, nls),
-      function(WhPlanPage)
+      ['app/wh/pages/WhPickupPage'].concat(css, nls),
+      function(WhPickupPage)
       {
-        return new WhPlanPage(options);
+        return new WhPickupPage(options);
       }
     );
   });

@@ -91,9 +91,12 @@
     "settings:tab:planning": "Planning",
     "settings:planning:ignorePsStatus": "Ignore paint-shop status during completion",
     "settings:planning:groupDuration": "Order group duration [h]",
-    "settings:wh:groupExtraItems": "Minimum quantity in group",
-    "settings:wh:groupExtraItems:help": "If quantity of an order in the first/last group of a given line is lower or equal to the specified value, then that group will be merged with the next/previous group.",
+    "settings:planning:groupExtraItems": "Minimum quantity in group",
+    "settings:planning:groupExtraItems:help": "If quantity of an order in the first/last group of a given line is lower or equal to the specified value, then that group will be merged with the next/previous group.",
     "settings:planning:ignoredMrps": "Ignored MRPs",
+    "settings:planning:ignoredMrps:help": "Orders with one of the following MRP won't show up on the pickup list.",
+    "settings:planning:enabledMrps": "Enabled MRPs",
+    "settings:planning:enabledMrps:help": "Only orders with one of the following MRP will be taken into account when a new set is being created.",
     "settings:planning:maxSetSize": "Maximum number of orders in a set",
     "settings:planning:minSetDuration": "Minimum set duration [min]",
     "settings:planning:minSetDuration:help": "Set duration cannot exceed the specified number of minutes to be extended by an order that exceeds the <em>Order group duration</em>.",
@@ -101,6 +104,8 @@
     "settings:planning:maxSetDuration:help": "Set duration cannot exceed the specified number of minutes.",
     "settings:planning:maxSetDifference": "Maximum set time difference [min]",
     "settings:planning:maxSetDifference:help": "Set creation will stop, if the difference between the start time of the next potential order to the finish time of the set's last order is greater than the specified number of minutes.",
+    "settings:planning:minPickupDowntime": "Maximum time between pickups [s]",
+    "settings:planning:minPickupDowntime:help": "Minimum time that has to pass between an end of the last pickup and a start of the new pickup to register a downtime.",
     "settings:tab:users": "Users",
     "settings:users:fmx": "FMX",
     "settings:users:kitter": "Kitter",
@@ -142,7 +147,13 @@
     "problem:editor:cancelOrder:message": "Cancelled pickup of {qty} PCE for line {line}.",
     "problem:editor:solveProblem:yes": "Solve problem",
     "problem:editor:solveProblem:no": "Do not solve",
-    "problem:editor:solveProblem:message": "Solved {func, select, fmx{FMX's} kitter{Kitter's} packer{Packer's} other{LP10}} problem with a pickup of {qty} PCE for line {line}."
+    "problem:editor:solveProblem:message": "Solved {func, select, fmx{FMX's} kitter{Kitter's} packer{Packer's} other{LP10}} problem with a pickup of {qty} PCE for line {line}.",
+
+    "downtimePicker:title": "Downtime",
+    "downtimePicker:submit": "Choose downtime reason",
+    "downtimePicker:cancel": "Cancel",
+    "downtimePicker:reason": "Downtime reason",
+    "downtimePicker:comment": "Comment"
   },
   "pl": true
 }

@@ -13,6 +13,8 @@ define([
 ) {
   'use strict';
 
+  var SUBDIVISION_TYPES = ['assembly', 'press', 'paintShop', 'wh-pickup', 'wh-dist'];
+
   return Model.extend({
 
     urlRoot: '/downtimeReasons',
@@ -32,7 +34,7 @@ define([
       return {
         label: null,
         type: 'other',
-        subdivisionTypes: ['assembly', 'press', 'paintShop'],
+        subdivisionTypes: SUBDIVISION_TYPES,
         opticsPosition: -1,
         pressPosition: -1,
         auto: false,
@@ -47,23 +49,24 @@ define([
 
     serialize: function()
     {
+      var nlsDomain = this.nlsDomain;
       var obj = this.toJSON();
 
       obj.scheduled = t('core', 'BOOL:' + obj.scheduled);
       obj.auto = t('core', 'BOOL:' + obj.auto);
-      obj.type = t('downtimeReasons', 'type:' + obj.type);
+      obj.type = t(nlsDomain, 'type:' + obj.type);
       obj.color = colorLabel(obj.color);
       obj.refColor = colorLabel(obj.refColor);
       obj.refValue = obj.refValue && obj.refValue.toLocaleString ? obj.refValue.toLocaleString() : '0';
 
       if (!obj.subdivisionTypes || !obj.subdivisionTypes.length)
       {
-        obj.subdivisionTypes = t('downtimeReasons', 'subdivisionType:none');
+        obj.subdivisionTypes = t(nlsDomain, 'subdivisionType:none');
       }
       else
       {
         obj.subdivisionTypes = obj.subdivisionTypes
-          .map(function(subdivisionType) { return t('downtimeReasons', 'subdivisionType:' + subdivisionType); })
+          .map(function(subdivisionType) { return t(nlsDomain, 'subdivisionType:' + subdivisionType); })
           .join('; ');
       }
 
@@ -83,10 +86,14 @@ define([
     {
       var obj = this.serialize();
 
-      obj.aors = obj.aors.length ? obj.aors.join('; ') : t('downtimeReasons', 'aors:all');
+      obj.aors = obj.aors.length ? obj.aors.join('; ') : t(this.nlsDomain, 'aors:all');
 
       return obj;
     }
+
+  }, {
+
+    SUBDIVISION_TYPES: SUBDIVISION_TYPES
 
   });
 });

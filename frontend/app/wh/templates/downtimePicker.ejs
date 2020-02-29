@@ -1,0 +1,22 @@
+<form class="wh-downtimePicker">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-reason"><%- t('downtimePicker:reason') %></label>
+    <input id="<%- idPrefix %>-filter" class="form-control" type="text" autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric">
+    <div class="btn-group-vertical">
+      <% reasons.forEach(function(reason) { %>
+      <button class="btn btn-lg btn-default" type="button" data-reason="<%- reason.id %>" data-filter="<%- reason.filter %>">
+        <strong><%- reason.id %></strong>
+        <%= reason.label %>
+      </button>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-comment"><%- t('downtimePicker:comment') %></label>
+    <textarea id="<%- idPrefix %>-comment" class="form-control" rows="2" data-vkb="alpha numeric multiline"></textarea>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary"><%- t('downtimePicker:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('downtimePicker:cancel') %></button>
+  </div>
+</form>

@@ -154,7 +154,7 @@ define([
 
       return $.ajax({
         method: 'POST',
-        url: '/old/wh/plans/' + date + ';act',
+        url: '/old/wh/pickup/' + date + ';act',
         data: JSON.stringify({
           action: action,
           data: data

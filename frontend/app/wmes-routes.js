@@ -82,6 +82,7 @@ define([
   './mor/routes',
   './planning/routes',
   './wh/routes',
+  './wh-downtimes/routes',
   './printers/routes',
   './kanban/routes',
   './kanbanComponents/routes',
