@@ -1,0 +1,36 @@
+<form class="well filter-form">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    utc: true,
+    labels: [{text: t('PROPERTY:date'), ranges: true}]
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-users"><%- t('PROPERTY:user') %></label>
+    <input id="<%- idPrefix %>-users" name="users" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-status"><%- t('PROPERTY:status') %></label>
+    <select id="<%- idPrefix %>-status" name="status" class="form-control is-expandable" multiple size="1">
+      <% STATUSES.forEach(function(status) { %>
+        <option value="<%- status %>"><%- t('status:' + status) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-kind"><%- t('PROPERTY:kind') %></label>
+    <select id="<%- idPrefix %>-kind" name="kind" class="form-control">
+      <option></option>
+      <% KINDS.forEach(function(kind) { %>
+      <option value="<%- kind %>"><%- t('kind:' + kind) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order"><%- t('PROPERTY:order') %></label>
+    <input id="<%- idPrefix %>-order" name="order" class="form-control" type="text" autocomplete="new-password" style="width: 90px">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

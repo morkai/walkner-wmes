@@ -6,7 +6,7 @@ define([
   './viewport',
   './user',
   './core/util/getShiftStartInfo',
-  './wh/pages/WhPlanPage',
+  './wh/pages/WhPickupPage',
   'i18n!app/nls/wh',
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
@@ -16,7 +16,7 @@ define([
   viewport,
   user,
   getShiftStartInfo,
-  WhPlanPage
+  WhPickupPage
 ) {
   'use strict';
 
@@ -35,7 +35,7 @@ define([
       });
     }
 
-    viewport.showPage(new WhPlanPage({
+    viewport.showPage(new WhPickupPage({
       date: date,
       focus: req.query.focus
     }));

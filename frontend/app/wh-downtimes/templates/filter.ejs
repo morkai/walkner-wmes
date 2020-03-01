@@ -3,7 +3,8 @@
     idPrefix: idPrefix,
     type: 'date+time',
     property: 'startedAt',
-    startHour: 6
+    startHour: 6,
+    labels: [{text: t('PROPERTY:startedAt'), ranges: true}]
   }) %>
   <div class="form-group">
     <label for="<%- idPrefix %>-user"><%- t('PROPERTY:user') %></label>

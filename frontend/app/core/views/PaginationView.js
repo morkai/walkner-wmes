@@ -77,7 +77,7 @@ define([
   {
     var limit = this.model.get('limit');
 
-    if (limit === -1 || (this.model.get('totalCount') <= limit))
+    if (limit <= 0 || this.model.get('totalCount') <= limit)
     {
       this.$el.hide();
     }

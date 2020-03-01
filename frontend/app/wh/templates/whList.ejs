@@ -17,13 +17,23 @@
           {id: 'line', class: 'is-min', width: 50},
           {id: 'whStatus', class: 'is-min', width: 80},
           {id: 'set', class: 'is-min text-center', width: 35},
+          {id: 'pickup', class: 'is-min text-center', width: 200, rowSpan: 1, colSpan: 4},
+          {id: 'delivery', class: 'is-min text-center', width: 100, rowSpan: 1, colSpan: 2},
+          {id: 'comment'}
+        ].forEach(function(column) { %>
+        <th class="<%- column.class || '' %>" rowspan="<%- column.rowSpan || 2 %>" colspan="<%- column.colSpan || 1 %>" style="min-width: <%- column.width ? column.width : '1' %>px"><%- t('wh', 'prop:' + column.id) %></th>
+        <% }) %>
+      </tr>
+      <tr>
+        <% [
           {id: 'picklist', class: 'is-min text-center', width: 50},
           {id: 'fmx', class: 'is-min text-center', width: 50},
           {id: 'kitter', class: 'is-min text-center', width: 50},
           {id: 'packer', class: 'is-min text-center', width: 50},
-          {id: 'comment'}
+          {id: 'fifoStatus', class: 'is-min text-center', width: 50},
+          {id: 'packStatus', class: 'is-min text-center', width: 50}
         ].forEach(function(column) { %>
-        <th class="<%- column.class || '' %>" colspan="<%- column.colSpan || 1 %>" style="min-width: <%- column.width ? column.width : '1' %>px"><%- t('wh', 'prop:' + column.id) %></th>
+        <th class="<%- column.class || '' %>" style="min-width: <%- column.width ? column.width : '1' %>px"><%- t('wh', 'prop:' + column.id) %></th>
         <% }) %>
       </tr>
     </thead>

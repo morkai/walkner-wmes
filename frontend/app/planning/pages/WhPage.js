@@ -81,7 +81,7 @@ define([
           label: page.t('PAGE_ACTION:wh:new'),
           icon: 'truck',
           privileges: 'WH:VIEW',
-          href: '#wh/plans/' + page.plan.id
+          href: '#wh/pickup/' + page.plan.id
         },
         {
           label: page.t('PAGE_ACTION:dailyPlan'),

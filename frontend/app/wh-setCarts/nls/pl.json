@@ -1,0 +1,28 @@
+{
+  "BREADCRUMB:base": "Magazyn (nowy)",
+  "BREADCRUMB:browse": "Wózki",
+
+  "PROPERTY:user": "Użytkownik",
+  "PROPERTY:status": "Status",
+  "PROPERTY:kind": "Rodzaj",
+  "PROPERTY:date": "Plan",
+  "PROPERTY:line": "Linia",
+  "PROPERTY:cart": "Wózek",
+  "PROPERTY:set": "Set",
+  "PROPERTY:orders": "Zlecenia",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:completedAt": "Czas kompl.",
+  "PROPERTY:completedBy": "Kompl. przez",
+  "PROPERTY:deliveringAt": "Czas wysyłki",
+  "PROPERTY:deliveringBy": "Wysyłka przez",
+  "PROPERTY:deliveredAt": "Czas dostawy",
+  "PROPERTY:deliveredBy": "Dostawa przez",
+  "PROPERTY:duration": "Czas dostawy",
+
+  "status:completed": "Skompletowany",
+  "status:delivering": "Dostarczanie",
+  "status:delivered": "Dostarczony",
+
+  "kind:components": "FIFO",
+  "kind:packaging": "Opakowania"
+}

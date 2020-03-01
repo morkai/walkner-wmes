@@ -31,7 +31,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.startedAt = time.format(obj.startedAt, 'LLL');
+      obj.startedAt = time.format(obj.startedAt, 'L LT');
       obj.duration = time.toString(obj.duration / 1000, false, false);
 
       var reason = downtimeReasons.get(obj.reason);

@@ -83,6 +83,8 @@ define([
   './planning/routes',
   './wh/routes',
   './wh-downtimes/routes',
+  './wh-setCarts/routes',
+  './wh-lines/routes',
   './printers/routes',
   './kanban/routes',
   './kanbanComponents/routes',

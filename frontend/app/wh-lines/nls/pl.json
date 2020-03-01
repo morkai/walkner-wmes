@@ -1,0 +1,12 @@
+{
+  "BREADCRUMB:base": "Magazyn (nowy)",
+  "BREADCRUMB:browse": "Linie",
+
+  "PROPERTY:_id": "ID",
+  "PROPERTY:pickup": "Kompletacja",
+  "PROPERTY:components": "Wysyłka FIFO",
+  "PROPERTY:packaging": "Wysyłka opakowań",
+  "PROPERTY:sets": "Sety",
+  "PROPERTY:qty": "Sztuki",
+  "PROPERTY:time": "Czas"
+}

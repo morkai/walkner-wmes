@@ -13,23 +13,23 @@ define([
 
   var canView = user.auth('WH:VIEW');
 
-  router.map('/wh/downtimes', canView, function(req)
+  router.map('/wh/setCarts', canView, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/FilteredListPage',
-        'app/wh-downtimes/WhDowntimeCollection',
-        'app/wh-downtimes/views/FilterView',
-        'app/wh-downtimes/views/ListView',
-        'i18n!app/nls/wh-downtimes'
+        'app/wh-setCarts/WhSetCartCollection',
+        'app/wh-setCarts/views/FilterView',
+        'app/wh-setCarts/views/ListView',
+        'i18n!app/nls/wh-setCarts'
       ],
-      function(FilteredListPage, WhDowntimeCollection, FilterView, ListView)
+      function(FilteredListPage, WhSetCartCollection, FilterView, ListView)
       {
         return new FilteredListPage({
           baseBreadcrumb: '#wh/pickup/0d',
           FilterView: FilterView,
           ListView: ListView,
-          collection: new WhDowntimeCollection(null, {rqlQuery: req.rql}),
+          collection: new WhSetCartCollection(null, {rqlQuery: req.rql}),
           actions: []
         });
       }

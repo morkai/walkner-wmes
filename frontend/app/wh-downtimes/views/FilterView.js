@@ -46,7 +46,7 @@ define([
       FilterView.prototype.afterRender.apply(this, arguments);
 
       setUpUserSelect2(this.$id('user'), {
-        width: '275x',
+        width: '275px',
         view: this
       });
 

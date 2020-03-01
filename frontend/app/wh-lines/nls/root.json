@@ -1,0 +1,15 @@
+{
+  "root": {
+    "BREADCRUMB:base": "WH (new)",
+    "BREADCRUMB:browse": "Lines",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:pickup": "Pickup",
+    "PROPERTY:components": "FIFO delivery",
+    "PROPERTY:packaging": "Packaging delivery",
+    "PROPERTY:sets": "Sets",
+    "PROPERTY:qty": "PCE",
+    "PROPERTY:time": "Time"
+  },
+  "pl": true
+}

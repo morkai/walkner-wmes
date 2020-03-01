@@ -43,6 +43,11 @@ define([
     problem: 'wh-problems-failure',
     finished: 'wh-problems-success'
   };
+  var DIST_STATUS_TO_ICON = {
+    pending: 'fa-question',
+    started: 'fa-truck',
+    finished: 'fa-thumbs-up'
+  };
   var FUNC_TO_INDEX = {
     fmx: 0,
     kitter: 1,
@@ -104,6 +109,11 @@ define([
         fmx: FUNC_STATUS_TO_ICON[obj.funcs[0].status],
         kitter: FUNC_STATUS_TO_ICON[obj.funcs[1].status],
         packer: FUNC_STATUS_TO_ICON[obj.funcs[2].status]
+      };
+      obj.distIcons = {
+        dist: DIST_STATUS_TO_ICON[obj.distStatus],
+        fifo: DIST_STATUS_TO_ICON[obj.fifoStatus],
+        pack: DIST_STATUS_TO_ICON[obj.packStatus]
       };
       obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
       obj.hidden = !filters

@@ -1,0 +1,31 @@
+{
+  "root": {
+    "BREADCRUMB:base": "WH (new)",
+    "BREADCRUMB:browse": "Carts",
+
+    "PROPERTY:user": "User",
+    "PROPERTY:status": "Status",
+    "PROPERTY:kind": "Kind",
+    "PROPERTY:date": "Plan",
+    "PROPERTY:line": "Line",
+    "PROPERTY:cart": "Cart",
+    "PROPERTY:set": "Set",
+    "PROPERTY:orders": "Orders",
+    "PROPERTY:order": "Order",
+    "PROPERTY:completedAt": "Completed at",
+    "PROPERTY:completedBy": "Completed by",
+    "PROPERTY:deliveringAt": "Delivering at",
+    "PROPERTY:deliveringBy": "Delivering by",
+    "PROPERTY:deliveredAt": "Delivered at",
+    "PROPERTY:deliveredBy": "Delivered by",
+    "PROPERTY:duration": "Duration",
+
+    "status:completed": "Completed",
+    "status:delivering": "Delivering",
+    "status:delivered": "Delivered",
+
+    "kind:components": "FIFO",
+    "kind:packaging": "Packaging"
+  },
+  "pl": true
+}

@@ -1,0 +1,11 @@
+<tr class="list-item" data-id="<%= row._id %>">
+  <td class="is-min text-fixed"><%= row._id %></td>
+  <td class="is-min is-number"><%- row.pickup.sets.toLocaleString() %></td>
+  <td class="is-min is-number"><%- row.pickup.qty.toLocaleString() %></td>
+  <td class="is-min is-number"><%- time.toString(row.pickup.time / 1000, true, false) %></td>
+  <td class="is-min is-number"><%- row.components.qty.toLocaleString() %></td>
+  <td class="is-min is-number"><%- time.toString(row.components.time / 1000, true, false) %></td>
+  <td class="is-min is-number"><%- row.packaging.qty.toLocaleString() %></td>
+  <td class="is-min is-number"><%- time.toString(row.packaging.time / 1000, true, false) %></td>
+  <td></td>
+</tr>

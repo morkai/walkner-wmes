@@ -198,6 +198,7 @@ define([
             return '?';
           }
 
+          var columnId = this.dataset.columnId;
           var templateData = {
             user: null,
             status: null,
@@ -206,7 +207,11 @@ define([
             comment: ''
           };
 
-          if (this.dataset.columnId === 'picklist')
+          if (columnId === 'fifoStatus' || columnId === 'packStatus')
+          {
+            templateData.status = view.t('status:' + whOrder.get(columnId));
+          }
+          else if (columnId === 'picklist')
           {
             var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
             var picklistDone = whOrder.get('picklistDone');

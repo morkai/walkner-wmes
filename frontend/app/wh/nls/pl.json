@@ -41,6 +41,8 @@
   "prop:product": "Wyrób",
   "prop:planStatus": "Status",
   "prop:whStatus": "Etap",
+  "prop:fifoStatus": "FIFO",
+  "prop:packStatus": "Opak.",
   "prop:nc12": "12NC",
   "prop:name": "Nazwa wyrobu",
   "prop:qty": "Ilość",
@@ -59,6 +61,8 @@
   "prop:user": "Magazynier",
   "prop:problemArea": "Pole problemów",
   "prop:status": "Status",
+  "prop:pickup": "Kompletacja",
+  "prop:delivery": "Wysyłka",
 
   "func:fmx": "FMX",
   "func:kitter": "Kitter",
@@ -136,6 +140,8 @@
   "list:popover:packer": "Opakowania",
   "list:popover:status": "Status",
   "list:popover:user": "Magazynier",
+  "list:popover:fifoStatus": "Wysyłka FIFO",
+  "list:popover:packStatus": "Wysyłka opakowań",
 
   "problem:empty": "Nie ma żadnych problemów!",
   "problem:title": "Szczegóły problemu ze zleceniem {orderNo} dla linii {line}",
