@@ -1,0 +1,1 @@
+define(["app/time","app/core/Collection","app/core/util/getShiftStartInfo","./WhSetCart"],function(t,e,r,i){"use strict";return e.extend({model:i,rqlQuery:function(t){return t.Query.fromObject({sort:{date:-1},limit:-1337})}})});

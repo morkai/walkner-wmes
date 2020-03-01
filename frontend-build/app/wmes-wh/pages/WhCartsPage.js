@@ -1,0 +1,1 @@
+define(["app/core/View"],function(e){"use strict";return e.extend({})});

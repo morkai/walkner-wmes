@@ -1,0 +1,1 @@
+define(["../i18n","../core/Model"],function(e,i){"use strict";return i.extend({urlRoot:"/wh/users",topicPrefix:"old.wh.users",privilegePrefix:"WH",nlsDomain:"wmes-wh",labelAttribute:"label"})});

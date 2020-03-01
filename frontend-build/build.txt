@@ -745,6 +745,10 @@ app/vis/assets/main.css
 ----------------
 app/vis/assets/main.css
 
+app/wh/assets/downtimePicker.css
+----------------
+app/wh/assets/downtimePicker.css
+
 app/wh/assets/list.css
 ----------------
 app/wh/assets/list.css
@@ -755,6 +759,7 @@ app/wh/assets/./message.css
 app/wh/assets/./list.css
 app/wh/assets/./set.css
 app/wh/assets/./problems.css
+app/wh/assets/./downtimePicker.css
 app/wh/assets/main.css
 
 app/wh/assets/message.css
@@ -1905,6 +1910,9 @@ i18n!app/nls/mor
 app/mor/routes.js
 app/planning/routes.js
 app/wh/routes.js
+app/wh-downtimes/routes.js
+app/wh-setCarts/routes.js
+app/wh-lines/routes.js
 app/printers/tags.js
 app/printers/Printer.js
 app/nls/printers.js
@@ -2315,6 +2323,9 @@ i18n!app/nls/mor
 app/mor/routes.js
 app/planning/routes.js
 app/wh/routes.js
+app/wh-downtimes/routes.js
+app/wh-setCarts/routes.js
+app/wh-lines/routes.js
 app/printers/tags.js
 app/printers/Printer.js
 app/nls/printers.js
@@ -3804,6 +3815,9 @@ app/wh/templates/cartsEditor.js
 app/wh/templates/problemEditor.js
 app/wh/templates/printLabels.js
 app/wh/views/WhSetView.js
+app/core/util/transliterate.js
+app/wh/templates/downtimePicker.js
+app/wh/views/DowntimePickerView.js
 app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
@@ -3812,7 +3826,7 @@ app/wh/templates/messages.js
 app/wh/templates/planPage.js
 app/wh/templates/resolveAction.js
 app/planning/templates/planLegend.js
-app/wh/pages/WhPlanPage.js
+app/wh/pages/WhPickupPage.js
 app/nls/wh.js
 app/nls/pl/wh.js
 i18n!app/nls/wh

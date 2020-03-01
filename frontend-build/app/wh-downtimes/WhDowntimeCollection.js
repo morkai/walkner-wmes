@@ -1,0 +1,1 @@
+define(["app/core/Collection","app/core/util/getShiftStartInfo","./WhDowntime"],function(t,e,r){"use strict";return t.extend({model:r,rqlQuery:function(t){var r=e(Date.now()).moment.hours(6).subtract(7,"days").valueOf();return t.Query.fromObject({sort:{startedAt:-1},limit:-1337,selector:{name:"and",args:[{name:"ge",args:["startedAt",r]}]}})}})});

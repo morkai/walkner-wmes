@@ -1,0 +1,1 @@
+define(["app/core/Collection","app/core/util/getShiftStartInfo","./WhLine"],function(e,t,i){"use strict";return e.extend({model:i,rqlQuery:"sort(_id)&limit(0)",comparator:function(e,t){return e.id.localeCompare(t.id,void 0,{numeric:!0,ignorePunctuation:!0})}})});
