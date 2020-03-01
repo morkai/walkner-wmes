@@ -152,9 +152,11 @@ define([
         date = time.utc.format(date, 'YYYY-MM-DD');
       }
 
+      data.date = date;
+
       return $.ajax({
         method: 'POST',
-        url: '/old/wh/pickup/' + date + ';act',
+        url: '/old/wh;act',
         data: JSON.stringify({
           action: action,
           data: data
