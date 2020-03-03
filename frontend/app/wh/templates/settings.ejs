@@ -40,6 +40,10 @@
         <input id="<%- idPrefix %>-planning-maxSetDifference" class="form-control" name="wh.planning.maxSetDifference" type="number" step="1" min="1" max="600">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxSetsPerLine"><%- t('settings:planning:maxSetsPerLine') %></label>
+        <input id="<%- idPrefix %>-planning-maxSetsPerLine" class="form-control" name="wh.planning.maxSetsPerLine" type="number" step="1" min="0" max="100">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-planning-minPickupDowntime"><%- t('settings:planning:minPickupDowntime') %></label>
         <span class="help-block"><%- t('settings:planning:minPickupDowntime:help') %></span>
         <input id="<%- idPrefix %>-planning-minPickupDowntime" class="form-control" name="wh.planning.minPickupDowntime" type="number" step="1" min="1" max="28800">

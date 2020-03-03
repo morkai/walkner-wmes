@@ -24,7 +24,8 @@ define([
     'maxSetDifference',
     'groupDuration',
     'groupExtraItems',
-    'minPickupDowntime'
+    'minPickupDowntime',
+    'maxSetsPerLine'
   ].join('|'));
 
   return SettingCollection.extend({

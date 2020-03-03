@@ -110,6 +110,7 @@
     "settings:planning:maxSetDifference:help": "Set creation will stop, if the difference between the start time of the next potential order to the finish time of the set's last order is greater than the specified number of minutes.",
     "settings:planning:minPickupDowntime": "Maximum time between pickups [s]",
     "settings:planning:minPickupDowntime:help": "Minimum time that has to pass between an end of the last pickup and a start of the new pickup to register a downtime.",
+    "settings:planning:maxSetsPerLine": "Maximum number of completed sets per line",
     "settings:tab:users": "Users",
     "settings:users:fmx": "FMX",
     "settings:users:kitter": "Kitter",
