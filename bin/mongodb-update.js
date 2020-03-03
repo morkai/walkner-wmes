@@ -3,18 +3,4 @@
 
 'use strict';
 
-db.oldwhdowntimes.drop();
-db.oldwhevents.drop();
-db.oldwhlines.drop();
-db.oldwhorders.drop();
-db.oldwhsetcarts.drop();
-
-db.downtimereasons.updateOne({_id: 'A'}, {$set: {
-  "subdivisionTypes": [
-    "assembly",
-    "press",
-    "paintShop",
-    "wh-pickup",
-    "wh-dist"
-  ]
-}});
+db.pings.drop();
