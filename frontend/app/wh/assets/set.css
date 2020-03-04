@@ -100,12 +100,12 @@
   height: 48px;
   font-size: 28px;
 }
-.wh-set-action[data-status="true"] .fa,
+.wh-set-action[data-status="success"] .fa,
 .wh-set-action[data-status="require"] .fa,
 .wh-set-action[data-status="success"] .fa {
   color: #00af00;
 }
-.wh-set-action[data-status="false"] .fa,
+.wh-set-action[data-status="problem"] .fa,
 .wh-set-action[data-status="failure"] .fa {
   color: #e00;
 }

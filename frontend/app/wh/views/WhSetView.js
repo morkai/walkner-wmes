@@ -43,9 +43,9 @@ define([
 
   var UPDATE_MENU_ITEMS = {
     picklistDone: [
-      {label: 'true', value: true, icon: 'fa-thumbs-o-up'},
-      {label: 'false', value: false, icon: 'fa-thumbs-o-down'},
-      {label: 'null', value: null, manage: true}
+      {value: 'success', icon: 'fa-thumbs-o-up'},
+      {value: 'failure', icon: 'fa-thumbs-o-down'},
+      {value: 'pending', manage: true}
     ],
     picklist: [
       {value: 'require', icon: 'fa-check'},
@@ -285,7 +285,7 @@ define([
 
         return {
           icon: item.icon,
-          label: t('wh', 'menu:' + prop + ':' + (item.label || item.value)),
+          label: view.t('menu:' + prop + ':' + (item.label || item.value)),
           handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value)
         };
       }).filter(function(item) { return !!item; });
@@ -310,14 +310,14 @@ define([
       switch (prop)
       {
         case 'picklistDone':
-          if (picklistDone === null || whOrder.get('picklistFunc') !== userFunc._id)
+          if (picklistDone === 'pending' || whOrder.get('picklistFunc') !== userFunc._id)
           {
             return;
           }
           break;
 
         case 'picklist':
-          if (!picklistDone || userFunc.status === 'pending' || propFunc !== userFunc._id)
+          if (picklistDone !== 'success' || userFunc.status === 'pending' || propFunc !== userFunc._id)
           {
             return;
           }

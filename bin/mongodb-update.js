@@ -3,4 +3,26 @@
 
 'use strict';
 
-db.pings.drop();
+db.oldwhorders.find({}, {picklistDone: 1}).forEach(o =>
+{
+  let picklistDone = null;
+
+  if (o.picklistDone === null)
+  {
+    picklistDone = 'pending';
+  }
+  else if (o.picklistDone === true)
+  {
+    picklistDone = 'success';
+  }
+  else if (o.picklistDone === false)
+  {
+    picklistDone = 'failure';
+  }
+  else
+  {
+    return;
+  }
+
+  db.oldwhorders.updateOne({_id: o._id}, {$set: {picklistDone}});
+});

@@ -216,10 +216,10 @@ define([
             var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
             var picklistDone = whOrder.get('picklistDone');
 
-            if (picklistDone !== null)
+            if (picklistDone !== 'pending')
             {
               templateData.user = picklistFunc ? picklistFunc.user.label : null;
-              templateData.status = view.t('status:picklistDone:' + whOrder.get('picklistDone'));
+              templateData.status = view.t('status:picklistDone:' + picklistDone);
             }
             else
             {
@@ -480,10 +480,10 @@ define([
             order.startTime,
             order.finishTime,
             order.line,
-            order.picklistFunc ? (order.picklistDone ? 1 : 0) : '',
-            t('wh', 'status:' + order.funcs[0].status),
-            t('wh', 'status:' + order.funcs[1].status),
-            t('wh', 'status:' + order.funcs[2].status),
+            view.t('status:' + order.picklistDone),
+            view.t('status:' + order.funcs[0].status),
+            view.t('status:' + order.funcs[1].status),
+            view.t('status:' + order.funcs[2].status),
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
               .join('\r\n--\r\n') + '"'
@@ -503,7 +503,7 @@ define([
           container: view.el,
           trigger: 'manual',
           placement: 'bottom',
-          title: t('planning', 'lineOrders:menu:copy:success')
+          title: view.t('planning', 'lineOrders:menu:copy:success')
         });
 
         $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({

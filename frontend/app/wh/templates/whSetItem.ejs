@@ -5,7 +5,7 @@
     <td data-prop="qty"><%- item.qty %>/<%- item.qtyTodo %></td>
     <td data-prop="startTime"><%- item.startTime %></td>
     <td class="wh-set-separator" rowspan="2"><hr></td>
-    <td class="wh-set-action <%- item.clickable.picklistDone ? 'is-clickable' : '' %>" data-prop="picklistDone" data-status="<%- String(item.picklistDone) %>" rowspan="2">
+    <td class="wh-set-action <%- item.clickable.picklistDone ? 'is-clickable' : '' %>" data-prop="picklistDone" data-status="<%- item.picklistDone %>" rowspan="2">
       <i class="fa fa-play"></i>
     </td>
     <% item.funcs.forEach(function(func) { %>

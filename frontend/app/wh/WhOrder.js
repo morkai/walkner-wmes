@@ -34,19 +34,25 @@ define([
     finished: 'fa-thumbs-up'
   };
   var FUNC_STATUS_TO_CLASS = {
-    null: 'wh-problems-pending',
-    true: 'wh-problems-success',
-    false: 'wh-problems-failure',
     pending: 'wh-problems-pending',
+    progress: 'wh-problems-progress',
     picklist: 'wh-problems-progress',
     pickup: 'wh-problems-progress',
     problem: 'wh-problems-failure',
+    failure: 'wh-problems-failure',
+    success: 'wh-problems-success',
     finished: 'wh-problems-success'
   };
   var DIST_STATUS_TO_ICON = {
     pending: 'fa-question',
     started: 'fa-truck',
     finished: 'fa-thumbs-up'
+  };
+  var PICKLIST_DONE_TO_ICON = {
+    pending: 'fa-question',
+    progress: 'fa-spinner',
+    success: 'fa-thumbs-up',
+    failure: 'fa-thumbs-down'
   };
   var FUNC_TO_INDEX = {
     fmx: 0,
@@ -115,6 +121,7 @@ define([
         fifo: DIST_STATUS_TO_ICON[obj.fifoStatus],
         pack: DIST_STATUS_TO_ICON[obj.packStatus]
       };
+      obj.picklistDoneIcon = PICKLIST_DONE_TO_ICON[obj.picklistDone];
       obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
       obj.hidden = !filters
         || startTime < filters.startTime.from
@@ -140,19 +147,20 @@ define([
       var canManage = user.isAllowedTo('WH:MANAGE');
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
+      var picklistDone = obj.picklistDone === 'success';
 
       obj.clickable = {
         picklistDone: canManage
-          || (isUser && userFunc._id === obj.picklistFunc && obj.picklistDone === null)
+          || (isUser && userFunc._id === obj.picklistFunc && picklistDone)
       };
 
       obj.funcs.forEach(function(func)
       {
         obj.clickable[func._id] = {
-          picklist: (canManage && obj.picklistDone)
-            || (obj.picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist'),
-          pickup: (canManage && obj.picklistDone !== null && func.picklist === 'require')
-            || (obj.picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
+          picklist: (canManage && picklistDone)
+            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist'),
+          pickup: (canManage && func.picklist === 'require')
+            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
         };
       });
 
@@ -239,44 +247,7 @@ define([
 
   }, {
 
-    FUNC_TO_INDEX: FUNC_TO_INDEX,
-
-    finalizeOrder: function(newData)
-    {
-      var anyProblem = newData.picklistDone === false;
-      var allFinished = true;
-
-      newData.funcs.forEach(function(func)
-      {
-        if (func.status === 'problem')
-        {
-          anyProblem = true;
-        }
-
-        if (func.status !== 'finished')
-        {
-          allFinished = false;
-        }
-      });
-
-      if (anyProblem)
-      {
-        newData.status = 'problem';
-        newData.finishedAt = new Date();
-      }
-      else if (allFinished)
-      {
-        newData.status = 'finished';
-        newData.finishedAt = new Date();
-      }
-      else
-      {
-        newData.status = 'started';
-        newData.finishedAt = null;
-      }
-
-      return newData;
-    }
+    FUNC_TO_INDEX: FUNC_TO_INDEX
 
   });
 });

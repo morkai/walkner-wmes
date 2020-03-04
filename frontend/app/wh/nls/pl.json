@@ -68,9 +68,10 @@
   "func:kitter": "Kitter",
   "func:packer": "Opakowania",
 
-  "status:picklistDone:null": "Transakcja niewykonana",
-  "status:picklistDone:true": "Transakcja wykonana",
-  "status:picklistDone:false": "Transakcja nieudana",
+  "status:picklistDone:pending": "Transakcja niewykonana",
+  "status:picklistDone:progress": "Transakcja rozpoczęta",
+  "status:picklistDone:success": "Transakcja wykonana",
+  "status:picklistDone:failure": "Transakcja nieudana",
 
   "status:pending": "Oczekiwanie",
   "status:started": "Rozpoczęte",
@@ -122,9 +123,9 @@
   "set:problemEditor:problemArea": "Nr pola problemów...",
   "set:problemEditor:comment": "Komentarz...",
 
-  "menu:picklistDone:true": "Transakcja wykonana",
-  "menu:picklistDone:false": "Transakcja nieudana",
-  "menu:picklistDone:null": "Resetuj status",
+  "menu:picklistDone:success": "Transakcja wykonana",
+  "menu:picklistDone:failure": "Transakcja nieudana",
+  "menu:picklistDone:pending": "Resetuj status",
   "menu:picklist:require": "Picklista wydrukowana",
   "menu:picklist:ignore": "Ignoruj kompletację",
   "menu:picklist:pending": "Resetuj status",

@@ -69,9 +69,10 @@
     "func:kitter": "Kitter",
     "func:packer": "Packer",
 
-    "status:picklistDone:null": "Transaction pending",
-    "status:picklistDone:true": "Transaction completed",
-    "status:picklistDone:false": "Transaction failed",
+    "status:picklistDone:pending": "Transaction pending",
+    "status:picklistDone:progress": "Transaction in progress",
+    "status:picklistDone:success": "Transaction completed",
+    "status:picklistDone:failure": "Transaction failed",
 
     "status:pending": "Pending",
     "status:started": "Started",
@@ -121,9 +122,9 @@
     "set:problemEditor:problemArea": "Problem areas...",
     "set:problemEditor:comment": "Comment...",
 
-    "menu:picklistDone:true": "Transaction succeeded",
-    "menu:picklistDone:false": "Transaction failed",
-    "menu:picklistDone:null": "Reset status",
+    "menu:picklistDone:success": "Transaction succeeded",
+    "menu:picklistDone:failure": "Transaction failed",
+    "menu:picklistDone:pending": "Reset status",
     "menu:picklist:require": "Picklist printed",
     "menu:picklist:ignore": "Ignore pickup",
     "menu:picklist:pending": "Reset status",
