@@ -1,1 +1,0 @@
-define(["../settings/Setting"],function(t){"use strict";return t.extend({nlsDomain:"wmes-wh",urlRoot:"/wh/settings"})});

@@ -1,28 +1,24 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  './time',
   './router',
   './viewport',
   './user',
-  './core/util/getShiftStartInfo',
-  './wh/pages/WhProblemListPage',
+  './wh/pages/WhProblemsPage',
   'i18n!app/nls/wh',
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
 ], function(
-  time,
   router,
   viewport,
   user,
-  getShiftStartInfo,
-  WhProblemListPage
+  WhProblemsPage
 ) {
   'use strict';
 
   router.map('/', user.auth('LOCAL', 'WH:VIEW'), function(req)
   {
-    viewport.showPage(new WhProblemListPage({
+    viewport.showPage(new WhProblemsPage({
       returnDate: req.query.returnDate
     }));
   });
