@@ -1,6 +1,8 @@
 {
   "BREADCRUMB:base": "Magazyn (nowy)",
   "BREADCRUMB:pickup": "Kompletacja",
+  "BREADCRUMB:dist:components": "Wysyłka FIFO",
+  "BREADCRUMB:dist:packaging": "Wysyłka opakowań",
   "BREADCRUMB:problems": "Problemy",
   "BREADCRUMB:settings": "Ustawienia",
 

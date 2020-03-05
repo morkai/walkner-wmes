@@ -2,6 +2,8 @@
   "root": {
     "BREADCRUMB:base": "WH (new)",
     "BREADCRUMB:pickup": "Pickup",
+    "BREADCRUMB:dist:components": "FIFO delivery",
+    "BREADCRUMB:dist:packaging": "Packaging delivery",
     "BREADCRUMB:problems": "Problems",
     "BREADCRUMB:settings": "Settings",
 

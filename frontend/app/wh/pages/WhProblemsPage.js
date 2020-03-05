@@ -43,8 +43,6 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
-
   return View.extend({
 
     template: pageTemplate,
@@ -54,14 +52,14 @@ define([
     breadcrumbs: function()
     {
       return [
-        {label: this.t('BREADCRUMB:base'), href: IS_EMBEDDED ? null : '#wh/pickup/0d'},
+        {label: this.t('BREADCRUMB:base'), href: embedded.isEnabled() ? null : '#wh/pickup/0d'},
         this.t('BREADCRUMB:problems')
       ];
     },
 
     actions: function()
     {
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
         return [
           {
@@ -243,7 +241,7 @@ define([
       });
 
       this.listView = new WhProblemListView({
-        embedded: IS_EMBEDDED,
+        embedded: embedded.isEnabled(),
         whSettings: this.whSettings,
         whOrders: this.whOrders
       });

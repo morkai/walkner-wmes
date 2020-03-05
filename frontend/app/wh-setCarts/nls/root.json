@@ -20,6 +20,7 @@
     "PROPERTY:deliveredBy": "Delivered by",
     "PROPERTY:duration": "Duration",
 
+    "status:completing": "Completing",
     "status:completed": "Completed",
     "status:delivering": "Delivering",
     "status:delivered": "Delivered",

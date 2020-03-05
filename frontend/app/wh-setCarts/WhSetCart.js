@@ -13,6 +13,13 @@ define([
 ) {
   'use strict';
 
+  var STATUS_TO_CLASS_NAME = {
+    completing: 'warning',
+    completed: '',
+    delivering: 'info',
+    delivered: 'success'
+  };
+
   return Model.extend({
 
     urlRoot: '/old/wh/setCarts',
@@ -29,7 +36,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.className = obj.status === 'delivering' ? 'info' : obj.status === 'delivered' ? 'success' : '';
+      obj.className = STATUS_TO_CLASS_NAME[obj.status];
       obj.status = t(this.nlsDomain, 'status:' + obj.status);
       obj.kind = t(this.nlsDomain, 'kind:' + obj.kind);
       obj.date = time.format(obj.date, 'L');
@@ -51,7 +58,7 @@ define([
 
   }, {
 
-    STATUSES: ['completed', 'delivering', 'delivered'],
+    STATUSES: ['completing', 'completed', 'delivering', 'delivered'],
     KINDS: ['components', 'packaging']
 
   });

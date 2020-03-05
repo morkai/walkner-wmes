@@ -4,7 +4,7 @@ define([
   './router',
   './viewport',
   './user',
-  './wh/pages/WhCartsPage',
+  './wh/pages/WhDistPage',
   'i18n!app/nls/wh',
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
@@ -12,14 +12,14 @@ define([
   router,
   viewport,
   user,
-  WhCartsPage
+  WhDistPage
 ) {
   'use strict';
 
   router.map('/', user.auth('LOCAL', 'WH:VIEW'), function()
   {
-    viewport.showPage(new WhCartsPage({
-      func: 'packer',
+    viewport.showPage(new WhDistPage({
+      kind: 'packaging',
       fullscreen: true
     }));
   });

@@ -19,6 +19,7 @@
   "PROPERTY:deliveredBy": "Dostawa przez",
   "PROPERTY:duration": "Czas dostawy",
 
+  "status:completing": "Kompletowanie",
   "status:completed": "Skompletowany",
   "status:delivering": "Dostarczanie",
   "status:delivered": "Dostarczony",

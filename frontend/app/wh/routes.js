@@ -63,10 +63,23 @@ define([
   router.map('/wh/problems', canView, function()
   {
     viewport.loadPage(
-      ['app/wh/pages/WhProblemListPage'].concat(css, nls),
-      function(WhProblemListPage)
+      ['app/wh/pages/WhProblemsPage'].concat(css, nls),
+      function(WhProblemsPage)
       {
-        return new WhProblemListPage();
+        return new WhProblemsPage();
+      }
+    );
+  });
+
+  router.map('/wh/dist/:kind', canView, function(req)
+  {
+    viewport.loadPage(
+      ['app/wh/pages/WhDistPage'].concat(css, nls),
+      function(WhDistPage)
+      {
+        return new WhDistPage({
+          kind: req.params.kind
+        });
       }
     );
   });
