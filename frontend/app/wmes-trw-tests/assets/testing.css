@@ -170,3 +170,16 @@
 .trw-testing-image[src=""] {
   display: none;
 }
+.io-check-failure[data-state="test"] .trw-testing-ft {
+  background: #E00;
+  border-top-color: #111;
+}
+.io-check-failure[data-state="test"] .trw-testing-ft .trw-testing-app {
+  color: #FFF;
+}
+.io-check-failure[data-state="test"] .trw-testing-ft .trw-testing-prop {
+  border-left-color: #FFF;
+}
+.io-check-failure[data-state="test"] .trw-testing-ft .trw-testing-prop-name {
+  color: #FFF;
+}

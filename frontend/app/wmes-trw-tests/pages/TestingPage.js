@@ -54,6 +54,7 @@ define([
   'use strict';
 
   var CHECK_INTERVAL = 150;
+  var IO_CHECK_FAILURE_DELAY = 4000;
 
   return View.extend({
 
@@ -1211,6 +1212,8 @@ define([
       var checkIo = {};
       var missingEndpoints = [];
 
+      this.$el.removeClass('io-check-failure');
+
       this.updateMessages();
 
       if (this.model.get('debug'))
@@ -1262,7 +1265,8 @@ define([
       this.model.set({
         setIo: setIo,
         checkIo: checkIo,
-        lastValidCheckAt: 0
+        lastValidCheckAt: 0,
+        stepStartedAt: Date.now()
       });
 
       if (this.model.get('debug'))
@@ -1399,6 +1403,8 @@ define([
 
         if (nok.length)
         {
+          page.toggleIoCheckFailure();
+
           page.model.set('lastValidCheckAt', 0);
 
           page.scheduleAction(page.checkIo, page.model.get('checkInterval'));
@@ -1424,10 +1430,14 @@ define([
 
         if (testing && (!lastValidCheckAt || validDuration < minValidDuration))
         {
+          page.toggleIoCheckFailure();
+
           page.scheduleAction(page.checkIo, page.model.get('checkInterval'));
 
           return;
         }
+
+        page.$el.removeClass('io-check-failure');
 
         var currentStep = page.model.get('step');
         var nextProgramStep = page.model.test.get('program').steps[currentStep];
@@ -1442,6 +1452,14 @@ define([
           page.scheduleAction(page.nextPass);
         }
       });
+    },
+
+    toggleIoCheckFailure: function()
+    {
+      this.$el.toggleClass(
+        'io-check-failure',
+        Date.now() - this.model.get('stepStartedAt') > IO_CHECK_FAILURE_DELAY
+      );
     },
 
     nextPass: function()
