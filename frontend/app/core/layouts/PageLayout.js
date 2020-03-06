@@ -509,7 +509,10 @@ define([
         }
         else
         {
-          html += '<a id="' + id + '" class="' + className + '" href="' + action.href + '">';
+          html += '<a id="' + id
+            + '" class="' + className
+            + '" href="' + action.href
+            + '" target="' + (action.target || '_self') + '">';
         }
 
         if (typeof action.icon === 'string')

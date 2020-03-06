@@ -241,6 +241,8 @@
   "NAVBAR:KAIZEN:behaviours": "Zachowania",
   "NAVBAR:KAIZEN:help": "Pomoc",
   "NAVBAR:KAIZEN:observations": "Obserwacje",
+  "NAVBAR:KAIZEN:printableCard:label": "Karta obserwacji",
+  "NAVBAR:KAIZEN:printableCard:file": "/files/karta-obserwacji.pdf",
   "NAVBAR:KAIZEN:minutesForSafety": "Minuty dla Bezpieczeństwa",
 
   "NAVBAR:SUGGESTIONS:main": "Usprawnienia",

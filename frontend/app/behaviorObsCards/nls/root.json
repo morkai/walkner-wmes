@@ -4,6 +4,8 @@
     "BREADCRUMB:browse": "Cards",
     "BREADCRUMB:reports:count": "Observation count",
 
+    "PAGE_ACTION:printable": "Printable version",
+
     "PANEL:TITLE:where": "Place of observation",
     "PANEL:TITLE:observations": "Observations",
     "PANEL:TITLE:risks": "At-risk workplace conditions",

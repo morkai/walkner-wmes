@@ -3,6 +3,8 @@
   "BREADCRUMB:browse": "Karty",
   "BREADCRUMB:reports:count": "Ilość obserwacji",
 
+  "PAGE_ACTION:printable": "Wersja do druku",
+
   "PANEL:TITLE:details": "Szczegóły karty obserwacji",
   "PANEL:TITLE:where": "Miejsce obserwacji",
   "PANEL:TITLE:observations": "Obserwacje zachowań",

@@ -13,6 +13,15 @@
     <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:observations') %>
     <li data-privilege="LOCAL USER" data-module class="navbar-with-button"><a href="#behaviorObsCards"><%- t('NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#behaviorObsCards;add"><i class="fa fa-plus"></i></button>
     <li data-privilege="USER" data-module><a href="#behaviorObsCards?users=mine&sort(-date)&limit(20)"><%- t('NAVBAR:KAIZEN:mine') %></a>
+    <% if (t.has('NAVBAR:KAIZEN:printableCard:file')) { %>
+    <li data-privilege="USER" data-module="behaviorObsCards">
+      <a href="<%- t('NAVBAR:KAIZEN:printableCard:file') %>" target="_blank">
+        <%- t('NAVBAR:KAIZEN:printableCard:label') %>
+        &nbsp;
+        <i class="fa fa-external-link"></i>
+        <i class="fa fa-print"></i>
+      </a>
+    <% } %>
     <li class="divider">
     <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:minutesForSafety') %>
     <li data-privilege="USER" data-module class="navbar-with-button"><a href="#minutesForSafetyCards"><%- t('NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#minutesForSafetyCards;add"><i class="fa fa-plus"></i></button>

@@ -283,7 +283,7 @@ define([
 
       if (value !== '-' && replaceRe !== null)
       {
-        value = value.replace(replaceRe === undefined ? /[^0-9]/g : replaceRe, '');
+        value = value.replace(replaceRe === undefined ? /[^0-9]+/g : replaceRe, '');
       }
 
       $el.val(value);

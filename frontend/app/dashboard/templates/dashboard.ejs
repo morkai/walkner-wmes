@@ -2,9 +2,16 @@
   <% include ./nearMiss.ejs %>
   <% include ./suggestion.ejs %>
   <div class="dashboard-buttons">
-    <a class="btn btn-info" href="#behaviorObsCards;add">
-      <%- t('dashboard', 'addButton:observation') %>
-    </a>
+    <div class="btn-group">
+      <a class="btn btn-info" href="#behaviorObsCards;add">
+        <%- t('dashboard', 'addButton:observation') %>
+      </a>
+      <% if (t.has('core', 'NAVBAR:KAIZEN:printableCard:file')) { %>
+      <a class="btn btn-info" href="<%- t('core', 'NAVBAR:KAIZEN:printableCard:file') %>" target="_blank">
+        <i class="fa fa-print"></i>
+      </a>
+      <% } %>
+    </div>
     <a class="btn btn-success" href="#minutesForSafetyCards;add">
       <%- t('dashboard', 'addButton:minutesForSafety') %>
     </a>

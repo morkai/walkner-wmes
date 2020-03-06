@@ -11,12 +11,27 @@
   border-top: 1px dotted #ddd;
   display: flex;
 }
-.dashboard-buttons > .btn {
+.dashboard-buttons .btn-group {
+  flex: 1 1 auto;
+  display: flex;
+}
+.dashboard-buttons .btn-group .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dashboard-buttons .btn-group .btn:last-child {
+  flex: 0;
+}
+.dashboard-buttons .btn-group .btn:only-child {
+  flex: 1 1 auto;
+}
+.dashboard-buttons .btn {
   flex: 1 1 auto;
   font-size: 48px;
   white-space: normal;
 }
-.dashboard-buttons > .btn:first-child {
+.dashboard-buttons .btn-group:first-child {
   margin-right: 7px;
 }
 .dashboard-buttons > .btn:last-child {
@@ -25,7 +40,7 @@
 .dashboard-buttons > .btn:only-child {
   margin: 0;
 }
-.dashboard-buttons > .btn > small {
+.dashboard-buttons .btn > small {
   display: block;
   margin-top: -8px;
   font-size: 16px;
@@ -221,7 +236,8 @@
   .dashboard-buttons {
     display: block;
   }
-  .dashboard-buttons .btn {
+  .dashboard-buttons .btn,
+  .dashboard-buttons .btn-group {
     margin: 0!important;
     width: 100%;
   }
@@ -240,8 +256,9 @@
     flex-wrap: wrap;
     height: auto;
   }
-  .dashboard-buttonAndMetrics > .btn,
-  .dashboard-buttons > .btn {
+  .dashboard-buttonAndMetrics .btn,
+  .dashboard-buttons .btn,
+  .dashboard-buttons .btn {
     flex-grow: 1;
     flex-shrink: 1;
     width: 100%;
