@@ -26,3 +26,10 @@ db.oldwhorders.find({}, {picklistDone: 1}).forEach(o =>
 
   db.oldwhorders.updateOne({_id: o._id}, {$set: {picklistDone}});
 });
+
+db.behaviorobscards.find({riskyBehaviors: {$exists: false}}).forEach(boc =>
+{
+  boc.riskyBehaviors = boc.observations.filter(o => !o.safe).map(o => o.id.replace(/-[0-9]{10,}$/, ''));
+
+  db.behaviorobscards.updateOne({_id: boc._id}, {$set: {riskyBehaviors: boc.riskyBehaviors}});
+});

@@ -29,6 +29,11 @@ define([
         }
 
         return false;
+      },
+
+      'click .is-filter': function(e)
+      {
+        this.trigger('showFilter', e.currentTarget.dataset.columnId);
       }
 
     }, ListView.prototype.events),
@@ -60,16 +65,16 @@ define([
       };
 
       return [
-        {id: 'rid', className: 'is-min is-number'},
-        {id: 'date', className: 'is-min'},
-        {id: 'observer', className: 'is-min'},
-        {id: 'section', className: 'is-min'},
-        {id: 'line', className: 'is-min'},
+        {id: 'rid', className: 'is-min is-number', thClassName: 'is-filter'},
+        {id: 'date', className: 'is-min', thClassName: 'is-filter'},
+        {id: 'observer', className: 'is-min', thClassName: 'is-filter'},
+        {id: 'section', className: 'is-min', thClassName: 'is-filter'},
+        {id: 'line', className: 'is-min', thClassName: 'is-filter'},
         {id: 'position', className: 'is-min', tdDecorator: textDecorator},
         {id: 'observation', tdAttrs: textAttrs, tdDecorator: textDecorator},
         {id: 'risk', tdAttrs: textAttrs, tdDecorator: textDecorator},
-        {id: 'hardBehavior', tdAttrs: textAttrs, tdDecorator: textDecorator},
-        {id: 'hardCondition', tdAttrs: textAttrs, tdDecorator: textDecorator}
+        {id: 'hardBehavior', thClassName: 'is-filter', tdAttrs: textAttrs, tdDecorator: textDecorator},
+        {id: 'hardCondition', thClassName: 'is-filter', tdAttrs: textAttrs, tdDecorator: textDecorator}
       ];
     },
 

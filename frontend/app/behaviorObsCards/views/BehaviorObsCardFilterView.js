@@ -30,6 +30,20 @@ define([
 
     template: template,
 
+    filterList: [
+      'observerSection',
+      'section',
+      'line',
+      'anyHard',
+      'riskyBehaviors',
+      'limit'
+    ],
+    filterMap: {
+      hardBehavior: 'anyHard',
+      hardCondition: 'anyHard',
+      observer: 'user'
+    },
+
     events: _.assign({
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
@@ -58,7 +72,8 @@ define([
         line: [],
         userType: 'others',
         user: null,
-        anyHard: []
+        anyHard: [],
+        riskyBehaviors: []
       };
     },
 
@@ -92,6 +107,7 @@ define([
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
       'observerSection': 'section',
+      'riskyBehaviors': 'section',
       'line': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
@@ -115,7 +131,8 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.call(this), {
-        sections: kaizenDictionaries.sections.toJSON()
+        sections: kaizenDictionaries.sections.toJSON(),
+        behaviors: kaizenDictionaries.behaviours.invoke('serialize')
       });
     },
 
@@ -154,7 +171,7 @@ define([
         selector.push({name: 'eq', args: ['anyHardRisks', true]});
       }
 
-      ['observerSection', 'section', 'line'].forEach(function(property)
+      ['observerSection', 'section', 'line', 'riskyBehaviors'].forEach(function(property)
       {
         var values = this.$id(property).val() || [];
 
@@ -185,7 +202,7 @@ define([
       this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('user'), {
-        width: '335px',
+        width: '375px',
         view: this
       });
 

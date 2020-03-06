@@ -64,6 +64,7 @@
     "FORM:ridEditor:notFound": "The specified entry doesn't exist!",
     "FORM:ridEditor:failure": "Failed to check the entry.",
 
+    "filter:user": "User",
     "filter:user:mine": "Mine",
     "filter:user:observer": "Observer",
     "filter:user:superior": "Shift leader",
@@ -73,6 +74,7 @@
     "filter:anyHard:risks": "workplace conditions",
     "filter:section": "Observation's section",
     "filter:observerSection": "Observer's section",
+    "filter:riskyBehaviors:other": "Other",
 
     "report:title:total": "Behavior observation card count",
     "report:title:countBySection": "Observation count by place of observation",
