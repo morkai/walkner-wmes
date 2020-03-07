@@ -1,0 +1,16 @@
+{
+  "root": {
+    "BREADCRUMB:operator": "Operator",
+    "BREADCRUMB:browse": "Component labels",
+    "BREADCRUMB:settings": "Settings",
+
+    "PAGE_ACTION:orderBomMatchers": "Component checking",
+
+    "PROPERTY:componentCode": "Component 12NC",
+    "PROPERTY:operationNo": "Operation no",
+    "PROPERTY:description": "Description",
+
+    "FORM:ERROR:duplicate": "The specified label already exists."
+  },
+  "pl": true
+}

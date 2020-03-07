@@ -41,6 +41,13 @@ define([
             t('orderBomMatchers', 'BREADCRUMB:operator'),
             {href: '#production;settings', label: t('orderBomMatchers', 'BREADCRUMB:settings')}
           ],
+          actions: function()
+          {
+            return [{
+              label: this.t('PAGE_ACTION:componentLabels'),
+              href: '#componentLabels'
+            }].concat(FilteredListPage.prototype.actions.apply(this, arguments));
+          },
           FilterView: FilterView,
           ListView: ListView,
           collection: new OrderBomMatcherCollection(null, {rqlQuery: req.rql})

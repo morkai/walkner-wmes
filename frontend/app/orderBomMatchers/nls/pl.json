@@ -3,6 +3,8 @@
   "BREADCRUMB:browse": "Sprawdzanie komponentów",
   "BREADCRUMB:settings": "Ustawienia",
 
+  "PAGE_ACTION:componentLabels": "Etykiety komponentów",
+
   "filter:submit": "Filtruj",
 
   "PROPERTY:active": "Aktywna?",

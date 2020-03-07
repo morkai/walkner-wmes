@@ -17,19 +17,19 @@ define([
 
     template: formTemplate,
 
-    afterRender: function()
+    initialize: function()
     {
-      FormView.prototype.afterRender.call(this);
+      FormView.prototype.initialize.apply(this, arguments);
 
-      if (this.options.editMode)
-      {
-        this.$id('name').attr('readonly', true);
-        this.$id('label').focus();
-      }
-      else
+      this.once('afterRender', function()
       {
         this.loadSystemPrinters();
-      }
+      });
+    },
+
+    afterRender: function()
+    {
+      FormView.prototype.afterRender.apply(this, arguments);
 
       this.$id('tags').select2({
         width: '100%',
@@ -51,6 +51,7 @@ define([
         view.$id('name').prop('readonly', false).removeClass('form-control').select2({
           width: '100%',
           placeholder: ' ',
+          allowClear: true,
           data: res.collection.map(function(printer)
           {
             return {
@@ -80,6 +81,11 @@ define([
       if (!formData.special)
       {
         formData.special = '';
+      }
+
+      if (!formData.name)
+      {
+        formData.name = '';
       }
 
       return formData;

@@ -171,16 +171,17 @@ define([
       this.selectedAutoDowntimeGroup = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var onlySpigot = !user.isAllowedTo('SUPER') && user.isAllowedTo('PROD_DATA:MANAGE:SPIGOT_ONLY');
 
-      return _.assign(SettingsView.prototype.serialize.apply(this, arguments), {
-        subtabs: onlySpigot ? ['spigot'] : [
-          'taktTime',
-          'downtimes',
-          'spigot',
-          'bomChecker'
+      return _.assign(SettingsView.prototype.getTemplateData.apply(this, arguments), {
+        subtabs: onlySpigot ? [{_id: 'spigot'}] : [
+          {_id: 'taktTime'},
+          {_id: 'downtimes'},
+          {_id: 'spigot'},
+          {_id: 'bomChecker', redirect: '#orderBomMatchers'},
+          {_id: 'componentLabels', redirect: '#componentLabels'}
         ],
         onlySpigot: onlySpigot
       });

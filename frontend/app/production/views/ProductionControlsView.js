@@ -10,6 +10,7 @@ define([
   'app/mor/views/MorView',
   './UnlockDialogView',
   './LockDialogView',
+  './ComponentLabelsDialogView',
   'app/production/templates/controls'
 ], function(
   t,
@@ -21,6 +22,7 @@ define([
   MorView,
   UnlockDialogView,
   LockDialogView,
+  ComponentLabelsDialogView,
   template
 ) {
   'use strict';
@@ -71,6 +73,7 @@ define([
 
     events: {
       'click #-mor': 'showMor',
+      'click #-componentLabels': 'showComponentLabels',
       'click a.production-controls-addNearMiss': 'addNearMiss',
       'click a.production-controls-addSuggestion': 'addSuggestion',
       'click a.production-controls-addObservation': 'addObservation',
@@ -271,6 +274,17 @@ define([
         });
 
       this.mor = mor;
+    },
+
+    showComponentLabels: function()
+    {
+      var dialogView = new ComponentLabelsDialogView({
+        model: this.model,
+        vkb: this.options.vkb,
+        embedded: this.options.embedded
+      });
+
+      viewport.showDialog(dialogView, this.t('componentLabels:title'));
     }
 
   });

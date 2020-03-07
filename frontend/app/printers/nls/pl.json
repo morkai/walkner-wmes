@@ -30,5 +30,6 @@
   "tags:wh/cart/kitter": "Magazyn: Wózek Kitter",
   "tags:wh/cart/packer": "Magazyn: Wózek Opakowania",
   "tags:generic/text": "Ogólna: Tekst",
-  "tags:hidLamps": "Oprawy HID"
+  "tags:hidLamps": "Oprawy HID",
+  "tags:componentLabels": "Etykiety komponentów"
 }

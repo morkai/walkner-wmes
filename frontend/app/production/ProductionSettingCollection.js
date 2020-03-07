@@ -23,6 +23,8 @@ define([
 
     topicSuffix: 'production.**',
 
+    nlsDomain: 'production',
+
     initialize: function(models, options)
     {
       SettingCollection.prototype.initialize.apply(this, arguments);

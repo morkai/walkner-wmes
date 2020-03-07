@@ -1,0 +1,30 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define([
+  '../i18n',
+  '../core/Model'
+], function(
+  t,
+  Model
+) {
+  'use strict';
+
+  return Model.extend({
+
+    urlRoot: '/componentLabels',
+
+    clientUrlRoot: '#componentLabels',
+
+    topicPrefix: 'componentLabels',
+
+    privilegePrefix: 'PROD_DATA',
+
+    nlsDomain: 'componentLabels',
+
+    getLabel: function()
+    {
+      return this.get('description') || (this.get('componentCode') + ', ' + this.get('operationNo'));
+    }
+
+  });
+});

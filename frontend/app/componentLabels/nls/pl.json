@@ -1,0 +1,13 @@
+{
+  "BREADCRUMB:operator": "Operator",
+  "BREADCRUMB:browse": "Etykiety komponentów",
+  "BREADCRUMB:settings": "Ustawienia",
+
+  "PAGE_ACTION:orderBomMatchers": "Sprawdzanie komponentów",
+
+  "PROPERTY:componentCode": "12NC komponentu",
+  "PROPERTY:operationNo": "Numer operacji",
+  "PROPERTY:description": "Opis",
+
+  "FORM:ERROR:duplicate": "Podana etykieta już istnieje."
+}

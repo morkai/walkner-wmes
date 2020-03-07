@@ -94,6 +94,7 @@ define([
   './pkhdStrategies/routes',
   './pfepEntries/routes',
   './orderBomMatchers/routes',
+  './componentLabels/routes',
   './help/routes',
   './logs-browserErrors/routes',
   './sapLaborTimeFixer/routes',

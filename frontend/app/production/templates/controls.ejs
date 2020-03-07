@@ -1,10 +1,14 @@
 <div class="production-controls">
-  <a href="#" class="fa fa-home hidden" title="<%- t('production', 'controls:dashboard') %>"></a>
-  <a id="<%- idPrefix %>-mor" class="fa fa-group" title="<%- t('production', 'controls:mor') %>"></a>
-  <a class="fa fa-warning production-controls-addNearMiss" title="<%- t('production', 'controls:addNearMiss') %>"></a>
-  <a class="fa fa-lightbulb-o production-controls-addSuggestion" title="<%- t('production', 'controls:addSuggestion') %>"></a>
-  <a class="fa fa-eye production-controls-addObservation" title="<%- t('production', 'controls:addObservation') %>"></a>
-  <a class="fa fa-unlock production-controls-lock" title="<%- t('production', 'controls:lock') %>"></a>
-  <a class="fa fa-lock production-controls-unlock" title="<%- t('production', 'controls:unlock') %>" accesskey="a"></a>
-  <i class="fa fa-signal production-controls-sync" title="<%- t('production', 'controls:sync') %>"></i>
+  <div class="production-controls-group">
+    <a id="<%- idPrefix %>-componentLabels" class="fa fa-print" title="<%- t('controls:componentLabels') %>"></a>
+  </div>
+  <div class="production-controls-group">
+    <a id="<%- idPrefix %>-mor" class="fa fa-group" title="<%- t('controls:mor') %>"></a>
+    <a class="fa fa-warning production-controls-addNearMiss" title="<%- t('controls:addNearMiss') %>"></a>
+    <a class="fa fa-lightbulb-o production-controls-addSuggestion" title="<%- t('controls:addSuggestion') %>"></a>
+    <a class="fa fa-eye production-controls-addObservation" title="<%- t('controls:addObservation') %>"></a>
+    <a class="fa fa-unlock production-controls-lock" title="<%- t('controls:lock') %>"></a>
+    <a class="fa fa-lock production-controls-unlock" title="<%- t('controls:unlock') %>" accesskey="a"></a>
+    <i class="fa fa-signal production-controls-sync" title="<%- t('controls:sync') %>"></i>
+  </div>
 </div>

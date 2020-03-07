@@ -25,7 +25,8 @@ define([
     'wh/cart/fmx',
     'wh/cart/kitter',
     'wh/cart/packer',
-    'hidLamps'
+    'hidLamps',
+    'componentLabels'
   ];
 
   return {

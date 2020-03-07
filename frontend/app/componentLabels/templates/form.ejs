@@ -1,0 +1,23 @@
+<form class="componentLabels-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-componentCode" class="control-label is-required"><%- t('PROPERTY:componentCode') %></label>
+        <input id="<%- idPrefix %>-componentCode" name="componentCode" class="form-control text-mono" type="text" autocomplete="new-password" required pattern="^[0-9]{12}$" maxlength="12" style="width: 120px">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-operationNo" class="control-label is-required"><%- t('PROPERTY:operationNo') %></label>
+        <input id="<%- idPrefix %>-operationNo" name="operationNo" class="form-control text-mono" type="text" autocomplete="new-password" required pattern="^[0-9]{4}$" maxlength="4" style="width: 60px">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-description" class="control-label"><%- t('PROPERTY:description') %></label>
+        <input id="<%- idPrefix %>-description" name="description" class="form-control" type="text" autocomplete="new-password">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

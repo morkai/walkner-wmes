@@ -63,7 +63,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = true; // TODO window.parent !== window;
+  var IS_EMBEDDED = embedded.isEnabled();
 
   return View.extend({
 
@@ -620,6 +620,7 @@ define([
         prodShiftOrderId: model.prodShiftOrder.id || null,
         prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null,
         orderNo: model.prodShiftOrder.get('orderId') || null,
+        operationNo: model.prodShiftOrder.get('operationNo') || null,
         dictionaries: {},
         orderQueue: true
       };

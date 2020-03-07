@@ -31,7 +31,8 @@
     "tags:wh/cart/kitter": "WH: Kitter cart",
     "tags:wh/cart/packer": "WH: Packer cart",
     "tags:generic/text": "Generic: Text",
-    "tags:hidLamps": "HID lamps"
+    "tags:hidLamps": "HID lamps",
+    "tags:componentLabels": "Component labels"
   },
   "pl": true
 }

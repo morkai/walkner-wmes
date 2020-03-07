@@ -4,19 +4,19 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('printers', 'PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" autofocus required maxlength="50">
+        <label for="<%- idPrefix %>-name" class="control-label"><%- t('PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" autofocus maxlength="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('printers', 'PROPERTY:label') %></label>
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('PROPERTY:label') %></label>
         <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="label" required maxlength="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-tags" class="control-label"><%- t('printers', 'PROPERTY:tags') %></label>
+        <label for="<%- idPrefix %>-tags" class="control-label"><%- t('PROPERTY:tags') %></label>
         <input id="<%- idPrefix %>-tags" type="text" autocomplete="new-password" name="tags">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-special" class="control-label"><%- t('printers', 'PROPERTY:special') %></label>
+        <label for="<%- idPrefix %>-special" class="control-label"><%- t('PROPERTY:special') %></label>
         <textarea id="<%- idPrefix %>-special" class="form-control text-mono" name="special" rows="3"></textarea>
       </div>
     </div>
