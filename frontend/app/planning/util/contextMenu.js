@@ -5,12 +5,15 @@ define([
   'jquery',
   'app/i18n',
   'app/broker',
-  'app/planning/templates/contextMenu'
+  'app/orders/util/commentPopover',
+  'app/planning/templates/contextMenu',
+  'i18n!app/nls/planning'
 ], function(
   _,
   $,
   t,
   broker,
+  commentPopover,
   template
 ) {
   'use strict';
@@ -386,6 +389,20 @@ define([
 
               setTimeout(function() { win.scrollTo(0, win.document.body.scrollHeight); }, 1);
             };
+          }
+        };
+      },
+
+      commentPopover: function(orderNo, source)
+      {
+        return {
+          icon: 'fa-comment-o',
+          label: t('planning', 'orders:menu:comment'),
+          handler: function(e)
+          {
+            commentPopover.show(e.contextMenu.view, orderNo, e.contextMenu.top, e.contextMenu.left, {
+              source: source || 'other'
+            });
           }
         };
       }

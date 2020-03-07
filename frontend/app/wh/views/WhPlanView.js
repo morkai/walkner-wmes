@@ -8,14 +8,15 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/templates/userInfo',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
   'app/planning/PlanSapOrder',
-  'app/core/templates/userInfo',
+  'app/planning/templates/lineOrderComments',
+  'app/orders/util/commentPopover',
   'app/wh/templates/whList',
   'app/wh/templates/whListRow',
-  'app/wh/templates/whListPopover',
-  'app/planning/templates/lineOrderComments'
+  'app/wh/templates/whListPopover'
 ], function(
   _,
   $,
@@ -24,14 +25,15 @@ define([
   user,
   viewport,
   View,
+  userInfoTemplate,
   clipboard,
   contextMenu,
   PlanSapOrder,
-  userInfoTemplate,
+  lineOrderCommentsTemplate,
+  commentPopover,
   whListTemplate,
   whListRowTemplate,
-  whListPopoverTemplate,
-  lineOrderCommentsTemplate
+  whListPopoverTemplate
 ) {
   'use strict';
 
@@ -326,7 +328,7 @@ define([
 
       if (this.plan.canCommentOrders())
       {
-        menu.push(contextMenu.actions.comment(orderNo));
+        menu.push(contextMenu.actions.commentPopover(orderNo, 'wh'));
       }
 
       menu.push('-');

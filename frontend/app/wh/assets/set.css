@@ -9,6 +9,13 @@
   font-size: 21px;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
+.wh-set-user {
+  float: right;
+  margin-right: 20px;
+}
+.wh-set-user .fa-users {
+  margin-left: 20px;
+}
 .wh-set-item {
   border-top: 1px solid #ccc;
 }

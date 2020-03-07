@@ -318,7 +318,7 @@ define([
 
     if (title)
     {
-      $header.find('.modal-title').text(title);
+      $header.find('.modal-title').html(title);
       $header.show();
     }
     else

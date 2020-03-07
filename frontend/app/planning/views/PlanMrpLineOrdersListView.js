@@ -295,7 +295,7 @@ define([
 
       if (this.plan.canCommentOrders())
       {
-        menu.push(contextMenu.actions.comment(orderNo));
+        menu.push(contextMenu.actions.commentPopover(orderNo));
       }
 
       menu.push({

@@ -616,7 +616,8 @@ define([
 
       var currentDialog = viewport.currentDialog;
 
-      if (currentDialog && user
+      if (user
+        && currentDialog
         && currentDialog instanceof WhSetView
         && currentDialog.model.user
         && currentDialog.model.user._id === user._id
@@ -627,19 +628,31 @@ define([
 
       viewport.closeAllDialogs();
 
+      var line = orders[0].get('line');
       var dialogView = new WhSetView({
         model: {
           user: user,
-          set: set
+          set: set,
+          line: line
         },
         whOrders: this.whOrders,
         plan: this.plan
       });
 
-      viewport.showDialog(dialogView, this.t('set:title', {
+      var title = this.t('set:title', {
         set: set,
-        line: orders[0].get('line')
-      }));
+        line: _.escape(line)
+      });
+
+      if (user)
+      {
+        title += ' <span class="wh-set-user">'
+          + '<i class="fa fa-user"></i><span>' + _.escape(user.label) + '</span>'
+          + '<i class="fa fa-users"></i><span>' + this.t('func:' + user.func) + '</span>'
+          + '</span>';
+      }
+
+      viewport.showDialog(dialogView, title);
     },
 
     pickDowntimeReason: function(personnelId, user, startedAt)

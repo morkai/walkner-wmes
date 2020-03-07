@@ -251,7 +251,7 @@ define([
 
       if (this.plan.canCommentOrders())
       {
-        menu.push(contextMenu.actions.comment(lateOrder.id));
+        menu.push(contextMenu.actions.commentPopover(lateOrder.id));
       }
 
       if (this.isEditable())

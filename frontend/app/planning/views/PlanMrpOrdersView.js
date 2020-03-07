@@ -403,7 +403,7 @@ define([
 
       if (this.plan.canCommentOrders())
       {
-        menu.push(contextMenu.actions.comment(planOrder.id));
+        menu.push(contextMenu.actions.commentPopover(planOrder.id));
       }
 
       if (this.isEditable() && !planOrder.isAutoAdded())
