@@ -7,6 +7,7 @@
 
   "PROPERTY:componentCode": "12NC komponentu",
   "PROPERTY:operationNo": "Numer operacji",
+  "PROPERTY:template": "Szablon",
   "PROPERTY:description": "Opis",
 
   "FORM:ERROR:duplicate": "Podana etykieta już istnieje."

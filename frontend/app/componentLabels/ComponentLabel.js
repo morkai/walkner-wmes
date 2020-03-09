@@ -26,5 +26,9 @@ define([
       return this.get('description') || (this.get('componentCode') + ', ' + this.get('operationNo'));
     }
 
+  }, {
+
+    TEMPLATES: ['32x16', '104x42']
+
   });
 });

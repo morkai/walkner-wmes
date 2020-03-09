@@ -2,9 +2,11 @@
 
 define([
   'app/core/views/FormView',
+  '../ComponentLabel',
   'app/componentLabels/templates/form'
 ], function(
   FormView,
+  ComponentLabel,
   template
 ) {
   'use strict';
@@ -12,6 +14,13 @@ define([
   return FormView.extend({
 
     template: template,
+
+    getTemplateData: function()
+    {
+      return {
+        TEMPLATES: ComponentLabel.TEMPLATES
+      };
+    },
 
     handleFailure: function(jqXhr)
     {
