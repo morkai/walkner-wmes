@@ -51,12 +51,21 @@
   width: 33%;
   font-size: 32px;
 }
-.paintShop-paintPicker-weight {
+.paintShop-paintPicker-metrics {
+  display: block;
   position: absolute;
-  top: 5px;
+  top: 7px;
   right: 53px;
-  font-size: 42px;
+  font-size: 18px;
   line-height: 1;
+  text-align: right;
+}
+.paintShop-paintPicker-weight {
+  display: block;
+}
+.paintShop-paintPicker-manHours {
+  display: block;
+  margin-top: 3px;
 }
 .paintShop-paintPicker-paint .fa-level-down {
   position: absolute;
@@ -109,6 +118,6 @@
 }
 @media (min-width: 768px) {
   .paintShop-paintPicker-dialog .modal-dialog {
-    width: 790px;
+    width: 710px;
   }
 }

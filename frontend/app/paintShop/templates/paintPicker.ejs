@@ -19,7 +19,10 @@
         <% } %>
       </span>
       <span class="paintShop-paintPicker-name"><%- _.escape(paint.name) || '&nbsp;' %></span>
-      <span class="paintShop-paintPicker-weight"><%- paint.weight.toLocaleString() %>g</span>
+      <span class="paintShop-paintPicker-metrics">
+        <span class="paintShop-paintPicker-weight"><%- paint.weight.toLocaleString() %> g</span>
+        <span class="paintShop-paintPicker-manHours"><%- paint.manHours.toLocaleString() %> <%- t('paintPicker:manHours') %></span>
+      </span>
       <% if (paint.dropped) { %>
       <i class="fa fa-level-down"></i>
       <% } %>
@@ -27,10 +30,10 @@
     <% }) %>
   </div>
   <div class="paintShop-paintPicker-buttons">
-    <button id="<%- idPrefix %>-select" class="btn btn-primary" type="button"><%- t('paintShop', 'paintPicker:select') %></button>
+    <button id="<%- idPrefix %>-select" class="btn btn-primary" type="button"><%- t('paintPicker:select') %></button>
     <button id="<%- idPrefix %>-msp" class="btn btn-warning" type="button">
-      <span><%- t('paintShop', 'paintPicker:msp') %></span><%- mspDropped ? ' <i class="fa fa-level-down"></i>' : '' %>
+      <span><%- t('paintPicker:msp') %></span><%- mspDropped ? ' <i class="fa fa-level-down"></i>' : '' %>
     </button>
-    <button id="<%- idPrefix %>-all" class="btn btn-danger" type="button"><%- t('paintShop', 'paintPicker:all') %></button>
+    <button id="<%- idPrefix %>-all" class="btn btn-danger" type="button"><%- t('paintPicker:all') %></button>
   </div>
 </form>

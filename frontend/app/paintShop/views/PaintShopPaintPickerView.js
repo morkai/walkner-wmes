@@ -53,6 +53,8 @@ define([
       }
     },
 
+    modelProperty: 'orders',
+
     initialize: function()
     {
       this.onVkbValueChange = this.onVkbValueChange.bind(this);
@@ -77,6 +79,7 @@ define([
       var nc12s = {};
       var paints = [];
       var weights = {};
+      var manHours = {};
 
       orders.serialize().forEach(function(order)
       {
@@ -87,6 +90,13 @@ define([
 
         order.childOrders.forEach(function(childOrder)
         {
+          var paintCount = 0;
+
+          childOrder.components.forEach(function(component)
+          {
+            paintCount += component.unit !== 'G' && component.unit !== 'KG' ? 0 : 1;
+          });
+
           childOrder.components.forEach(function(component)
           {
             if (component.unit !== 'G' && component.unit !== 'KG')
@@ -97,9 +107,11 @@ define([
             if (!weights[component.nc12])
             {
               weights[component.nc12] = 0;
+              manHours[component.nc12] = 0;
             }
 
             weights[component.nc12] += component.qty;
+            manHours[component.nc12] += childOrder.manHours / paintCount;
           });
         });
       });
@@ -124,6 +136,7 @@ define([
           totals: totals,
           remaining: remaining,
           weight: weights[nc12] || 0,
+          manHours: Math.round((manHours[nc12] || 0) * 100) / 100,
           className: !totals || remaining === 0 ? 'success' : 'default'
         });
       });

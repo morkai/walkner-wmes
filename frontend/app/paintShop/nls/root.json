@@ -71,6 +71,7 @@
     "paintPicker:select": "Pick",
     "paintPicker:msp": "MSP",
     "paintPicker:all": "All",
+    "paintPicker:manHours": "mh",
 
     "userPicker:guest": "Log in",
     "userPicker:logIn": "Log in",
