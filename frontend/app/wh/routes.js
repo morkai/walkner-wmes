@@ -71,13 +71,13 @@ define([
     );
   });
 
-  router.map('/wh/dist/:kind', canView, function(req)
+  router.map('/wh/delivery/:kind', canView, function(req)
   {
     viewport.loadPage(
-      ['app/wh/pages/WhDistPage'].concat(css, nls),
-      function(WhDistPage)
+      ['app/wh/pages/WhDeliveryPage'].concat(css, nls),
+      function(WhDeliveryPage)
       {
-        return new WhDistPage({
+        return new WhDeliveryPage({
           kind: req.params.kind
         });
       }

@@ -4,7 +4,7 @@ define([
   './router',
   './viewport',
   './user',
-  './wh/pages/WhDistPage',
+  './wh/pages/WhDeliveryPage',
   'i18n!app/nls/wh',
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
@@ -12,15 +12,15 @@ define([
   router,
   viewport,
   user,
-  WhDistPage
+  WhDeliveryPage
 ) {
   'use strict';
 
   router.map('/', user.auth('LOCAL', 'WH:VIEW'), function()
   {
-    viewport.showPage(new WhDistPage({
-      kind: 'components',
-      fullscreen: true
+    viewport.showPage(new WhDeliveryPage({
+      layoutName: 'blank',
+      kind: 'components'
     }));
   });
 });

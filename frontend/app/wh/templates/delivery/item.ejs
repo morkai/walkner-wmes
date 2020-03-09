@@ -1,0 +1,26 @@
+<tbody class="wh-delivery-item <%- item.className %>" data-id="<%- item._id %>">
+<tr>
+  <td class="wh-delivery-item-cart"><%- item.cart %></td>
+  <td class="wh-delivery-item-line <%- item.lineClassName %>" title="<%= item.line %>"><%= item.line %></td>
+  <td class="wh-delivery-item-plan">
+    <%- item.date %>
+    <br>
+    <%- item.set %>
+  </td>
+  <td class="wh-delivery-item-info">
+    <% if (item.status === 'delivering') { %>
+    <i class="fa fa-hourglass-start"></i><span><%- time.format(item.deliveringAt, 'L LT') %></span>
+    <br>
+    <i class="fa fa-user"></i><span><%= item.deliveringBy.label %></span>
+    <% } %>
+  </td>
+</tr>
+<tr class="wh-delivery-item-ft">
+  <td></td>
+  <td class="wh-delivery-item-orders" colspan="3">
+    <% item.sapOrders.forEach(function(orderNo) { %>
+    <span class="wh-delivery-item-order"><%- orderNo %></span>
+    <% }) %>
+  </td>
+</tr>
+</tbody>

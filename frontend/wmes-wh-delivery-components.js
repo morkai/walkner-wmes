@@ -4,7 +4,7 @@
 {
   'use strict';
 
-  window.WMES_APP_ID = 'wh-kitter';
+  window.WMES_APP_ID = 'wh-delivery-components';
 
   window.requireApp = requireApp;
 
@@ -42,7 +42,7 @@
       'app/core/layouts/PageLayout',
       'app/core/layouts/BlankLayout',
       'app/time',
-      'app/wmes-wh-kitter-routes',
+      'app/wmes-wh-delivery-components-routes',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,

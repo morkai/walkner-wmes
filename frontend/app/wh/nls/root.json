@@ -15,6 +15,9 @@
     "msg:resolveAction:403": "<p>No permissions to execute actions.</p>",
     "msg:USER_NOT_FOUND": "<p>User not found:</p><p>{personnelId}</p>",
     "msg:NO_PENDING_ORDERS": "<p>No pending orders found.</p>",
+    "msg:INVALID_FUNC": "<p>Invalid user function.</p>",
+    "msg:delivered": "<p>Delivery finished successfully.</p>",
+    "msg:nothingToDeliver": "<p>No carts awaiting delivery.</p>",
 
     "PAGE_ACTION:dailyPlan": "Daily plan",
     "PAGE_ACTION:old": "Old module",
@@ -70,6 +73,7 @@
     "func:fmx": "FMX",
     "func:kitter": "Kitter",
     "func:packer": "Packer",
+    "func:dist": "Delivery",
 
     "status:picklistDone:pending": "Transaction pending",
     "status:picklistDone:progress": "Transaction in progress",
@@ -96,6 +100,9 @@
     "menu:resetSet": "Reset set",
 
     "settings:tab:planning": "Planning",
+    "settings:tab:pickup": "Pickup",
+    "settings:tab:delivery": "Delivery",
+    "settings:tab:users": "Users",
     "settings:planning:ignorePsStatus": "Ignore paint-shop status during completion",
     "settings:planning:groupDuration": "Order group duration [h]",
     "settings:planning:groupExtraItems": "Minimum quantity in group",
@@ -114,10 +121,10 @@
     "settings:planning:minPickupDowntime": "Maximum time between pickups [s]",
     "settings:planning:minPickupDowntime:help": "Minimum time that has to pass between an end of the last pickup and a start of the new pickup to register a downtime.",
     "settings:planning:maxSetsPerLine": "Maximum number of completed sets per line",
-    "settings:tab:users": "Users",
     "settings:users:fmx": "FMX",
     "settings:users:kitter": "Kitter",
     "settings:users:packer": "Packer",
+    "settings:users:dist": "Delivery",
 
     "set:title": "Order set no {set} for line {line}",
     "set:cartsEditor:carts": "Carts...",
@@ -163,7 +170,21 @@
     "downtimePicker:submit": "Choose downtime reason",
     "downtimePicker:cancel": "Cancel",
     "downtimePicker:reason": "Downtime reason",
-    "downtimePicker:comment": "Comment"
+    "downtimePicker:comment": "Comment",
+
+    "delivery:title:completed": "Completed {kind, select, components{FIFO} packaging{packaging} other{}}",
+    "delivery:title:pending": "Pending",
+    "delivery:title:delivering": "Delivering",
+    "delivery:set": "Set {set}",
+    "delivery:set:title": "Delivering {kind, select, components{FIFO} packaging{packaging} other{}} carts",
+    "delivery:set:finish": "Finish delivery",
+    "delivery:set:cancel": "Cancel",
+    "delivery:set:msg": "Scan again to finish the delivery.",
+    "delivery:set:cart": "Cart",
+    "delivery:set:line": "Line",
+    "delivery:set:date": "Plan",
+    "delivery:set:set": "Set",
+    "delivery:set:sapOrders": "Orders"
   },
   "pl": true
 }

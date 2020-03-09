@@ -535,7 +535,7 @@ define([
     {
       viewport.msg.saving();
 
-      this.promised(this.whOrders.act('cancelOrders', filter))
+      this.promised(this.whOrders.act('resetOrders', Object.assign({cancel: true}, filter)))
         .done(function() { viewport.msg.saved(); })
         .fail(function() { viewport.msg.savingFailed(); });
     },

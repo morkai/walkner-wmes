@@ -25,7 +25,11 @@ define([
     'groupDuration',
     'groupExtraItems',
     'minPickupDowntime',
-    'maxSetsPerLine'
+    'maxSetsPerLine',
+    'minTimeForDelivery',
+    'lateDeliveryTime',
+    'minDeliveryDowntime',
+    'maxSetCartsPerDelivery'
   ].join('|'));
 
   return SettingCollection.extend({
@@ -138,6 +142,16 @@ define([
           return _.escape(lineGroup._id) + ': ' + lineGroup.lines.join(', ');
         })
         .join('\n');
+    },
+
+    getMinTimeForDelivery: function()
+    {
+      return (this.getValue('planning.minTimeForDelivery') || 45) * 60 * 1000;
+    },
+
+    getLateDeliveryTime: function()
+    {
+      return (this.getValue('planning.lateDeliveryTime') || 30) * 60 * 1000;
     }
 
   });

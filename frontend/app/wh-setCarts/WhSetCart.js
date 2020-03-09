@@ -13,6 +13,13 @@ define([
 ) {
   'use strict';
 
+  var DATE_PROPS = [
+    'date',
+    'completedAt',
+    'deliveringAt',
+    'deliveredAt'
+  ];
+
   var STATUS_TO_CLASS_NAME = {
     completing: 'warning',
     completed: '',
@@ -43,7 +50,7 @@ define([
       obj.orders = obj.orders.map(function(o) { return o.sapOrder; }).join('; ');
       obj.completedAt = time.format(obj.completedAt, 'L LT');
       obj.duration = obj.deliveredAt && obj.deliveringAt
-        ? time.toStirng((Date.parse(obj.deliveredAt) - Date.parse(obj.deliveringAt)) / 1000, false, false)
+        ? time.toString((Date.parse(obj.deliveredAt) - Date.parse(obj.deliveringAt)) / 1000, false, false)
         : '';
       obj.deliveringAt = obj.deliveringAt ? time.format(obj.deliveringAt, 'L LT') : '';
       obj.deliveredAt = obj.deliveredAt ? time.format(obj.deliveredAt, 'L LT') : '';
@@ -59,7 +66,35 @@ define([
   }, {
 
     STATUSES: ['completing', 'completed', 'delivering', 'delivered'],
-    KINDS: ['components', 'packaging']
+    KINDS: ['components', 'packaging'],
+
+    parse: function(obj)
+    {
+      DATE_PROPS.forEach(function(prop)
+      {
+        if (obj[prop])
+        {
+          obj[prop] = new Date(obj[prop]);
+        }
+      });
+
+      if (obj.date && obj.set)
+      {
+        obj.setKey = obj.date.getTime() + ':' + obj.set;
+      }
+
+      return obj;
+    },
+
+    isPartial: function(obj)
+    {
+      return obj.status === undefined
+        || obj.date === undefined
+        || obj.kind === undefined
+        || obj.set === undefined
+        || obj.cart === undefined
+        || obj.users === undefined;
+    }
 
   });
 });

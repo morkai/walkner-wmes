@@ -1,0 +1,22 @@
+<div class="wh-delivery-section">
+  <div class="wh-delivery-section-hd">
+    <div class="wh-delivery-section-title">
+      <%- t('delivery:title:' + status, {kind: kind}) %>
+    </div>
+    <div class="wh-delivery-section-actions">
+      <%- resolveAction %>
+    </div>
+  </div>
+  <div class="wh-delivery-section-bd">
+    <table id="<%- idPrefix %>-items" class="wh-delivery-items">
+      <tfoot>
+      <tr>
+        <td colspan="4"></td>
+      </tr>
+      </tfoot>
+      <% items.forEach(function(item) { %>
+      <%- renderItem({item: item}) %>
+      <% }) %>
+    </table>
+  </div>
+</div>

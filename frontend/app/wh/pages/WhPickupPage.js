@@ -532,29 +532,40 @@ define([
 
       page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
 
-      var req = page.promised(page.whOrders.act('resolveAction', Object.assign({personnelId: personnelId}, data)));
+      var req = page.promised(
+        page.whOrders.act(
+          'resolveAction',
+          Object.assign({source: 'pickup', personnelId: personnelId}, data)
+        )
+      );
 
       req.fail(function()
       {
-        var code = req.responseJSON && req.responseJSON.error && req.responseJSON.error.code;
-        var error = code;
+        var error = req.responseJSON && req.responseJSON.error || {};
+        var msg = error.code;
+
+        if (typeof msg === 'number')
+        {
+          msg = null;
+          error.code = null;
+        }
 
         if (!req.status)
         {
-          error = 'connectionFailure';
+          msg = 'connectionFailure';
         }
         else if (page.t.has('msg:resolveAction:' + req.status))
         {
-          error = 'resolveAction:' + req.status;
+          msg = 'resolveAction:' + req.status;
         }
-        else if (!page.t.has('msg:' + error))
+        else if (!page.t.has('msg:' + msg))
         {
-          error = 'genericFailure';
+          msg = 'genericFailure';
         }
 
         page.showMessage('error', 5000, 'text', {
-          text: page.t('msg:' + error, {
-            errorCode: code || '?',
+          text: page.t('msg:' + msg, {
+            errorCode: error.code || error.message || '?',
             personnelId: personnelId
           })
         });
@@ -705,6 +716,7 @@ define([
       var $message = this.$id('message');
       var visible = $overlay[0].style.display === 'block';
 
+      $message.stop(true, true);
       $overlay.css('display', 'block');
       $message
         .html(messageTemplates[message] && messageTemplates[message](messageData || {}) || message)

@@ -1,16 +1,12 @@
 <form class="settings planning-settings" autocomplete="off">
   <div class="list-group">
     <a class="list-group-item" href="#wh/settings?tab=planning" data-tab="planning" data-privileges="WH:MANAGE"><%- t('settings:tab:planning') %></a>
+    <a class="list-group-item" href="#wh/settings?tab=pickup" data-tab="pickup" data-privileges="WH:MANAGE"><%- t('settings:tab:pickup') %></a>
+    <a class="list-group-item" href="#wh/settings?tab=delivery" data-tab="delivery" data-privileges="WH:MANAGE"><%- t('settings:tab:delivery') %></a>
     <a class="list-group-item" href="#wh/settings?tab=users" data-tab="users" data-privileges="WH:MANAGE:USERS"><%- t('settings:tab:users') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="planning">
-      <div class="checkbox">
-        <label class="control-label">
-          <input id="<%- idPrefix %>-planning-ignorePsStatus" name="wh.planning.ignorePsStatus" type="checkbox" value="true">
-          <%- t('settings:planning:ignorePsStatus') %>
-        </label>
-      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-groupDuration"><%- t('settings:planning:groupDuration') %></label>
         <input id="<%- idPrefix %>-planning-groupDuration" class="form-control" name="wh.planning.groupDuration" type="number" step="1" min="1" max="24">
@@ -19,6 +15,29 @@
         <label for="<%- idPrefix %>-planning-groupExtraItems"><%- t('settings:planning:groupExtraItems') %></label>
         <span class="help-block"><%- t('settings:planning:groupExtraItems:help') %></span>
         <input id="<%- idPrefix %>-planning-groupExtraItems" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('settings:planning:ignoredMrps') %></label>
+        <span class="help-block"><%- t('settings:planning:ignoredMrps:help') %></span>
+        <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" autocomplete="new-password" data-setting>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-enabledMrps"><%- t('settings:planning:enabledMrps') %></label>
+        <span class="help-block"><%- t('settings:planning:enabledMrps:help') %></span>
+        <input id="<%- idPrefix %>-planning-enabledMrps" name="wh.planning.enabledMrps" type="text" autocomplete="new-password" data-setting>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-lineGroups"><%- t('settings:planning:lineGroups') %></label>
+        <span class="help-block"><%- t('settings:planning:lineGroups:help') %></span>
+        <textarea id="<%- idPrefix %>-planning-lineGroups" name="wh.planning.lineGroups" class="form-control text-fixed" rows="6" data-keyup-delay="10000"></textarea>
+      </div>
+    </div>
+    <div class="panel-body" data-tab="pickup">
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-planning-ignorePsStatus" name="wh.planning.ignorePsStatus" type="checkbox" value="true">
+          <%- t('settings:planning:ignorePsStatus') %>
+        </label>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-maxSetSize"><%- t('settings:planning:maxSetSize') %></label>
@@ -48,25 +67,32 @@
         <span class="help-block"><%- t('settings:planning:minPickupDowntime:help') %></span>
         <input id="<%- idPrefix %>-planning-minPickupDowntime" class="form-control" name="wh.planning.minPickupDowntime" type="number" step="1" min="1" max="28800">
       </div>
+    </div>
+    <div class="panel-body" data-tab="delivery">
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('settings:planning:ignoredMrps') %></label>
-        <span class="help-block"><%- t('settings:planning:ignoredMrps:help') %></span>
-        <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" autocomplete="new-password" data-setting>
+        <label for="<%- idPrefix %>-planning-minTimeForDelivery"><%- t('settings:planning:minTimeForDelivery') %></label>
+        <span class="help-block"><%- t('settings:planning:minTimeForDelivery:help') %></span>
+        <input id="<%- idPrefix %>-planning-minTimeForDelivery" class="form-control" name="wh.planning.minTimeForDelivery" type="number" step="1" min="1" max="480">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-enabledMrps"><%- t('settings:planning:enabledMrps') %></label>
-        <span class="help-block"><%- t('settings:planning:enabledMrps:help') %></span>
-        <input id="<%- idPrefix %>-planning-enabledMrps" name="wh.planning.enabledMrps" type="text" autocomplete="new-password" data-setting>
+        <label for="<%- idPrefix %>-planning-lateDeliveryTime"><%- t('settings:planning:lateDeliveryTime') %></label>
+        <span class="help-block"><%- t('settings:planning:lateDeliveryTime:help') %></span>
+        <input id="<%- idPrefix %>-planning-lateDeliveryTime" class="form-control" name="wh.planning.lateDeliveryTime" type="number" step="1" min="1" max="480">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-lineGroups"><%- t('settings:planning:lineGroups') %></label>
-        <span class="help-block"><%- t('settings:planning:lineGroups:help') %></span>
-        <textarea id="<%- idPrefix %>-planning-lineGroups" name="wh.planning.lineGroups" class="form-control text-fixed" rows="6" data-keyup-delay="10000"></textarea>
+        <label for="<%- idPrefix %>-planning-maxSetCartsPerDelivery"><%- t('settings:planning:maxSetCartsPerDelivery') %></label>
+        <span class="help-block"><%- t('settings:planning:maxSetCartsPerDelivery:help') %></span>
+        <input id="<%- idPrefix %>-planning-maxSetCartsPerDelivery" class="form-control" name="wh.planning.maxSetCartsPerDelivery" type="number" step="1" min="1" max="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-minDeliveryDowntime"><%- t('settings:planning:minDeliveryDowntime') %></label>
+        <span class="help-block"><%- t('settings:planning:minDeliveryDowntime:help') %></span>
+        <input id="<%- idPrefix %>-planning-minDeliveryDowntime" class="form-control" name="wh.planning.minDeliveryDowntime" type="number" step="1" min="1" max="28800">
       </div>
     </div>
     <div class="panel-body" data-tab="users">
       <div style="display: flex">
-        <% ['fmx', 'kitter', 'packer'].forEach(function(func) { %>
+        <% ['fmx', 'kitter', 'packer', 'dist'].forEach(function(func) { %>
         <div class="form-group settings-select2-long" style="min-width: 300px; margin-right: 15px;">
           <label><%- t('settings:users:' + func) %></label>
           <input type="text" autocomplete="new-password" data-user-func="<%- func %>">

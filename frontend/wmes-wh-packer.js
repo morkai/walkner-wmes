@@ -42,7 +42,7 @@
       'app/core/layouts/PageLayout',
       'app/core/layouts/BlankLayout',
       'app/time',
-      'app/wmes-wh-kitter-routes',
+      'app/wmes-wh-packer-routes',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,

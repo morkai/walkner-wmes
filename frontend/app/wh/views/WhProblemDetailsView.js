@@ -288,6 +288,7 @@ define([
         viewport.msg.saving();
 
         var cancelReq = WhOrderCollection.act(view.model.get('date'), 'cancelOrders', {
+          cancel: true,
           orders: [view.model.id]
         });
 

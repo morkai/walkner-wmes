@@ -1,8 +1,8 @@
 {
   "BREADCRUMB:base": "Magazyn (nowy)",
   "BREADCRUMB:pickup": "Kompletacja",
-  "BREADCRUMB:dist:components": "Wysyłka FIFO",
-  "BREADCRUMB:dist:packaging": "Wysyłka opakowań",
+  "BREADCRUMB:delivery:components": "Wysyłka FIFO",
+  "BREADCRUMB:delivery:packaging": "Wysyłka opakowań",
   "BREADCRUMB:problems": "Problemy",
   "BREADCRUMB:settings": "Ustawienia",
 
@@ -14,6 +14,9 @@
   "msg:resolveAction:403": "<p>Brak uprawnień do wykonywania akcji.</p>",
   "msg:USER_NOT_FOUND": "<p>Nie znaleziono użytkownika:</p><p>{personnelId}</p>",
   "msg:NO_PENDING_ORDERS": "<p>Brak zleceń gotowych do kompletacji.</p>",
+  "msg:INVALID_FUNC": "<p>Nieprawidłowa funkcja użytkownika.</p>",
+  "msg:delivered": "<p>Dostawa zakończona pomyślnie.</p>",
+  "msg:nothingToDeliver": "<p>Brak wózków oczekujących na wysyłkę.</p>",
 
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
   "PAGE_ACTION:old": "Stary moduł",
@@ -69,6 +72,7 @@
   "func:fmx": "FMX",
   "func:kitter": "Kitter",
   "func:packer": "Opakowania",
+  "func:dist": "Wysyłka",
 
   "status:picklistDone:pending": "Transakcja niewykonana",
   "status:picklistDone:progress": "Transakcja rozpoczęta",
@@ -95,6 +99,9 @@
   "menu:resetSet": "Resetuj zestaw zleceń",
 
   "settings:tab:planning": "Planowanie",
+  "settings:tab:pickup": "Kompletacja",
+  "settings:tab:delivery": "Wysyłka",
+  "settings:tab:users": "Użytkownicy",
   "settings:planning:ignorePsStatus": "Ignoruj status malarnii podczas kompletacji",
   "settings:planning:groupDuration": "Czas trwania grupy zleceń [h]",
   "settings:planning:groupExtraItems": "Minimalna ilość sztuk w grupie",
@@ -115,10 +122,18 @@
   "settings:planning:minPickupDowntime": "Maksymalny czas między kompletacjami [s]",
   "settings:planning:minPickupDowntime:help": "Minimalny czas jaki musi upłynać między zakończeniem ostatniej kompletacji a rozpoczęciem kolejnej, aby zarejestrowany został przestój.",
   "settings:planning:maxSetsPerLine": "Maksymalna ilość skompletowanych zestawów na linię",
-  "settings:tab:users": "Użytkownicy",
+  "settings:planning:minTimeForDelivery": "Czas na wysyłkę [min]",
+  "settings:planning:minTimeForDelivery:help": "Wózki dla linii, które mają dostępny czas komponentów mniejszy niż dana wartość zostaną oznaczone na żółto i będą mogły zostać wysłane na linię.",
+  "settings:planning:lateDeliveryTime": "Czas opóźnionej wysyłki [min]",
+  "settings:planning:lateDeliveryTime:help": "Wózki dla linii, które mają dostępny czas komponentów mniejszy niż dana wartość zostaną oznaczone na czerwono.",
+  "settings:planning:minDeliveryDowntime": "Maksymalny czas między wysyłkami [s]",
+  "settings:planning:minDeliveryDowntime:help": "Minimalny czas jaki musi upłynać między zakończeniem ostatniej wysyłki a rozpoczęciem kolejnej, aby zarejestrowany został przestój.",
+  "settings:planning:maxSetCartsPerDelivery": "Maksymalna ilość wózków FIFO",
+  "settings:planning:maxSetCartsPerDelivery:help": "Maksymalna ilość wózków FIFO do wysyłki jaka może zostać przydzielona dla użytkownika za jednym razem.",
   "settings:users:fmx": "FMX",
   "settings:users:kitter": "Kitter",
   "settings:users:packer": "Opakowania",
+  "settings:users:dist": "Wysyłka",
 
   "set:title": "Zestaw zleceń nr {set} dla linii {line}",
   "set:cartsEditor:carts": "Numery wózków...",
@@ -164,5 +179,19 @@
   "downtimePicker:submit": "Wybierz powód przestoju",
   "downtimePicker:cancel": "Anuluj",
   "downtimePicker:reason": "Powód przestoju",
-  "downtimePicker:comment": "Komentarz"
+  "downtimePicker:comment": "Komentarz",
+
+  "delivery:title:completed": "Skompletowane {kind, select, components{FIFO} packaging{opakowania} other{}}",
+  "delivery:title:pending": "Do realizacji",
+  "delivery:title:delivering": "W realizacji",
+  "delivery:set": "Set {set}",
+  "delivery:set:title": "Wysyłka wózków {kind, select, components{FIFO} packaging{z opakowaniami} other{}}",
+  "delivery:set:finish": "Zakończ dostawę",
+  "delivery:set:cancel": "Anuluj",
+  "delivery:set:msg": "Zeskanuj się ponownie, aby zakończyć dostawę.",
+  "delivery:set:cart": "Wózek",
+  "delivery:set:line": "Linia",
+  "delivery:set:date": "Plan",
+  "delivery:set:set": "Set",
+  "delivery:set:sapOrders": "Zlecenia"
 }

@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/time',
   'app/core/Collection',
   'app/core/util/getShiftStartInfo',
   './WhSetCart'
 ], function(
+  $,
   time,
   Collection,
   getShiftStartInfo,

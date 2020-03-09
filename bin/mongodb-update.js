@@ -33,3 +33,25 @@ db.behaviorobscards.find({riskyBehaviors: {$exists: false}}).forEach(boc =>
 
   db.behaviorobscards.updateOne({_id: boc._id}, {$set: {riskyBehaviors: boc.riskyBehaviors}});
 });
+
+db.oldwhsetcarts.find({startTime: {$exists: false}}).forEach(setCart =>
+{
+  setCart.startTime = Number.MAX_SAFE_INTEGER;
+
+  setCart.orders.forEach(o =>
+  {
+    const whOrder = db.oldwhorders.findOne({_id: o.whOrder});
+
+    o.startTime = whOrder.startTime;
+
+    if (o.startTime < setCart.startTime)
+    {
+      setCart.startTime = +o.startTime;
+    }
+  });
+
+  db.oldwhsetcarts.updateOne({_id: setCart._id}, {$set: {
+    orders: setCart.orders,
+    startTime: new Date(setCart.startTime)
+  }});
+});
