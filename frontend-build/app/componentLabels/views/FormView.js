@@ -1,0 +1,1 @@
+define(["app/core/views/FormView","app/componentLabels/templates/form"],function(e,r){"use strict";return e.extend({template:r,handleFailure:function(r){return"DUPLICATE_KEY"===(r.responseJSON&&r.responseJSON.error&&r.responseJSON.error.code)?this.showErrorMessage(this.t("FORM:ERROR:duplicate")):e.prototype.handleFailure.apply(this,arguments)}})});

@@ -1,0 +1,1 @@
+define(["../i18n","../core/Model"],function(e,i){"use strict";return i.extend({urlRoot:"/old/wh/pendingDeliveries",topicPrefix:"old.wh.pendingDeliveries",privilegePrefix:"WH",nlsDomain:"wh"})});

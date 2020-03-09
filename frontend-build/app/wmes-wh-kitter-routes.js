@@ -1,1 +1,0 @@
-define(["./router","./viewport","./user","./wh/pages/WhDistPage","i18n!app/nls/wh","i18n!app/nls/planning","i18n!app/nls/paintShop"],function(n,e,p,i){"use strict";n.map("/",p.auth("LOCAL","WH:VIEW"),function(){e.showPage(new i({kind:"components",fullscreen:!0}))})});
