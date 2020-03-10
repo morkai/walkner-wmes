@@ -4,7 +4,7 @@
 {
   'use strict';
 
-  window.WMES_APP_ID = 'wh-packer';
+  window.WMES_APP_ID = 'wh-delivery-packaging';
 
   window.requireApp = requireApp;
 
@@ -42,7 +42,7 @@
       'app/core/layouts/PageLayout',
       'app/core/layouts/BlankLayout',
       'app/time',
-      'app/wmes-wh-packer-routes',
+      'app/wmes-wh-delivery-packaging-routes',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,

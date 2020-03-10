@@ -275,10 +275,10 @@ exports.updater = {
       dictionaryModules: {}
     },
     {
-      frontendVersionKey: 'wh-packer',
-      path: '/wh-packer/manifest.appcache',
-      mainJsFile: '/wmes-wh-packer.js',
-      mainCssFile: '/assets/wmes-wh-packer.css',
+      frontendVersionKey: 'wh-delivery-packaging',
+      path: '/wh-delivery-packaging/manifest.appcache',
+      mainJsFile: '/wmes-wh-delivery-packaging.js',
+      mainCssFile: '/assets/wmes-wh-delivery-packaging.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
       dictionaryModules: {}
