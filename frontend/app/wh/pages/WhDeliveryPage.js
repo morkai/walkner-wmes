@@ -589,6 +589,11 @@ define([
       setCarts.completed.add(completed.add);
       setCarts.pending.add(pending.add);
 
+      if (page.options.kind === 'packaging')
+      {
+        page.completedView.highlight();
+      }
+
       page.pendingView.highlight();
     },
 
