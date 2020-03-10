@@ -15,6 +15,10 @@ define([
 
     template: listTemplate,
 
+    localTopics: {
+      'socket.connected': function() { this.refreshCollectionNow(); }
+    },
+
     remoteTopics: function()
     {
       var topics = {};
