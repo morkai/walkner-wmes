@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/old/wh/pending/components",topicPrefix:"old.wh.pending.components",privilegePrefix:"WH",nlsDomain:"wh"})});
