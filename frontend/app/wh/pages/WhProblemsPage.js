@@ -57,22 +57,6 @@ define([
       ];
     },
 
-    actions: function()
-    {
-      if (embedded.isEnabled())
-      {
-        return [
-          {
-            label: t('wh', 'PAGE_ACTION:pickup'),
-            icon: 'check-square-o',
-            href: '/wh-pickup'
-          }
-        ];
-      }
-
-      return [];
-    },
-
     remoteTopics: {
       'orders.updated.*': function(message)
       {
