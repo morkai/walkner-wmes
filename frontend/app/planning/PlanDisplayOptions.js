@@ -130,7 +130,7 @@ define([
 
       displayOptions.readFromLocalStorage();
 
-      ['mrps', 'lines', 'whStatuses', 'psStatuses', 'from', 'to'].forEach(function(prop)
+      ['mrps', 'lines', 'whStatuses', 'psStatuses'].forEach(function(prop)
       {
         if (Array.isArray(attrs[prop]))
         {
@@ -140,7 +140,7 @@ define([
 
       ['from', 'to'].forEach(function(prop)
       {
-        displayOptions.set(prop, attrs[prop]);
+        displayOptions.set(prop, attrs[prop] || '06:00');
       });
 
       return displayOptions;

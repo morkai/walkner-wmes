@@ -149,6 +149,9 @@ const frontendDictionaryModules = {
   downtimeReasons: 'DOWNTIME_REASONS',
   isaPalletKinds: 'ISA_PALLET_KINDS'
 };
+const whDictionaryModules = {
+  downtimeReasons: 'DOWNTIME_REASONS'
+};
 
 exports.updater = {
   manifestPath: `${ROOT_PATH}/config/wmes-manifest.appcache`,
@@ -254,7 +257,7 @@ exports.updater = {
       mainCssFile: '/assets/wmes-wh-pickup.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
-      dictionaryModules: {}
+      dictionaryModules: whDictionaryModules
     },
     {
       frontendVersionKey: 'wh-problems',
@@ -263,7 +266,7 @@ exports.updater = {
       mainCssFile: '/assets/wmes-wh-problems.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
-      dictionaryModules: {}
+      dictionaryModules: whDictionaryModules
     },
     {
       frontendVersionKey: 'wh-delivery-components',
@@ -272,7 +275,7 @@ exports.updater = {
       mainCssFile: '/assets/wmes-wh-delivery-components.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
-      dictionaryModules: {}
+      dictionaryModules: whDictionaryModules
     },
     {
       frontendVersionKey: 'wh-delivery-packaging',
@@ -281,7 +284,7 @@ exports.updater = {
       mainCssFile: '/assets/wmes-wh-delivery-packaging.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
-      dictionaryModules: {}
+      dictionaryModules: whDictionaryModules
     },
     {
       frontendVersionKey: 'isa',

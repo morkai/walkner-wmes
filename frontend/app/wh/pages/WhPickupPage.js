@@ -407,7 +407,7 @@ define([
     {
       var plan = this.plan;
 
-      if (embedded.isEnabled())
+      if (embedded.isEnabled() || window.location.pathname.startsWith('/wh-pickup'))
       {
         sessionStorage.WMES_WH_PICKUP_DATE = plan.id;
       }
