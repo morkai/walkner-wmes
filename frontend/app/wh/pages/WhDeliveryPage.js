@@ -250,6 +250,7 @@ define([
     afterRender: function()
     {
       this.resize();
+      embedded.render(this);
     },
 
     onLinesUpdated: function(message)
