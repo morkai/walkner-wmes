@@ -43,6 +43,17 @@ define([
 ) {
   'use strict';
 
+  var DEV_PERSONNEL = {
+    fmx: '13370001',
+    fmx2: '110404',
+    kit: '13370002',
+    kit2: '100307',
+    pac: '13370003',
+    pac2: '115006',
+    dlv: '13370004',
+    dlv2: '13370005'
+  };
+
   var LINE_UPDATE_INTERVAL = 10000;
 
   return View.extend({
@@ -648,6 +659,11 @@ define([
       if (page.acting)
       {
         return;
+      }
+
+      if (window.ENV === 'development' && DEV_PERSONNEL[personnelId])
+      {
+        personnelId = DEV_PERSONNEL[personnelId];
       }
 
       if (viewport.currentDialog instanceof DeliverySetView
