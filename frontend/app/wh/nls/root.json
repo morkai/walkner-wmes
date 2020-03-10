@@ -178,7 +178,7 @@
     "delivery:set": "Set {set}",
     "delivery:set:title": "Delivering {kind, select, components{FIFO} packaging{packaging} other{}} carts",
     "delivery:set:finish": "Finish delivery",
-    "delivery:set:cancel": "Cancel",
+    "delivery:set:cancel": "Close",
     "delivery:set:msg": "Scan again to finish the delivery.",
     "delivery:set:cart": "Cart",
     "delivery:set:line": "Line",

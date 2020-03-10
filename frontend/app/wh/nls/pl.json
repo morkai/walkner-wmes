@@ -187,7 +187,7 @@
   "delivery:set": "Set {set}",
   "delivery:set:title": "Wysyłka wózków {kind, select, components{FIFO} packaging{z opakowaniami} other{}}",
   "delivery:set:finish": "Zakończ dostawę",
-  "delivery:set:cancel": "Anuluj",
+  "delivery:set:cancel": "Zamknij",
   "delivery:set:msg": "Zeskanuj się ponownie, aby zakończyć dostawę.",
   "delivery:set:cart": "Wózek",
   "delivery:set:line": "Linia",
