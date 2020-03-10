@@ -2,10 +2,10 @@
 
 define([
   '../core/Collection',
-  './WhPendingDelivery'
+  './WhPendingComponents'
 ], function(
   Collection,
-  WhPendingDelivery
+  WhPendingComponents
 ) {
   'use strict';
 
@@ -16,7 +16,7 @@ define([
 
   return Collection.extend({
 
-    model: WhPendingDelivery,
+    model: WhPendingComponents,
 
     paginate: false,
 

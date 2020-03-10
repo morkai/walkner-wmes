@@ -147,15 +147,17 @@ define([
       this.setClassName(page.pageClassName);
     }
 
+    if (page.title)
+    {
+      this.setTitle(page.title, page);
+    }
+
     if (page.breadcrumbs)
     {
       this.setBreadcrumbs(page.breadcrumbs, page);
     }
-    else if (page.title)
-    {
-      this.setTitle(page.title, page);
-    }
-    else
+
+    if (!page.breadcrumbs && !page.title)
     {
       this.changeTitle();
     }
@@ -252,7 +254,10 @@ define([
       this.renderBreadcrumbs();
     }
 
-    this.changeTitle();
+    if (!this.model.page)
+    {
+      this.changeTitle();
+    }
 
     return this;
   };

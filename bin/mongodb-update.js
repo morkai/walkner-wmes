@@ -35,3 +35,7 @@ function getManHours(order)
 
   return Math.round(manHours * 10000) / 10000;
 }
+
+db.oldwhpendingdeliveries.drop();
+db.createCollection('oldwhpendingcomponents');
+db.createCollection('oldwhpendingpackagings');

@@ -14,11 +14,12 @@ define([
   'app/wh-setCarts/WhSetCartCollection',
   'app/wh/settings',
   'app/wh/WhOrderCollection',
-  'app/wh/WhPendingDeliveryCollection',
+  'app/wh/WhPendingComponentsCollection',
+  'app/wh/WhPendingPackagingCollection',
   'app/wh/views/DeliverySectionView',
   'app/wh/views/DeliverySetView',
-  'app/wh/templates/delivery/page',
-  'app/wh/templates/messages'
+  'app/wh/templates/messages',
+  'app/wh/templates/delivery/page'
 ], function(
   _,
   $,
@@ -33,11 +34,12 @@ define([
   WhSetCartCollection,
   whSettings,
   WhOrderCollection,
-  WhPendingDeliveryCollection,
+  WhPendingComponentsCollection,
+  WhPendingPackagingCollection,
   DeliverySectionView,
   DeliverySetView,
-  template,
-  messageTemplates
+  messageTemplates,
+  pageTemplate
 ) {
   'use strict';
 
@@ -45,7 +47,7 @@ define([
 
   return View.extend({
 
-    template: template,
+    template: pageTemplate,
 
     nlsDomain: 'wh',
 
@@ -61,10 +63,16 @@ define([
 
     breadcrumbs: [],
 
-    remoteTopics: {
-      'old.wh.lines.updated': 'onLinesUpdated',
-      'old.wh.pendingDeliveries.updated': 'onPendingDeliveriesUpdated',
-      'old.wh.setCarts.updated': 'onSetCartsUpdated'
+    remoteTopics: function()
+    {
+      var topics = {
+        'old.wh.lines.updated': 'onLinesUpdated',
+        'old.wh.setCarts.updated': 'onSetCartsUpdated'
+      };
+
+      topics['old.wh.pending.' + this.options.kind + '.updated'] = 'onPendingDeliveriesUpdated';
+
+      return topics;
     },
 
     localTopics: {
@@ -107,7 +115,11 @@ define([
         paginate: false
       }), this);
 
-      this.pendingDeliveries = bindLoadingMessage(new WhPendingDeliveryCollection(null, {
+      var WhPendingDeliveriesCollection = this.options.kind === 'components'
+        ? WhPendingComponentsCollection
+        : WhPendingPackagingCollection;
+
+      this.pendingDeliveries = bindLoadingMessage(new WhPendingDeliveriesCollection(null, {
         rqlQuery: 'limit(0)',
         paginate: false
       }), this);
@@ -226,7 +238,6 @@ define([
 
     afterRender: function()
     {
-console.log('WhDeliveryPage.afterRender');
       this.resize();
     },
 
@@ -236,10 +247,9 @@ console.log('WhDeliveryPage.afterRender');
 
       if (page.model.get('loading'))
       {
-console.log('onLinesUpdated loading', message);
         return;
       }
-console.log('onLinesUpdated', message);
+
       (message.deleted || []).forEach(function(line)
       {
         page.lines.remove(line._id);
@@ -271,10 +281,8 @@ console.log('onLinesUpdated', message);
 
       if (page.model.get('loading'))
       {
-console.log('onPendingDeliveriesUpdated loading', message);
         return;
       }
-console.log('onPendingDeliveriesUpdated', message);
 
       (message.deleted || []).forEach(function(pendingDelivery)
       {
@@ -296,7 +304,10 @@ console.log('onPendingDeliveriesUpdated', message);
 
     scheduleLineUpdate: function(lineId, force)
     {
-      this.updatedLines[lineId] = true;
+      if (lineId)
+      {
+        this.updatedLines[lineId] = true;
+      }
 
       var now = Date.now();
       var delay = now - this.lastLineUpdateAt;
@@ -331,10 +342,8 @@ console.log('onPendingDeliveriesUpdated', message);
 
       if (page.model.get('loading'))
       {
-console.log('onSetCartsUpdated loading', message);
         return;
       }
-console.log('onSetCartsUpdated', message);
 
       var partials = [];
 
@@ -423,9 +432,7 @@ console.log('onSetCartsUpdated', message);
           completed.push(setCart);
         }
       });
-console.log('reset', page.setCarts.length, {
-  completed, pending, delivering
-});
+
       page.setCarts.completed.reset(completed);
       page.setCarts.pending.reset(pending);
       page.setCarts.delivering.reset(delivering);
@@ -433,7 +440,6 @@ console.log('reset', page.setCarts.length, {
 
     onSetCartRemoved: function(setCart)
     {
-console.log('onSetCartRemoved', setCart);
       this.setCarts.completed.remove(setCart.id);
       this.setCarts.pending.remove(setCart.id);
       this.setCarts.delivering.remove(setCart.id);
@@ -441,7 +447,6 @@ console.log('onSetCartRemoved', setCart);
 
     onSetCartAdded: function(setCart)
     {
-console.log('onSetCartAdded', setCart);
       if (setCart.get('status') === 'delivering')
       {
         this.setCarts.delivering.add(setCart);
@@ -458,7 +463,6 @@ console.log('onSetCartAdded', setCart);
 
     onSetCartChanged: function(setCart)
     {
-console.log('onSetCartChanged', setCart);
       var setCarts = this.setCarts;
 
       if (setCart.get('status') === 'completed')
@@ -493,6 +497,11 @@ console.log('onSetCartChanged', setCart);
         return true;
       }
 
+      if (page.options.kind === 'packaging')
+      {
+        return false;
+      }
+
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
       var line = setCart.get('lines').find(function(lineId)
       {
@@ -511,7 +520,6 @@ console.log('onSetCartChanged', setCart);
 
     loadPartialSetCarts: function(ids)
     {
-console.log('loadPartialSetCarts', ids);
       var page = this;
       var req = page.ajax({
         url: page.setCarts.url + '?_id=in=(' + ids.join(',') + ')&kind=' + page.options.kind
@@ -520,6 +528,8 @@ console.log('loadPartialSetCarts', ids);
       req.fail(function()
       {
         console.error('Failed to load partial set carts:', req);
+
+        window.location.reload();
       });
 
       req.done(function(res)
@@ -535,8 +545,6 @@ console.log('loadPartialSetCarts', ids);
     {
       var page = this;
       var setCarts = page.setCarts;
-
-console.log('handleUpdatedLines', page.updatedLines);
 
       clearTimeout(page.timers.handleUpdatedLines);
       page.timers.handleUpdatedLines = null;

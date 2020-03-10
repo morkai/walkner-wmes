@@ -26,6 +26,7 @@ define([
   BlankLayout.prototype.initialize = function()
   {
     this.model = {
+      title: null,
       breadcrumbs: []
     };
   };
@@ -42,14 +43,49 @@ define([
 
   BlankLayout.prototype.setUpPage = function(page)
   {
+    if (page.title)
+    {
+      this.setTitle(page.title, page);
+    }
+
     if (page.breadcrumbs)
     {
       this.setBreadcrumbs(page.breadcrumbs, page);
     }
-    else
+
+    if (!page.breadcrumbs && !page.title)
     {
       this.changeTitle();
     }
+  };
+
+  /**
+   * @param {function|string|Array.<string>} title
+   * @param {Object} [context]
+   * @returns {BlankLayout}
+   */
+  BlankLayout.prototype.setTitle = function(title, context)
+  {
+    if (title == null)
+    {
+      return this;
+    }
+
+    if (typeof title === 'function')
+    {
+      title = title.call(context, this);
+    }
+
+    if (!Array.isArray(title))
+    {
+      title = [title];
+    }
+
+    this.model.title = title;
+
+    this.changeTitle();
+
+    return this;
   };
 
   /**
@@ -87,7 +123,10 @@ define([
       return breadcrumb;
     });
 
-    this.changeTitle();
+    if (!this.model.title)
+    {
+      this.changeTitle();
+    }
 
     return this;
   };
@@ -99,7 +138,11 @@ define([
   {
     if (this.isRendered())
     {
-      this.broker.publish('page.titleChanged', _.pluck(this.model.breadcrumbs, 'label'));
+      var newTitle = Array.isArray(this.model.title)
+        ? [].concat(this.model.title)
+        : _.pluck(this.model.breadcrumbs, 'label');
+
+      this.broker.publish('page.titleChanged', newTitle);
     }
   };
 

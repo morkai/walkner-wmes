@@ -60,8 +60,6 @@ define([
 
     afterRender: function()
     {
-      console.log('DeliverySectionView.afterRender', this.options.status);
-
       if (this.options.resolveAction)
       {
         this.onPersonnelIdChanged();
@@ -118,6 +116,7 @@ define([
           continue;
         }
 
+        // TODO Change based on kind?
         var remainingTime = line.get('components').time;
 
         if (remainingTime < lateDeliveryTime)
@@ -186,19 +185,16 @@ define([
 
     onRemoved: function(setCart)
     {
-console.log('onRemoved', this.options.status, setCart);
       this.$item(setCart.id).remove();
     },
 
     onAdded: function(setCart)
     {
-console.log('onAdded', this.options.status, setCart);
       this.$id('items').append(this.renderItem(setCart));
     },
 
     onChanged: function(setCart)
     {
-console.log('onChanged', this.options.status, setCart);
       this.$item(setCart.id).replaceWith(this.renderItem(setCart));
     },
 

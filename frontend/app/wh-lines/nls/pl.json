@@ -3,8 +3,8 @@
   "BREADCRUMB:browse": "Linie",
 
   "PROPERTY:_id": "ID",
-  "PROPERTY:pickup": "Kompletacja",
-  "PROPERTY:components": "Wysyłka FIFO",
+  "PROPERTY:pickup": "Skompletowane",
+  "PROPERTY:components": "Dostępne",
   "PROPERTY:packaging": "Wysyłka opakowań",
   "PROPERTY:sets": "Sety",
   "PROPERTY:qty": "Sztuki",
