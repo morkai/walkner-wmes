@@ -10,6 +10,7 @@
     "PROPERTY:operationNo": "Operation no",
     "PROPERTY:template": "Template",
     "PROPERTY:description": "Description",
+    "PROPERTY:global": "Global",
 
     "FORM:ERROR:duplicate": "The specified label already exists."
   },

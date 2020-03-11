@@ -9,6 +9,7 @@
   "PROPERTY:operationNo": "Numer operacji",
   "PROPERTY:template": "Szablon",
   "PROPERTY:description": "Opis",
+  "PROPERTY:global": "Globalna",
 
   "FORM:ERROR:duplicate": "Podana etykieta już istnieje."
 }

@@ -53,6 +53,7 @@ define([
             {id: 'componentCode', className: 'is-min', tdClassName: 'text-mono'},
             {id: 'operationNo', className: 'is-min', tdClassName: 'text-mono'},
             {id: 'template', className: 'is-min'},
+            {id: 'global', className: 'is-min'},
             'description'
           ],
           collection: new ComponentLabelCollection(null, {rqlQuery: req.rql})

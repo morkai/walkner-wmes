@@ -21,6 +21,12 @@
         </label>
         <% }) %>
       </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-global" name="global" type="checkbox" value="true">
+          <%- t('PROPERTY:global') %>
+        </label>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-description" class="control-label"><%- t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" name="description" class="form-control" type="text" autocomplete="new-password">

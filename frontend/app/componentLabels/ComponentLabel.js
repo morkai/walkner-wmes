@@ -24,6 +24,15 @@ define([
     getLabel: function()
     {
       return this.get('description') || (this.get('componentCode') + ', ' + this.get('operationNo'));
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.global = t('core', 'BOOL:' + !!obj.global);
+
+      return obj;
     }
 
   }, {
