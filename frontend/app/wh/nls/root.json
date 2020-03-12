@@ -73,7 +73,8 @@
     "func:fmx": "FMX",
     "func:kitter": "Kitter",
     "func:packer": "Packer",
-    "func:dist": "Delivery",
+    "func:dist-components": "FIFO delivery",
+    "func:dist-packaging": "Packaging delivery",
 
     "status:picklistDone:pending": "Transaction pending",
     "status:picklistDone:progress": "Transaction in progress",
@@ -121,10 +122,6 @@
     "settings:planning:minPickupDowntime": "Maximum time between pickups [s]",
     "settings:planning:minPickupDowntime:help": "Minimum time that has to pass between an end of the last pickup and a start of the new pickup to register a downtime.",
     "settings:planning:maxSetsPerLine": "Maximum number of completed sets per line",
-    "settings:users:fmx": "FMX",
-    "settings:users:kitter": "Kitter",
-    "settings:users:packer": "Packer",
-    "settings:users:dist": "Delivery",
 
     "set:title": "Order set no {set} for line {line}",
     "set:cartsEditor:carts": "Carts...",

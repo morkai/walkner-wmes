@@ -94,9 +94,11 @@ define([
         view: this
       });
 
+      var canManageUsers = user.isAllowedTo('WH:MANAGE:USERS');
+
       this.$('input[data-user-func]').each(function()
       {
-        setUpUserSelect2(view.$(this), {
+        setUpUserSelect2(view.$(this).prop('disabled', !canManageUsers), {
           width: '100%',
           multiple: true,
           allowClear: true,

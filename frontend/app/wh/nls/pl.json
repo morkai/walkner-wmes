@@ -72,7 +72,8 @@
   "func:fmx": "FMX",
   "func:kitter": "Kitter",
   "func:packer": "Opakowania",
-  "func:dist": "Wysyłka",
+  "func:dist-components": "Wysyłka FIFO",
+  "func:dist-packaging": "Wysyłka opakowań",
 
   "status:picklistDone:pending": "Transakcja niewykonana",
   "status:picklistDone:progress": "Transakcja rozpoczęta",
@@ -130,10 +131,6 @@
   "settings:planning:minDeliveryDowntime:help": "Minimalny czas jaki musi upłynać między zakończeniem ostatniej wysyłki a rozpoczęciem kolejnej, aby zarejestrowany został przestój.",
   "settings:planning:maxSetCartsPerDelivery": "Maksymalna ilość wózków FIFO",
   "settings:planning:maxSetCartsPerDelivery:help": "Maksymalna ilość wózków FIFO do wysyłki jaka może zostać przydzielona dla użytkownika za jednym razem.",
-  "settings:users:fmx": "FMX",
-  "settings:users:kitter": "Kitter",
-  "settings:users:packer": "Opakowania",
-  "settings:users:dist": "Wysyłka",
 
   "set:title": "Zestaw zleceń nr {set} dla linii {line}",
   "set:cartsEditor:carts": "Numery wózków...",
