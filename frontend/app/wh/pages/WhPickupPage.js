@@ -110,15 +110,7 @@ define([
 
       if (embedded.isEnabled())
       {
-        return [
-          {
-            label: page.t('PAGE_ACTION:problems'),
-            icon: 'bug',
-            privileges: 'WH:VIEW',
-            href: '/wh-problems'
-          },
-          legend
-        ];
+        return [legend];
       }
 
       return [
