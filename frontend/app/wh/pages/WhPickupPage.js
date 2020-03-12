@@ -17,9 +17,9 @@ define([
   'app/planning/PlanDisplayOptions',
   '../settings',
   '../WhOrderCollection',
-  '../views/WhFilterView',
-  '../views/WhPlanView',
-  '../views/WhSetView',
+  '../views/WhPickupFilterView',
+  '../views/WhPickupListView',
+  '../views/WhPickupSetView',
   '../views/DowntimePickerView',
   '../templates/messages',
   'app/wh/templates/planPage',
@@ -42,9 +42,9 @@ define([
   PlanDisplayOptions,
   whSettings,
   WhOrderCollection,
-  WhFilterView,
-  WhPlanView,
-  WhSetView,
+  WhPickupFilterView,
+  WhPickupListView,
+  WhPickupSetView,
   DowntimePickerView,
   messageTemplates,
   pageTemplate,
@@ -280,11 +280,11 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new WhFilterView({
+      this.filterView = new WhPickupFilterView({
         plan: this.plan
       });
 
-      this.listView = new WhPlanView({
+      this.listView = new WhPickupListView({
         whSettings: this.whSettings,
         whOrders: this.whOrders,
         plan: this.plan
@@ -623,7 +623,7 @@ define([
 
       if (user
         && currentDialog
-        && currentDialog instanceof WhSetView
+        && currentDialog instanceof WhPickupSetView
         && currentDialog.model.user
         && currentDialog.model.user._id === user._id
         && currentDialog.model.set === set)
@@ -634,7 +634,7 @@ define([
       viewport.closeAllDialogs();
 
       var line = orders[0].get('line');
-      var dialogView = new WhSetView({
+      var dialogView = new WhPickupSetView({
         model: {
           user: user,
           set: set,

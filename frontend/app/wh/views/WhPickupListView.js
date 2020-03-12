@@ -310,7 +310,8 @@ define([
 
       var orderNo = whOrder.get('order');
       var set = whOrder.get('set');
-      var status = whOrder.get('status');
+      var pickStatus = whOrder.get('status');
+      var distStatus = whOrder.get('distStatus');
       var menu = [
         contextMenu.actions.sapOrder(orderNo)
       ];
@@ -339,29 +340,11 @@ define([
         handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, false, false)
       });
 
-      if (user.isAllowedTo('WH:MANAGE'))
+      if (user.isAllowedTo('WH:MANAGE') && distStatus === 'pending')
       {
         menu.push('-');
 
-        if (status === 'cancelled')
-        {
-          /*
-          menu.push({
-            icon: 'fa-recycle',
-            label: t('wh', 'menu:restoreOrder'),
-            handler: this.handleRestoreAction.bind(this, {orders: [whOrder.id]})
-          });
-
-          if (set)
-          {
-            menu.push({
-              label: t('wh', 'menu:restoreSet'),
-              handler: this.handleRestoreAction.bind(this, {set: set})
-            });
-          }
-          */
-        }
-        else
+        if (pickStatus !== 'cancelled')
         {
           menu.push({
             icon: 'fa-times',
@@ -378,7 +361,7 @@ define([
           }
         }
 
-        if (status !== 'pending')
+        if (pickStatus !== 'pending')
         {
           menu.push({
             icon: 'fa-eraser',
