@@ -32,13 +32,13 @@ define([
       return user;
     }
 
-    var name = user.lastName && user.firstName
+    user.name = user.lastName && user.firstName
       ? (user.lastName + ' ' + user.firstName)
       : (user.name || user.login || user._id);
 
     return {
       id: user._id,
-      text: textFormatter(user, name, query),
+      text: textFormatter(user, user.name, query),
       user: user
     };
   }

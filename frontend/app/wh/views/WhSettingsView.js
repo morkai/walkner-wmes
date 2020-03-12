@@ -101,7 +101,7 @@ define([
           multiple: true,
           allowClear: true,
           placeholder: ' ',
-          noPersonnelId: true
+          noPersonnelId: false
         });
 
         view.updateUsers(this.dataset.userFunc);
@@ -160,7 +160,7 @@ define([
       {
         whUser = new WhUser({
           _id: user.id,
-          label: user.text,
+          label: user.user.name,
           func: func
         });
 
