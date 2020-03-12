@@ -15,8 +15,6 @@ define([
 
   return EditFormPage.extend({
 
-    pageClassName: 'page-max-flex',
-
     FormView: UserFormView,
 
     breadcrumbs: function()
