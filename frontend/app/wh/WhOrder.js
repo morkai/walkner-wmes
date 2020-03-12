@@ -151,7 +151,7 @@ define([
 
       obj.clickable = {
         picklistDone: canManage
-          || (isUser && userFunc._id === obj.picklistFunc && picklistDone)
+          || (isUser && userFunc._id === obj.picklistFunc && !picklistDone)
       };
 
       obj.funcs.forEach(function(func)
