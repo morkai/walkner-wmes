@@ -15,6 +15,11 @@ define([
 
     paginate: false,
 
+    comparator: function(a, b)
+    {
+      return a.get('label').localeCompare(b.get('label'), 'pl', {ignorePunctuation: true});
+    },
+
     setUpPubsub: function(pubsub)
     {
       pubsub.subscribe('old.wh.users.*', this.handleMessage.bind(this));
