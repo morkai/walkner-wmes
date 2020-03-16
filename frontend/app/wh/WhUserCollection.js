@@ -17,7 +17,10 @@ define([
 
     comparator: function(a, b)
     {
-      return a.get('label').localeCompare(b.get('label'), 'pl', {ignorePunctuation: true});
+      a = a.get('label') || '';
+      b = b.get('label') || '';
+
+      return a.localeCompare(b, 'pl', {ignorePunctuation: true});
     },
 
     setUpPubsub: function(pubsub)
