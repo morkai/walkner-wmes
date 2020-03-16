@@ -1,0 +1,24 @@
+{
+  "root": {
+    "BREADCRUMB:base": "WH (new)",
+    "BREADCRUMB:browse": "Delivered orders",
+
+    "PROPERTY:line": "Line",
+    "PROPERTY:qtyTodo": "Quantity todo",
+    "PROPERTY:qtyDone": "Quantity done",
+    "PROPERTY:qty": "Quantity",
+    "PROPERTY:pceTime": "PCE time",
+    "PROPERTY:sapOrder": "Order",
+    "PROPERTY:date": "Plan",
+    "PROPERTY:set": "Set",
+    "PROPERTY:startTime": "Planned start time",
+
+    "FILTER:lineOrOrder": "Specify an order or select a line.",
+    "FILTER:onlyRemaining": "Only incomplete",
+
+    "FORM:edit:title": "Editing delivered order",
+    "FORM:edit:submit": "Save",
+    "FORM:edit:failure": "Editing failed."
+  },
+  "pl": true
+}

@@ -1,0 +1,23 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <div class="form-group">
+    <label class="control-label"><%- t('PROPERTY:line') %></label>
+    <p class="form-control-static"><%= model.line %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('PROPERTY:sapOrder') %></label>
+    <p class="form-control-static"><%= model.sapOrder %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-qtyDone" class="control-label"><%- t('PROPERTY:qtyDone') %></label>
+    <input id="<%- idPrefix %>-qtyDone" name="qtyDone" class="form-control" type="number" min="0" required style="width: 100px">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-qtyTodo" class="control-label"><%- t('PROPERTY:qtyTodo') %></label>
+    <input id="<%- idPrefix %>-qtyTodo" name="qtyTodo" class="form-control" type="number" min="1" max="9999" required style="width: 100px">
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('FORM:edit:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

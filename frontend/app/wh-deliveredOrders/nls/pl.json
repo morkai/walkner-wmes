@@ -1,0 +1,21 @@
+{
+  "BREADCRUMB:base": "Magazyn (nowy)",
+  "BREADCRUMB:browse": "Dostarczone zlecenia",
+
+  "PROPERTY:line": "Linia",
+  "PROPERTY:qtyTodo": "Ilość do zrobienia",
+  "PROPERTY:qtyDone": "Ilość zrobiona",
+  "PROPERTY:qty": "Ilość",
+  "PROPERTY:pceTime": "Czas sztuki",
+  "PROPERTY:sapOrder": "Zlecenie",
+  "PROPERTY:date": "Plan",
+  "PROPERTY:set": "Set",
+  "PROPERTY:startTime": "Plan. czas rozp.",
+
+  "FILTER:lineOrOrder": "Podaj zlecenie lub wybierz linię.",
+  "FILTER:onlyRemaining": "Tylko niewykonane",
+
+  "FORM:edit:title": "Edycja dostarczonego zlecenia",
+  "FORM:edit:submit": "Zapisz",
+  "FORM:edit:failure": "Edycja nie powiodła się."
+}
