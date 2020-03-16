@@ -150,7 +150,8 @@ const frontendDictionaryModules = {
   isaPalletKinds: 'ISA_PALLET_KINDS'
 };
 const whDictionaryModules = {
-  downtimeReasons: 'DOWNTIME_REASONS'
+  downtimeReasons: 'DOWNTIME_REASONS',
+  orderStatuses: 'ORDER_STATUSES'
 };
 
 exports.updater = {
