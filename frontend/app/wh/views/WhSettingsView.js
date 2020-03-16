@@ -52,8 +52,22 @@ define([
           return;
         }
 
-        var name = e.currentTarget.textContent.trim();
-        var whUser = this.whUsers.find(function(whUser) { return whUser.get('label') === name; });
+        var i = -1;
+        var li = e.currentTarget.parentNode;
+
+        while ((li = li.previousSibling) !== null) // eslint-disable-line no-cond-assign
+        {
+          ++i;
+        }
+
+        var item = this.$(e.currentTarget).closest('.select2-container').select2('data')[i];
+
+        if (!item)
+        {
+          return;
+        }
+
+        var whUser = this.whUsers.get(item.id);
 
         if (!whUser)
         {
