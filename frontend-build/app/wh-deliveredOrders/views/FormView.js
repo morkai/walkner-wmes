@@ -1,0 +1,1 @@
+define(["app/viewport","app/core/views/FormView","app/wh-deliveredOrders/templates/form"],function(e,t,r){"use strict";return t.extend({template:r,handleSuccess:function(){e.closeDialog()},getFailureText:function(){return this.t("FORM:edit:failure")},serializeForm:function(e){return e.qtyTodo=parseInt(e.qtyTodo,10),e.qtyDone=parseInt(e.qtyDone,10),e}})});
