@@ -9,7 +9,7 @@ define([
 
   return ListView.extend({
 
-    className: '',
+    className: 'is-colored',
 
     remoteTopics: function()
     {
@@ -31,8 +31,9 @@ define([
       {id: 'completedAt', className: 'is-min'},
       {id: 'deliveringAt', className: 'is-min'},
       {id: 'duration', className: 'is-min'},
-      {id: 'completedBy'},
-      {id: 'deliveringBy'}
+      {id: 'completedBy', className: 'is-min'},
+      {id: 'deliveringBy', className: 'is-min'},
+      '-'
     ],
 
     actions: []
