@@ -340,7 +340,8 @@ define([
         handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, false, false)
       });
 
-      if (user.isAllowedTo('WH:MANAGE') && distStatus === 'pending')
+      if ((user.isAllowedTo('WH:MANAGE') && distStatus === 'pending')
+        || (window.ENV === 'development' && user.isAllowedTo('SUPER')))
       {
         menu.push('-');
 
