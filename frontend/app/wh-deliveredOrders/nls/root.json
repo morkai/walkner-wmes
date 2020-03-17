@@ -18,7 +18,9 @@
 
     "FORM:edit:title": "Editing delivered order",
     "FORM:edit:submit": "Save",
-    "FORM:edit:failure": "Editing failed."
+    "FORM:edit:failure": "Editing failed.",
+
+    "FORM:edit:finish": "Finish"
   },
   "pl": true
 }

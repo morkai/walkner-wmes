@@ -17,5 +17,7 @@
 
   "FORM:edit:title": "Edycja dostarczonego zlecenia",
   "FORM:edit:submit": "Zapisz",
-  "FORM:edit:failure": "Edycja nie powiodła się."
+  "FORM:edit:failure": "Edycja nie powiodła się.",
+
+  "LIST:ACTION:finish": "Zakończ"
 }

@@ -15,6 +15,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-colored',
+
     localTopics: {
       'socket.connected': 'refreshCollectionNow'
     },
@@ -38,6 +40,28 @@ define([
         });
 
         viewport.showDialog(dialogView, this.t('FORM:edit:title'));
+      },
+
+      'click .action-finish': function(e)
+      {
+        viewport.msg.saving();
+
+        var model = this.collection.get(this.$(e.currentTarget).closest('.list-item')[0].dataset.id);
+
+        var req = this.promised(model.save(
+          {qtyDone: model.get('qtyTodo')},
+          {wait: true}
+        ));
+
+        req.fail(function()
+        {
+          viewport.msg.savingFailed();
+        });
+
+        req.done(function()
+        {
+          viewport.msg.saved();
+        });
       }
 
     }, ListView.prototype.events),
@@ -57,18 +81,29 @@ define([
       var view = this;
       var canManage = user.isAllowedTo('WH:MANAGE');
 
-      return function()
+      return function(row)
       {
+        var actions = [];
+
         if (!canManage)
         {
-          return [];
+          return actions;
         }
 
-        return [{
+        actions.push({
+          id: 'finish',
+          icon: 'check',
+          label: view.t('LIST:ACTION:finish'),
+          className: row.qtyDone < row.qtyTodo ? '' : 'disabled'
+        });
+
+        actions.push({
           id: 'edit',
           icon: 'edit',
           label: view.t('core', 'LIST:ACTION:edit')
-        }];
+        });
+
+        return actions;
       };
     },
 

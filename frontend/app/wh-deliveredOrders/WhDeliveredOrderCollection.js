@@ -15,22 +15,26 @@ define([
 
     model: WhDeliveredOrder,
 
-    rqlQuery: 'limit(-1337)',
+    rqlQuery: 'sort(date,set,startTime)&limit(-1337)',
 
     getLineFilter: function()
     {
-      return _.find(this.rqlQuery.selector.args, function(term)
+      var term = _.find(this.rqlQuery.selector.args, function(term)
       {
         return term.name === 'eq' && term.args[0] === 'line';
       });
+
+      return term ? term.args[1] : null;
     },
 
     getSapOrderFilter: function()
     {
-      return _.find(this.rqlQuery.selector.args, function(term)
+      var term = _.find(this.rqlQuery.selector.args, function(term)
       {
         return term.name === 'eq' && term.args[0] === 'sapOrder';
       });
+
+      return term ? term.args[1] : null;
     }
 
   });

@@ -19,7 +19,7 @@ define([
 
     baseBreadcrumb: '#wh/pickup/0d',
 
-    listClassName: '',
+    pageClassName: 'page-max-flex',
 
     FilterView: FilterView,
 

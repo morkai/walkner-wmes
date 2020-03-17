@@ -30,6 +30,15 @@ define([
       obj.date = time.utc.format(obj.date, 'L');
 
       return obj;
+    },
+
+    serializeRow: function()
+    {
+      var row = this.serialize();
+
+      row.className = row.qtyDone === row.qtyTodo ? 'success' : row.qtyDone ? 'info' : '';
+
+      return row;
     }
 
   });

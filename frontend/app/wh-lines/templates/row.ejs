@@ -4,12 +4,12 @@
   <td class="is-min is-number"><%- row.pickup.qty.toLocaleString() %></td>
   <td class="is-min is-number"><%- time.toString(row.pickup.time / 1000, true, false) %></td>
   <td class="is-min is-number">
-    <a href="#wh/deliveredOrders?line=<%= row._id %>&qtyRemaining=gt=0&limit(-1337)">
+    <a href="#wh/deliveredOrders?line=<%= row._id %>&qtyRemaining=gt=0&sort(date,set,startTime)&limit(-1337)">
       <%- row.components.qty.toLocaleString() %>
     </a>
   </td>
   <td class="is-min is-number">
-    <a href="#wh/deliveredOrders?line=<%= row._id %>&qtyRemaining=gt=0&limit(-1337)">
+    <a href="#wh/deliveredOrders?line=<%= row._id %>&qtyRemaining=gt=0&sort(date,set,startTime)&limit(-1337)">
       <%- time.toString(row.components.time / 1000, true, false) %>
     </a>
   </td>
