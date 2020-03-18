@@ -125,6 +125,8 @@
 
     "set:title": "Order set no {set} for line {line}",
     "set:cartsEditor:carts": "Carts...",
+    "set:cartsEditor:used:error": "{count, plural, one{Cart already in use:} other{Carts already in use:}}",
+    "set:cartsEditor:used:cart": "{cart} ({date}, set {set})",
     "set:problemEditor:problemArea": "Problem areas...",
     "set:problemEditor:comment": "Comment...",
 

@@ -495,20 +495,87 @@ define([
           carts: newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]].carts.join(' ')
         });
 
+        $editor.find('.form-control').on('input', function(e)
+        {
+          e.currentTarget.setCustomValidity('');
+        });
+
         $editor.on('submit', function()
         {
-          done(function(newData)
+          var carts = $editor.find('.form-control')
+            .val()
+            .split(/[^0-9]+/)
+            .filter(function(v) { return !!v.length; })
+            .map(function(v) { return +v; });
+
+          if (carts.length === 0)
           {
-            return {
-              whOrderId: newData._id,
-              funcId: propFunc,
-              newValue: 'success',
-              carts: $editor.find('.form-control')
-                .val()
-                .split(/[^0-9]+/)
-                .filter(function(v) { return !!v.length; })
-                .map(function(v) { return +v; })
-            };
+            complete(carts);
+
+            return false;
+          }
+
+          var $fields = $editor.find('input, button').prop('disabled', true);
+
+          var req = view.ajax({
+            url: '/old/wh/setCarts'
+              + '?select(date,set,cart)'
+              + 'status=in=(completing,completed,delivering)'
+              + '&kind=' + (propFunc === 'packer' ? 'packaging' : 'components')
+              + '&cart=in=(' + carts.join(',') + ')'
+          });
+
+          req.fail(function()
+          {
+            if (view.$editor === $editor)
+            {
+              complete(carts);
+            }
+          });
+
+          req.done(function(res)
+          {
+            if (view.$editor !== $editor)
+            {
+              return;
+            }
+
+            var orderSet = Date.parse(newData.date) + ':' + newData.set;
+            var usedCarts = (res.collection || []).filter(function(setCart)
+            {
+              var cartSet = Date.parse(setCart.date) + ':' + setCart.set;
+
+              return cartSet !== orderSet;
+            });
+
+            if (!usedCarts.length)
+            {
+              complete(carts);
+
+              return;
+            }
+
+            var error = view.t('set:cartsEditor:used:error', {
+              count: usedCarts.length
+            });
+
+            usedCarts.forEach(function(setCart, i)
+            {
+              if (i > 0)
+              {
+                error += ', ';
+              }
+
+              error += ' ' + view.t('set:cartsEditor:used:cart', {
+                cart: setCart.cart,
+                date: time.utc.format(setCart.date, 'L'),
+                set: setCart.set
+              });
+            });
+
+            $editor.find('.form-control')[0].setCustomValidity(error);
+            $fields.prop('disabled', false);
+            $editor.find('.btn').click();
           });
 
           return false;
@@ -517,6 +584,19 @@ define([
         view.showEditor($editor, $prop[0]);
 
         $editor.find('input').select();
+
+        function complete(carts)
+        {
+          done(function(newData)
+          {
+            return {
+              whOrderId: newData._id,
+              funcId: propFunc,
+              newValue: 'success',
+              carts: carts
+            };
+          });
+        }
       },
 
       handlePickupFailure: function(newData, propFunc, done)

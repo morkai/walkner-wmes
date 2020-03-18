@@ -134,6 +134,8 @@
 
   "set:title": "Zestaw zleceń nr {set} dla linii {line}",
   "set:cartsEditor:carts": "Numery wózków...",
+  "set:cartsEditor:used:error": "{count, plural, one{Podany wózek jest w użyciu:} other{Podane wózki są już w użyciu:}}",
+  "set:cartsEditor:used:cart": "{cart} ({date}, set {set})",
   "set:problemEditor:problemArea": "Nr pola problemów...",
   "set:problemEditor:comment": "Komentarz...",
 
