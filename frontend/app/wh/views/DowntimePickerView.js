@@ -77,6 +77,13 @@ define([
     onDialogShown: function()
     {
       this.$id('filter').focus();
+
+      var $active = this.$('.active[data-filter]');
+
+      if ($active.length)
+      {
+        $active[0].scrollIntoView();
+      }
     },
 
     transliterate: function(s)
