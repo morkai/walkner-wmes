@@ -616,7 +616,7 @@ define([
         this.unselectMsg();
         this.hideEditor();
       }
-      else if (e.key === 'Delete')
+      else if (e.key === 'Delete' && !viewport.currentDialog)
       {
         this.deleteMsg();
       }
