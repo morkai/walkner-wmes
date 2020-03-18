@@ -3,4 +3,4 @@
 
 'use strict';
 
-db.componentlabels.updateMany({global: {$exists: false}}, {$set: {global: true}});
+db.oldwhevents.deleteMany({});
