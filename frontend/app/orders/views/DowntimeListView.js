@@ -26,7 +26,8 @@ define([
         collection: this.collection,
         simple: true,
         shiftColumn: true,
-        autoRefresh: !embedded.isEnabled()
+        autoRefresh: !embedded.isEnabled(),
+        orderId: this.model.id
       }));
 
       this.once('afterRender', function()

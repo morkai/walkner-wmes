@@ -27,12 +27,34 @@ define([
 
       if (this.options.autoRefresh !== false)
       {
-        topics['prodDowntimes.created.*'] = 'refreshIfMatches';
-        topics['prodDowntimes.updated.*'] = 'refreshIfMatches';
-        topics['prodDowntimes.deleted.*'] = 'refreshIfMatches';
+        if (this.options.orderId)
+        {
+          topics['prodDowntimes.created.*'] = 'onCreated';
+          topics['prodDowntimes.updated.*'] = 'onUpdated';
+          topics['prodDowntimes.deleted.*'] = 'onDeleted';
+        }
+        else
+        {
+          topics['prodDowntimes.created.*'] = 'refreshIfMatches';
+          topics['prodDowntimes.updated.*'] = 'refreshIfMatches';
+          topics['prodDowntimes.deleted.*'] = 'refreshIfMatches';
+        }
       }
 
       return topics;
+    },
+
+    initialize: function()
+    {
+      ListView.prototype.initialize.apply(this, arguments);
+
+      if (this.options.orderId)
+      {
+        this.once('afterRender', function()
+        {
+          this.listenTo(this.collection, 'change', this.render);
+        });
+      }
     },
 
     columns: function()
@@ -163,6 +185,34 @@ define([
       });
 
       this.scheduleDurationsUpdate();
+    },
+
+    onCreated: function(data)
+    {
+      if (data.orderId === this.options.orderId)
+      {
+        this.refreshCollection();
+      }
+    },
+
+    onUpdated: function(data)
+    {
+      var model = this.collection.get(data._id);
+
+      if (model)
+      {
+        model.set(data);
+      }
+    },
+
+    onDeleted: function(data)
+    {
+      var model = this.collection.get(data._id);
+
+      if (model)
+      {
+        this.refreshCollection();
+      }
     }
 
   });
