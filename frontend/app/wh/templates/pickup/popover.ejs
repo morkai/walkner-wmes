@@ -1,0 +1,26 @@
+<dl>
+  <% if (status) { %>
+  <dt><%- t('list:popover:status') %></dt>
+  <dd><%- status %></dd>
+  <% } %>
+  <% if (user) { %>
+  <dt><%- t('list:popover:user') %></dt>
+  <dd><%- user %></dd>
+  <% } %>
+  <% if (carts.length) { %>
+  <dt><%- t('prop:carts') %></dt>
+  <dd><%- carts.join(', ') %></dd>
+  <% } %>
+  <% if (problemArea) { %>
+  <dt><%- t('prop:problemArea') %></dt>
+  <dd><%= problemArea %></dd>
+  <% } %>
+  <% if (comment) { %>
+  <dt><%- t('prop:comment') %></dt>
+  <dd style="white-space: pre-line"><%= comment %></dd>
+  <% } %>
+  <% qtyPerLine.forEach(function(lineQty) {  %>
+  <dt><%= lineQty.line %></dt>
+  <dd><%- lineQty.qty.toLocaleString() %>/<%- lineQty.max.toLocaleString() %></dd>
+  <% }) %>
+</dl>

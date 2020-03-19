@@ -160,6 +160,7 @@
   "list:popover:user": "Magazynier",
   "list:popover:fifoStatus": "Wysyłka FIFO",
   "list:popover:packStatus": "Wysyłka opakowań",
+  "list:popover:qty": "Ilość",
 
   "problem:empty": "Nie ma żadnych problemów!",
   "problem:title": "Szczegóły problemu ze zleceniem {orderNo} dla linii {line}",

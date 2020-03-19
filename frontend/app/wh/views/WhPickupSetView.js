@@ -13,12 +13,12 @@ define([
   'app/planning/PlanSapOrder',
   '../WhOrder',
   'app/core/templates/userInfo',
-  'app/wh/templates/whSet',
-  'app/wh/templates/whSetItem',
-  'app/wh/templates/whSetPickupPopover',
-  'app/wh/templates/cartsEditor',
-  'app/wh/templates/problemEditor',
-  'app/wh/templates/printLabels'
+  'app/wh/templates/pickup/set/set',
+  'app/wh/templates/pickup/set/setItem',
+  'app/wh/templates/pickup/set/setPickupPopover',
+  'app/wh/templates/pickup/set/cartsEditor',
+  'app/wh/templates/pickup/set/problemEditor',
+  'app/wh/templates/pickup/set/printLabels'
 ], function(
   _,
   $,

@@ -14,9 +14,9 @@ define([
   'app/planning/PlanSapOrder',
   'app/planning/templates/lineOrderComments',
   'app/orders/util/commentPopover',
-  'app/wh/templates/whList',
-  'app/wh/templates/whListRow',
-  'app/wh/templates/whListPopover'
+  'app/wh/templates/pickup/list',
+  'app/wh/templates/pickup/row',
+  'app/wh/templates/pickup/popover'
 ], function(
   _,
   $,
@@ -31,15 +31,15 @@ define([
   PlanSapOrder,
   lineOrderCommentsTemplate,
   commentPopover,
-  whListTemplate,
-  whListRowTemplate,
-  whListPopoverTemplate
+  listTemplate,
+  rowTemplate,
+  popoverTemplate
 ) {
   'use strict';
 
   return View.extend({
 
-    template: whListTemplate,
+    template: listTemplate,
 
     modelProperty: 'whOrders',
 
@@ -129,12 +129,14 @@ define([
         this.$stickyHeaders.remove();
         this.$stickyHeaders = null;
       }
+
+      $('.popover').popover('destroy');
     },
 
     getTemplateData: function()
     {
       return {
-        renderRow: whListRowTemplate,
+        renderRow: rowTemplate,
         rows: this.serializeRows()
       };
     },
@@ -148,7 +150,7 @@ define([
     {
       clearTimeout(this.timers.render);
 
-      $('.planning-mrp-comment-popover, .wh-list-popover').popover('destroy');
+      $('.popover').popover('destroy');
     },
 
     afterRender: function()
@@ -206,10 +208,22 @@ define([
             status: null,
             carts: [],
             problemArea: '',
-            comment: ''
+            comment: '',
+            qtyPerLine: []
           };
 
-          if (columnId === 'fifoStatus' || columnId === 'packStatus')
+          if (columnId === 'qty')
+          {
+            templateData.qtyPerLine = whOrder.get('lines').map(function(line)
+            {
+              return {
+                line: line._id,
+                qty: line.qty,
+                max: whOrder.get('qty')
+              };
+            });
+          }
+          else if (columnId === 'fifoStatus' || columnId === 'packStatus')
           {
             templateData.status = view.t('status:' + whOrder.get(columnId));
           }
@@ -228,7 +242,7 @@ define([
               templateData.status = view.t('status:pending');
             }
           }
-          else
+          else if (columnId === 'fmx' || columnId === 'kitter' || columnId === 'packer')
           {
             var func = whOrder.getFunc(this.dataset.columnId);
 
@@ -243,7 +257,7 @@ define([
             }
           }
 
-          return view.renderPartial(whListPopoverTemplate, templateData);
+          return view.renderPartial(popoverTemplate, templateData);
         }
       });
     },
@@ -577,7 +591,7 @@ define([
 
       var i = this.whOrders.indexOf(whOrder);
 
-      $tr.replaceWith(whListRowTemplate({
+      $tr.replaceWith(rowTemplate({
         row: whOrder.serialize(this.plan, i, this.whOrders.getFilters(this.plan))
       }));
 

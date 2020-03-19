@@ -6,7 +6,7 @@
   <td data-column-id="planStatus" class="is-min planning-mrp-lineOrders-status" data-status="<%- row.planStatus %>"><%- row.planStatusIcons %></td>
   <td data-column-id="nc12" class="is-min"><%= row.nc12 %></td>
   <td data-column-id="name" class="is-min"><%= row.name %></td>
-  <td data-column-id="qty" class="is-min text-right"><%- row.qty %>/<%- row.qtyTodo %></td>
+  <td data-column-id="qty" class="is-min text-right <%- row.lines.length > 1 ? 'wh-has-popover' : '' %>"><%- row.qty %>/<%- row.qtyTodo %></td>
   <td data-column-id="shift" class="is-min text-center" style="min-width: 35px"><%- t('core', 'SHIFT:' + row.shift) %></td>
   <td data-column-id="startTime" class="is-min text-right"><%- row.startTime %></td>
   <td data-column-id="finishTime" class="is-min text-right"><%- row.finishTime %></td>

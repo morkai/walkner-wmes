@@ -151,6 +151,7 @@
     "list:popover:user": "Warehouseman",
     "list:popover:fifoStatus": "FIFO delivery",
     "list:popover:packStatus": "Packaging delivery",
+    "list:popover:qty": "Quantity",
 
     "problem:empty": "No problems!",
     "problem:title": "Problem details for order {orderNo} on line {line}",
