@@ -39,21 +39,25 @@
 .wh-delivery-item {
   line-height: 1;
   background: #FFF;
+  color: #000;
 }
 .wh-delivery-item.wh-status-delivering {
-  background: #DFF0D8;
+  background: #449d44;
+  color: #FFF;
 }
 .wh-delivery-item.wh-status-pending {
-  background: #D9EDF7;
+  background: #5bc0de;
 }
 .wh-delivery-item.wh-status-deliverable {
-  background: #FCF8E3;
+  background: #f0ad4e;
 }
 .wh-delivery-item.wh-status-late {
-  background: #F2DEDE;
+  background: #c9302c;
+  color: #FFF;
 }
 .wh-delivery-item:hover {
-  background: #FFFFD6;
+  background: #FFFFA6;
+  color: #000;
 }
 .wh-delivery-item td {
   padding: 7px 7px 5px 7px;
