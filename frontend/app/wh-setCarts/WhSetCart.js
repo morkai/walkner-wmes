@@ -48,12 +48,12 @@ define([
       obj.kind = t(this.nlsDomain, 'kind:' + obj.kind);
       obj.date = time.format(obj.date, 'L');
       obj.orders = obj.orders.map(function(o) { return o.sapOrder; }).join('; ');
-      obj.completedAt = time.format(obj.completedAt, 'L LT');
+      obj.completedAt = time.format(obj.completedAt, 'L LTS');
       obj.duration = obj.deliveredAt && obj.deliveringAt
         ? time.toString((Date.parse(obj.deliveredAt) - Date.parse(obj.deliveringAt)) / 1000, false, false)
         : '';
-      obj.deliveringAt = obj.deliveringAt ? time.format(obj.deliveringAt, 'L LT') : '';
-      obj.deliveredAt = obj.deliveredAt ? time.format(obj.deliveredAt, 'L LT') : '';
+      obj.deliveringAt = obj.deliveringAt ? time.format(obj.deliveringAt, 'L LTS') : '';
+      obj.deliveredAt = obj.deliveredAt ? time.format(obj.deliveredAt, 'L LTS') : '';
       obj.completedBy = obj.completedBy
         .map(function(userInfo) { return userInfoTemplate({userInfo: userInfo}); })
         .join('; ');
