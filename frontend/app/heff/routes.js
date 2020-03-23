@@ -5,14 +5,17 @@ define([
   '../viewport',
   '../data/localStorage',
   '../core/View',
+  '../core/Model',
   './views/HeffView',
   'i18n!app/nls/heff',
-  'i18n!app/nls/production'
+  'i18n!app/nls/production',
+  'i18n!app/nls/prodShifts'
 ], function(
   router,
   viewport,
   localStorage,
   View,
+  Model,
   HeffView
 ) {
   'use strict';
@@ -32,14 +35,19 @@ define([
     window.WMES_LINE_ID = line;
     window.WMES_STATION = station;
 
+    var model = new Model({
+      prodLine: window.WMES_LINE_ID,
+      station: +window.WMES_STATION || 0,
+      date: null,
+      quantitiesDone: []
+    });
+
+    model.nlsDomain = 'heff';
+
     viewport.showPage(new View({
       layoutName: 'blank',
       view: new HeffView({
-        model: {
-          nlsDomain: 'heff',
-          prodLine: window.WMES_LINE_ID,
-          station: +window.WMES_STATION || 0
-        }
+        model: model
       })
     }));
   });

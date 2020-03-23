@@ -67,13 +67,10 @@
   color: #ffc000;
 }
 .heff-ft {
-  margin-top: 60px;
+  margin-top: 15px;
+  margin-bottom: 30px;
   text-align: center;
-  font-size: 64px;
-}
-.heff-remaining {
-  margin-top: 30px;
-  font-size: 128px;
+  font-size: 84px;
 }
 .heff-line select {
   font-size: 26px;

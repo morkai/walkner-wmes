@@ -12,6 +12,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/core/util/embedded',
   'app/production/snManager',
+  'app/prodShifts/views/QuantitiesDoneChartView',
   './UnlockDialogView',
   'app/heff/templates/page'
 ], function(
@@ -26,6 +27,7 @@ define([
   getShiftStartInfo,
   embedded,
   snManager,
+  QuantitiesDoneChartView,
   UnlockDialogView,
   template
 ) {
@@ -45,9 +47,9 @@ define([
     {
       var topics = {};
 
-      if (this.model.prodLine)
+      if (this.model.get('prodLine'))
       {
-        topics['heff.reload.' + this.model.prodLine] = 'onReload';
+        topics['heff.reload.' + this.model.get('prodLine')] = 'onReload';
       }
 
       return topics;
@@ -87,6 +89,17 @@ define([
       this.currentHour = -1;
       this.shiftStartInfo = null;
 
+      this.setView('#-chart', new QuantitiesDoneChartView({
+        showTitle: false,
+        showLegend: false,
+        noData: false,
+        exporting: false,
+        height: 285,
+        model: this.model
+      }));
+
+      this.listenTo(this.model, 'change:quantitiesDone', this.onQuantitiesDoneChanged);
+
       snManager.bind(this);
     },
 
@@ -104,7 +117,7 @@ define([
       embedded.render(this);
       embedded.ready();
 
-      if (!this.model.prodLine)
+      if (!this.model.get('prodLine'))
       {
         this.$id('line').click();
       }
@@ -114,18 +127,18 @@ define([
     {
       var view = this;
 
-      if (!view.model.prodLine)
+      if (!view.model.get('prodLine'))
       {
         return;
       }
 
-      var url = '/heff/' + encodeURIComponent(view.model.prodLine);
+      var url = '/heff/' + encodeURIComponent(view.model.get('prodLine'));
 
       clearTimeout(view.timers.loadData);
 
-      view.ajax({url: url}).done(function(quantitiesDone)
+      view.ajax({url: url}).done(function(data)
       {
-        view.updateData(quantitiesDone);
+        view.onReload(data);
 
         view.timers.loadData = setTimeout(view.loadData, 5 * 60 * 1000);
       });
@@ -172,15 +185,15 @@ define([
     {
       var line = '?';
 
-      if (this.model.prodLine)
+      if (this.model.get('prodLine'))
       {
-        line = this.model.prodLine;
+        line = this.model.get('prodLine');
 
-        if (this.model.station)
+        if (this.model.get('station'))
         {
           line = this.t('station', {
             line: line,
-            station: this.model.station
+            station: this.model.get('station')
           });
         }
       }
@@ -241,9 +254,14 @@ define([
         .addClass(totalActual >= currentPlanned ? 'fa-smile-o' : 'fa-frown-o');
     },
 
-    onReload: function(message)
+    onReload: function(data)
     {
-      this.updateData(message.quantitiesDone);
+      this.model.set(data);
+    },
+
+    onQuantitiesDoneChanged: function()
+    {
+      this.updateData(this.model.get('quantitiesDone'));
     }
 
   });

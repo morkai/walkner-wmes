@@ -154,8 +154,8 @@
          * @requires modules/no-data-to-display
          */
         chartPrototype.showNoData = function (str) {
-            var chart = this, options = chart.options, text = str || (options && options.lang.noData), noDataOptions = options && options.noData;
-            if (!chart.noDataLabel && chart.renderer) {
+            var chart = this, options = chart.options, text = str || (options && options.lang.noData), noDataOptions = options && options.noData || {};
+            if (noDataOptions.enabled !== false && !chart.noDataLabel && chart.renderer) {
                 chart.noDataLabel = chart.renderer
                     .label(text, 0, 0, null, null, null, noDataOptions.useHTML, null, 'no-data');
                 if (!chart.styledMode) {

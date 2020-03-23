@@ -52,6 +52,9 @@ define([
           reflow: this.options.reflow !== false,
           spacingBottom: 0
         },
+        exporting: {
+          enabled: this.options.exporting !== false
+        },
         title: this.options.showTitle === false ? null : {
           text: t('prodShifts', 'charts:quantitiesDone:title'),
           style: {
@@ -59,7 +62,9 @@ define([
             color: '#333'
           }
         },
-        noData: {},
+        noData: {
+          enabled: this.options.noData !== false
+        },
         legend: {
           enabled: this.options.showLegend !== false
         },
@@ -106,7 +111,8 @@ define([
 
       var chartData = this.serializeChartData();
 
-      this.chart.series[0].setData(chartData.planned, true);
+      this.chart.xAxis[0].setCategories(chartData.categories, false);
+      this.chart.series[0].setData(chartData.planned, false);
       this.chart.series[1].setData(chartData.actual, true);
     },
 

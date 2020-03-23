@@ -50,7 +50,7 @@ define([
     {
       this.loadLines();
 
-      this.$('input[name="station"][value="' + (this.model.station || 6) + '"]').click();
+      this.$('input[name="station"][value="' + (this.model.get('station') || 6) + '"]').click();
     },
 
     selectActiveLine: function()
@@ -90,7 +90,7 @@ define([
           var label = _.escape(line._id);
           var className = 'btn btn-lg btn-default';
 
-          if (line._id === view.model.prodLine)
+          if (line._id === view.model.get('prodLine'))
           {
             className += ' active';
           }
