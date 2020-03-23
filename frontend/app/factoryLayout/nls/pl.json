@@ -8,6 +8,7 @@
   "pa:layout:fullscreen": "Tryb pełnoekranowy",
   "pa:layout:edit": "Edytuj układ fabryki",
   "pa:layout:live": "Publikuj",
+  "pa:layout:heff": "Wydajność godzinowa",
 
   "prop:master": "Mistrz",
   "prop:leader": "Lider",
@@ -57,6 +58,11 @@
   "popover:avgCycleTime": "Śr. czas cyklu:",
   "popover:downtime": "Przestój:",
   "popover:aor": "Obszar:",
+  "popover:heff:totalActual": "Ilość zrobiona",
+  "popover:heff:currentPlanned": "Ilość zaplanowana (teraz)",
+  "popover:heff:endOfHourPlanned": "Ilość zaplanowana (godz.)",
+  "popover:heff:totalPlanned": "Ilość zaplanowana (zmiana)",
+  "popover:heff:totalRemaining": "Ilość do zrobienia",
 
   "settings:tab:blacklist": "Ignorowane jednostki org.",
   "settings:tab:divisionColors": "Kolory wydziałów",

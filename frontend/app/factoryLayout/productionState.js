@@ -35,6 +35,7 @@ define([
 
   productionState.pubsub = null;
   productionState.url = '/production/state';
+  productionState.nlsDomain = 'factoryLayout';
   productionState.settings = {
     factoryLayout: new FactoryLayoutSettingCollection(),
     production: new ProductionSettingCollection()

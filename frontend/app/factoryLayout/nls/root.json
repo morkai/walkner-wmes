@@ -8,6 +8,7 @@
     "pa:layout:fullscreen": "Fullscreen mode",
     "pa:layout:edit": "Edit layout",
     "pa:layout:live": "Publish",
+    "pa:layout:heff": "Hourly efficiency",
 
     "prop:master": "Master",
     "prop:leader": "Leader",
@@ -57,6 +58,11 @@
     "popover:avgCycleTime": "Avg. Cycle Time:",
     "popover:downtime": "Downtime:",
     "popover:aor": "AOR:",
+    "popover:heff:totalActual": "Quantity done",
+    "popover:heff:currentPlanned": "Quantity planned (now)",
+    "popover:heff:endOfHourPlanned": "Quantity planned (hour)",
+    "popover:heff:totalPlanned": "Quantity planned (shift)",
+    "popover:heff:totalRemaining": "Quantity remaining",
 
     "settings:tab:blacklist": "Ignored org units",
     "settings:tab:divisionColors": "Division colors",

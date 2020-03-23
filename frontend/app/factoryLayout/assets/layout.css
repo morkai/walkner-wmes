@@ -146,19 +146,23 @@
   text-shadow: 0 1px 2px #000;
   fill: #fff;
 }
-.is-idle .factoryLayout-prodLine-bg {
+.is-idle .factoryLayout-prodLine-bg,
+.is-heff-noPlan .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-idle);
 }
-.is-working .factoryLayout-prodLine-bg {
+.is-working .factoryLayout-prodLine-bg,
+.is-heff-over .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-working);
 }
-.is-working.is-tt-nok .factoryLayout-prodLine-bg {
+.is-working.is-tt-nok .factoryLayout-prodLine-bg,
+.is-heff-unplanned .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-working-nok);
 }
-.is-downtime .factoryLayout-prodLine-bg {
+.is-downtime .factoryLayout-prodLine-bg,
+.is-heff-under .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-downtime);
 }
-.is-break .factoryLayout-prodLine-bg {
+.is-downtime.is-break .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-break);
 }
 .is-fullscreen .factoryLayout-area {

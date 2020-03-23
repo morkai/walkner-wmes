@@ -2,20 +2,24 @@
 
 define([
   'underscore',
-  '../core/Model',
-  '../prodShifts/ProdShift',
-  '../prodShiftOrders/ProdShiftOrder',
-  '../prodShiftOrders/ProdShiftOrderCollection',
-  '../prodDowntimes/ProdDowntime',
-  '../prodDowntimes/ProdDowntimeCollection'
+  'app/time',
+  'app/core/Model',
+  'app/prodShifts/ProdShift',
+  'app/prodShiftOrders/ProdShiftOrder',
+  'app/prodShiftOrders/ProdShiftOrderCollection',
+  'app/prodDowntimes/ProdDowntime',
+  'app/prodDowntimes/ProdDowntimeCollection',
+  'app/planning/util/shift'
 ], function(
   _,
+  time,
   Model,
   ProdShift,
   ProdShiftOrder,
   ProdShiftOrderCollection,
   ProdDowntime,
-  ProdDowntimeCollection
+  ProdDowntimeCollection,
+  shiftUtil
 ) {
   'use strict';
 
@@ -30,19 +34,6 @@ define([
     privilegePrefix: 'FACTORY_LAYOUT',
 
     nlsDomain: 'factoryLayout',
-
-    defaults: {
-      v: 0,
-      state: null,
-      stateChangedAt: 0,
-      online: false,
-      extended: false,
-      plannedQuantityDone: 0,
-      actualQuantityDone: 0,
-      prodShift: null,
-      prodShiftOrders: null,
-      prodDowntimes: null
-    },
 
     initialize: function(attrs, options)
     {
@@ -246,6 +237,91 @@ define([
       {
         this.trigger('change');
       }
+    },
+
+    getMetricValue: function(metricName, heff)
+    {
+      if (!heff)
+      {
+        return this.get(metricName);
+      }
+
+      heff = this.get('heff') || this.recalcHeff();
+
+      if (metricName === 'plannedQuantityDone')
+      {
+        return heff.endOfHourPlanned;
+      }
+
+      if (metricName === 'actualQuantityDone')
+      {
+        return heff.totalActual;
+      }
+
+      return 0;
+    },
+
+    recalcHeff: function()
+    {
+      var result = {
+        currentPlanned: 0,
+        endOfHourPlanned: 0,
+        totalPlanned: 0,
+        totalActual: 0,
+        totalRemaining: 0,
+        status: 'off'
+      };
+
+      var prodShift = this.get('prodShift');
+
+      if (!prodShift || !prodShift.get('shift'))
+      {
+        this.set('heff', result);
+
+        return result;
+      }
+
+      var quantitiesDone = prodShift.get('quantitiesDone');
+      var currentTime = time.getMoment();
+      var currentHour = currentTime.hours();
+      var currentMinute = currentTime.minutes();
+      var currentHourIndex = shiftUtil.HOUR_TO_INDEX_SHIFT[currentHour];
+
+      for (var hourIndex = 0; hourIndex < 8; ++hourIndex)
+      {
+        var hourPlanned = quantitiesDone[hourIndex].planned;
+        var hourActual = quantitiesDone[hourIndex].actual;
+
+        result.totalPlanned += hourPlanned;
+        result.totalActual += hourActual;
+
+        if (hourIndex < currentHourIndex)
+        {
+          result.currentPlanned += hourPlanned;
+          result.endOfHourPlanned += hourPlanned;
+        }
+        else if (hourIndex === currentHourIndex)
+        {
+          result.endOfHourPlanned += hourPlanned;
+          result.currentPlanned += Math.round(hourPlanned * (currentMinute / 60) * 1000) / 1000;
+        }
+      }
+
+      result.totalRemaining = Math.max(result.totalPlanned - result.totalActual, 0);
+      result.currentPlanned = Math.floor(result.currentPlanned);
+
+      if (result.totalPlanned)
+      {
+        result.status = result.totalActual >= result.currentPlanned ? 'over' : 'under';
+      }
+      else
+      {
+        result.status = result.totalActual ? 'unplanned' : 'noPlan';
+      }
+
+      this.set('heff', result);
+
+      return result;
     }
 
   }, {

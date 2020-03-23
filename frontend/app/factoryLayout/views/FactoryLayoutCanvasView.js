@@ -133,11 +133,12 @@ define([
       }
     },
 
-    initialize: function()
+    initialize: function(options)
     {
       this.onKeyDown = this.onKeyDown.bind(this);
       this.onResize = _.debounce(this.onResize.bind(this), 16);
 
+      this.heff = !!options.heff;
       this.editable = !!this.options.editable;
       this.canvas = null;
       this.zoom = null;
@@ -161,8 +162,11 @@ define([
         this.listenTo(prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
         this.listenTo(prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
         this.listenTo(prodLineStates, 'change:taktTime', this.updateTaktTime);
+        this.listenTo(prodLineStates, 'change:heff', this.updateHeffStatus);
         this.listenTo(model.settings.factoryLayout, 'change', this.onLayoutSettingsChange);
         this.listenTo(model.settings.production, 'change', this.onProductionSettingsChange);
+
+        this.timers.updateHeffMetrics = setInterval(this.updateHeffMetrics.bind(this), 20000);
       }
     },
 
@@ -386,14 +390,31 @@ define([
         style: 'font-size: ' + PROD_LINE_TEXT_SIZE + 'px'
       });
 
+      var heff = this.heff && prodLineState ? prodLineState.recalcHeff() : null;
+      var plannedQuantityDone = 0;
+      var actualQuantityDone = 0;
+
       if (prodLineState)
       {
         prodLineOuterContainer.attr('data-id', prodLineState.id);
 
-        if (prodLineState.get('state') !== null)
+        if (!heff && prodLineState.get('state') !== null)
         {
           prodLineOuterContainer.classed('is-' + prodLineState.get('state'), true);
           prodLineOuterContainer.classed('is-break', prodLineState.isBreak());
+        }
+
+        if (heff)
+        {
+          plannedQuantityDone = heff.endOfHourPlanned;
+          actualQuantityDone = heff.totalActual;
+
+          prodLineOuterContainer.classed('is-heff-' + heff.status, true);
+        }
+        else
+        {
+          plannedQuantityDone = prodLineState.getMetricValue('plannedQuantityDone');
+          actualQuantityDone = prodLineState.getMetricValue('actualQuantityDone');
         }
       }
 
@@ -429,9 +450,8 @@ define([
         height: PROD_LINE_HEIGHT
       });
 
-      var plannedQuantityDone = this.prepareMetricValue(
-        prodLineState ? prodLineState.get('plannedQuantityDone') : 0
-      );
+      plannedQuantityDone = this.prepareMetricValue(plannedQuantityDone);
+      actualQuantityDone = this.prepareMetricValue(actualQuantityDone);
 
       prodLineInnerContainer.append('text')
         .attr({
@@ -449,10 +469,6 @@ define([
         width: PROD_LINE_METRIC_WIDTH,
         height: PROD_LINE_HEIGHT
       });
-
-      var actualQuantityDone = this.prepareMetricValue(
-        prodLineState ? prodLineState.get('actualQuantityDone') : 0
-      );
 
       prodLineInnerContainer.append('text')
         .attr({
@@ -615,7 +631,7 @@ define([
       var downtime = prodLineState.getCurrentDowntime();
       var now = Date.now();
 
-      return popoverTemplate({
+      return this.renderPartialHtml(popoverTemplate, {
         order: {
           name: order.getProductName(),
           operation: order.getOperationName(),
@@ -633,7 +649,8 @@ define([
           reason: downtime.getReasonLabel(),
           aor: downtime.getAorLabel(),
           duration: downtime.getDurationString(now, false)
-        }
+        },
+        heff: this.heff ? prodLineState.get('heff') : null
       });
     },
 
@@ -667,6 +684,11 @@ define([
 
     onStateChange: function(prodLineState)
     {
+      this.updateLineClassNames(prodLineState);
+    },
+
+    updateLineClassNames: function(prodLineState)
+    {
       var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
 
       if (prodLineOuterContainer.empty())
@@ -678,10 +700,22 @@ define([
         'is-idle': false,
         'is-working': false,
         'is-downtime': false,
-        'is-break': prodLineState.isBreak()
+        'is-break': !this.heff && prodLineState.isBreak(),
+        'is-heff-off': false,
+        'is-heff-noPlan': false,
+        'is-heff-unplanned': false,
+        'is-heff-under': false,
+        'is-heff-over': false
       };
 
-      stateClassNames['is-' + prodLineState.get('state')] = true;
+      if (this.heff)
+      {
+        stateClassNames['is-heff-' + prodLineState.get('heff').status] = true;
+      }
+      else
+      {
+        stateClassNames['is-' + prodLineState.get('state')] = true;
+      }
 
       prodLineOuterContainer.classed(stateClassNames);
     },
@@ -715,11 +749,21 @@ define([
 
     onPlannedQuantityDoneChange: function(prodLineState)
     {
+      if (this.heff)
+      {
+        prodLineState.recalcHeff();
+      }
+
       this.updateMetricValue(prodLineState, 'plannedQuantityDone');
     },
 
     onActualQuantityDoneChange: function(prodLineState)
     {
+      if (this.heff)
+      {
+        prodLineState.recalcHeff();
+      }
+
       this.updateMetricValue(prodLineState, 'actualQuantityDone');
     },
 
@@ -772,12 +816,71 @@ define([
         return;
       }
 
-      var value = this.prepareMetricValue(prodLineState.get(metricName));
+      var value = this.prepareMetricValue(prodLineState.getMetricValue(metricName, this.heff));
 
-      metric.style('display', 'none');
-      metric.text(value);
-      metric.attr('data-length', value.length);
-      _.defer(function() { metric.style('display', null); });
+      if (metric.text() === value)
+      {
+        return;
+      }
+
+      var oldLength = +metric.attr('data-length');
+      var newLength = value.length;
+
+      if (newLength === oldLength)
+      {
+        metric.text(value);
+      }
+      else
+      {
+        metric.style('display', 'none');
+        metric.text(value);
+        metric.attr('data-length', value.length);
+        _.defer(function() { metric.style('display', null); });
+      }
+    },
+
+    updateHeffMetrics: function()
+    {
+      var view = this;
+
+      if (!view.heff)
+      {
+        return;
+      }
+
+      view.model.prodLineStates.forEach(function(prodLineState)
+      {
+        prodLineState.recalcHeff();
+        view.updateMetricValue(prodLineState, 'plannedQuantityDone');
+      });
+    },
+
+    updateHeffStatus: function(prodLineState)
+    {
+      this.updateLineClassNames(prodLineState);
+    },
+
+    toggleHeff: function()
+    {
+      var view = this;
+
+      view.heff = !view.heff;
+
+      view.model.prodLineStates.forEach(function(prodLineState)
+      {
+        if (view.heff)
+        {
+          prodLineState.recalcHeff();
+        }
+
+        view.updateMetricValue(prodLineState, 'plannedQuantityDone');
+        view.updateMetricValue(prodLineState, 'actualQuantityDone');
+
+        if (!view.heff)
+        {
+          prodLineState.set('heff', null);
+        }
+      });
     },
 
     prepareMetricValue: function(value)

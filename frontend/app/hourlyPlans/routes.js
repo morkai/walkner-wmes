@@ -128,6 +128,7 @@ define([
       [
         'app/hourlyPlans/HourlyPlan',
         'app/hourlyPlans/pages/HourlyPlanDetailsPage',
+        'css!app/fte/assets/main.css',
         css,
         nls
       ],

@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/data/localStorage',
   '../views/FactoryLayoutCanvasView'
 ], function(
   $,
@@ -13,6 +14,7 @@ define([
   t,
   View,
   bindLoadingMessage,
+  localStorage,
   FactoryLayoutCanvasView
 ) {
   'use strict';
@@ -31,7 +33,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('factoryLayout', 'bc:layout')
+        this.t('bc:layout')
       ];
     },
 
@@ -43,7 +45,7 @@ define([
       if (document.msExitFullscreen)
       {
         actions.push({
-          label: t.bound('factoryLayout', 'pa:layout:fullscreen'),
+          label: page.t('pa:layout:fullscreen'),
           icon: 'arrows-alt',
           callback: function()
           {
@@ -52,17 +54,27 @@ define([
         });
       }
 
-      actions.push(/* {
-        label: t.bound('factoryLayout', 'pa:layout:edit'),
-        icon: 'edit',
-        privileges: 'FACTORY_LAYOUT:MANAGE',
-        href: this.model.factoryLayout.genClientUrl('edit')
-      },*/ {
-        label: t.bound('factoryLayout', 'pa:settings'),
-        icon: 'cogs',
-        privileges: 'FACTORY_LAYOUT:MANAGE',
-        href: '#factoryLayout;settings?tab=blacklist'
-      });
+      actions.push(
+        {
+          label: page.t('pa:layout:heff'),
+          icon: 'smile-o',
+          className: page.canvasView.heff ? 'active' : '',
+          callback: function()
+          {
+            page.canvasView.toggleHeff();
+
+            localStorage.setItem('WMES_FACTORY_LAYOUT_HEFF', page.canvasView.heff ? '1' : '0');
+
+            this.querySelector('.btn').classList.toggle('active', page.canvasView.heff);
+          }
+        },
+        {
+          label: page.t('pa:settings'),
+          icon: 'cogs',
+          privileges: 'FACTORY_LAYOUT:MANAGE',
+          href: '#factoryLayout;settings?tab=blacklist'
+        }
+      );
 
       return actions;
     },
@@ -91,7 +103,10 @@ define([
 
     defineViews: function()
     {
-      this.canvasView = new FactoryLayoutCanvasView({model: this.model});
+      this.canvasView = new FactoryLayoutCanvasView({
+        model: this.model,
+        heff: localStorage.getItem('WMES_FACTORY_LAYOUT_HEFF') === '1'
+      });
     },
 
     load: function(when)

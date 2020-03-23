@@ -1,40 +1,48 @@
 <table>
   <tbody>
+  <% if (heff) { %>
+  <% ['totalActual', 'currentPlanned', 'endOfHourPlanned', 'totalPlanned', 'totalRemaining'].forEach(function(prop) { %>
   <tr>
-    <th><%- t('factoryLayout', 'popover:order') %>
+    <th><%- t('popover:heff:' + prop) %>
+    <td><%- heff[prop].toLocaleString() %>
+  <% }) %>
+  <% } else { %>
+  <tr>
+    <th><%- t('popover:order') %>
     <td><span class="factoryLayout-popover-value"><%= order.name %></span>
   <tr>
-    <th><%- t('factoryLayout', 'popover:operation') %>
+    <th><%- t('popover:operation') %>
     <td><span class="factoryLayout-popover-value"><%= order.operation %></span>
   <tr>
-    <th><%- t('factoryLayout', 'popover:duration') %>
+    <th><%- t('popover:duration') %>
     <td><%- order.duration %>
   <tr>
-    <th><%- t('factoryLayout', 'popover:workerCount') %>
+    <th><%- t('popover:workerCount') %>
     <td><%- order.workerCount %> (<%- order.sapWorkerCount %>)
   <tr>
-    <th><%- t('factoryLayout', 'popover:quantityDone') %>
+    <th><%- t('popover:quantityDone') %>
     <td><%- order.quantityDone %>
   <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
   <tr>
-    <th><%- t('factoryLayout', 'popover:taktTime') %>
+    <th><%- t('popover:taktTime') %>
     <td><%- order.taktTime %>
   <tr>
-    <th><%- t('factoryLayout', 'popover:cycleTime') %>
+    <th><%- t('popover:cycleTime') %>
     <td><%- order.cycleTime || '?' %> (<%- order.iptCycleTime || '?' %>)
   <tr>
-    <th><%- t('factoryLayout', 'popover:avgCycleTime') %>
+    <th><%- t('popover:avgCycleTime') %>
     <td><%- order.avgCycleTime || '?' %>
   <% } %>
   <% if (downtime) { %>
   <tr>
-    <th><%- t('factoryLayout', 'popover:downtime') %>
+    <th><%- t('popover:downtime') %>
     <td><%= downtime.reason %>
   <% ['aor', 'duration'].forEach(function(p) { %>
   <tr>
-    <th><%- t('factoryLayout', 'popover:' + p) %>
+    <th><%- t('popover:' + p) %>
     <td><span class="factoryLayout-popover-value"><%- downtime[p] %></span>
   <% }) %>
+  <% } %>
   <% } %>
   </tbody>
 </table>
