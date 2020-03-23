@@ -67,6 +67,11 @@
         <span class="help-block"><%- t('settings:planning:minPickupDowntime:help') %></span>
         <input id="<%- idPrefix %>-planning-minPickupDowntime" class="form-control" name="wh.planning.minPickupDowntime" type="number" step="1" min="1" max="28800">
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxPickupDowntime"><%- t('settings:planning:maxPickupDowntime') %></label>
+        <span class="help-block"><%- t('settings:planning:maxPickupDowntime:help') %></span>
+        <input id="<%- idPrefix %>-planning-maxPickupDowntime" class="form-control" name="wh.planning.maxPickupDowntime" type="number" step="1" min="1" max="1440">
+      </div>
     </div>
     <div class="panel-body" data-tab="delivery">
       <div class="form-group">
@@ -88,6 +93,11 @@
         <label for="<%- idPrefix %>-planning-minDeliveryDowntime"><%- t('settings:planning:minDeliveryDowntime') %></label>
         <span class="help-block"><%- t('settings:planning:minDeliveryDowntime:help') %></span>
         <input id="<%- idPrefix %>-planning-minDeliveryDowntime" class="form-control" name="wh.planning.minDeliveryDowntime" type="number" step="1" min="1" max="28800">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxDeliveryDowntime"><%- t('settings:planning:maxDeliveryDowntime') %></label>
+        <span class="help-block"><%- t('settings:planning:maxDeliveryDowntime:help') %></span>
+        <input id="<%- idPrefix %>-planning-maxDeliveryDowntime" class="form-control" name="wh.planning.maxDeliveryDowntime" type="number" step="1" min="1" max="1440">
       </div>
     </div>
     <div class="panel-body" data-tab="users">

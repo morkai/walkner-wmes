@@ -25,10 +25,12 @@ define([
     'groupDuration',
     'groupExtraItems',
     'minPickupDowntime',
+    'maxPickupDowntime',
     'maxSetsPerLine',
     'minTimeForDelivery',
     'lateDeliveryTime',
     'minDeliveryDowntime',
+    'maxDeliveryDowntime',
     'maxSetCartsPerDelivery'
   ].join('|'));
 
