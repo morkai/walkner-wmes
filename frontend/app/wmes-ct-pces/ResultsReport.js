@@ -4,12 +4,14 @@ define([
   'underscore',
   'app/i18n',
   'app/time',
-  'app/core/Model'
+  'app/core/Model',
+  'app/data/localStorage'
 ], function(
   _,
   t,
   time,
-  Model
+  Model,
+  localStorage
 ) {
   'use strict';
 
@@ -33,8 +35,17 @@ define([
         minMrpUnbalance: null,
         minMrpEfficiency: null,
         tab: 'mrps',
+        upph: localStorage.getItem('WMES_CT_RESULTS_UPPH_MODE') || 'standard',
         report: null
       };
+    },
+
+    initialize: function()
+    {
+      this.on('change:upph', function()
+      {
+        localStorage.setItem('WMES_CT_RESULTS_UPPH_MODE', this.get('upph'));
+      });
     },
 
     fetch: function(options)
@@ -116,7 +127,8 @@ define([
       var attrs = {
         from: +query.from || 0,
         to: +query.to || 0,
-        tab: query.tab || undefined
+        tab: query.tab || undefined,
+        upph: query.upph || undefined
       };
 
       if (!attrs.from && !attrs.to)

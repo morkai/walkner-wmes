@@ -23,7 +23,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:report', this.render);
+      this.listenTo(this.model, 'change:upph change:report', this.render);
     },
 
     destroy: function()
@@ -126,16 +126,24 @@ define([
       this.createChart();
     },
 
+    getUpph: function()
+    {
+      var mode = this.model.get('upph');
+      var prop = mode === 'normalized' ? 'upphNorm' : 'upph';
+
+      return this.model.get('report')[prop] || [];
+    },
+
     serializeCategories: function()
     {
-      return (this.model.get('report').upph || []).map(function(d) { return d._id; });
+      return this.getUpph().map(function(d) { return d._id; });
     },
 
     serializeSeries: function()
     {
       return [{
         name: this.t('resultsReport:avgOutput:series'),
-        data: (this.model.get('report').upph || []).map(function(d) { return d.upph; }),
+        data: this.getUpph().map(function(d) { return d.upph; }),
         valueDecimals: 1
       }];
     },

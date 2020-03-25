@@ -111,6 +111,9 @@
     "resultsReport:avgOutput:title": "Weekly Average Output [Units Per Person Hour]",
     "resultsReport:avgOutput:filename": "WMES_AvgOutput",
     "resultsReport:avgOutput:series": "UPPH",
+    "resultsReport:avgOutput:standard": "standard",
+    "resultsReport:avgOutput:normalized": "normalized",
+    "resultsReport:avgOutput:editUpphConfig": "Edit quarterly normalization coefficients",
 
     "resultsReport:table:mrps": "Families",
     "resultsReport:table:lines": "Lines",

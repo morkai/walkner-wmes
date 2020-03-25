@@ -1,0 +1,20 @@
+<form autocomplete="off">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-year" class="control-label is-required"><%- t('upphQuarterlyConfig:year') %></label>
+      <input id="<%- idPrefix %>-year" name="year" class="form-control" type="number" required min="<%- minYear %>" max="<%- maxYear %>" style="width: 75px">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-quarter" class="control-label is-required"><%- t('upphQuarterlyConfig:quarter') %></label>
+      <input id="<%- idPrefix %>-quarter" name="quarter" class="form-control" type="number" required min="1" max="4" style="width: 75px">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-coeffs" class="control-label is-required"><%- t('upphQuarterlyConfig:coeffs') %></label>
+    <textarea id="<%- idPrefix %>-coeffs" name="coeffs" class="form-control text-fixed" required rows="10"></textarea>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('core', 'FORM:ACTION:save') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

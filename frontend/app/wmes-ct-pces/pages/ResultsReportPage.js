@@ -3,6 +3,7 @@
 define([
   'underscore',
   'app/i18n',
+  'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/wmes-ct-state/settings',
@@ -11,10 +12,12 @@ define([
   '../views/resultsReport/VsChartView',
   '../views/resultsReport/AvgOutputChartView',
   '../views/resultsReport/TableView',
+  '../views/resultsReport/UpphQuarterlyConfigView',
   'app/wmes-ct-pces/templates/resultsReport/page'
 ], function(
   _,
   t,
+  viewport,
   View,
   bindLoadingMessage,
   settings,
@@ -23,6 +26,7 @@ define([
   VsChartView,
   AvgOutputChartView,
   TableView,
+  UpphQuarterlyConfigView,
   template
 ) {
   'use strict';
@@ -32,6 +36,19 @@ define([
     layoutName: 'page',
 
     template: template,
+
+    events: {
+      'click #-editUpphConfig': function()
+      {
+        var dialogView = new UpphQuarterlyConfigView();
+
+        viewport.showDialog(dialogView, this.t('upphQuarterlyConfig:title'));
+      },
+      'click .ct-reports-results-mode': function(e)
+      {
+        this.model.set(e.currentTarget.dataset.prop, e.currentTarget.dataset.value);
+      }
+    },
 
     breadcrumbs: function()
     {
@@ -71,6 +88,7 @@ define([
 
       this.listenTo(this.model, 'filtered', this.onFiltered);
       this.listenTo(this.model, 'change:tab', this.updateUrl);
+      this.listenTo(this.model, 'change:upph', this.onUpphChanged);
     },
 
     load: function(when)
@@ -78,9 +96,20 @@ define([
       return when(this.model.fetch());
     },
 
+    afterRender: function()
+    {
+      this.updateUpphMode();
+    },
+
     onFiltered: function()
     {
       this.promised(this.model.fetch());
+      this.updateUrl();
+    },
+
+    onUpphChanged: function()
+    {
+      this.updateUpphMode();
       this.updateUrl();
     },
 
@@ -91,6 +120,12 @@ define([
         trigger: false,
         replace: true
       });
+    },
+
+    updateUpphMode: function()
+    {
+      this.$('.active[data-prop]').removeClass('active');
+      this.$('.ct-reports-results-mode[data-value="' + this.model.get('upph') + '"]').addClass('active');
     }
 
   });

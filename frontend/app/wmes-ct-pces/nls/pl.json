@@ -110,6 +110,9 @@
   "resultsReport:avgOutput:title": "Weekly Average Output [Units Per Person Hour]",
   "resultsReport:avgOutput:filename": "WMES_AvgOutput",
   "resultsReport:avgOutput:series": "UPPH",
+  "resultsReport:avgOutput:standard": "standardowe",
+  "resultsReport:avgOutput:normalized": "znormalizowane",
+  "resultsReport:avgOutput:editUpphConfig": "Edytuj kwartalne współczynniki normalizacyjne",
 
   "resultsReport:table:mrps": "Rodziny",
   "resultsReport:table:lines": "Linie",
@@ -133,5 +136,10 @@
   "mrpConfig:date": "Data obowiązywania",
   "mrpConfig:unbalance": "Unbalance %",
   "mrpConfig:bottleneck": "St. z wąskim gardłem",
-  "mrpConfig:add": "Dodaj nową datę"
+  "mrpConfig:add": "Dodaj nową datę",
+
+  "upphQuarterlyConfig:title": "Edycja współczynników normalizacyjnych UPPH",
+  "upphQuarterlyConfig:year": "Rok",
+  "upphQuarterlyConfig:quarter": "Kwartał",
+  "upphQuarterlyConfig:coeffs": "Współczynniki"
 }
