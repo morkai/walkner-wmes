@@ -1,13 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../router',
-  '../viewport',
-  '../user'
+  'app/router',
+  'app/viewport',
+  'app/user',
+  'app/core/util/pageActions'
 ], function(
   router,
   viewport,
-  user
+  user,
+  pageActions
 ) {
   'use strict';
 
@@ -28,7 +30,10 @@ define([
       {
         return new FilteredListPage({
           baseBreadcrumb: '#ct',
-          actions: null,
+          actions: function(layout)
+          {
+            return [pageActions.export(layout, this, this.collection)];
+          },
           FilterView: FilterView,
           ListView: ListView,
           collection: new PceCollection(null, {rqlQuery: req.rql})

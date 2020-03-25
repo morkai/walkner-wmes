@@ -27,7 +27,7 @@ define([
     }, FilterView.prototype.events),
 
     termToForm: {
-      'time': dateTimeRange.rqlToForm,
+      'startedAt': dateTimeRange.rqlToForm,
       'order._id': function(propertyName, term, formData)
       {
         formData.order = term.args[1];
