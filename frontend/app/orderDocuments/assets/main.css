@@ -199,13 +199,15 @@
 }
 .is-enlarged > .orderDocuments-buttons-addImprovement {
   top: 70px;
-  right: 79px;
+  width: 79px;
   box-shadow: 0 4px 12px #666;
 }
-.orderDocuments-buttons-lockUi {
+.orderDocuments-buttons-lockUi,
+.orderDocuments-buttons-balancing {
   display: none;
 }
-.is-enlarged .orderDocuments-buttons-lockUi {
+.is-enlarged .orderDocuments-buttons-lockUi,
+.is-enlarged .orderDocuments-buttons-balancing {
   display: block;
 }
 .orderDocuments-buttons-addImprovement {
@@ -430,4 +432,8 @@
 .orderDocuments-confirm > p {
   font-size: 28px;
   line-height: 1.2;
+}
+
+.orderDocuments.is-embedded .btn-lg {
+  height: 56px;
 }

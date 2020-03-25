@@ -24,6 +24,7 @@
   "controls:lockUi": "Zablokuj interfejs",
   "controls:confirm": "Potwierdzam zapoznanie<br>się z dokumentem",
   "controls:confirm:noStation": "Proszę ustawić numer stanowiska pracy.",
+  "controls:balancing": "Balansowanie",
 
   "uiLocked": "Interfejs zablokowany.<br>Dotknij tutaj, aby odblokować.",
 

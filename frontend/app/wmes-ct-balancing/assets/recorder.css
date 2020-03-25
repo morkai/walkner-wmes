@@ -1,0 +1,38 @@
+.ct-balancing-recorder {
+  position: absolute;
+  bottom: 15px;
+  left: 240px;
+  z-index: 998;
+  display: flex;
+  background-color: #fff;
+  border: 1px solid #333;
+  box-shadow: 0 4px 12px #666;
+  user-select: none;
+}
+.ct-balancing-recorder-duration {
+  padding: 0 14px;
+  line-height: 72px;
+  font-size: 49px;
+}
+.ct-balancing-recorder-duration-value {
+  display: inline-block;
+  min-width: 135px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  text-align: right;
+}
+.ct-balancing-recorder .btn {
+  width: 72px;
+  height: 72px;
+  font-size: 35px;
+}
+.ct-balancing-recorder .btn[data-action="stop"],
+.ct-balancing-recorder .btn[data-action="record"],
+.ct-balancing-recorder.is-started .btn[data-action="start"],
+.ct-balancing-recorder.is-recording .btn[data-action="start"],
+.ct-balancing-recorder.is-recording .btn[data-action="stop"] {
+  display: none;
+}
+.ct-balancing-recorder.is-started .btn[data-action="stop"],
+.ct-balancing-recorder.is-recording .btn[data-action="record"] {
+  display: inline-block;
+}

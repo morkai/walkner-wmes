@@ -38,6 +38,11 @@ define([
           label: this.t('PAGE_ACTION:pces')
         },
         {
+          href: '#ct/balancing/pces',
+          label: this.t('PAGE_ACTION:balancing:pces'),
+          privileges: window.ENV === 'production' ? 'SUPER' : undefined
+        },
+        {
           template: function()
           {
             return page.renderPartialHtml(reportsActionTemplate);

@@ -1,0 +1,22 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Cycle time",
+    "BREADCRUMB:browse": "Balancing",
+
+    "PROPERTY:line": "Line",
+    "PROPERTY:station": "Station",
+    "PROPERTY:station:short": "St.",
+    "PROPERTY:order": "Order",
+    "PROPERTY:order:_id": "Order no",
+    "PROPERTY:order:nc12": "Product 12NC",
+    "PROPERTY:order:name": "Product name",
+    "PROPERTY:order:mrp": "MRP",
+    "PROPERTY:order:qty": "Quantity",
+    "PROPERTY:order:workerCount": "Worker count",
+    "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:duration": "Duration"
+  },
+  "pl": true
+}

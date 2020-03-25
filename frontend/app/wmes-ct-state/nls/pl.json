@@ -5,6 +5,7 @@
 
   "PAGE_ACTION:pceReport": "Raport",
   "PAGE_ACTION:pces": "Historia sztuk",
+  "PAGE_ACTION:balancing:pces": "Balansowanie",
   "PAGE_ACTION:reports": "Raporty",
   "PAGE_ACTION:reports:pce": "Sztuki",
   "PAGE_ACTION:reports:groups": "Grupy wyrobów",

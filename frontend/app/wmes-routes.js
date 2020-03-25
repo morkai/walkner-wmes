@@ -120,6 +120,7 @@ define([
   './wmes-ct-carts/routes',
   './wmes-ct-orderGroups/routes',
   './wmes-ct-state/routes',
+  './wmes-ct-balancing/routes',
   './wmes-orders-productNotes/routes'
 ], function()
 {

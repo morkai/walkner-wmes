@@ -1,0 +1,6 @@
+<dl>
+  <% Object.keys(order).forEach(function(prop) { %>
+  <dt><%- t('PROPERTY:order:' + prop) %></dt>
+  <dd><%- order[prop] %></dd>
+  <% }) %>
+</dl>

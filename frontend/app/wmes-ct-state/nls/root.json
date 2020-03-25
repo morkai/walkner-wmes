@@ -6,6 +6,7 @@
 
     "PAGE_ACTION:pceReport": "Report",
     "PAGE_ACTION:pces": "PCE history",
+    "PAGE_ACTION:balancing:pces": "Balancing",
     "PAGE_ACTION:reports": "Raporty",
     "PAGE_ACTION:reports:pce": "PCEs",
     "PAGE_ACTION:reports:groups": "Product groups",

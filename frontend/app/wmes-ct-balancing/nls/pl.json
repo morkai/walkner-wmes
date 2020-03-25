@@ -1,0 +1,19 @@
+{
+  "BREADCRUMB:base": "Czas cyklu",
+  "BREADCRUMB:browse": "Balansowanie",
+
+  "PROPERTY:line": "Linia",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:station:short": "St.",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:order:_id": "Nr zlecenia",
+  "PROPERTY:order:nc12": "12NC wyrobu",
+  "PROPERTY:order:name": "Nazwa wyrobu",
+  "PROPERTY:order:mrp": "MRP",
+  "PROPERTY:order:qty": "Ilość do zrobienia",
+  "PROPERTY:order:workerCount": "Ilość osób w zleceniu",
+  "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania"
+}

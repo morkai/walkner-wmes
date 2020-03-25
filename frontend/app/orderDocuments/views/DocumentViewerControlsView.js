@@ -10,6 +10,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/data/localStorage',
   'app/production/snManager',
+  'app/wmes-ct-balancing/views/BalancingPceRecorderView',
   './LocalOrderPickerView',
   './DocumentViewerSettingsView',
   'app/orderDocuments/templates/documentListItem',
@@ -25,6 +26,7 @@ define([
   getShiftStartInfo,
   localStorage,
   snManager,
+  BalancingPceRecorderView,
   LocalOrderPickerView,
   DocumentViewerSettingsView,
   renderDocumentListItem,
@@ -291,7 +293,11 @@ define([
         this.control(e, this.lockUi);
       },
       'click #-confirm': 'confirmDocument',
-      'click #-notes': 'confirmNotes'
+      'click #-notes': 'confirmNotes',
+      'click #-toggleBalancingRecorder': function(e)
+      {
+        this.control(e, this.toggleBalancingRecorder);
+      }
     },
 
     localTopics: {
@@ -372,6 +378,7 @@ define([
       if (this.$el.hasClass('is-touch'))
       {
         this.$id('buttons').addClass('is-enlarged');
+        this.positionAddImprovementButtons();
       }
     },
 
@@ -387,7 +394,13 @@ define([
       {
         this.$id('buttons').toggleClass('is-enlarged');
         this.$id('addImprovementButtons').addClass('hidden');
+        this.positionAddImprovementButtons();
       }
+    },
+
+    positionAddImprovementButtons: function()
+    {
+      this.$id('addImprovementButtons').css('left', this.$id('toggleAddImprovementButtons').position().left + 'px');
     },
 
     control: function(e, control)
@@ -945,6 +958,7 @@ define([
       this.updateButtons();
       this.updateCurrentOrderInfo();
       this.updateDocuments();
+      this.updateBalancingRecorderOrder();
     },
 
     onLocalFileChange: function()
@@ -1224,6 +1238,32 @@ define([
       }));
 
       this.hideNotes();
+    },
+
+    toggleBalancingRecorder: function()
+    {
+      var recorderView = this.getView('#-balancing-recorder');
+
+      if (!recorderView)
+      {
+        recorderView = new BalancingPceRecorderView();
+
+        this.setView('#-balancing-recorder', recorderView);
+
+        recorderView.render();
+      }
+
+      recorderView.toggle(this.model.getCurrentOrder().no);
+    },
+
+    updateBalancingRecorderOrder: function()
+    {
+      var recorderView = this.getView('#-balancing-recorder');
+
+      if (recorderView)
+      {
+        recorderView.updateOrder(this.model.getCurrentOrder().no);
+      }
     }
 
   });
