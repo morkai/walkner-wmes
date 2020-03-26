@@ -1,1 +1,1 @@
-define(["../core/Collection","./Pce"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)&sort(-startedAt)"})});
+define(["app/time","app/core/Collection","./Pce"],function(e,t,r){"use strict";return t.extend({model:r,rqlQuery:function(t){var r=[{name:"ge",args:["startedAt",e.getMoment().startOf("day").subtract(2,"weeks").valueOf()]}];return t.Query.fromObject({sort:{startedAt:-1},limit:-1337,selector:{name:"and",args:r}})}})});

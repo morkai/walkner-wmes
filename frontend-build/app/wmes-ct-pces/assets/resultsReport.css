@@ -1,1 +1,1 @@
-.ct-report-results-ok{color:#5cb85c;}.ct-report-results-nok{color:#e00;}
+.ct-report-results-ok{color:#5cb85c;}.ct-report-results-nok{color:#e00;}.ct-reports-results-mode{margin-left:10px;cursor:pointer;}.ct-reports-results-mode.active{cursor:default;color:inherit;}.ct-reports-results-mode + .ct-reports-results-mode{padding-left:10px;border-left:1px dotted #ccc;}
