@@ -78,14 +78,21 @@ define([
       reload();
     }
 
+    var data = !options.itemDecorator ? mrps : mrps.map(function(item)
+    {
+      return options.itemDecorator(_.clone(item), false);
+    });
+
+    if (options.filter)
+    {
+      data = data.filter(options.filter);
+    }
+
     $input.select2(_.assign({
       width: '300px',
       allowClear: true,
       multiple: true,
-      data: !options.itemDecorator ? mrps : mrps.map(function(item)
-      {
-        return options.itemDecorator(_.clone(item), false);
-      }),
+      data: data,
       minimumResultsForSearch: 1,
       matcher: function(term, text, item)
       {

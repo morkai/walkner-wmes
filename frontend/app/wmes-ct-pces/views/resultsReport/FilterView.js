@@ -43,14 +43,22 @@ define([
 
     afterRender: function()
     {
-      js2form(this.el, this.serializeFormData());
+      var view = this;
 
-      this.updatePlaceholders();
+      js2form(view.el, view.serializeFormData());
 
-      setUpMrpSelect2(this.$id('includedMrps'), {
+      view.updatePlaceholders();
+
+      var ignoredMrps = view.settings.getValue('reports.results.ignoredMrps', []);
+
+      setUpMrpSelect2(view.$id('includedMrps'), {
         width: '500px',
-        view: this,
-        own: true
+        view: view,
+        own: true,
+        filter: function(item)
+        {
+          return ignoredMrps.indexOf(item.id) === -1;
+        }
       });
     },
 
