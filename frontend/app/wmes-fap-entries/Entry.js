@@ -861,9 +861,10 @@ define([
         }
       });
 
-      var observers = data.observers || [].concat(entry.get('observers'));
+      var observers = (data.observers || []).concat(entry.get('observers'));
       var observerIndex = _.findIndex(observers, function(o)
       {
+        // TODO Remove if there are no errors in the future
         if ((!o || !o.user) && window.WMES_LOG_BROWSER_ERROR)
         {
           window.WMES_LOG_BROWSER_ERROR(new Error( // eslint-disable-line new-cap
