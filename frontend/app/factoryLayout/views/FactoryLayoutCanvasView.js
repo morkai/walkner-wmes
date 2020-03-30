@@ -710,7 +710,14 @@ define([
 
       if (this.heff)
       {
-        stateClassNames['is-heff-' + prodLineState.get('heff').status] = true;
+        var heff = prodLineState.get('heff');
+
+        if (!heff)
+        {
+          heff = prodLineState.recalcHeff();
+        }
+
+        stateClassNames['is-heff-' + heff.status] = true;
       }
       else
       {
