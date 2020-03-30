@@ -278,10 +278,10 @@ define([
       var obj = this.serialize();
 
       obj.auth = this.serializeAuth();
-      obj.problem = this.serializeText(obj.problem.trim().replace(/\n{3,}/, '\n\n'));
-      obj.solution = this.serializeText(obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-');
+      obj.problem = this.serializeText(obj.problem);
+      obj.solution = this.serializeText(obj.solution || '-');
       obj.solver = obj.solver ? obj.solver.label : '';
-      obj.solutionSteps = this.serializeText(obj.solutionSteps.trim().replace(/\n{3,}/, '\n\n') || '-');
+      obj.solutionSteps = this.serializeText(obj.solutionSteps || '-');
       obj.empty = {
         solution: obj.solution === '-'
       };
@@ -607,6 +607,8 @@ define([
     serializeText: function(text)
     {
       var nlsDomain = this.nlsDomain;
+
+      text = (text || '').trim().replace(/\n{3,}/, '\n\n');
 
       text = autolink(_.escape(text))
         .replace(/👤/g, '<i class="fa fa-user"></i>');
