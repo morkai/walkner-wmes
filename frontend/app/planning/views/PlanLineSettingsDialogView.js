@@ -169,7 +169,7 @@ define([
 
         if (!mrpSettings)
         {
-          mrpSettings = mrpSettings.add({_id: mrpId}).get(mrpId);
+          mrpSettings = settings.mrps.add({_id: mrpId}).get(mrpId);
         }
 
         var mrpLineSettings = mrpSettings.lines.get(view.line.id);

@@ -7,6 +7,7 @@
 <h3>Baza testów > Xiconf</h3>
 <ul>
   <li>Dodano możliwość filtrowania importowanych komponentów po 12NC.</li>
+  <li>Dodano możliwość ograniczenia importowanych komponentów do wybranych MRP.</li>
 </ul>
 <h3>Zlecenia produkcyjne</h3>
 <ul>
@@ -20,6 +21,8 @@
   <li>Poprawiono błąd powodujący ignorowanie przypisania zlecenia do linii.</li>
   <li>Poprawiono błąd powodujący ignorowanie flagi 'Wymuś dzień pracujący'.</li>
   <li>Poprawiono błąd powodujący niezapisywanie usunięcia grup linii.</li>
+  <li>Poprawiono błąd uniemożliwiający zapisanie nowych ustawień linii, jeżeli do linii przypisano MRP, które
+    nie występowało jeszcze w planie.</li>
   <li>Zmieniono algorytm planowania tak, aby podczas kolejnych przejść planowania, zlecenia zostały usunięte
     z grupy, do której zostały przypisane w pierwszym przejściu, jeżeli ta grupa nie ma zdefiniowanych
     żadnych komponentów.</li>
