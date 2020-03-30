@@ -170,10 +170,15 @@ define([
       }
 
       var keyPressAt = Date.now();
-      var prevValue = keyPressAt - this.lastKeyPressAt > 333 ? '' : this.$id('nc12').val();
-      var key = String.fromCharCode(e.keyCode);
+      var $nc12 = this.$id('nc12');
 
-      this.$id('nc12').val(prevValue + key)[0].setCustomValidity('');
+      if ($nc12.length)
+      {
+        var prevValue = keyPressAt - this.lastKeyPressAt > 333 ? '' : $nc12.val();
+        var key = String.fromCharCode(e.keyCode);
+
+        $nc12.val(prevValue + key)[0].setCustomValidity('');
+      }
 
       this.lastKeyPressAt = keyPressAt;
 
