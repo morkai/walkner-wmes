@@ -23,11 +23,15 @@
   <li>Poprawiono błąd powodujący niezapisywanie usunięcia grup linii.</li>
   <li>Poprawiono błąd uniemożliwiający zapisanie nowych ustawień linii, jeżeli do linii przypisano MRP, które
     nie występowało jeszcze w planie.</li>
+  <li>Poprawiono błąd powodujący dodawanie do zrzutu statystyk planu MRP, które mają opóźnione zlecenia, mimo że nie
+    zostały wybrane w filtrze.</li>
   <li>Zmieniono algorytm planowania tak, aby podczas kolejnych przejść planowania, zlecenia zostały usunięte
     z grupy, do której zostały przypisane w pierwszym przejściu, jeżeli ta grupa nie ma zdefiniowanych
     żadnych komponentów.</li>
   <li>Zmieniono akcję 'Komentuj zlecenie' tak, aby zamiast otwierania nowego okna ze stroną szczegółów zlecenia,
     pokazywany był tylko formularz do komentowania.</li>
+  <li>Zmieniono obliczanie realizacji sekwencji tak, aby pod uwagę brana była ilość zrobionych sztuk w stosunku
+    do ilości zaplanowanych sztuk, a nie ilość całkowicie wykonanych zaplanowanych zleceń.</li>
 </ul>
 <h3>Czas cyklu</h3>
 <ul>

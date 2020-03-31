@@ -131,10 +131,10 @@ define([
           stats.manHours.plan += lineOrder.get('manHours');
           stats.quantity.plan += quantityTodo;
           stats.orders.plan += 1;
-          stats.execution.plan += 1;
-          stats.execution.done += quantityDone >= quantityTodo ? 1 : 0;
-          stats.execution[shiftNo].plan += 1;
-          stats.execution[shiftNo].done += quantityDone >= quantityTodo ? 1 : 0;
+          stats.execution.plan += quantityTodo;
+          stats.execution.done += quantityDone;
+          stats.execution[shiftNo].plan += quantityTodo;
+          stats.execution[shiftNo].done += quantityDone;
         });
       });
 
