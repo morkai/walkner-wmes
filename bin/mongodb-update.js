@@ -7,6 +7,11 @@
 // /fix/clip/count-daily-mrp?from=2018-01-01
 // /fix/fteMasterEntries/recount-totals?date=2018-01-01
 
+db.oldwhsetcarts.find({cart: {$type: 'number'}}, {cart: 1}).forEach(setCart =>
+{
+  db.oldwhsetcarts.updateOne({_id: setCart._id}, {$set: {cart: String(setCart.cart)}});
+});
+
 if (!db.mrpcontrollers.findOne({_id: 'KE8~a'}))
 {
   const ke8 = db.mrpcontrollers.findOne({_id: 'KE8'});

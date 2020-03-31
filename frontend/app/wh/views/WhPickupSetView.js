@@ -504,9 +504,9 @@ define([
         {
           var carts = $editor.find('.form-control')
             .val()
-            .split(/[^0-9]+/)
-            .filter(function(v) { return !!v.length; })
-            .map(function(v) { return +v; });
+            .toUpperCase()
+            .split(/[^0-9A-Z_-]+/)
+            .filter(function(v) { return !!v.length; });
 
           if (carts.length === 0)
           {
