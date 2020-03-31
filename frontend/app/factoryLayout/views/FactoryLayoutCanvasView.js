@@ -615,24 +615,30 @@ define([
     {
       var prodLineState = this.model.prodLineStates.get(prodLineId);
       var state = prodLineState && prodLineState.get('state') || 'idle';
+      var order = null;
+      var downtime = null;
 
-      if (state === 'idle')
+      if (!this.heff)
       {
-        return;
+        if (state === 'idle')
+        {
+          return;
+        }
+
+        order = prodLineState.getCurrentOrder();
+
+        if (!order)
+        {
+          return;
+        }
+
+        downtime = prodLineState.getCurrentDowntime();
       }
 
-      var order = prodLineState.getCurrentOrder();
-
-      if (!order)
-      {
-        return;
-      }
-
-      var downtime = prodLineState.getCurrentDowntime();
       var now = Date.now();
 
       return this.renderPartialHtml(popoverTemplate, {
-        order: {
+        order: !order ? null : {
           name: order.getProductName(),
           operation: order.getOperationName(),
           startedAt: time.format(order.get('startedAt'), 'LTS'),

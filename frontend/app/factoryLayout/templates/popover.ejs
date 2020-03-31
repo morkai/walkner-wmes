@@ -7,6 +7,7 @@
     <td><%- heff[prop].toLocaleString() %>
   <% }) %>
   <% } else { %>
+  <% if (order) { %>
   <tr>
     <th><%- t('popover:order') %>
     <td><span class="factoryLayout-popover-value"><%= order.name %></span>
@@ -32,6 +33,7 @@
   <tr>
     <th><%- t('popover:avgCycleTime') %>
     <td><%- order.avgCycleTime || '?' %>
+  <% } %>
   <% } %>
   <% if (downtime) { %>
   <tr>
