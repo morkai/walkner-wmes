@@ -65,7 +65,9 @@
     "settings:resultsReport:minUpphWorkDuration": "Minimum order work duration",
     "settings:resultsReport:minUpphWorkDuration:help": "",
     "settings:resultsReport:ignoredMrps": "Ignored families",
-    "settings:resultsReport:ignoredMrps:help": ""
+    "settings:resultsReport:ignoredMrps:help": "",
+    "settings:resultsReport:includedMrps": "UPPH families",
+    "settings:resultsReport:includedMrps:help": ""
   },
   "pl": true
 }

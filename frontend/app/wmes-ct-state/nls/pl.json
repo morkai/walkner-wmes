@@ -64,5 +64,7 @@
   "settings:resultsReport:minUpphWorkDuration": "Minimalny czas pracy w zleceniu",
   "settings:resultsReport:minUpphWorkDuration:help": "Domyślna wartość filtra <em>Min. UPPH</em>. Czas pracy zlecenia w minutach, aby było zaliczone do mianownika UPPH.",
   "settings:resultsReport:ignoredMrps": "Ignorowane rodziny",
-  "settings:resultsReport:ignoredMrps:help": "Zlecenia z MRP znajdującym się na liście nie będą brane pod uwagę podczas tworzenia raportu."
+  "settings:resultsReport:ignoredMrps:help": "Zlecenia z MRP znajdującym się na liście nie będą brane pod uwagę podczas tworzenia raportu. Nie dotyczy UPPH.",
+  "settings:resultsReport:includedMrps": "Rodziny UPPH",
+  "settings:resultsReport:includedMrps:help": "Tylko zlecenia z MRP znajdującym się na liście będą brane pod uwagę podczas obliczania UPPH."
 }

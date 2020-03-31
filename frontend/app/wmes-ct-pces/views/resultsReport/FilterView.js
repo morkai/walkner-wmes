@@ -49,15 +49,15 @@ define([
 
       view.updatePlaceholders();
 
-      var ignoredMrps = view.settings.getValue('reports.results.ignoredMrps', []);
+      var includedMrps = view.settings.getValue('reports.results.includedMrps', []);
 
       setUpMrpSelect2(view.$id('includedMrps'), {
         width: '500px',
         view: view,
-        own: true,
+        own: false,
         filter: function(item)
         {
-          return ignoredMrps.indexOf(item.id) === -1;
+          return !includedMrps.length || includedMrps.indexOf(item.id) !== -1;
         }
       });
     },

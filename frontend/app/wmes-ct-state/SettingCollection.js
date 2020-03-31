@@ -53,7 +53,7 @@ define([
         return this.prepareNumericValue(newValue, 0, 480, 0);
       }
 
-      if (/ignoredMrps/.test(id))
+      if (/Mrps$/.test(id))
       {
         return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
       }
