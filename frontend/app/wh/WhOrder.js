@@ -148,19 +148,22 @@ define([
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
+      var undelivered = this.get('distStatus') === 'pending';
 
       obj.clickable = {
-        picklistDone: canManage
-          || (isUser && userFunc._id === obj.picklistFunc && !picklistDone)
+        picklistDone: undelivered
+          && (canManage || (isUser && userFunc._id === obj.picklistFunc && !picklistDone))
       };
 
       obj.funcs.forEach(function(func)
       {
         obj.clickable[func._id] = {
-          picklist: (canManage && picklistDone)
-            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist'),
-          pickup: (canManage && func.picklist === 'require')
-            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
+          picklist: undelivered
+            && ((canManage && picklistDone)
+            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist')),
+          pickup: undelivered
+            && ((canManage && func.picklist === 'require')
+            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup'))
         };
       });
 
@@ -179,9 +182,9 @@ define([
         func = this.getFunc(this.get('picklistFunc'));
 
         problemFunc = {
-          label: t('wh', 'prop:picklist'),
+          label: this.t('prop:picklist'),
           className: FUNC_STATUS_TO_CLASS[this.get('picklistDone')],
-          status: t('wh', 'status:picklistDone:' + this.get('picklistDone')),
+          status: this.t('status:picklistDone:' + this.get('picklistDone')),
           user: !func || !func.user ? '' : userInfoTemplate({
             userInfo: func.user,
             noIp: true,
@@ -197,9 +200,9 @@ define([
         func = this.getFunc(funcId);
 
         problemFunc = {
-          label: t('wh', 'func:' + funcId),
+          label: this.t('func:' + funcId),
           className: FUNC_STATUS_TO_CLASS[func.status],
-          status: t('wh', 'status:' + func.status),
+          status: this.t('status:' + func.status),
           user: !func.user ? '' : userInfoTemplate({
             userInfo: func.user,
             noIp: true,
