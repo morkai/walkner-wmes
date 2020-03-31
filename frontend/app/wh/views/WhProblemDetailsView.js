@@ -208,9 +208,9 @@ define([
         var $fields = $editor.find('input, textarea, button').prop('disabled', true);
         var $carts = $editor.find('[name="carts"]');
         var carts = ($carts.val() || '')
-          .split(/[^0-9]+/)
-          .filter(function(v) { return !!v.length; })
-          .map(function(v) { return +v; });
+          .toUpperCase()
+          .split(/[^0-9A-Z]+/)
+          .filter(function(v) { return !!v.length; });
         var comment = $editor.find('[name="comment"]').val().trim();
 
         if (funcId !== 'lp10' && !carts.length)
