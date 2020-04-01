@@ -238,6 +238,7 @@
     "orders:menu:lines:submit": "Save pin to line",
     "orders:menu:lines:failure": "Failed to pin to line.",
     "orders:menu:lines:urgent": "Urgent",
+    "orders:menu:lines:urgent:help": "Urgent order can be pinned to any line ignoring the Order priority.",
     "orders:menu:add": "Add order",
     "orders:menu:remove": "Remove order",
     "orders:menu:remove:title": "Removing order",

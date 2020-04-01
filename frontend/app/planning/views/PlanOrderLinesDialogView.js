@@ -19,6 +19,8 @@ define([
 
     template: template,
 
+    modelProperty: 'plan',
+
     events: {
 
       'submit': function()
@@ -26,16 +28,35 @@ define([
         this.submitForm();
 
         return false;
+      },
+
+      'change #-urgent': function()
+      {
+        this.setUpLinesSelect2();
+
+        if (this.$id('urgent').prop('checked'))
+        {
+          return;
+        }
+
+        var availableLines = this.serializeLines()
+          .filter(function(item) { return !item.disabled; })
+          .map(function(item) { return item.id; });
+        var selectedLines = this.$id('lines').select2('data');
+
+        this.$id('lines').select2('data', selectedLines.filter(function(item)
+        {
+          return _.includes(availableLines, item.id);
+        }));
       }
 
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var order = this.order;
 
       return {
-        idPrefix: this.idPrefix,
         orderNo: order.id,
         mrp: order.get('mrp'),
         kind: order.get('kind'),
@@ -45,30 +66,41 @@ define([
 
     afterRender: function()
     {
-      var kind = this.order.get('kind');
-      var availableLines = [];
-      var data = this.plan.settings.mrps.get(this.order.get('mrp')).lines
-        .filter(function(mrpLineSettings)
-        {
-          return _.includes(mrpLineSettings.get('orderPriority'), kind);
-        })
-        .map(function(mrpLineSettings)
-        {
-          availableLines.push(mrpLineSettings.id);
+      this.setUpLinesSelect2();
 
-          return {
-            id: mrpLineSettings.id,
-            text: mrpLineSettings.id
-          };
-        });
+      this.$id('lines').select2('data', (this.order.get('lines') || []).map(function(id)
+      {
+        return {
+          id: id,
+          text: id
+        };
+      }));
+    },
 
-      var lines = _.intersection(this.order.get('lines') || [], availableLines).join(',');
-
-      this.$id('lines').val(lines).select2({
+    setUpLinesSelect2: function()
+    {
+      this.$id('lines').select2({
+        multiple: true,
         allowClear: true,
         placeholder: ' ',
-        data: data
+        data: this.serializeLines()
       });
+    },
+
+    serializeLines: function()
+    {
+      var kind = this.order.get('kind');
+      var urgent = this.$id('urgent').prop('checked');
+
+      return this.plan.settings.mrps.get(this.order.get('mrp')).lines
+        .map(function(mrpLineSettings)
+        {
+          return {
+            id: mrpLineSettings.id,
+            text: mrpLineSettings.id,
+            disabled: !urgent && !_.includes(mrpLineSettings.get('orderPriority'), kind)
+          };
+        });
     },
 
     submitForm: function()
@@ -95,7 +127,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'orders:menu:lines:failure')
+          text: view.t('orders:menu:lines:failure')
         });
 
         view.plan.settings.trigger('errored');

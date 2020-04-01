@@ -237,6 +237,7 @@
   "orders:menu:lines:submit": "Zmień przypięcie",
   "orders:menu:lines:failure": "Przypinanie nie powiodło się.",
   "orders:menu:lines:urgent": "Pilne",
+  "orders:menu:lines:urgent:help": "Pilne zlecenie może być przypięte do każdej linii bez względu na Priorytet zleceń.",
   "orders:menu:add": "Dodaj zlecenie",
   "orders:menu:remove": "Usuń zlecenie",
   "orders:menu:remove:title": "Usuwanie zlecenia",

@@ -1,30 +1,31 @@
 <form>
   <div class="form-group">
-    <label class="control-label"><%- t('planning', 'orders:_id') %></label>
+    <label class="control-label"><%- t('orders:_id') %></label>
     <p class="form-control-static"><%- orderNo %></p>
   </div>
   <div class="form-group">
-    <label class="control-label"><%- t('planning', 'orders:mrp') %></label>
+    <label class="control-label"><%- t('orders:mrp') %></label>
     <p class="form-control-static"><%= mrp %></p>
   </div>
   <div class="form-group">
-    <label class="control-label"><%- t('planning', 'orders:kind') %></label>
-    <p class="form-control-static"><%- t('planning', 'orderPriority:' + kind) %></p>
-  </div>
-  <div class="form-group">
-    <label class="control-label"><%- t('planning', 'orders:lines') %></label>
-    <input id="<%- idPrefix %>-lines" name="lines" type="text" autocomplete="new-password" value="">
+    <label class="control-label"><%- t('orders:kind') %></label>
+    <p class="form-control-static"><%- t('orderPriority:' + kind) %></p>
   </div>
   <div class="checkbox">
     <label class="control-label">
       <input id="<%- idPrefix %>-urgent" type="checkbox" value="1" <%- urgent ? 'checked' : '' %>>
-      <%- t('planning', 'orders:menu:lines:urgent') %>
+      <%- t('orders:menu:lines:urgent') %>
     </label>
+    <p class="help-block"><%- t('orders:menu:lines:urgent:help') %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('orders:lines') %></label>
+    <input id="<%- idPrefix %>-lines" name="lines" type="text" autocomplete="new-password" value="">
   </div>
   <div class="form-actions">
     <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
-      <span><%- t('planning', 'orders:menu:lines:submit') %></span>
+      <span><%- t('orders:menu:lines:submit') %></span>
     </button>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
