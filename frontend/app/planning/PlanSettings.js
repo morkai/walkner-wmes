@@ -49,6 +49,7 @@ define([
         splitOrderQuantity: 0,
         maxSplitLineCount: 0,
         hardOrderManHours: 0,
+        hardBigComponents: [],
         hardComponents: [],
         lines: [],
         groups: []

@@ -192,6 +192,7 @@ define([
       this.setUpOrderStatusSelect2('ignoredStatuses');
       this.setUpOrderStatusSelect2('completedStatuses');
       this.setUpComponentsSelect2(this.$id('hardComponents'));
+      this.setUpComponentsSelect2(this.$id('hardBigComponents'));
       this.setUpLineSelect2();
       this.setUpMrpSelect2();
       this.setUpMrpLineSelect2();
@@ -616,12 +617,25 @@ define([
           .prop('disabled', disabled);
       });
 
-      view.$id('hardComponents')
-        .select2('data', disabled ? [] : (mrp.get('hardComponents') || []).map(function(nc12)
+      [
+        'hardComponents',
+        'hardBigComponents'
+      ].forEach(function(prop)
+      {
+        var data = [];
+
+        if (!disabled)
         {
-          return {id: nc12, text: nc12};
-        }))
-        .select2('enable', enabled);
+          data = (mrp.get(prop) || []).map(function(nc12)
+          {
+            return {id: nc12, text: nc12};
+          });
+        }
+
+        view.$id(prop)
+          .select2('data', data)
+          .select2('enable', enabled);
+      });
 
       view.removeGroups();
 
@@ -893,6 +907,7 @@ define([
         case 'ignoredStatuses':
         case 'completedStatuses':
         case 'hardComponents':
+        case 'hardBigComponents':
         case 'orderPriority':
           v = $property.val().split(',').filter(function(v) { return v.length > 0; });
           break;
