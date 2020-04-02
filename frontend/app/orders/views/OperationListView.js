@@ -56,6 +56,8 @@ define([
 
     template: operationListTemplate,
 
+    nlsDomain: 'orders',
+
     events: {
 
       'click [data-action="changeQtyMax"]': function(e)
