@@ -235,7 +235,7 @@ define([
 
       var scanInfo = this.model.logEntry.data;
 
-      scanInfo.scannedAt = new Date().toISOString();
+      scanInfo.scannedAt = new Date();
       scanInfo.bom = [];
 
       this.components.forEach(function(component)
