@@ -182,9 +182,9 @@ define([
         func = this.getFunc(this.get('picklistFunc'));
 
         problemFunc = {
-          label: this.t('prop:picklist'),
+          label: t('wh', 'prop:picklist'),
           className: FUNC_STATUS_TO_CLASS[this.get('picklistDone')],
-          status: this.t('status:picklistDone:' + this.get('picklistDone')),
+          status: t('wh', 'status:picklistDone:' + this.get('picklistDone')),
           user: !func || !func.user ? '' : userInfoTemplate({
             userInfo: func.user,
             noIp: true,
@@ -200,9 +200,9 @@ define([
         func = this.getFunc(funcId);
 
         problemFunc = {
-          label: this.t('func:' + funcId),
+          label: t('wh', 'func:' + funcId),
           className: FUNC_STATUS_TO_CLASS[func.status],
-          status: this.t('status:' + func.status),
+          status: t('wh', 'status:' + func.status),
           user: !func.user ? '' : userInfoTemplate({
             userInfo: func.user,
             noIp: true,
