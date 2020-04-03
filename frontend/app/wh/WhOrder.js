@@ -148,7 +148,7 @@ define([
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
-      var undelivered = this.get('distStatus') === 'pending';
+      var undelivered = this.get('fifoStatus') === 'pending';
 
       obj.clickable = {
         picklistDone: undelivered
