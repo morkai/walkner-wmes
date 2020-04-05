@@ -25,6 +25,15 @@ define([
       return this.t('FORM:edit:failure');
     },
 
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.blocked = formData.status === 'blocked';
+
+      return formData;
+    },
+
     serializeForm: function(formData)
     {
       formData.qtyTodo = parseInt(formData.qtyTodo, 10);

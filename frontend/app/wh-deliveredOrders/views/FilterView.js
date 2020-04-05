@@ -4,7 +4,8 @@ define([
   'underscore',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
-  'app/wh-deliveredOrders/templates/filter'
+  'app/wh-deliveredOrders/templates/filter',
+  'app/core/util/ExpandableSelect'
 ], function(
   _,
   FilterView,
@@ -17,23 +18,20 @@ define([
 
     template: template,
 
-    events: _.assign({
-
-      'change #-line': 'checkValidity',
-      'change #-sapOrder': 'checkValidity'
-
-    }, FilterView.prototype.events),
-
     termToForm: {
       'line': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
       'sapOrder': 'line',
-      'qtyRemaining': function(propertyName, term, formData)
-      {
-        formData.onlyRemaining = term.name === 'gt';
-      }
+      'status': 'line'
+    },
+
+    destroy: function()
+    {
+      FilterView.prototype.destroy.apply(this, arguments);
+
+      this.$('.is-expandable').expandableSelect('destroy');
     },
 
     afterRender: function()
@@ -47,13 +45,14 @@ define([
         data: this.lines.map(idAndLabel)
       });
 
-      this.toggleButtonGroup('onlyRemaining');
+      this.$('.is-expandable').expandableSelect();
     },
 
     serializeFormToQuery: function(selector)
     {
       var line = this.$id('line').val();
       var sapOrder = this.$id('sapOrder').val();
+      var status = this.$id('status').val();
 
       if (line)
       {
@@ -65,20 +64,10 @@ define([
         selector.push({name: 'eq', args: ['sapOrder', sapOrder]});
       }
 
-      if (this.getButtonGroupValue('onlyRemaining'))
+      if (status && status.length)
       {
-        selector.push({name: 'gt', args: ['qtyRemaining', 0]});
+        selector.push({name: 'in', args: ['status', status]});
       }
-    },
-
-    checkValidity: function()
-    {
-      var line = this.$id('line').val();
-      var sapOrder = this.$id('sapOrder').val();
-
-      this.$id('sapOrder')[0].setCustomValidity(
-        line === '' && sapOrder === '' ? this.t('FILTER:lineOrOrder') : ''
-      );
     }
 
   });

@@ -7,12 +7,13 @@
     <label for="<%- idPrefix %>-sapOrder"><%- t('PROPERTY:sapOrder') %></label>
     <input id="<%- idPrefix %>-sapOrder" name="sapOrder" class="form-control" type="text" autocomplete="new-password">
   </div>
-  <div class="form-group no-label">
-    <div id="<%- idPrefix %>-onlyRemaining" class="btn-group filter-btn-group" data-toggle="buttons">
-      <label class="btn btn-default">
-        <input type="checkbox" name="onlyRemaining" value="true"> <%- t('FILTER:onlyRemaining') %>
-      </label>
-    </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-status"><%- t('PROPERTY:status') %></label>
+    <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
+      <% ['todo', 'done', 'blocked'].forEach(function(status) { %>
+      <option value="<%- status %>"><%- t('status:' + status) %></option>
+      <% }) %>
+    </select>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

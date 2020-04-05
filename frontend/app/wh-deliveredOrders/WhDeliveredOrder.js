@@ -2,9 +2,11 @@
 
 define([
   'app/time',
+  'app/i18n',
   'app/core/Model'
 ], function(
   time,
+  t,
   Model
 ) {
   'use strict';
@@ -28,6 +30,7 @@ define([
       obj.qty = obj.qtyDone + '/' + obj.qtyTodo;
       obj.pceTime = time.toString(obj.pceTime / 1000, false, false);
       obj.date = time.utc.format(obj.date, 'L');
+      obj.statusText = t(this.nlsDomain, 'status:' + obj.status);
 
       return obj;
     },
@@ -36,7 +39,22 @@ define([
     {
       var row = this.serialize();
 
-      row.className = row.qtyDone === row.qtyTodo ? 'success' : row.qtyDone ? 'info' : '';
+      if (row.status === 'blocked')
+      {
+        row.className = 'danger';
+      }
+      else if (row.status === 'done')
+      {
+        row.className = 'success';
+      }
+      else if (row.qtyDone)
+      {
+        row.className = 'info';
+      }
+      else
+      {
+        row.className = '';
+      }
 
       return row;
     }

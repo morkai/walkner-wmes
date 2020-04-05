@@ -3,18 +3,12 @@
 
 'use strict';
 
-db.plansettings.find({}, {mrps: 1}).forEach(settings =>
+db.oldwhdeliveredorders.dropIndex({sapOrder: 1, line: 1, qtyRemaining: 1, pceTime: 1});
+db.oldwhdeliveredorders.dropIndex({line: 1, qtyRemaining: 1, pceTime: 1});
+
+db.oldwhdeliveredorders.find({status: {$exists: false}}).forEach(o =>
 {
-  settings.mrps.forEach(mrp =>
-  {
-    if (mrp.hardBigComponents)
-    {
-      return;
-    }
-
-    mrp.hardBigComponents = mrp.hardComponents;
-    mrp.hardComponents = [];
-  });
-
-  db.plansettings.updateOne({_id: settings._id}, {$set: {mrps: settings.mrps}});
+  db.oldwhdeliveredorders.updateOne({_id: o._id}, {$set: {
+    status: o.qtyRemaining ? 'todo' : 'done'
+  }});
 });

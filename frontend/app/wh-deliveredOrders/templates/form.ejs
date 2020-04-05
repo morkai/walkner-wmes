@@ -16,6 +16,12 @@
     <label for="<%- idPrefix %>-qtyTodo" class="control-label"><%- t('PROPERTY:qtyTodo') %></label>
     <input id="<%- idPrefix %>-qtyTodo" name="qtyTodo" class="form-control" type="number" min="1" max="9999" required style="width: 100px">
   </div>
+  <div class="checkbox">
+    <label class="control-label">
+      <input id="<%- idPrefix %>-blocked" name="blocked" type="checkbox" value="true">
+      <%- t('PROPERTY:blocked') %>
+    </label>
+  </div>
   <div class="form-actions">
     <button class="btn btn-primary" type="submit"><%- t('FORM:edit:submit') %></button>
     <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>

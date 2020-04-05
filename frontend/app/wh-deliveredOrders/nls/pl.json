@@ -2,6 +2,7 @@
   "BREADCRUMB:base": "Magazyn (nowy)",
   "BREADCRUMB:browse": "Dostarczone zlecenia",
 
+  "PROPERTY:status": "Status",
   "PROPERTY:line": "Linia",
   "PROPERTY:qtyTodo": "Ilość do zrobienia",
   "PROPERTY:qtyDone": "Ilość zrobiona",
@@ -11,6 +12,7 @@
   "PROPERTY:date": "Plan",
   "PROPERTY:set": "Set",
   "PROPERTY:startTime": "Plan. czas rozp.",
+  "PROPERTY:blocked": "Zablokowane?",
 
   "FILTER:lineOrOrder": "Podaj zlecenie lub wybierz linię.",
   "FILTER:onlyRemaining": "Tylko niewykonane",
@@ -19,5 +21,16 @@
   "FORM:edit:submit": "Zapisz",
   "FORM:edit:failure": "Edycja nie powiodła się.",
 
-  "LIST:ACTION:finish": "Zakończ"
+  "LIST:ACTION:finish": "Zakończ",
+  "LIST:ACTION:block": "Zablokuj",
+  "LIST:ACTION:unblock": "Odblokuj",
+
+  "confirm:cancel": "Anuluj",
+  "confirm:finish": "Zakończ",
+  "confirm:block": "Zablokuj",
+  "confirm:unblock": "Odblokuj",
+
+  "status:todo": "Do zrobienia",
+  "status:done": "Zrobione",
+  "status:blocked": "Zablokowane"
 }

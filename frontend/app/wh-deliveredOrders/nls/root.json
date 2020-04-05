@@ -3,6 +3,7 @@
     "BREADCRUMB:base": "WH (new)",
     "BREADCRUMB:browse": "Delivered orders",
 
+    "PROPERTY:status": "Status",
     "PROPERTY:line": "Line",
     "PROPERTY:qtyTodo": "Quantity todo",
     "PROPERTY:qtyDone": "Quantity done",
@@ -12,6 +13,7 @@
     "PROPERTY:date": "Plan",
     "PROPERTY:set": "Set",
     "PROPERTY:startTime": "Planned start time",
+    "PROPERTY:blocked": "Blocked?",
 
     "FILTER:lineOrOrder": "Specify an order or select a line.",
     "FILTER:onlyRemaining": "Only incomplete",
@@ -20,7 +22,18 @@
     "FORM:edit:submit": "Save",
     "FORM:edit:failure": "Editing failed.",
 
-    "FORM:edit:finish": "Finish"
+    "FORM:edit:finish": "Finish",
+    "LIST:ACTION:block": "Block",
+    "LIST:ACTION:unblock": "Unblock",
+
+    "confirm:cancel": "Cancel",
+    "confirm:finish": "Finish",
+    "confirm:block": "Block",
+    "confirm:unblock": "Unblock",
+
+    "status:todo": "Todo",
+    "status:done": "Done",
+    "status:blocked": "Blocked"
   },
   "pl": true
 }

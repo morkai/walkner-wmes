@@ -168,6 +168,11 @@ function(
       this.$tip.css(this.options.css);
     }
 
+    if (this.options.contentCss)
+    {
+      this.$tip.find('.popover-content').first().css(this.options.contentCss);
+    }
+
     if (this.options.className)
     {
       this.$tip.addClass(this.options.className);
