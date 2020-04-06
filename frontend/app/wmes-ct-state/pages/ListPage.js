@@ -47,7 +47,7 @@ define([
           {
             return page.renderPartialHtml(reportsActionTemplate);
           },
-          privileges: 'PROD_DATA:MANAGE'
+          privileges: 'PROD_DATA:VIEW'
         },
         {
           template: function()
