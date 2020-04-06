@@ -148,7 +148,11 @@ define([
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
-      var undelivered = this.get('fifoStatus') === 'pending';
+      var fifoUndelivered = this.get('fifoStatus') === 'pending'
+        || (obj.funcs[0].pickup === 'ignore' && obj.funcs[1].pickup === 'ignore');
+      var packUndelivered = this.get('packStatus') === 'pending'
+        || obj.funcs[2].pickup === 'ignore';
+      var undelivered = fifoUndelivered && packUndelivered;
 
       obj.clickable = {
         picklistDone: undelivered
