@@ -563,17 +563,24 @@ define([
     },
     viewEditDelete: function(collection, privilegePrefix, nlsDomain)
     {
+      var Model = collection.model;
+      var canEdit = Model.can && (Model.can.edit || Model.can.manage);
+      var canDelete = Model.can && (Model.can.delete || Model.can.manage);
+
       return function(row)
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model, nlsDomain)];
+        var canManage = user.isAllowedTo((privilegePrefix || model.getPrivilegePrefix()) + ':MANAGE');
 
-        if (user.isAllowedTo((privilegePrefix || model.getPrivilegePrefix()) + ':MANAGE'))
+        if ((canEdit && canEdit.call(Model, model, 'edit')) || (!canEdit && canManage))
         {
-          actions.push(
-            ListView.actions.edit(model, nlsDomain),
-            ListView.actions.delete(model, nlsDomain)
-          );
+          actions.push(ListView.actions.edit(model, nlsDomain));
+        }
+
+        if ((canDelete && canDelete.call(Model, model, 'delete')) || (!canDelete && canManage))
+        {
+          actions.push(ListView.actions.delete(model, nlsDomain));
         }
 
         return actions;

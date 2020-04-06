@@ -193,6 +193,7 @@
   "PRIVILEGE:LUCA:MANAGE": "Luca: zarządzanie",
   "PRIVILEGE:WMES:CLIENTS:VIEW": "Klienci WMES: przeglądanie",
   "PRIVILEGE:WMES:CLIENTS:MANAGE": "Klienci WMES: zarządzanie",
+  "PRIVILEGE:CT:MANAGE:ORDER_GROUPS": "Czas cyklu: zarządzanie grupami wyrobów",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

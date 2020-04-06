@@ -1,4 +1,85 @@
 <div class="hidden">
+  <h1>v0.147.0</h1>
+  <h2><%- time.format('2020-04-05', 'LL') %></h2>
+  <h3>Baza testów > TRW</h3>
+  <ul>
+    <li>Dodano możliwość przypisywania komunikatów do poszczególnych kroków programu.</li>
+  </ul>
+  <h3>Baza testów > Xiconf</h3>
+  <ul>
+    <li>Dodano możliwość filtrowania importowanych komponentów po 12NC.</li>
+    <li>Dodano możliwość ograniczenia importowanych komponentów do wybranych MRP.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprzeliczanie wykonanych ilości w zleceniu produkcyjnym po edycji
+      nr operacji w zleceniu wykonanym na linii.</li>
+    <li>Zmieniono wyświetlanie zagnieżdżonych list w historii zleceń na bardziej użyteczne.</li>
+    <li>Dodano możliwość definiowania uwag dla zleceń. Uwagi wyświetlane są w aplikacjach dokumentacji
+      oraz malarnii.</li>
+    <li>Dodano skróty klawiszowe do poszczególnych paneli na stronie ze szczegółami zlecenia.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący ignorowanie przypisania zlecenia do linii.</li>
+    <li>Poprawiono błąd powodujący ignorowanie flagi 'Wymuś dzień pracujący'.</li>
+    <li>Poprawiono błąd powodujący niezapisywanie usunięcia grup linii.</li>
+    <li>Poprawiono błąd uniemożliwiający zapisanie nowych ustawień linii, jeżeli do linii przypisano MRP, które
+      nie występowało jeszcze w planie.</li>
+    <li>Poprawiono błąd powodujący dodawanie do zrzutu statystyk planu MRP, które mają opóźnione zlecenia, mimo że nie
+      zostały wybrane w filtrze.</li>
+    <li>Zmieniono algorytm planowania tak, aby podczas kolejnych przejść planowania, zlecenia zostały usunięte
+      z grupy, do której zostały przypisane w pierwszym przejściu, jeżeli ta grupa nie ma zdefiniowanych
+      żadnych komponentów.</li>
+    <li>Zmieniono akcję 'Komentuj zlecenie' tak, aby zamiast otwierania nowego okna ze stroną szczegółów zlecenia,
+      pokazywany był tylko formularz do komentowania.</li>
+    <li>Zmieniono obliczanie realizacji sekwencji tak, aby pod uwagę brana była ilość zrobionych sztuk w stosunku
+      do ilości zaplanowanych sztuk, a nie ilość całkowicie wykonanych zaplanowanych zleceń.</li>
+    <li>Zmieniono przypinanie zleceń do linii tak, aby można było przypiąć zlecenie do kilku linii oraz pilne, przypięte
+      zlecenia mogły być rozplanowywane na liniach bez uwzględnienia 'Priorytety zleceń'.</li>
+    <li>Dodano nową opcję konfiguracyjną dla MRP: Trudne komponenty bez względu na ilość sztuk lub roboczogodzin
+      (oznaczanie małych zleceń jako trudne).</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Dodano wysyłkę wózków FIFO oraz opakowań.</li>
+    <li>Dodano rejestrowanie przestojów podczas kompletacji.</li>
+    <li>Dodano funkcję tymczasowego blokowania zleceń dostarczonych na linie.</li>
+  </ul>
+  <h3>Czas cyklu</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niezapisywanie podsumowania czasu cyklu dla zlecenia produkcyjnego
+      z linii podczas kończenia zlecenia.</li>
+    <li>Poprawiono błąd powodujący niewysyłanie stanów lamp natychmiast po ich zmianie.</li>
+    <li>Dodano możliwość eksportowania historii sztuk.</li>
+    <li>Dodano do raportu Wyniki możliwość przełączenia na znormalizowaną wartość UPPH.</li>
+    <li>Dodano nowe opcję konfiguracyjną w ustawieniach: Rodziny UPPH.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Dodano ilość do zrobienia do zrzutu wykonania planu.</li>
+    <li>Dodano ilość roboczogodzin do listy farb oraz zrzutu farb.</li>
+    <li>Dodano status wiercenia do zrzutu zleceń.</li>
+  </ul>
+  <h3>Obserwacje zachowań</h3>
+  <ul>
+    <li>Dodano odnośniki do formularza w wersji do druku.</li>
+    <li>Dodano filtr 'Ryzykowne zachowania'.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Dodano możliwość drukowania etykiet komponentów.</li>
+  </ul>
+  <h3>Monitoring > Układ fabryki</h3>
+  <ul>
+    <li>Dodano nowy tryb wyświetlania: Wydajność godzinowa.</li>
+  </ul>
+  <h3>Wydajność godzinowa</h3>
+  <ul>
+    <li>Dodano wykres z zaplanowanymi i wykonanymi ilościami na zmianie.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.146.0</h1>
   <h2><%- time.format('2020-02-09', 'LL') %></h2>
   <h3>Monitoring > Czas cyklu</h3>

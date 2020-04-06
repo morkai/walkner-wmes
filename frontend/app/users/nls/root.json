@@ -192,6 +192,7 @@
     "PRIVILEGE:LUCA:MANAGE": "Luca: manage",
     "PRIVILEGE:WMES:CLIENTS:VIEW": "WMES clients: view",
     "PRIVILEGE:WMES:CLIENTS:MANAGE": "WMES clients: manage",
+    "PRIVILEGE:CT:MANAGE:ORDER_GROUPS": "Cycle time: manage product groups",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

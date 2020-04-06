@@ -2,11 +2,13 @@
 
 define([
   'underscore',
-  '../i18n',
-  '../core/Model'
+  'app/i18n',
+  'app/user',
+  'app/core/Model'
 ], function(
   _,
   t,
+  user,
   Model
 ) {
   'use strict';
@@ -68,6 +70,17 @@ define([
       });
 
       return obj;
+    }
+
+  }, {
+
+    can: {
+
+      manage: function()
+      {
+        return user.isAllowedTo('CT:MANAGE:ORDER_GROUPS');
+      }
+
     }
 
   });
