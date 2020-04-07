@@ -3,6 +3,25 @@
 
 'use strict';
 
+const orderMrps = {};
+
+db.ctpces.find({'order.mrp': {$exists: false}}, {'order._id': 1}).forEach(pce =>
+{
+  if (!orderMrps[pce.order._id])
+  {
+    const sapOrder = db.orders.findOne({_id: pce.order._id}, {mrp: 1});
+
+    if (!sapOrder)
+    {
+      return;
+    }
+
+    orderMrps[pce.order._id] = sapOrder.mrp;
+  }
+
+  db.ctpces.updateOne({_id: pce._id}, {$set: {'order.mrp': orderMrps[pce.order._id]}});
+});
+
 db.ctpces.aggregate([{$group: {_id: '$order.pso'}}]).forEach(pso =>
 {
   pso = db.prodshiftorders.findOne({_id: pso._id}, {sapTaktTime: 1});
