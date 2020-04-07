@@ -160,10 +160,8 @@
     "settings:operations:timeCoeffs": "Operation time coefficients",
     "settings:operations:timeCoeffs:help": "Each line should contain order's MRP for which operation times from SAP should be adjusted, followed by names of the operation times and values of the coefficients.<br>Available time names are: <code>machineSetup</code>, <code>machine</code>, <code>laborSetup</code> and <code>labor</code>.<br>For example: <code>KE3: labor=0.8 machineSetup=1.1</code>",
     "settings:documents:excludedMrps": "MRPs excluded from the document import",
-    "settings:documents:path": "Path to a directory with the document files",
     "settings:documents:extra": "Extra documents",
     "settings:documents:remoteServer": "Document search engine server",
-    "settings:documents:useCatalog": "Use the WMES document catalog for serving document files",
     "settings:iptChecker:toBusinessDays": "Number of days to check",
     "settings:iptChecker:mrps": "MRPs to check",
 

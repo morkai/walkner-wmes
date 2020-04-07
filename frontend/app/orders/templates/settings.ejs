@@ -18,12 +18,6 @@
       </div>
     </div>
     <div class="panel-body" data-tab="documents">
-      <div class="checkbox">
-        <label class="control-label">
-          <input id="<%- idPrefix %>-documents-useCatalog" name="orders.documents.useCatalog" type="checkbox" value="true">
-          <%- helpers.t('settings:documents:useCatalog') %>
-        </label>
-      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-documents-excludedMrps"><%- helpers.t('settings:documents:excludedMrps') %></label>
         <input id="<%- idPrefix %>-documents-excludedMrps" name="orders.documents.excludedMrps" type="text" autocomplete="new-password" data-setting>
@@ -31,10 +25,6 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-documents-remoteServer"><%- helpers.t('settings:documents:remoteServer') %></label>
         <input id="<%- idPrefix %>-documents-remoteServer" class="form-control" name="orders.documents.remoteServer" type="text" autocomplete="new-password" data-change-delay="0">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-documents-path"><%- helpers.t('settings:documents:path') %></label>
-        <input id="<%- idPrefix %>-documents-path" class="form-control" name="orders.documents.path" type="text" autocomplete="new-password" data-change-delay="0">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-documents-extra"><%- helpers.t('settings:documents:extra') %></label>

@@ -30,12 +30,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/useCatalog$/.test(id))
-      {
-        return !!newValue;
-      }
-
-      if (/documents.(path|remoteServer)$/.test(id))
+      if (/documents.remoteServer$/.test(id))
       {
         return newValue;
       }
