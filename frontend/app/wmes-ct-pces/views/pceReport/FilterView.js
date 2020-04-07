@@ -82,12 +82,35 @@ define([
 
     toggleValidity: function()
     {
-      var hasOrders = this.$id('orders').val().trim().length >= 7;
-      var hasFromDate = this.$id('from-date').val().length > 0;
-      var hasLines = this.$id('lines').val().length > 0;
+      var $orders = this.$id('orders');
+      var $fromDate = this.$id('from-date');
+      var $lines = this.$id('lines');
+      var hasOrders = $orders.val().trim().length >= 7;
+      var hasFromDate = $fromDate.val().length > 0;
+      var hasLines = $lines.val().length > 0;
       var valid = hasOrders || (hasFromDate && hasLines);
 
-      this.$id('orders')[0].setCustomValidity(valid ? '' : this.t('pceReport:filter:invalid'));
+      $orders[0].setCustomValidity('');
+      $fromDate[0].setCustomValidity('');
+      $lines[0].setCustomValidity('');
+
+      if (valid)
+      {
+        return;
+      }
+
+      var $target = $orders;
+
+      if (hasFromDate)
+      {
+        $target = $lines;
+      }
+      else if (hasLines)
+      {
+        $target = $fromDate;
+      }
+
+      $target[0].setCustomValidity(valid ? '' : this.t('pceReport:filter:invalid'));
     }
 
   });

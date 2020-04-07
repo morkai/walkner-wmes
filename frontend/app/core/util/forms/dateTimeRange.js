@@ -351,10 +351,10 @@ define([
 
     var dateFormat = DATE_FORMATS[type];
 
-    $container.find('input[name="from-date"]').val(fromMoment.format(dateFormat));
-    $container.find('input[name="from-time"]').val(fromMoment.format('HH:mm:ss'));
-    $container.find('input[name="to-date"]').val(toMoment.format(dateFormat));
-    $container.find('input[name="to-time"]').val(toMoment.format('HH:mm:ss'));
+    $container.find('input[name="from-date"]').val(fromMoment.format(dateFormat)).trigger('change');
+    $container.find('input[name="from-time"]').val(fromMoment.format('HH:mm:ss')).trigger('change');
+    $container.find('input[name="to-date"]').val(toMoment.format(dateFormat)).trigger('change');
+    $container.find('input[name="to-time"]').val(toMoment.format('HH:mm:ss')).trigger('change');
 
     var $intervals = view.$('[name="interval"]');
 
