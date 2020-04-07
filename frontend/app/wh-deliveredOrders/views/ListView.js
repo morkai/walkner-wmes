@@ -298,6 +298,8 @@ define([
 
     onReset: function()
     {
+      ListView.prototype.onReset.apply(this, arguments);
+
       if (this.$popover && !this.collection.get(this.$popover.data('modelId')))
       {
         this.hidePopover();
