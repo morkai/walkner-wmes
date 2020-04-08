@@ -58,6 +58,8 @@
   "files:components:addByName": "Dodaj po nazwie",
   "files:components:addByName:placeholder": "Nazwa komponentu...",
   "files:stations": "Stanowiska",
+  "files:msg:nc15:copied": "15NC skopiowano do schowka.",
+  "files:msg:nc15:set": "15NC ustawiono w pliku do załadowania.",
 
   "unlinkFiles:title": "Usuwanie przypisania dokumentów",
   "unlinkFiles:submit": "Usuń przypisania",
@@ -148,6 +150,7 @@
   "uploads:msg:folderIsTrash": "Nie można dodawać plików do śmietnika.",
   "uploads:error:INVALID_TYPE": "Nieprawidłowy typ pliku.",
   "uploads:error:INVALID_RESPONSE": "Nieprawidłowa odpowiedź serwera.",
+  "uploads:error:INVALID_DYNAMIC_NC15": "Nie można dodawać nowych dokumentów z prefiksem 000.",
   "uploads:error:UNKNOWN_ERROR": "Nieoczekiwany błąd podczas ładowania pliku.",
 
   "fileChanges:time": "Czas zmiany",

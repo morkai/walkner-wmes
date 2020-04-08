@@ -10,6 +10,8 @@ define([
   'app/core/View',
   'app/core/views/DialogView',
   'app/core/util/padString',
+  'app/core/util/fileIcons',
+  'app/data/clipboard',
   'app/planning/util/contextMenu',
   '../OrderDocumentTree',
   './EditFileDialogView',
@@ -29,6 +31,8 @@ define([
   View,
   DialogView,
   padString,
+  fileIcons,
+  clipboard,
   contextMenu,
   OrderDocumentTree,
   EditFileDialogView,
@@ -91,6 +95,11 @@ define([
         var tree = this.model;
         var documentFile = tree.files.get(e.currentTarget.dataset.id);
 
+        if (!documentFile)
+        {
+          return;
+        }
+
         if (e.altKey)
         {
           tree.addUpload(documentFile.id, null);
@@ -127,6 +136,39 @@ define([
         this.model.setSelectedFolder(e.target.dataset.folderId, {
           scroll: true,
           keepFile: true
+        });
+
+        return false;
+      },
+      'click dd[data-prop="nc15"]': function(e)
+      {
+        var view = this;
+        var selectedFile = view.model.getSelectedFile();
+
+        if (!selectedFile)
+        {
+          return;
+        }
+
+        if (e.ctrlKey)
+        {
+          var upload = view.model.uploads.find(function(u) { return u.get('nc15') === ''; });
+
+          if (upload)
+          {
+            upload.set('nc15', selectedFile.id, {source: 'preview'});
+          }
+
+          return false;
+        }
+
+        clipboard.copy(function(clipboardData)
+        {
+          clipboardData.setData('text/plain', selectedFile.id);
+
+          clipboard.showTooltip(view, e.currentTarget, e.pageX, e.pageY, {
+            title: view.t('files:msg:nc15:copied')
+          });
         });
 
         return false;
@@ -384,15 +426,22 @@ define([
       }
 
       var marked = this.model.isMarkedFile(file);
+      var files = file.get('files');
+      var text = file.id;
+
+      if (/^000/.test(text))
+      {
+        text = text.replace(/^(0+)([0-9]+)$/, '<span class="orderDocumentTree-files-label-prefix">$1</span>$2');
+      }
 
       return {
         id: file.id,
-        text: file.id,
+        text: text,
         smallText: label.replace(/_/g, ' '),
         selected: file.id === this.model.get('selectedFile'),
         marked: marked,
-        icon: 'fa-file-o',
-        files: file.get('files').map(function(f)
+        icon: fileIcons.getByMime(files[0].type),
+        files: files.map(function(f)
         {
           return {
             hash: f.hash,
@@ -577,6 +626,8 @@ define([
       var $preview = this.$id('preview');
       var props = this.serializePreview();
 
+      this.$id('previewIcon').attr('class', 'fa fa-3x ' + props.icon);
+
       _.forEach(props, function(html, prop)
       {
         $preview
@@ -617,7 +668,8 @@ define([
       var selectedFile = this.model.getSelectedFile();
 
       return {
-        nc15: _.escape(selectedFile.id),
+        icon: fileIcons.getByMime(selectedFile.get('files')[0].type),
+        nc15: this.serializePreviewNc15(),
         name: _.escape(selectedFile.getLabel()),
         folders: this.serializePreviewFolders(),
         files: this.serializePreviewFiles(),
@@ -625,6 +677,16 @@ define([
         stations: selectedFile.get('stations').join(', '),
         updatedAt: this.serializePreviewUpdatedAt()
       };
+    },
+
+    serializePreviewNc15: function()
+    {
+      var nc15 = this.model.getSelectedFile().id.replace(
+        /^(0{3,15})([0-9]{1,15})$/,
+        '<span class="orderDocumentTree-files-label-prefix">$1</span>$2'
+      );
+
+      return nc15 + ' <a href="javascript:void(0)"><i class="fa fa-copy"></i></a>';
     },
 
     serializePreviewFolders: function()

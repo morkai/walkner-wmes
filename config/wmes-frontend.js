@@ -579,10 +579,7 @@ exports.d8 = {
 
 exports.orderDocuments = {
   importPath: `${DATA_PATH}/attachments-input`,
-  cachedPath: `${DATA_PATH}/order-documents/cached`,
-  convertedPath: `${DATA_PATH}/order-documents/converted`,
-  uploadedPath: `${DATA_PATH}/order-documents/uploaded`,
-  sejdaConsolePath: 'sejda-console'
+  uploadsDest: `${DATA_PATH}/uploads/documents`
 };
 
 exports.opinionSurveys = {

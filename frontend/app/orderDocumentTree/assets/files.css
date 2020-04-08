@@ -48,6 +48,9 @@
 .orderDocumentTree-files-label-text {
   display: block;
 }
+.orderDocumentTree-files-label-prefix {
+  color: #999;
+}
 .orderDocumentTree-files-label-smallText {
   display: block;
   margin-top: 2px;

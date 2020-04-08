@@ -14,7 +14,7 @@
   </div>
   <div id="<%- idPrefix %>-preview" class="orderDocumentTree-files-preview hidden">
     <div class="orderDocumentTree-files-preview-actions">
-      <i class="fa fa-3x fa-file-o"></i>
+      <i id="<%- idPrefix %>-previewIcon" class="fa fa-3x fa-file-o"></i>
       <% if (user.isAllowedTo('USER', 'DOCUMENTS:VIEW')) { %>
       <button id="<%- idPrefix %>-subFile" class="btn btn-default" disabled><i class="fa"></i></button>
       <% } %>

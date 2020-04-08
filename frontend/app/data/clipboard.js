@@ -35,18 +35,46 @@ define([
 
     showTooltip: function(view, el, x, y, options)
     {
-      var $btn = view.$(el).tooltip(_.assign({
+      var $el = view.$(el);
+      var id = $el.data('bs.tooltip.id');
+
+      if (!x && !y)
+      {
+        var box = el.getBoundingClientRect();
+
+        x = box.left;
+        y = box.top + box.height;
+      }
+
+      if (id)
+      {
+        clearTimeout(view.timers[id]);
+
+        var tooltip = $el.data('bs.tooltip');
+
+        if (tooltip)
+        {
+          tooltip.$tip.removeClass('fade');
+          $el.tooltip('destroy').removeData('bs.tooltip.id');
+        }
+      }
+
+      id = _.uniqueId('tooltip');
+
+      $el.tooltip(_.assign({
         container: view.el,
         trigger: 'manual',
         placement: 'bottom'
       }, options));
 
-      $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
+      $el.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
         left: x + 'px',
         top: y + 'px'
       });
 
-      view.timers[_.uniqueId('hideTooltip')] = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
+      $el.data('bs.tooltip.id', id);
+
+      view.timers[id] = setTimeout(function() { $el.tooltip('destroy').removeData('bs.tooltip.id'); }, 1337);
     }
 
   };

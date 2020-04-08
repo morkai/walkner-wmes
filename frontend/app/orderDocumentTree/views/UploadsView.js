@@ -8,6 +8,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/padString',
   '../util/pasteDateEvents',
   'app/orderDocumentTree/templates/uploads',
   'app/orderDocumentTree/templates/upload'
@@ -19,6 +20,7 @@ define([
   user,
   viewport,
   View,
+  padString,
   pasteDateEvents,
   template,
   renderUpload
@@ -42,10 +44,31 @@ define([
       'change .orderDocumentTree-uploads-field': function(e)
       {
         var upload = this.model.uploads.get(this.$upload(e.target).attr('data-id'));
+        var prop = e.target.name;
+        var value = e.target.value;
+
+        if (prop === 'nc15' && /^[0-9]{1,12}$/.test(value))
+        {
+          value = e.target.value = padString.start(value, 15, '0');
+        }
+
+        if (prop === 'nc15' && upload.get('error') === 'INVALID_DYNAMIC_NC15')
+        {
+          upload.set('error', null);
+        }
 
         if (upload)
         {
-          upload.set(e.target.name, e.target.value, {source: 'user'});
+          upload.set(prop, value, {source: 'user'});
+        }
+      },
+      'input input[name="nc15"]': function(e)
+      {
+        var upload = this.model.uploads.get(this.$upload(e.target).attr('data-id'));
+
+        if (upload && upload.get('error') === 'INVALID_DYNAMIC_NC15')
+        {
+          upload.set('error', null);
         }
       },
       'click #-setDate': function()
@@ -56,7 +79,7 @@ define([
       {
         this.model.uploads.reset();
       },
-      'click .orderDocumentTree-uploads-nc15[readonly]': function(e)
+      'click input[name="nc15"][readonly]': function(e)
       {
         var documentFile = this.model.files.get(e.currentTarget.value);
 
@@ -72,16 +95,36 @@ define([
       {
         e.preventDefault();
 
-        var $setDate = this.$id('setDate').prop('disabled', true);
-        var $submit = this.$id('submit').prop('disabled', true);
+        var view = this;
+        var $setDate = view.$id('setDate').prop('disabled', true);
+        var $submit = view.$id('submit').prop('disabled', true);
 
-        var req = this.model.addFiles();
+        var req = view.model.addFiles();
 
         viewport.msg.saving();
 
         req.fail(function()
         {
-          viewport.msg.savingFailed();
+          var error = req.responseJSON && req.responseJSON.error || {};
+
+          if (error.code !== 'INVALID_NC15')
+          {
+            viewport.msg.savingFailed();
+
+            return;
+          }
+
+          viewport.msg.saved();
+
+          error.invalidIds.forEach(function(nc15)
+          {
+            var upload = view.model.uploads.findWhere({nc15: nc15});
+
+            if (upload)
+            {
+              upload.set('error', 'INVALID_DYNAMIC_NC15');
+            }
+          });
         });
 
         req.done(function()
@@ -110,8 +153,9 @@ define([
       view.listenTo(tree.uploads, 'remove', this.onRemove);
       view.listenTo(tree.uploads, 'focus', this.onFocus);
       view.listenTo(tree.uploads, 'upload:start', this.onUploadStart);
-      view.listenTo(tree.uploads, 'change:date', this.onDateChange);
-      view.listenTo(tree.uploads, 'change:name', this.onNameChange);
+      view.listenTo(tree.uploads, 'change:nc15', this.onPropChange.bind(this, 'nc15'));
+      view.listenTo(tree.uploads, 'change:date', this.onPropChange.bind(this, 'date'));
+      view.listenTo(tree.uploads, 'change:name', this.onPropChange.bind(this, 'name'));
       view.listenTo(tree.uploads, 'change:error change:progress', this.onProgressChange);
 
       $(document)
@@ -132,7 +176,7 @@ define([
     {
       return {
         uploads: this.model.uploads.invoke('serializeDetails'),
-        renderUpload: renderUpload
+        renderUpload: this.renderPartialHtml.bind(renderUpload)
       };
     },
 
@@ -262,19 +306,11 @@ define([
       this.$upload(upload.id).find('input[name="date"]').focus();
     },
 
-    onDateChange: function(upload, uploads, options)
+    onPropChange: function(prop, upload, uploads, options)
     {
       if (options && options.source !== 'user')
       {
-        this.$upload(upload.id).find('input[name="date"]').val(upload.get('date'));
-      }
-    },
-
-    onNameChange: function(upload, uploads, options)
-    {
-      if (options && options.source !== 'user')
-      {
-        this.$upload(upload.id).find('input[name="name"]').val(upload.get('name'));
+        this.$upload(upload.id).find('input[name="' + prop + '"]').val(upload.get(prop)).trigger('change');
       }
     },
 

@@ -1,8 +1,8 @@
 <div class="orderDocumentTree-uploads-upload" data-id="<%- upload.id %>">
   <div class="orderDocumentTree-uploads-fields">
-    <input class="orderDocumentTree-uploads-field orderDocumentTree-uploads-nc15" type="text" autocomplete="new-password" name="nc15" value="<%- upload.nc15 %>" <%- upload.virtual ? 'readonly' : '' %> required pattern="^[0-9]{15}$" maxlength="15" placeholder="<%- t('orderDocumentTree', 'upload:nc15:placeholder') %>">
+    <input class="orderDocumentTree-uploads-field orderDocumentTree-uploads-nc15" type="text" autocomplete="new-password" name="nc15" value="<%- upload.nc15 %>" <%- upload.virtual ? 'readonly' : '' %> pattern="^[0-9]{15}$" maxlength="15" placeholder="<%- t('upload:nc15:placeholder') %>">
     <input class="orderDocumentTree-uploads-field orderDocumentTree-uploads-date" type="date" name="date" value="<%- upload.date %>" required pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}$">
-    <input class="orderDocumentTree-uploads-field orderDocumentTree-uploads-name" type="text" autocomplete="new-password" name="name" value="<%= upload.name %>" required placeholder="<%- t('orderDocumentTree', 'upload:name:placeholder') %>">
+    <input class="orderDocumentTree-uploads-field orderDocumentTree-uploads-name" type="text" autocomplete="new-password" name="name" value="<%= upload.name %>" required placeholder="<%- t('upload:name:placeholder') %>">
     <button class="orderDocumentTree-uploads-btn" type="button" data-action="remove"><i class="fa fa-remove"></i></button>
   </div>
   <div class="progress">

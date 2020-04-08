@@ -8,6 +8,7 @@ define([
   'app/viewport',
   'app/core/views/FormView',
   'app/core/util/padString',
+  'app/core/util/fileIcons',
   'app/orderDocumentTree/allowedTypes',
   'app/orderDocumentTree/util/pasteDateEvents',
   'app/orderDocumentTree/templates/editFileDialog'
@@ -19,31 +20,12 @@ define([
   viewport,
   FormView,
   padString,
+  fileIcons,
   allowedTypes,
   pasteDateEvents,
   template
 ) {
   'use strict';
-
-  var FILE_ICONS = {
-    '7z': 'fa-file-archive-o',
-    zip: 'fa-file-archive-o',
-    rar: 'fa-file-archive-o',
-    mp3: 'fa-file-audio-o',
-    wav: 'fa-file-audio-o',
-    flac: 'fa-file-audio-o',
-    json: 'fa-file-code-o',
-    jpg: 'fa-file-image-o',
-    gif: 'fa-file-image-o',
-    png: 'fa-file-image-o',
-    webp: 'fa-file-image-o',
-    xlsx: 'fa-file-excel-o',
-    mp4: 'fa-file-movie-o',
-    pdf: 'fa-file-pdf-o',
-    pptx: 'fa-file-powerpoint-o',
-    txt: 'fa-file-text-o',
-    docx: 'fa-file-word-o'
-  };
 
   return FormView.extend({
 
@@ -165,7 +147,7 @@ define([
 
           return Object.assign({
             ext: ext,
-            icon: FILE_ICONS[ext] || 'fa-file-o'
+            icon: fileIcons.getByExt(ext)
           }, file);
         })
       };
