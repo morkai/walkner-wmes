@@ -160,7 +160,6 @@
   "settings:operations:timeCoeffs:help": "W każdej linii należy podać MRP zlecenia, dla którego czasy operacji z SAP mają być zmienione, a następnie nazwy czasów i wartości współczynników.<br>Dostępne nazwy czasów to: <code>machineSetup</code>, <code>machine</code>, <code>laborSetup</code> oraz <code>labor</code>.<br>Na przykład: <code>KE3: labor=0.8 machineSetup=1.1</code>",
   "settings:documents:excludedMrps": "MRP wyłączone z importu dokumentów",
   "settings:documents:extra": "Dodatkowe dokumenty",
-  "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów",
   "settings:iptChecker:toBusinessDays": "Ilość dni do sprawdzenia",
   "settings:iptChecker:mrps": "MRP do sprawdzenia",
 
