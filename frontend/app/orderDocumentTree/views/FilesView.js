@@ -699,7 +699,7 @@ define([
         }
 
         html += '<li><a target="_blank"'
-          + ' href="/orderDocuments/' + selectedFile.id + '?pdf=1&hash=' + file.hash + '"'
+          + ' href="/orderDocuments/' + selectedFile.id + '?original=1&hash=' + file.hash + '"'
           + ' data-file-id="' + selectedFile.id + '"'
           + ' data-hash="' + file.hash + '"'
           + ' title="' + title + '">'

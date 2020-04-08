@@ -6,14 +6,16 @@ define([
   '../i18n',
   '../time',
   '../core/Model',
-  '../core/util/uuid'
+  '../core/util/uuid',
+  './allowedTypes'
 ], function(
   _,
   $,
   t,
   time,
   Model,
-  uuid
+  uuid,
+  allowedTypes
 ) {
   'use strict';
 
@@ -26,6 +28,7 @@ define([
       name: '',
       file: null,
       hash: '',
+      retries: 0,
       progress: -1,
       error: null
     },
@@ -48,7 +51,8 @@ define([
       return !this.xhr
         && !this.isUploaded()
         && !!this.get('file')
-        && this.get('file').type === 'application/pdf';
+        && this.get('retries') < 5
+        && !!allowedTypes[this.get('file').type];
     },
 
     isReuploadable: function()
@@ -132,7 +136,8 @@ define([
         nc15: this.get('nc15'),
         hash: this.get('hash'),
         date: this.get('date'),
-        name: this.get('name')
+        name: this.get('name'),
+        type: this.get('type')
       };
     },
 
@@ -203,7 +208,10 @@ define([
         upload.trigger('upload:done');
       });
 
-      upload.set('progress', 0);
+      upload.set({
+        progress: 0,
+        retries: upload.get('retries') + 1
+      });
       upload.trigger('upload:start', upload, upload.xhr);
     },
 
@@ -228,6 +236,7 @@ define([
         nc15: document.id,
         date: time.utc.format(file.date, 'YYYY-MM-DD'),
         name: document.get('name'),
+        type: file.type,
         hash: file.hash,
         progress: 100
       }, {
@@ -240,11 +249,17 @@ define([
       var nc15 = this.resolveNc15(file.name);
       var date = time.format(Date.now(), 'YYYY-MM-DD');
       var name = this.resolveName(file.name, nc15);
+      var requiredExt = allowedTypes[file.type];
+      var actualExt = file.name.split('.').pop().toLowerCase();
       var error = null;
 
-      if (file.type !== 'application/pdf')
+      if (!requiredExt)
       {
         error = 'INVALID_TYPE';
+      }
+      else if (actualExt !== requiredExt)
+      {
+        error = 'INVALID_EXT';
       }
 
       return new this({
@@ -253,6 +268,7 @@ define([
         nc15: nc15,
         date: date,
         name: name,
+        type: file.type,
         file: file,
         error: error
       });
@@ -260,21 +276,9 @@ define([
 
     resolveNc15: function(fileName)
     {
-      var matches = fileName.match(/([0-9]{15}|[0-9]{12,15})/);
+      var matches = fileName.match(/([0-9]{15})/);
 
-      if (!matches)
-      {
-        return '';
-      }
-
-      var nc15 = matches[1];
-
-      while (nc15.length < 15)
-      {
-        nc15 = '0' + nc15;
-      }
-
-      return nc15;
+      return matches ? matches[1] : '';
     },
 
     resolveName: function(fileName, nc15)

@@ -108,7 +108,7 @@
     "editFile:submit": "Edit document",
     "editFile:cancel": "Cancel",
     "editFile:openFile": "Open file",
-    "editFile:openFile:pdf": "Open the source PDF document",
+    "editFile:openFile:original": "Open the source document",
     "editFile:openFile:img": "Open the document converted to images",
     "editFile:forceConvert": "Force convert the PDF document to images again",
     "editFile:forceConvert:failure": "Failed to force the conversion.",
@@ -148,7 +148,7 @@
     "uploads:msg:notAllowed": "You don't have permissions to add files.",
     "uploads:msg:noFolder": "Files cannot be added to the root folder.",
     "uploads:msg:folderIsTrash": "Files cannot be added to the Trash.",
-    "uploads:error:INVALID_TYPE": "Invalid file type. Expected a PDF document.",
+    "uploads:error:INVALID_TYPE": "Invalid file type.",
     "uploads:error:INVALID_RESPONSE": "Invalid server response.",
     "uploads:error:UNKNOWN_ERROR": "Unexpected error during file loading.",
 

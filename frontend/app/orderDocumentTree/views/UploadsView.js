@@ -166,7 +166,7 @@ define([
         viewport.msg.show({
           type: 'warning',
           time: 3000,
-          text: t('orderDocumentTree', 'uploads:msg:notAllowed')
+          text: this.t('uploads:msg:notAllowed')
         });
 
         return;
@@ -180,7 +180,7 @@ define([
         viewport.msg.show({
           type: 'warning',
           time: 3000,
-          text: t('orderDocumentTree', 'uploads:msg:noFolder')
+          text: this.t('uploads:msg:noFolder')
         });
 
         return;
@@ -191,7 +191,7 @@ define([
         viewport.msg.show({
           type: 'warning',
           time: 3000,
-          text: t('orderDocumentTree', 'uploads:msg:folderIsTrash')
+          text: this.t('uploads:msg:folderIsTrash')
         });
 
         return;

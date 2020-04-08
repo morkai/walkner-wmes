@@ -50,7 +50,7 @@ define([
     {
       return [
         {
-          label: t.bound('orderDocumentTree', 'PAGE_ACTION:settings'),
+          label: this.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'DOCUMENTS:MANAGE',
           href: '#orders;settings?tab=documents'
@@ -61,8 +61,8 @@ define([
     breadcrumbs: function()
     {
       return [
-        t('orderDocumentTree', 'BREADCRUMB:base'),
-        t('orderDocumentTree', 'BREADCRUMB:root')
+        this.t('BREADCRUMB:base'),
+        this.t('BREADCRUMB:root')
       ];
     },
 
@@ -117,7 +117,8 @@ define([
 
     load: function(when)
     {
-      var tree = this.model;
+      var view = this;
+      var tree = view.model;
 
       if (!tree.hasSelectedFile() || tree.hasSelectedFolder())
       {
@@ -135,13 +136,13 @@ define([
           .done(function() { deferred.resolve(); });
       };
 
-      this.ajax({url: '/orderDocuments/files/' + tree.get('selectedFile')})
+      view.ajax({url: '/orderDocuments/files/' + tree.get('selectedFile')})
         .fail(function()
         {
           viewport.msg.show({
             type: 'warning',
             time: 3000,
-            text: t('orderDocumentTree', 'MSG:fileNotFound', {nc15: tree.get('selectedFile')})
+            text: view.t('MSG:fileNotFound', {nc15: tree.get('selectedFile')})
           });
         })
         .done(function(file)
@@ -153,10 +154,9 @@ define([
       return when(deferred.promise());
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         uploading: this.model.uploads.length > 0
       };
     },

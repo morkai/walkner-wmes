@@ -138,7 +138,7 @@ define([
 
       file.files.forEach(function(f)
       {
-        html += '<li><a target="_blank" href="/orderDocuments/' + file._id + '?pdf=1&hash=' + f.hash + '">'
+        html += '<li><a target="_blank" href="/orderDocuments/' + file._id + '?original=1&hash=' + f.hash + '">'
           + view.t('files:files:date', {date: time.utc.format(f.date, 'LL')})
           + '</a>';
       });

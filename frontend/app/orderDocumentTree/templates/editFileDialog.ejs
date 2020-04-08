@@ -1,15 +1,15 @@
 <form class="orderDocumentTree-editFile" method="post" action="<%- formAction %>">
   <input type="hidden" name="_method" value="<%= formMethod %>">
   <div class="form-group">
-    <label for="<%- idPrefix %>-nc15" class="control-label"><%- helpers.t('files:nc15') %></label>
+    <label for="<%- idPrefix %>-nc15" class="control-label"><%- t('files:nc15') %></label>
     <p class="form-control-static"><%= model._id %></p>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-name" class="control-label"><%- helpers.t('files:name') %></label>
+    <label for="<%- idPrefix %>-name" class="control-label"><%- t('files:name') %></label>
     <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required autofocus>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-folders" class="control-label"><%- helpers.t('files:folders') %></label>
+    <label for="<%- idPrefix %>-folders" class="control-label"><%- t('files:folders') %></label>
     <% folders.forEach(function(folder) { %>
     <div class="checkbox">
       <label>
@@ -20,34 +20,34 @@
   </div>
   <div class="form-group" style="position: relative">
     <label for="<%- idPrefix %>-components" class="control-label" style="display: flex">
-      <span title="<%- helpers.t('files:components:help') %>">
-        <%- helpers.t('files:components') %>
+      <span title="<%- t('files:components:help') %>">
+        <%- t('files:components') %>
         <i class="fa fa-question-circle"></i>
       </span>
-      <a id="<%- idPrefix %>-components-addByName-toggle" href="javascript:void(0)" style="margin-left: auto"><%- helpers.t('files:components:addByName') %></a>
+      <a id="<%- idPrefix %>-components-addByName-toggle" href="javascript:void(0)" style="margin-left: auto"><%- t('files:components:addByName') %></a>
     </label>
     <input id="<%- idPrefix %>-components" name="components" type="text">
     <div id="<%- idPrefix %>-components-addByName" class="hidden" style="position: absolute; top: 0; right: 0; width: 200px; display: flex; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)">
-      <input type="text" class="form-control" placeholder="<%- helpers.t('files:components:addByName:placeholder') %>" style="flex: 1 1 auto">
+      <input type="text" class="form-control" placeholder="<%- t('files:components:addByName:placeholder') %>" style="flex: 1 1 auto">
       <button type="button" class="btn btn-default" style="flex: 0; margin-left: -1px"><i class="fa fa-plus"></i></button>
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-stations" class="control-label"><%- helpers.t('files:stations') %></label>
+    <label for="<%- idPrefix %>-stations" class="control-label"><%- t('files:stations') %></label>
     <input id="<%- idPrefix %>-stations" name="stations" class="form-control" type="text" autocomplete="new-password" placeholder="1, 2, 3, 4, 5, 6, 7">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-folders" class="control-label"><%- helpers.t('files:files') %></label>
-    <% model.files.forEach(function(file, i) { %>
+    <label for="<%- idPrefix %>-folders" class="control-label"><%- t('files:files') %></label>
+    <% files.forEach(function(file, i) { %>
     <div class="checkbox">
       <label>
         <input class="orderDocumentTree-editFile-checkbox" type="checkbox" name="files[<%- i %>].hash" value="<%- file.hash %>">
         <input type="hidden" name="files[<%- i %>].type" value="application/pdf">
         <input type="date" name="files[<%- i %>].date" class="form-control" required min="2000-01-01" max="<%- time.getMoment().startOf('day').add(1, 'year').format('YYYY-MM-DD') %>">
       </label>
-      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?pdf=1&hash=<%- file.hash %>" target="_blank" title="<%- helpers.t('editFile:openFile:pdf') %>"><i class="fa fa-file-pdf-o"></i></a>
-      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?hash=<%- file.hash %>" target="_blank" title="<%- helpers.t('editFile:openFile:img') %>"><i class="fa fa-file-image-o"></i></a>
-      <button data-action="forceConvert" data-hash="<%- file.hash %>" class="btn btn-default" type="button" title="<%- helpers.t('editFile:forceConvert') %>"><i class="fa fa-wrench"></i></button>
+      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?original=1&hash=<%- file.hash %>" target="_blank" title="<%- t('editFile:openFile:original') %>"><i class="fa <%- file.icon %>"></i></a>
+      <a class="btn btn-default <%- file.ext === 'pdf' ? '' : 'disabled' %>" href="/orderDocuments/<%- model._id %>?hash=<%- file.hash %>" target="_blank" title="<%- t('editFile:openFile:img') %>"><i class="fa fa-file-image-o"></i></a>
+      <button data-action="forceConvert" data-hash="<%- file.hash %>" class="btn btn-default" type="button" <%- file.ext === 'pdf' ? '' : 'disabled' %> title="<%- t('editFile:forceConvert') %>"><i class="fa fa-wrench"></i></button>
       <% if (file.updatedAt && file.updater) { %>
       <span style="margin-left: 10px; line-height: 34px; vertical-align: middle">
         <i class="fa fa-clock-o"></i><span style="margin-right: 10px"><%- time.format(file.updatedAt, 'D.M.YYYY HH:mm') %></span>
@@ -58,7 +58,7 @@
     <% }) %>
   </div>
   <div class="form-actions">
-    <button class="btn btn-primary" type="submit"><%- helpers.t('editFile:submit') %></button>
-    <button class="btn btn-link cancel" type="button"><%- helpers.t('editFile:cancel') %></button>
+    <button class="btn btn-primary" type="submit"><%- t('editFile:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('editFile:cancel') %></button>
   </div>
 </form>

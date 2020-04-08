@@ -106,7 +106,7 @@
   "editFile:title": "Edycja dokumentu",
   "editFile:submit": "Edytuj dokument",
   "editFile:cancel": "Anuluj",
-  "editFile:openFile:pdf": "Otwórz źródłowy dokument PDF",
+  "editFile:openFile:original": "Otwórz źródłowy dokument",
   "editFile:openFile:img": "Otwórz dokument przekonwertowany na obrazki",
   "editFile:forceConvert": "Wymuś ponowną konwersję dokumentu PDF na obrazki",
   "editFile:forceConvert:failure": "Wymuszanie konwersji nie powiodło się.",
@@ -146,7 +146,7 @@
   "uploads:msg:notAllowed": "Nie masz uprawnień do dodawania plików.",
   "uploads:msg:noFolder": "Nie można dodawać plików do głównego katalogu.",
   "uploads:msg:folderIsTrash": "Nie można dodawać plików do śmietnika.",
-  "uploads:error:INVALID_TYPE": "Nieprawidłowy typ pliku. Oczekiwano dokumentu PDF.",
+  "uploads:error:INVALID_TYPE": "Nieprawidłowy typ pliku.",
   "uploads:error:INVALID_RESPONSE": "Nieprawidłowa odpowiedź serwera.",
   "uploads:error:UNKNOWN_ERROR": "Nieoczekiwany błąd podczas ładowania pliku.",
 
