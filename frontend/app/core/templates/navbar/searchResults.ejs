@@ -70,6 +70,7 @@
   <li class="navbar-search-result"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:fapEntries') %></a></li>
   <% if (loadedModules.isLoaded('wmes-ct-frontend') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
   <li class="navbar-search-result"><a href="#ct/reports/pce?orders=<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:cycleTime') %></a></li>
+  <li class="navbar-search-result"><a href="#ct/balancing/pces?sort(-startedAt)&limit(-1337)&order._id=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:balancing') %></a></li>
   <% } %>
   <li class="divider"></li>
   <% } %>
@@ -115,6 +116,7 @@
   <% } %>
   <% if (loadedModules.isLoaded('wmes-ct-frontend') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
   <li class="navbar-search-result"><a href="#ct/reports/pce?orders=<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:cycleTime') %></a></li>
+  <li class="navbar-search-result"><a href="#ct/balancing/pces?sort(-startedAt)&limit(-1337)&order.nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:balancing') %></a></li>
   <% } %>
   <li class="divider"></li>
   <% } %>

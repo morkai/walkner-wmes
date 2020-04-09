@@ -15,5 +15,20 @@
   "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
-  "PROPERTY:duration": "Czas trwania"
+  "PROPERTY:d": "Czas trwania",
+  "PROPERTY:stt": "% TT",
+  "PROPERTY:comment": "Komentarz",
+
+  "filter:product": "Zlecenie/Wyrób",
+
+  "balancing:title:idle": "Balansowanie",
+  "balancing:title:started": "Rozpoczęto pomiar...",
+  "balancing:title:finished": "Zakończono pomiar",
+
+  "pceReport:station": "{no, plural, =0{Wszystkie} other{Stanowisko {no}}}",
+  "pceReport:metric:min": "Minimum",
+  "pceReport:metric:max": "Maksimum",
+  "pceReport:metric:avg": "Średnia",
+  "pceReport:metric:med": "Mediana",
+  "pceReport:metric:stt": "Takt Time (SAP)"
 }

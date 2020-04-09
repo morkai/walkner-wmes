@@ -1,11 +1,20 @@
-<div class="ct-balancing-recorder hidden">
-  <div class="ct-balancing-recorder-duration">
-    <span id="<%- idPrefix %>-value" class="ct-balancing-recorder-duration-value"></span>
-    <span class="ct-balancing-recorder-duration-unit">s</span>
+<div class="ct-balancing-recorder hidden" data-state="idle">
+  <div class="ct-balancing-recorder-hd">
+    <div class="ct-balancing-recorder-close"><i class="fa fa-close"></i></div>
+    <div id="<%- idPrefix %>-title" class="ct-balancing-recorder-title"><%- t('balancing:title:idle') %></div>
   </div>
-  <div class="ct-balancing-recorder-actions">
-    <button id="<%- idPrefix %>-start" class="btn btn-primary" data-action="start"><i class="fa fa-play"></i></button>
-    <button id="<%- idPrefix %>-stop" class="btn btn-warning" data-action="stop"><i class="fa fa-stop"></i></button>
-    <button id="<%- idPrefix %>-record" class="btn btn-info" data-action="record"><i class="fa fa-spinner fa-spin"></i></button>
+  <div class="ct-balancing-recorder-bd">
+    <div class="ct-balancing-recorder-duration">
+      <span id="<%- idPrefix %>-value" class="ct-balancing-recorder-duration-value"></span>
+      <span class="ct-balancing-recorder-duration-unit">s</span>
+      <div class="ct-balancing-recorder-duration-icon"><i class="fa fa-comment"></i></div>
+    </div>
+    <textarea id="<%- idPrefix %>-text" class="ct-balancing-recorder-comment form-control"></textarea>
+    <div class="ct-balancing-recorder-actions">
+      <button id="<%- idPrefix %>-start" class="btn btn-primary" data-action="start"><i class="fa fa-play"></i></button>
+      <button id="<%- idPrefix %>-stop" class="btn btn-warning" data-action="stop"><i class="fa fa-stop"></i></button>
+      <button id="<%- idPrefix %>-comment" class="btn btn-primary" data-action="comment"><i class="fa fa-comment-o"></i></button>
+      <button id="<%- idPrefix %>-record" class="btn btn-info" data-action="record"><i class="fa fa-spinner fa-spin"></i></button>
+    </div>
   </div>
 </div>

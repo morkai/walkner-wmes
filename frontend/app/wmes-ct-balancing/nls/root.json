@@ -16,7 +16,15 @@
     "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
     "PROPERTY:startedAt": "Started at",
     "PROPERTY:finishedAt": "Finished at",
-    "PROPERTY:duration": "Duration"
+    "PROPERTY:d": "Duration",
+    "PROPERTY:stt": "% of TT",
+    "PROPERTY:comment": "Comment",
+
+    "filter:product": "Order/Product",
+
+    "balancing:title:idle": "Balansowanie",
+    "balancing:title:started": "Measurement started...",
+    "balancing:title:finished": "Measurement finished"
   },
   "pl": true
 }

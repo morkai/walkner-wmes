@@ -3,39 +3,126 @@
 define([
   'underscore',
   'app/time',
+  'app/user',
+  'app/viewport',
   'app/core/views/ListView',
-  'app/wmes-ct-balancing/templates/orderPopover'
+  'app/wmes-ct-balancing/templates/orderPopover',
+  'app/wmes-ct-balancing/templates/commentEditor'
 ], function(
   _,
   time,
+  user,
+  viewport,
   ListView,
-  orderPopoverTemplate
+  orderPopoverTemplate,
+  commentEditorTemplate
 ) {
   'use strict';
 
   return ListView.extend({
 
-    className: '',
+    className: function()
+    {
+      return 'ct-balancing-list ' + (user.isAllowedTo('PROD_DATA:MANAGE') ? 'is-editable' : '');
+    },
 
     remoteTopics: {
-      'ct.balancing.pces.updated': 'refreshCollection'
+      'ct.balancing.pces.updated': function(message)
+      {
+        var view = this;
+
+        if (message.added)
+        {
+          if (this.commenting)
+          {
+            this.needsRefresh = true;
+          }
+          else
+          {
+            this.refreshCollection();
+          }
+
+          return;
+        }
+
+        if (message.updated)
+        {
+          message.updated.forEach(update =>
+          {
+            var model = view.collection.get(update._id);
+
+            if (model)
+            {
+              model.set(update);
+            }
+          });
+
+          return;
+        }
+      }
     },
+
+    events: Object.assign({
+
+      'click td[data-id="comment"]': function(e)
+      {
+        if (!user.isAllowedTo('PROD_DATA:MANAGE'))
+        {
+          return;
+        }
+
+        this.showCommentEditor(this.$(e.currentTarget).closest('.list-item')[0].dataset.id);
+      }
+
+    }, ListView.prototype.events),
 
     serializeColumns: function()
     {
       return [
         {id: 'startedAt', className: 'is-min'},
-        {id: 'duration', className: 'is-min text-right'},
+        {id: 'd', className: 'is-min text-right'},
+        {id: 'stt', className: 'is-min text-right'},
         {id: 'order', className: 'is-min'},
         {id: 'line', className: 'is-min'},
         {id: 'station', className: 'is-min is-number', label: this.t('PROPERTY:station:short')},
-        '-'
+        {id: 'comment'}
       ];
     },
 
     serializeActions: function()
     {
       return null;
+    },
+
+    initialize: function()
+    {
+      ListView.prototype.initialize.apply(this, arguments);
+
+      this.commenting = false;
+      this.needsRefresh = false;
+
+      this.listenTo(this.collection, 'sync', function()
+      {
+        this.needsRefresh = false;
+
+        this.hideEditor(false);
+      });
+
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.collection, 'change:comment', this.onCommentChange);
+      });
+
+      $(window)
+        .on('keydown.' + this.idPrefix, this.onWindowKeyDown.bind(this))
+        .on('resize.' + this.idPrefix, this.onWindowResize.bind(this));
+    },
+
+    destroy: function()
+    {
+      ListView.prototype.destroy.apply(this, arguments);
+
+      $(window).off('.' + this.idPrefix);
     },
 
     afterRender: function()
@@ -79,6 +166,121 @@ define([
           }
         }
       });
+    },
+
+    onCommentChange: function(model)
+    {
+      this.$cell(model.id, 'comment').text(model.get('comment'));
+    },
+
+    showCommentEditor: function(id)
+    {
+      var view = this;
+      var model = view.collection.get(id);
+
+      if (!model)
+      {
+        view.hideEditor(false);
+
+        return;
+      }
+
+      if (view.$editor && (view.$editor.data('id') !== id || view.$editor.data('prop', 'comment')))
+      {
+        this.hideEditor();
+      }
+
+      view.$editor = view.renderPartial(commentEditorTemplate, {
+        comment: model.get('comment')
+      });
+
+      view.$editor.data('id', id).data('prop', 'comment');
+
+      view.$editor.find('.form-control').on('keyup', function(e)
+      {
+        if (e.ctrlKey && e.key === 'Enter')
+        {
+          view.$editor.find('.btn-primary').click();
+        }
+      });
+
+      view.$editor.on('submit', function()
+      {
+        var newComment = view.$editor.find('.form-control').val();
+
+        if (newComment.replace(/[^A-Z0-9]+/ig, '') === model.get('comment').replace(/[^A-Z0-9]+/ig, ''))
+        {
+          view.hideEditor(true);
+
+          return false;
+        }
+
+        viewport.msg.saving();
+
+        var req = model.save({comment: newComment}, {wait: true});
+
+        req.fail(function()
+        {
+          viewport.msg.savingFailed();
+        });
+
+        req.done(function()
+        {
+          viewport.msg.saved();
+
+          view.hideEditor(true);
+        });
+
+        return false;
+      });
+
+      view.positionEditor();
+
+      view.$editor.appendTo('body').find('.form-control').focus();
+    },
+
+    positionEditor: function()
+    {
+      if (!this.$editor)
+      {
+        return;
+      }
+
+      var $cell = this.$cell(this.$editor.data('id'), this.$editor.data('prop'));
+      var pos = $cell.position();
+
+      this.$editor.css({
+        top: (pos.top + 5) + 'px',
+        left: (pos.left + 5) + 'px',
+        width: ($cell.outerWidth() - 10) + 'px'
+      });
+    },
+
+    hideEditor: function(refresh)
+    {
+      if (this.$editor)
+      {
+        this.$editor.remove();
+        this.$editor = null;
+      }
+
+      if (refresh !== false && this.needsRefresh)
+      {
+        this.refreshCollectionNow();
+      }
+    },
+
+    onWindowKeyDown: function(e)
+    {
+      if (e.key === 'Escape')
+      {
+        this.hideEditor(true);
+      }
+    },
+
+    onWindowResize: function()
+    {
+      this.positionEditor();
     }
 
   });

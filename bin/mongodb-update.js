@@ -3,6 +3,8 @@
 
 'use strict';
 
+db.orders.updateMany({notes: {$exists: false}}, {$set: {notes: []}});
+
 const orderMrps = {};
 
 db.ctpces.find({'order.mrp': {$exists: false}}, {'order._id': 1}).forEach(pce =>

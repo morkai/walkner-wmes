@@ -3,13 +3,11 @@
 define([
   'app/router',
   'app/viewport',
-  'app/user',
-  'app/core/util/pageActions'
+  'app/user'
 ], function(
   router,
   viewport,
-  user,
-  pageActions
+  user
 ) {
   'use strict';
 
@@ -19,22 +17,14 @@ define([
   {
     viewport.loadPage(
       [
-        'app/core/pages/FilteredListPage',
         'app/wmes-ct-balancing/BalancingPceCollection',
-        'app/wmes-ct-balancing/views/FilterView',
-        'app/wmes-ct-balancing/views/ListView',
-        'i18n!app/nls/wmes-ct-balancing'
+        'app/wmes-ct-balancing/pages/ListPage',
+        'i18n!app/nls/wmes-ct-balancing',
+        'css!app/wmes-ct-balancing/assets/main'
       ],
-      function(FilteredListPage, Collection, FilterView, ListView)
+      function(Collection, ListPage)
       {
-        return new FilteredListPage({
-          baseBreadcrumb: '#ct',
-          actions: function(layout)
-          {
-            return [pageActions.export(layout, this, this.collection)];
-          },
-          FilterView: FilterView,
-          ListView: ListView,
+        return new ListPage({
           collection: new Collection(null, {rqlQuery: req.rql})
         });
       }

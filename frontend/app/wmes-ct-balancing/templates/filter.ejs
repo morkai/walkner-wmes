@@ -3,17 +3,25 @@
     idPrefix: idPrefix,
     property: 'startedAt',
     labels: {
-      text: helpers.t('PROPERTY:startedAt'),
+      text: t('PROPERTY:startedAt'),
       ranges: true
     }
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-order"><%- helpers.t('PROPERTY:order') %></label>
-    <input id="<%- idPrefix %>-order" name="order" class="form-control" type="text" pattern="^[0-9]{9}$" style="width: 90px">
+    <label for="<%- idPrefix %>-product"><%- t('filter:product') %></label>
+    <input id="<%- idPrefix %>-product" name="product" class="form-control" type="text" pattern="^([0-9]{9}|[0-9]{12}|[A-Za-z0-9]{7})$" maxlength="12" style="width: 120px">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-minDuration"><%- t('PROPERTY:d') %></label>
+    <div style="display: flex">
+      <input id="<%- idPrefix %>-minDuration" name="minDuration" class="form-control" type="text" style="width: 75px">
+      <span style="padding: 0 4px; align-self: center">–</span>
+      <input id="<%- idPrefix %>-maxDuration" name="maxDuration" class="form-control" type="text" style="width: 75px">
+    </div>
+  </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('core', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('core', 'filter:submit') %></span></button>
   </div>
 </form>

@@ -46,7 +46,8 @@ define([
         obj.order = '<a href="#orders/' + obj.order + '">' + obj.order + '</a>';
       }
 
-      obj.duration = time.toString(Math.ceil(obj.duration / 1000), false, false);
+      obj.d = time.toString(obj.d, false, false);
+      obj.stt += '%';
 
       return obj;
     }

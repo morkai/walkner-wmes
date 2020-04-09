@@ -33,5 +33,6 @@ module.exports = {
   'planning/transport': require(`${MODULES}/planning/reports/transport`),
   'wmes-ct/pce': require(`${MODULES}/wmes-ct-frontend/reports/pce`),
   'wmes-ct/groups': require(`${MODULES}/wmes-ct-frontend/reports/groups`),
-  'wmes-ct/results': require(`${MODULES}/wmes-ct-frontend/reports/results`)
+  'wmes-ct/results': require(`${MODULES}/wmes-ct-frontend/reports/results`),
+  'wmes-ct/balancing': require(`${MODULES}/wmes-ct-frontend/reports/balancing`)
 };

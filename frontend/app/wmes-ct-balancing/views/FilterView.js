@@ -30,11 +30,20 @@ define([
       'startedAt': dateTimeRange.rqlToForm,
       'order._id': function(propertyName, term, formData)
       {
-        formData.order = term.args[1];
+        formData.product = term.args[1];
       },
+      'order.nc12': 'order._id',
       'line': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
+      },
+      'stt': function(propertyName, term, formData)
+      {
+        formData[term.name === 'ge' ? 'minDuration' : 'maxDuration'] = term.args[1] + '%';
+      },
+      'd': function(propertyName, term, formData)
+      {
+        formData[term.name === 'ge' ? 'minDuration' : 'maxDuration'] = term.args[1] + 's';
       }
     },
 
@@ -57,11 +66,39 @@ define([
 
       dateTimeRange.formToRql(view, selector);
 
-      var order = view.$id('order').val().trim();
+      var product = view.$id('product').val().trim();
+      var minDuration = view.$id('minDuration').val().trim();
+      var maxDuration = view.$id('maxDuration').val().trim();
 
-      if (order.length)
+      if (product.length === 9)
       {
-        selector.push({name: 'eq', args: ['order._id', order]});
+        selector.push({name: 'eq', args: ['order._id', product]});
+      }
+      else if (product.length === 7 || product.length === 12)
+      {
+        selector.push({name: 'eq', args: ['order.nc12', product.toUpperCase()]});
+      }
+
+      if (/^[0-9]+\s*[%s]?$/.test(minDuration))
+      {
+        selector.push({
+          name: 'ge',
+          args: [
+            /%/.test(minDuration) ? 'stt' : 'd',
+            parseInt(minDuration, 10)
+          ]
+        });
+      }
+
+      if (/^[0-9]+\s*[%s]?$/.test(maxDuration))
+      {
+        selector.push({
+          name: 'le',
+          args: [
+            /%/.test(maxDuration) ? 'stt' : 'd',
+            parseInt(maxDuration, 10)
+          ]
+        });
       }
     },
 
