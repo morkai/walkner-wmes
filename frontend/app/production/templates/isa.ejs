@@ -4,7 +4,7 @@
       <span class="production-isa-status-label"><%- pickupStatusLabel %></span>
     </div>
     <button id="<%- idPrefix %>-pickup" class="btn btn-lg btn-block btn-default production-isa-btn <%- pickupActive ? 'active' : '' %>" <%- pickupDisabled ? 'disabled' : '' %>>
-      <%- t('production', 'isa:pickup') %>
+      <%- t('isa:pickup') %>
     </button>
   </div>
   <div class="production-isa-section">
@@ -14,9 +14,9 @@
     <div class="dropup">
       <button id="<%- idPrefix %>-deliver" class="btn btn-lg btn-block btn-default production-isa-btn <%- deliveryActive ? 'active' : '' %>" <%- deliveryDisabled ? 'disabled' : '' %>>
         <% if (selectedPalletKind) { %>
-        <%- t('production', 'isa:deliver:specific', {qty: selectedQty, palletKind: selectedPalletKind}) %>
+        <%- t('isa:deliver:specific', {qty: selectedQty, palletKind: selectedPalletKind}) %>
         <% } else { %>
-        <%- t('production', 'isa:deliver') %>
+        <%- t('isa:deliver') %>
         <% } %>
       </button>
     </div>

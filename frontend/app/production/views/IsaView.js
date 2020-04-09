@@ -73,7 +73,7 @@ define([
           this.deliver(palletKind, count);
         });
 
-        viewport.showDialog(dialogView, t('production', 'isa:deliver:title'));
+        viewport.showDialog(dialogView, this.t('isa:deliver:title'));
       }
     },
 
@@ -106,7 +106,7 @@ define([
       view.listenTo(isaRequests, 'add remove change reset', render);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var syncing = this.syncing;
       var connected = this.socket.isConnected();
@@ -121,7 +121,6 @@ define([
       var selectedPalletKind = deliveryRequest ? deliveryRequest.getFullPalletKind() : null;
 
       return {
-        idPrefix: this.idPrefix,
         pickupIndicatorColor: this.serializeIndicatorColor(pickupRequest),
         deliveryIndicatorColor: this.serializeIndicatorColor(deliveryRequest),
         pickupStatusLabel: this.serializeStatusLabel(pickupRequest),
@@ -157,7 +156,7 @@ define([
 
     serializeStatusLabel: function(request)
     {
-      return t('production', 'isa:status:' + (request ? request.get('status') : 'idle'));
+      return this.t('isa:status:' + (request ? request.get('status') : 'idle'));
     },
 
     afterRender: function()
@@ -186,6 +185,7 @@ define([
       var dialogView = new DialogView({
         dialogClassName: 'production-modal',
         template: cancelDialogTemplate,
+        nlsDomain: this.model.getNlsDomain(),
         model: {
           requestType: request.get('type')
         }
@@ -193,7 +193,7 @@ define([
 
       view.listenTo(dialogView, 'answered', function(answer)
       {
-        if (answer === 'yes')
+        if (answer === 'yes' && view.model.isaRequests.get(request.id))
         {
           view.model.isaRequests.cancel(
             request.id,
@@ -203,7 +203,7 @@ define([
         }
       });
 
-      viewport.showDialog(dialogView, t('production', 'isa:cancel:title'));
+      viewport.showDialog(dialogView, view.t('isa:cancel:title'));
     },
 
     showErrorMessage: function(action, err)
