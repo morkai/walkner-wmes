@@ -20,4 +20,7 @@
 <ul>
   <li>Poprawiono błąd oznaczający status wysyłki FIFO kompletowanego zlecenia jako 'Zakończone', jeżeli
     zakończono kompletację FMX a następnie zignorowano kompletację Kitter (lub odwrotnie).</li>
+  <li>Zmieniono dokładanie brakujących wózków FIFO do wywózki tak, aby brane pod uwagę były tylko pierwsze
+    pasujące sety z każdej kwalifikującej się linii (a nie wszystkie), żeby zachować kolejność wywożonych
+    zleceń.</li>
 </ul>
