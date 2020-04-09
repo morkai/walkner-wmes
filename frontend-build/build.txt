@@ -788,6 +788,10 @@ app/wh/assets/set.css
 ----------------
 app/wh/assets/set.css
 
+app/wmes-ct-balancing/assets/main.css
+----------------
+app/wmes-ct-balancing/assets/main.css
+
 app/wmes-ct-balancing/assets/recorder.css
 ----------------
 app/wmes-ct-balancing/assets/recorder.css
@@ -2509,6 +2513,9 @@ app/wmes-ct-balancing/templates/recorder.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
 css!app/wmes-ct-balancing/assets/recorder
+app/nls/wmes-ct-balancing.js
+app/nls/pl/wmes-ct-balancing.js
+i18n!app/nls/wmes-ct-balancing
 app/wmes-ct-balancing/views/BalancingPceRecorderView.js
 vendor/js2form.js
 vendor/form2js.js

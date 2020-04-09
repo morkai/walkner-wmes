@@ -1,0 +1,1 @@
+define(["app/core/Model"],function(t){"use strict";return t.extend({urlRoot:"/ct/reports/balancing",nlsDomain:"wmes-ct-balancing",fetch:function(r){return r||(r={}),r.data=r&&r.rqlQuery&&r.rqlQuery.toString()||{},t.prototype.fetch.call(this,r)},parse:function(t){return{report:t}}})});
