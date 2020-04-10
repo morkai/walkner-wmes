@@ -165,10 +165,18 @@ define([
         });
 
         task.name = task.name.trim().replace(/[s\-,.]+$/, '');
-        task.lines = {
-          title: '* ' + task.lines.join('\n* '),
-          label: task.lines.shift() + (task.lines.length ? '...' : '')
-        };
+
+        if (task.lines.length)
+        {
+          task.lines = {
+            title: '* ' + task.lines.join('\n* '),
+            label: task.lines.shift() + (task.lines.length ? '...' : '')
+          };
+        }
+        else
+        {
+          task.lines = {title: '', label: ''};
+        }
 
         task.absence = absenceTasks[task.id] >= 0;
         task.totalByCompany = {};
