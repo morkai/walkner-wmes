@@ -3,10 +3,72 @@
 
 'use strict';
 
+print('prodflows deactivated');
+[
+  'LM-8_COVER',
+  'LM-8_GPLATE',
+  'LM-9_COVER',
+  'LM-9_GPLATE',
+  'LM-10_COVER',
+  'LM-10_GPLATE',
+  'LM-17_COVER',
+  'LM-17_GPLATE',
+  'LM-26_COVER',
+  'LM-26_GPLATE',
+  'LM-29_COVER',
+  'LM-29_GPLATE',
+  'LM-31_COVER',
+  'LM-31_GPLATE',
+  'LM-44_COVER',
+  'LM-44_GPLATE',
+  'McL',
+  'McL2'
+].forEach(line =>
+{
+  const prodLine = db.prodlines.findOne({_id: line});
+
+  if (!prodLine || !prodLine.deactivatedAt)
+  {
+    return;
+  }
+
+  const workCenter = db.workcenters.findOne({_id: prodLine.workCenter});
+
+  if (!workCenter || workCenter.deactivatedAt)
+  {
+    return;
+  }
+
+  if (db.prodlines.find({workCenter: workCenter._id, deactivatedAt: null}).toArray().length !== 0)
+  {
+    return;
+  }
+
+  print(`wc deactivated ${workCenter._id}`);
+  db.workcenters.updateOne({_id: workCenter._id}, {$set: {deactivatedAt: prodLine.deactivatedAt}});
+
+  const prodFlow = db.prodflows.findOne({_id: workCenter.prodFlow});
+
+  if (!prodFlow || prodFlow.deactivatedAt)
+  {
+    return;
+  }
+
+  if (db.workcenters.find({prodFlow: prodFlow._id, deactivatedAt: null}).toArray().length)
+  {
+    return;
+  }
+
+  print(`flow deactivated ${prodFlow.name}`);
+  db.prodflows.updateOne({_id: prodFlow._id}, {$set: {deactivatedAt: prodLine.deactivatedAt}});
+});
+
+print('orders notes');
 db.orders.updateMany({notes: {$exists: false}}, {$set: {notes: []}});
 
 const orderMrps = {};
 
+print('ctpces mrp');
 db.ctpces.find({'order.mrp': {$exists: false}}, {'order._id': 1}).forEach(pce =>
 {
   if (!orderMrps[pce.order._id])
@@ -24,6 +86,7 @@ db.ctpces.find({'order.mrp': {$exists: false}}, {'order._id': 1}).forEach(pce =>
   db.ctpces.updateOne({_id: pce._id}, {$set: {'order.mrp': orderMrps[pce.order._id]}});
 });
 
+print('prodshiftorders ct sum');
 db.ctpces.aggregate([{$group: {_id: '$order.pso'}}]).forEach(pso =>
 {
   pso = db.prodshiftorders.findOne({_id: pso._id}, {sapTaktTime: 1});
