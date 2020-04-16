@@ -868,7 +868,11 @@ define([
         if ((!o || !o.user) && window.WMES_LOG_BROWSER_ERROR)
         {
           window.WMES_LOG_BROWSER_ERROR(new Error( // eslint-disable-line new-cap
-            'Invalid observer: ' + JSON.stringify({change: change, observer: o})
+            'Invalid observer: ' + JSON.stringify({
+              change: change,
+              observer: o,
+              observers: observers
+            })
           ));
         }
 
