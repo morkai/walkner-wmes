@@ -20,6 +20,7 @@
   "PROPERTY:comment": "Komentarz",
 
   "filter:product": "Zlecenie/Wyrób",
+  "filter:d:title": "Wartość absolutna, np. 10s\nlub\nrelatywna w stosunku do taktu, np. 10%",
 
   "balancing:title:idle": "Balansowanie",
   "balancing:title:started": "Rozpoczęto pomiar...",

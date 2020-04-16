@@ -21,6 +21,7 @@
     "PROPERTY:comment": "Comment",
 
     "filter:product": "Order/Product",
+    "filter:d:title": "Absolute value, e.g. 10s\nor\nvalue relative to takt time, e.g. 10%",
 
     "balancing:title:idle": "Balansowanie",
     "balancing:title:started": "Measurement started...",
