@@ -25,6 +25,11 @@ define([
 
     nlsDomain: 'wmes-ct-balancing',
 
+    getLabel: function()
+    {
+      return '';
+    },
+
     serialize: function()
     {
       var obj = this.toJSON();

@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   'app/core/util/bindLoadingMessage',
@@ -10,6 +11,7 @@ define([
   'app/wmes-ct-balancing/views/BalancingPceChartView',
   'app/wmes-ct-balancing/templates/listPage'
 ], function(
+  _,
   FilteredListPage,
   pageActions,
   bindLoadingMessage,
@@ -47,7 +49,7 @@ define([
 
       this.setView('.report-container', this.reportView);
 
-      this.listenTo(this.listView, 'added', this.reloadReport);
+      this.listenTo(this.listView, 'reloadNeeded', _.debounce(this.reloadReport.bind(this), 100));
     },
 
     load: function(when)

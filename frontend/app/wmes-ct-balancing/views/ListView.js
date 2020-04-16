@@ -100,7 +100,20 @@ define([
 
     serializeActions: function()
     {
-      return null;
+      var view = this;
+      var canDelete = user.isAllowedTo('PROD_DATA:MANAGE', 'FN:*process-engineer*');
+
+      return function(row)
+      {
+        var actions = [];
+
+        if (canDelete)
+        {
+          actions.push(ListView.actions.delete(view.collection.get(row._id)));
+        }
+
+        return actions;
+      };
     },
 
     initialize: function()
@@ -192,7 +205,7 @@ define([
         return;
       }
 
-      this.trigger('added');
+      this.trigger('reloadNeeded');
 
       if (this.collection.length + added.length <= this.collection.rqlQuery.limit)
       {
@@ -218,6 +231,8 @@ define([
       }
 
       this.$row(model.id).remove();
+
+      this.trigger('reloadNeeded');
     },
 
     showCommentEditor: function(id)
