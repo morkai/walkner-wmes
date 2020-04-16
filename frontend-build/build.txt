@@ -3828,6 +3828,8 @@ app/planning/PlanningSettingCollection.js
 app/planning/settings.js
 app/planning/PlanSettings.js
 app/planning/PlanDisplayOptions.js
+app/wh-lines/WhLine.js
+app/wh-lines/WhLineCollection.js
 app/wh/WhSetting.js
 app/wh/WhSettingCollection.js
 app/wh/settings.js
@@ -3864,6 +3866,7 @@ app/planning/templates/lineOrderComments.js
 app/wh/templates/pickup/list.js
 app/wh/templates/pickup/row.js
 app/wh/templates/pickup/popover.js
+app/wh/templates/pickup/linePopover.js
 app/wh/views/WhPickupListView.js
 app/wh/templates/pickup/set/set.js
 app/wh/templates/pickup/set/setItem.js

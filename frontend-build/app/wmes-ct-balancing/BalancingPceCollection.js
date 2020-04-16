@@ -1,1 +1,1 @@
-define(["app/core/Collection","./BalancingPce"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-startedAt)&limit(-1337)"})});
+define(["app/core/Collection","./BalancingPce"],function(e,r){"use strict";return e.extend({model:r,rqlQuery:"sort(-startedAt)&limit(100)",getProductFilter:function(){var e=this.findRqlTerm("order._id","eq")||this.findRqlTerm("order.nc12","eq");return e?e.args[1]:null}})});
