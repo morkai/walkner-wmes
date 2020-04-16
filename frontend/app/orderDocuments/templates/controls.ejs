@@ -11,7 +11,7 @@
         <% } %>
         <button id="<%- idPrefix %>-openSettingsDialog" type="button" class="btn btn-default" title="<%- t('controls:openSettingsDialog') %>"><i class="fa fa-wrench"></i></button>
         <button id="<%- idPrefix %>-toggleAddImprovementButtons" type="button" class="btn btn-default" title="<%- t('controls:toggleAddImprovementButtons') %>"><i class="fa fa-comment"></i></button>
-        <button id="<%- idPrefix %>-toggleBalancingRecorder" type="button" class="btn btn-default orderDocuments-buttons-balancing <%- window.ENV !== 'production' || user.isAllowedTo('SUPER') ? '' : 'hidden' %>" title="<%- t('controls:balancing') %>"><i class="fa fa-balance-scale"></i></button>
+        <button id="<%- idPrefix %>-toggleBalancingRecorder" type="button" class="btn btn-default orderDocuments-buttons-balancing" title="<%- t('controls:balancing') %>"><i class="fa fa-balance-scale"></i></button>
         <button id="<%- idPrefix %>-lockUi" type="button" class="btn btn-default orderDocuments-buttons-lockUi" title="<%- t('controls:lockUi') %>"><i class="fa fa-lock"></i></button>
       </div>
       <div id="<%- idPrefix %>-addImprovementButtons" class="orderDocuments-buttons orderDocuments-buttons-addImprovement hidden">

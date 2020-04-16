@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/time',
   'app/user',
   'app/viewport',
@@ -10,6 +11,7 @@ define([
   'app/wmes-ct-balancing/templates/commentEditor'
 ], function(
   _,
+  $,
   time,
   user,
   viewport,
@@ -31,18 +33,17 @@ define([
       {
         var view = this;
 
-        if (message.added)
+        if (message.deleted)
         {
-          if (this.commenting)
+          message.deleted.forEach(deleted =>
           {
-            this.needsRefresh = true;
-          }
-          else
-          {
-            this.refreshCollection();
-          }
+            var model = view.collection.get(deleted._id);
 
-          return;
+            if (model)
+            {
+              view.collection.remove(model);
+            }
+          });
         }
 
         if (message.updated)
@@ -56,8 +57,18 @@ define([
               model.set(update);
             }
           });
+        }
 
-          return;
+        if (message.added)
+        {
+          if (this.commenting)
+          {
+            this.needsRefresh = true;
+          }
+          else
+          {
+            this.refreshCollectionIfNeeded(message.added);
+          }
         }
       }
     },
@@ -66,12 +77,10 @@ define([
 
       'click td[data-id="comment"]': function(e)
       {
-        if (!user.isAllowedTo('PROD_DATA:MANAGE'))
+        if (user.isAllowedTo('PROD_DATA:MANAGE', 'FN:*process-engineer*'))
         {
-          return;
+          this.showCommentEditor(this.$(e.currentTarget).closest('.list-item')[0].dataset.id);
         }
-
-        this.showCommentEditor(this.$(e.currentTarget).closest('.list-item')[0].dataset.id);
       }
 
     }, ListView.prototype.events),
@@ -79,12 +88,12 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: 'startedAt', className: 'is-min'},
-        {id: 'd', className: 'is-min text-right'},
-        {id: 'stt', className: 'is-min text-right'},
         {id: 'order', className: 'is-min'},
         {id: 'line', className: 'is-min'},
         {id: 'station', className: 'is-min is-number', label: this.t('PROPERTY:station:short')},
+        {id: 'startedAt', className: 'is-min'},
+        {id: 'd', className: 'is-min text-right'},
+        {id: 'stt', className: 'is-min text-right'},
         {id: 'comment'}
       ];
     },
@@ -111,6 +120,7 @@ define([
       this.once('afterRender', function()
       {
         this.listenTo(this.collection, 'change:comment', this.onCommentChange);
+        this.listenTo(this.collection, 'remove', this.onPceRemove);
       });
 
       $(window)
@@ -168,9 +178,46 @@ define([
       });
     },
 
+    refreshCollectionIfNeeded: function(added)
+    {
+      var productFilter = this.collection.getProductFilter();
+
+      added = added.filter(function(pce)
+      {
+        return pce.order._id === productFilter || pce.order.nc12 === productFilter;
+      });
+
+      if (!added.length)
+      {
+        return;
+      }
+
+      this.trigger('added');
+
+      if (this.collection.length + added.length <= this.collection.rqlQuery.limit)
+      {
+        this.collection.add(added, {at: 0});
+        this.render();
+      }
+      else
+      {
+        this.refreshCollection();
+      }
+    },
+
     onCommentChange: function(model)
     {
       this.$cell(model.id, 'comment').text(model.get('comment'));
+    },
+
+    onPceRemove: function(model)
+    {
+      if (this.$editor && this.$editor.data('id') === model.id)
+      {
+        this.hideEditor(true);
+      }
+
+      this.$row(model.id).remove();
     },
 
     showCommentEditor: function(id)

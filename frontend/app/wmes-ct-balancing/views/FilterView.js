@@ -58,6 +58,14 @@ define([
         },
         orgUnitTypes: ['prodLine']
       }));
+
+      this.once('afterRender', function()
+      {
+        if (!this.$id('product').val())
+        {
+          this.$('.btn[type="submit"]').click();
+        }
+      });
     },
 
     serializeFormToQuery: function(selector)

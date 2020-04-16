@@ -1,4 +1,9 @@
 <form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-product" class="control-label is-required"><%- t('filter:product') %></label>
+    <input id="<%- idPrefix %>-product" name="product" class="form-control" type="text" required pattern="^([0-9]{9}|[0-9]{12}|[A-Za-z0-9]{7})$" maxlength="12" style="width: 120px">
+  </div>
+  <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <%- forms.dateTimeRange({
     idPrefix: idPrefix,
     property: 'startedAt',
@@ -7,11 +12,6 @@
       ranges: true
     }
   }) %>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-product"><%- t('filter:product') %></label>
-    <input id="<%- idPrefix %>-product" name="product" class="form-control" type="text" pattern="^([0-9]{9}|[0-9]{12}|[A-Za-z0-9]{7})$" maxlength="12" style="width: 120px">
-  </div>
-  <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <div class="form-group">
     <label for="<%- idPrefix %>-minDuration"><%- t('PROPERTY:d') %></label>
     <div style="display: flex">

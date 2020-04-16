@@ -46,10 +46,17 @@ define([
       });
 
       this.setView('.report-container', this.reportView);
+
+      this.listenTo(this.listView, 'added', this.reloadReport);
     },
 
     load: function(when)
     {
+      if (!this.collection.getProductFilter())
+      {
+        return when();
+      }
+
       return when(
         this.collection.fetch({reset: true}),
         this.report.fetch({rqlQuery: this.collection.rqlQuery})
@@ -65,6 +72,11 @@ define([
     {
       FilteredListPage.prototype.onFilterChanged.apply(this, arguments);
 
+      this.reloadReport();
+    },
+
+    reloadReport: function()
+    {
       this.promised(this.report.fetch({rqlQuery: this.collection.rqlQuery}));
     }
 

@@ -25,6 +25,8 @@
   "balancing:title:started": "Rozpoczęto pomiar...",
   "balancing:title:finished": "Zakończono pomiar",
 
+  "pceReport:chart:filename": "WMES_CT_BALANCING",
+  "pceReport:chart:title": "Balansowanie",
   "pceReport:station": "{no, plural, =0{Wszystkie} other{Stanowisko {no}}}",
   "pceReport:metric:min": "Minimum",
   "pceReport:metric:max": "Maksimum",

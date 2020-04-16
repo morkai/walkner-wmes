@@ -13,7 +13,14 @@ define([
 
     model: BalancingPce,
 
-    rqlQuery: 'sort(-startedAt)&limit(-1337)'
+    rqlQuery: 'sort(-startedAt)&limit(100)',
+
+    getProductFilter: function()
+    {
+      var term = this.findRqlTerm('order._id', 'eq') || this.findRqlTerm('order.nc12', 'eq');
+
+      return term ? term.args[1] : null;
+    }
 
   });
 });

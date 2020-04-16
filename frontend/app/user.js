@@ -234,7 +234,18 @@ function(
         }
         else if (/^FN:/.test(requiredPrivilege))
         {
-          actualMatches += user.data.prodFunction === requiredPrivilege.substring(3) ? 1 : 0;
+          var requiredFn = requiredPrivilege.substring(3);
+
+          if (requiredFn.indexOf('*') !== -1)
+          {
+            var requiredFnRe = new RegExp('^' + requiredFn.replace(/\*/g, '.*?') + '$');
+
+            actualMatches += requiredFnRe.test(user.data.prodFunction) ? 1 : 0;
+          }
+          else
+          {
+            actualMatches += user.data.prodFunction === requiredFn ? 1 : 0;
+          }
         }
         else
         {

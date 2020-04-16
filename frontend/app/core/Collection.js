@@ -224,5 +224,23 @@ define([
     return Math.max(10, Math.floor(availHeight / rowHeight));
   };
 
+  Collection.prototype.findRqlTerm = function(prop, name)
+  {
+    return _.find(this.rqlQuery.selector.args, function(term)
+    {
+      if (term.args[0] !== prop)
+      {
+        return false;
+      }
+
+      if (Array.isArray(name))
+      {
+        return name.indexOf(term.name) !== -1;
+      }
+
+      return !name || term.name === name;
+    });
+  };
+
   return Collection;
 });

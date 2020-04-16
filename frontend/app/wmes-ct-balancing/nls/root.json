@@ -24,7 +24,16 @@
 
     "balancing:title:idle": "Balansowanie",
     "balancing:title:started": "Measurement started...",
-    "balancing:title:finished": "Measurement finished"
+    "balancing:title:finished": "Measurement finished",
+
+    "pceReport:chart:filename": "WMES_CT_BALANCING",
+    "pceReport:chart:title": "Balancing",
+    "pceReport:station": "{no, plural, =0{All} other{Station {no}}}",
+    "pceReport:metric:min": "Minimum",
+    "pceReport:metric:max": "Maximum",
+    "pceReport:metric:avg": "Average",
+    "pceReport:metric:med": "Median",
+    "pceReport:metric:stt": "Takt Time (SAP)"
   },
   "pl": true
 }

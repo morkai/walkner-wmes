@@ -39,15 +39,13 @@ define([
         },
         {
           href: '#ct/balancing/pces',
-          label: this.t('PAGE_ACTION:balancing:pces'),
-          privileges: window.ENV === 'production' ? 'SUPER' : undefined
+          label: this.t('PAGE_ACTION:balancing:pces')
         },
         {
           template: function()
           {
             return page.renderPartialHtml(reportsActionTemplate);
-          },
-          privileges: 'PROD_DATA:VIEW'
+          }
         },
         {
           template: function()
