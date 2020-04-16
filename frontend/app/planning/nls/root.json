@@ -104,6 +104,7 @@
     "toggleLock:title:false": "MRP locking",
     "toggleLock:message:true": "<p>Are you sure you want to unlock MRP <em>{mrp}</em>?</p><p>Unlocking will resume the plan recalculation for that MRP and might change the plan for Warehouse.</p>",
     "toggleLock:message:false": "<p>Are you sure you want to lock MRP <em>{mrp}</em>?</p><p>Locking will disable any changes to that MRP and will stop plan recalculation of all lines in the MRP.</p>",
+    "toggleLock:message:warning": "Orders with the specified MRP were already picked up by the warehouse.",
     "toggleLock:yes:true": "Unlock MRP",
     "toggleLock:yes:false": "Lock MRP",
     "toggleLock:no:true": "Leave locked",

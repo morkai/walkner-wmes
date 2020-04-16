@@ -14,11 +14,11 @@ define([
   'app/prodShifts/ProdShiftCollection',
   '../util/shift',
   '../PlanSapOrderCollection',
+  './ToggleMrpLockDialogView',
   'app/planning/templates/toolbar',
   'app/planning/templates/toolbarPrintLineList',
   'app/planning/templates/printPage',
-  'app/planning/templates/orderStatusIcons',
-  'app/planning/templates/toggleLockDialog'
+  'app/planning/templates/orderStatusIcons'
 ], function(
   _,
   $,
@@ -33,17 +33,19 @@ define([
   ProdShiftCollection,
   shiftUtil,
   PlanSapOrderCollection,
+  ToggleMrpLockDialogView,
   toolbarTemplate,
   toolbarPrintLineListTemplate,
   printPageTemplate,
-  orderStatusIconsTemplate,
-  toggleLockDialogTemplate
+  orderStatusIconsTemplate
 ) {
   'use strict';
 
   return View.extend({
 
     template: toolbarTemplate,
+
+    modelProperty: 'plan',
 
     events: {
 
@@ -115,11 +117,11 @@ define([
       {
         var view = this;
         var locked = view.plan.settings.isMrpLockedDirectly(view.mrp.id);
-        var dialogView = new DialogView({
-          template: toggleLockDialogTemplate,
+        var dialogView = new ToggleMrpLockDialogView({
           model: {
             locked: locked,
-            mrp: view.mrp.id
+            mrp: view.mrp.id,
+            date: view.plan.id
           }
         });
 
@@ -149,7 +151,7 @@ define([
           });
         });
 
-        viewport.showDialog(dialogView, t('planning', 'toggleLock:title:' + locked));
+        viewport.showDialog(dialogView, view.t('toggleLock:title:' + locked));
       }
 
     },
@@ -217,7 +219,7 @@ define([
           container: view.el,
           trigger: 'manual',
           placement: 'left',
-          title: t('planning', 'toolbar:copyOrderList:success')
+          title: view.t('toolbar:copyOrderList:success')
         });
 
         $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success');
@@ -258,7 +260,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'MSG:LOADING_FAILURE:shifts')
+          text: view.t('MSG:LOADING_FAILURE:shifts')
         });
       });
 
@@ -267,7 +269,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'MSG:LOADING_FAILURE:sapOrders')
+          text: view.t('MSG:LOADING_FAILURE:sapOrders')
         });
       });
 
@@ -465,13 +467,13 @@ define([
 
         if (workerCounts.length === 1)
         {
-          bigPage.workerCount = t('planning', 'print:workerCount', {count: workerCounts[0]});
+          bigPage.workerCount = view.t('print:workerCount', {count: workerCounts[0]});
         }
         else
         {
           workerCounts.sort();
 
-          bigPage.workerCount = t('planning', 'print:workerCounts', {
+          bigPage.workerCount = view.t('print:workerCounts', {
             to: workerCounts.pop(),
             from: workerCounts.join('-')
           });
@@ -554,7 +556,7 @@ define([
 
         this.$id('toggleLock')
           .toggleClass('active', locked)
-          .attr('title', t('planning', 'toolbar:toggleLock:' + locked));
+          .attr('title', this.t('toolbar:toggleLock:' + locked));
       }
     }
 

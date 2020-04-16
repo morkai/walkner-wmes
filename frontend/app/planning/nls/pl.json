@@ -103,6 +103,7 @@
   "toggleLock:title:false": "Blokowanie MRP",
   "toggleLock:message:true": "<p>Czy na pewno chcesz odblokować MRP <em>{mrp}</em>?</p><p>Odblokowanie wznowi przeliczanie planu dla danego MRP i może zmienić plan magazynu.</p>",
   "toggleLock:message:false": "<p>Czy na pewno chcesz zablokować MRP <em>{mrp}</em>?</p><p>Zablokowanie uniemożliwi zmianę ustawień dla danego MRP oraz sprawi, że plan linii nie będzie przeliczany (tzn. pozostanie taki jak w momencie zablokowania, nawet bez względu na zmiany statusów zleceń w SAP).</p>",
+  "toggleLock:message:warning": "Zlecenia z danym MRP zostały już skompletowane na magazynie.",
   "toggleLock:yes:true": "Odblokuj MRP",
   "toggleLock:yes:false": "Zablokuj MRP",
   "toggleLock:no:true": "Pozostaw zablokowane",

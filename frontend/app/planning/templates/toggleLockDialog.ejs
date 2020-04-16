@@ -1,7 +1,10 @@
 <div>
-  <%- t('planning', 'toggleLock:message:' + locked, {mrp: mrp}) %>
+  <%- t('toggleLock:message:' + locked, {mrp: mrp}) %>
+  <p id="<%- idPrefix %>-warning" class="message message-inline message-warning hidden">
+    <%- t('toggleLock:message:warning') %>
+  </p>
   <div class="form-actions">
-    <button class="btn btn-primary dialog-answer" type="button" autofocus data-answer="yes"><%- t('planning', 'toggleLock:yes:' + locked) %></button>
-    <button class="btn btn-link cancel" type="button"><%- t('planning', 'toggleLock:no:' + locked) %></button>
+    <button id="<%- idPrefix %>-yes" class="btn btn-primary dialog-answer" type="button" autofocus data-answer="yes" <%- locked ? 'disabled' : '' %>><%- t('toggleLock:yes:' + locked) %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('toggleLock:no:' + locked) %></button>
   </div>
 </div>
