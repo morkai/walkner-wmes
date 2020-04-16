@@ -15,6 +15,7 @@ define([
   'app/planning/Plan',
   'app/planning/PlanSettings',
   'app/planning/PlanDisplayOptions',
+  'app/wh-lines/WhLineCollection',
   '../settings',
   '../WhOrderCollection',
   '../views/WhPickupFilterView',
@@ -40,6 +41,7 @@ define([
   Plan,
   PlanSettings,
   PlanDisplayOptions,
+  WhLineCollection,
   whSettings,
   WhOrderCollection,
   WhPickupFilterView,
@@ -191,6 +193,30 @@ define([
         {
           this.whOrders.update(newOrders);
         }
+      },
+      'old.wh.lines.updated': function(message)
+      {
+        var page = this;
+        var refresh = false;
+
+        (message.updated || []).forEach(function(data)
+        {
+          var line = page.whLines.get(data._id);
+
+          if (refresh || !line)
+          {
+            refresh = true;
+
+            return;
+          }
+
+          line.set(data);
+        });
+
+        if (refresh)
+        {
+          page.promised(page.whLines.fetch());
+        }
       }
     },
 
@@ -267,6 +293,8 @@ define([
 
       page.whOrders = bindLoadingMessage(new WhOrderCollection(null, {date: plan.id}), page);
 
+      page.whLines = plan.whLines = bindLoadingMessage(new WhLineCollection(), page);
+
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
       var nlsDomain = 'planning';
 
@@ -286,6 +314,7 @@ define([
 
       this.listView = new WhPickupListView({
         whSettings: this.whSettings,
+        whLines: this.whLines,
         whOrders: this.whOrders,
         plan: this.plan
       });
@@ -337,6 +366,7 @@ define([
 
       return when(
         this.whSettings.fetchIfEmpty(),
+        this.whLines.fetch({reset: true}),
         this.whOrders.fetch({reset: true}),
         plan.settings.fetch(),
         plan.shiftOrders.fetch({reset: true}),
@@ -366,13 +396,15 @@ define([
 
       plan.set('loading', true);
 
-      page.whOrders.date = page.plan.id;
+      page.whOrders.setDateFilter(plan.id);
+      plan.settings.set('_id', plan.id);
 
-      page.promised(plan.settings.set('_id', plan.id).fetch()).then(
+      page.promised(plan.settings.fetch()).then(
         function()
         {
           var promise = $.when(
             page.whSettings.fetch({reset: true}),
+            page.whLines.fetch(),
             page.whOrders.fetch({reset: true, reload: true}),
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),

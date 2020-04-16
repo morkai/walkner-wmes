@@ -772,8 +772,8 @@ if (typeof jQuery === 'undefined') {
     }, self.options.delay.hide)
   }
 
-  Tooltip.prototype.show = function () {
-    this.children.forEach(function (child) { child.show(); })
+  Tooltip.prototype.show = function (opts) {
+    this.children.forEach(function (child) { child.show(opts); })
 
     var e = $.Event('show.bs.' + this.type)
 
@@ -840,9 +840,9 @@ if (typeof jQuery === 'undefined') {
         that.hoverState = null
 
         if (prevHoverState == 'out') that.leave(that)
-      }
+      };
 
-      $.support.transition && this.$tip.hasClass('fade') ?
+      (!opts || opts.transition !== false) && $.support.transition && this.$tip.hasClass('fade') ?
         $tip
           .one('bsTransitionEnd', complete)
           .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :

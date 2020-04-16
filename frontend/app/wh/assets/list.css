@@ -108,6 +108,27 @@ td.wh-list-icon {
 .wh-list-popover {
   max-width: 400px;
 }
+.wh-list-popover > .popover-content {
+  padding: 0;
+}
+.wh-list-popover > .popover-content > dl {
+  padding: 9px;
+}
+.wh-list-popover > .popover-content > table {
+
+}
+.wh-list-popover > .popover-content > table > tbody > tr > td {
+  padding: 0 4px 0 4px;
+  border-top: 1px solid #ebebeb;
+  border-left: 1px solid #ebebeb;
+}
+.wh-list-popover > .popover-content > table > tbody > tr:first-child > td {
+  border-top: none;
+}
+.wh-list-popover > .popover-content > table > tbody > tr > td[colspan],
+.wh-list-popover > .popover-content > table > tbody > tr > td[rowspan] {
+  border-left: none;
+}
 
 .wh-list-sticky {
   position: fixed;

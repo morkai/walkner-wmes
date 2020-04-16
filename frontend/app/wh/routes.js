@@ -15,8 +15,17 @@ define([
 ) {
   'use strict';
 
-  var css = ['css!app/wh/assets/main', 'css!app/planning/assets/main', 'css!app/paintShop/assets/main'];
-  var nls = ['i18n!app/nls/wh', 'i18n!app/nls/planning', 'i18n!app/nls/paintShop'];
+  var css = [
+    'css!app/wh/assets/main',
+    'css!app/planning/assets/main',
+    'css!app/paintShop/assets/main'
+  ];
+  var nls = [
+    'i18n!app/nls/wh',
+    'i18n!app/nls/wh-lines',
+    'i18n!app/nls/planning',
+    'i18n!app/nls/paintShop'
+  ];
   var canView = user.auth('LOCAL', 'WH:VIEW');
   var canManage = user.auth('WH:MANAGE', 'WH:MANAGE:USERS');
 

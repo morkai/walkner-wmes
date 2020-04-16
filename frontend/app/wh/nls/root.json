@@ -88,6 +88,7 @@
     "status:pickup": "Pickup",
     "status:problem": "Problem",
     "status:cancelled": "Cancelled",
+    "status:ignored": "Ignored",
 
     "menu:shiftOrder": "Open production shift order",
     "menu:copy:all": "Copy order list",
@@ -164,6 +165,7 @@
     "list:popover:fifoStatus": "FIFO delivery",
     "list:popover:packStatus": "Packaging delivery",
     "list:popover:qty": "Quantity",
+    "list:popover:line": "Line",
 
     "problem:empty": "No problems!",
     "problem:title": "Problem details for order {orderNo} on line {line}",

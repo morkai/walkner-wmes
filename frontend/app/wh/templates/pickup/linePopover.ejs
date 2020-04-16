@@ -1,0 +1,50 @@
+<table class="wh-list-popover-line" data-order-id="<%- orderId %>">
+  <tbody>
+  <tr>
+    <td colspan="2"></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center">
+      <%= line._id %>
+      <% if (line.redirLine) { %>
+      <br>
+      <i class="fa fa-arrow-down"></i>
+      <br>
+      <%= line.redirLine %>
+      <% } %>
+    </td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td rowspan="3"><%- t('wh-lines', 'PROPERTY:pickup') %></td>
+    <td><%- t('wh-lines', 'PROPERTY:sets') %></td>
+    <% lines.forEach(function(line) { %>
+      <td class="text-center"><%- line.pickup.sets %></td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td><%- t('wh-lines', 'PROPERTY:qty') %></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center"><%- line.pickup.qty %></td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td><%- t('wh-lines', 'PROPERTY:time') %></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center"><%- time.toString(line.pickup.time / 1000, true, false) %></td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td rowspan="2"><%- t('wh-lines', 'PROPERTY:components') %></td>
+    <td><%- t('wh-lines', 'PROPERTY:qty') %></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center"><%- line.components.qty %></td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td><%- t('wh-lines', 'PROPERTY:time') %></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center"><%- time.toString(line.components.time / 1000, true, false) %></td>
+    <% }) %>
+  </tr>
+  </tbody>
+</table>

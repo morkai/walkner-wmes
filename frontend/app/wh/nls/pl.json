@@ -87,6 +87,7 @@
   "status:pickup": "Kompletacja",
   "status:problem": "Problem",
   "status:cancelled": "Anulowane",
+  "status:ignored": "Ignorowana",
 
   "menu:shiftOrder": "Otwórz szczegóły zlecenia z linii",
   "menu:copy:all": "Kopiuj listę zleceń",
@@ -165,6 +166,7 @@
   "list:popover:fifoStatus": "Wysyłka FIFO",
   "list:popover:packStatus": "Wysyłka opakowań",
   "list:popover:qty": "Ilość",
+  "list:popover:line": "Linia",
 
   "problem:empty": "Nie ma żadnych problemów!",
   "problem:title": "Szczegóły problemu ze zleceniem {orderNo} dla linii {line}",

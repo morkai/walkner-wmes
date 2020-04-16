@@ -8,5 +8,6 @@
   "PROPERTY:packaging": "Wysyłka opakowań",
   "PROPERTY:sets": "Sety",
   "PROPERTY:qty": "Sztuki",
-  "PROPERTY:time": "Czas"
+  "PROPERTY:time": "Czas",
+  "PROPERTY:redirLine": "Przekierowanie"
 }

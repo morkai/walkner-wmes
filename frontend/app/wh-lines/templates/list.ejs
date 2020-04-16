@@ -6,6 +6,7 @@
         <th class="is-min" rowspan="2"><%- t('PROPERTY:_id') %></th>
         <th class="is-min" colspan="3"><%- t('PROPERTY:pickup') %></th>
         <th class="is-min" colspan="2"><%- t('PROPERTY:components') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:redirLine') %></th>
         <th rowspan="2"></th>
       </tr>
       <tr>
@@ -19,7 +20,7 @@
       <tbody>
         <% if (!rows.length) { %>
         <tr>
-          <td colspan="7"><%- noData %></td>
+          <td colspan="8"><%- noData %></td>
         </tr>
         <% } %>
         <% rows.forEach(function(row) { %>

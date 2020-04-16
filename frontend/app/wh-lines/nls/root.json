@@ -9,7 +9,8 @@
     "PROPERTY:packaging": "Packaging delivery",
     "PROPERTY:sets": "Sets",
     "PROPERTY:qty": "PCE",
-    "PROPERTY:time": "Time"
+    "PROPERTY:time": "Time",
+    "PROPERTY:redirLine": "Redirection"
   },
   "pl": true
 }

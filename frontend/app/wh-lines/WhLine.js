@@ -19,6 +19,26 @@ define([
 
     nlsDomain: 'wh-lines',
 
+    defaults: function()
+    {
+      return {
+        pickup: {
+          sets: 0,
+          qty: 0,
+          time: 0
+        },
+        components: {
+          qty: 0,
+          time: 0
+        },
+        packaging: {
+          qty: 0,
+          time: 0
+        },
+        redirLine: null
+      };
+    },
+
     serialize: function()
     {
       var obj = this.toJSON();

@@ -26,6 +26,7 @@ define([
       {
         return new ListPage({
           baseBreadcrumb: '#wh/pickup/0d',
+          pageClassName: 'page-max-flex',
           ListView: ListView,
           collection: new WhLineCollection(null, {rqlQuery: req.rql}),
           actions: []

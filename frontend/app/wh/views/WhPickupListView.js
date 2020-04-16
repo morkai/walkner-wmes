@@ -14,9 +14,11 @@ define([
   'app/planning/PlanSapOrder',
   'app/planning/templates/lineOrderComments',
   'app/orders/util/commentPopover',
+  'app/wh-lines/WhLine',
   'app/wh/templates/pickup/list',
   'app/wh/templates/pickup/row',
-  'app/wh/templates/pickup/popover'
+  'app/wh/templates/pickup/popover',
+  'app/wh/templates/pickup/linePopover'
 ], function(
   _,
   $,
@@ -31,9 +33,11 @@ define([
   PlanSapOrder,
   lineOrderCommentsTemplate,
   commentPopover,
+  WhLine,
   listTemplate,
   rowTemplate,
-  popoverTemplate
+  popoverTemplate,
+  linePopoverTemplate
 ) {
   'use strict';
 
@@ -113,6 +117,9 @@ define([
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
       view.listenTo(view.whOrders, 'change', view.onOrderChanged);
 
+      view.listenTo(view.whLines, 'change', view.onLineChanged);
+      view.listenTo(view.whLines, 'change:redirLine', view.onRedirLineChanged);
+
       view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:psStatuses', view.onPsStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
@@ -189,6 +196,15 @@ define([
         trigger: 'hover',
         html: true,
         className: 'wh-list-popover',
+        hasContent: function()
+        {
+          var columnId = this.dataset.columnId;
+          var orderId = $(this).closest('.wh-list-item')[0].dataset.id;
+          var hasTitle = view.t.has('list:popover:' + columnId);
+          var hasOrder = !!view.whOrders.get(orderId);
+
+          return hasTitle && hasOrder;
+        },
         title: function()
         {
           return view.t('list:popover:' + this.dataset.columnId);
@@ -199,10 +215,35 @@ define([
 
           if (!whOrder)
           {
-            return '?';
+            return '';
           }
 
           var columnId = this.dataset.columnId;
+
+          if (columnId === 'line')
+          {
+            var lines = whOrder.get('lines');
+            var redirLines = whOrder.get('redirLines');
+
+            return view.renderPartial(linePopoverTemplate, {
+              orderId: whOrder.id,
+              lines: lines.map(function(whOrderLine, i)
+              {
+                var whLine = view.whLines.get(whOrderLine._id) || new WhLine({_id: whOrderLine._id});
+                var redirLine = view.whLines.get(redirLines && redirLines[i] || null);
+                var line = whLine.toJSON();
+
+                if (redirLine)
+                {
+                  line._id = redirLine.id;
+                  line.redirLine = whLine.id;
+                }
+
+                return line;
+              })
+            });
+          }
+
           var templateData = {
             user: null,
             status: null,
@@ -597,6 +638,87 @@ define([
 
       this.adjustStickyHeaders();
       this.toggleSeparatorRowVisibility();
+    },
+
+    onLineChanged: function(whLine)
+    {
+      var view = this;
+      var redirLineChanged = whLine.hasChanged('redirLine');
+      var changedWhLineId = whLine.id;
+
+      $('.wh-list-popover-line').each(function()
+      {
+        var whOrder = view.whOrders.get(this.dataset.orderId);
+
+        if (!whOrder)
+        {
+          return;
+        }
+
+        if (!redirLineChanged)
+        {
+          var anyMatchingLines = whOrder.get('lines').some(function(whOrderLine)
+          {
+            if (whOrderLine._id === changedWhLineId)
+            {
+              return true;
+            }
+
+            var whLine = view.whLines.get(whOrderLine._id);
+
+            return whLine && whLine.get('redirLine') === changedWhLineId;
+          });
+
+          if (!anyMatchingLines)
+          {
+            return;
+          }
+        }
+
+        var $tr = view.$('tr[data-id="' + whOrder.id + '"]');
+        var $line = $tr.find('td[data-column-id="line"]');
+        var popover = $line.data('bs.popover');
+
+        if (popover)
+        {
+          popover.show({transition: false});
+        }
+      });
+    },
+
+    onRedirLineChanged: function(whLine)
+    {
+      var filters = this.whOrders.getFilters(this.plan);
+      var changed = false;
+
+      for (var i = 0; i < this.whOrders.length; ++i)
+      {
+        var whOrder = this.whOrders.models[i];
+
+        if (!whOrder.get('lines').some(function(line) { return line._id === whLine.id; }))
+        {
+          continue;
+        }
+
+        var $tr = this.$('tr[data-id="' + whOrder.id + '"]');
+
+        if (!$tr.length)
+        {
+          continue;
+        }
+
+        $tr.replaceWith(rowTemplate({
+          row: whOrder.serialize(this.plan, i, filters)
+        }));
+
+        changed = true;
+      }
+
+      if (changed)
+      {
+        this.adjustStickyHeaders();
+        this.toggleSeparatorRowVisibility();
+      }
     },
 
     onWhStatusesFilterChanged: function()

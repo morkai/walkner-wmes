@@ -31,7 +31,8 @@ define([
     picklist: 'fa-file-text-o',
     pickup: 'fa-shopping-cart',
     problem: 'fa-thumbs-down',
-    finished: 'fa-thumbs-up'
+    finished: 'fa-thumbs-up',
+    ignored: 'fa-times'
   };
   var FUNC_STATUS_TO_CLASS = {
     pending: 'wh-problems-pending',
@@ -46,7 +47,8 @@ define([
   var DIST_STATUS_TO_ICON = {
     pending: 'fa-question',
     started: 'fa-truck',
-    finished: 'fa-thumbs-up'
+    finished: 'fa-thumbs-up',
+    ignored: 'fa-times'
   };
   var PICKLIST_DONE_TO_ICON = {
     pending: 'fa-question',
@@ -111,11 +113,13 @@ define([
       obj.comment = sapOrder ? sapOrder.getCommentWithIcon() : '';
       obj.comments = sapOrder ? sapOrder.get('comments') : [];
       obj.rowClassName = STATUS_TO_CLASS_NAME[obj.status];
-      obj.funcIcons = {
-        fmx: FUNC_STATUS_TO_ICON[obj.funcs[0].status],
-        kitter: FUNC_STATUS_TO_ICON[obj.funcs[1].status],
-        packer: FUNC_STATUS_TO_ICON[obj.funcs[2].status]
-      };
+      obj.funcIcons = {};
+      obj.funcs.forEach(function(func)
+      {
+        obj.funcIcons[func._id] = func.picklist === 'ignore'
+          ? FUNC_STATUS_TO_ICON.ignored
+          : FUNC_STATUS_TO_ICON[func.status];
+      });
       obj.distIcons = {
         dist: DIST_STATUS_TO_ICON[obj.distStatus],
         fifo: DIST_STATUS_TO_ICON[obj.fifoStatus],
