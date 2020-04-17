@@ -74,6 +74,16 @@ $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
 ; Execute
 $session.FindById("wnd[0]/tbar[1]/btn[8]").Press()
 
+; Check for no data Information window
+$win = $session.FindById("wnd[1]")
+
+If IsObj($win) And $win.Text = "Information" Then
+  $win.Close()
+  CloseSession()
+  LogDebug("NO_DOCS_FOR_ORDERS")
+  Exit(0)
+EndIf
+
 ; Save to file (replace)
 $session.FindById("wnd[0]/usr/cntlCUSTOM/shellcont/shell/shellcont/shell").pressToolbarButton("&NAVIGATION_PROFILE_TOOLBAR_EXPAND")
 $session.FindById("wnd[0]/usr/cntlCUSTOM/shellcont/shell/shellcont/shell").pressToolbarContextButton("&MB_EXPORT")

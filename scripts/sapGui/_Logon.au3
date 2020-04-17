@@ -30,7 +30,23 @@ Func TryToLogIn()
   $session.findById("wnd[0]/usr/txtRSYST-LANGU").text = $SAP_LOGON_LANGUAGE
   $session.findById("wnd[0]/tbar[0]/btn[0]").press()
 
-  If $session.findById("wnd[0]/sbar").Text <> "" Then
+  $sbar = $session.findById("wnd[0]/sbar").text
+
+  If $sbar = "" Then
+    LogDebug("LOGGED_IN")
+    Return Null
+  EndIf
+
+  $terminateOpt = $session.findById("wnd[1]/usr/radMULTI_LOGON_OPT1")
+
+  If IsObj($terminateOpt) Then
+    $terminateOpt.select()
+    $session.findById("wnd[1]/tbar[0]/btn[0]").press()
+  EndIf
+
+  $sbar = $session.findById("wnd[0]/sbar").text
+
+  If $sbar <> "" Then
     LogDebug('"' & $session.findById("wnd[0]/sbar").Text & '"')
     LogError("ERR_INVALID_CREDENTIALS", $ERR_INVALID_CREDENTIALS)
   EndIf
@@ -42,7 +58,6 @@ Func CloseSession()
   LogDebug("CLOSING_SESSION")
   If IsObj($session) Then
     $session.TestToolMode = 0
-    $session.UnlockSessionUI()
     $connection.CloseSession($session.Id)
   EndIf
 EndFunc
