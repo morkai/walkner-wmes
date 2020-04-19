@@ -12,6 +12,7 @@ define([
   'app/delayReasons/DelayReasonCollection',
   'app/factoryLayout/productionState',
   'app/paintShop/views/PaintShopDatePickerView',
+  'app/wh-lines/WhLineCollection',
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
@@ -34,6 +35,7 @@ define([
   DelayReasonCollection,
   productionState,
   PaintShopDatePickerView,
+  WhLineCollection,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -55,12 +57,14 @@ define([
 
     layoutName: 'page',
 
+    modelProperty: 'plan',
+
     breadcrumbs: function()
     {
       return [
         {
           href: '#planning/plans',
-          label: t.bound('planning', 'BREADCRUMB:base')
+          label: this.t('BREADCRUMB:base')
         },
         {
           href: '#planning/plans/' + this.plan.id,
@@ -82,7 +86,7 @@ define([
 
       return [
         {
-          label: t.bound('planning', 'PAGE_ACTION:hourlyPlans'),
+          label: page.t('PAGE_ACTION:hourlyPlans'),
           icon: 'calendar',
           privileges: 'HOURLY_PLANS:VIEW',
           href: '#hourlyPlans?sort(-date)&limit(-1337)'
@@ -90,7 +94,7 @@ define([
             + '&date=lt=' + firstShiftMoment.add(1, 'days').valueOf()
         },
         {
-          label: t.bound('planning', 'PAGE_ACTION:paintShop'),
+          label: page.t('PAGE_ACTION:paintShop'),
           icon: 'paint-brush',
           privileges: 'PAINT_SHOP:VIEW',
           href: '#paintShop/' + page.plan.id
@@ -100,7 +104,7 @@ define([
           template: function() { return whPageActionTemplate({id: page.plan.id}); }
         },
         {
-          label: t.bound('planning', 'PAGE_ACTION:changes'),
+          label: page.t('PAGE_ACTION:changes'),
           icon: 'list-ol',
           href: '#planning/changes?sort(date)&plan=' + page.plan.id
         },
@@ -135,14 +139,14 @@ define([
                 model: page.plan
               });
 
-              viewport.showDialog(dialogView, t('planning', 'copySettings:title'));
+              viewport.showDialog(dialogView, page.t('copySettings:title'));
 
               return false;
             });
           }
         },
         {
-          label: t.bound('planning', 'PAGE_ACTION:legend'),
+          label: page.t('PAGE_ACTION:legend'),
           icon: 'question-circle',
           callback: function()
           {
@@ -165,7 +169,7 @@ define([
         {
           this.$msg = viewport.msg.show({
             type: 'info',
-            text: t('planning', 'MSG:GENERATING')
+            text: this.t('MSG:GENERATING')
           });
         }
       },
@@ -224,10 +228,18 @@ define([
       'production.stateChanged.**': function(message)
       {
         this.plan.shiftOrders.update(message);
+      },
+      'old.wh.lines.updated': function(message)
+      {
+        if (this.plan.whLines.length)
+        {
+          this.plan.whLines.handleUpdate(message);
+        }
       }
     },
 
     localTopics: {
+      'socket.connected': function() { this.reload(true); },
       'socket.disconnected': function() { reloadProdState = true; },
       'planning.mrpStatsRecounted': 'scheduleStatRecount'
     },
@@ -277,10 +289,12 @@ define([
         pceTimes: false
       });
 
+      plan.whLines = bindLoadingMessage(new WhLineCollection(), page);
+
       page.delayReasons = new DelayReasonCollection();
 
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
-      var nlsDomain = 'planning';
+      var nlsDomain = plan.getNlsDomain();
 
       bindLoadingMessage(plan, page, nlsPrefix + 'plan', nlsDomain);
       bindLoadingMessage(plan.settings, page, nlsPrefix + 'settings', nlsDomain);
@@ -314,7 +328,7 @@ define([
       page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
-      page.listenTo(plan.settings, 'errored', page.reload);
+      page.listenTo(plan.settings, 'errored', function() { page.reload(true); });
 
       page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
 
@@ -346,7 +360,8 @@ define([
         page.promised(plan.settings.fetch()),
         page.promised(plan.shiftOrders.fetch({reset: true})),
         page.promised(plan.sapOrders.fetch({reset: true})),
-        page.promised(plan.lateOrders.fetch({reset: true}))
+        page.promised(plan.lateOrders.fetch({reset: true})),
+        page.promised(plan.whLines.fetch({reset: true}))
       );
 
       load1.fail(function() { deferred.reject.apply(deferred, arguments); });
@@ -363,10 +378,9 @@ define([
       return when(deferred.promise());
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         wrap: this.plan.displayOptions.isListWrappingEnabled(),
         darker: this.plan.displayOptions.isDarkerThemeUsed()
       };
@@ -379,7 +393,7 @@ define([
       this.renderMrps();
     },
 
-    reload: function()
+    reload: function(all)
     {
       var page = this;
       var plan = page.plan;
@@ -398,6 +412,7 @@ define([
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
             plan.lateOrders.fetch({reset: true, reload: true}),
+            all ? plan.whLines.fetch({reset: true, reload: true}) : null,
             plan.fetch()
           );
 

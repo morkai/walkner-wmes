@@ -1,0 +1,27 @@
+<form data-mode="<%- mode %>">
+  <p class="message message-inline message-info" style="margin-bottom: 15px">
+    <%- t('redirLine:message:' + mode) %>
+  </p>
+  <div class="form-group">
+    <label class="control-label"><%- t('redirLine:sourceLine') %></label>
+    <p class="form-control-static"><%= sourceLine %></p>
+  </div>
+  <div class="form-group has-required-select2">
+    <label class="control-label" for="<%- idPrefix %>-targetLine"><%- t('redirLine:targetLine') %></label>
+    <% if (mode === 'stop') { %>
+    <p class="form-control-static"><%= targetLine %></p>
+    <% } else { %>
+    <input id="<%- idPrefix %>-targetLine" type="text" required>
+    <% } %>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input id="<%- idPrefix %>-redirDelivered" type="checkbox" value="true" checked>
+      <%- t('redirLine:redirDelivered') %>
+    </label>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('redirLine:submit:' + mode) %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

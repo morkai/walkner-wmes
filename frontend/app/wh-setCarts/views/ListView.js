@@ -25,7 +25,7 @@ define([
       {id: 'kind', className: 'is-min'},
       {id: 'date', className: 'is-min'},
       {id: 'set', className: 'is-min'},
-      {id: 'line', className: 'is-min'},
+      {id: 'line', className: 'is-min', tdClassName: 'text-fixed', titleProperty: 'redirLine'},
       {id: 'cart', className: 'is-min'},
       {id: 'orders', className: 'is-min'},
       {id: 'completedAt', className: 'is-min'},

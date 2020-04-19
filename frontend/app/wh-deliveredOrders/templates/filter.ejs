@@ -10,7 +10,7 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-status"><%- t('PROPERTY:status') %></label>
     <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
-      <% ['todo', 'done', 'blocked'].forEach(function(status) { %>
+      <% ['todo', 'blocked', 'done'].forEach(function(status) { %>
       <option value="<%- status %>"><%- t('status:' + status) %></option>
       <% }) %>
     </select>

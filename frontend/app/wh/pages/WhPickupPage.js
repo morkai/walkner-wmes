@@ -187,12 +187,7 @@ define([
       },
       'old.wh.orders.updated': function(message)
       {
-        var newOrders = message.updated;
-
-        if (newOrders.length && this.whOrders.get(newOrders[0]._id))
-        {
-          this.whOrders.update(newOrders);
-        }
+        this.whOrders.update(message.updated || []);
       },
       'old.wh.lines.updated': function(message)
       {
@@ -676,20 +671,35 @@ define([
         plan: this.plan
       });
 
-      var title = this.t('set:title', {
+      if (orders[0].get('redirLine'))
+      {
+        var lines = orders[0].get('lines');
+        var redirTitle = orders[0].get('redirLines')
+          .map(function(sourceLine, i)
+          {
+            return _.escape(sourceLine) + ' ➜ ' + _.escape(lines[i]._id);
+          })
+          .join('\n');
+
+        line = '<span title="' + redirTitle + '"><i class="fa fa-arrow-right"></i><span>'
+          + _.escape(line)
+          + '</span></span>';
+      }
+
+      var dialogTitle = this.t('set:title', {
         set: set,
-        line: _.escape(line)
+        line: line
       });
 
       if (user)
       {
-        title += ' <span class="wh-set-user">'
+        dialogTitle += ' <span class="wh-set-user">'
           + '<i class="fa fa-user"></i><span>' + _.escape(user.label) + '</span>'
           + '<i class="fa fa-users"></i><span>' + this.t('func:' + user.func) + '</span>'
           + '</span>';
       }
 
-      viewport.showDialog(dialogView, title);
+      viewport.showDialog(dialogView, dialogTitle);
     },
 
     pickDowntimeReason: function(personnelId, user, startedAt)

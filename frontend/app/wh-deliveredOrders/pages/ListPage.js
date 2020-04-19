@@ -27,6 +27,15 @@ define([
 
     actions: [],
 
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      topics[this.lines.getTopicPrefix() + '.updated'] = 'onLineUpdated';
+
+      return topics;
+    },
+
     defineModels: function()
     {
       FilteredListPage.prototype.defineModels.apply(this, arguments);
@@ -47,6 +56,11 @@ define([
         this.lines.fetch({reset: true}),
         this.collection.fetch({reset: true})
       );
+    },
+
+    onLineUpdated: function(message)
+    {
+      this.lines.handleUpdate(message);
     }
 
   });

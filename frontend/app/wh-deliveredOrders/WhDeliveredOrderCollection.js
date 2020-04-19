@@ -2,10 +2,12 @@
 
 define([
   'underscore',
+  'app/user',
   'app/core/Collection',
   './WhDeliveredOrder'
 ], function(
   _,
+  user,
   Collection,
   WhDeliveredOrder
 ) {
@@ -19,22 +21,29 @@ define([
 
     getLineFilter: function()
     {
-      var term = _.find(this.rqlQuery.selector.args, function(term)
-      {
-        return term.name === 'eq' && term.args[0] === 'line';
-      });
+      var term = this.findRqlTerm('line', 'eq');
 
       return term ? term.args[1] : null;
     },
 
     getSapOrderFilter: function()
     {
-      var term = _.find(this.rqlQuery.selector.args, function(term)
-      {
-        return term.name === 'eq' && term.args[0] === 'sapOrder';
-      });
+      var term = this.findRqlTerm('sapOrder', 'eq');
 
       return term ? term.args[1] : null;
+    }
+
+  }, {
+
+    can: {
+      view: function()
+      {
+        return user.isAllowedTo('WH:VIEW', 'PLANNING:VIEW');
+      },
+      manage: function()
+      {
+        return user.isAllowedTo('WH:MANAGE', 'PLANNING:MANAGE', 'PLANNING:PLANNER');
+      }
     }
 
   });

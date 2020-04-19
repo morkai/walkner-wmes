@@ -1,5 +1,5 @@
 <div class="planning-mrp-list-container planning-mrp-lines">
-  <div class="planning-mrp-list-hd"><%- t('planning', 'lines:hd') %></div>
+  <div class="planning-mrp-list-hd"><%- t('lines:hd') %></div>
   <% if (showEditButton) { %>
   <button id="<%- idPrefix %>-edit" class="planning-mrp-list-action btn btn-default">
     <i class="fa fa-cog"></i>
@@ -12,9 +12,10 @@
     <div class="planning-mrp-list-item is-line" data-id="<%= line._id %>">
       <div class="planning-mrp-list-item-inner">
         <%= line._id %>
-        <span class="planning-mrp-list-property <%- line.frozenOrders ? '' : 'hidden' %>" data-property="frozenOrders" title="<%- t('planning', 'lines:frozenOrders') %>"><i class="fa fa-lock"></i><span><%- line.frozenOrders %></span></span>
-        <span class="planning-mrp-list-property <%- line.workerCount ? '' : 'is-invalid' %>" data-property="workerCount" title="<%- t('planning', 'lines:workerCount') %>"><i class="fa fa-user"></i><span><%- line.workerCount %></span></span>
-        <span class="planning-mrp-list-property <%- line.customTimes ? '' : 'hidden' %>" data-property="customTimes" title="<%- t('planning', 'lines:activeTime') %>"><i class="fa fa-clock-o"></i><span><%- line.customTimes %></span></span>
+        <span class="planning-mrp-list-property <%- line.redirLine ? '' : 'hidden' %>" data-property="redirLine" title="<%- t('lines:redirLine') %>"><i class="fa fa-arrow-right" style="color: red"></i><span><%= line.redirLine %></span></span>
+        <span class="planning-mrp-list-property <%- line.frozenOrders ? '' : 'hidden' %>" data-property="frozenOrders" title="<%- t('lines:frozenOrders') %>"><i class="fa fa-lock"></i><span><%- line.frozenOrders %></span></span>
+        <span class="planning-mrp-list-property <%- line.workerCount ? '' : 'is-invalid' %>" data-property="workerCount" title="<%- t('lines:workerCount') %>"><i class="fa fa-user"></i><span><%- line.workerCount %></span></span>
+        <span class="planning-mrp-list-property <%- line.customTimes ? '' : 'hidden' %>" data-property="customTimes" title="<%- t('lines:activeTime') %>"><i class="fa fa-clock-o"></i><span><%- line.customTimes %></span></span>
       </div>
     </div>
     <% }) %>

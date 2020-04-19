@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/i18n',
   'app/core/Model'
 ], function(
+  _,
   time,
   t,
   Model
@@ -54,6 +56,12 @@ define([
       else
       {
         row.className = '';
+      }
+
+      if (row.redirLine)
+      {
+        row.redirLine = _.escape(row.redirLine) + ' ➜ ' + _.escape(row.line);
+        row.line = '<i class="fa fa-arrow-right"></i><span>' + _.escape(row.line) + '</span>';
       }
 
       return row;

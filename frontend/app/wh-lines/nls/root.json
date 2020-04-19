@@ -10,7 +10,25 @@
     "PROPERTY:sets": "Sets",
     "PROPERTY:qty": "PCE",
     "PROPERTY:time": "Time",
-    "PROPERTY:redirLine": "Redirection"
+    "PROPERTY:redirLine": "Redirection",
+
+    "redirLine:start": "Start line redirection",
+    "redirLine:stop": "Stop line redirection",
+    "redirLine:title:start": "Starting line redirection",
+    "redirLine:title:stop": "Stopping line redirection",
+    "redirLine:submit:start": "Start redirection",
+    "redirLine:submit:stop": "Stop redirection",
+    "redirLine:message:start": "Starting a line redirection will make all orders planned on the source line move to the target line.",
+    "redirLine:message:stop": "Stopping a line redirection will make the previously redirected orders move back to the source line from the target line.",
+    "redirLine:sourceLine": "Source line",
+    "redirLine:targetLine": "Target line",
+    "redirLine:redirDelivered": "Redirect delivered orders",
+    "redirLine:error:SAME_LINES": "Can't redirect to the same line.",
+    "redirLine:error:LINE_REDIRECTED": "Line is already redirected: {line} ➜ {redirLine}.",
+    "redirLine:error:UNKNOWN_SOURCE_LINE": "Unknown source line.",
+    "redirLine:error:UNKNOWN_TARGET_LINE": "Unknown target line.",
+    "redirLine:error:INVALID_TARGET_LINE": "Invalid target line.",
+    "redirLine:error:LINE_NOT_REDIRECTED": "Source line isn't redirected."
   },
   "pl": true
 }

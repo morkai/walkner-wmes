@@ -9,6 +9,9 @@ define([
   'app/core/View',
   'app/core/views/DialogView',
   'app/data/orgUnits',
+  'app/wh-lines/WhLineCollection',
+  'app/wh-lines/views/RedirLineDialogView',
+  'app/wh-deliveredOrders/WhDeliveredOrderCollection',
   '../util/contextMenu',
   './PlanLineSettingsDialogView',
   './PlanLinesMrpPriorityDialogView',
@@ -27,6 +30,9 @@ define([
   View,
   DialogView,
   orgUnits,
+  WhLineCollection,
+  RedirLineDialogView,
+  WhDeliveredOrderCollection,
   contextMenu,
   PlanLineSettingsDialogView,
   PlanLinesMrpPriorityDialogView,
@@ -42,6 +48,8 @@ define([
   return View.extend({
 
     template: linesTemplate,
+
+    modelProperty: 'plan',
 
     events: {
       'contextmenu .is-line': function(e)
@@ -69,6 +77,7 @@ define([
     {
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
       this.listenTo(this.mrp.lines, 'change:frozenOrders', this.onFrozenOrdersChanged);
+      this.listenTo(this.plan.whLines, 'add remove change:redirLine', this.onWhLineChanged);
     },
 
     destroy: function()
@@ -78,17 +87,17 @@ define([
       this.$el.popover('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var view = this;
 
       return {
-        idPrefix: view.idPrefix,
         showEditButton: view.isEditable(),
         lines: view.mrp.lines.map(function(line)
         {
           return {
             _id: line.id,
+            redirLine: view.serializeRedirLine(line),
             workerCount: view.serializeWorkerCount(line),
             customTimes: view.serializeActiveTime(line, false),
             frozenOrders: line.getFrozenOrderCount()
@@ -98,6 +107,11 @@ define([
           return a._id.localeCompare(b._id, undefined, {numeric: true, ignorePunctuation: true});
         })
       };
+    },
+
+    beforeRender: function()
+    {
+      this.$el.popover('destroy');
     },
 
     afterRender: function()
@@ -119,10 +133,7 @@ define([
         html: true,
         hasContent: true,
         content: function() { return view.serializePopover(this.dataset.id); },
-        template: '<div class="popover planning-mrp-popover">'
-          + '<div class="arrow"></div>'
-          + '<div class="popover-content"></div>'
-          + '</div>'
+        className: 'planning-mrp-popover'
       });
     },
 
@@ -153,7 +164,8 @@ define([
 
     serializePopover: function(lineId)
     {
-      var line = this.mrp.lines.get(lineId);
+      var view = this;
+      var line = view.mrp.lines.get(lineId);
 
       if (!line)
       {
@@ -173,20 +185,22 @@ define([
         prodLine = '';
       }
 
-      return linePopoverTemplate({
+      return this.renderPartialHtml(linePopoverTemplate, {
         line: {
           _id: lineId,
           division: lineUnits.division ? lineUnits.division : '?',
           prodFlow: prodFlow,
           prodLine: prodLine,
-          activeTime: this.serializeActiveTime(line, true),
-          workerCount: this.serializeWorkerCount(line),
+          activeTime: view.serializeActiveTime(line, true),
+          workerCount: view.serializeWorkerCount(line),
           mrpPriority: line.settings ? line.settings.get('mrpPriority').join(', ') : '?',
           orderPriority: !lineMrpSettings
             ? '?'
             : lineMrpSettings.get('orderPriority')
-              .map(function(v) { return t('planning', 'orderPriority:' + v); })
-              .join(', ')
+              .map(function(v) { return view.t('orderPriority:' + v); })
+              .join(', '),
+          redirLine: view.serializeRedirLine(line),
+          whLine: view.serializeWhLine(line)
         }
       });
     },
@@ -208,6 +222,32 @@ define([
       }
 
       return activeTimes;
+    },
+
+    serializeRedirLine: function(line)
+    {
+      var whLine = this.plan.whLines.get(line.id);
+
+      return whLine && whLine.get('redirLine') || null;
+    },
+
+    serializeWhLine: function(line)
+    {
+      var whLine = this.plan.whLines.get(line.id);
+
+      if (!whLine)
+      {
+        return null;
+      }
+
+      var redirLine = this.plan.whLines.get(whLine.get('redirLine'));
+
+      if (redirLine)
+      {
+        return redirLine.attributes;
+      }
+
+      return whLine ? whLine.attributes : null;
     },
 
     serializeWorkerCount: function(line)
@@ -247,17 +287,17 @@ define([
       contextMenu.show(this, pos.top + $edit.outerHeight() / 2, pos.left + $edit.outerWidth() / 2, [
         {
           icon: 'fa-check',
-          label: t('planning', 'lines:menu:mrpPriority'),
+          label: this.t('lines:menu:mrpPriority'),
           handler: this.handleMrpPriorityAction.bind(this)
         },
         {
           icon: 'fa-user',
-          label: t('planning', 'lines:menu:workerCount'),
+          label: this.t('lines:menu:workerCount'),
           handler: this.handleWorkerCountAction.bind(this)
         },
         {
           icon: 'fa-star-half-o',
-          label: t('planning', 'lines:menu:orderPriority'),
+          label: this.t('lines:menu:orderPriority'),
           handler: this.handleOrderPriorityAction.bind(this)
         }
       ]);
@@ -275,35 +315,58 @@ define([
 
     showLineMenu: function(e)
     {
-      if (!this.isEditable())
-      {
-        return;
-      }
-
       var line = this.mrp.lines.get(this.$(e.currentTarget).attr('data-id'));
-      var menu = [
-        {
-          icon: 'fa-cogs',
-          label: t('planning', 'lines:menu:settings'),
-          handler: this.handleSettingsAction.bind(this, line)
-        },
-        {
-          icon: 'fa-times',
-          label: t('planning', 'lines:menu:remove'),
-          handler: this.handleRemoveAction.bind(this, line)
-        }
-      ];
+      var menu = [];
 
-      if (this.plan.canFreezeOrders())
+      if (this.isEditable())
       {
         menu.push({
-          icon: 'fa-lock',
-          label: t('planning', 'lines:menu:freezeOrders'),
-          handler: this.handleFreezeOrdersAction.bind(this, line)
+          icon: 'fa-cogs',
+          label: this.t('lines:menu:settings'),
+          handler: this.handleSettingsAction.bind(this, line)
+        }, {
+          icon: 'fa-times',
+          label: this.t('lines:menu:remove'),
+          handler: this.handleRemoveAction.bind(this, line)
         });
+
+        if (this.plan.canFreezeOrders())
+        {
+          menu.push({
+            icon: 'fa-lock',
+            label: this.t('lines:menu:freezeOrders'),
+            handler: this.handleFreezeOrdersAction.bind(this, line)
+          });
+        }
       }
 
-      contextMenu.show(this, e.pageY, e.pageX, menu);
+      var whLine = this.plan.whLines.get(line.id);
+
+      if (whLine)
+      {
+        if (WhDeliveredOrderCollection.can.view())
+        {
+          menu.push({
+            icon: 'fa-cubes',
+            label: this.t('lines:menu:deliveredOrders'),
+            handler: this.handleDeliveredOrders.bind(this, line)
+          });
+        }
+
+        if (WhLineCollection.can.redir())
+        {
+          menu.push({
+            icon: 'fa-arrow-right',
+            label: this.t('lines:menu:redirLine:' + (whLine.get('redirLine') ? 'stop' : 'start')),
+            handler: this.handleRedirLine.bind(this, line)
+          });
+        }
+      }
+
+      if (menu.length)
+      {
+        contextMenu.show(this, e.pageY, e.pageX, menu);
+      }
     },
 
     handleMrpPriorityAction: function()
@@ -313,7 +376,7 @@ define([
         mrp: this.mrp
       });
 
-      viewport.showDialog(dialogView, t('planning', 'lines:menu:mrpPriority:title'));
+      viewport.showDialog(dialogView, this.t('lines:menu:mrpPriority:title'));
     },
 
     handleWorkerCountAction: function()
@@ -323,7 +386,7 @@ define([
         mrp: this.mrp
       });
 
-      viewport.showDialog(dialogView, t('planning', 'lines:menu:workerCount:title'));
+      viewport.showDialog(dialogView, this.t('lines:menu:workerCount:title'));
     },
 
     handleOrderPriorityAction: function()
@@ -333,7 +396,7 @@ define([
         mrp: this.mrp
       });
 
-      viewport.showDialog(dialogView, t('planning', 'lines:menu:orderPriority:title'));
+      viewport.showDialog(dialogView, this.t('lines:menu:orderPriority:title'));
     },
 
     handleSettingsAction: function(line)
@@ -344,7 +407,7 @@ define([
         line: line
       });
 
-      viewport.showDialog(dialogView, t('planning', 'lines:menu:settings:title'));
+      viewport.showDialog(dialogView, this.t('lines:menu:settings:title'));
     },
 
     handleRemoveAction: function(line)
@@ -374,7 +437,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('planning', 'lines:menu:remove:failure')
+            text: view.t('lines:menu:remove:failure')
           });
 
           view.plan.settings.trigger('errored');
@@ -383,7 +446,7 @@ define([
         });
       });
 
-      viewport.showDialog(dialogView, t('planning', 'lines:menu:remove:title'));
+      viewport.showDialog(dialogView, view.t('lines:menu:remove:title'));
     },
 
     handleFreezeOrdersAction: function(line)
@@ -394,7 +457,42 @@ define([
         line: line
       });
 
-      viewport.showDialog(dialogView, t('planning', 'lines:menu:freezeOrders:title'));
+      viewport.showDialog(dialogView, this.t('lines:menu:freezeOrders:title'));
+    },
+
+    handleDeliveredOrders: function(line)
+    {
+      var whLine = this.plan.whLines.get(line.id);
+
+      if (!whLine)
+      {
+        return;
+      }
+
+      var redirLine = this.plan.whLines.get(whLine.get('redirLine'));
+
+      var lineId = encodeURIComponent(redirLine ? redirLine.id : whLine.id);
+
+      window.open('/#wh/deliveredOrders?sort(date,set,startTime)&limit(-1337)&status=in=(todo,blocked)&line=' + lineId);
+    },
+
+    handleRedirLine: function(line)
+    {
+      var sourceLine = this.plan.whLines.get(line.id);
+
+      if (!sourceLine)
+      {
+        return;
+      }
+
+      var dialogView = new RedirLineDialogView({
+        model: sourceLine
+      });
+
+      viewport.showDialog(
+        dialogView,
+        dialogView.t('redirLine:title:' + (sourceLine.get('redirLine') ? 'stop' : 'start'))
+      );
     },
 
     onSettingsChanged: function(changes)
@@ -415,6 +513,22 @@ define([
         .toggleClass('hidden', frozenOrders === 0)
         .find('span')
         .text(frozenOrders);
+    },
+
+    onWhLineChanged: function(whLine)
+    {
+      if (!this.mrp.lines.get(whLine.id))
+      {
+        return;
+      }
+
+      var redirLine = whLine.get('redirLine') || null;
+
+      this.$('.is-line[data-id="' + whLine.id + '"]')
+        .find('span[data-property="redirLine"]')
+        .toggleClass('hidden', !redirLine)
+        .find('span')
+        .text(redirLine || '');
     }
 
   });

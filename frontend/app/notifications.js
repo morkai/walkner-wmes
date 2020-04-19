@@ -70,6 +70,11 @@ function(
     {
       if (!registration.active)
       {
+        if (window.ENV === 'development')
+        {
+          console.log('[sw] Inactive registration:', registration);
+        }
+
         return complete(new Error('No active registration!'));
       }
 

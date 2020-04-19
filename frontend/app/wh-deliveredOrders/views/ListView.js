@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
+  '../WhDeliveredOrderCollection',
   './FormView',
   'app/wh-deliveredOrders/templates/confirm'
 ], function(
@@ -12,6 +13,7 @@ define([
   user,
   viewport,
   ListView,
+  WhDeliveredOrderCollection,
   FormView,
   confirmTemplate
 ) {
@@ -67,7 +69,7 @@ define([
     }, ListView.prototype.events),
 
     columns: [
-      {id: 'line', className: 'is-min', tdClassName: 'text-fixed'},
+      {id: 'line', className: 'is-min', tdClassName: 'text-fixed', titleProperty: 'redirLine'},
       {id: 'sapOrder', className: 'is-min'},
       {id: 'qty', className: 'is-min text-right', tdClassName: 'text-right'},
       {id: 'pceTime', className: 'is-min'},
@@ -80,7 +82,7 @@ define([
     actions: function()
     {
       var view = this;
-      var canManage = user.isAllowedTo('WH:MANAGE');
+      var canManage = WhDeliveredOrderCollection.can.manage();
 
       return function(row)
       {
@@ -172,6 +174,11 @@ define([
         if (model)
         {
           model.set(data);
+
+          if (model.get('line') !== line)
+          {
+            refresh = true;
+          }
         }
         else if (data.line === line || data.sapOrder === sapOrder)
         {

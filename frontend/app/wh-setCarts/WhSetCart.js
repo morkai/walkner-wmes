@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/time',
   'app/core/Model',
   'app/core/templates/userInfo'
 ], function(
+  _,
   t,
   time,
   Model,
@@ -59,6 +61,14 @@ define([
         .join('; ');
       obj.deliveringBy = userInfoTemplate({userInfo: obj.deliveringBy});
       obj.deliveredBy = userInfoTemplate({userInfo: obj.deliveredBy});
+
+      if (obj.redirLine)
+      {
+        obj.redirLine = obj.redirLines
+          .map(function(sourceLine, i) { return _.escape(sourceLine) + ' ➜ ' + _.escape(obj.lines[i]); })
+          .join('\n');
+        obj.line = '<i class="fa fa-arrow-right"></i><span>' + _.escape(obj.line) + '</span>';
+      }
 
       return obj;
     }

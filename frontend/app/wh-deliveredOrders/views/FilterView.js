@@ -27,6 +27,16 @@ define([
       'status': 'line'
     },
 
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.lines, 'add remove change', _.debounce(this.setUpLineSelect2.bind(this), 30));
+      });
+    },
+
     destroy: function()
     {
       FilterView.prototype.destroy.apply(this, arguments);
@@ -38,14 +48,19 @@ define([
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
+      this.setUpLineSelect2();
+
+      this.$('.is-expandable').expandableSelect();
+    },
+
+    setUpLineSelect2: function()
+    {
       this.$id('line').select2({
         width: '200px',
         allowClear: true,
         placeholder: ' ',
         data: this.lines.map(idAndLabel)
       });
-
-      this.$('.is-expandable').expandableSelect();
     },
 
     serializeFormToQuery: function(selector)

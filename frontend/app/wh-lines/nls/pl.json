@@ -9,5 +9,23 @@
   "PROPERTY:sets": "Sety",
   "PROPERTY:qty": "Sztuki",
   "PROPERTY:time": "Czas",
-  "PROPERTY:redirLine": "Przekierowanie"
+  "PROPERTY:redirLine": "Przekierowanie",
+
+  "redirLine:start": "Rozpocznij przekierowanie linii",
+  "redirLine:stop": "Zakończ przekierowanie linii",
+  "redirLine:title:start": "Rozpoczynanie przekierowania linii",
+  "redirLine:title:stop": "Kończenie przekierowania linii",
+  "redirLine:submit:start": "Rozpocznij przekierowanie",
+  "redirLine:submit:stop": "Zakończ przekierowanie",
+  "redirLine:message:start": "Rozpoczęcie przekierowania linii sprawi, że zlecenia zaplanowane na linię źródłową trafią na linię docelową.",
+  "redirLine:message:stop": "Zakończenie przekierowania linii sprawi, że wcześniej przekierowane zlecenia z linii źródłowej na linię docelową wrócą na linię źródłową.",
+  "redirLine:sourceLine": "Linia źródłowa",
+  "redirLine:targetLine": "Linia docelowa",
+  "redirLine:redirDelivered": "Przekieruj dostarczone zlecenia",
+  "redirLine:error:SAME_LINES": "Nie można przekierować na tę samą linię.",
+  "redirLine:error:LINE_REDIRECTED": "Linia jest już przekierowana: {line} ➜ {redirLine}.",
+  "redirLine:error:UNKNOWN_SOURCE_LINE": "Nieznana linia źródłowa.",
+  "redirLine:error:UNKNOWN_TARGET_LINE": "Nieznana linia docelowa.",
+  "redirLine:error:INVALID_TARGET_LINE": "Nieprawidłowa linia docelowa.",
+  "redirLine:error:LINE_NOT_REDIRECTED": "Linia źródłowa nie ma przekierowania."
 }

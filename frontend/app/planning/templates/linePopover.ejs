@@ -1,34 +1,53 @@
 <table data-item-type="line" data-item-id="<%- line._id %>">
   <tbody>
   <tr>
-    <th><%- t('planning', 'lines:division') %></th>
+    <th><%- t('lines:division') %></th>
     <td><span class="planning-mrp-popover-value"><%= line.division %></span></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lines:prodFlow') %></th>
+    <th><%- t('lines:prodFlow') %></th>
     <td><span class="planning-mrp-popover-value"><%= line.prodFlow %></span></td>
   </tr>
-  <% if (line.prodLine) { %>
+  <% if (line.activeTime !== '06:00-06:00') { %>
   <tr>
-    <th><%- t('planning', 'lines:prodLine') %></th>
-    <td><span class="planning-mrp-popover-value"><%= line.prodLine %></span></td>
+    <th><%- t('lines:activeTime') %></th>
+    <td><%= line.activeTime %></td>
   </tr>
   <% } %>
   <tr>
-    <th><%- t('planning', 'lines:activeTime') %></th>
-    <td><%= line.activeTime %></td>
-  </tr>
-  <tr>
-    <th><%- t('planning', 'lines:workerCount') %></th>
+    <th><%- t('lines:workerCount') %></th>
     <td><%= line.workerCount.toLocaleString() %></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lines:orderPriority') %></th>
+    <th><%- t('lines:orderPriority') %></th>
     <td><%= line.orderPriority %></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lines:mrpPriority') %></th>
+    <th><%- t('lines:mrpPriority') %></th>
     <td><%= line.mrpPriority %></td>
   </tr>
+  <% if (line.redirLine) { %>
+  <tr>
+    <th><%- t('lines:redirLine') %></th>
+    <td><%= line.redirLine %></td>
+  </tr>
+  <% } %>
+  <% if (line.whLine) { %>
+  <tr>
+    <th><%- t('lines:wh:pickup') %></th>
+    <td>
+      <strong><%- t('lines:wh:sets') %>: </strong><%= line.whLine.pickup.sets %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.pickup.qty %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.pickup.time / 1000, true) %>
+    </td>
+  </tr>
+  <tr>
+    <th><%- t('lines:wh:components') %></th>
+    <td>
+      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.components.qty %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.components.time / 1000, true) %>
+    </td>
+  </tr>
+  <% } %>
   </tbody>
 </table>

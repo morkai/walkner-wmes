@@ -6,3 +6,4 @@
 db.oldwhorders.updateMany({redirLine: {$exists: false}}, {$set: {redirLine: null, redirLines: []}});
 db.oldwhsetcarts.updateMany({redirLine: {$exists: false}}, {$set: {redirLine: null, redirLines: []}});
 db.oldwhlines.updateMany({redirLine: {$exists: false}}, {$set: {redirLine: null}});
+db.oldwhdeliveredorders.updateMany({redirLine: {$exists: false}}, {$set: {redirLine: null}});

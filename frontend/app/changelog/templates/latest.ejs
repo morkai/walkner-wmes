@@ -24,6 +24,7 @@
   <li>Zmieniono dokładanie brakujących wózków FIFO do wywózki tak, aby brane pod uwagę były tylko pierwsze
     pasujące sety z każdej kwalifikującej się linii (a nie wszystkie), żeby zachować kolejność wywożonych
     zleceń.</li>
+  <li>Dodano możliwość przekierowywania linii.</li>
 </ul>
 <h3>FTE (produkcja)</h3>
 <ul>
@@ -32,8 +33,10 @@
 </ul>
 <h3>Planowanie</h3>
 <ul>
-  <li>Poprawiono błąd powodujący zatrzymanie procesu automatycznego blokowania MRP po rozpoczęciu kompletacji
-    w magazynie po zablokowaniu pierwszego MRP.</li>
+  <li>Poprawiono błąd powodujący zatrzymanie procesu automatycznego blokowania MRP po zablokowaniu pierwszego MRP
+    od uruchomienia serwera.</li>
   <li>Zmieniono odblokowywanie MRP tak, aby tylko super administrator mógł odblokować MRP, dla którego istnieją
     skompletowane sety w magazynie.</li>
+  <li>Dodano wsparcie dla przekierowywania linii z poziomu planu.</li>
+  <li>Dodano informację o skompletowanych oraz dostępnych sztukach do dymka linii.</li>
 </ul>
