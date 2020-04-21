@@ -3,24 +3,24 @@
     idPrefix: idPrefix,
     property: 'createdAt',
     labels: {
-      text: helpers.t('PROPERTY:date'),
+      text: t('PROPERTY:date'),
       ranges: true
     }
   }) %>
   <div class="form-group hidden" data-filter="nc12">
-    <label for="<%- idPrefix %>-nc12"><%- t('pfepEntries', 'filter:nc12') %></label>
+    <label for="<%- idPrefix %>-nc12"><%- t('filter:nc12') %></label>
     <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" autocomplete="new-password" maxlength="12">
   </div>
   <div class="form-group hidden" data-filter="packType">
-    <label for="<%- idPrefix %>-packType"><%- t('pfepEntries', 'filter:packType') %></label>
-    <input id="<%- idPrefix %>-packType" class="form-control" name="packType" type="text" autocomplete="new-password">
+    <label for="<%- idPrefix %>-packType"><%- t('filter:packType') %></label>
+    <input id="<%- idPrefix %>-packType" name="packType" type="text" autocomplete="new-password">
   </div>
   <div class="form-group hidden" data-filter="vendor">
-    <label for="<%- idPrefix %>-vendor"><%- t('pfepEntries', 'filter:vendor') %></label>
-    <input id="<%- idPrefix %>-vendor" class="form-control" name="vendor" type="text" autocomplete="new-password">
+    <label for="<%- idPrefix %>-vendor"><%- t('filter:vendor') %></label>
+    <input id="<%- idPrefix %>-vendor" name="vendor" type="text" autocomplete="new-password">
   </div>
   <div class="form-group hidden" data-filter="creator">
-    <label for="<%- idPrefix %>-creator"><%- t('pfepEntries', 'PROPERTY:creator') %></label>
+    <label for="<%- idPrefix %>-creator"><%- t('PROPERTY:creator') %></label>
     <input id="<%- idPrefix %>-creator" name="creator" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit({hidden: true}) %>

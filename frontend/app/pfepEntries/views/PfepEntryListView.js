@@ -48,7 +48,7 @@ define([
         {id: 'palletSize', tdClassName: 'is-min is-number text-center', label: t('LIST:COLUMN:palletSize')},
         {id: 'moq', tdClassName: 'is-min is-number'},
         {id: 'roundingValue', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:roundingValue')},
-        {id: 'vendor', tdClassName: 'is-min', thClassName: 'is-filter'},
+        {id: 'vendor', thClassName: 'is-filter'},
         {id: 'creator', thClassName: 'is-filter'},
         {id: 'notes', label: t('LIST:COLUMN:notes')}
       ];

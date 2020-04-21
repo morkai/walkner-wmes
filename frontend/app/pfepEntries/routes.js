@@ -26,16 +26,17 @@ define([
   {
     viewport.loadPage(
       [
+        'app/pfepEntries/dictionaries',
         'app/pfepEntries/PfepEntryCollection',
         'app/pfepEntries/pages/PfepEntryListPage',
         css,
         nls
       ],
-      function(PfepEntryCollection, PfepEntryListPage)
+      function(dictionaries, PfepEntryCollection, PfepEntryListPage)
       {
-        return new PfepEntryListPage({
+        return dictionaries.bind(new PfepEntryListPage({
           collection: new PfepEntryCollection(null, {rqlQuery: req.rql})
-        });
+        }));
       }
     );
   });
@@ -62,15 +63,16 @@ define([
   {
     viewport.loadPage(
       [
+        'app/pfepEntries/dictionaries',
         'app/pfepEntries/PfepEntry',
         'app/pfepEntries/pages/PfepEntryAddFormPage',
         nls
       ],
-      function(PfepEntry, PfepEntryAddFormPage)
+      function(dictionaries, PfepEntry, PfepEntryAddFormPage)
       {
-        return new PfepEntryAddFormPage({
+        return dictionaries.bind(new PfepEntryAddFormPage({
           model: new PfepEntry()
-        });
+        }));
       }
     );
   });
@@ -79,15 +81,16 @@ define([
   {
     viewport.loadPage(
       [
+        'app/pfepEntries/dictionaries',
         'app/pfepEntries/PfepEntry',
         'app/pfepEntries/pages/PfepEntryEditFormPage',
         nls
       ],
-      function(PfepEntry, PfepEntryEditFormPage)
+      function(dictionaries, PfepEntry, PfepEntryEditFormPage)
       {
-        return new PfepEntryEditFormPage({
+        return dictionaries.bind(new PfepEntryEditFormPage({
           model: new PfepEntry({_id: req.params.id})
-        });
+        }));
       }
     );
   });

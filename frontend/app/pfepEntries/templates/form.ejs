@@ -1,5 +1,20 @@
 <form class="pfepEntries-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
+  <datalist id="<%- idPrefix %>-packTypes">
+    <% packTypes.forEach(function(packType) { %>
+    <option value="<%= packType %>">
+    <% }) %>
+  </datalist>
+  <datalist id="<%- idPrefix %>-units">
+    <% units.forEach(function(unit) { %>
+    <option value="<%= unit %>">
+      <% }) %>
+  </datalist>
+  <datalist id="<%- idPrefix %>-vendors">
+    <% vendors.forEach(function(vendor) { %>
+    <option value="<%= vendor %>">
+      <% }) %>
+  </datalist>
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
@@ -16,13 +31,13 @@
       <div class="row">
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-unit" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:unit') %></label>
-          <input id="<%- idPrefix %>-unit" name="unit" class="form-control" type="text" autocomplete="new-password" required>
+          <input id="<%- idPrefix %>-unit" name="unit" list="<%- idPrefix %>-units" class="form-control" type="text" autocomplete="new-password" required>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-packType" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:packType') %></label>
-          <input id="<%- idPrefix %>-packType" name="packType" class="form-control" type="text" autocomplete="new-password" required>
+          <input id="<%- idPrefix %>-packType" name="packType" list="<%- idPrefix %>-packTypes" class="form-control" type="text" autocomplete="new-password" required>
         </div>
         <% ['externalPackQty', 'internalPackQty'].forEach(function(prop) { %>
         <div class="col-lg-4 form-group">
@@ -74,7 +89,7 @@
       <div class="row">
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-vendor" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:vendor') %></label>
-          <input id="<%- idPrefix %>-vendor" name="vendor" class="form-control" type="text" autocomplete="new-password" required>
+          <input id="<%- idPrefix %>-vendor" name="vendor" list="<%- idPrefix %>-vendors" class="form-control" type="text" autocomplete="new-password" required>
         </div>
       </div>
       <div class="form-group">

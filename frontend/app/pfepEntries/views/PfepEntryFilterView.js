@@ -7,6 +7,7 @@ define([
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
+  '../dictionaries',
   'app/pfepEntries/templates/filter'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   idAndLabel,
   dateTimeRange,
   setUpUserSelect2,
+  dictionaries,
   template
 ) {
   'use strict';
@@ -52,6 +54,20 @@ define([
       }
 
     }, FilterView.prototype.events),
+
+    localTopics: {
+      'pfep.dictionaries.updated': function(message)
+      {
+        if (message.dictionary === 'packTypes')
+        {
+          this.setUpPackTypeSelect2();
+        }
+        else if (message.dictionary === 'vendors')
+        {
+          this.setUpVendorSelect2();
+        }
+      }
+    },
 
     defaultFormData: function()
     {
@@ -118,6 +134,15 @@ define([
       }, this);
     },
 
+    getTemplateData: function()
+    {
+      return {
+        packTypes: dictionaries.packTypes,
+        units: dictionaries.units,
+        vendors: dictionaries.vendors
+      };
+    },
+
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
@@ -131,6 +156,29 @@ define([
       setUpUserSelect2(this.$id('creator'), {
         view: this,
         width: '275px'
+      });
+
+      this.setUpPackTypeSelect2();
+      this.setUpVendorSelect2();
+    },
+
+    setUpPackTypeSelect2: function()
+    {
+      this.$id('packType').select2({
+        width: '175px',
+        allowClear: true,
+        placeholder: ' ',
+        data: dictionaries.packTypes.map(function(id) { return {id: id, text: id}; })
+      });
+    },
+
+    setUpVendorSelect2: function()
+    {
+      this.$id('vendor').select2({
+        width: '275px',
+        allowClear: true,
+        placeholder: ' ',
+        data: dictionaries.vendors.map(function(id) { return {id: id, text: id}; })
       });
     },
 
