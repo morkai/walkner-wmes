@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/core/View',
   'app/wh/templates/delivery/section',
   'app/wh/templates/delivery/item',
   'app/wh/templates/resolveAction',
 ], function(
+  _,
   time,
   View,
   template,
@@ -22,6 +24,22 @@ define([
     nlsDomain: 'wh',
 
     events: {
+      'click .wh-delivery-item': function(e)
+      {
+        if (this.options.status !== 'delivering')
+        {
+          return;
+        }
+
+        var deliveringBy = this.setCarts.get(e.currentTarget.dataset.id).get('deliveringBy');
+
+        this.model.trigger('continueDelivery', {
+          user: deliveringBy,
+          setCarts: this.setCarts
+            .filter(function(c) { return c.get('deliveringBy').id === deliveringBy.id; })
+            .map(function(c) { return c.id; })
+        });
+      },
       'submit .wh-pa-resolveAction': function()
       {
         var personnelId = this.$('.wh-pa-resolveAction').find('.form-control').val();
@@ -85,7 +103,7 @@ define([
 
       obj.model = setCart;
       obj.className = this.getStatusClassName(setCart);
-      obj.lineClassName = obj.line.length >= 15 ? 'wh-is-very-long' : obj.line.length > 10 ? 'wh-is-long' : '';
+      obj.line = this.serializeItemLine(setCart);
       obj.date = time.utc.format(obj.date, 'L');
       obj.set = this.t('delivery:set', {set: obj.set});
       obj.sapOrders = {};
@@ -93,6 +111,75 @@ define([
       obj.sapOrders = Object.keys(obj.sapOrders);
 
       return obj;
+    },
+
+    serializeItemLine: function(setCart)
+    {
+      var line = setCart.get('line');
+      var lines = setCart.get('lines');
+      var redirLine = setCart.get('redirLine');
+      var redirLines = setCart.get('redirLines');
+      var actualLength = line.length;
+      var veryLongLength = 23;
+      var longLength = 19;
+
+      if (this.options.status === 'completed')
+      {
+        veryLongLength = 16;
+        longLength = 12;
+      }
+
+      var title = '';
+      var className = '';
+      var label = _.escape(line);
+
+      if (redirLine)
+      {
+        actualLength += 2;
+        label = '<i class="fa fa-arrow-right"></i>' + label;
+
+        if (this.options.status !== 'completed')
+        {
+          actualLength += redirLine.length;
+          label = _.escape(redirLine) + label;
+        }
+
+        if (lines.length === 1)
+        {
+          title = redirLine + ' ➜ ' + line;
+        }
+        else
+        {
+          title = line + ':';
+
+          lines.forEach(function(line, i)
+          {
+            if (line === redirLines[i])
+            {
+              title += '\n - ' + line;
+            }
+            else
+            {
+              title += '\n - ' + redirLines[i] + ' ➜ ' + line;
+            }
+          });
+        }
+      }
+
+      if (actualLength > veryLongLength)
+      {
+        className = 'wh-is-very-long';
+      }
+      else if (actualLength > longLength)
+      {
+        className = 'wh-is-long';
+      }
+
+      return {
+        title: title,
+        className: className,
+        label: label
+      };
     },
 
     getStatusClassName: function(setCart)

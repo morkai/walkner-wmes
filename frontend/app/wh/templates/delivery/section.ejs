@@ -11,7 +11,7 @@
     <table id="<%- idPrefix %>-items" class="wh-delivery-items">
       <tfoot>
       <tr>
-        <td colspan="4"></td>
+        <td colspan="<%- status === 'completed' ? 3 : 4 %>"></td>
       </tr>
       </tfoot>
       <% items.forEach(function(item) { %>

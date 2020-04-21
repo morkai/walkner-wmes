@@ -50,8 +50,9 @@ define([
     kit2: '100307',
     pac: '13370003',
     pac2: '115006',
-    dlv: '13370004',
-    dlv2: '13370005'
+    dfifo: '13370004',
+    dpac: '13370005',
+    dfifo2: '13370006'
   };
 
   var LINE_UPDATE_INTERVAL = 10000;
@@ -185,6 +186,7 @@ define([
       page.once('afterRender', function()
       {
         page.listenTo(page.model, 'resolveAction', page.resolveAction);
+        page.listenTo(page.model, 'continueDelivery', page.handleContinueDelivery);
         page.listenTo(page.model, 'change:loading', page.onLoadingChanged);
         page.listenTo(page.lines, 'remove add change', page.onLineUpdated);
         page.listenTo(page.setCarts, 'remove', page.onSetCartRemoved);

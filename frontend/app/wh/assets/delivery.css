@@ -10,6 +10,12 @@
 .wh-delivery-section-container {
   flex: 1 1 0;
 }
+.wh-delivery-section-container[data-status="completed"] {
+  flex: 0 0 480px;
+}
+.wh-delivery-section-container[data-status="pending"] {
+  flex: 0 0 620px;
+}
 .wh-delivery-section {
   margin: 0 15px;
 }
@@ -84,7 +90,10 @@
   max-width: 100px;
 }
 .wh-delivery-item-line {
-  max-width: 225px;
+  max-width: 375px;
+}
+.wh-status-completed .wh-delivery-item-line {
+  max-width: 245px;
 }
 .wh-delivery-item-line.wh-is-long {
   font-size: 28px;
@@ -93,9 +102,11 @@
   font-size: 24px;
 }
 .wh-delivery-item-plan {
-  width: 1px;
   white-space: nowrap;
   line-height: 1.3;
+}
+.wh-status-delivering .wh-delivery-item-plan {
+  width: 1px;
 }
 .wh-delivery-item-info {
   line-height: 1.3;

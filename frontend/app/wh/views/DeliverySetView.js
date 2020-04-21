@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/viewport',
   'app/core/View',
   'app/wh/WhOrderCollection',
   'app/wh/templates/delivery/set'
 ], function(
+  _,
   time,
   viewport,
   View,
@@ -53,6 +55,15 @@ define([
         obj.sapOrders = {};
         obj.orders.forEach(function(o) { obj.sapOrders[o.sapOrder] = 1; });
         obj.sapOrders = Object.keys(obj.sapOrders).join(', ');
+
+        if (obj.redirLine)
+        {
+          obj.line = obj.redirLine + ' <i class="fa fa-arrow-right"></i> ' + obj.line;
+        }
+        else
+        {
+          obj.line = _.escape(obj.line);
+        }
 
         return obj;
       });
