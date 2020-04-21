@@ -5,8 +5,8 @@
   "version": "0.147.0",
   "updater": {
     "wmes": {
-      "backend": 540,
-      "frontend": 691,
+      "backend": 541,
+      "frontend": 692,
       "reports": 121,
       "attachments": 3,
       "importer-sap": 57,
@@ -19,16 +19,16 @@
       "planning": 75,
       "ps-queue": 49,
       "ps-load": 15,
-      "wh-pickup": 37,
-      "wh-problems": 24,
-      "wh-delivery-components": 20,
-      "wh-delivery-packaging": 20,
+      "wh-pickup": 38,
+      "wh-problems": 25,
+      "wh-delivery-components": 21,
+      "wh-delivery-packaging": 21,
       "isa": 6,
       "luma2": 12,
       "trw": 19,
       "luca": 7,
       "drilling": 9,
-      "wiring": 1,
+      "wiring": 2,
       "ct": 12
     },
     "pos": {
