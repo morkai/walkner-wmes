@@ -117,6 +117,9 @@ define([
 
     hide: function()
     {
+      clearInterval(this.timers.updateValue);
+      this.timers.updateValue = null;
+
       this.reset();
     },
 
