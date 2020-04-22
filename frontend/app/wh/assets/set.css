@@ -150,10 +150,18 @@
   height: 48px;
   font-size: 28px;
 }
+.wh-set-editor-carts.wh-is-multiline {
+  margin-left: -308px;
+}
+.wh-set-editor-carts.wh-is-multiline .form-control {
+  width: 325px;
+  height: 135px;
+  resize: vertical;
+}
 .wh-set-editor-carts .btn {
   padding: 0;
   width: 48px;
-  height: 48px;
+  height: auto;
   font-size: 28px;
 }
 .wh-set-editor-problem {

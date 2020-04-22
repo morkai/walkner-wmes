@@ -152,6 +152,7 @@
     "menu:pickup:success": "Pickup succeeded",
     "menu:pickup:failure": "Pickup failed",
     "menu:pickup:pending": "Reset status",
+    "menu:pickup:editCarts": "Change carts",
 
     "update:failure": "Failed to execute action.",
     "printLabels:failure": "Failed to print labels.",

@@ -131,7 +131,7 @@ define([
             viewport.msg.show({
               type: 'error',
               time: 2500,
-              text: t('wh', 'printLabels:failure')
+              text: view.t('printLabels:failure')
             });
           });
 
@@ -191,11 +191,10 @@ define([
       this.hideEditor();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        renderItem: setItemTemplate,
+        renderItem: this.renderPartialHtml.bind(this, setItemTemplate),
         items: this.serializeItems()
       };
     },
@@ -276,24 +275,46 @@ define([
     {
       var view = this;
       var canManage = user.isAllowedTo('WH:MANAGE');
-      var menu = UPDATE_MENU_ITEMS[prop].map(function(item)
+      var menu = [];
+
+      if (!canManage
+        && prop === 'pickup'
+        && whOrder.getFunc(func).pickup === 'success'
+        && whOrder.get('distStatus') === 'pending'
+        && user.isAllowedTo('WH:MANAGE:CARTS'))
       {
-        if (item.manage && !canManage)
+        menu.push({
+          icon: 'fa-edit',
+          label: view.t('menu:pickup:editCarts'),
+          handler: view.handleUpdate.bind(view, whOrder, func, 'pickup', 'success', {
+            edit: true
+          })
+        });
+      }
+      else
+      {
+        UPDATE_MENU_ITEMS[prop].forEach(function(item)
         {
-          return null;
-        }
+          if (item.manage && !canManage)
+          {
+            return;
+          }
 
-        return {
-          icon: item.icon,
-          label: view.t('menu:' + prop + ':' + (item.label || item.value)),
-          handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value)
-        };
-      }).filter(function(item) { return !!item; });
+          menu.push({
+            icon: item.icon,
+            label: view.t('menu:' + prop + ':' + (item.label || item.value)),
+            handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value)
+          });
+        });
+      }
 
-      contextMenu.show(view, e.pageY - 17, e.pageX - 17, {
-        className: 'wh-set-menu',
-        menu: menu
-      });
+      if (menu.length)
+      {
+        contextMenu.show(view, e.pageY - 17, e.pageX - 17, {
+          className: 'wh-set-menu',
+          menu: menu
+        });
+      }
     },
 
     showFixUpdateMenu: function(whOrder, propFunc, prop, e)
@@ -372,7 +393,7 @@ define([
       }
     },
 
-    handleUpdate: function(whOrder, func, prop, newValue)
+    handleUpdate: function(whOrder, func, prop, newValue, options)
     {
       var view = this;
       var newData = JSON.parse(JSON.stringify(whOrder.attributes));
@@ -383,7 +404,7 @@ define([
         .removeClass()
         .addClass('fa fa-spinner fa-spin');
 
-      view.updateHandlers[prop].call(view, newData, newValue, func, function(update)
+      view.updateHandlers[prop].call(view, newData, newValue, func, options || {}, function(update)
       {
         view.hideEditor();
 
@@ -434,7 +455,7 @@ define([
 
     updateHandlers: {
 
-      picklistDone: function(newData, newValue, propFunc, done)
+      picklistDone: function(newData, newValue, propFunc, options, done)
       {
         done(function(newData)
         {
@@ -445,7 +466,7 @@ define([
         });
       },
 
-      picklist: function(newData, newValue, propFunc, done)
+      picklist: function(newData, newValue, propFunc, options, done)
       {
         done(function(newData)
         {
@@ -457,7 +478,7 @@ define([
         });
       },
 
-      pickup: function(newData, newValue, propFunc, done)
+      pickup: function(newData, newValue, propFunc, options, done)
       {
         var view = this;
 
@@ -475,7 +496,7 @@ define([
 
         if (newValue === 'success')
         {
-          return view.updateHandlers.handlePickupSuccess.call(view, newData, propFunc, done);
+          return view.updateHandlers.handlePickupSuccess.call(view, newData, propFunc, options, done);
         }
 
         if (newValue === 'failure')
@@ -486,36 +507,59 @@ define([
         throw new Error('Invalid pickup value.');
       },
 
-      handlePickupSuccess: function(newData, propFunc, done)
+      handlePickupSuccess: function(newData, propFunc, options, done)
       {
         var view = this;
         var $item = view.$('.wh-set-item[data-id="' + newData._id + '"]');
         var $prop = $item.find('.wh-set-action[data-prop="pickup"][data-func="' + propFunc + '"]');
         var $editor = view.renderPartial(cartsEditorTemplate, {
+          multiline: propFunc === 'packer',
           carts: newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]].carts.join(' ')
         });
 
-        $editor.find('.form-control').on('input', function(e)
-        {
-          e.currentTarget.setCustomValidity('');
-        });
+        $editor.find('.form-control')
+          .on('input', function(e)
+          {
+            e.currentTarget.setCustomValidity('');
+          })
+          .on('keydown', function(e)
+          {
+            if (e.target.tagName === 'TEXTAREA' && e.key === 'Enter')
+            {
+              $editor.find('.btn').click();
+
+              return false;
+            }
+          });
 
         $editor.on('submit', function()
         {
-          var carts = $editor.find('.form-control')
+          var $carts = $editor.find('.form-control');
+          var carts = $carts
             .val()
             .toUpperCase()
-            .split(/[^0-9A-Z_-]+/)
-            .filter(function(v) { return !!v.length; });
+            .split(/[,\s]+/)
+            .filter(function(v) { return /^[A-Z0-9]+$/.test(v); })
+            .sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true}); });
+
+          $carts.val(carts.join(' '));
 
           if (carts.length === 0)
           {
-            complete(carts);
+            view.timers.resubmit = setTimeout(function() { $editor.find('.btn').click(); });
 
             return false;
           }
 
-          var $fields = $editor.find('input, button').prop('disabled', true);
+          var oldCarts = view.whOrders.get(newData._id).getFunc(propFunc).carts
+            .sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true}); });
+
+          if (_.isEqual(carts, oldCarts))
+          {
+            return done();
+          }
+
+          var $fields = $editor.find('.form-control, .btn').prop('disabled', true);
 
           var req = view.ajax({
             url: '/old/wh/setCarts'
@@ -583,7 +627,9 @@ define([
 
         view.showEditor($editor, $prop[0]);
 
-        $editor.find('input').select();
+        var $carts = $editor.find('.form-control');
+        $carts[0].selectionStart = 9999;
+        $carts.focus();
 
         function complete(carts)
         {
@@ -593,7 +639,8 @@ define([
               whOrderId: newData._id,
               funcId: propFunc,
               newValue: 'success',
-              carts: carts
+              carts: carts,
+              edit: !!options.edit
             };
           });
         }
@@ -680,7 +727,7 @@ define([
         return $item.fadeOut('fast', function() { $item.remove(); });
       }
 
-      $item.replaceWith(setItemTemplate({
+      $item.replaceWith(this.renderPartialHtml(setItemTemplate, {
         item: whOrder.serializeSet(
           this.plan,
           this.whOrders.indexOf(whOrder),

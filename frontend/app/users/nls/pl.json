@@ -181,6 +181,7 @@
   "PRIVILEGE:WH:VIEW": "Magazyn: przeglądanie",
   "PRIVILEGE:WH:MANAGE": "Magazyn: zarządzanie",
   "PRIVILEGE:WH:MANAGE:USERS": "Magazyn: zarządzanie użytkownikami",
+  "PRIVILEGE:WH:MANAGE:CARTS": "Magazyn: zarządzanie wózkami",
   "PRIVILEGE:WH:SOLVER": "Magazyn: rozwiązywanie problemów",
   "PRIVILEGE:LUMA2:VIEW": "Luma2: przeglądanie",
   "PRIVILEGE:LUMA2:MANAGE": "Luma2: zarządzanie",

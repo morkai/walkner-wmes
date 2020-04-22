@@ -19,9 +19,7 @@
     <% }) %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <td class="wh-set-actions" rowspan="2">
-      <% if (item.clickable.printLabels) { %>
-      <button class="btn btn-default" type="button" data-action="printLabels"><i class="fa fa-print"></i></button>
-      <% } %>
+      <button class="btn btn-default" type="button" data-action="printLabels" <%- !item.clickable.printLabels ? 'disabled style="visibility: hidden"' : '' %>><i class="fa fa-print"></i></button>
     </td>
   </tr>
   <tr>

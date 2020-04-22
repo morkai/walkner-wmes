@@ -149,14 +149,11 @@ define([
         psStatuses: []
       });
       var canManage = user.isAllowedTo('WH:MANAGE');
+      var canManageCarts = user.isAllowedTo('WH:MANAGE:CARTS');
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
-      var fifoUndelivered = this.get('fifoStatus') === 'pending'
-        || (obj.funcs[0].pickup === 'ignore' && obj.funcs[1].pickup === 'ignore');
-      var packUndelivered = this.get('packStatus') === 'pending'
-        || obj.funcs[2].pickup === 'ignore';
-      var undelivered = fifoUndelivered && packUndelivered;
+      var undelivered = this.get('distStatus') === 'pending';
 
       obj.clickable = {
         picklistDone: undelivered
@@ -167,11 +164,16 @@ define([
       {
         obj.clickable[func._id] = {
           picklist: undelivered
-            && ((canManage && picklistDone)
-            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist')),
+            && (
+              (canManage && picklistDone)
+              || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist')
+            ),
           pickup: undelivered
-            && ((canManage && func.picklist === 'require')
-            || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup'))
+            && (
+              (canManage && func.picklist === 'require')
+              || (canManageCarts && func.pickup === 'success')
+              || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
+            )
         };
       });
 

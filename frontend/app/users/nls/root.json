@@ -180,6 +180,7 @@
     "PRIVILEGE:WH:VIEW": "WH: view",
     "PRIVILEGE:WH:MANAGE": "WH: manage",
     "PRIVILEGE:WH:MANAGE:USERS": "WH: manage users",
+    "PRIVILEGE:WH:MANAGE:CARTS": "WH: manage carts",
     "PRIVILEGE:WH:SOLVER": "WH: problem solving",
     "PRIVILEGE:LUMA2:VIEW": "Luma2: view",
     "PRIVILEGE:LUMA2:MANAGE": "Luma2: manage",

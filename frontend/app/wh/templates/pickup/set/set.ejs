@@ -1,15 +1,15 @@
 <table class="wh-set">
   <thead>
   <tr>
-    <th data-prop="order"><%- t('wh', 'prop:order') %></th>
-    <th data-prop="product"><%- t('wh', 'prop:product') %></th>
-    <th data-prop="qty"><%- t('wh', 'prop:qty') %></th>
-    <th data-prop="time"><%- t('wh', 'prop:time') %></th>
+    <th data-prop="order"><%- t('prop:order') %></th>
+    <th data-prop="product"><%- t('prop:product') %></th>
+    <th data-prop="qty"><%- t('prop:qty') %></th>
+    <th data-prop="time"><%- t('prop:time') %></th>
     <th class="wh-set-separator"></th>
-    <th data-prop="picklistDone"><%- t('wh', 'prop:picklist') %></th>
+    <th data-prop="picklistDone"><%- t('prop:picklist') %></th>
     <% items[0].funcs.forEach(function(func) { %>
     <th class="wh-set-separator"></th>
-    <th data-prop="func" data-func="<%- func._id %>" colspan="2"><%- t('wh', 'prop:' + func._id) %></th>
+    <th data-prop="func" data-func="<%- func._id %>" colspan="2"><%- t('prop:' + func._id) %></th>
     <% }) %>
     <th class="wh-set-separator"></th>
     <th><%- t('core', 'LIST:COLUMN:actions') %></th>

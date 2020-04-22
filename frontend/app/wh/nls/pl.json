@@ -153,6 +153,7 @@
   "menu:pickup:success": "Kompletacja wykonana",
   "menu:pickup:failure": "Kompletacja nieudana",
   "menu:pickup:pending": "Resetuj status",
+  "menu:pickup:editCarts": "Zmień wózki",
 
   "update:failure": "Wykonywanie akcji nie powiodło się.",
   "printLabels:failure": "Drukowanie etykiet nie powiodło się.",

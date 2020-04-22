@@ -1,4 +1,4 @@
-<h1>v?.?.?</h1>
+<h1>v0.148.0</h1>
 <h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Czas cyklu</h3>
 <ul>
@@ -7,6 +7,7 @@
   <li>Poprawiono błąd przy liczeniu ilości wszystkich linii montażowych w raporcie Wyniki.</li>
   <li>Zmieniono sposób obliczania unbalance.</li>
   <li>Dodano oddzielne uprawnienia do zarządzania grupami wyrobów.</li>
+  <li>Dodano wsparcie dla balansowania operacji.</li>
 </ul>
 <h3>Dokumentacja</h3>
 <ul>
@@ -15,6 +16,7 @@
   <li>Dodano możliwość dodawania do katalogu plików innego typu niż PDF: txt, json, docx, xlsx, pptx, mp4.</li>
   <li>Dodano możliwość dodawania do katalogu plików bez podania 15NC. Jeżeli 15NC nie zostanie podane, to dokument
     dostanie automatycznie wygenerowany, unikalny kod z prefiksem 000.</li>
+  <li>Dodano wsparcie dla balansowania operacji.</li>
 </ul>
 <h3>Magazyn</h3>
 <ul>
@@ -25,6 +27,8 @@
     pasujące sety z każdej kwalifikującej się linii (a nie wszystkie), żeby zachować kolejność wywożonych
     zleceń.</li>
   <li>Dodano możliwość przekierowywania linii.</li>
+  <li>Dodano możliwość zmiany nr wózków w niewysłanych setach dla użytkowników z uprawnieniem
+    'Magazyn: zarządzanie wózkami'.</li>
 </ul>
 <h3>FTE (produkcja)</h3>
 <ul>

@@ -1,4 +1,8 @@
-<form class="wh-set-editor wh-set-editor-carts">
-  <input type="text" autocomplete="new-password" class="form-control" value="<%- carts %>" placeholder="<%- t('wh', 'set:cartsEditor:carts') %>" required>
+<form class="wh-set-editor wh-set-editor-carts <%- multiline ? 'wh-is-multiline' : '' %>">
+  <% if (multiline) { %>
+  <textarea class="form-control text-fixed" placeholder="<%- t('set:cartsEditor:carts') %>" required><%- carts %></textarea>
+  <% } else { %>
+  <input type="text" autocomplete="new-password" class="form-control" value="<%- carts %>" placeholder="<%- t('set:cartsEditor:carts') %>" required>
+  <% } %>
   <button class="btn btn-success"><i class="fa fa-shopping-cart"></i></button>
 </form>
