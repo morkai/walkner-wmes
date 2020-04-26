@@ -1,0 +1,1 @@
+define(["app/core/views/ListView"],function(e){"use strict";return e.extend({className:"wh-events-list",remoteTopics:function(){var e={};return e[this.collection.getTopicPrefix()+".updated"]="refreshCollection",e},columns:[{id:"time",className:"is-min"},{id:"type",className:"is-min"},{id:"user",className:"is-min"},{id:"whUser",className:"is-min"},{id:"data"}],actions:[]})});

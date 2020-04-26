@@ -1,0 +1,1 @@
+define(["app/core/Collection","./WhEvent"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:function(e){return e.Query.fromObject({sort:{time:-1},limit:20})}})});

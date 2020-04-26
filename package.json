@@ -5,8 +5,8 @@
   "version": "0.148.0",
   "updater": {
     "wmes": {
-      "backend": 542,
-      "frontend": 693,
+      "backend": 543,
+      "frontend": 694,
       "reports": 121,
       "attachments": 3,
       "importer-sap": 57,
@@ -60,6 +60,7 @@
   },
   "main": "./backend/main",
   "dependencies": {
+    "axios": "^0.19.2",
     "axon": "^2.0.3",
     "bcrypt": "3.0.6",
     "body-parser": "^1.19.0",
@@ -84,6 +85,7 @@
     "h5.rql": "morkai/h5.rql",
     "h5.step": "morkai/h5.step",
     "https-proxy-agent": "^4.0.0",
+    "iconv-lite": "^0.4.24",
     "jsonwebtoken": "^8.5.1",
     "jszip": "^3.2.2",
     "later": "^1.2.0",
