@@ -1,50 +1,6 @@
-<h1>v0.148.0</h1>
-<h2><%- time.format('2020-04-22', 'LL') %></h2>
-<h3>Czas cyklu</h3>
-<ul>
-  <li>Poprawiono błąd powodujący niewyświetlanie na ekranie monitoringu menu z raportami dla użytkowników
-    z uprawnieniem 'Dane produkcyjne: przeglądanie'.</li>
-  <li>Poprawiono błąd przy liczeniu ilości wszystkich linii montażowych w raporcie Wyniki.</li>
-  <li>Zmieniono sposób obliczania unbalance.</li>
-  <li>Dodano oddzielne uprawnienia do zarządzania grupami wyrobów.</li>
-  <li>Dodano wsparcie dla balansowania operacji.</li>
-</ul>
-<h3>Dokumentacja</h3>
-<ul>
-  <li>Usunięto funkcjonalność serwowania plików dokumentów z ustawionego katalogu na dysku lokalnym.
-    Od teraz pliki dokumentów zawsze są serwowane z Katalogu dokumentów WMES.</li>
-  <li>Dodano możliwość dodawania do katalogu plików innego typu niż PDF: txt, json, docx, xlsx, pptx, mp4.</li>
-  <li>Dodano możliwość dodawania do katalogu plików bez podania 15NC. Jeżeli 15NC nie zostanie podane, to dokument
-    dostanie automatycznie wygenerowany, unikalny kod z prefiksem 000.</li>
-  <li>Dodano wsparcie dla balansowania operacji.</li>
-</ul>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Magazyn</h3>
 <ul>
-  <li>Poprawiono błąd oznaczający status wysyłki FIFO kompletowanego zlecenia jako 'Zakończone', jeżeli
-    zakończono kompletację FMX a następnie zignorowano kompletację Kitter (lub odwrotnie).</li>
-  <li>Poprawiono błąd powodujący zawieszenie statusów wózków w secie po rozwiązaniu problemu z transakcją LP10.</li>
-  <li>Zmieniono dokładanie brakujących wózków FIFO do wywózki tak, aby brane pod uwagę były tylko pierwsze
-    pasujące sety z każdej kwalifikującej się linii (a nie wszystkie), żeby zachować kolejność wywożonych
-    zleceń.</li>
-  <li>Dodano możliwość przekierowywania linii.</li>
-  <li>Dodano możliwość zmiany nr wózków w niewysłanych setach dla użytkowników z uprawnieniem
-    'Magazyn: zarządzanie wózkami'.</li>
-</ul>
-<h3>FTE (produkcja)</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wyświetlanie w formularzu edycji zasobów `undefined` jako ID linii, jeżeli
-    w danym przepływie nie ma żadnych aktywnych linii.</li>
-</ul>
-<h3>Planowanie</h3>
-<ul>
-  <li>Poprawiono błąd powodujący zatrzymanie procesu automatycznego blokowania MRP po zablokowaniu pierwszego MRP
-    od uruchomienia serwera.</li>
-  <li>Zmieniono odblokowywanie MRP tak, aby tylko super administrator mógł odblokować MRP, dla którego istnieją
-    skompletowane sety w magazynie.</li>
-  <li>Dodano wsparcie dla przekierowywania linii z poziomu planu.</li>
-  <li>Dodano informację o skompletowanych oraz dostępnych sztukach do dymka linii.</li>
-</ul>
-<h3>Baza PFEP</h3>
-<ul>
-  <li>Dodano listy rozwijane z istniejącymi wartościami do pól Jednostka, Rodzaj opakowania oraz Dostawca.</li>
+  <li>Dodano listę zdarzeń.</li>
 </ul>

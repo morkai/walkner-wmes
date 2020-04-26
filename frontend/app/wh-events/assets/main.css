@@ -1,0 +1,20 @@
+.wh-events-list td[data-id="data"] {
+  padding: 7px 7px 0 0;
+}
+.wh-events-prop {
+  display: inline-block;
+  margin-left: 7px;
+  margin-bottom: 7px;
+  border: 1px solid #999;
+}
+.wh-events-prop-name {
+  display: inline-block;
+  padding: 2px 4px;
+  background: #EEE;
+  color: #000;
+  border-right: 1px solid #999;
+}
+.wh-events-prop-value {
+  display: inline-block;
+  padding: 2px 4px;
+}

@@ -1,0 +1,32 @@
+<form class="well filter-form">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    utc: true,
+    property: 'time',
+    labels: [{text: t('PROPERTY:time'), ranges: true}]
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-type"><%- t('PROPERTY:type') %></label>
+    <select id="<%- idPrefix %>-type" name="type" class="form-control is-expandable" multiple size="1">
+      <% TYPES.forEach(function(type) { %>
+      <option value="<%- type %>"><%- t('type:' + type) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-user"><%- t('PROPERTY:user') %></label>
+    <input id="<%- idPrefix %>-user" name="user" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order"><%- t('filter:order') %></label>
+    <input id="<%- idPrefix %>-order" name="order" class="form-control" type="text" autocomplete="new-password" style="width: 90px">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-line"><%- t('filter:line') %></label>
+    <input id="<%- idPrefix %>-line" name="line" type="text" autocomplete="new-password">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('core', 'filter:submit') %></span></button>
+  </div>
+</form>
