@@ -6,7 +6,7 @@
     <%- t('resultsReport:avgOutput:title') %>
     <a href="javascript:void(0)" class="ct-reports-results-mode" data-prop="upph" data-value="standard"><%- t('resultsReport:avgOutput:standard') %></a>
     <a href="javascript:void(0)" class="ct-reports-results-mode" data-prop="upph" data-value="normalized"><%- t('resultsReport:avgOutput:normalized') %></a>
-    <% if (user.isAllowedTo('PROD_DATA:MANAGE')) { %>
+    <% if (canManage) { %>
     <a id="<%- idPrefix %>-editUpphConfig" href="javascript:void(0)" style="margin-left: 10px"><i class="fa fa-edit" style="vertical-align: bottom"></i></a>
     <% } %>
   </h3>

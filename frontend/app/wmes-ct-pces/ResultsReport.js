@@ -2,14 +2,14 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/time',
+  'app/user',
   'app/core/Model',
   'app/data/localStorage'
 ], function(
   _,
-  t,
   time,
+  user,
   Model,
   localStorage
 ) {
@@ -121,6 +121,13 @@ define([
     }
 
   }, {
+
+    can: {
+      manage: function()
+      {
+        return user.isAllowedTo('PROD_DATA:MANAGE', 'FN:*process-engineer*');
+      }
+    },
 
     fromQuery: function(query)
     {

@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  '../../ResultsReport',
   '../../MrpConfig',
   './MrpConfigDialogView',
   'app/wmes-ct-pces/templates/resultsReport/table'
@@ -13,6 +14,7 @@ define([
   user,
   viewport,
   View,
+  ResultsReport,
   MrpConfig,
   MrpConfigDialogView,
   template
@@ -104,7 +106,7 @@ define([
     getTemplateData: function()
     {
       return {
-        canManage: user.isAllowedTo('PROD_DATA:MANAGE'),
+        canManage: ResultsReport.can.manage(),
         selectedTab: this.model.get('tab'),
         report: this.model.get('report')
       };

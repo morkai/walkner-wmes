@@ -21,7 +21,7 @@ define([
   View,
   bindLoadingMessage,
   settings,
-  Report,
+  ResultsReport,
   FilterView,
   VsChartView,
   AvgOutputChartView,
@@ -94,6 +94,13 @@ define([
     load: function(when)
     {
       return when(this.model.fetch());
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        canManage: ResultsReport.can.manage()
+      };
     },
 
     afterRender: function()
