@@ -44,15 +44,18 @@ define([
   'use strict';
 
   var DEV_PERSONNEL = {
-    fmx: '13370001',
-    fmx2: '110404',
-    kit: '13370002',
-    kit2: '100307',
-    pac: '13370003',
-    pac2: '115006',
-    dfifo: '13370004',
-    dpac: '13370005',
-    dfifo2: '13370006'
+    fmx: '13370011',
+    fmx2: '13370012',
+    kit: '13370021',
+    kit2: '13370022',
+    pack: '13370031',
+    pack2: '13370032',
+    plat: '13370041',
+    plat2: '13370042',
+    dfifo: '13370051',
+    dfifo2: '13370052',
+    dpack: '13370061',
+    dpack2: '13370061'
   };
 
   var LINE_UPDATE_INTERVAL = 10000;
@@ -669,7 +672,7 @@ define([
         return;
       }
 
-      if (window.ENV === 'development' && DEV_PERSONNEL[personnelId])
+      if (window.ENV !== 'production' && DEV_PERSONNEL[personnelId])
       {
         personnelId = DEV_PERSONNEL[personnelId];
       }

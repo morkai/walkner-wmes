@@ -19,7 +19,7 @@ define([
   '../views/WhProblemFilterView',
   '../views/WhProblemListView',
   '../views/WhProblemDetailsView',
-  'app/wh/templates/problemListPage'
+  'app/wh/templates/problems/listPage'
 ], function(
   _,
   $,

@@ -2,7 +2,7 @@
 
 define([
   'app/core/View',
-  'app/wh/templates/problemFilter'
+  'app/wh/templates/problems/filter'
 ], function(
   View,
   template

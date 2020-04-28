@@ -59,7 +59,8 @@ define([
   var FUNC_TO_INDEX = {
     fmx: 0,
     kitter: 1,
-    packer: 2
+    platformer: 2,
+    packer: 3
   };
 
   return Model.extend({

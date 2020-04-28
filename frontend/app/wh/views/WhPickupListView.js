@@ -283,7 +283,10 @@ define([
               templateData.status = view.t('status:pending');
             }
           }
-          else if (columnId === 'fmx' || columnId === 'kitter' || columnId === 'packer')
+          else if (columnId === 'fmx'
+            || columnId === 'kitter'
+            || columnId === 'platformer'
+            || columnId === 'packer')
           {
             var func = whOrder.getFunc(this.dataset.columnId);
 

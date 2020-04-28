@@ -3,20 +3,20 @@
 
 'use strict';
 
-db.oldwhevents.find({'data.setCarts': {$exists: true}}, {objects: 1, 'data.setCarts': 1}).forEach(event =>
+db.oldwhorders.find({funcs: {$size: 3}}).forEach(o =>
 {
-  event.data.setCarts.forEach(setCart =>
-  {
-    if (!event.objects.includes(`cart-${setCart.cart}`))
-    {
-      event.objects.push(`cart-${setCart.cart}`);
-    }
-
-    if (!event.objects.includes(`cart-${setCart.kind}-${setCart.cart}`))
-    {
-      event.objects.push(`cart-${setCart.kind}-${setCart.cart}`);
-    }
+  o.funcs.splice(2, 0, {
+    _id: "platformer",
+    user: null,
+    startedAt: null,
+    finishedAt: null,
+    status: "pending",
+    picklist: "pending",
+    pickup: "pending",
+    carts: [],
+    problemArea: "",
+    comment: ""
   });
 
-  db.oldwhevents.updateOne({_id: event._id}, {$set: {objects: event.objects}});
+  db.oldwhorders.updateOne({_id: o._id}, {$set: {funcs: o.funcs}});
 });

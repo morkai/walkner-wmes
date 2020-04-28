@@ -101,14 +101,12 @@
       </div>
     </div>
     <div class="panel-body" data-tab="users">
-      <div style="display: flex">
-        <% ['fmx', 'kitter', 'packer', 'dist-components', 'dist-packaging'].forEach(function(func) { %>
-        <div class="form-group settings-select2-long" style="min-width: 300px; margin-right: 15px;">
-          <label><%- t('func:' + func) %></label>
-          <input type="text" autocomplete="new-password" data-user-func="<%- func %>">
-        </div>
-        <% }) %>
+      <% ['fmx', 'kitter', 'platformer', 'packer', 'dist-components', 'dist-packaging'].forEach(function(func) { %>
+      <div class="form-group">
+        <label><%- t('func:' + func) %></label>
+        <input type="text" autocomplete="new-password" data-user-func="<%- func %>">
       </div>
+      <% }) %>
     </div>
   </div>
 </form>

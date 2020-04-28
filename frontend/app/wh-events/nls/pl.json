@@ -47,6 +47,7 @@
 
   "func:fmx": "FMX",
   "func:kitter": "Kitter",
+  "func:platformer": "Platformowy",
   "func:packer": "Opakowania",
 
   "type:newSetStarted": "Rozpoczęcie nowego seta",

@@ -16,11 +16,11 @@ define([
   '../WhOrder',
   '../WhOrderCollection',
   './WhProblemChatView',
-  'app/wh/templates/problemDetails',
-  'app/wh/templates/problemDetailsOrderInfo',
-  'app/wh/templates/problemDetailsFuncs',
-  'app/wh/templates/problemCancelOrderEditor',
-  'app/wh/templates/problemSolveProblemEditor'
+  'app/wh/templates/problems/details',
+  'app/wh/templates/problems/detailsOrderInfo',
+  'app/wh/templates/problems/detailsFuncs',
+  'app/wh/templates/problems/cancelOrderEditor',
+  'app/wh/templates/problems/solveProblemEditor'
 ], function(
   _,
   $,
@@ -117,6 +117,7 @@ define([
           lp10: this.model.serializeProblemFunc('lp10'),
           fmx: this.model.serializeProblemFunc('fmx'),
           kitter: this.model.serializeProblemFunc('kitter'),
+          platformer: this.model.serializeProblemFunc('platformer'),
           packer: this.model.serializeProblemFunc('packer')
         }
       };

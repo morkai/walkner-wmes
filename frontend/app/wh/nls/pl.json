@@ -61,6 +61,7 @@
   "prop:picklist": "LP10",
   "prop:fmx": "FMX",
   "prop:kitter": "Kitter",
+  "prop:platformer": "Plat.",
   "prop:packer": "Opak.",
   "prop:carts": "Wózki",
   "prop:user": "Magazynier",
@@ -71,6 +72,7 @@
 
   "func:fmx": "FMX",
   "func:kitter": "Kitter",
+  "func:platformer": "Platformowy",
   "func:packer": "Opakowania",
   "func:dist-components": "Wysyłka FIFO",
   "func:dist-packaging": "Wysyłka opakowań",
@@ -161,6 +163,7 @@
   "list:popover:picklist": "LP10",
   "list:popover:fmx": "FMX",
   "list:popover:kitter": "Kitter",
+  "list:popover:platformer": "Platformowy",
   "list:popover:packer": "Opakowania",
   "list:popover:status": "Status",
   "list:popover:user": "Magazynier",

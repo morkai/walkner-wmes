@@ -300,6 +300,11 @@ define([
             return;
           }
 
+          if (func === 'platformer' && prop === 'picklist' && item.value === 'ignore')
+          {
+            return;
+          }
+
           menu.push({
             icon: item.icon,
             label: view.t('menu:' + prop + ':' + (item.label || item.value)),

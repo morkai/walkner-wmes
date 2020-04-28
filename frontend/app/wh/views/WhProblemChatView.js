@@ -10,8 +10,8 @@ define([
   'app/core/View',
   'app/core/templates/userInfo',
   'app/planning/PlanSapOrder',
-  'app/wh/templates/problemChat',
-  'app/wh/templates/problemChatMessage'
+  'app/wh/templates/problems/chat',
+  'app/wh/templates/problems/chatMessage'
 ], function(
   _,
   $,

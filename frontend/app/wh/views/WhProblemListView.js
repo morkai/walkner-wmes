@@ -9,8 +9,8 @@ define([
   'app/viewport',
   'app/core/View',
   './WhProblemDetailsView',
-  'app/wh/templates/problemList',
-  'app/wh/templates/problemListItem'
+  'app/wh/templates/problems/list',
+  'app/wh/templates/problems/listItem'
 ], function(
   _,
   $,
@@ -105,6 +105,7 @@ define([
         lp10: whOrder.serializeProblemFunc('lp10'),
         fmx: whOrder.serializeProblemFunc('fmx'),
         kitter: whOrder.serializeProblemFunc('kitter'),
+        platformer: whOrder.serializeProblemFunc('platformer'),
         packer: whOrder.serializeProblemFunc('packer'),
         urls: urls
       };
