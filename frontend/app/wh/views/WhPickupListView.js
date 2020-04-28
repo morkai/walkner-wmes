@@ -481,6 +481,7 @@ define([
           'picklist',
           'fmx',
           'kitter',
+          'platformer',
           'packer',
           'comment'
         ];
@@ -524,14 +525,19 @@ define([
             order.startTime,
             order.finishTime,
             order.line,
-            view.t('status:' + order.picklistDone),
-            view.t('status:' + order.funcs[0].status),
-            view.t('status:' + order.funcs[1].status),
-            view.t('status:' + order.funcs[2].status),
+            view.t('status:' + order.picklistDone)
+          ];
+
+          order.funcs.forEach(function(func)
+          {
+            row.push(view.t('status:' + func.status));
+          });
+
+          row.push(
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
               .join('\r\n--\r\n') + '"'
-          ];
+          );
 
           text.push(row.join('\t'));
         });
@@ -563,7 +569,6 @@ define([
         view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
       });
     },
-
     handleResetAction: function(filter)
     {
       viewport.msg.saving();
