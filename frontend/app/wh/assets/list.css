@@ -73,10 +73,15 @@ td.wh-list-icon {
   width: 140px;
 }
 
-.wh-list-item[data-status="started"] {
+.wh-list-item > td[data-status="pending"] {
+  background: #fff;
+}
+.wh-list-item[data-status="started"],
+.wh-list-item > td[data-status="started"] {
   background: #d9edf7;
 }
-.planning-darker .wh-list-item[data-status="started"] {
+.planning-darker .wh-list-item[data-status="started"],
+.planning-darker .wh-list-item > td[data-status="started"]  {
   background: #0af;
   color: #fff;
 }

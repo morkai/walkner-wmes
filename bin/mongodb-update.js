@@ -20,3 +20,11 @@ db.oldwhorders.find({funcs: {$size: 3}}).forEach(o =>
 
   db.oldwhorders.updateOne({_id: o._id}, {$set: {funcs: o.funcs}});
 });
+
+db.oldwhorders.updateMany(
+  {packStatus: 'started', fifoStatus: 'finished', 'funcs.3.carts': {$size: 0}},
+  {$set: {
+    distStatus: 'finished',
+    packStatus: 'ignored'
+  }}
+);
