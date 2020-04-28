@@ -191,7 +191,7 @@
   "downtimePicker:reason": "Powód przestoju",
   "downtimePicker:comment": "Komentarz",
 
-  "delivery:title:completed": "Skompletowane {kind, select, components{FIFO} packaging{opakowania} other{}}",
+  "delivery:title:completed": "Skompletowane {kind, select, components{FIFO} packaging{opak.} other{}}",
   "delivery:title:pending": "Do realizacji",
   "delivery:title:delivering": "W realizacji",
   "delivery:set": "Set {set}",

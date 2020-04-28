@@ -190,7 +190,7 @@
     "downtimePicker:reason": "Downtime reason",
     "downtimePicker:comment": "Comment",
 
-    "delivery:title:completed": "Completed {kind, select, components{FIFO} packaging{packaging} other{}}",
+    "delivery:title:completed": "Completed {kind, select, components{FIFO} packaging{pack.} other{}}",
     "delivery:title:pending": "Pending",
     "delivery:title:delivering": "Delivering",
     "delivery:set": "Set {set}",
