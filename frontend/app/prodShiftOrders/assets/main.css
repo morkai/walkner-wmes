@@ -17,16 +17,31 @@
 .prodShiftOrders-filter-operationNo {
   width: 60px;
 }
-.prodShiftOrders-serialNumber {
-  display: inline-block;
-  margin: 0.1em 0;
-  font-size: 1em;
-  font-weight: normal;
-  text-shadow: 1px 1px 1px #000;
-}
 .prodShiftOrders-filter-orderId + .form-control {
   position: absolute;
   margin-top: -34px;
   width: 383px;
   z-index: 2;
+}
+.prodShiftOrders-serialNumbers-panel .panel-body {
+  padding: 0 0 11px 0;
+}
+.prodShiftOrders-serialNumbers-list {
+  display: flex;
+  overflow-x: scroll;
+}
+.prodShiftOrders-serialNumbers-item {
+  width: 70px;
+  padding: 3px 6px;
+  text-align: center;
+  border-left: 1px solid #ddd;
+}
+.prodShiftOrders-serialNumbers-item:first-child {
+  border-left: none;
+}
+.prodShiftOrders-serialNumbers-item.is-over {
+  background: #fcf8e3;
+}
+.prodShiftOrders-serialNumbers-item.is-under {
+  background: #dff0d8;
 }

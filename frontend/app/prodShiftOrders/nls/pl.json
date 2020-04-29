@@ -8,7 +8,6 @@
   "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",
   "PANEL:TITLE:losses": "Straty materiałowe",
   "PANEL:TITLE:downtimes": "Przestoje rozpoczęte w trakcie wykonywania zlecenia",
-  "PANEL:TITLE:serialNumbers": "Zeskanowane numery seryjne",
   "PANEL:TITLE:addForm": "Formularz dodawania zlecenia",
   "PANEL:TITLE:editForm": "Formularz edycji zlecenia",
 
@@ -81,5 +80,13 @@
   "changeRequest:msg:success:delete": "Żądanie usunięcia zlecenia produkcyjnego zostało utworzone.",
   "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowego zlecenia produkcyjnego.",
   "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji zlecenia produkcyjnego.",
-  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zlecenia produkcyjnego."
+  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zlecenia produkcyjnego.",
+
+  "serialNumbers:panel:title": "Zeskanowane numery seryjne",
+  "serialNumbers:panel:totals": "<strong>Cel:</strong> {tgt} | <strong>Średnia:</strong> {avg} | <strong>Mediana:</strong> {med} | <strong>Minimum:</strong> {min} | <strong>Maksimum:</strong> {max}",
+  "serialNumbers:panel:openList": "Przejdź do listy zeskanowanych numerów seryjnych",
+  "serialNumbers:chart:filename": "WMES_PSO_SN",
+  "serialNumbers:chart:title": "Takt Time zlecenia",
+  "serialNumbers:metrics:actual": "Rzeczywisty",
+  "serialNumbers:metrics:target": "Cel"
 }

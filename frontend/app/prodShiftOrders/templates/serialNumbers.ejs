@@ -1,21 +1,21 @@
-<div class="panel panel-default">
-  <div class="panel-heading is-with-actions">
-    <%- helpers.t('PANEL:TITLE:serialNumbers') %>
-    <div class="panel-actions">
-      <a class="btn btn-default" href="#prodSerialNumbers?sort(scannedAt)&limit(20)&prodShiftOrder=<%- prodShiftOrderId %>"><i class="fa fa-list"></i></a>
+<div class="panel panel-default is-with-actions prodShiftOrders-serialNumbers-panel">
+  <div class="panel-heading">
+    <div class="panel-heading-title"><%- helpers.t('serialNumbers:panel:title') %></div>
+    <div class="panel-heading-actions">
+      <div id="<%- idPrefix %>-totals" style="margin-right: 12px"></div>
+      <a class="btn btn-default" href="#prodSerialNumbers?sort(scannedAt)&limit(20)&prodShiftOrder=<%- prodShiftOrderId %>" title="<%- t('serialNumbers:panel:openList') %>"><i class="fa fa-list"></i></a>
     </div>
   </div>
   <div class="panel-body">
-    <% if (!serialNumbers.length) { %>
-    <%- t('core', 'LIST:NO_DATA') %>
-    <% } %>
-    <% serialNumbers.forEach(function(sn) { %>
-    <span class="label label-<%- sn.taktTime > sn.sapTaktTime * 1000 ? 'warning' : 'success' %> prodShiftOrders-serialNumber">
-      #<%- sn.serialNo %> <%- time.format(sn.scannedAt, 'LTS') %> /<%- Math.round(sn.taktTime / 1000) %>s
-      <% if (sn.iptTaktTime) { %>
-      /<%- Math.round(sn.iptTaktTime / 1000) %>s
-      <% } %>
-    </span>
-    <% }) %>
+    <div class="prodShiftOrders-serialNumbers-list">
+      <% serialNumbers.forEach(function(sn) { %>
+      <div class="prodShiftOrders-serialNumbers-item <%- sn.taktTime > sn.sapTaktTime * 1000 ? 'is-over' : 'is-under' %>">
+        #<%- sn.serialNo %>
+        <%- time.format(sn.scannedAt, 'LTS') %>
+        <%- Math.round(sn.taktTime / 1000) %>s
+      </div>
+      <% }) %>
+    </div>
+    <div id="<%- idPrefix %>-chart" class="prodShiftOrders-serialNumbers-chart"></div>
   </div>
 </div>

@@ -9,7 +9,6 @@
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
     "PANEL:TITLE:losses": "Losses",
     "PANEL:TITLE:downtimes": "Downtimes",
-    "PANEL:TITLE:serialNumbers": "Scanned serial numbers",
     "PANEL:TITLE:addForm": "Order add form",
     "PANEL:TITLE:editForm": "Order edit form",
 
@@ -80,7 +79,15 @@
     "changeRequest:msg:success:delete": "Order deletion request was created successfully.",
     "changeRequest:msg:failure:add": "Failed to create a new order creation request.",
     "changeRequest:msg:failure:edit": "Failed to create a new order modification request.",
-    "changeRequest:msg:failure:delete": "Failed to create a new order deletion request."
+    "changeRequest:msg:failure:delete": "Failed to create a new order deletion request.",
+
+    "serialNumbers:panel:title": "Scanned serial numbers",
+    "serialNumbers:panel:totals": "<strong>Target:</strong> {tgt} | <strong>Average:</strong> {avg} | <strong>Median:</strong> {med} | <strong>Min:</strong> {min} | <strong>Max:</strong> {max}",
+    "serialNumbers:panel:openList": "Go to scanned serial numbers list",
+    "serialNumbers:chart:filename": "WMES_PSO_SN",
+    "serialNumbers:chart:title": "Order Takt Time",
+    "serialNumbers:metrics:actual": "Target",
+    "serialNumbers:metrics:target": "Actual"
   },
   "pl": true
 }
