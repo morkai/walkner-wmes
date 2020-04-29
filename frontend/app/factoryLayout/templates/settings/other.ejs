@@ -1,6 +1,10 @@
 <div class="panel-body" data-tab="other">
   <div class="form-group">
-    <label for="<%- idPrefix %>-extendedDowntimeDelay"><%- t('factoryLayout', 'settings:extendedDowntimeDelay') %></label>
-    <input id="<%- idPrefix %>-extendedDowntimeDelay" class="form-control" name="factoryLayout.extendedDowntimeDelay" type="number" value="15" step="1" min="5" max="1440">
+    <label for="<%- idPrefix %>-extendedDowntimeDelay"><%- t('settings:extendedDowntimeDelay') %></label>
+    <input id="<%- idPrefix %>-extendedDowntimeDelay" class="form-control" name="factoryLayout.extendedDowntimeDelay" type="number" step="1" min="5" max="1440">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-outOfSyncWindow"><%- t('settings:outOfSyncWindow') %></label>
+    <input id="<%- idPrefix %>-outOfSyncWindow" class="form-control" name="factoryLayout.outOfSyncWindow" type="number" step="1" min="0" max="100">
   </div>
 </div>

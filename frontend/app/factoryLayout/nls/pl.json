@@ -1,6 +1,7 @@
 {
-  "bc:layout": "Monitoring",
-  "bc:layout:edit": "Edycja układu fabryki",
+  "bc:base": "Monitoring",
+  "bc:layout": "Układ fabryki",
+  "bc:heff": "Wydajność godzinowa",
   "bc:list": "Linie produkcyjne",
   "bc:settings": "Ustawienia",
 
@@ -67,5 +68,31 @@
   "settings:tab:blacklist": "Ignorowane jednostki org.",
   "settings:tab:divisionColors": "Kolory wydziałów",
   "settings:tab:other": "Inne",
-  "settings:extendedDowntimeDelay": "Długi przestój [min]"
+  "settings:extendedDowntimeDelay": "Długi przestój [min]",
+  "settings:outOfSyncWindow": "Próg odbiegania od planu [%]",
+
+  "legend:heff:off": "niedostępna",
+  "legend:heff:off:title": "Od startu serwera linia nie nawiązała z nim połączenia.",
+  "legend:heff:noPlan": "niepracująca",
+  "legend:heff:noPlan:title": "Linia nie ma planu i nie pracowała.",
+  "legend:heff:unplanned": "nieplanowana",
+  "legend:heff:unplanned:title": "Linia nie ma planu ale pracowała.",
+  "legend:heff:under": "za wolno",
+  "legend:heff:under:title": "Ilość zrobiona jest mniejsza niż ilość zaplanowana do teraz.",
+  "legend:heff:over": "z planem",
+  "legend:heff:over:title": "Ilość zrobiona jest większa lub równa ilości zaplanowanej do teraz.",
+  "legend:heff:outOfSync": "odbiega {window}%",
+  "legend:heff:outOfSync:title": "Ilość zrobiona odbiega od ilości zaplanowanej do teraz o dany procent.",
+  "legend:layout:off": "niedostępna",
+  "legend:layout:off:title": "Od startu serwera linia nie nawiązała z nim połączenia.",
+  "legend:layout:idle": "niepracująca",
+  "legend:layout:idle:title": "Linia nie pracuje.",
+  "legend:layout:nok": "poniżej taktu",
+  "legend:layout:nok:title": "Średni czas cyklu jest poniżej czasu taktu.",
+  "legend:layout:ok": "takt ok",
+  "legend:layout:ok:title": "Średni czas cyklu jest większy lub równy czasowi taktu.",
+  "legend:layout:downtime": "przestój",
+  "legend:layout:downtime:title": "Na linii jest przestój innego typu niż Przerwa.",
+  "legend:layout:break": "przerwa",
+  "legend:layout:break:title": "Na linii jest przestój typu Przerwa."
 }

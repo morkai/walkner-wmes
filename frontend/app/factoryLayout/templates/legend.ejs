@@ -1,0 +1,14 @@
+<div class="factoryLayout-legend">
+  <% if (heff) { %>
+    <% ['off', 'noPlan', 'unplanned', 'under', 'over'].forEach(function(state) { %>
+      <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:heff:' + state + ':title') %>"><%- t('legend:heff:' + state) %></div>
+    <% }) %>
+    <% if (outOfSyncWindow) { %>
+      <div class="factoryLayout-legend-item" data-state="outOfSync" title="<%- t('legend:heff:outOfSync:title') %>"><%- t('legend:heff:outOfSync', {window: outOfSyncWindow}) %></div>
+    <% } %>
+  <% } else { %>
+    <% ['off', 'idle', 'nok', 'ok', 'downtime', 'break'].forEach(function(state) { %>
+      <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:heff:' + state + ':title') %>"><%- t('legend:layout:' + state) %></div>
+    <% }) %>
+  <% } %>
+</div>

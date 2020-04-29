@@ -7,7 +7,8 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/data/localStorage',
-  '../views/FactoryLayoutCanvasView'
+  '../views/FactoryLayoutCanvasView',
+  'app/factoryLayout/templates/legend'
 ], function(
   $,
   screenfull,
@@ -15,7 +16,8 @@ define([
   View,
   bindLoadingMessage,
   localStorage,
-  FactoryLayoutCanvasView
+  FactoryLayoutCanvasView,
+  legendTemplate
 ) {
   'use strict';
 
@@ -33,14 +35,22 @@ define([
     breadcrumbs: function()
     {
       return [
-        this.t('bc:layout')
+        this.t(this.canvasView.heff ? 'bc:heff' : 'bc:layout')
       ];
     },
 
     actions: function()
     {
       var page = this;
-      var actions = [];
+      var actions = [{
+        template: function()
+        {
+          return page.renderPartialHtml(legendTemplate, {
+            heff: page.canvasView.heff,
+            outOfSyncWindow: page.model.settings.factoryLayout.getValue('outOfSyncWindow')
+          });
+        }
+      }];
 
       if (document.msExitFullscreen)
       {
@@ -66,6 +76,9 @@ define([
             localStorage.setItem('WMES_FACTORY_LAYOUT_HEFF', page.canvasView.heff ? '1' : '0');
 
             this.querySelector('.btn').classList.toggle('active', page.canvasView.heff);
+
+            page.layout.setBreadcrumbs(page.breadcrumbs, page);
+            page.layout.setActions(page.actions, page);
           }
         },
         {
@@ -83,6 +96,7 @@ define([
     {
       this.defineModels();
       this.defineViews();
+      this.defineBindings();
 
       this.setView(this.canvasView);
     },
@@ -109,9 +123,19 @@ define([
       });
     },
 
+    defineBindings: function()
+    {
+      this.listenTo(this.model.settings.factoryLayout, 'change', this.onLayoutSettingsChange);
+    },
+
     load: function(when)
     {
       return when(this.model.load(false));
+    },
+
+    setUpLayout: function(layout)
+    {
+      this.layout = layout;
     },
 
     afterRender: function()
@@ -120,6 +144,14 @@ define([
       $('.ft').addClass('hidden');
 
       this.model.load(false);
+    },
+
+    onLayoutSettingsChange: function(setting)
+    {
+      if (/outOfSyncWindow/.test(setting.id))
+      {
+        this.layout.setActions(this.actions, this);
+      }
     }
 
   });

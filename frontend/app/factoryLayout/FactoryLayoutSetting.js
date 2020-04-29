@@ -9,7 +9,9 @@ define([
 
   return Setting.extend({
 
-    urlRoot: '/factoryLayout/settings'
+    urlRoot: '/factoryLayout/settings',
+
+    nlsDomain: 'factoryLayout'
 
   });
 });

@@ -1,6 +1,8 @@
 {
   "root": {
-    "bc:layout": "Monitoring",
+    "bc:base": "Monitoring",
+    "bc:layout": "Factory layout",
+    "bc:heff": "Hourly efficiency",
     "bc:list": "Production lines",
     "bc:settings": "Settings",
 
@@ -67,7 +69,33 @@
     "settings:tab:blacklist": "Ignored org units",
     "settings:tab:divisionColors": "Division colors",
     "settings:tab:other": "Other",
-    "settings:extendedDowntimeDelay": "Extended downtime [min]"
+    "settings:extendedDowntimeDelay": "Extended downtime [min]",
+    "settings:outOfSyncWindow": "Plan deviation threshold [%]",
+
+    "legend:heff:off": "unavailable",
+    "legend:heff:off:title": "Line didn't connect to the server yet.",
+    "legend:heff:noPlan": "no plan",
+    "legend:heff:noPlan:title": "The line has no plan and hasn't worked.",
+    "legend:heff:unplanned": "unplanned",
+    "legend:heff:unplanned:title": "The line has no plan but worked.",
+    "legend:heff:under": "too slow",
+    "legend:heff:under:title": "The quantity done is less than the quantity planned up to now.",
+    "legend:heff:over": "as planned",
+    "legend:heff:over:title": "The quantity done is greater than or equal to the quantity planned up to now.",
+    "legend:heff:outOfSync": "deviates {window}%",
+    "legend:heff:outOfSync:title": "The quantity done deviates from the quantity planned up to now by the given percentage.",
+    "legend:layout:off": "unavailable",
+    "legend:layout:off:title": "Line didn't connect to the server yet.",
+    "legend:layout:idle": "idle",
+    "legend:layout:idle:title": "Line isn't working.",
+    "legend:layout:nok": "under tact",
+    "legend:layout:nok:title": "The average cycle time is below the tact time.",
+    "legend:layout:ok": "tact ok",
+    "legend:layout:ok:title": "The average cycle time is greater than or equal to the tact time.",
+    "legend:layout:downtime": "downtime",
+    "legend:layout:downtime:title": "Line has a downtime other than Break.",
+    "legend:layout:break": "break",
+    "legend:layout:break:title": "Line has a downtime of type Break."
   },
   "pl": true
 }

@@ -282,6 +282,7 @@ define([
       }
 
       var quantitiesDone = prodShift.get('quantitiesDone');
+
       var currentTime = time.getMoment();
       var currentHour = currentTime.hours();
       var currentMinute = currentTime.minutes();
@@ -312,7 +313,17 @@ define([
 
       if (result.totalPlanned)
       {
-        result.status = result.totalActual >= result.currentPlanned ? 'over' : 'under';
+        var outOfSyncWindow = this.settings && this.settings.factoryLayout.getValue('outOfSyncWindow');
+        var ratio = Math.abs(Math.round(result.totalActual / result.currentPlanned * 100) - 100);
+
+        if (ratio >= outOfSyncWindow)
+        {
+          result.status = 'outOfSync';
+        }
+        else
+        {
+          result.status = result.totalActual >= result.currentPlanned ? 'over' : 'under';
+        }
       }
       else
       {

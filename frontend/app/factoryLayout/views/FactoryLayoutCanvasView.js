@@ -156,15 +156,19 @@ define([
         var model = this.model;
         var prodLineStates = model.prodLineStates;
 
-        this.listenTo(prodLineStates, 'change:state', this.onStateChange);
-        this.listenTo(prodLineStates, 'change:online', this.onOnlineChange);
-        this.listenTo(prodLineStates, 'change:extended', this.onExtendedChange);
-        this.listenTo(prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
-        this.listenTo(prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
-        this.listenTo(prodLineStates, 'change:taktTime', this.updateTaktTime);
-        this.listenTo(prodLineStates, 'change:heff', this.updateHeffStatus);
-        this.listenTo(model.settings.factoryLayout, 'change', this.onLayoutSettingsChange);
-        this.listenTo(model.settings.production, 'change', this.onProductionSettingsChange);
+        this.once('afterRender', function()
+        {
+          this.listenTo(prodLineStates, 'change:state', this.onStateChange);
+          this.listenTo(prodLineStates, 'change:online', this.onOnlineChange);
+          this.listenTo(prodLineStates, 'change:extended', this.onExtendedChange);
+          this.listenTo(prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
+          this.listenTo(prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
+          this.listenTo(prodLineStates, 'change:taktTime', this.updateTaktTime);
+          this.listenTo(prodLineStates, 'change:heff', this.updateHeffStatus);
+          this.listenTo(model, 'sync', this.render);
+          this.listenTo(model.settings.factoryLayout, 'change', this.onLayoutSettingsChange);
+          this.listenTo(model.settings.production, 'change', this.onProductionSettingsChange);
+        });
 
         this.timers.updateHeffMetrics = setInterval(this.updateHeffMetrics.bind(this), 20000);
       }
@@ -188,21 +192,8 @@ define([
       this.panInfo = null;
     },
 
-    beforeRender: function()
-    {
-      if (!this.editable)
-      {
-        this.stopListening(this.model, 'sync');
-      }
-    },
-
     afterRender: function()
     {
-      if (!this.editable)
-      {
-        this.listenToOnce(this.model, 'sync', this.render);
-      }
-
       if (this.model.isLoading())
       {
         return;
@@ -711,7 +702,8 @@ define([
         'is-heff-noPlan': false,
         'is-heff-unplanned': false,
         'is-heff-under': false,
-        'is-heff-over': false
+        'is-heff-over': false,
+        'is-heff-outOfSync': false
       };
 
       if (this.heff)
@@ -792,6 +784,13 @@ define([
         var divisionId = setting.id.split('.')[1];
 
         this.canvas.select('.factoryLayout-division[data-id="' + divisionId + '"]').attr('fill', setting.getValue());
+      }
+      else if (/outOfSyncWindow/.test(setting.id))
+      {
+        this.model.prodLineStates.forEach(function(prodLineState)
+        {
+          prodLineState.recalcHeff();
+        });
       }
     },
 
