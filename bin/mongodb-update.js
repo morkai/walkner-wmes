@@ -5,14 +5,16 @@
 
 db.oldwhorders.find({funcs: {$size: 3}}).forEach(o =>
 {
+  var pending = o.status === "pending";
+
   o.funcs.splice(2, 0, {
     _id: "platformer",
     user: null,
     startedAt: null,
     finishedAt: null,
-    status: "pending",
-    picklist: "pending",
-    pickup: "pending",
+    status: pending ? "pending" : "finished",
+    picklist: pending ? "pending" : "ignore",
+    pickup: pending ? "pending" : "ignore",
     carts: [],
     problemArea: "",
     comment: ""
