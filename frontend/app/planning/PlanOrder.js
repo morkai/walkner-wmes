@@ -47,6 +47,13 @@ define([
       return this.attributes.quantityPlan > 0 && this.attributes.source !== 'incomplete';
     },
 
+    getOperationNo: function()
+    {
+      var op = this.get('operation');
+
+      return op ? op.no : null;
+    },
+
     getManHours: function(quantity)
     {
       if (quantity === undefined)

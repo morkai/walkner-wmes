@@ -13,7 +13,16 @@ define([
 ) {
   'use strict';
 
-  var PROPERTIES = ['_id', 'prodLine', 'shift', 'orderId', 'quantityDone', 'startedAt', 'finishedAt'];
+  var PROPERTIES = [
+    '_id',
+    'prodLine',
+    'shift',
+    'orderId',
+    'operationNo',
+    'quantityDone',
+    'startedAt',
+    'finishedAt'
+  ];
 
   return Collection.extend({
 
@@ -77,14 +86,28 @@ define([
       return shiftOrders;
     },
 
-    getTotalQuantityDone: function(line, shift, orderNo)
+    getTotalQuantityDone: function(line, shift, orderNo, operationNo)
     {
       var cache = this.cache.byLine;
       var planShiftOrders = cache[line] && cache[line][shift] && cache[line][shift][orderNo];
+      var totalQuantityDone = 0;
 
-      return planShiftOrders
-        ? planShiftOrders.reduce(function(total, pso) { return total + (pso.get('quantityDone') || 0); }, 0)
-        : 0;
+      if (!planShiftOrders)
+      {
+        return totalQuantityDone;
+      }
+
+      planShiftOrders.forEach(function(pso)
+      {
+        var opNo = pso.get('operationNo');
+
+        if (!operationNo || !opNo || operationNo === opNo)
+        {
+          totalQuantityDone += pso.get('quantityDone') || 0;
+        }
+      });
+
+      return totalQuantityDone;
     },
 
     updateShiftTime: function()

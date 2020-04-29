@@ -125,7 +125,9 @@ define([
 
           var startAt = Date.parse(lineOrder.get('startAt'));
           var shiftNo = shiftUtil.getShiftNo(startAt);
-          var quantityDone = plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, planOrder.id);
+          var quantityDone = plan.shiftOrders.getTotalQuantityDone(
+            line.id, shiftNo, planOrder.id, planOrder.getOperationNo()
+          );
           var quantityTodo = lineOrder.get('quantity');
 
           stats.manHours.plan += lineOrder.get('manHours');

@@ -362,13 +362,14 @@ define([
         line.orders.forEach(function(lineOrder, i)
         {
           var orderNo = lineOrder.get('orderNo');
-          var order = plan.orders.get(orderNo);
+          var planOrder = plan.orders.get(orderNo);
+          var operationNo = planOrder ? planOrder.getOperationNo() : null;
           var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
           var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
 
           prevShiftNo = shiftNo;
 
-          var lineMrpSettings = order ? line.mrpSettings(order.get('mrp')) : null;
+          var lineMrpSettings = planOrder ? line.mrpSettings(planOrder.get('mrp')) : null;
 
           if (lineMrpSettings && !_.includes(workerCounts, lineMrpSettings.get('workerCount')))
           {
@@ -376,16 +377,16 @@ define([
           }
 
           var qtyPlan = lineOrder.get('quantity');
-          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, orderNo) : -1;
+          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, orderNo, operationNo) : -1;
 
           var printOrder = {
             no: i + 1,
-            missing: !order,
+            missing: !planOrder,
             orderNo: orderNo,
-            nc12: order ? order.get('nc12') : '?',
-            name: order ? order.get('name') : '?',
-            kind: order ? order.get('kind') : '?',
-            qtyTodo: order ? order.get('quantityTodo') : '?',
+            nc12: planOrder ? planOrder.get('nc12') : '?',
+            name: planOrder ? planOrder.get('name') : '?',
+            kind: planOrder ? planOrder.get('kind') : '?',
+            qtyTodo: planOrder ? planOrder.get('quantityTodo') : '?',
             qtyPlan: qtyPlan,
             qtyClass: qtyDone === -1
               ? ''
