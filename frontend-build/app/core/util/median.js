@@ -1,0 +1,1 @@
+define([],function(){"use strict";return function(n,t){return 0===n.length?0:1===n.length?n[0]:(t||n.sort(function(n,t){return n-t}),n.length%2==0?(n[n.length/2-1]+n[n.length/2])/2:n[(n.length+1)/2-1])}});
