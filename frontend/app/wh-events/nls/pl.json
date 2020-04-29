@@ -45,6 +45,7 @@
   "status:deliveredOrder:done": "Zrobione",
   "status:deliveredOrder:blocked": "Zablokowane",
 
+  "func:lp10": "LP10",
   "func:fmx": "FMX",
   "func:kitter": "Kitter",
   "func:platformer": "Platformowy",

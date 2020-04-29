@@ -98,7 +98,7 @@ define([
               sets[order.date] = {};
             }
 
-            sets[order.date][order.set] = 1;
+            sets[order.date][order.set || '?'] = 1;
 
             orders.push(order.sapOrder);
           }
