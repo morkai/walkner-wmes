@@ -3,4 +3,10 @@
 
 'use strict';
 
-db.oldwhorders.updateMany({date: {$lt: new Date('2020-05-01T00:00:00Z')}}, {$set: {status: 'cancelled'}});
+db.prodshiftorders.createIndex({finishedAt: -1});
+
+db.oldwhorders.updateMany({
+  status: 'pending',
+  date: {$lt: new Date('2020-05-01T00:00:00Z')}
+}, {$set: {status: 'cancelled'}});
+

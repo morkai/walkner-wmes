@@ -3,14 +3,19 @@
 <h3>Magazyn</h3>
 <ul>
   <li>Poprawiono błąd powodujący oznaczenie statusu wysyłki opakowań dla zleceń, które nie mają skompletowanych
-    opakowań, jeżeli ich wysyła została rozpoczęta razem ze zleceniami, które mają opakowania.</li>
+    opakowań, jeżeli ich wysyłka została rozpoczęta razem ze zleceniami, które mają opakowania.</li>
   <li>Zmieniono zliczanie skompletowanych setów tak, aby sety, które mają problem były pomijane.</li>
   <li>Zmieniono dokładanie brakujących wózków FIFO do wywózki tak, aby brane pod uwagę były wszystkie kolejne
     sety z kwalifikujących się linii: do seta z jednym wózkiem może zostać dołożony kolejny set z tej samej linii,
     tylko, jeżeli mieści się w limicie wózków i następuje dokładnie po poprzednim secie.</li>
-  <li>Zmieniono rozpoczynanie akcji kompletacji tak, aby nie były ograniczane do aktualnie wyświetlanego dnia.</li>
+  <li>Zmieniono rozpoczynanie akcji kompletacji tak, aby nie była ograniczona do aktualnie wyświetlanego dnia.</li>
+  <li>Zmieniono wysyłkę wózków opakowań tak, aby można było zainicjować wysyłkę na kwalifikujące się linie
+    bezpośrednio z poziomu wysyłki opakowań, a nie dopiero po rozpoczęciu wysyłki FIFO.</li>
   <li>Dodano listę zdarzeń.</li>
   <li>Dodano nową funkcję kompletacji: Platformowy.</li>
+  <li>Dodano nową opcję konfiguracyjną wysyłki: Maksymalny czas do rozpoczęcia zlecenia - maksymalna ilość minut
+    od teraz do zaplanowanego czasu rozpoczęcia zlecenia, aby wózek został przeznaczony do realizacji,
+    jeżeli linia w danym momencie nie pracuje.</li>
 </ul>
 <h3>Czas cyklu</h3>
 <ul>

@@ -35,15 +35,14 @@ define([
           qty: 0,
           time: 0
         },
-        redirLine: null
+        redirLine: null,
+        working: false
       };
     },
 
     serialize: function()
     {
-      var obj = this.toJSON();
-
-      return obj;
+      return this.toJSON();
     }
 
   });

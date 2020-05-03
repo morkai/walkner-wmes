@@ -28,6 +28,7 @@ define([
     'maxPickupDowntime',
     'maxSetsPerLine',
     'minTimeForDelivery',
+    'maxDeliveryStartTime',
     'lateDeliveryTime',
     'minDeliveryDowntime',
     'maxDeliveryDowntime',
@@ -144,6 +145,11 @@ define([
           return _.escape(lineGroup._id) + ': ' + lineGroup.lines.join(', ');
         })
         .join('\n');
+    },
+
+    getMaxDeliveryStartTime: function()
+    {
+      return (this.getValue('planning.maxDeliveryStartTime') || 60) * 60 * 1000;
     },
 
     getMinTimeForDelivery: function()

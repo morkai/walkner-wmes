@@ -191,27 +191,7 @@ define([
       },
       'old.wh.lines.updated': function(message)
       {
-        var page = this;
-        var refresh = false;
-
-        (message.updated || []).forEach(function(data)
-        {
-          var line = page.whLines.get(data._id);
-
-          if (refresh || !line)
-          {
-            refresh = true;
-
-            return;
-          }
-
-          line.set(data);
-        });
-
-        if (refresh)
-        {
-          page.promised(page.whLines.fetch());
-        }
+        this.promised(this.whLines.handleUpdate(message));
       }
     },
 
@@ -673,6 +653,7 @@ define([
         && currentDialog instanceof WhPickupSetView
         && currentDialog.model.user
         && currentDialog.model.user._id === user._id
+        && currentDialog.model.date === date
         && currentDialog.model.set === set)
       {
         return;
@@ -684,6 +665,7 @@ define([
       var dialogView = new WhPickupSetView({
         model: {
           user: user,
+          date: date,
           set: set,
           line: line
         },

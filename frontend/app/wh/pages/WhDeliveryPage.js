@@ -93,7 +93,12 @@ define([
     localTopics: {
       'socket.connected': function()
       {
+        this.scheduleLineReload();
         this.reload();
+      },
+      'socket.disconnected': function()
+      {
+        clearTimeout(this.timers.lineReload);
       }
     },
 
@@ -260,36 +265,10 @@ define([
 
     onLinesUpdated: function(message)
     {
-      var page = this;
-
-      if (page.model.get('loading'))
+      if (!this.model.get('loading'))
       {
-        return;
+        this.promised(this.lines.handleUpdate(message));
       }
-
-      (message.deleted || []).forEach(function(line)
-      {
-        page.lines.remove(line._id);
-      });
-
-      (message.added || []).forEach(function(line)
-      {
-        page.lines.add(line);
-      });
-
-      (message.updated || []).forEach(function(update)
-      {
-        var line = page.lines.get(update._id);
-
-        if (line)
-        {
-          line.set(update);
-        }
-        else
-        {
-          page.lines.add(update);
-        }
-      });
     },
 
     onPendingDeliveriesUpdated: function(message)
@@ -304,13 +283,13 @@ define([
       (message.deleted || []).forEach(function(pendingDelivery)
       {
         page.pendingDeliveries.remove(pendingDelivery._id);
-        page.scheduleLineUpdate(pendingDelivery.line, true);
+        page.scheduleLineUpdate(null, true);
       });
 
       (message.added || []).forEach(function(pendingDelivery)
       {
         page.pendingDeliveries.add(pendingDelivery);
-        page.scheduleLineUpdate(pendingDelivery.line, true);
+        page.scheduleLineUpdate(null, true);
       });
     },
 
@@ -321,10 +300,7 @@ define([
 
     scheduleLineUpdate: function(lineId, force)
     {
-      if (lineId)
-      {
-        this.updatedLines[lineId] = true;
-      }
+      this.updatedLines[lineId] = true;
 
       var now = Date.now();
       var delay = now - this.lastLineUpdateAt;
@@ -514,12 +490,12 @@ define([
         return true;
       }
 
-      if (page.options.kind === 'packaging')
-      {
-        return false;
-      }
-
+      var now = Date.now();
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
+      var maxDeliveryStartTime = page.whSettings.getMaxDeliveryStartTime();
+      var startTime = Date.parse(setCart.startTime);
+      var startTimeDiff = startTime - now;
+      var timeForDelivery = startTimeDiff < maxDeliveryStartTime;
       var line = setCart.get('lines').find(function(lineId)
       {
         var whLine = page.lines.get(lineId);
@@ -529,7 +505,12 @@ define([
           return false;
         }
 
-        return whLine.get('components').time < minTimeForDelivery;
+        if (whLine.get('components').time >= minTimeForDelivery)
+        {
+          return false;
+        }
+
+        return whLine.get('working') || timeForDelivery;
       });
 
       return !!line;
@@ -571,7 +552,6 @@ define([
       var pending = {add: [], remove: []};
       var completed = {add: [], remove: []};
 
-      // TODO Check carts only for updated lines?
       setCarts.completed.forEach(function(setCart)
       {
         if (page.isPendingSetCart(setCart))
@@ -595,11 +575,7 @@ define([
       setCarts.completed.add(completed.add);
       setCarts.pending.add(pending.add);
 
-      if (page.options.kind === 'packaging')
-      {
-        page.completedView.highlight();
-      }
-
+      page.completedView.highlight();
       page.pendingView.highlight();
     },
 
@@ -914,6 +890,18 @@ define([
           page.timers.hideMessage = null;
         }
       });
+    },
+
+    scheduleLineReload: function()
+    {
+      var page = this;
+
+      clearTimeout(page.timers.lineReload);
+
+      page.timers.lineReload = setTimeout(
+        function() { page.promised(page.lines.fetch()); },
+        20000
+      );
     }
 
   });

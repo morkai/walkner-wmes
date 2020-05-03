@@ -85,6 +85,11 @@
         <input id="<%- idPrefix %>-planning-lateDeliveryTime" class="form-control" name="wh.planning.lateDeliveryTime" type="number" step="1" min="1" max="480">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxDeliveryStartTime"><%- t('settings:planning:maxDeliveryStartTime') %></label>
+        <span class="help-block"><%- t('settings:planning:maxDeliveryStartTime:help') %></span>
+        <input id="<%- idPrefix %>-planning-maxDeliveryStartTime" class="form-control" name="wh.planning.maxDeliveryStartTime" type="number" step="1" min="1">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-planning-maxSetCartsPerDelivery"><%- t('settings:planning:maxSetCartsPerDelivery') %></label>
         <span class="help-block"><%- t('settings:planning:maxSetCartsPerDelivery:help') %></span>
         <input id="<%- idPrefix %>-planning-maxSetCartsPerDelivery" class="form-control" name="wh.planning.maxSetCartsPerDelivery" type="number" step="1" min="1" max="100">

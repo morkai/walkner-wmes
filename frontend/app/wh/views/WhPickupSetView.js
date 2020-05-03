@@ -201,11 +201,7 @@ define([
 
     serializeItems: function()
     {
-      var view = this;
-
-      return view.whOrders
-        .filter(function(whOrder) { return whOrder.get('set') === view.model.set; })
-        .map(function(whOrder, i) { return whOrder.serializeSet(view.plan, i, view.model.user); });
+      return this.whOrders.serializeSet(this.model.set, this.plan, this.model.user);
     },
 
     beforeRender: function()
@@ -727,15 +723,19 @@ define([
         return;
       }
 
-      if (whOrder.get('set') !== this.model.set)
+      if (whOrder.get('date') !== this.model.date
+       || whOrder.get('set') !== this.model.set)
       {
         return $item.fadeOut('fast', function() { $item.remove(); });
       }
 
       $item.replaceWith(this.renderPartialHtml(setItemTemplate, {
         item: whOrder.serializeSet(
+          {
+            i: this.whOrders.indexOf(whOrder),
+            distStatus: this.whOrders.getDistStatusForSet(whOrder.get('set'))
+          },
           this.plan,
-          this.whOrders.indexOf(whOrder),
           this.model.user
         )
       }));

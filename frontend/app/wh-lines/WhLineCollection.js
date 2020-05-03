@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/user',
   'app/core/Collection',
   'app/core/util/getShiftStartInfo',
   './WhLine'
 ], function(
+  _,
   user,
   Collection,
   getShiftStartInfo,
@@ -13,30 +15,13 @@ define([
 ) {
   'use strict';
 
+  var REFRESH_PROPS = ['pickup', 'components', 'packaging', 'redirLine'];
+
   return Collection.extend({
 
     model: WhLine,
 
     rqlQuery: 'sort(_id)&limit(0)',
-
-    defaults: function()
-    {
-      return {
-        pickup: {
-          sets: 0,
-          qty: 0,
-          time: 0
-        },
-        components: {
-          qty: 0,
-          time: 0
-        },
-        packaging: {
-          qty: 0,
-          time: 0
-        }
-      };
-    },
 
     comparator: function(a, b)
     {
@@ -45,28 +30,37 @@ define([
 
     handleUpdate: function(message)
     {
+      var collection = this;
+      var fetch = false;
+
       if (message.added)
       {
-        this.add(message.added);
+        collection.add(message.added, {merge: true});
       }
 
       if (message.deleted)
       {
-        message.deleted.forEach(function(d) { this.remove(d._id); }, this);
+        message.deleted.forEach(function(d) { collection.remove(d._id); });
       }
 
       if (message.updated)
       {
         message.updated.forEach(function(d)
         {
-          var model = this.get(d._id);
+          var model = collection.get(d._id);
 
           if (model)
           {
             model.set(d);
           }
-        }, this);
+          else if (!fetch && _.intersection(Object.keys(d), REFRESH_PROPS).length)
+          {
+            fetch = true;
+          }
+        });
       }
+
+      return fetch ? collection.fetch() : null;
     }
 
   }, {

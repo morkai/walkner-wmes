@@ -142,9 +142,9 @@ define([
       return obj;
     },
 
-    serializeSet: function(plan, i, whUser)
+    serializeSet: function(setData, plan, whUser)
     {
-      var obj = this.serialize(plan, i, this.collection ? this.collection.getFilters(plan) : {
+      var obj = this.serialize(plan, setData.i, this.collection ? this.collection.getFilters(plan) : {
         startTime: {},
         whStatuses: [],
         psStatuses: []
@@ -154,7 +154,7 @@ define([
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
-      var undelivered = this.get('distStatus') === 'pending';
+      var undelivered = setData.distStatus === 'pending';
 
       obj.clickable = {
         picklistDone: undelivered

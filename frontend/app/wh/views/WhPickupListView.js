@@ -357,9 +357,10 @@ define([
 
     showMenu: function(e)
     {
+      var view = this;
       var td = e.currentTarget;
       var tr = td.parentNode;
-      var whOrder = this.whOrders.get(tr.dataset.id);
+      var whOrder = view.whOrders.get(tr.dataset.id);
 
       if (!whOrder)
       {
@@ -375,17 +376,17 @@ define([
       ];
 
       if (user.isAllowedTo('PROD_DATA:VIEW')
-        && (this.plan.shiftOrders.findOrders(orderNo).length
-        || this.plan.getActualOrderData(orderNo).quantityDone))
+        && (view.plan.shiftOrders.findOrders(orderNo).length
+        || view.plan.getActualOrderData(orderNo).quantityDone))
       {
         menu.push({
           icon: 'fa-file-text-o',
-          label: t('wh', 'menu:shiftOrder'),
-          handler: this.handleShiftOrderAction.bind(this, orderNo)
+          label: view.t('menu:shiftOrder'),
+          handler: view.handleShiftOrderAction.bind(view, orderNo)
         });
       }
 
-      if (this.plan.canCommentOrders())
+      if (view.plan.canCommentOrders())
       {
         menu.push(contextMenu.actions.commentPopover(orderNo, 'wh'));
       }
@@ -394,11 +395,11 @@ define([
 
       menu.push({
         icon: 'fa-clipboard',
-        label: t('wh', 'menu:copy:all'),
-        handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, false, false)
+        label: view.t('menu:copy:all'),
+        handler: view.handleCopyAction.bind(view, tr, e.pageY, e.pageX, false, false)
       });
 
-      if ((user.isAllowedTo('WH:MANAGE') && distStatus === 'pending')
+      if ((user.isAllowedTo('WH:MANAGE') && view.whOrders.getDistStatusForSet(set) === 'pending')
         || (window.ENV === 'development' && user.isAllowedTo('SUPER')))
       {
         menu.push('-');
@@ -407,15 +408,15 @@ define([
         {
           menu.push({
             icon: 'fa-times',
-            label: t('wh', 'menu:cancelOrder'),
-            handler: this.handleCancelAction.bind(this, {orders: [whOrder.id]})
+            label: view.t('menu:cancelOrder'),
+            handler: view.handleCancelAction.bind(view, {orders: [whOrder.id]})
           });
 
           if (set)
           {
             menu.push({
-              label: t('wh', 'menu:cancelSet'),
-              handler: this.handleCancelAction.bind(this, {set: set})
+              label: view.t('menu:cancelSet'),
+              handler: view.handleCancelAction.bind(view, {set: set})
             });
           }
         }
@@ -424,21 +425,21 @@ define([
         {
           menu.push({
             icon: 'fa-eraser',
-            label: t('wh', 'menu:resetOrder'),
-            handler: this.handleResetAction.bind(this, {orders: [whOrder.id]})
+            label: view.t('menu:resetOrder'),
+            handler: view.handleResetAction.bind(view, {orders: [whOrder.id]})
           });
 
           if (set)
           {
             menu.push({
-              label: t('wh', 'menu:resetSet'),
-              handler: this.handleResetAction.bind(this, {set: set})
+              label: view.t('menu:resetSet'),
+              handler: view.handleResetAction.bind(view, {set: set})
             });
           }
         }
       }
 
-      contextMenu.show(this, e.pageY, e.pageX, menu);
+      contextMenu.show(view, e.pageY, e.pageX, menu);
     },
 
     handleShiftOrderAction: function(orderNo)

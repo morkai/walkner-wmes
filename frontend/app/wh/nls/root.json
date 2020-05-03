@@ -138,6 +138,8 @@
     "settings:planning:maxDeliveryDowntime:help": "If a duration of the potential downtime is greater than the specified value, the downtime is not saved.",
     "settings:planning:maxSetCartsPerDelivery": "Maximum FIFO carts per delivery",
     "settings:planning:maxSetCartsPerDelivery:help": "Maximum number of FIFO carts that can be assigned for delivery to a user at once.",
+    "settings:planning:maxDeliveryStartTime": "Maximum time to order start [min]",
+    "settings:planning:maxDeliveryStartTime:help": "Maximum minutes from now to the planned order start time to mark a cart as pending delivery, if its line is currently not working.",
 
     "set:title": "Order set no {set} for line {line}",
     "set:cartsEditor:carts": "Carts...",

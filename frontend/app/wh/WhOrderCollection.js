@@ -141,6 +141,68 @@ define([
       });
 
       this.byOrderNo = byOrderNo;
+    },
+
+    serializeSet: function(setNo, plan, whUser)
+    {
+      var setOrders = this.getOrdersBySet(setNo);
+      var distStatus = this.getDistStatusForSet(setOrders.map(function(o) { return o.order; }));
+
+      return setOrders.map(function(o)
+      {
+        return o.order.serializeSet({i: o.i, distStatus: distStatus}, plan, whUser);
+      });
+    },
+
+    getOrdersBySet: function(setNo)
+    {
+      var setOrders = [];
+
+      this.forEach(function(order, i)
+      {
+        if (order.get('set') === setNo)
+        {
+          setOrders.push({
+            i: i,
+            order: order
+          });
+        }
+      });
+
+      return setOrders;
+    },
+
+    getDistStatusForSet: function(set)
+    {
+      var count = {
+        all: 0,
+        pending: 0,
+        started: 0,
+        finished: 0
+      };
+
+      if (typeof set === 'number')
+      {
+        set = this.getOrdersBySet(set).map(function(o) { return o.order; });
+      }
+
+      set.forEach(function(order)
+      {
+        count.all += 1;
+        count[order.get('distStatus')] += 1;
+      });
+
+      if (count.started)
+      {
+        return 'started';
+      }
+
+      if (count.all === count.finished)
+      {
+        return 'finished';
+      }
+
+      return 'pending';
     }
 
   }, {

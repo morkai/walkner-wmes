@@ -57,41 +57,7 @@ define([
 
     onUpdated: function(message)
     {
-      var view = this;
-      var refresh = false;
-
-      (message.added || []).forEach(function(data)
-      {
-        var line = view.collection.get(data._id);
-
-        if (line)
-        {
-          line.set(data);
-        }
-        else
-        {
-          view.collection.add(data);
-        }
-      });
-
-      (message.updated || []).forEach(function(data)
-      {
-        var line = view.collection.get(data._id);
-
-        if (refresh || !line)
-        {
-          refresh = true;
-
-          return;
-        }
-
-        line.set(data);
-      });
-
-      if (refresh)
-      {
-        view.refreshCollection();
-      }
+      this.promised(this.collection.handleUpdate(message));
     },
 
     getTemplateData: function()
