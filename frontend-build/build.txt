@@ -3888,6 +3888,7 @@ app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
 app/wh/templates/messages/userNotFound.js
+app/wh/templates/messages/switchingPlan.js
 app/wh/templates/messages.js
 app/wh/templates/planPage.js
 app/wh/templates/resolveAction.js
@@ -4234,6 +4235,7 @@ app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
 app/wh/templates/messages/userNotFound.js
+app/wh/templates/messages/switchingPlan.js
 app/wh/templates/messages.js
 app/wh/templates/delivery/page.js
 app/wh/pages/WhDeliveryPage.js
@@ -4396,6 +4398,7 @@ app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
 app/wh/templates/messages/userNotFound.js
+app/wh/templates/messages/switchingPlan.js
 app/wh/templates/messages.js
 app/wh/templates/delivery/page.js
 app/wh/pages/WhDeliveryPage.js
