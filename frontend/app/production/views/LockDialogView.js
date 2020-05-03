@@ -2,11 +2,13 @@
 
 define([
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/production/templates/unlockDialog'
 ], function(
   t,
+  user,
   viewport,
   View,
   template
@@ -63,7 +65,7 @@ define([
     {
       return {
         type: 'lock',
-        apiKey: '',
+        apiKey: window.ENV === 'development' && user.isAllowedTo('SUPER') ? 'SUPER' : '',
         prodLine: this.model.prodLine.id
       };
     },

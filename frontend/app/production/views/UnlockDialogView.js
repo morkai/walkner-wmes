@@ -3,6 +3,7 @@
 define([
   'underscore',
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/data/dictionaries',
@@ -12,6 +13,7 @@ define([
 ], function(
   _,
   t,
+  user,
   viewport,
   View,
   dictionaries,
@@ -90,9 +92,20 @@ define([
 
     getTemplateData: function()
     {
+      var apiKey = '';
+
+      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      {
+        apiKey = 'SUPER';
+      }
+      else if (window.WMES_CLIENT && window.WMES_CLIENT.apiKey)
+      {
+        apiKey = window.WMES_CLIENT.apiKey;
+      }
+
       return {
         type: 'unlock',
-        apiKey: window.WMES_CLIENT && window.WMES_CLIENT.apiKey || '',
+        apiKey: apiKey,
         prodLine: ''
       };
     },
