@@ -18,6 +18,7 @@
     "msg:INVALID_FUNC": "<p>Invalid user function.</p>",
     "msg:delivered": "<p>Delivery finished successfully.</p>",
     "msg:nothingToDeliver": "<p>No carts awaiting delivery.</p>",
+    "msg:switchingPlan": "<p>Switching plan to:</p><p>{newDate}</p>",
 
     "PAGE_ACTION:dailyPlan": "Daily plan",
     "PAGE_ACTION:old": "Old module",

@@ -81,9 +81,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        {
-          label: this.t('BREADCRUMB:base')
-        },
+        this.t('BREADCRUMB:base'),
         {
           href: '#wh/pickup/' + this.plan.id,
           label: this.plan.getLabel(),
@@ -94,9 +92,7 @@ define([
               + '<a class="fa fa-chevron-right" data-action="next"></a></span>';
           }
         },
-        {
-          label: this.t('BREADCRUMB:pickup')
-        }
+        this.t('BREADCRUMB:pickup')
       ];
     },
 
@@ -251,6 +247,7 @@ define([
     initialize: function()
     {
       this.keyBuffer = '';
+      this.setToContinue = null;
 
       this.defineModels();
       this.defineViews();
@@ -329,6 +326,7 @@ define([
 
       page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
+      page.listenTo(plan, 'change:loading', page.onLoadingChanged);
 
       page.listenTo(plan.displayOptions, 'change:whStatuses', page.onWhStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:psStatuses', page.onPsStatusesFilterChanged);
@@ -374,20 +372,6 @@ define([
       );
     },
 
-    getTemplateData: function()
-    {
-      return {
-        darker: this.plan.displayOptions.isDarkerThemeUsed()
-      };
-    },
-
-    afterRender: function()
-    {
-      whSettings.acquire();
-      embedded.render(this);
-      this.updateUrl();
-    },
-
     reload: function()
     {
       var page = this;
@@ -410,13 +394,15 @@ define([
             plan.fetch()
           );
 
-          page.promised(promise).then(
-            plan.set.bind(plan, 'loading', false),
-            loadingFailed
-          );
+          page.promised(promise).then(loaded, loadingFailed);
         },
         loadingFailed
       );
+
+      function loaded()
+      {
+        plan.set('loading', false);
+      }
 
       function loadingFailed()
       {
@@ -424,6 +410,20 @@ define([
 
         viewport.msg.loadingFailed();
       }
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        darker: this.plan.displayOptions.isDarkerThemeUsed()
+      };
+    },
+
+    afterRender: function()
+    {
+      whSettings.acquire();
+      embedded.render(this);
+      this.updateUrl();
     },
 
     updateUrl: function()
@@ -614,16 +614,16 @@ define([
       {
         case 'newSetStarted':
           this.whOrders.update(res.orders);
-          this.continueSet(res.user, res.orders[0].set);
+          this.continueSet(res.user, res.orders[0].date, res.orders[0].set);
           break;
 
         case 'assignedToSet':
           this.whOrders.update(res.orders);
-          this.continueSet(res.user, res.orders[0].set);
+          this.continueSet(res.user, res.orders[0].date, res.orders[0].set);
           break;
 
         case 'continueSet':
-          this.continueSet(res.user, res.set);
+          this.continueSet(res.user, res.date, res.set);
           break;
 
         case 'pickDowntimeReason':
@@ -636,8 +636,24 @@ define([
       }
     },
 
-    continueSet: function(user, set, scroll)
+    continueSet: function(user, date, set, scroll)
     {
+      if (!time.utc.getMoment(this.whOrders.getDateFilter()).isSame(date))
+      {
+        this.setToContinue = Array.prototype.slice.call(arguments);
+
+        this.plan.set('_id', time.utc.format(date, 'YYYY-MM-DD'));
+
+        return;
+      }
+
+      if (this.setToContinue)
+      {
+        this.hideMessage(true);
+      }
+
+      this.setToContinue = null;
+
       var orders = this.whOrders.filter(function(o) { return o.get('set') === set; });
 
       if (!orders.length)
@@ -755,11 +771,17 @@ define([
       var $overlay = this.$id('messageOverlay');
       var $message = this.$id('message');
       var visible = $overlay[0].style.display === 'block';
+      var html = message;
+
+      if (messageTemplates[message])
+      {
+        html = this.renderPartialHtml(messageTemplates[message], messageData || {});
+      }
 
       $message.stop(true, true);
       $overlay.css('display', 'block');
       $message
-        .html(messageTemplates[message] && messageTemplates[message](messageData || {}) || message)
+        .html(html)
         .removeClass('message-error message-warning message-success message-info')
         .addClass('message-' + type);
 
@@ -792,7 +814,7 @@ define([
       }
     },
 
-    hideMessage: function()
+    hideMessage: function(now)
     {
       var page = this;
 
@@ -807,7 +829,16 @@ define([
 
       var $message = page.$id('message');
 
-      $message.fadeOut(function()
+      if (now === true)
+      {
+        hide();
+      }
+      else
+      {
+        $message.fadeOut(hide);
+      }
+
+      function hide()
       {
         $overlay.css('display', 'none');
         $message.css('display', 'none');
@@ -816,7 +847,7 @@ define([
         {
           page.timers.hideMessage = null;
         }
-      });
+      }
     },
 
     showDatePickerDialog: function()
@@ -942,6 +973,25 @@ define([
       }
     },
 
+    onLoadingChanged: function()
+    {
+      if (!this.setToContinue)
+      {
+        return;
+      }
+
+      if (!this.plan.get('loading'))
+      {
+        this.continueSet.apply(this, this.setToContinue);
+
+        return;
+      }
+
+      this.showMessage('warning', 0, 'switchingPlan', {
+        newDate: this.plan.getLabel()
+      });
+    },
+
     onSapOrdersSynced: function()
     {
       if (this.timers.reloadOrders)
@@ -971,7 +1021,7 @@ define([
         func: func._id
       };
 
-      this.continueSet(user, whOrder.get('set'), false);
+      this.continueSet(user, whOrder.get('date'), whOrder.get('set'), false);
     }
 
   });

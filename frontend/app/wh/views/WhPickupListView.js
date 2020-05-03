@@ -608,7 +608,11 @@ define([
 
     onOrdersReset: function(orders, options)
     {
-      if (!options.reload)
+      if (this.whOrders.length === 0)
+      {
+        this.render();
+      }
+      else if (!options.reload)
       {
         this.scheduleRender();
       }

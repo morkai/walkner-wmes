@@ -17,6 +17,7 @@
   "msg:INVALID_FUNC": "<p>Nieprawidłowa funkcja użytkownika.</p>",
   "msg:delivered": "<p>Dostawa zakończona pomyślnie.</p>",
   "msg:nothingToDeliver": "<p>Brak wózków oczekujących na wysyłkę.</p>",
+  "msg:switchingPlan": "<p>Przełączanie planu na:</p><p>{newDate}</p>",
 
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
   "PAGE_ACTION:old": "Stary moduł",
