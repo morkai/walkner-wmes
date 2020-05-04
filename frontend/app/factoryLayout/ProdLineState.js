@@ -314,11 +314,15 @@ define([
       if (result.totalPlanned)
       {
         var outOfSyncWindow = this.settings && this.settings.factoryLayout.getValue('outOfSyncWindow');
-        var ratio = Math.abs(Math.round(result.totalActual / result.currentPlanned * 100) - 100);
+        var ratio = Math.round(result.totalActual / result.currentPlanned * 100) - 100;
 
         if (ratio >= outOfSyncWindow)
         {
-          result.status = 'outOfSync';
+          result.status = 'overRatio';
+        }
+        else if (ratio <= outOfSyncWindow)
+        {
+          result.status = 'underRatio';
         }
         else
         {

@@ -40,13 +40,9 @@
 .factoryLayout-canvas {
   cursor: move;
   cursor: grab;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
 }
 .is-panning .factoryLayout-canvas {
   cursor: grabbing;
-  cursor: -webkit-grabbing;
-  cursor: -moz-grabbing;
 }
 .factoryLayout-area {
   fill: none;
@@ -151,7 +147,8 @@
   fill: url(/#factoryLayout-prodLine-bg-idle);
 }
 .is-working .factoryLayout-prodLine-bg,
-.is-heff-over .factoryLayout-prodLine-bg {
+.is-heff-over .factoryLayout-prodLine-bg,
+.is-heff-overRatio .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-working);
 }
 .is-working.is-tt-nok .factoryLayout-prodLine-bg,
@@ -159,7 +156,8 @@
   fill: url(/#factoryLayout-prodLine-bg-working-nok);
 }
 .is-downtime .factoryLayout-prodLine-bg,
-.is-heff-under .factoryLayout-prodLine-bg {
+.is-heff-under .factoryLayout-prodLine-bg,
+.is-heff-underRatio .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-downtime);
 }
 .is-downtime.is-break .factoryLayout-prodLine-bg,
@@ -175,10 +173,13 @@
 .is-fullscreen .factoryLayout-toolbar {
   display: none;
 }
-.is-extended .factoryLayout-prodLine-inner {
-  -webkit-animation: wiggle 0.3s linear infinite;
-  -ms-animation: wiggle 0.3s linear infinite;
-  animation: wiggle 0.3s linear infinite;
+.is-extended .factoryLayout-prodLine-inner,
+.is-heff .is-heff-overRatio .factoryLayout-prodLine-inner,
+.is-heff .is-heff-underRatio .factoryLayout-prodLine-inner {
+  animation: factoryLayout-wiggle 0.3s linear infinite;
+}
+.is-heff .is-extended .factoryLayout-prodLine-inner {
+  animation: none;
 }
 
 .factoryLayout-popover {
@@ -237,7 +238,7 @@
 .factoryLayout-legend-item[data-state="outOfSync"] {
   background: linear-gradient(to bottom, #CD00CD, #B300B3);
 }
-@keyframes wiggle {
+@keyframes factoryLayout-wiggle {
   0% {
     transform: translate(0, 0);
   }
@@ -249,33 +250,5 @@
   }
   100% {
     transform: translate(0, 0);
-  }
-}
-@-webkit-keyframes wiggle {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(0, -2px);
-  }
-  75% {
-    transform: translate(0, 2px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-@-ms-keyframes wiggle {
-  0% {
-    -ms-transform: translate(0, 0);
-  }
-  25% {
-    -ms-transform: translate(0, -2px);
-  }
-  75% {
-    -ms-transform: translate(0, 2px);
-  }
-  100% {
-    -ms-transform: translate(0, 0);
   }
 }

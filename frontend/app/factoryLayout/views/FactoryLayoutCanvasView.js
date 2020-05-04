@@ -192,14 +192,20 @@ define([
       this.panInfo = null;
     },
 
+    getTemplateData: function()
+    {
+      return {
+        editable: this.editable,
+        heff: this.heff
+      };
+    },
+
     afterRender: function()
     {
       if (this.model.isLoading())
       {
         return;
       }
-
-      this.$el.toggleClass('is-editable', this.editable);
 
       this.setUpCanvas(this.getSize());
       this.renderLayout();
@@ -694,6 +700,7 @@ define([
       }
 
       var stateClassNames = {
+        'is-off': false,
         'is-idle': false,
         'is-working': false,
         'is-downtime': false,
@@ -703,7 +710,8 @@ define([
         'is-heff-unplanned': false,
         'is-heff-under': false,
         'is-heff-over': false,
-        'is-heff-outOfSync': false
+        'is-heff-underRatio': false,
+        'is-heff-overRatio': false
       };
 
       if (this.heff)
@@ -719,7 +727,7 @@ define([
       }
       else
       {
-        stateClassNames['is-' + prodLineState.get('state')] = true;
+        stateClassNames['is-' + (prodLineState.get('state') || 'off')] = true;
       }
 
       prodLineOuterContainer.classed(stateClassNames);
@@ -877,6 +885,8 @@ define([
       var view = this;
 
       view.heff = !view.heff;
+
+      view.$el.toggleClass('is-heff', view.heff);
 
       view.model.prodLineStates.forEach(function(prodLineState)
       {
