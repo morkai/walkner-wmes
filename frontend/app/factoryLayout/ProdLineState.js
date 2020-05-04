@@ -282,7 +282,6 @@ define([
       }
 
       var quantitiesDone = prodShift.get('quantitiesDone');
-
       var currentTime = time.getMoment();
       var currentHour = currentTime.hours();
       var currentMinute = currentTime.minutes();
@@ -320,7 +319,7 @@ define([
         {
           result.status = 'overRatio';
         }
-        else if (ratio <= outOfSyncWindow)
+        else if (ratio <= (outOfSyncWindow * -1))
         {
           result.status = 'underRatio';
         }
