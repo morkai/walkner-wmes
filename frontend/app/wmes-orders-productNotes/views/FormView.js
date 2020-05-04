@@ -19,11 +19,12 @@ define([
 
     events: _.assign({
 
-      'change #-nc12': function(e)
+      'change #-codes': function(e)
       {
         e.target.value = e.target.value
+          .toUpperCase()
           .split(/[^0-9a-zA-Z]+/)
-          .filter(function(v) { return v.length >= 7; })
+          .filter(function(v) { return /^([A-Z0-9]{7}|[0-9]{9}|[0-9]{12})$/.test(v); })
           .join(', ');
       }
 
@@ -39,9 +40,10 @@ define([
 
     serializeForm: function(formData)
     {
-      formData.nc12 = (formData.nc12 || '')
-          .split(/[^0-9a-zA-Z]+/)
-          .filter(function(v) { return v.length > 0; });
+      formData.codes = (formData.codes || '')
+        .toUpperCase()
+        .split(/[^0-9A-Z]+/)
+        .filter(function(v) { return v.length > 0; });
 
       return formData;
     }

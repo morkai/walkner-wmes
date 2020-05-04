@@ -51,7 +51,7 @@ define([
     {
       var obj = this.serialize();
 
-      obj.nc12 = obj.nc12.join(', ');
+      obj.codes = obj.codes.join(', ');
       obj.priority = '<span class="label label-' + obj.priority + '" style="display: block; width: 50px">&nbsp;</span>';
 
       return obj;
@@ -61,7 +61,7 @@ define([
     {
       var obj = this.serialize();
 
-      obj.nc12 = obj.nc12[0] + (obj.nc12.length > 1 ? (' +' + obj.nc12.length - 1) : '');
+      obj.codes = obj.codes[0] + (obj.codes.length > 1 ? (' +' + obj.codes.length - 1) : '');
       obj.priority = '<span class="label label-' + obj.priority + '" style="display: block">&nbsp;</span>';
 
       return obj;
@@ -71,7 +71,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.nc12 = obj.nc12 ? obj.nc12.join(', ') : '';
+      obj.codes = obj.codes ? obj.codes.join(', ') : '';
 
       return obj;
     }

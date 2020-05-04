@@ -3,10 +3,11 @@
 
 'use strict';
 
-db.prodshiftorders.createIndex({finishedAt: -1});
-
-db.oldwhorders.updateMany({
-  status: 'pending',
-  date: {$lt: new Date('2020-05-01T00:00:00Z')}
-}, {$set: {status: 'cancelled'}});
-
+db.productnotes.dropIndex({nc12: 1, target: 1});
+db.productnotes.createIndex({codes: 1});
+db.productnotes.find({codes: {$exists: false}}).forEach(note =>
+{
+  note.codes = note.nc12;
+  delete note.nc12;
+  db.productnotes.replaceOne({_id: note._id}, note);
+});

@@ -3,13 +3,17 @@
     "BREADCRUMB:base": "Production orders",
     "BREADCRUMB:browse": "Notes",
 
-    "PROPERTY:nc12": "12NC",
+    "PROPERTY:codes": "Codes",
     "PROPERTY:target": "Target",
     "PROPERTY:priority": "Priority",
     "PROPERTY:text": "Text",
 
     "target:docs": "Documentation",
-    "target:ps": "Paint-shop"
+    "target:ps": "Paint-shop",
+
+    "filter:codes": "Code",
+
+    "form:codes": "Order no/Product 12NC/Component 12NC"
   },
   "pl": true
 }

@@ -12,7 +12,7 @@ define([
     className: 'is-clickable',
 
     columns: [
-      {id: 'nc12', className: 'is-min'},
+      {id: 'codes', className: 'is-min'},
       {id: 'target', className: 'is-min'},
       {id: 'priority', className: 'is-min'},
       'text'

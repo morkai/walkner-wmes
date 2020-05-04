@@ -15,14 +15,16 @@ define([
     template: template,
 
     defaultFormData: {
-      description: ''
+      codes: '',
+      target: []
     },
 
     termToForm: {
-      'description': function(propertyName, term, formData)
+      'codes': function(propertyName, term, formData)
       {
-        formData[propertyName] = this.unescapeRegExp(term.args[1]);
-      }
+        formData[propertyName] = term.args[1];
+      },
+      'target': 'codes'
     },
 
     destroy: function()
@@ -41,14 +43,12 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var nc12 = this.$id('nc12').val().split(/[^0-9a-zA-Z]+/).filter(function(v) { return !!v.length; });
+      var codes = this.$id('codes').val().toUpperCase();
       var target = this.$id('target').val() || [];
 
-      this.$id('nc12').val(nc12.join(', '));
-
-      if (nc12.length)
+      if (codes.length)
       {
-        selector.push({name: 'in', args: ['nc12', nc12]});
+        selector.push({name: 'eq', args: ['codes', codes]});
       }
 
       if (target.length && target.length !== this.$id('target').find('option').length)

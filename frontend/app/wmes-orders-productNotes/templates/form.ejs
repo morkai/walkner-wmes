@@ -4,8 +4,8 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- t('PROPERTY:nc12') %></label>
-        <textarea id="<%- idPrefix %>-nc12" class="form-control" name="nc12" required rows="2"></textarea>
+        <label for="<%- idPrefix %>-codes" class="control-label is-required"><%- t('form:codes') %></label>
+        <textarea id="<%- idPrefix %>-codes" class="form-control text-fixed" name="codes" required rows="2" style="resize: vertical"></textarea>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-target" class="control-label"><%- t('PROPERTY:target') %></label>
@@ -29,7 +29,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-text" class="control-label is-required"><%- t('PROPERTY:text') %></label>
-        <textarea id="<%- idPrefix %>-text" class="form-control" name="text" rows="2" required></textarea>
+        <textarea id="<%- idPrefix %>-text" class="form-control" name="text" rows="2" required style="resize: vertical"></textarea>
       </div>
     </div>
     <div class="panel-footer">
