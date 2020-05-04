@@ -1,1 +1,1 @@
-define(["app/core/views/ListView"],function(i){"use strict";return i.extend({className:"is-clickable",columns:[{id:"nc12",className:"is-min"},{id:"target",className:"is-min"},{id:"priority",className:"is-min"},"text"]})});
+define(["app/core/views/ListView"],function(i){"use strict";return i.extend({className:"is-clickable",columns:[{id:"codes",className:"is-min"},{id:"target",className:"is-min"},{id:"priority",className:"is-min"},"text"]})});
