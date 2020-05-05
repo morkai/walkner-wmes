@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/viewport',
   'app/user',
+  'app/time',
   'app/core/Model',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
@@ -25,6 +26,7 @@ define([
   $,
   viewport,
   user,
+  time,
   Model,
   View,
   bindLoadingMessage,
@@ -490,10 +492,10 @@ define([
         return true;
       }
 
-      var now = Date.now();
+      var now = time.getMoment(Date.now()).utc(true).valueOf();
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
       var maxDeliveryStartTime = page.whSettings.getMaxDeliveryStartTime();
-      var startTime = Date.parse(setCart.startTime);
+      var startTime = Date.parse(setCart.get('startTime'));
       var startTimeDiff = startTime - now;
       var timeForDelivery = startTimeDiff < maxDeliveryStartTime;
       var line = setCart.get('lines').find(function(lineId)
