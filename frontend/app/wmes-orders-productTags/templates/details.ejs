@@ -1,0 +1,41 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, ['_id', 'label']) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PROPERTY:conditions') %></div>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th><%- t('conditions:mrp') %></th>
+        <th><%- t('conditions:nc12') %></th>
+        <th><%- t('conditions:bom') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.conditions.forEach(function(condition) { %>
+      <tr>
+        <td>
+          <% if (condition.mrp.length) { %>
+          <code><%- condition.mrp.join('</code> <code>') %></code>
+          <% } %>
+        </td>
+        <td>
+          <% if (condition.nc12.length) { %>
+            <code><%- condition.nc12.join('</code> <code>') %></code>
+          <% } %>
+        </td>
+        <td>
+          <% if (condition.bom.length) { %>
+            <code><%- condition.bom.join('</code> <code>') %></code>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

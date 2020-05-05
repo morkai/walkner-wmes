@@ -24,6 +24,7 @@ define([
           operations: 0,
           bom: 0,
           documents: 0,
+          notes: 0,
           changes: 0
         },
         limit: -1337,

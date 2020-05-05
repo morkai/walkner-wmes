@@ -122,7 +122,8 @@ define([
   './wmes-ct-orderGroups/routes',
   './wmes-ct-state/routes',
   './wmes-ct-balancing/routes',
-  './wmes-orders-productNotes/routes'
+  './wmes-orders-productNotes/routes',
+  './wmes-orders-productTags/routes'
 ], function()
 {
   'use strict';

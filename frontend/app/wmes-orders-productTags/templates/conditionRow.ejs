@@ -1,0 +1,10 @@
+<tr>
+  <td style="width: 20%"><textarea class="form-control text-fixed" name="conditions[<%- i %>].mrp" rows="2" style="resize: vertical"><%- condition.mrp.join(', ') %></textarea></td>
+  <td style="width: 40%"><textarea class="form-control text-fixed" name="conditions[<%- i %>].nc12" rows="2" style="resize: vertical"><%- condition.nc12.join(', ') %></textarea></td>
+  <td style="width: 40%"><textarea class="form-control text-fixed" name="conditions[<%- i %>].bom" rows="2" style="resize: vertical"><%- condition.bom.join(', ') %></textarea></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button class="btn btn-default" type="button" data-action="removeCondition"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+</tr>

@@ -201,6 +201,13 @@
 .orders-notes-priority[data-value="danger"] {
   background: #FFD1D1;
 }
+.orders-tag {
+  padding: 1px 3px;
+  text-shadow: none;
+  color: #000;
+  background: #FFF;
+  border: 1px solid #000;
+}
 
 .page[data-parent-app-id="docs"] {
   background-color: #525659;

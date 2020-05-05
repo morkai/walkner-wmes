@@ -1,0 +1,14 @@
+{
+  "BREADCRUMB:base": "Zlecenia produkcyjne",
+  "BREADCRUMB:browse": "Tagi",
+
+  "PROPERTY:_id": "Tag",
+  "PROPERTY:label": "Opis",
+  "PROPERTY:conditions": "Warunki",
+
+  "conditions:add": "Dodaj warunek",
+  "conditions:mrp": "MRP",
+  "conditions:nc12": "12NC wyrobów",
+  "conditions:bom": "12NC komponentów",
+  "conditions:invalid": "Zdefiniuj przynajmniej jeden prawidłowy warunek."
+}

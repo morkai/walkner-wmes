@@ -1,0 +1,17 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Production orders",
+    "BREADCRUMB:browse": "Tags",
+
+    "PROPERTY:_id": "Tag",
+    "PROPERTY:label": "Description",
+    "PROPERTY:conditions": "Conditions",
+
+    "conditions:add": "Add condition",
+    "conditions:mrp": "MRP",
+    "conditions:nc12": "Product 12NC",
+    "conditions:bom": "Component 12NC",
+    "conditions:invalid": "Define at least one valid condition."
+  },
+  "pl": true
+}

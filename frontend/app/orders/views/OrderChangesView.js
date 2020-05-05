@@ -250,6 +250,9 @@ define([
             + this.t('changes:notes', {count: value.length})
             + '</a>';
 
+        case 'tags':
+          return value.map(function(tag) { return tag._id; }).join(', ');
+
         case 'statuses':
           return orderStatuses.findAndFill(value).map(renderOrderStatusLabel).join(' ');
 

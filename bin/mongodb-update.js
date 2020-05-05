@@ -3,11 +3,4 @@
 
 'use strict';
 
-db.productnotes.dropIndex({nc12: 1, target: 1});
-db.productnotes.createIndex({codes: 1});
-db.productnotes.find({codes: {$exists: false}}).forEach(note =>
-{
-  note.codes = note.nc12;
-  delete note.nc12;
-  db.productnotes.replaceOne({_id: note._id}, note);
-});
+db.orders.updateMany({scheduledStartDate: {$gte: new Date('2020-05-01 00:00:00')}}, {$set: {tags: []}});

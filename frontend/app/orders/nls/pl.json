@@ -9,6 +9,7 @@
   "PAGE_ACTION:jump:placeholder": "Nr zlecenia",
   "PAGE_ACTION:cycleTime": "Czas cyklu",
   "PAGE_ACTION:notes": "Uwagi",
+  "PAGE_ACTION:tags": "Tagi",
 
   "LIST:ACTION:print": "Drukuj",
 
@@ -88,6 +89,7 @@
   "PROPERTY:m4": "4M",
   "PROPERTY:etoCont": "Kontynuacja pilota ETO",
   "PROPERTY:notes": "Uwagi",
+  "PROPERTY:tags": "Tagi",
 
   "m4:man": "Człowiek",
   "m4:machine": "Maszyna",

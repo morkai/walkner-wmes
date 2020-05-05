@@ -1,0 +1,40 @@
+<form class="productTags-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('PROPERTY:_id') %></label>
+        <% if (editMode) { %>
+        <p class="form-control-static"><%= model._id %></p>
+        <% } else { %>
+        <input id="<%- idPrefix %>-_id" class="form-control text-fixed" name="_id" type="text" required pattern="^[A-Za-z0-9]{1,10}$" maxlength="10" style="width: 100px">
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-label" class="control-label"><%- t('PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" name="label" type="text">
+      </div>
+      <div class="form-group">
+        <label class="control-label is-required"><%- t('PROPERTY:conditions') %></label>
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th><%- t('conditions:mrp') %></th>
+            <th><%- t('conditions:nc12') %></th>
+            <th><%- t('conditions:bom') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-conditions"></tbody>
+        </table>
+        <button id="<%- idPrefix %>-addCondition" class="btn btn-default" type="button">
+          <i class="fa fa-plus"></i><span><%- t('conditions:add') %></span>
+        </button>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

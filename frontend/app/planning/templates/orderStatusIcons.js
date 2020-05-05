@@ -33,6 +33,7 @@ define([
     var orderData = plan.getActualOrderData(orderNo);
     var kindIcon = planOrder.getKindIcon();
     var sourceIcon = planOrder.getSourceIcon();
+    var sapOrder = plan.sapOrders.get(orderNo);
     var psStatus = plan.sapOrders.getPsStatus(orderNo);
     var whStatus = plan.sapOrders.getWhStatus(orderNo);
 
@@ -71,10 +72,26 @@ define([
     if (priority === 'E' || priority === 'EK')
     {
       statuses.push(
-        '<span class="planning-mrp-list-property planning-mrp-list-property-priority" '
-        + 'title="' + t('planning', 'orders:priority', {priority: priority}) + '" '
-        + '>' + priority + '</span>'
+        '<span class="planning-mrp-list-property planning-mrp-list-property-tag" '
+        + 'title="' + t('planning', 'orders:priority', {priority: priority}) + '" ' + '>'
+        + priority
+        + '</span>'
       );
+    }
+
+    if (sapOrder)
+    {
+      var tags = sapOrder.get('tags') || [];
+
+      tags.forEach(function(tag)
+      {
+        statuses.push(
+          '<span class="planning-mrp-list-property planning-mrp-list-property-tag" '
+          + 'title="' + _.escape(tag.label) + '" ' + '>'
+          + _.escape(tag._id)
+          + '</span>'
+        );
+      });
     }
 
     statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-psStatus" '

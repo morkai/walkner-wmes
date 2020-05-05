@@ -72,21 +72,32 @@ define([
           className: 'is-min',
           tdDecorator: function(columnId, value, row)
           {
-            var name = [row.name];
-
-            if (row.description && row.name !== row.description)
-            {
-              name.unshift('<i class="fa fa-question-circle"></i>');
-            }
+            var name = [];
 
             if (row.etoCont)
             {
-              name.unshift('<span class="label label-default">EK</span>');
+              name.push('<span class="label label-default orders-tag">EK</span>');
             }
             else if (row.priority === 'E')
             {
-              name.unshift('<span class="label label-default">E</span>');
+              name.push('<span class="label label-default orders-tag">E</span>');
             }
+
+            (row.tags || []).forEach(function(tag)
+            {
+              name.push(
+                '<span class="label label-default orders-tag" title="' + _.escape(tag.label) + '">'
+                + _.escape(tag._id)
+                + '</span>'
+              );
+            });
+
+            if (row.description && row.name !== row.description)
+            {
+              name.push('<i class="fa fa-question-circle"></i>');
+            }
+
+            name.push(row.name);
 
             return name.join(' ');
           }

@@ -19,6 +19,6 @@
 .planning-mrp-list-property-whStatus[data-wh-status="done"] {
   color: #449d44;
 }
-.planning-mrp-list-property-priority {
+.planning-mrp-list-property-tag {
   font-weight: bold;
 }

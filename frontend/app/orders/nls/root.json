@@ -10,6 +10,7 @@
     "PAGE_ACTION:jump:placeholder": "Order no",
     "PAGE_ACTION:cycleTime": "Cycle time",
     "PAGE_ACTION:notes": "Notes",
+    "PAGE_ACTION:tags": "Tags",
 
     "LIST:ACTION:print": "Print",
 
@@ -89,6 +90,7 @@
     "PROPERTY:m4": "4M",
     "PROPERTY:etoCont": "ETO Pilot continuation",
     "PROPERTY:notes": "Notes",
+    "PROPERTY:tags": "Tags",
 
     "m4:man": "Man",
     "m4:machine": "Machine",
