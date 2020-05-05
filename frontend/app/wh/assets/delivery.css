@@ -61,9 +61,16 @@
   background: #c9302c;
   color: #FFF;
 }
-.wh-delivery-item:hover {
-  background: #FFFFA6;
+.wh-delivery-section-container[data-status="completed"] .wh-delivery-item.wh-status-deliverable {
+  background: #FCF8E3;
+}
+.wh-delivery-section-container[data-status="completed"] .wh-delivery-item.wh-status-late {
+  background: #F2DEDE;
   color: #000;
+}
+.wh-delivery-item:hover {
+  background: #FFFFA6!important;
+  color: #000!important;;
 }
 .wh-delivery-item td {
   padding: 7px 7px 5px 7px;
