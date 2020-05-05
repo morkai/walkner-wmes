@@ -5,8 +5,8 @@
   "version": "0.148.0",
   "updater": {
     "wmes": {
-      "backend": 546,
-      "frontend": 698,
+      "backend": 547,
+      "frontend": 699,
       "reports": 121,
       "attachments": 3,
       "importer-sap": 57,
@@ -21,8 +21,8 @@
       "ps-load": 15,
       "wh-pickup": 41,
       "wh-problems": 28,
-      "wh-delivery-components": 23,
-      "wh-delivery-packaging": 23,
+      "wh-delivery-components": 24,
+      "wh-delivery-packaging": 24,
       "isa": 6,
       "luma2": 12,
       "trw": 19,
