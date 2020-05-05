@@ -4,12 +4,14 @@ define([
   'underscore',
   '../time',
   '../core/Collection',
-  './PlanShiftOrder'
+  './PlanShiftOrder',
+  './util/shift'
 ], function(
   _,
   time,
   Collection,
-  PlanShiftOrder
+  PlanShiftOrder,
+  shiftUtil
 ) {
   'use strict';
 
@@ -42,6 +44,8 @@ define([
         byOrder: {}
       };
 
+      self.updateShiftTime();
+
       self.plan.on('change:_id', self.updateShiftTime.bind(self));
 
       self.on('reset', function()
@@ -57,16 +61,19 @@ define([
       self.on('add', self.cacheOrder, self);
 
       self.forEach(self.cacheOrder, self);
-
-      self.updateShiftTime();
     },
 
     url: function()
     {
-      return '/prodShiftOrders?select(' + PROPERTIES.join(',') + ')'
-        + '&limit(0)&mechOrder=false'
-        + '&startedAt=ge=' + this.shiftStartTime
-        + '&startedAt=lt=' + this.shiftEndTime;
+      return '/planning/shiftOrders/' + this.plan.id;
+    },
+
+    updateShiftTime: function()
+    {
+      var planMoment = time.getMoment(this.plan.id, 'YYYY-MM-DD').hours(6);
+
+      this.shiftStartTime = planMoment.valueOf();
+      this.shiftEndTime = planMoment.add(1, 'days').valueOf();
     },
 
     findOrders: function(orderNo, line, shift)
@@ -86,9 +93,20 @@ define([
       return shiftOrders;
     },
 
-    getTotalQuantityDone: function(line, shift, orderNo, operationNo)
+    getTotalQuantityDone: function(line, lineOrder)
     {
+      var orderNo = lineOrder.get('orderNo');
+      var planOrder = this.plan.orders.get(orderNo);
+
+      if (!planOrder)
+      {
+        return 0;
+      }
+
       var cache = this.cache.byLine;
+      var startAt = Date.parse(lineOrder.get('startAt'));
+      var shift = shiftUtil.getShiftNo(startAt);
+      var operationNo = planOrder.getOperationNo();
       var planShiftOrders = cache[line] && cache[line][shift] && cache[line][shift][orderNo];
       var totalQuantityDone = 0;
 
@@ -108,14 +126,6 @@ define([
       });
 
       return totalQuantityDone;
-    },
-
-    updateShiftTime: function()
-    {
-      var planMoment = time.getMoment(this.plan.id, 'YYYY-MM-DD').hours(6);
-
-      this.shiftStartTime = planMoment.valueOf();
-      this.shiftEndTime = planMoment.add(24, 'hours').valueOf();
     },
 
     update: function(data)
@@ -150,14 +160,10 @@ define([
 
     addOrder: function(data)
     {
-      var startedAt = Date.parse(data.startedAt);
-
-      if (startedAt < this.shiftStartTime || startedAt >= this.shiftEndTime)
+      if (this.plan.orders.get(data.orderId))
       {
-        return;
+        this.add(data, {merge: true});
       }
-
-      this.add(_.pick(data, PROPERTIES));
     },
 
     cacheOrder: function(planShiftOrder)
@@ -167,6 +173,16 @@ define([
       var line = planShiftOrder.get('prodLine');
       var shift = planShiftOrder.get('shift');
       var orderNo = planShiftOrder.get('orderId');
+      var startedAt = Date.parse(planShiftOrder.get('startedAt'));
+
+      if (startedAt < this.shiftStartTime)
+      {
+        return;
+      }
+      else if (startedAt > this.shiftEndTime)
+      {
+        return;
+      }
 
       if (!byLine[line])
       {

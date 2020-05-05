@@ -272,12 +272,7 @@ define([
         var prevShiftOrder = shift.orders[shift.orders.length - 1];
         var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
         var quantityTodo = lineOrder.get('quantity');
-        var quantityDone = plan.shiftOrders.getTotalQuantityDone(
-          planLine.id,
-          shift.no,
-          orderNo,
-          planOrder ? planOrder.getOperationNo() : null
-        );
+        var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, lineOrder);
 
         shift.orders.push({
           _id: lineOrder.id,
@@ -362,12 +357,11 @@ define([
       var orderNo = lineOrder.get('orderNo');
       var planOrder = this.plan.orders.get(orderNo);
       var sapOrder = this.plan.sapOrders.get(orderNo);
-      var operationNo = planOrder ? planOrder.getOperationNo() : null;
       var orderData = this.plan.getActualOrderData(orderNo);
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
       var quantityDone = this.plan.isProdStateUsed()
-        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shiftUtil.getShiftNo(startAt), orderNo, operationNo)
+        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, lineOrder)
         : -1;
 
       return lineOrderPopoverTemplate({
@@ -567,10 +561,8 @@ define([
         return;
       }
 
-      var planOrder = this.plan.orders.get(orderNo);
-      var operationNo = planOrder ? planOrder.getOperationNo() : null;
       var quantityTodo = lineOrder.get('quantity');
-      var quantityDone = this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shift, orderNo, operationNo);
+      var quantityDone = this.plan.shiftOrders.getTotalQuantityDone(this.line.id, lineOrder);
 
       $lineOrder
         .toggleClass('is-started', quantityDone > 0)

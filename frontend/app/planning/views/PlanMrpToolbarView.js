@@ -363,7 +363,6 @@ define([
         {
           var orderNo = lineOrder.get('orderNo');
           var planOrder = plan.orders.get(orderNo);
-          var operationNo = planOrder ? planOrder.getOperationNo() : null;
           var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
           var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
 
@@ -377,7 +376,7 @@ define([
           }
 
           var qtyPlan = lineOrder.get('quantity');
-          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, orderNo, operationNo) : -1;
+          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, lineOrder) : -1;
 
           var printOrder = {
             no: i + 1,
