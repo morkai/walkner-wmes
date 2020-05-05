@@ -1,0 +1,1 @@
+define(["../core/Collection","./ProductTag"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"exclude(conditions)&limit(100)"})});

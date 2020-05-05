@@ -1,0 +1,1 @@
+define(["../core/Model"],function(r){"use strict";return r.extend({urlRoot:"/productTags",clientUrlRoot:"#productTags",topicPrefix:"orders.productTags",privilegePrefix:"ORDERS",nlsDomain:"wmes-orders-productTags"})});

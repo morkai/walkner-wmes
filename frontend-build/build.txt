@@ -1983,6 +1983,7 @@ app/wmes-ct-orderGroups/routes.js
 app/wmes-ct-state/routes.js
 app/wmes-ct-balancing/routes.js
 app/wmes-orders-productNotes/routes.js
+app/wmes-orders-productTags/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
@@ -2400,6 +2401,7 @@ app/wmes-ct-orderGroups/routes.js
 app/wmes-ct-state/routes.js
 app/wmes-ct-balancing/routes.js
 app/wmes-orders-productNotes/routes.js
+app/wmes-orders-productTags/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js

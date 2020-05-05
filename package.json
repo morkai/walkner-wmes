@@ -5,11 +5,11 @@
   "version": "0.148.0",
   "updater": {
     "wmes": {
-      "backend": 547,
-      "frontend": 699,
+      "backend": 548,
+      "frontend": 700,
       "reports": 121,
       "attachments": 3,
-      "importer-sap": 57,
+      "importer-sap": 58,
       "importer-results": 12,
       "watchdog": 13,
       "mailer": 14,
