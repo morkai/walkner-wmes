@@ -370,7 +370,6 @@ define([
       var orderNo = whOrder.get('order');
       var set = whOrder.get('set');
       var pickStatus = whOrder.get('status');
-      var distStatus = whOrder.get('distStatus');
       var menu = [
         contextMenu.actions.sapOrder(orderNo)
       ];
@@ -399,7 +398,7 @@ define([
         handler: view.handleCopyAction.bind(view, tr, e.pageY, e.pageX, false, false)
       });
 
-      if ((user.isAllowedTo('WH:MANAGE') && view.whOrders.getDistStatusForSet(set) === 'pending')
+      if ((user.isAllowedTo('WH:MANAGE') && !view.whOrders.isSetDelivered(set))
         || (window.ENV === 'development' && user.isAllowedTo('SUPER')))
       {
         menu.push('-');

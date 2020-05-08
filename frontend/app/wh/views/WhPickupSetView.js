@@ -70,7 +70,7 @@ define([
     events: {
       'click .is-clickable': function(e)
       {
-        var whOrder = this.whOrders.get(this.$(e.target).closest('tbody').attr('data-id'));
+        var whOrder = this.whOrders.get(this.$(e.target).closest('.wh-set-item').attr('data-id'));
         var func = e.currentTarget.dataset.func;
         var prop = e.currentTarget.dataset.prop;
 
@@ -87,7 +87,7 @@ define([
           return;
         }
 
-        var whOrder = this.whOrders.get(this.$(e.target).closest('tbody').attr('data-id'));
+        var whOrder = this.whOrders.get(this.$(e.target).closest('.wh-set-item').attr('data-id'));
         var func = e.currentTarget.dataset.func;
         var prop = e.currentTarget.dataset.prop;
 
@@ -213,6 +213,8 @@ define([
     {
       var view = this;
 
+      view.updateSummary();
+
       view.$el.popover({
         selector: '[data-popover]',
         container: 'body',
@@ -262,6 +264,65 @@ define([
       }
     },
 
+    updateSummary: function()
+    {
+      var view = this;
+      var qtyPlan = 0;
+      var qtyTodo = 0;
+      var duration = 0;
+      var funcs = {
+        fmx: '',
+        kitter: '',
+        platformer: '',
+        packer: ''
+      };
+
+      this.$('.wh-set-item').each(function()
+      {
+        var whOrder = view.whOrders.get(this.dataset.id);
+
+        if (!whOrder
+          || whOrder.get('date') !== view.model.date
+          || whOrder.get('set') !== view.model.set)
+        {
+          return;
+        }
+
+        if (whOrder.get('status') !== 'problem')
+        {
+          var planOrder = view.plan.orders.get(whOrder.get('order'));
+
+          qtyPlan += whOrder.get('qty');
+          qtyTodo += planOrder ? planOrder.get('quantityTodo') : 0;
+          duration += Date.parse(whOrder.get('finishTime')) - Date.parse(whOrder.get('startTime'));
+        }
+
+        whOrder.get('funcs').forEach(function(func)
+        {
+          if (func.user)
+          {
+            funcs[func._id] = func.user.label;
+          }
+        });
+      });
+
+      view.$id('qty').text(qtyPlan.toLocaleString() + '/' + qtyTodo.toLocaleString());
+      view.$id('time').text(time.toString(duration / 1000, true, false));
+
+      _.forEach(funcs, function(label, func)
+      {
+        var parts = label.split(/\s+/);
+        var name = parts[0];
+
+        if (parts.length > 1)
+        {
+          name += ' ' + parts[1].charAt(0) + (parts[1].length > 1 ? '.' : '');
+        }
+
+        view.$id(func).text(name).attr('title', label);
+      });
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -276,7 +337,7 @@ define([
       if (!canManage
         && prop === 'pickup'
         && whOrder.getFunc(func).pickup === 'success'
-        && whOrder.get('distStatus') === 'pending'
+        && !whOrder.isDelivered()
         && user.isAllowedTo('WH:MANAGE:CARTS'))
       {
         menu.push({
@@ -287,6 +348,12 @@ define([
           })
         });
       }
+      else if (func === 'platformer'
+        && prop === 'pickup'
+        && whOrder.getFunc(func).pickup === 'pending')
+      {
+        setTimeout(view.handleUpdate.bind(view), 1, whOrder, func, prop, 'success');
+      }
       else
       {
         UPDATE_MENU_ITEMS[prop].forEach(function(item)
@@ -296,7 +363,7 @@ define([
             return;
           }
 
-          if (func === 'platformer' && prop === 'picklist' && item.value === 'ignore')
+          if (func === 'platformer' && prop === 'pickup' && item.value === 'failure')
           {
             return;
           }
@@ -362,8 +429,16 @@ define([
 
       view.hideEditor();
 
+      var $item = view.$(el).closest('.wh-set-item');
+
+      if (!$item.length)
+      {
+        return;
+      }
+
       $editor
-        .data('whOrderId', view.$(el).closest('.wh-set-item')[0].dataset.id)
+        .data('whOrderId', $item[0].dataset.id)
+        .attr('data-func', el.dataset.func)
         .css({
           left: el.offsetLeft + 'px',
           top: el.offsetTop + 'px'
@@ -421,10 +496,12 @@ define([
         {
           view.onOrderChanged(whOrder);
 
+          var error = req.responseJSON && req.responseJSON.error && req.responseJSON.error.code || 'failure';
+
           viewport.msg.show({
             type: 'error',
             time: 2500,
-            text: view.t('update:failure')
+            text: view.t.has('update:' + error) ? view.t('update:' + error) : view.t('update:failure')
           });
         });
 
@@ -513,10 +590,20 @@ define([
         var view = this;
         var $item = view.$('.wh-set-item[data-id="' + newData._id + '"]');
         var $prop = $item.find('.wh-set-action[data-prop="pickup"][data-func="' + propFunc + '"]');
-        var $editor = view.renderPartial(cartsEditorTemplate, {
+        var templateData = {
           multiline: propFunc === 'packer',
-          carts: newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]].carts.join(' ')
-        });
+          carts: newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]].carts.join(' '),
+          fmxCarts: [],
+          kitterCarts: []
+        };
+
+        if (propFunc === 'platformer')
+        {
+          templateData.fmxCarts = newData.funcs[WhOrder.FUNC_TO_INDEX.fmx].carts;
+          templateData.kitterCarts = newData.funcs[WhOrder.FUNC_TO_INDEX.kitter].carts;
+        }
+
+        var $editor = view.renderPartial(cartsEditorTemplate, templateData);
 
         $editor.find('.form-control')
           .on('input', function(e)
@@ -533,15 +620,42 @@ define([
             }
           });
 
+        $editor.on('click', 'a[data-cart]', function(e)
+        {
+          var func = e.currentTarget.dataset.func;
+          var cart = e.currentTarget.dataset.cart;
+          var $carts = $editor.find('.form-control');
+          var newCarts = $carts
+            .val()
+            .toUpperCase()
+            .split(/[,\s]+/)
+            .filter(function(v) { return /^[A-Z0-9]+$/.test(v); });
+
+          if (cart === 'all')
+          {
+            newCarts = newCarts.concat(newData.funcs[WhOrder.FUNC_TO_INDEX[func]].carts);
+          }
+          else
+          {
+            newCarts.push(cart);
+          }
+
+          newCarts = _.uniq(newCarts);
+
+          newCarts.sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true}); });
+
+          $carts.val(newCarts.join(' ')).focus();
+        });
+
         $editor.on('submit', function()
         {
           var $carts = $editor.find('.form-control');
-          var carts = $carts
+          var carts = _.uniq($carts
             .val()
             .toUpperCase()
             .split(/[,\s]+/)
             .filter(function(v) { return /^[A-Z0-9]+$/.test(v); })
-            .sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true}); });
+            .sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true}); }));
 
           $carts.val(carts.join(' '));
 
@@ -685,7 +799,7 @@ define([
     {
       if (this.plan.orders.get(sapOrder.id))
       {
-        this.$('tbody[data-order="' + sapOrder.id + '"] .planning-mrp-lineOrders-comment').html(
+        this.$('.wh-set-item[data-order="' + sapOrder.id + '"] .planning-mrp-lineOrders-comment').html(
           sapOrder.getCommentWithIcon()
         );
       }
@@ -701,7 +815,7 @@ define([
 
     onPsStatusChanged: function(sapOrder)
     {
-      var $item = this.$('tbody[data-order="' + sapOrder.id + '"]');
+      var $item = this.$('.wh-set-item[data-order="' + sapOrder.id + '"]');
 
       if ($item.length)
       {
@@ -716,24 +830,44 @@ define([
 
     onOrderChanged: function(whOrder)
     {
-      var $item = this.$('tbody[data-id="' + whOrder.id + '"]');
+      var view = this;
+      var $item = view.$('.wh-set-item[data-id="' + whOrder.id + '"]');
 
       if (!$item.length)
       {
         return;
       }
 
+      this.updateSummary();
+
       if (whOrder.get('date') !== this.model.date
        || whOrder.get('set') !== this.model.set)
       {
-        return $item.fadeOut('fast', function() { $item.remove(); });
+        if (view.$('.wh-set-item').length === 1)
+        {
+          viewport.closeDialog();
+
+          return;
+        }
+
+        $item.fadeOut('fast', function()
+        {
+          $item.remove();
+
+          if (!view.$('.wh-set-item').length)
+          {
+            viewport.closeDialog();
+          }
+        });
+
+        return;
       }
 
       $item.replaceWith(this.renderPartialHtml(setItemTemplate, {
         item: whOrder.serializeSet(
           {
             i: this.whOrders.indexOf(whOrder),
-            distStatus: this.whOrders.getDistStatusForSet(whOrder.get('set'))
+            delivered: this.whOrders.isSetDelivered(whOrder.get('set'))
           },
           this.plan,
           this.model.user

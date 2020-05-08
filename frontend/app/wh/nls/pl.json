@@ -161,6 +161,8 @@
   "menu:pickup:editCarts": "Zmień wózki",
 
   "update:failure": "Wykonywanie akcji nie powiodło się.",
+  "update:FIFO_IGNORED": "Nie można zignorować kompletacji FIFO.",
+  "update:ALL_IGNORED": "Nie można całkowicie zignorować kompletacji.",
   "printLabels:failure": "Drukowanie etykiet nie powiodło się.",
 
   "list:popover:picklist": "LP10",

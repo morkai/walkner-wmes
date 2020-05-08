@@ -154,7 +154,7 @@ define([
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
-      var undelivered = setData.distStatus === 'pending';
+      var undelivered = !setData.delivered;
 
       obj.clickable = {
         picklistDone: undelivered
@@ -178,6 +178,8 @@ define([
         };
       });
 
+      obj.clickable.platformer.picklist = false;
+      obj.clickable.platformer.pickup = obj.clickable.platformer.pickup && obj.funcs[0].pickup === 'success';
       obj.clickable.printLabels = canManage || isUser;
 
       return obj;
@@ -257,6 +259,13 @@ define([
       }
 
       return func;
+    },
+
+    isDelivered: function()
+    {
+      var distStatus = this.get('distStatus');
+
+      return distStatus === 'started' || distStatus === 'finished';
     }
 
   }, {

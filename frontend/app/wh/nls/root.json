@@ -160,6 +160,8 @@
     "menu:pickup:editCarts": "Change carts",
 
     "update:failure": "Failed to execute action.",
+    "update:FIFO_IGNORED": "FIFO pickup cannot be ignored.",
+    "update:ALL_IGNORED": "Pickup cannot be ignored completely.",
     "printLabels:failure": "Failed to print labels.",
 
     "list:popover:picklist": "LP10",

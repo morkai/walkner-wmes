@@ -6,6 +6,7 @@ define([
   './user',
   './wh/pages/WhProblemsPage',
   'i18n!app/nls/wh',
+  'i18n!app/nls/wh-lines',
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
 ], function(

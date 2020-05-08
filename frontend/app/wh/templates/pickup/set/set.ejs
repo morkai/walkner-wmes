@@ -3,13 +3,22 @@
   <tr>
     <th data-prop="order"><%- t('prop:order') %></th>
     <th data-prop="product"><%- t('prop:product') %></th>
-    <th data-prop="qty"><%- t('prop:qty') %></th>
-    <th data-prop="time"><%- t('prop:time') %></th>
+    <th class="text-center" data-prop="qty">
+      <%- t('prop:qty') %>
+      <span id="<%- idPrefix %>-qty" class="wh-set-summary">0</span>
+    </th>
+    <th class="text-center" data-prop="time">
+      <%- t('prop:time') %>
+      <span id="<%- idPrefix %>-time" class="wh-set-summary">00:00:00</span>
+    </th>
     <th class="wh-set-separator"></th>
-    <th data-prop="picklistDone"><%- t('prop:picklist') %></th>
+    <th class="text-center" data-prop="picklistDone"><%- t('prop:picklist') %></th>
     <% items[0].funcs.forEach(function(func) { %>
     <th class="wh-set-separator"></th>
-    <th data-prop="func" data-func="<%- func._id %>" colspan="2"><%- t('prop:' + func._id) %></th>
+    <th class="text-center" data-prop="func" data-func="<%- func._id %>" colspan="<%- func._id === 'platformer' ? 1 : 2%>">
+      <%- t('prop:' + func._id) %>
+      <span id="<%- idPrefix %>-<%- func._id %>" class="wh-set-summary">?</span>
+    </th>
     <% }) %>
     <th class="wh-set-separator"></th>
     <th><%- t('core', 'LIST:COLUMN:actions') %></th>

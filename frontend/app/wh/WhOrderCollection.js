@@ -146,11 +146,11 @@ define([
     serializeSet: function(setNo, plan, whUser)
     {
       var setOrders = this.getOrdersBySet(setNo);
-      var distStatus = this.getDistStatusForSet(setOrders.map(function(o) { return o.order; }));
+      var delivered = this.isSetDelivered(setOrders.map(function(o) { return o.order; }));
 
       return setOrders.map(function(o)
       {
-        return o.order.serializeSet({i: o.i, distStatus: distStatus}, plan, whUser);
+        return o.order.serializeSet({i: o.i, delivered: delivered}, plan, whUser);
       });
     },
 
@@ -172,7 +172,7 @@ define([
       return setOrders;
     },
 
-    getDistStatusForSet: function(set)
+    isSetDelivered: function(set)
     {
       var count = {
         all: 0,
@@ -185,24 +185,15 @@ define([
       {
         set = this.getOrdersBySet(set).map(function(o) { return o.order; });
       }
-
-      set.forEach(function(order)
+      else if (!set)
       {
-        count.all += 1;
-        count[order.get('distStatus')] += 1;
+        set = [];
+      }
+
+      return set.some(function(order)
+      {
+        return order.isDelivered();
       });
-
-      if (count.started)
-      {
-        return 'started';
-      }
-
-      if (count.all === count.finished)
-      {
-        return 'finished';
-      }
-
-      return 'pending';
     }
 
   }, {

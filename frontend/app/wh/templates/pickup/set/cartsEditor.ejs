@@ -1,8 +1,36 @@
 <form class="wh-set-editor wh-set-editor-carts <%- multiline ? 'wh-is-multiline' : '' %>">
-  <% if (multiline) { %>
-  <textarea class="form-control text-fixed" placeholder="<%- t('set:cartsEditor:carts') %>" required><%- carts %></textarea>
-  <% } else { %>
-  <input type="text" autocomplete="new-password" class="form-control" value="<%- carts %>" placeholder="<%- t('set:cartsEditor:carts') %>" required>
+  <div class="wh-set-editor-carts-input">
+    <% if (multiline) { %>
+    <textarea class="form-control text-fixed" placeholder="<%- t('set:cartsEditor:carts') %>" required><%- carts %></textarea>
+    <% } else { %>
+    <input type="text" autocomplete="new-password" class="form-control text-fixed" value="<%- carts %>" placeholder="<%- t('set:cartsEditor:carts') %>" required>
+    <% } %>
+    <button class="btn btn-success"><i class="fa fa-shopping-cart"></i></button>
+  </div>
+  <% if (fmxCarts.length || kitterCarts.length) { %>
+  <table class="wh-set-editor-carts-other">
+    <tbody>
+      <% if (fmxCarts.length) { %>
+      <tr>
+        <th><a href="javascript:void(0)" data-func="fmx" data-cart="all"><%- t('func:fmx') %></a>:</th>
+        <td>
+          <% fmxCarts.forEach(function(cart) { %>
+          <a href="javascript:void(0)" data-func="fmx" data-cart="<%- cart %>"><%- cart %></a>
+          <% }) %>
+        </td>
+      </tr>
+      <% } %>
+      <% if (kitterCarts.length) { %>
+      <tr>
+        <th><a href="javascript:void(0)" data-func="kitter" data-cart="all"><%- t('func:kitter') %></a>:</th>
+        <td>
+          <% kitterCarts.forEach(function(cart) { %>
+          <a href="javascript:void(0)" data-func="kitter" data-cart="<%- cart %>"><%- cart %></a>
+          <% }) %>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
   <% } %>
-  <button class="btn btn-success"><i class="fa fa-shopping-cart"></i></button>
 </form>

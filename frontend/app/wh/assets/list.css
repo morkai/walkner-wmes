@@ -2,7 +2,7 @@
   margin-top: 10px;
 }
 .planning-wh-list .planning-mrp-lineOrders-list {
-  overflow-y: hidden;
+  overflow: hidden;
 }
 .planning-mrp-lineOrders-table .success {
   background: #dff0d8;
@@ -73,8 +73,10 @@ td.wh-list-icon {
   width: 140px;
 }
 
-.wh-list-item > td[data-status="pending"] {
+.wh-list-item > td[data-status="pending"],
+.planning-darker .wh-list-item > td[data-status="pending"] {
   background: #fff;
+  color: #000;
 }
 .wh-list-item[data-status="started"],
 .wh-list-item > td[data-status="started"] {

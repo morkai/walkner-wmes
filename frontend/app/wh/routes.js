@@ -16,9 +16,9 @@ define([
   'use strict';
 
   var css = [
-    'css!app/wh/assets/main',
+    'css!app/paintShop/assets/main',
     'css!app/planning/assets/main',
-    'css!app/paintShop/assets/main'
+    'css!app/wh/assets/main'
   ];
   var nls = [
     'i18n!app/nls/wh',

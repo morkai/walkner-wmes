@@ -10,9 +10,11 @@
     </td>
     <% item.funcs.forEach(function(func) { %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
+    <% if (func._id !== 'platformer') { %>
     <td class="wh-set-action <%- item.clickable[func._id].picklist ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="picklist" data-status="<%- func.picklist %>" rowspan="2">
       <i class="fa fa-file-text-o"></i>
     </td>
+    <% } %>
     <td class="wh-set-action <%- item.clickable[func._id].pickup ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="pickup" data-status="<%- func.pickup %>" data-popover="pickup" rowspan="2">
       <i class="fa fa-shopping-cart"></i>
     </td>
