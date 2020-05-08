@@ -1,1 +1,1 @@
-define(["./router","./viewport","./user","./wh/pages/WhDeliveryPage","i18n!app/nls/wh","i18n!app/nls/planning","i18n!app/nls/paintShop"],function(n,a,e,i){"use strict";n.map("/",e.auth("LOCAL","WH:VIEW"),function(){a.showPage(new i({layoutName:"blank",kind:"packaging"}))})});
+define(["./router","./viewport","./user","./wh/pages/WhDeliveryPage","i18n!app/nls/wh","i18n!app/nls/wh-lines","i18n!app/nls/planning","i18n!app/nls/paintShop"],function(n,a,i,p){"use strict";n.map("/",i.auth("LOCAL","WH:VIEW"),function(){a.showPage(new p({layoutName:"blank",kind:"packaging"}))})});

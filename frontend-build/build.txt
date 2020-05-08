@@ -3899,6 +3899,9 @@ app/wh/pages/WhPickupPage.js
 app/nls/wh.js
 app/nls/pl/wh.js
 i18n!app/nls/wh
+app/nls/wh-lines.js
+app/nls/pl/wh-lines.js
+i18n!app/nls/wh-lines
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
 i18n!app/nls/paintShop
@@ -4084,6 +4087,9 @@ app/wh/pages/WhProblemsPage.js
 app/nls/wh.js
 app/nls/pl/wh.js
 i18n!app/nls/wh
+app/nls/wh-lines.js
+app/nls/pl/wh-lines.js
+i18n!app/nls/wh-lines
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
 i18n!app/nls/paintShop
@@ -4244,6 +4250,9 @@ app/wh/pages/WhDeliveryPage.js
 app/nls/wh.js
 app/nls/pl/wh.js
 i18n!app/nls/wh
+app/nls/wh-lines.js
+app/nls/pl/wh-lines.js
+i18n!app/nls/wh-lines
 app/nls/planning.js
 app/nls/pl/planning.js
 i18n!app/nls/planning
@@ -4407,6 +4416,9 @@ app/wh/pages/WhDeliveryPage.js
 app/nls/wh.js
 app/nls/pl/wh.js
 i18n!app/nls/wh
+app/nls/wh-lines.js
+app/nls/pl/wh-lines.js
+i18n!app/nls/wh-lines
 app/nls/planning.js
 app/nls/pl/planning.js
 i18n!app/nls/planning
