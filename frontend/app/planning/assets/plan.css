@@ -280,6 +280,12 @@
   background: #ccc;
   border: 0;
 }
+.planning-mrp-lineOrders-container > hr:first-child {
+  display: none;
+}
+.planning-mrp-lineOrders-container:first-child > hr:first-child {
+  display: block;
+}
 .planning-mrp-lineOrders-container:last-child > hr {
   display: none;
 }
