@@ -3,4 +3,16 @@
 
 'use strict';
 
-db.orders.updateMany({scheduledStartDate: {$gte: new Date('2020-05-01 00:00:00')}}, {$set: {tags: []}});
+var pendingOrders = {};
+
+db.oldwhorders.find({status: {$in: ['pending', 'problem']}}, {order: 1}).forEach(whOrder =>
+{
+  pendingOrders[whOrder.order] = 1;
+});
+
+db.orders.find({_id: {$in: Object.keys(pendingOrders)}, statuses: {$nin: ['CNF', 'DLV', 'TECO', 'DLT', 'DLFL']}}, {_id: 1}).forEach(sapOrder =>
+{
+  delete pendingOrders[sapOrder._id];
+});
+
+db.oldwhorders.updateMany({order: {$in: Object.keys(pendingOrders)}}, {$set: {status: 'cancelled'}});

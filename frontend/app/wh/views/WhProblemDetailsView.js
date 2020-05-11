@@ -19,7 +19,7 @@ define([
   'app/wh/templates/problems/details',
   'app/wh/templates/problems/detailsOrderInfo',
   'app/wh/templates/problems/detailsFuncs',
-  'app/wh/templates/problems/cancelOrderEditor',
+  'app/wh/templates/problems/resetOrderEditor',
   'app/wh/templates/problems/solveProblemEditor'
 ], function(
   _,
@@ -40,7 +40,7 @@ define([
   detailsTemplate,
   orderInfoTemplate,
   funcsTemplate,
-  cancelOrderEditorTemplate,
+  resetOrderEditorTemplate,
   solveProblemEditorTemplate
 ) {
   'use strict';
@@ -167,19 +167,18 @@ define([
 
       this.hideEditor();
 
-      var funcId = this.$(e.target).closest('.wh-problems-func').attr('data-func');
       var options = {
         className: 'wh-problems-menu',
         menu: [
           {
             icon: 'fa-thumbs-up',
-            label: this.t('problem:menu:solveProblem'),
-            handler: this.solveProblem.bind(this, funcId)
+            label: this.t('problem:menu:resetOrder'),
+            handler: this.resetOrder.bind(this, false)
           },
           {
             icon: 'fa-times',
             label: this.t('problem:menu:cancelOrder'),
-            handler: this.cancelOrder.bind(this)
+            handler: this.resetOrder.bind(this, true)
           }
         ]
       };
@@ -266,11 +265,14 @@ define([
       }
     },
 
-    cancelOrder: function(e)
+    resetOrder: function(cancel, e)
     {
       var view = this;
-      var $editor = view.renderPartial(cancelOrderEditorTemplate, {
-        comment: view.t('problem:editor:cancelOrder:message', {
+      var mode = cancel ? 'cancel' : 'reset';
+      var $editor = view.renderPartial(resetOrderEditorTemplate, {
+        yes: view.t('problem:editor:' + mode + 'Order:yes'),
+        no: view.t('problem:editor:' + mode + 'Order:no'),
+        comment: view.t('problem:editor:' + mode + 'Order:message', {
           qty: view.model.get('qty'),
           line: view.model.get('line')
         })
@@ -289,7 +291,7 @@ define([
         viewport.msg.saving();
 
         var cancelReq = WhOrderCollection.act(view.model.get('date'), 'resetOrders', {
-          cancel: true,
+          cancel: cancel,
           orders: [view.model.id]
         });
 

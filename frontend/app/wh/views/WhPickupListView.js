@@ -113,6 +113,7 @@ define([
       view.listenTo(sapOrders, 'reset', view.onOrdersReset);
       view.listenTo(sapOrders, 'change:comments', view.onCommentChange);
       view.listenTo(sapOrders, 'change:psStatus', view.onPsStatusChanged);
+      view.listenTo(sapOrders, 'change:statuses', view.onStatusesChanged);
 
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
       view.listenTo(view.whOrders, 'change', view.onOrderChanged);
@@ -631,6 +632,16 @@ define([
           .attr('title', t('planning', 'orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
       }
+    },
+
+    onStatusesChanged: function(sapOrder)
+    {
+      var view = this;
+
+      view.$('.wh-list-item[data-order="' + sapOrder.id + '"]').each(function()
+      {
+        view.onOrderChanged(view.whOrders.get(this.dataset.id));
+      });
     },
 
     onOrderChanged: function(whOrder)

@@ -91,7 +91,8 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'xiconf.orders.synced',
     'orderDocuments.synced', 'orderDocuments.eto.synced',
     'cags.plan.synced', 'cags.plan.syncFailed',
-    'kanban.import.*'
+    'kanban.import.*',
+    'old.wh.orders.updated'
   ]
 });
 

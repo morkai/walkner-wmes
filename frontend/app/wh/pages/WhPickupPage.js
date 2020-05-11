@@ -148,6 +148,10 @@ define([
       {
         this.plan.applyChange(planChange);
       },
+      'orders.synced': function()
+      {
+        this.promised(this.plan.sapOrders.fetch());
+      },
       'orders.updated.*': function(message)
       {
         var change = message.change;

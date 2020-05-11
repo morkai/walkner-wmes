@@ -11,11 +11,15 @@
   <li>Zmieniono rozpoczynanie akcji kompletacji tak, aby nie była ograniczona do aktualnie wyświetlanego dnia.</li>
   <li>Zmieniono wysyłkę wózków opakowań tak, aby można było zainicjować wysyłkę na kwalifikujące się linie
     bezpośrednio z poziomu wysyłki opakowań, a nie dopiero po rozpoczęciu wysyłki FIFO.</li>
+  <li>Zmieniono rozpoczynanie problemu tak, aby problematyczne zlecenie było usuwane z seta.</li>
+  <li>Zmieniono rozwiązywanie problemu tak, aby resetowano całe zlecenie.</li>
   <li>Dodano listę zdarzeń.</li>
   <li>Dodano nową funkcję kompletacji: Platformowy.</li>
   <li>Dodano nową opcję konfiguracyjną wysyłki: Maksymalny czas do rozpoczęcia zlecenia - maksymalna ilość minut
     od teraz do zaplanowanego czasu rozpoczęcia zlecenia, aby wózek został przeznaczony do realizacji,
     jeżeli linia w danym momencie nie pracuje.</li>
+  <li>Dodano automatyczne anulowanie Oczekujących i Problematycznych zleceń, które zostały zakończone, tzn.
+    otrzymały status CNF, DLV, TECO, DLT lub DLFL.</li>
 </ul>
 <h3>Czas cyklu</h3>
 <ul>

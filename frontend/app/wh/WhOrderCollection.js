@@ -174,13 +174,6 @@ define([
 
     isSetDelivered: function(set)
     {
-      var count = {
-        all: 0,
-        pending: 0,
-        started: 0,
-        finished: 0
-      };
-
       if (typeof set === 'number')
       {
         set = this.getOrdersBySet(set).map(function(o) { return o.order; });
