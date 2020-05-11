@@ -39,6 +39,7 @@
     "PROPERTY:leader:prod": "Team leader",
     "PROPERTY:leader:wh": "Warehouseman",
     "PROPERTY:coach": "Coach",
+    "PROPERTY:operator": "Operator",
     "PROPERTY:division": "Division",
     "PROPERTY:line": "Location",
     "PROPERTY:line:prod": "Line",

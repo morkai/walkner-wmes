@@ -3,7 +3,7 @@
     <div class="col-lg-4">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:' + model.source) %>
+          <%- t('PANEL:TITLE:details:' + model.source) %>
         </div>
         <div class="panel-details">
           <%- helpers.props(model, [
@@ -17,7 +17,7 @@
               return orderNo;
             }},
             {id: 'serialNumbers', visible: model.source === 'prod'},
-            {id: '!nc12', label: helpers.t('PROPERTY:nc12:' + model.source), value: function(nc12)
+            {id: '!nc12', label: t('PROPERTY:nc12:' + model.source), value: function(nc12)
               {
                 if (user.isAllowedTo('ORDERS:VIEW'))
                 {
@@ -27,9 +27,9 @@
                 return nc12;
               }},
             {id: 'productFamily', visible: model.source === 'prod'},
-            {id: 'productName', label: helpers.t('PROPERTY:productName:' + model.source)},
+            {id: 'productName', label: t('PROPERTY:productName:' + model.source)},
             'division',
-            {id: 'line', label: helpers.t('PROPERTY:line:' + model.source)},
+            {id: 'line', label: t('PROPERTY:line:' + model.source)},
             {id: 'qtyOrder', visible: model.source === 'prod'}
           ]) %>
         </div>
@@ -38,7 +38,7 @@
     <div class="col-lg-4">
       <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:inspection') %>
+          <%- t('PANEL:TITLE:details:inspection') %>
         </div>
         <div class="panel-details">
           <%- helpers.props(model, [
@@ -46,7 +46,8 @@
             'inspectedAt',
             '!inspector',
             '!coach',
-            {id: '!leader', label: helpers.t('PROPERTY:leader:' + model.source)},
+            '!operator',
+            {id: '!leader', label: t('PROPERTY:leader:' + model.source)},
             {id: '!nokOwner', visible: !model.ok},
             'qtyInspected',
             {id: 'qtyNokInspected', visible: !model.ok},
@@ -59,7 +60,7 @@
     <div class="col-lg-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:extra') %>
+          <%- t('PANEL:TITLE:details:extra') %>
         </div>
         <div class="panel-details">
           <%- helpers.props(model, ['createdAt', '!creator', 'updatedAt', '!updater']) %>
@@ -72,7 +73,7 @@
     <div class="col-lg-4">
       <div class="panel panel-danger">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:inspection:nok') %>
+          <%- t('PANEL:TITLE:details:inspection:nok') %>
         </div>
         <div class="panel-details">
           <%- helpers.props(model, [
@@ -113,7 +114,7 @@
     <div class="col-lg-4">
       <div class="panel panel-success">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:attachments:ok') %>
+          <%- t('PANEL:TITLE:details:attachments:ok') %>
         </div>
         <div class="panel-body qiResults-details-attachment">
           <% if (model.okFile) { %>
@@ -134,7 +135,7 @@
     <div class="col-lg-4">
       <div class="panel panel-danger">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:attachments:nok') %>
+          <%- t('PANEL:TITLE:details:attachments:nok') %>
         </div>
         <div class="panel-body qiResults-details-attachment">
           <% if (model.nokFile) { %>
@@ -155,7 +156,7 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <%- helpers.t('PANEL:TITLE:details:actions') %>
+      <%- t('PANEL:TITLE:details:actions') %>
     </div>
     <% if (model.correctiveActions.length) { %>
     <%- renderCorrectiveActionsTable({
@@ -165,7 +166,7 @@
     }) %>
     <% } else { %>
     <div class="panel-body">
-      <p><%- helpers.t('correctiveActions:empty') %></p>
+      <p><%- t('correctiveActions:empty') %></p>
     </div>
     <% } %>
   </div>

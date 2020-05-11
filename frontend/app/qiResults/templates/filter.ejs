@@ -64,6 +64,10 @@
     <label for="<%- idPrefix %>-coach"><%- helpers.t('PROPERTY:coach') %></label>
     <input id="<%- idPrefix %>-coach" name="coach" type="text" autocomplete="new-password">
   </div>
+  <div class="form-group hidden" data-filter="operator">
+    <label for="<%- idPrefix %>-operator"><%- helpers.t('PROPERTY:operator') %></label>
+    <input id="<%- idPrefix %>-operator" name="operator" type="text" autocomplete="new-password">
+  </div>
   <%- renderLimit({hidden: true}) %>
   <div class="form-group filter-actions">
     <%- renderButton() %>

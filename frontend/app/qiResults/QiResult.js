@@ -182,6 +182,7 @@ define([
       obj.nokOwner = renderUserInfo({userInfo: obj.nokOwner});
       obj.leader = renderUserInfo({userInfo: obj.leader});
       obj.coach = renderUserInfo({userInfo: obj.coach});
+      obj.operator = renderUserInfo({userInfo: obj.operator});
       obj.kind = dictionaries.getLabel('kind', obj.kind);
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';
       obj.qtyInspected = obj.qtyInspected.toLocaleString();

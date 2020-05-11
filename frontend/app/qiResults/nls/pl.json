@@ -38,6 +38,7 @@
   "PROPERTY:leader:prod": "Lider",
   "PROPERTY:leader:wh": "Magazynier",
   "PROPERTY:coach": "Trener",
+  "PROPERTY:operator": "Operator",
   "PROPERTY:division": "Centrum",
   "PROPERTY:line": "Lokalizacja",
   "PROPERTY:line:prod": "Linia",

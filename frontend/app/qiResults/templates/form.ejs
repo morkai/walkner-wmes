@@ -8,45 +8,45 @@
           <% ['prod', 'wh'].forEach(function(source) { %>
           <label class="btn btn-default" style="min-width: 100px">
             <input id="<%- idPrefix %>-source" type="radio" name="source" value="<%- source %>">
-            <%- helpers.t('source:' + source) %>
+            <%- t('source:' + source) %>
           </label>
           <% }) %>
         </div>
         <div id="<%- idPrefix %>-result" class="btn-group" data-toggle="buttons" style="margin-left: 30px">
           <label class="btn btn-default qiResults-filter-ok" style="min-width: 90px">
             <input id="<%- idPrefix %>-ok" type="radio" name="ok" value="true">
-            <%- helpers.t('ok:true') %>
+            <%- t('ok:true') %>
           </label>
           <label class="btn btn-default qiResults-filter-nok" style="min-width: 90px">
             <input id="<%- idPrefix %>-nok" type="radio" name="ok" value="false">
-            <%- helpers.t('ok:false') %>
+            <%- t('ok:false') %>
           </label>
         </div>
       </div>
       <div id="<%- idPrefix %>-orderGroup" class="row">
         <div class="col-lg-2 form-group" data-source="prod">
-          <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- helpers.t('PROPERTY:orderNo') %></label>
+          <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('PROPERTY:orderNo') %></label>
           <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control no-controls" type="number" required min="100000000" max="999999999" data-role="inspector">
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-nc12" class="control-label"><span data-source="prod"><%- helpers.t('PROPERTY:nc12:prod') %></span><span data-source="wh"><%- helpers.t('PROPERTY:nc12:wh') %></span></label>
+          <label for="<%- idPrefix %>-nc12" class="control-label"><span data-source="prod"><%- t('PROPERTY:nc12:prod') %></span><span data-source="wh"><%- t('PROPERTY:nc12:wh') %></span></label>
           <input id="<%- idPrefix %>-nc12" name="nc12" class="form-control" type="text" autocomplete="new-password" required readonly>
         </div>
         <div class="col-lg-2 form-group" data-source="prod">
-          <label for="<%- idPrefix %>-productFamily" class="control-label"><%- helpers.t('PROPERTY:productFamily') %></label>
+          <label for="<%- idPrefix %>-productFamily" class="control-label"><%- t('PROPERTY:productFamily') %></label>
           <input id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" type="text" autocomplete="new-password" required readonly pattern="^[A-Z0-9]{6}$">
         </div>
         <div class="col-lg-6 form-group">
           <label for="<%- idPrefix %>-productName" class="control-label">
-            <span data-source="prod"><%- helpers.t('PROPERTY:productName:prod') %></span>
-            <span data-source="wh"><%- helpers.t('PROPERTY:productName:wh') %></span>
+            <span data-source="prod"><%- t('PROPERTY:productName:prod') %></span>
+            <span data-source="wh"><%- t('PROPERTY:productName:wh') %></span>
           </label>
           <input id="<%- idPrefix %>-productName" name="productName" class="form-control" type="text" autocomplete="new-password" required readonly>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-division" class="control-label is-required"><%- helpers.t('PROPERTY:division') %></label>
+          <label for="<%- idPrefix %>-division" class="control-label is-required"><%- t('PROPERTY:division') %></label>
           <select id="<%- idPrefix %>-division" name="division" class="form-control" required data-role="inspector">
             <option></option>
             <% divisions.forEach(function(division) { %>
@@ -55,25 +55,25 @@
           </select>
         </div>
         <div class="col-lg-2 form-group" data-source="prod">
-          <label for="<%- idPrefix %>-line" class="control-label"><%- helpers.t('PROPERTY:line:prod') %></label>
+          <label for="<%- idPrefix %>-line" class="control-label"><%- t('PROPERTY:line:prod') %></label>
           <select id="<%- idPrefix %>-line" name="line" class="form-control" data-role="inspector">
             <option></option>
           </select>
         </div>
         <div class="col-lg-2 form-group" data-source="wh">
-          <label for="<%- idPrefix %>-location" class="control-label"><%- helpers.t('PROPERTY:line:wh') %></label>
+          <label for="<%- idPrefix %>-location" class="control-label"><%- t('PROPERTY:line:wh') %></label>
           <input id="<%- idPrefix %>-location" name="location" class="form-control" type="text" data-role="inspector">
         </div>
         <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-leader" class="control-label">
-            <span data-source="prod"><%- helpers.t('PROPERTY:leader:prod') %></span>
-            <span data-source="wh"><%- helpers.t('PROPERTY:leader:wh') %></span>
+            <span data-source="prod"><%- t('PROPERTY:leader:prod') %></span>
+            <span data-source="wh"><%- t('PROPERTY:leader:wh') %></span>
           </label>
           <select id="<%- idPrefix %>-leader" name="leader" class="form-control" data-role="inspector"></select>
         </div>
         <% if (!model.ok) { %>
         <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- helpers.t('PROPERTY:nokOwner') %></label>
+          <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- t('PROPERTY:nokOwner') %></label>
           <select id="<%- idPrefix %>-nokOwner" name="nokOwner" class="form-control" data-role="inspector">
             <option></option>
             <% masters.forEach(function(master) { %>
@@ -85,7 +85,7 @@
       </div>
       <div class="row">
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-kind" class="control-label is-required"><%- helpers.t('PROPERTY:kind') %></label>
+          <label for="<%- idPrefix %>-kind" class="control-label is-required"><%- t('PROPERTY:kind') %></label>
           <select id="<%- idPrefix %>-kind" name="kind" class="form-control" required data-role="inspector">
             <% kinds.forEach(function(kind) { %>
             <option value="<%- kind.id %>"><%= kind.text %></option>
@@ -93,47 +93,53 @@
           </select>
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-inspectedAt" class="control-label is-required"><%- helpers.t('PROPERTY:inspectedAt') %></label>
+          <label for="<%- idPrefix %>-inspectedAt" class="control-label is-required"><%- t('PROPERTY:inspectedAt') %></label>
           <input id="<%- idPrefix %>-inspectedAt" name="inspectedAt" class="form-control" type="date" min="<%- inspectedAtMin %>" max="<%- inspectedAtMax %>" data-role="inspector">
         </div>
         <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-inspector" class="control-label is-required"><%- helpers.t('PROPERTY:inspector') %></label>
+          <label for="<%- idPrefix %>-inspector" class="control-label is-required"><%- t('PROPERTY:inspector') %></label>
           <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
             <% inspectors.forEach(function(inspector) { %>
               <option value="<%- inspector.id %>"><%= inspector.text %></option>
             <% }) %>
           </select>
         </div>
+      </div>
+      <div class="row">
         <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-coach" class="control-label"><%- helpers.t('PROPERTY:coach') %></label>
+          <label for="<%- idPrefix %>-coach" class="control-label"><%- t('PROPERTY:coach') %></label>
           <input id="<%- idPrefix %>-coach" name="coach" type="text" data-role="inspector">
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('PROPERTY:operator') %></label>
+          <input id="<%- idPrefix %>-operator" name="operator" type="text" data-role="inspector">
         </div>
       </div>
       <div class="row">
         <div class="col-lg-2 form-group" data-source="prod">
-          <label for="<%- idPrefix %>-qtyOrder" class="control-label"><%- helpers.t('PROPERTY:qtyOrder') %></label>
+          <label for="<%- idPrefix %>-qtyOrder" class="control-label"><%- t('PROPERTY:qtyOrder') %></label>
           <input id="<%- idPrefix %>-qtyOrder" name="qtyOrder" class="form-control" type="number"  required readonly min="0">
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-qtyInspected" class="control-label is-required"><%- helpers.t('PROPERTY:qtyInspected') %></label>
+          <label for="<%- idPrefix %>-qtyInspected" class="control-label is-required"><%- t('PROPERTY:qtyInspected') %></label>
           <input id="<%- idPrefix %>-qtyInspected" name="qtyInspected" class="form-control" type="number" required min="1" data-role="inspector">
         </div>
         <% if (!model.ok) { %>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-qtyNokInspected" class="control-label is-required" title="<%- helpers.t('PROPERTY:qtyNokInspected') %>"><%- helpers.t('PROPERTY:qtyNokInspected:min') %></label>
+          <label for="<%- idPrefix %>-qtyNokInspected" class="control-label is-required" title="<%- t('PROPERTY:qtyNokInspected') %>"><%- t('PROPERTY:qtyNokInspected:min') %></label>
           <input id="<%- idPrefix %>-qtyNokInspected" name="qtyNokInspected" class="form-control" type="number" required min="0" data-role="inspector">
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-qtyToFix" class="control-label is-required"><%- helpers.t('PROPERTY:qtyToFix') %></label>
+          <label for="<%- idPrefix %>-qtyToFix" class="control-label is-required"><%- t('PROPERTY:qtyToFix') %></label>
           <input id="<%- idPrefix %>-qtyToFix" name="qtyToFix" class="form-control" type="number" required min="0" data-role="inspector">
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-qtyNok" class="control-label is-required"><%- helpers.t('PROPERTY:qtyNok') %></label>
+          <label for="<%- idPrefix %>-qtyNok" class="control-label is-required"><%- t('PROPERTY:qtyNok') %></label>
           <input id="<%- idPrefix %>-qtyNok" name="qtyNok" class="form-control" type="number" required min="0" data-role="inspector">
         </div>
         <% } %>
         <div class="col-lg-2 form-group" data-source="prod">
-          <label for="<%- idPrefix %>-serialNumbers" class="control-label"><%- helpers.t('PROPERTY:serialNumbers') %></label>
+          <label for="<%- idPrefix %>-serialNumbers" class="control-label"><%- t('PROPERTY:serialNumbers') %></label>
           <input id="<%- idPrefix %>-serialNumbers" name="serialNumbers" class="form-control" type="text" autocomplete="new-password" data-role="inspector">
         </div>
       </div>
@@ -141,7 +147,7 @@
       <div class="row">
         <div class="col-lg-4">
           <div class="form-group">
-            <label for="<%- idPrefix %>-errorCategory" class="control-label <%- user.isAllowedTo('QI:RESULTS:MANAGE') ? '' : 'is-required' %>"><%- helpers.t('PROPERTY:errorCategory') %></label>
+            <label for="<%- idPrefix %>-errorCategory" class="control-label <%- user.isAllowedTo('QI:RESULTS:MANAGE') ? '' : 'is-required' %>"><%- t('PROPERTY:errorCategory') %></label>
             <select id="<%- idPrefix %>-errorCategory" name="errorCategory" class="form-control" <%- user.isAllowedTo('QI:RESULTS:MANAGE') ? '' : 'required' %> data-role="specialist">
               <option></option>
               <% errorCategories.forEach(function(errorCategory) { %>
@@ -150,7 +156,7 @@
             </select>
           </div>
           <div class="form-group not-last">
-            <label for="<%- idPrefix %>-faultCode" class="control-label"><%- helpers.t('PROPERTY:faultCode') %></label>
+            <label for="<%- idPrefix %>-faultCode" class="control-label"><%- t('PROPERTY:faultCode') %></label>
             <select id="<%- idPrefix %>-faultCode" name="faultCode" class="form-control" required data-role="inspector">
               <% faults.forEach(function(fault) { %>
               <option value="<%- fault.id %>"><%= fault.text %></option>
@@ -159,17 +165,17 @@
           </div>
         </div>
         <div class="col-lg-8 form-group">
-          <label for="<%- idPrefix %>-faultDescription" class="control-label"><%- helpers.t('PROPERTY:faultDescription') %></label>
+          <label for="<%- idPrefix %>-faultDescription" class="control-label"><%- t('PROPERTY:faultDescription') %></label>
           <textarea id="<%- idPrefix %>-faultDescription" name="faultDescription" class="form-control" rows="3" data-role="inspector"></textarea>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-6 form-group">
-          <label for="<%- idPrefix %>-problem" class="control-label"><%- helpers.t('PROPERTY:problem') %></label>
+          <label for="<%- idPrefix %>-problem" class="control-label"><%- t('PROPERTY:problem') %></label>
           <textarea id="<%- idPrefix %>-problem" name="problem" class="form-control" rows="4" data-role="inspector"></textarea>
         </div>
         <div class="col-lg-6 form-group">
-          <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- helpers.t('PROPERTY:immediateActions') %></label>
+          <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- t('PROPERTY:immediateActions') %></label>
           <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="4" data-role="inspector specialist nokOwner leader"></textarea>
         </div>
       </div>
@@ -192,7 +198,7 @@
 %>
         <div class="form-group" data-i="<%- i %>">
           <label class="control-label is-required">
-            <span><%- helpers.t('FORM:rootCause:label', {n: i + 1, total: model.rootCause.length}) %></span>
+            <span><%- t('FORM:rootCause:label', {n: i + 1, total: model.rootCause.length}) %></span>
             <a class="qiResults-form-removeRootCause" href="javascript:void(0)" title="<%- t('FORM:rootCause:remove') %>"><i class="fa fa-times"></i></a>
           </label>
           <% rootCause.forEach(function(why, whyI) { %>
@@ -204,16 +210,16 @@
       <button id="<%- idPrefix %>-addRootCause" type="button" class="btn btn-default" style="margin: 7px 0 15px 0"><i class="fa fa-plus"></i><span><%- t('FORM:rootCause:add') %></span></button>
       <% if (model.okFile || model.nokFile) { %>
       <% if (canEditAttachments) { %>
-      <div class="message message-inline message-warning"><%- helpers.t('FORM:attachments:update') %></div>
+      <div class="message message-inline message-warning"><%- t('FORM:attachments:update') %></div>
       <% } %>
       <div class="row">
         <div class="col-lg-3 form-group">
-          <label class="control-label"><%- helpers.t('FORM:okFile:current') %></label>
+          <label class="control-label"><%- t('FORM:okFile:current') %></label>
           <p class="form-control-static">
             <% if (model.okFile) { %>
             <a href="/qi/results/<%- model._id %>/attachments/okFile"><%= model.okFile.name %></a>
             <% if (canEditAttachments) { %>
-            <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="ok"> <%- helpers.t('FORM:attachments:remove') %>)</label>
+            <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="ok"> <%- t('FORM:attachments:remove') %>)</label>
             <% } %>
             <% } else { %>
             -
@@ -221,12 +227,12 @@
           </p>
         </div>
         <div class="col-lg-3 form-group">
-          <label class="control-label"><%- helpers.t('FORM:nokFile:current') %></label>
+          <label class="control-label"><%- t('FORM:nokFile:current') %></label>
           <p class="form-control-static">
             <% if (model.nokFile) { %>
             <a href="/qi/results/<%- model._id %>/attachments/nokFile"><%= model.nokFile.name %></a>
             <% if (canEditAttachments) { %>
-            <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="nok"> <%- helpers.t('FORM:attachments:remove') %>)</label>
+            <label class="qiResults-form-removeAttachment">(<input type="checkbox" name="removeFile[]" value="nok"> <%- t('FORM:attachments:remove') %>)</label>
             <% } %>
             <% } else { %>
             -
@@ -238,11 +244,11 @@
       <% if (canEditAttachments) { %>
       <div class="row">
         <div class="col-lg-3 form-group">
-          <label for="<%- idPrefix %>-okFile" class="control-label"><%- helpers.t('FORM:okFile:new') %></label>
+          <label for="<%- idPrefix %>-okFile" class="control-label"><%- t('FORM:okFile:new') %></label>
           <input id="<%- idPrefix %>-okFile" name="okFile" class="form-control" type="file">
         </div>
         <div class="col-lg-3 form-group">
-          <label for="<%- idPrefix %>-nokFile" class="control-label"><%- helpers.t('FORM:nokFile:new') %></label>
+          <label for="<%- idPrefix %>-nokFile" class="control-label"><%- t('FORM:nokFile:new') %></label>
           <input id="<%- idPrefix %>-nokFile" name="nokFile" class="form-control" type="file">
         </div>
       </div>
@@ -252,11 +258,11 @@
         <table class="table table-bordered table-condensed qiResults-form-correctiveActions">
           <thead>
           <tr>
-            <th class="is-min"><%- helpers.t('correctiveActions:#') %></th>
-            <th class="is-min"><%- helpers.t('correctiveActions:status') %></th>
-            <th class="is-min"><%- helpers.t('correctiveActions:when') %></th>
-            <th class="is-min"><%- helpers.t('correctiveActions:who') %></th>
-            <th><%- helpers.t('correctiveActions:what') %></th>
+            <th class="is-min"><%- t('correctiveActions:#') %></th>
+            <th class="is-min"><%- t('correctiveActions:status') %></th>
+            <th class="is-min"><%- t('correctiveActions:when') %></th>
+            <th class="is-min"><%- t('correctiveActions:who') %></th>
+            <th><%- t('correctiveActions:what') %></th>
             <th></th>
           </tr>
           </thead>
@@ -265,14 +271,14 @@
       </div>
       <% if (canAddActions) { %>
       <button id="<%- idPrefix %>-addAction" class="btn btn-default" type="button">
-        <i class="fa fa-plus"></i><span><%- helpers.t('correctiveActions:add') %></span>
+        <i class="fa fa-plus"></i><span><%- t('correctiveActions:add') %></span>
       </button>
       <% } %>
       <% } %>
       <% } %>
       <% if (editMode) { %>
       <div class="form-group qiResults-form-comment">
-        <label for="<%- idPrefix %>-comment" class="control-label"><%- helpers.t('PROPERTY:comment') %></label>
+        <label for="<%- idPrefix %>-comment" class="control-label"><%- t('PROPERTY:comment') %></label>
         <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>
       </div>
       <% } %>

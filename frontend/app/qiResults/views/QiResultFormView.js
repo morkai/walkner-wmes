@@ -434,6 +434,7 @@ define([
       formData.nokOwner = formData.nokOwner ? formData.nokOwner.id : '';
       formData.leader = formData.leader ? formData.leader.id : '';
       formData.coach = formData.coach ? formData.coach.id : '';
+      formData.operator = formData.operator ? formData.operator.id : '';
       formData.inspectedAt = time.format(formData.inspectedAt, 'YYYY-MM-DD');
       formData.serialNumbers = formData.serialNumbers ? formData.serialNumbers.join(', ') : '';
 
@@ -484,6 +485,7 @@ define([
       }
 
       formData.coach = setUpUserSelect2.getUserInfo(view.$id('coach'));
+      formData.operator = setUpUserSelect2.getUserInfo(view.$id('operator'));
 
       ['inspector', 'nokOwner', 'leader'].forEach(function(prop)
       {
@@ -594,6 +596,7 @@ define([
       this.setUpMasterSelect2();
       this.setUpLeaderSelect2();
       this.setUpCoachSelect2();
+      this.setUpOperatorSelect2();
       buttonGroup.toggle(this.$id('source'));
       buttonGroup.toggle(this.$id('result'));
       this.toggleRoleFields();
@@ -690,6 +693,22 @@ define([
         $coach.select2('data', {
           id: coach.id,
           text: coach.label
+        });
+      }
+    },
+
+    setUpOperatorSelect2: function()
+    {
+      var $operator = this.$id('operator');
+      var operator = this.model.get('operator');
+
+      setUpUserSelect2($operator, {noPersonnelId: true});
+
+      if (operator)
+      {
+        $operator.select2('data', {
+          id: operator.id,
+          text: operator.label
         });
       }
     },

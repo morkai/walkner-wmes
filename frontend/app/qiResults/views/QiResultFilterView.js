@@ -41,6 +41,7 @@ define([
       'nokOwner',
       'leader',
       'coach',
+      'operator',
       'limit'
     ],
     filterMap: {
@@ -99,6 +100,7 @@ define([
       'nokOwner.id': 'inspector.id',
       'leader.id': 'inspector.id',
       'coach.id': 'inspector.id',
+      'operator.id': 'inspector.id',
       'line': 'inspector.id',
       'kind': 'division',
       'errorCategory': 'division',
@@ -146,7 +148,7 @@ define([
         selector.push({name: 'eq', args: ['serialNumbers', serialNumbers]});
       }
 
-      ['inspector', 'nokOwner', 'leader', 'coach'].forEach(function(prop)
+      ['inspector', 'nokOwner', 'leader', 'coach', 'operator'].forEach(function(prop)
       {
         var value = view.$id(prop).val();
 
@@ -309,6 +311,15 @@ define([
       });
 
       setUpUserSelect2(this.$id('coach'), {
+        view: this,
+        width: '230px',
+        multiple: true,
+        allowClear: true,
+        placeholder: ' ',
+        noPersonnelId: true
+      });
+
+      setUpUserSelect2(this.$id('operator'), {
         view: this,
         width: '230px',
         multiple: true,
