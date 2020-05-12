@@ -199,6 +199,11 @@
     "downtimePicker:reason": "Downtime reason",
     "downtimePicker:comment": "Comment",
 
+    "pickup:status:fmx": "FMX",
+    "pickup:status:kitter": "Kitter",
+    "pickup:status:platformer": "Platformer",
+    "pickup:status:packer": "Packer",
+
     "delivery:title:completed": "Completed {kind, select, components{FIFO} packaging{pack.} other{}}",
     "delivery:title:pending": "Pending",
     "delivery:title:delivering": "Delivering",

@@ -1,0 +1,7 @@
+<div class="wh-pickup-status">
+  <% _.forEach(funcs, function(ready, func) { %>
+  <div class="wh-pickup-status-func <%- ready ? 'is-ready' : '' %>" data-func="<%- func %>">
+    <%- t('pickup:status:' + func) %>
+  </div>
+  <% }) %>
+</div>

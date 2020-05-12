@@ -27,6 +27,7 @@
     "data:kind": "Kind",
     "data:problemArea": "Problem area",
     "data:status": "Status",
+    "data:duration": "Duration",
 
     "kind:components": "FIFO",
     "kind:packaging": "Packaging",

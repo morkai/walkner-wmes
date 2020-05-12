@@ -3,6 +3,10 @@
 
 'use strict';
 
+db.oldwhorders.dropIndex({'funcs.user.id': 1, 'funcs.status': 1, 'funcs.finishedAt': 1});
+db.oldwhorders.dropIndex({psStatus: 1, date: -1});
+db.oldwhorders.dropIndex({'lines._id': 1, date: -1});
+
 var pendingOrders = {};
 
 db.oldwhorders.find({status: {$in: ['pending', 'problem']}}, {order: 1}).forEach(whOrder =>

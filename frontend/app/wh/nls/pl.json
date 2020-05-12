@@ -200,6 +200,11 @@
   "downtimePicker:reason": "Powód przestoju",
   "downtimePicker:comment": "Komentarz",
 
+  "pickup:status:fmx": "FMX",
+  "pickup:status:kitter": "Kitter",
+  "pickup:status:platformer": "Platformowy",
+  "pickup:status:packer": "Opakowania",
+
   "delivery:title:completed": "Skompletowane {kind, select, components{FIFO} packaging{opak.} other{}}",
   "delivery:title:pending": "Do realizacji",
   "delivery:title:delivering": "W realizacji",

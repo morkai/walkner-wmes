@@ -1,0 +1,28 @@
+.wh-pickup-status-container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: #3C3C41;
+  border-top: 1px solid #000;
+  box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175);
+}
+.wh-pickup-status {
+  display: flex;
+}
+.wh-pickup-status-func {
+  flex: 1;
+  font-size: 42px;
+  line-height: 1.6;
+  text-align: center;
+  text-transform: uppercase;
+  border-left: 1px solid #000;
+  color: #999;
+}
+.wh-pickup-status-func:first-child {
+  border-left: none;
+}
+.wh-pickup-status-func.is-ready {
+  background-color: #00E600;
+  color: #000;
+}

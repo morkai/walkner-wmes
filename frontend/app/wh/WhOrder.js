@@ -270,6 +270,7 @@ define([
 
   }, {
 
+    FUNC_LIST: Object.keys(FUNC_TO_INDEX),
     FUNC_TO_INDEX: FUNC_TO_INDEX
 
   });

@@ -18,12 +18,14 @@ define([
   'app/wh-lines/WhLineCollection',
   '../settings',
   '../WhOrderCollection',
+  '../WhPickupStatus',
   '../views/WhPickupFilterView',
   '../views/WhPickupListView',
   '../views/WhPickupSetView',
+  '../views/WhPickupStatusView',
   '../views/DowntimePickerView',
   '../templates/messages',
-  'app/wh/templates/planPage',
+  'app/wh/templates/pickup/page',
   'app/wh/templates/resolveAction',
   'app/planning/templates/planLegend'
 ], function(
@@ -44,9 +46,11 @@ define([
   WhLineCollection,
   whSettings,
   WhOrderCollection,
+  WhPickupStatus,
   WhPickupFilterView,
   WhPickupListView,
   WhPickupSetView,
+  WhPickupStatusView,
   DowntimePickerView,
   messageTemplates,
   pageTemplate,
@@ -196,6 +200,10 @@ define([
       'old.wh.lines.updated': function(message)
       {
         this.promised(this.whLines.handleUpdate(message));
+      },
+      'old.wh.pickupStatus.updated': function(pickupStatus)
+      {
+        this.pickupStatus.update(pickupStatus);
       }
     },
 
@@ -275,6 +283,8 @@ define([
 
       page.whLines = plan.whLines = bindLoadingMessage(new WhLineCollection(), page);
 
+      page.pickupStatus = bindLoadingMessage(new WhPickupStatus(), page);
+
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
       var nlsDomain = 'planning';
 
@@ -299,8 +309,13 @@ define([
         plan: this.plan
       });
 
+      this.statusView = new WhPickupStatusView({
+        model: this.pickupStatus
+      });
+
       this.setView('#-filter', this.filterView);
       this.setView('#-list', this.listView);
+      this.setView('#-status', this.statusView);
     },
 
     defineBindings: function()
@@ -349,6 +364,7 @@ define([
         this.whSettings.fetchIfEmpty(),
         this.whLines.fetch({reset: true}),
         this.whOrders.fetch({reset: true}),
+        this.pickupStatus.fetch(),
         plan.settings.fetch(),
         plan.shiftOrders.fetch({reset: true}),
         plan.sapOrders.fetch({reset: true}),
@@ -373,6 +389,7 @@ define([
             page.whSettings.fetch({reset: true}),
             page.whLines.fetch(),
             page.whOrders.fetch({reset: true, reload: true}),
+            page.pickupStatus.fetch(),
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
             plan.fetch()
