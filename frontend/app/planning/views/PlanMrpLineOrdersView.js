@@ -355,7 +355,6 @@ define([
     {
       var lineOrder = this.line.orders.get(id);
       var orderNo = lineOrder.get('orderNo');
-      var planOrder = this.plan.orders.get(orderNo);
       var sapOrder = this.plan.sapOrders.get(orderNo);
       var orderData = this.plan.getActualOrderData(orderNo);
       var startAt = Date.parse(lineOrder.get('startAt'));

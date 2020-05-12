@@ -6,7 +6,7 @@ define([
   'app/core/View',
   'app/wh/templates/delivery/section',
   'app/wh/templates/delivery/item',
-  'app/wh/templates/resolveAction',
+  'app/wh/templates/resolveAction'
 ], function(
   _,
   time,
