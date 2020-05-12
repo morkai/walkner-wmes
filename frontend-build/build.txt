@@ -4076,7 +4076,7 @@ app/wh/views/WhProblemChatView.js
 app/wh/templates/problems/details.js
 app/wh/templates/problems/detailsOrderInfo.js
 app/wh/templates/problems/detailsFuncs.js
-app/wh/templates/problems/cancelOrderEditor.js
+app/wh/templates/problems/resetOrderEditor.js
 app/wh/templates/problems/solveProblemEditor.js
 app/wh/views/WhProblemDetailsView.js
 app/wh/templates/problems/list.js
