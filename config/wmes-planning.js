@@ -63,7 +63,8 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'drilling.orders.changed.*',
     'wiring.orders.changed.*',
     'old.wh.generator.started', 'old.wh.generator.finished', 'old.wh.orders.changed.*',
-    'wh.generator.started', 'wh.generator.finished', 'wh.orders.changed.*'
+    'wh.generator.started', 'wh.generator.finished', 'wh.orders.changed.*',
+    'orders.updated.*'
   ]
 });
 
@@ -73,7 +74,8 @@ exports.settings = {
 
 exports.orders = {
   expressId: null,
-  userId: null
+  userId: null,
+  syncPsStatus: true
 };
 
 exports.planning = {

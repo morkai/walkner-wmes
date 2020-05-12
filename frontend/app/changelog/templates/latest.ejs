@@ -4,6 +4,8 @@
 <ul>
   <li>Poprawiono błąd powodujący oznaczenie statusu wysyłki opakowań dla zleceń, które nie mają skompletowanych
     opakowań, jeżeli ich wysyłka została rozpoczęta razem ze zleceniami, które mają opakowania.</li>
+  <li>Poprawiono błąd powodujący w niektórych przypadkach brak synchronizacji statusu malowania między
+    modułem Malarnii a modułem Magazynu, co skutkowało podawaniem do kompletacji niepomalowanych zleceń.</li>
   <li>Zmieniono zliczanie skompletowanych setów tak, aby sety, które mają problem były pomijane.</li>
   <li>Zmieniono dokładanie brakujących wózków FIFO do wywózki tak, aby brane pod uwagę były wszystkie kolejne
     sety z kwalifikujących się linii: do seta z jednym wózkiem może zostać dołożony kolejny set z tej samej linii,
