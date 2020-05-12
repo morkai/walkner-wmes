@@ -1,0 +1,1 @@
+define(["app/core/Model"],function(t){"use strict";return t.extend({url:"/old/wh/pickupStatus",topicPrefix:"old.wh.pickupStatus",privilegePrefix:"WH",nlsDomain:"wh",update:function(t){t.updatedAt>this.get("updatedAt")&&this.set(t)}})});
