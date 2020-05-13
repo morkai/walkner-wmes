@@ -88,7 +88,7 @@ define([
         orgUnitType: this.model.orgUnitType
       };
 
-      formData[formData.orgUnitType] = this.model.orgUnitIds.join(',');
+      formData[formData.orgUnitType] = (this.model.orgUnitIds || []).join(',');
 
       return formData;
     },
