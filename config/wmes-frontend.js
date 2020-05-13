@@ -572,7 +572,11 @@ exports.qi = {
 
 exports.orders = {
   importPath: `${DATA_PATH}/attachments-input`,
-  iptCheckerClientId: 'messenger/client:wmes-importer-sap'
+  iptCheckerClientId: 'messenger/client:wmes-importer-sap',
+  syncPsStatus: {
+    generator: false,
+    updater: true
+  }
 };
 
 exports.d8 = {

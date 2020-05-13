@@ -75,7 +75,10 @@ exports.settings = {
 exports.orders = {
   expressId: null,
   userId: null,
-  syncPsStatus: true
+  syncPsStatus: {
+    generator: true,
+    updater: false
+  }
 };
 
 exports.planning = {
