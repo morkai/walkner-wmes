@@ -1046,10 +1046,12 @@ define([
         prodLog.record(model, logEntry);
 
         snManager.showMessage(scanInfo, 'error', error);
+
+        checkSn(error);
       }
       else
       {
-        checkSn(logEntry, bomScanInfo);
+        checkSn(null, logEntry, bomScanInfo);
       }
     },
 
