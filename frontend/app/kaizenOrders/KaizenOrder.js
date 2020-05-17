@@ -216,7 +216,7 @@ define([
     {
       var observer = this.attributes.observer;
 
-      if (!observer.notify)
+      if (!observer || !observer.notify)
       {
         return;
       }
