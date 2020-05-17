@@ -1,4 +1,4 @@
-<form class="production-componentLabels-form">
+<form class="production-componentLabels-form" autocomplete="off">
   <div class="form-group">
     <label class="control-label"><%- t('componentLabels:orderNo') %></label>
     <p class="form-control-static"><%- orderNo || '-' %></p>
@@ -7,20 +7,34 @@
     <label class="control-label"><%- t('componentLabels:operationNo') %></label>
     <p class="form-static"><%- operationNo || '-' %></p>
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-labelQty" class="control-label"><%- t('componentLabels:labelQty') %></label>
-    <input id="<%- idPrefix %>-labelQty" class="form-control small is-embedded" type="text" autocomplete="new-password" value="1" min="1" max="9999" data-vkb="numeric">
+  <div style="display: flex">
+    <div class="form-group" style="margin-top: 0">
+      <label for="<%- idPrefix %>-labelQty" class="control-label"><%- t('componentLabels:labelQty') %></label>
+      <input id="<%- idPrefix %>-labelQty" class="form-control small is-embedded" type="text" autocomplete="new-password" value="1" min="1" max="9999" data-vkb="numeric">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-shiftX" class="control-label"><%- t('componentLabels:shiftX') %></label>
+      <input id="<%- idPrefix %>-shiftX" class="form-control small is-embedded" type="text" autocomplete="new-password" value="<%- shiftX %>" min="-9999" max="9999" data-vkb="numeric negative">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-shiftY" class="control-label"><%- t('componentLabels:shiftY') %></label>
+      <input id="<%- idPrefix %>-shiftY" class="form-control small is-embedded" type="text" autocomplete="new-password" value="<%- shiftY %>" min="-120" max="120" data-vkb="numeric negative">
+    </div>
   </div>
   <div id="<%- idPrefix %>-componentsGroup" class="production-form-btn-group">
     <label class="control-label"><%- t('componentLabels:componentCode') %></label>
     <p id="<%- idPrefix %>-componentsMessage" style="padding: 0 15px"><i class="fa fa-spinner fa-spin"></i></p>
     <div id="<%- idPrefix %>-componentsList" class="btn-group-vertical hidden"></div>
   </div>
-  <div class="form-actions">
+  <div class="form-actions" style="display: flex">
     <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit" disabled>
       <i class="fa fa-spinner fa-spin hidden"></i>
       <span><%- t('componentLabels:submit') %></span>
     </button>
     <button class="btn btn-lg btn-link cancel" type="button"><%- t('componentLabels:cancel') %></button>
+    <button id="<%- idPrefix %>-test" class="btn btn-lg btn-default" type="button" disabled style="margin-left: auto">
+      <i class="fa fa-spinner fa-spin hidden"></i>
+      <span><%- t('componentLabels:test') %></span>
+    </button>
   </div>
 </form>

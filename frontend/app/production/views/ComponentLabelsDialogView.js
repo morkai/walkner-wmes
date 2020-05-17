@@ -4,12 +4,16 @@ define([
   'underscore',
   'app/viewport',
   'app/core/View',
+  'app/data/localStorage',
+  'app/componentLabels/ComponentLabel',
   'app/componentLabels/ComponentLabelCollection',
   'app/production/templates/componentLabels'
 ], function(
   _,
   viewport,
   View,
+  localStorage,
+  ComponentLabel,
   ComponentLabelCollection,
   template
 ) {
@@ -37,9 +41,14 @@ define([
         e.currentTarget.classList.add('active');
       },
 
+      'click #-test': function()
+      {
+        this.submitForm(true);
+      },
+
       'submit': function()
       {
-        this.submitForm();
+        this.submitForm(false);
 
         return false;
       }
@@ -49,6 +58,7 @@ define([
     initialize: function()
     {
       this.selected = null;
+      this.labelShift = JSON.parse(localStorage.getItem('WMES_OPERATOR_COMPONENT_LABEL_SHIFT') || '[0, 0]');
 
       this.componentLabels = new ComponentLabelCollection(null, {
         url: '/orders/'
@@ -77,7 +87,9 @@ define([
     {
       return {
         orderNo: this.model.prodShiftOrder.get('orderId'),
-        operationNo: this.model.prodShiftOrder.get('operationNo')
+        operationNo: this.model.prodShiftOrder.get('operationNo'),
+        shiftX: this.labelShift[0],
+        shiftY: this.labelShift[1]
       };
     },
 
@@ -86,12 +98,14 @@ define([
       var $list = this.$id('componentsList');
       var $message = this.$id('componentsMessage');
       var $submit = this.$id('submit');
+      var $test = this.$id('test');
 
       if (!this.componentLabels.length)
       {
         $list.addClass('hidden').empty();
         $message.html(this.t('componentLabels:noComponents')).removeClass('hidden');
         $submit.prop('disabled', true);
+        $test.prop('disabled', true);
 
         return;
       }
@@ -109,9 +123,15 @@ define([
       $message.addClass('hidden');
       $list.html(html).removeClass('hidden');
       $submit.prop('disabled', false);
+      $test.prop('disabled', false);
+
+      if (this.componentLabels.length === 1)
+      {
+        $list.children().first().click();
+      }
     },
 
-    submitForm: function()
+    submitForm: function(test)
     {
       var view = this;
       var labelQty = +view.$id('labelQty').val().replace(/[^0-9]+/g, '');
@@ -143,13 +163,31 @@ define([
 
       view.$id('labelQty').val(labelQty);
 
-      view.$id('submit').prop('disabled', true).find('.fa-spin').removeClass('hidden');
+      view.$id('submit').prop('disabled', true);
+      view.$id('test').prop('disabled', true);
+      view.$id(test ? 'test' : 'submit').find('.fa-spin').removeClass('hidden');
+
+      var shiftX = Math.max(Math.min(parseInt(view.$id('shiftX').val(), 10) || 0, 9999), -9999);
+      var shiftY = Math.max(Math.min(parseInt(view.$id('shiftY').val(), 10) || 0, 120), -120);
+
+      view.$id('shiftX').val(shiftX);
+      view.$id('shiftY').val(shiftY);
+
+      if (this.labelShift[0] !== shiftX || this.labelShift[1] !== shiftY)
+      {
+        this.labelShift = [shiftX, shiftY];
+
+        localStorage.setItem('WMES_OPERATOR_COMPONENT_LABEL_SHIFT', JSON.stringify(this.labelShift));
+      }
 
       var req = view.ajax({
         method: 'POST',
         url: '/componentLabels/' + componentLabel.id + ';print',
         data: JSON.stringify({
+          test: test,
           labelQty: labelQty,
+          shiftX: shiftX,
+          shiftY: shiftY,
           orderNo: this.model.prodShiftOrder.get('orderId'),
           prodLine: view.model.prodLine.id,
           secretKey: view.model.getSecretKey()
@@ -168,12 +206,17 @@ define([
             : view.t('componentLabels:error')
         });
 
-        view.$id('submit').prop('disabled', false).find('.fa-spin').addClass('hidden');
+        view.$id('submit').prop('disabled', false);
+        view.$id('test').prop('disabled', false);
+        view.$id(test ? 'test' : 'submit').find('.fa-spin').addClass('hidden');
       });
 
       req.done(function()
       {
-        viewport.closeDialog();
+        if (!test)
+        {
+          viewport.closeDialog();
+        }
       });
     }
 
