@@ -45,6 +45,7 @@
     "PROPERTY:line:prod": "Line",
     "PROPERTY:line:wh": "WH location",
     "PROPERTY:orderNo": "Order no",
+    "PROPERTY:mrp": "Order MRP",
     "PROPERTY:nc12": "12NC",
     "PROPERTY:nc12:prod": "Product 12NC",
     "PROPERTY:nc12:wh": "Component 12NC",

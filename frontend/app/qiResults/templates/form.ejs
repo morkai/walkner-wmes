@@ -47,7 +47,7 @@
       <div class="row">
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-division" class="control-label is-required"><%- t('PROPERTY:division') %></label>
-          <select id="<%- idPrefix %>-division" name="division" class="form-control" required data-role="inspector">
+          <select id="<%- idPrefix %>-division" name="division" class="form-control" required data-role="inspector" data-orders-division="<%- model.division || '' %>" data-orders-mrp="<%- model.mrp || '' %>">
             <option></option>
             <% divisions.forEach(function(division) { %>
             <option value="<%- division.id %>"><%= division.getLabel() %></option>
@@ -58,6 +58,9 @@
           <label for="<%- idPrefix %>-line" class="control-label"><%- t('PROPERTY:line:prod') %></label>
           <select id="<%- idPrefix %>-line" name="line" class="form-control" data-role="inspector">
             <option></option>
+            <% if (model.line) { %>
+            <option value="<%= model.line %>" selected><%= model.line %></option>
+            <% } %>
           </select>
         </div>
         <div class="col-lg-2 form-group" data-source="wh">

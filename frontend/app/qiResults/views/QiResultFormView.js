@@ -852,6 +852,8 @@ define([
         return;
       }
 
+      view.$id('submit').prop('disabled', true);
+
       var req = view.ajax({
         method: 'GET',
         url: '/qi/results;order',
@@ -882,6 +884,8 @@ define([
         view.updateDivision();
 
         $orderNo[0].setCustomValidity('');
+
+        view.$id('submit').prop('disabled', false);
       });
 
       view.findOrderReq = req;

@@ -44,6 +44,7 @@
   "PROPERTY:line:prod": "Linia",
   "PROPERTY:line:wh": "Lokalizacja magazynowa",
   "PROPERTY:orderNo": "Nr zlecenia",
+  "PROPERTY:mrp": "MRP zlecenia",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:nc12:prod": "12NC wyrobu",
   "PROPERTY:nc12:wh": "12NC komponentu",
