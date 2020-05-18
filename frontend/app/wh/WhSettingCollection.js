@@ -32,7 +32,8 @@ define([
     'lateDeliveryTime',
     'minDeliveryDowntime',
     'maxDeliveryDowntime',
-    'maxSetCartsPerDelivery'
+    'maxSetCartsPerDelivery',
+    'availableTimeThreshold'
   ].join('|'));
 
   return SettingCollection.extend({
