@@ -68,7 +68,12 @@ define([
 
     if (!matches)
     {
-      matches = buffer.match(/([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))(?:[^.]|$)/);
+      matches = buffer.match(/([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))$/);
+
+      if (matches && /^[A-Z0-9]+\.[0-9]+\.[0-9]+\.[A-Z0-9]+$/.test(buffer))
+      {
+        matches = null;
+      }
     }
 
     if (matches)

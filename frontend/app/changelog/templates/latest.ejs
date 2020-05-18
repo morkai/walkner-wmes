@@ -1,73 +1,7 @@
-<h1>v0.149.0</h1>
-<h2><%- time.format('2020-05-17', 'LL') %></h2>
-<h3>Magazyn</h3>
-<ul>
-  <li>Poprawiono błąd powodujący oznaczenie statusu wysyłki opakowań dla zleceń, które nie mają skompletowanych
-    opakowań, jeżeli ich wysyłka została rozpoczęta razem ze zleceniami, które mają opakowania.</li>
-  <li>Poprawiono błąd powodujący w niektórych przypadkach brak synchronizacji statusu malowania między
-    modułem Malarnii a modułem Magazynu, co skutkowało podawaniem do kompletacji niepomalowanych zleceń.</li>
-  <li>Zmieniono zliczanie skompletowanych setów tak, aby sety, które mają problem były pomijane.</li>
-  <li>Zmieniono dokładanie brakujących wózków FIFO do wywózki tak, aby brane pod uwagę były wszystkie kolejne
-    sety z kwalifikujących się linii: do seta z jednym wózkiem może zostać dołożony kolejny set z tej samej linii,
-    tylko, jeżeli mieści się w limicie wózków i następuje dokładnie po poprzednim secie.</li>
-  <li>Zmieniono rozpoczynanie akcji kompletacji tak, aby nie była ograniczona do aktualnie wyświetlanego dnia.</li>
-  <li>Zmieniono wysyłkę wózków opakowań tak, aby można było zainicjować wysyłkę na kwalifikujące się linie
-    bezpośrednio z poziomu wysyłki opakowań, a nie dopiero po rozpoczęciu wysyłki FIFO.</li>
-  <li>Zmieniono rozpoczynanie problemu tak, aby problematyczne zlecenie było usuwane z seta.</li>
-  <li>Zmieniono rozwiązywanie problemu tak, aby resetowano całe zlecenie.</li>
-  <li>Dodano listę zdarzeń.</li>
-  <li>Dodano nową funkcję kompletacji: Platformowy.</li>
-  <li>Dodano nową opcję konfiguracyjną wysyłki: Maksymalny czas do rozpoczęcia zlecenia - maksymalna ilość minut
-    od teraz do zaplanowanego czasu rozpoczęcia zlecenia, aby wózek został przeznaczony do realizacji,
-    jeżeli linia w danym momencie nie pracuje.</li>
-  <li>Dodano automatyczne anulowanie Oczekujących i Problematycznych zleceń, które zostały zakończone, tzn.
-    otrzymały status CNF, DLV, TECO, DLT lub DLFL.</li>
-  <li>Dodano wyświetlanie statusu gotowości do kompletacji dla poszczególnych funkcji: FMX, Kitter, Platformowy
-    i Opakowania.</li>
-</ul>
-<h3>Czas cyklu</h3>
-<ul>
-  <li>Dodano uprawnienia do konfiguracji MRP i UPPH w raporcie Wyniki dla użytkowników z funkcją
-    inżyniera produkcji.</li>
-</ul>
-<h3>Planowanie</h3>
-<ul>
-  <li>Zmieniono obliczanie % realizacji zaplanowanej sekwencji tak, aby pod uwagę brane były tylko zrobione zlecenia
-    z zaplanowaną operacją.</li>
-</ul>
-<h3>Produkcja > Zlecenia</h3>
-<ul>
-  <li>Zmieniono sposób wyświetlania zeskanowanych numerów seryjnych na stronie ze szczegółami zlecenia:
-    <ul>
-      <li>panel widoczny jest tylko, gdy zlecenie ma zeskanowane numery seryjne,</li>
-      <li>lista numerów seryjnych wyświetlana jest w jednym przewijalnym wierszu,</li>
-      <li>dodano wykres prezentujący rzeczywiste czasy poszczególnych sztuk oraz cel,</li>
-      <li>dodano obliczanie średniej, mediany, minimum oraz maksimum z dostępnym danych.</li>
-    </ul>
-  </li>
-</ul>
-<h3>Monitoring > Układ fabryki</h3>
-<ul>
-  <li>Poprawiono błąd powodujący w niektórych przypadkach niedziałanie filtra linii produkcyjnych.</li>
-  <li>Zmieniono tytuł z 'Monitoring' na 'Układ fabryki' lub 'Wydajność godzinowa' (jeżeli ten tryb jest włączony).</li>
-  <li>Dodano legendę objaśniającą statusy linii.</li>
-  <li>Dodano nową opcję konfiguracyjną do trybu wydajności godzinowej: Próg odbiegania od planu [%] - linie, które
-    odbiegają od planu o podany procent, są oznaczana innym kolorem.</li>
-</ul>
-<h3>Zlecenia produkcyjne</h3>
-<ul>
-  <li>Dodano możliwość definiowania uwag dla numerów zleceń.</li>
-  <li>Dodano możliwość dodawania do zleceń tagów na podstawie MRP, 12NC wyrobu lub komponentów.</li>
-</ul>
-<h3>Dokumentacja</h3>
-<ul>
-  <li>Poprawiono błąd powodujący niewyświetlanie ręcznie zdefiniowanych uwag na liście komponentów.</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Dodano nowe pole: Operator.</li>
-</ul>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Dodano do formularza drukowania etykiet komponentów możliwość podania przesunięcia etykiety.</li>
+  <li>Poprawiono błąd powodujący traktowanie zeskanowanej etykiety komponentu jako etykiety oprawy z numerem
+    seryjnym, jeżeli nr sztuki przekracza wartośc 9999.</li>
 </ul>

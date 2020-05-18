@@ -49,7 +49,17 @@ define([
         single: true,
         unique: true,
         patternInfo: {
-          pattern: /([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))(?:[^.]|$)/,
+          pattern: function(buffer)
+          {
+            var matches = buffer.match(/([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))$/);
+
+            if (matches && /^[A-Z0-9]+\.[0-9]+\.[0-9]+\.[A-Z0-9]+$/.test(buffer))
+            {
+              matches = null;
+            }
+
+            return matches;
+          },
           nc12: [2],
           sn: [3]
         },
@@ -106,7 +116,9 @@ define([
       {
         var component = this.components[i];
 
-        var matches = scanBuffer.match(component.patternInfo.pattern);
+        var matches = typeof component.patternInfo.pattern === 'function'
+          ? component.patternInfo.pattern(scanBuffer)
+          : scanBuffer.match(component.patternInfo.pattern);
 
         if (!matches)
         {
