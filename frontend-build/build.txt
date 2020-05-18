@@ -4205,6 +4205,7 @@ app/core/layouts/PageLayout.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/bindLoadingMessage.js
+app/planning/util/shift.js
 app/wh-lines/WhLine.js
 app/wh-lines/WhLineCollection.js
 app/core/templates/userInfo.js
@@ -4229,7 +4230,6 @@ app/settings/SettingCollection.js
 app/wh/WhSetting.js
 app/wh/WhSettingCollection.js
 app/wh/settings.js
-app/planning/util/shift.js
 app/orderStatuses/OrderStatus.js
 app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
@@ -4371,6 +4371,7 @@ app/core/layouts/PageLayout.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/bindLoadingMessage.js
+app/planning/util/shift.js
 app/wh-lines/WhLine.js
 app/wh-lines/WhLineCollection.js
 app/core/templates/userInfo.js
@@ -4395,7 +4396,6 @@ app/settings/SettingCollection.js
 app/wh/WhSetting.js
 app/wh/WhSettingCollection.js
 app/wh/settings.js
-app/planning/util/shift.js
 app/orderStatuses/OrderStatus.js
 app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
