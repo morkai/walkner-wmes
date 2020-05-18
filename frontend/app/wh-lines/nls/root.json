@@ -11,6 +11,9 @@
     "PROPERTY:qty": "PCE",
     "PROPERTY:time": "Time",
     "PROPERTY:redirLine": "Redirection",
+    "PROPERTY:working": "Working?",
+    "PROPERTY:nextShiftAt": "Next shift",
+    "PROPERTY:startedPlan": "Started plan",
 
     "redirLine:start": "Start line redirection",
     "redirLine:stop": "Stop line redirection",

@@ -3,20 +3,41 @@
 
 'use strict';
 
-db.oldwhorders.dropIndex({'funcs.user.id': 1, 'funcs.status': 1, 'funcs.finishedAt': 1});
-db.oldwhorders.dropIndex({psStatus: 1, date: -1});
-db.oldwhorders.dropIndex({'lines._id': 1, date: -1});
-
-var pendingOrders = {};
-
-db.oldwhorders.find({status: {$in: ['pending', 'problem']}}, {order: 1}).forEach(whOrder =>
+db.oldwhlines.find({}).forEach(line =>
 {
-  pendingOrders[whOrder.order] = 1;
-});
+  var nextShiftAt = null;
+  var startedPlan = new Date(0);
 
-db.orders.find({_id: {$in: Object.keys(pendingOrders)}, statuses: {$nin: ['CNF', 'DLV', 'TECO', 'DLT', 'DLFL']}}, {_id: 1}).forEach(sapOrder =>
-{
-  delete pendingOrders[sapOrder._id];
-});
+  var lastPso = db.prodshiftorders
+    .find({
+      $or: [
+        {
+          finishedAt: null,
+          prodLine: line._id,
+          'orderData.scheduledStartDate': {$exists: true}
+        },
+        {
+          prodLine: line._id,
+          startedAt: {$gt: new Date(Date.now() - 24 * 3600 * 7 * 1000)},
+          quantityDone: {$gt: 0},
+          'orderData.scheduledStartDate': {$exists: true}
+        }
+      ]
+    })
+    .projection({
+      _id: 0,
+      'orderData.scheduledStartDate': 1
+    })
+    .sort({prodLine: 1, startedAt: -1})
+    .limit(1)
+    .toArray()[0];
 
-db.oldwhorders.updateMany({order: {$in: Object.keys(pendingOrders)}}, {$set: {status: 'cancelled'}});
+  if (lastPso)
+  {
+    var d = new Date(lastPso.orderData.scheduledStartDate);
+
+    startedPlan = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  }
+
+  db.oldwhlines.updateOne({_id: line._id}, {$set: {nextShiftAt, startedPlan}});
+});

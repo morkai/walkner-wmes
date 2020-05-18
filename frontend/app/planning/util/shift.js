@@ -46,6 +46,26 @@ define([
       return h >= 6 && h < 14 ? 1 : h >= 14 && h < 22 ? 2 : 3;
     },
 
+    getShiftNoFromStartTime: function(startTime)
+    {
+      if (startTime === '06:00:00')
+      {
+        return 1;
+      }
+
+      if (startTime === '14:00:00')
+      {
+        return 2;
+      }
+
+      if (startTime === '22:00:00')
+      {
+        return 3;
+      }
+
+      return 0;
+    },
+
     getShiftStartTime: function(time)
     {
       var date = new Date(time);
@@ -87,6 +107,20 @@ define([
       }
 
       return moment.hours(h).minutes(m).valueOf();
+    },
+
+    getPlanDate: function(input, local)
+    {
+      var moment = local ? time.getMoment(input).utc(true) : time.utc.getMoment(input);
+
+      if (moment.hours() < 6)
+      {
+        moment.subtract(1, 'days');
+      }
+
+      moment.startOf('day');
+
+      return moment;
     }
 
   };

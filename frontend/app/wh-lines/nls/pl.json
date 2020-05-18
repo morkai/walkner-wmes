@@ -10,6 +10,9 @@
   "PROPERTY:qty": "Sztuki",
   "PROPERTY:time": "Czas",
   "PROPERTY:redirLine": "Przekierowanie",
+  "PROPERTY:working": "Pracuje?",
+  "PROPERTY:nextShiftAt": "Następna zmiana",
+  "PROPERTY:startedPlan": "Rozpoczęty plan",
 
   "redirLine:start": "Rozpocznij przekierowanie linii",
   "redirLine:stop": "Zakończ przekierowanie linii",

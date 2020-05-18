@@ -72,7 +72,7 @@ define([
     {
       var $row = this.$row(line.id);
       var html = this.renderPartialHtml(rowTemplate, {
-        row: line.serialize(),
+        row: line.serializeRow(),
         canRedir: WhLineCollection.can.redir()
       });
 
