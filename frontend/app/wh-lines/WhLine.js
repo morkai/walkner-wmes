@@ -59,8 +59,6 @@ define([
     {
       var obj = this.serialize();
 
-      obj.working = t('core', 'BOOL:' + obj.working);
-
       if (obj.nextShiftAt)
       {
         var shiftDate = shiftUtil.getPlanDate(obj.nextShiftAt).format('L');
