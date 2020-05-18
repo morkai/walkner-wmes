@@ -141,6 +141,8 @@
   "settings:planning:maxSetCartsPerDelivery:help": "Maksymalna ilość wózków FIFO do wysyłki jaka może zostać przydzielona dla użytkownika za jednym razem.",
   "settings:planning:maxDeliveryStartTime": "Maksymalny czas do rozpoczęcia zlecenia [min]",
   "settings:planning:maxDeliveryStartTime:help": "Maksymalna ilość minut od teraz do zaplanowanego czasu rozpoczęcia zlecenia, aby wózek został przeznaczony do realizacji, jeżeli linia w danym momencie nie pracuje.",
+  "settings:planning:availableTimeThreshold": "Próg dostępnego czasu [min]",
+  "settings:planning:availableTimeThreshold:help": "Przy wyborze linii do nowego seta, suma czasu skompletowanego oraz czasu dostępnego zostanie zamieniona na 0, jeżeli jest mniejsza niż podana ilość minut.",
 
   "set:title": "Zestaw zleceń nr {set} dla linii {line}",
   "set:cartsEditor:carts": "Numery wózków...",

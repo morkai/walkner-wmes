@@ -140,6 +140,8 @@
     "settings:planning:maxSetCartsPerDelivery:help": "Maximum number of FIFO carts that can be assigned for delivery to a user at once.",
     "settings:planning:maxDeliveryStartTime": "Maximum time to order start [min]",
     "settings:planning:maxDeliveryStartTime:help": "Maximum minutes from now to the planned order start time to mark a cart as pending delivery, if its line is currently not working.",
+    "settings:planning:availableTimeThreshold": "Available time threshold [min]",
+    "settings:planning:availableTimeThreshold:help": "When picking a line during creation of a new set, the sum of picked up time and delivered time will be changed to 0, if it's less than the specified number of minutes.",
 
     "set:title": "Order set no {set} for line {line}",
     "set:cartsEditor:carts": "Carts...",
