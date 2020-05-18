@@ -16,7 +16,8 @@ module.exports = {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    autoIndex: process.env.NODE_ENV !== 'production'
   }
 };
 
