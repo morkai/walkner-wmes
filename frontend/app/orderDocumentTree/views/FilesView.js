@@ -440,7 +440,7 @@ define([
         smallText: label.replace(/_/g, ' '),
         selected: file.id === this.model.get('selectedFile'),
         marked: marked,
-        icon: fileIcons.getByMime(files[0].type),
+        icon: fileIcons.getByMime(files.length ? files[0].type : null),
         files: files.map(function(f)
         {
           return {
