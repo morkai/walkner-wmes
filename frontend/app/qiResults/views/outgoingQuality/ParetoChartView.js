@@ -3,11 +3,13 @@
 define([
   'underscore',
   'app/highcharts',
-  'app/core/View'
+  'app/core/View',
+  'app/qiResults/dictionaries'
 ], function(
   _,
   Highcharts,
-  View
+  View,
+  dictionaries
 ) {
   'use strict';
 
@@ -121,6 +123,33 @@ define([
           headerFormatter: function(ctx)
           {
             return ctx.points[0].point.name;
+          },
+          extraRowsProvider: function(points, rows)
+          {
+            if (view.options.property !== 'what')
+            {
+              return;
+            }
+
+            var pareto = rows.pop();
+
+            Object.keys(points[0].point.errorCategories).forEach(function(id)
+            {
+              var value = points[0].point.errorCategories[id];
+              var errorCategory = dictionaries.errorCategories.get(id);
+
+              rows.push({
+                point: points[0].point,
+                color: 'transparent',
+                name: '▪ ' + (errorCategory ? errorCategory.getLabel() : id),
+                prefix: '',
+                suffix: 'PCE',
+                decimals: 0,
+                value: value
+              });
+            });
+
+            rows.push(pareto);
           }
         },
         legend: {
@@ -209,7 +238,8 @@ define([
         categories.push(category);
         series[0].data.push({
           name: value[0],
-          y: value[1]
+          y: value[1],
+          errorCategories: value[3]
         });
         series[1].data.push((pareto / group.qtyNok) * 100);
       }

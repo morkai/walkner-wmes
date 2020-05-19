@@ -425,6 +425,13 @@ define([
         obj.concern += ': ' + fault.get('name');
       }
 
+      var errorCategory = dictionaries.errorCategories.get(obj.errorCategory);
+
+      if (errorCategory)
+      {
+        obj.errorCategory = errorCategory.getLabel();
+      }
+
       var standard = dictionaries.standards.get(obj.standard);
 
       if (standard)
