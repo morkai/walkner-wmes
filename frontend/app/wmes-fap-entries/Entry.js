@@ -290,12 +290,12 @@ define([
         solution: obj.solution.indexOf('\n') !== -1,
         solutionSteps: obj.solutionSteps.indexOf('\n') !== -1
       };
-      obj.mainAnalyzer = obj.analyzers.length ? obj.analyzers[0].label : '-';
-      obj.analyzers = obj.analyzers.length > 1
+      obj.mainAnalyzer = obj.analyzers && obj.analyzers.length ? obj.analyzers[0].label : '-';
+      obj.analyzers = obj.analyzers && obj.analyzers.length > 1
         ? obj.analyzers.slice(1).map(function(u) { return u.label; }).join('; ')
         : '-';
       obj.chat = this.serializeChat();
-      obj.attachments = obj.attachments.map(this.serializeAttachment, this);
+      obj.attachments = (obj.attachments || []).map(this.serializeAttachment, this);
       obj.observers = this.serializeObservers();
       obj.message = {
         type: '',
@@ -420,7 +420,7 @@ define([
       var entry = this;
       var availableAttachments = {};
 
-      entry.attributes.attachments.forEach(function(a)
+      (entry.get('attachments') || []).forEach(function(a)
       {
         availableAttachments[a._id] = true;
       });
@@ -447,7 +447,7 @@ define([
         }]
       }];
 
-      entry.get('changes').forEach(function(change)
+      (entry.get('changes') || []).forEach(function(change)
       {
         if (!change.user)
         {
