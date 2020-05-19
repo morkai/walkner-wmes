@@ -14,6 +14,9 @@
   "PROPERTY:nextShiftAt": "Następna zmiana",
   "PROPERTY:startedPlan": "Rozpoczęty plan",
 
+  "LIST:COLUMN:nextShiftAt": "Następna<br>zaplanowana<br>zmiana",
+  "LIST:COLUMN:startedPlan": "Rozpoczęty<br>plan",
+
   "redirLine:start": "Rozpocznij przekierowanie linii",
   "redirLine:stop": "Zakończ przekierowanie linii",
   "redirLine:title:start": "Rozpoczynanie przekierowania linii",

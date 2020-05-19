@@ -144,7 +144,8 @@ define([
 
         if (Array.isArray(value))
         {
-          var el = view.el.querySelector('input[name="' + setting.id + '"]');
+          var el = view.el.querySelector('input[name="' + setting.id + '"]')
+            || view.el.querySelector('input[name="' + setting.id + '[]"]');
 
           if (!el || (el.tagName !== 'SELECT' && el.type !== 'checkbox'))
           {
@@ -390,7 +391,7 @@ define([
 
     scheduleUpdateSetting: function(el, delay)
     {
-      var settingId = el.name;
+      var settingId = el.name.replace('[]', '');
 
       if (_.isEmpty(settingId))
       {

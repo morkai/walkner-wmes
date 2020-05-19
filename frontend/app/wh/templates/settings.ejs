@@ -33,11 +33,23 @@
       </div>
     </div>
     <div class="panel-body" data-tab="pickup">
-      <div class="checkbox">
-        <label class="control-label">
-          <input id="<%- idPrefix %>-planning-ignorePsStatus" name="wh.planning.ignorePsStatus" type="checkbox" value="true">
-          <%- t('settings:planning:ignorePsStatus') %>
-        </label>
+      <div class="form-group">
+        <label class="control-label"><%- t('settings:planning:ignorePsStatus') %></label>
+        <span class="help-block" style="margin-bottom: 0"><%- t('settings:planning:ignorePsStatus:help') %></span>
+        <div class="checkbox" style="margin-top: 5px">
+          <label>
+            <input type="checkbox" disabled>
+            <%- t('planning', 'orders:psStatus:unknown') %>
+          </label>
+        </div>
+        <% ['new', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="wh.planning.ignorePsStatus[]" value="<%- psStatus %>">
+            <%- t('planning', 'orders:psStatus:' + psStatus) %>
+          </label>
+        </div>
+        <% }) %>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-maxSetSize"><%- t('settings:planning:maxSetSize') %></label>
