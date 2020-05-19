@@ -346,7 +346,7 @@ define([
       var entry = view.model;
       var attachments = {};
 
-      entry.get('attachments').forEach(function(a)
+      (entry.get('attachments') || []).forEach(function(a)
       {
         attachments[a.name + a.size] = true;
       });
