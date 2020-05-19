@@ -24,7 +24,8 @@ define([
     'countByObserverSection',
     'safeBySection',
     'riskyBySection',
-    'categories'
+    'safeCategories',
+    'riskyCategories'
   ];
 
   return Model.extend({
@@ -106,6 +107,13 @@ define([
         }
       };
 
+      var categoryLabels = report.categories;
+
+      kaizenDictionaries.behaviours.forEach(function(b)
+      {
+        categoryLabels[b.id] = b.t('name');
+      });
+
       _.forEach(TABLE_AND_CHART_METRICS, function(metric)
       {
         if (attrs[metric])
@@ -113,21 +121,26 @@ define([
           return;
         }
 
-        if (metric === 'categories')
+        if (metric === 'riskyCategories')
         {
-          var labels = report.categories;
-
-          kaizenDictionaries.behaviours.forEach(function(b)
-          {
-            labels[b.id] = b.t('name');
-          });
-
           attrs[metric] = {
             rows: model.prepareRows(
               totals.risky,
-              totals.categories,
+              totals.riskyCategories,
               'categories',
-              labels
+              categoryLabels
+            ),
+            series: {}
+          };
+        }
+        else if (metric === 'safeCategories')
+        {
+          attrs[metric] = {
+            rows: model.prepareRows(
+              totals.safe,
+              totals.safeCategories,
+              'categories',
+              categoryLabels
             ),
             series: {}
           };

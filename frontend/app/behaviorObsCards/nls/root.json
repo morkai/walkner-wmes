@@ -81,7 +81,8 @@
     "report:title:countByObserverSection": "Observation count by observer's workplace",
     "report:title:safeBySection": "Safe behavior count by place of observation",
     "report:title:riskyBySection": "At-risk behavior count be place of observation",
-    "report:title:categories": "At-risk behavior count by category",
+    "report:title:safeCategories": "Safe behavior count by category",
+    "report:title:riskyCategories": "At-risk behavior count by category",
     "report:title:observers": "Behavior observation card count by observers",
     "report:series:behaviorObsCard": "Observation cards",
     "report:series:total": "Total",
@@ -91,7 +92,8 @@
     "report:filenames:countByObserverSection": "OBS_CountByObserverSection",
     "report:filenames:safeBySection": "OBS_SafeBySection",
     "report:filenames:riskyBySection": "OBS_AtRiskBySection",
-    "report:filenames:categories": "OBS_AtRiskByCategories",
+    "report:filenames:safeCategories": "OBS_SafeByCategories",
+    "report:filenames:riskyCategories": "OBS_AtRiskByCategories",
     "report:filenames:observers": "OBS_CountByObservers"
   },
   "pl": true

@@ -85,7 +85,8 @@
   "report:title:countByObserverSection": "Ilość przeprowadzonych obserwacji wg działów (miejsce pracy obserwatora)",
   "report:title:safeBySection": "Ilość bezpiecznych zachowań wg działów (miejsce obserwacji)",
   "report:title:riskyBySection": "Ilość ryzykownych zachowań wg działów (miejsce obserwacji)",
-  "report:title:categories": "Ilość ryzykownych zachowań wg kategorii",
+  "report:title:safeCategories": "Ilość bezpiecznych zachowań wg kategorii",
+  "report:title:riskyCategories": "Ilość ryzykownych zachowań wg kategorii",
   "report:title:observers": "Ilość kart obserwacji wg obserwatorów",
   "report:series:behaviorObsCard": "Karty obserwacji",
   "report:series:total": "Suma",
@@ -95,6 +96,7 @@
   "report:filenames:countByObserverSection": "OBS_IloscWgMiejscaPracyObserwatora",
   "report:filenames:safeBySection": "OBS_IloscBezpZachWgDzialow",
   "report:filenames:riskyBySection": "OBS_IloscRyzykZachWgDzialow",
-  "report:filenames:categories": "OBS_IloscRyzykZachWgKategorii",
+  "report:filenames:safeCategories": "OBS_IloscBezpZachWgKategorii",
+  "report:filenames:riskyCategories": "OBS_IloscRyzykZachWgKategorii",
   "report:filenames:observers": "OBS_IloscWgObserwatorow"
 }
