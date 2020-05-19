@@ -666,9 +666,10 @@ define([
     serializePreview: function()
     {
       var selectedFile = this.model.getSelectedFile();
+      var files = selectedFile.get('files');
 
       return {
-        icon: fileIcons.getByMime(selectedFile.get('files')[0].type),
+        icon: fileIcons.getByMime(files.length ? files[0].type : null),
         nc15: this.serializePreviewNc15(),
         name: _.escape(selectedFile.getLabel()),
         folders: this.serializePreviewFolders(),
