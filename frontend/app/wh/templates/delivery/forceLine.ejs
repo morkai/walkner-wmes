@@ -1,0 +1,20 @@
+<form class="wh-delivery-forceLine" autocomplete="off">
+  <p class="message message-inline message-info" style="margin-bottom: 15px"><%- t('delivery:forceLine:message') %></p>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-line" class="control-label is-required"><%- t('delivery:forceLine:line') %></label>
+    <input id="<%- idPrefix %>-filter" class="form-control" type="text" autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric">
+    <div class="btn-group-vertical">
+      <% lines.forEach(function(line) { %>
+      <button class="btn btn-lg btn-default" type="button" data-line="<%= line._id %>" data-filter="<%- line.filter %>"><%= line._id %></button>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-card" class="control-label is-required"><%- t('delivery:forceLine:card') %></label>
+    <input id="<%- idPrefix %>-card" class="form-control" name="card" value="<%- card %>" type="text" required autocomplete="new-password" data-vkb="numeric">
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary"><%- t('delivery:forceLine:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

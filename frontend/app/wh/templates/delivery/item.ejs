@@ -5,6 +5,9 @@
   </td>
   <td class="wh-delivery-item-plan">
     <%- item.date %>
+    <% if (item.status !== 'delivering') { %>
+      ▪ <%- item.startTime %>
+    <% } %>
     <br>
     <%- item.set %>
   </td>

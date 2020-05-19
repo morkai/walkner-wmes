@@ -29,8 +29,12 @@
   font-weight: bold;
   line-height: 1;
 }
-.wh-deliver-section-actions {
+.wh-delivery-section-actions {
+  display: flex;
   margin-left: auto;
+}
+.wh-delivery-section-actions > .btn {
+  margin-left: 15px;
 }
 .wh-delivery-section-bd {
   overflow-y: scroll;
@@ -139,4 +143,21 @@
   .wh-delivery-set-dialog .modal-dialog {
     width: 800px;
   }
+}
+.wh-delivery-forceLine .btn-group-vertical {
+  display: block;
+  border: 1px solid #ccc;
+  overflow-y: scroll;
+  max-height: 310px;
+}
+.wh-delivery-forceLine .btn-group-vertical > .btn-default {
+  text-align: left;
+  border-left: 0;
+  border-right: 0;
+}
+.wh-delivery-forceLine .btn-group-vertical > .btn-default:first-child {
+  border-top: 0;
+}
+.wh-delivery-forceLine .btn-group-vertical > .btn-default:last-child {
+  border-bottom: 0;
 }

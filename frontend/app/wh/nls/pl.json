@@ -220,5 +220,11 @@
   "delivery:set:line": "Linia",
   "delivery:set:date": "Plan",
   "delivery:set:set": "Set",
-  "delivery:set:sapOrders": "Zlecenia"
+  "delivery:set:sapOrders": "Zlecenia",
+  "delivery:forceLine:action": "Wymuś wysyłkę",
+  "delivery:forceLine:title": "Wysyłka na linię",
+  "delivery:forceLine:message": "Wybierz linię i zeskanuj się, aby wymusić wysyłkę wózków na daną linię.",
+  "delivery:forceLine:line": "Linia",
+  "delivery:forceLine:card": "ID karty",
+  "delivery:forceLine:submit": "Rozpocznij wysyłkę"
 }

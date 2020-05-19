@@ -219,7 +219,13 @@
     "delivery:set:line": "Line",
     "delivery:set:date": "Plan",
     "delivery:set:set": "Set",
-    "delivery:set:sapOrders": "Orders"
+    "delivery:set:sapOrders": "Orders",
+    "delivery:forceLine:action": "Force delivery",
+    "delivery:forceLine:title": "Delivery for line",
+    "delivery:forceLine:message": "Choose a line and scan yourself to force a delivery to the specified line.",
+    "delivery:forceLine:line": "Line",
+    "delivery:forceLine:card": "Card ID",
+    "delivery:forceLine:submit": "Start delivery"
   },
   "pl": true
 }

@@ -3,9 +3,14 @@
     <div class="wh-delivery-section-title">
       <%- t('delivery:title:' + status, {kind: kind}) %>
     </div>
+    <% if (actions) { %>
     <div class="wh-delivery-section-actions">
       <%- resolveAction %>
+      <button id="<%- idPrefix %>-forceLine" class="btn btn-default" type="button">
+        <i class="fa fa-crosshairs"></i><span><%- t('delivery:forceLine:action') %></span>
+      </button>
     </div>
+    <% } %>
   </div>
   <div class="wh-delivery-section-bd">
     <table id="<%- idPrefix %>-items" class="wh-delivery-items">

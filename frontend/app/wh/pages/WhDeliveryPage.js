@@ -19,6 +19,7 @@ define([
   'app/wh/WhPendingPackagingCollection',
   'app/wh/views/DeliverySectionView',
   'app/wh/views/DeliverySetView',
+  'app/wh/views/ForceLineDeliveryView',
   'app/wh/templates/messages',
   'app/wh/templates/delivery/page'
 ], function(
@@ -40,6 +41,7 @@ define([
   WhPendingPackagingCollection,
   DeliverySectionView,
   DeliverySetView,
+  ForceLineDeliveryView,
   messageTemplates,
   pageTemplate
 ) {
@@ -87,7 +89,15 @@ define([
         'old.wh.setCarts.updated': 'onSetCartsUpdated'
       };
 
-      topics['old.wh.pending.' + this.options.kind + '.updated'] = 'onPendingDeliveriesUpdated';
+      if (this.pendingComponents)
+      {
+        topics['old.wh.pending.components.updated'] = 'onPendingComponentsUpdated';
+      }
+
+      if (this.pendingPackaging)
+      {
+        topics['old.wh.pending.packaging.updated'] = 'onPendingPackagingUpdated';
+      }
 
       return topics;
     },
@@ -102,6 +112,22 @@ define([
       {
         clearTimeout(this.timers.lineReload);
       }
+    },
+
+    events: {
+
+      'click #-message': function()
+      {
+        if (document.getSelection().toString() === '')
+        {
+          this.hideMessage();
+        }
+      },
+      'click #-messageOverlay': function()
+      {
+        this.hideMessage();
+      }
+
     },
 
     initialize: function()
@@ -137,14 +163,18 @@ define([
         paginate: false
       }), this);
 
-      var WhPendingDeliveriesCollection = this.options.kind === 'components'
-        ? WhPendingComponentsCollection
-        : WhPendingPackagingCollection;
-
-      this.pendingDeliveries = bindLoadingMessage(new WhPendingDeliveriesCollection(null, {
+      this.pendingComponents = bindLoadingMessage(new WhPendingComponentsCollection(null, {
         rqlQuery: 'limit(0)',
         paginate: false
       }), this);
+
+      if (this.options.kind === 'packaging')
+      {
+        this.pendingPackaging = bindLoadingMessage(new WhPendingPackagingCollection(null, {
+          rqlQuery: 'limit(0)',
+          paginate: false
+        }), this);
+      }
 
       this.setCarts = bindLoadingMessage(new WhSetCartCollection(null, {
         rqlQuery: 'limit(0)&status=in=(completed,delivering)&kind=' + this.options.kind,
@@ -181,7 +211,7 @@ define([
         lines: this.lines,
         setCarts: this.setCarts.delivering,
         status: 'delivering',
-        resolveAction: true
+        actions: true
       });
 
       this.setView('#-completed', this.completedView);
@@ -192,6 +222,8 @@ define([
     defineBindings: function()
     {
       var page = this;
+
+      page.listenTo(page.deliveringView, 'forceLineClicked', page.showForceLineDialog);
 
       page.once('afterRender', function()
       {
@@ -218,7 +250,8 @@ define([
     {
       return when(
         this.lines.fetch({reset: true}),
-        this.pendingDeliveries.fetch({reset: true}),
+        this.pendingComponents ? this.pendingComponents.fetch({reset: true}) : null,
+        this.pendingPackaging ? this.pendingPackaging.fetch({reset: true}) : null,
         this.setCarts.fetch({reset: true})
       );
     },
@@ -234,7 +267,8 @@ define([
       var req = page.promised($.when(
         page.whSettings.fetch({reset: true}),
         page.lines.fetch({reset: true}),
-        page.pendingDeliveries.fetch({reset: true}),
+        page.pendingComponents ? page.pendingComponents.fetch({reset: true}) : null,
+        page.pendingPackaging ? page.pendingPackaging.fetch({reset: true}) : null,
         page.setCarts.fetch({reset: true})
       ));
 
@@ -273,7 +307,17 @@ define([
       }
     },
 
-    onPendingDeliveriesUpdated: function(message)
+    onPendingComponentsUpdated: function(message)
+    {
+      this.onPendingDeliveriesUpdated(this.pendingComponents, message);
+    },
+
+    onPendingPackagingUpdated: function(message)
+    {
+      this.onPendingDeliveriesUpdated(this.pendingPackaging, message);
+    },
+
+    onPendingDeliveriesUpdated: function(pendingDeliveries, message)
     {
       var page = this;
 
@@ -284,13 +328,13 @@ define([
 
       (message.deleted || []).forEach(function(pendingDelivery)
       {
-        page.pendingDeliveries.remove(pendingDelivery._id);
+        pendingDeliveries.remove(pendingDelivery._id);
         page.scheduleLineUpdate(null, true);
       });
 
       (message.added || []).forEach(function(pendingDelivery)
       {
-        page.pendingDeliveries.add(pendingDelivery);
+        pendingDeliveries.add(pendingDelivery);
         page.scheduleLineUpdate(null, true);
       });
     },
@@ -405,12 +449,18 @@ define([
       }
     },
 
+    utcNow: function()
+    {
+      return time.getMoment().utc(true).valueOf();
+    },
+
     reset: function()
     {
       var page = this;
       var completed = [];
       var pending = [];
       var delivering = [];
+      var utcNow = page.utcNow();
 
       page.setCarts.forEach(function(setCart)
       {
@@ -418,7 +468,7 @@ define([
         {
           delivering.push(setCart);
         }
-        else if (page.isPendingSetCart(setCart))
+        else if (page.isPendingSetCart(setCart, utcNow))
         {
           pending.push(setCart);
         }
@@ -483,20 +533,25 @@ define([
       }
     },
 
-    isPendingSetCart: function(setCart)
+    isPendingSetCart: function(setCart, utcNow)
     {
       var page = this;
 
-      if (page.pendingDeliveries.isPendingSetCart(setCart))
+      if ((page.pendingComponents && page.pendingComponents.isPendingSetCart(setCart))
+        || (page.pendingPackaging && page.pendingPackaging.isPendingSetCart(setCart)))
       {
         return true;
       }
 
-      var now = time.getMoment(Date.now()).utc(true).valueOf();
+      if (!utcNow)
+      {
+        utcNow = this.utcNow();
+      }
+
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
       var maxDeliveryStartTime = page.whSettings.getMaxDeliveryStartTime();
       var startTime = Date.parse(setCart.get('startTime'));
-      var startTimeDiff = startTime - now;
+      var startTimeDiff = startTime - utcNow;
       var timeForDelivery = startTimeDiff < maxDeliveryStartTime;
       var line = setCart.get('lines').find(function(lineId)
       {
@@ -553,10 +608,11 @@ define([
 
       var pending = {add: [], remove: []};
       var completed = {add: [], remove: []};
+      var utcNow = page.utcNow();
 
       setCarts.completed.forEach(function(setCart)
       {
-        if (page.isPendingSetCart(setCart))
+        if (page.isPendingSetCart(setCart, utcNow))
         {
           completed.remove.push(setCart);
           pending.add.push(setCart);
@@ -565,7 +621,7 @@ define([
 
       setCarts.pending.forEach(function(setCart)
       {
-        if (!page.isPendingSetCart(setCart))
+        if (!page.isPendingSetCart(setCart, utcNow))
         {
           pending.remove.push(setCart);
           completed.add.push(setCart);
@@ -655,12 +711,28 @@ define([
         personnelId = DEV_PERSONNEL[personnelId];
       }
 
-      if (viewport.currentDialog instanceof DeliverySetView
-        && viewport.currentDialog.model.personnelId === personnelId)
+      var dialog = viewport.currentDialog;
+
+      if (dialog instanceof DeliverySetView
+        && dialog.model.personnelId === personnelId)
       {
-        viewport.currentDialog.finish();
+        dialog.finish();
 
         return;
+      }
+
+      if (dialog instanceof ForceLineDeliveryView)
+      {
+        if (dialog.getCard() === personnelId)
+        {
+          viewport.closeAllDialogs();
+        }
+        else
+        {
+          dialog.setCard(personnelId);
+
+          return;
+        }
       }
 
       page.acting = true;
@@ -830,11 +902,17 @@ define([
       var $overlay = this.$id('messageOverlay');
       var $message = this.$id('message');
       var visible = $overlay[0].style.display === 'block';
+      var html = message;
+
+      if (messageTemplates[message])
+      {
+        html = this.renderPartialHtml(messageTemplates[message], messageData || {});
+      }
 
       $message.stop(true, true);
       $overlay.css('display', 'block');
       $message
-        .html(messageTemplates[message] && messageTemplates[message](messageData || {}) || message)
+        .html(html)
         .removeClass('message-error message-warning message-success message-info')
         .addClass('message-' + type);
 
@@ -904,6 +982,24 @@ define([
         function() { page.promised(page.lines.fetch()); },
         20000
       );
+    },
+
+    showForceLineDialog: function()
+    {
+      var page = this;
+      var dialogView = new ForceLineDeliveryView({
+        model: page.model,
+        setCarts: page.setCarts
+      });
+
+      page.listenTo(dialogView, 'picked', function(data)
+      {
+        viewport.closeAllDialogs();
+
+        page.resolveAction(data.card, {forceLine: data.line});
+      });
+
+      viewport.showDialog(dialogView, page.t('delivery:forceLine:title'));
     }
 
   });

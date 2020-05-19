@@ -24,6 +24,10 @@ define([
     nlsDomain: 'wh',
 
     events: {
+      'click #-forceLine': function()
+      {
+        this.trigger('forceLineClicked');
+      },
       'click .wh-delivery-item': function(e)
       {
         if (this.options.status !== 'delivering')
@@ -42,6 +46,11 @@ define([
       },
       'submit .wh-pa-resolveAction': function()
       {
+        if (document.activeElement)
+        {
+          document.activeElement.blur();
+        }
+
         var personnelId = this.$('.wh-pa-resolveAction').find('.form-control').val();
 
         this.model.trigger('resolveAction', personnelId);
@@ -57,7 +66,7 @@ define([
       this.listenTo(this.setCarts, 'add', this.onAdded);
       this.listenTo(this.setCarts, 'change', this.onChanged);
 
-      if (this.options.resolveAction)
+      if (this.options.actions)
       {
         this.listenTo(this.model, 'change:personnelId', this.onPersonnelIdChanged);
       }
@@ -70,7 +79,8 @@ define([
         status: this.options.status,
         renderItem: this.renderPartialHtml.bind(this, itemTemplate),
         items: this.serializeItems(),
-        resolveAction: !this.options.resolveAction ? '' : this.renderPartialHtml(resolveActionTemplate, {
+        actions: !!this.options.actions,
+        resolveAction: !this.options.actions ? '' : this.renderPartialHtml(resolveActionTemplate, {
           pattern: window.ENV === 'development' ? '' : '^[0-9]{5,}$'
         })
       };
@@ -105,6 +115,7 @@ define([
       obj.className = this.getStatusClassName(setCart);
       obj.line = this.serializeItemLine(setCart);
       obj.date = time.utc.format(obj.date, 'L');
+      obj.startTime = time.utc.format(obj.startTime, 'HH:mm:ss');
       obj.set = this.t('delivery:set', {set: obj.set});
       obj.sapOrders = {};
       obj.orders.forEach(function(o) { obj.sapOrders[o.sapOrder] = 1; });
