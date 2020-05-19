@@ -4247,6 +4247,8 @@ app/wh/templates/resolveAction.js
 app/wh/views/DeliverySectionView.js
 app/wh/templates/delivery/set.js
 app/wh/views/DeliverySetView.js
+app/wh/templates/delivery/forceLine.js
+app/wh/views/ForceLineDeliveryView.js
 app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
@@ -4413,6 +4415,8 @@ app/wh/templates/resolveAction.js
 app/wh/views/DeliverySectionView.js
 app/wh/templates/delivery/set.js
 app/wh/views/DeliverySetView.js
+app/wh/templates/delivery/forceLine.js
+app/wh/views/ForceLineDeliveryView.js
 app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
