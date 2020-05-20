@@ -6,12 +6,13 @@
 
     "MSG:date:failure": "Failed to find date.",
     "MSG:date:empty": "No orders.",
-    "MSG:start:failure": "Failed to start order.",
-    "MSG:continue:failure": "Failed to continue order.",
-    "MSG:finish:failure": "Failed to finish order.",
-    "MSG:reset:failure": "Failed to reset order.",
-    "MSG:cancel:failure": "Failed to cancel order.",
-    "MSG:deliver:failure": "Failed to deliver order.",
+    "MSG:start:failure": "Failed to start the order.",
+    "MSG:continue:failure": "Failed to continue the order.",
+    "MSG:finish:failure": "Failed to finish the order.",
+    "MSG:reset:failure": "Failed to reset the order.",
+    "MSG:cancel:failure": "Failed to cancel the order.",
+    "MSG:deliver:failure": "Failed to deliver the order.",
+    "MSG:aside:failure": "Failed to set aside the order.",
     "MSG:search:failure": "Order not found.",
 
     "PAGE_ACTION:drilling": "Drilling",
@@ -45,6 +46,7 @@
     "status:finished": "Finished",
     "status:partial": "Partial",
     "status:cancelled": "Cancelled",
+    "status:aside": "Set aside",
     "status:delivered": "Delivered",
 
     "action:start": "Start",
@@ -56,6 +58,7 @@
     "action:continue:cabin": "<small>Continue</small>Cabin {cabin}",
     "action:comment": "Comment",
     "action:deliver": "Deliver",
+    "action:aside": "Set aside",
 
     "datePicker:d0": "Today",
     "datePicker:d+1": "Tomorrow",

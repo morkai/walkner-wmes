@@ -8,28 +8,28 @@
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="planning">
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-groupDuration"><%- t('settings:planning:groupDuration') %></label>
-        <input id="<%- idPrefix %>-planning-groupDuration" class="form-control" name="wh.planning.groupDuration" type="number" step="1" min="1" max="24">
+        <label for="<%- id('planning-groupDuration') %>"><%- t('settings:planning:groupDuration') %></label>
+        <input id="<%- id('planning-groupDuration') %>" class="form-control" name="wh.planning.groupDuration" type="number" step="1" min="1" max="24">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-groupExtraItems"><%- t('settings:planning:groupExtraItems') %></label>
+        <label for="<%- id('planning-groupExtraItems') %>"><%- t('settings:planning:groupExtraItems') %></label>
         <span class="help-block"><%- t('settings:planning:groupExtraItems:help') %></span>
-        <input id="<%- idPrefix %>-planning-groupExtraItems" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
+        <input id="<%- id('planning-groupExtraItems') %>" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('settings:planning:ignoredMrps') %></label>
+        <label for="<%- id('planning-ignoredMrps') %>"><%- t('settings:planning:ignoredMrps') %></label>
         <span class="help-block"><%- t('settings:planning:ignoredMrps:help') %></span>
-        <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" autocomplete="new-password" data-setting>
+        <input id="<%- id('planning-ignoredMrps') %>" name="wh.planning.ignoredMrps" type="text" autocomplete="new-password" data-setting>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-enabledMrps"><%- t('settings:planning:enabledMrps') %></label>
+        <label for="<%- id('planning-enabledMrps') %>"><%- t('settings:planning:enabledMrps') %></label>
         <span class="help-block"><%- t('settings:planning:enabledMrps:help') %></span>
-        <input id="<%- idPrefix %>-planning-enabledMrps" name="wh.planning.enabledMrps" type="text" autocomplete="new-password" data-setting>
+        <input id="<%- id('planning-enabledMrps') %>" name="wh.planning.enabledMrps" type="text" autocomplete="new-password" data-setting>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-lineGroups"><%- t('settings:planning:lineGroups') %></label>
+        <label for="<%- id('planning-lineGroups') %>"><%- t('settings:planning:lineGroups') %></label>
         <span class="help-block"><%- t('settings:planning:lineGroups:help') %></span>
-        <textarea id="<%- idPrefix %>-planning-lineGroups" name="wh.planning.lineGroups" class="form-control text-fixed" rows="6" data-keyup-delay="10000"></textarea>
+        <textarea id="<%- id('planning-lineGroups') %>" name="wh.planning.lineGroups" class="form-control text-fixed" rows="6" data-keyup-delay="10000"></textarea>
       </div>
     </div>
     <div class="panel-body" data-tab="pickup">
@@ -42,7 +42,7 @@
             <%- t('planning', 'orders:psStatus:unknown') %>
           </label>
         </div>
-        <% ['new', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+        <% ['new', 'aside', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
         <div class="checkbox">
           <label>
             <input type="checkbox" name="wh.planning.ignorePsStatus[]" value="<%- psStatus %>">
@@ -52,74 +52,74 @@
         <% }) %>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxSetSize"><%- t('settings:planning:maxSetSize') %></label>
-        <input id="<%- idPrefix %>-planning-maxSetSize" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
+        <label for="<%- id('planning-maxSetSize') %>"><%- t('settings:planning:maxSetSize') %></label>
+        <input id="<%- id('planning-maxSetSize') %>" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-minSetDuration"><%- t('settings:planning:minSetDuration') %></label>
+        <label for="<%- id('planning-minSetDuration') %>"><%- t('settings:planning:minSetDuration') %></label>
         <span class="help-block"><%- t('settings:planning:minSetDuration:help') %></span>
-        <input id="<%- idPrefix %>-planning-minSetDuration" class="form-control" name="wh.planning.minSetDuration" type="number" step="1" min="1" max="600">
+        <input id="<%- id('planning-minSetDuration') %>" class="form-control" name="wh.planning.minSetDuration" type="number" step="1" min="1" max="600">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxSetDuration"><%- t('settings:planning:maxSetDuration') %></label>
+        <label for="<%- id('planning-maxSetDuration') %>"><%- t('settings:planning:maxSetDuration') %></label>
         <span class="help-block"><%- t('settings:planning:maxSetDuration:help') %></span>
-        <input id="<%- idPrefix %>-planning-maxSetDuration" class="form-control" name="wh.planning.maxSetDuration" type="number" step="1" min="1" max="600">
+        <input id="<%- id('planning-maxSetDuration') %>" class="form-control" name="wh.planning.maxSetDuration" type="number" step="1" min="1" max="600">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxSetDifference"><%- t('settings:planning:maxSetDifference') %></label>
+        <label for="<%- id('planning-maxSetDifference') %>"><%- t('settings:planning:maxSetDifference') %></label>
         <span class="help-block"><%- t('settings:planning:maxSetDifference:help') %></span>
-        <input id="<%- idPrefix %>-planning-maxSetDifference" class="form-control" name="wh.planning.maxSetDifference" type="number" step="1" min="1" max="600">
+        <input id="<%- id('planning-maxSetDifference') %>" class="form-control" name="wh.planning.maxSetDifference" type="number" step="1" min="1" max="600">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxSetsPerLine"><%- t('settings:planning:maxSetsPerLine') %></label>
-        <input id="<%- idPrefix %>-planning-maxSetsPerLine" class="form-control" name="wh.planning.maxSetsPerLine" type="number" step="1" min="0" max="100">
+        <label for="<%- id('planning-maxSetsPerLine') %>"><%- t('settings:planning:maxSetsPerLine') %></label>
+        <input id="<%- id('planning-maxSetsPerLine') %>" class="form-control" name="wh.planning.maxSetsPerLine" type="number" step="1" min="0" max="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-availableTimeThreshold"><%- t('settings:planning:availableTimeThreshold') %></label>
+        <label for="<%- id('planning-availableTimeThreshold') %>"><%- t('settings:planning:availableTimeThreshold') %></label>
         <span class="help-block"><%- t('settings:planning:availableTimeThreshold:help') %></span>
-        <input id="<%- idPrefix %>-planning-availableTimeThreshold" class="form-control" name="wh.planning.availableTimeThreshold" type="number" step="1" min="0" max="1440">
+        <input id="<%- id('planning-availableTimeThreshold') %>" class="form-control" name="wh.planning.availableTimeThreshold" type="number" step="1" min="0" max="1440">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-minPickupDowntime"><%- t('settings:planning:minPickupDowntime') %></label>
+        <label for="<%- id('planning-minPickupDowntime') %>"><%- t('settings:planning:minPickupDowntime') %></label>
         <span class="help-block"><%- t('settings:planning:minPickupDowntime:help') %></span>
-        <input id="<%- idPrefix %>-planning-minPickupDowntime" class="form-control" name="wh.planning.minPickupDowntime" type="number" step="1" min="1" max="28800">
+        <input id="<%- id('planning-minPickupDowntime') %>" class="form-control" name="wh.planning.minPickupDowntime" type="number" step="1" min="1" max="28800">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxPickupDowntime"><%- t('settings:planning:maxPickupDowntime') %></label>
+        <label for="<%- id('planning-maxPickupDowntime') %>"><%- t('settings:planning:maxPickupDowntime') %></label>
         <span class="help-block"><%- t('settings:planning:maxPickupDowntime:help') %></span>
-        <input id="<%- idPrefix %>-planning-maxPickupDowntime" class="form-control" name="wh.planning.maxPickupDowntime" type="number" step="1" min="1" max="1440">
+        <input id="<%- id('planning-maxPickupDowntime') %>" class="form-control" name="wh.planning.maxPickupDowntime" type="number" step="1" min="1" max="1440">
       </div>
     </div>
     <div class="panel-body" data-tab="delivery">
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-minTimeForDelivery"><%- t('settings:planning:minTimeForDelivery') %></label>
+        <label for="<%- id('planning-minTimeForDelivery') %>"><%- t('settings:planning:minTimeForDelivery') %></label>
         <span class="help-block"><%- t('settings:planning:minTimeForDelivery:help') %></span>
-        <input id="<%- idPrefix %>-planning-minTimeForDelivery" class="form-control" name="wh.planning.minTimeForDelivery" type="number" step="1" min="1" max="480">
+        <input id="<%- id('planning-minTimeForDelivery') %>" class="form-control" name="wh.planning.minTimeForDelivery" type="number" step="1" min="1" max="480">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-lateDeliveryTime"><%- t('settings:planning:lateDeliveryTime') %></label>
+        <label for="<%- id('planning-lateDeliveryTime') %>"><%- t('settings:planning:lateDeliveryTime') %></label>
         <span class="help-block"><%- t('settings:planning:lateDeliveryTime:help') %></span>
-        <input id="<%- idPrefix %>-planning-lateDeliveryTime" class="form-control" name="wh.planning.lateDeliveryTime" type="number" step="1" min="1" max="480">
+        <input id="<%- id('planning-lateDeliveryTime') %>" class="form-control" name="wh.planning.lateDeliveryTime" type="number" step="1" min="1" max="480">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxDeliveryStartTime"><%- t('settings:planning:maxDeliveryStartTime') %></label>
+        <label for="<%- id('planning-maxDeliveryStartTime') %>"><%- t('settings:planning:maxDeliveryStartTime') %></label>
         <span class="help-block"><%- t('settings:planning:maxDeliveryStartTime:help') %></span>
-        <input id="<%- idPrefix %>-planning-maxDeliveryStartTime" class="form-control" name="wh.planning.maxDeliveryStartTime" type="number" step="1" min="1">
+        <input id="<%- id('planning-maxDeliveryStartTime') %>" class="form-control" name="wh.planning.maxDeliveryStartTime" type="number" step="1" min="1">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxSetCartsPerDelivery"><%- t('settings:planning:maxSetCartsPerDelivery') %></label>
+        <label for="<%- id('planning-maxSetCartsPerDelivery') %>"><%- t('settings:planning:maxSetCartsPerDelivery') %></label>
         <span class="help-block"><%- t('settings:planning:maxSetCartsPerDelivery:help') %></span>
-        <input id="<%- idPrefix %>-planning-maxSetCartsPerDelivery" class="form-control" name="wh.planning.maxSetCartsPerDelivery" type="number" step="1" min="1" max="100">
+        <input id="<%- id('planning-maxSetCartsPerDelivery') %>" class="form-control" name="wh.planning.maxSetCartsPerDelivery" type="number" step="1" min="1" max="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-minDeliveryDowntime"><%- t('settings:planning:minDeliveryDowntime') %></label>
+        <label for="<%- id('planning-minDeliveryDowntime') %>"><%- t('settings:planning:minDeliveryDowntime') %></label>
         <span class="help-block"><%- t('settings:planning:minDeliveryDowntime:help') %></span>
-        <input id="<%- idPrefix %>-planning-minDeliveryDowntime" class="form-control" name="wh.planning.minDeliveryDowntime" type="number" step="1" min="1" max="28800">
+        <input id="<%- id('planning-minDeliveryDowntime') %>" class="form-control" name="wh.planning.minDeliveryDowntime" type="number" step="1" min="1" max="28800">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxDeliveryDowntime"><%- t('settings:planning:maxDeliveryDowntime') %></label>
+        <label for="<%- id('planning-maxDeliveryDowntime') %>"><%- t('settings:planning:maxDeliveryDowntime') %></label>
         <span class="help-block"><%- t('settings:planning:maxDeliveryDowntime:help') %></span>
-        <input id="<%- idPrefix %>-planning-maxDeliveryDowntime" class="form-control" name="wh.planning.maxDeliveryDowntime" type="number" step="1" min="1" max="1440">
+        <input id="<%- id('planning-maxDeliveryDowntime') %>" class="form-control" name="wh.planning.maxDeliveryDowntime" type="number" step="1" min="1" max="1440">
       </div>
     </div>
     <div class="panel-body" data-tab="users">

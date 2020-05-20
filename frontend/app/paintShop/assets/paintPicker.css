@@ -95,9 +95,14 @@
   color: #000;
   background-color: #ccc;
   line-height: 24px;
+  text-shadow: 1px 1px 1px #000;
 }
 .paintShop-paintPicker-total[data-status="new"] {
   text-shadow: none;
+}
+.paintShop-paintPicker-total[data-status="aside"] {
+  background-color: #ff69b4;
+  color: #fff;
 }
 .paintShop-paintPicker-total[data-status="started"] {
   background-color: #5bc0de;
@@ -114,10 +119,9 @@
 .paintShop-paintPicker-total[data-status="cancelled"] {
   background-color: #d9534f;
   color: #fff;
-  text-shadow: none;
 }
 @media (min-width: 768px) {
   .paintShop-paintPicker-dialog .modal-dialog {
-    width: 710px;
+    width: 760px;
   }
 }

@@ -135,7 +135,7 @@ define([
           dropped: dropZones.getState(nc12),
           totals: totals,
           remaining: remaining,
-          weight: weights[nc12] || 0,
+          weight: Math.ceil(weights[nc12] || 0),
           manHours: Math.round((manHours[nc12] || 0) * 100) / 100,
           className: !totals || remaining === 0 ? 'success' : 'default'
         });

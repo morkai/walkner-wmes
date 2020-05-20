@@ -204,6 +204,7 @@
   "orders:psStatus:started": "W trakcie malowania",
   "orders:psStatus:partial": "Niekompletne malowanie",
   "orders:psStatus:finished": "Malowanie zakończone",
+  "orders:psStatus:aside": "Odstawione",
   "orders:psStatus:cancelled": "Malowanie anulowane",
   "orders:whStatus:unknown": "Nieokreślony",
   "orders:whStatus:todo": "Do zrobienia",

@@ -16,6 +16,7 @@
 .paintShop-list-item[data-status="started"][data-cabin="2"] {
   background-color: #9c64a6;
   color: #fff;
+  text-shadow: 1px 1px 1px #000;
 }
 .paintShop-list-item[data-status="partial"] {
   background-color: #f0ad4e;
@@ -23,18 +24,27 @@
 .paintShop-list-item[data-status="finished"] {
   background-color: #449d44;
   color: #fff;
+  text-shadow: 1px 1px 1px #000;
 }
 .paintShop-list-item[data-status="delivered"] {
   background-color: #222;
   color: #fff;
+  text-shadow: 1px 1px 1px #000;
+}
+.paintShop-list-item[data-status="aside"] {
+  background-color: #ff69b4;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
 }
 .paintShop-list-item[data-status="cancelled"] {
   background-color: #d9534f;
   color: #fff;
+  text-shadow: 1px 1px 1px #000;
 }
 .paintShop-list-item:hover {
   background: #ffffd6!important;
   color: #333!important;
+  text-shadow: none!important;
 }
 .paintShop-list-item:last-child {
   flex: 1 1 auto;

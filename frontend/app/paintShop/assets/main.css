@@ -129,6 +129,11 @@
 .paintShop-totals-total:first-child {
   border-left: none;
 }
+.paintShop-totals-total[data-status="aside"] {
+  background: #ff69b4;
+  color: #fff;
+  text-shadow: 1px 1px 1px #333;
+}
 .paintShop-totals-total[data-status="started"],
 .paintShop-totals-total[data-status="started1"] {
   background: #5bc0de;
@@ -137,6 +142,7 @@
 .paintShop-totals-total[data-status="started2"] {
   background: #9c64a6;
   color: #fff;
+  text-shadow: 1px 1px 1px #333;
 }
 .paintShop-totals-total[data-status="partial"] {
   background: #f0ad4e;
@@ -144,12 +150,15 @@
 .paintShop-totals-total[data-status="finished"] {
   background: #449d44;
   color: #fff;
+  text-shadow: 1px 1px 1px #333;
 }
 .paintShop-totals-total[data-status="delivered"] {
   background: #222;
   color: #fff;
+  text-shadow: 1px 1px 1px #333;
 }
 .paintShop-totals-total[data-status="cancelled"] {
   background: #d9534f;
   color: #fff;
+  text-shadow: 1px 1px 1px #333;
 }

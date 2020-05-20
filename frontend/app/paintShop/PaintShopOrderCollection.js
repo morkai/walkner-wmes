@@ -27,6 +27,7 @@ define([
       partial: 0,
       finished: 0,
       delivered: 0,
+      aside: 0,
       cancelled: 0
     };
   }

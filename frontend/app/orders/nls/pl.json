@@ -105,6 +105,7 @@
   "psStatus:started": "W trakcie",
   "psStatus:partial": "Niekompletne",
   "psStatus:finished": "Zakończone",
+  "psStatus:aside": "Odstawione",
   "psStatus:cancelled": "Anulowane",
 
   "OPERATIONS:NO_DATA": "Brak operacji.",

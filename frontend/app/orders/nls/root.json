@@ -106,6 +106,7 @@
     "psStatus:started": "Started",
     "psStatus:partial": "Partial",
     "psStatus:finished": "Finished",
+    "psStatus:aside": "Set aside",
     "psStatus:cancelled": "Cancelled",
 
     "OPERATIONS:NO_DATA": "No operations.",

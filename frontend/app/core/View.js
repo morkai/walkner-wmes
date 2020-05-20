@@ -222,7 +222,8 @@ function(
     return {
       idPrefix: this.idPrefix,
       helpers: helpers,
-      t: helpers.t
+      t: helpers.t,
+      id: helpers.id
     };
   };
 
@@ -233,8 +234,14 @@ function(
 
   View.prototype.getTemplateHelpers = function()
   {
+    var idPrefix = this.idPrefix;
+
     return {
       t: this.t,
+      id: function()
+      {
+        return idPrefix + '-' + Array.prototype.slice.call(arguments).join('-');
+      },
       props: this.props.bind(this)
     };
   };

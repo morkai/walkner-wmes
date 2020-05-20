@@ -13,6 +13,9 @@
 .planning-mrp-list-property-psStatus[data-ps-status="cancelled"] {
   color: #d9534f;
 }
+.planning-mrp-list-property-psStatus[data-ps-status="aside"] {
+  color: #ff69b4;
+}
 .planning-mrp-list-property-whStatus[data-wh-status="unknown"] {
   display: none;
 }

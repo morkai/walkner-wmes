@@ -11,6 +11,7 @@
   "MSG:reset:failure": "Nie udało się zresetować zlecenia.",
   "MSG:cancel:failure": "Nie udało się zignorować zlecenia.",
   "MSG:deliver:failure": "Nie udało się dostarczyć zlecenia.",
+  "MSG:aside:failure": "Nie udało się odstawić zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
 
   "PAGE_ACTION:drilling": "Wiercenie",
@@ -44,6 +45,7 @@
   "status:finished": "Zrealizowane",
   "status:partial": "Niekompletne",
   "status:cancelled": "Anulowane",
+  "status:aside": "Odstawione",
   "status:delivered": "Dostarczone",
 
   "action:start": "Rozpocznij",
@@ -55,6 +57,7 @@
   "action:continue:cabin": "<small>Kontynuuj</small>Kabina {cabin}",
   "action:comment": "Komentuj",
   "action:deliver": "Dostarcz",
+  "action:aside": "Odstaw",
 
   "datePicker:d0": "Dzisiaj",
   "datePicker:d+1": "Jutro",

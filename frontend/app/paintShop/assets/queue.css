@@ -38,6 +38,20 @@
 .paintShop-order-component {
   background-color: #fff;
 }
+.paintShop-order[data-status="aside"] .paintShop-order-order {
+  background-color: #ff69b4;
+  border-bottom-color: #dd4792;
+  color: #000;
+}
+.paintShop-order[data-status="aside"] .paintShop-order-childOrder {
+  background-color: #ff9ce7;
+  border-top-color: #e17ac5;
+  border-bottom-color: #e17ac5;
+  color: #000;
+}
+.paintShop-order[data-status="aside"] .paintShop-order-component {
+  background-color: #fde;
+}
 .paintShop-order[data-status="started"] .paintShop-order-order {
   background-color: #5bc0de;
   border-bottom-color: #39a0bc;
@@ -313,6 +327,9 @@ span.paintShop-property > .fa {
 }
 .paintShop-whOrder-status[data-wh-status="pending"] {
   color: #fff;
+}
+.paintShop-whOrder-status[data-wh-status="aside"] {
+  color: #ff69b4;
 }
 .paintShop-whOrder-status[data-wh-status="started"] {
   color: #5bc0de;

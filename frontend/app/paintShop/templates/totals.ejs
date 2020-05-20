@@ -1,11 +1,12 @@
-<% _.forEach(totals, function(total, status) { %>
-<% if (/^started/.test(status)) { %>
-<% if (/[0-9]$/.test(status)) return %>
+<div class="paintShop-totals-total" data-status="new" title="<%- t('status:new') %>"><%- totals.new %></div>
 <div class="paintShop-totals-split">
-  <div class="paintShop-totals-total" data-status="started1" title="<%= t('paintShop', 'status:started:cabin', {cabin: 1}) %>"><%- totals.started1 %></div>
-  <div class="paintShop-totals-total" data-status="started2" title="<%= t('paintShop', 'status:started:cabin', {cabin: 2}) %>"><%- totals.started2 %></div>
+  <div class="paintShop-totals-total" data-status="started1" title="<%- t('status:started:cabin', {cabin: 1}) %>"><%- totals.started1 %></div>
+  <div class="paintShop-totals-total" data-status="started2" title="<%- t('status:started:cabin', {cabin: 2}) %>"><%- totals.started2 %></div>
 </div>
-<% } else { %>
-<div class="paintShop-totals-total" data-status="<%- status %>" title="<%= t('paintShop', 'status:' + status) %>"><%- total %></div>
-<% } %>
-<% }) %>
+<div class="paintShop-totals-total" data-status="partial" title="<%- t('status:partial') %>"><%- totals.partial %></div>
+<div class="paintShop-totals-total" data-status="finished" title="<%- t('status:finished') %>"><%- totals.finished %></div>
+<div class="paintShop-totals-total" data-status="delivered" title="<%- t('status:delivered') %>"><%- totals.delivered %></div>
+<div class="paintShop-totals-split">
+  <div class="paintShop-totals-total" data-status="aside" title="<%- t('status:aside') %>"><%- totals.aside %></div>
+  <div class="paintShop-totals-total" data-status="cancelled" title="<%- t('status:cancelled') %>"><%- totals.cancelled %></div>
+</div>

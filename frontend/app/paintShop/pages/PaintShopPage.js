@@ -422,7 +422,9 @@ define([
         vkb: this.vkbView,
         filter: function(psOrder)
         {
-          return psOrder.status === 'new' || psOrder.status === 'cancelled';
+          return psOrder.status === 'new'
+            || psOrder.status === 'aside'
+            || psOrder.status === 'cancelled';
         }
       });
       this.doneView = new PaintShopListView({
@@ -519,7 +521,7 @@ define([
         embedded: embedded.isEnabled(),
         height: this.calcInitialHeight() + 'px',
         renderTabs: mrpTabsTemplate,
-        renderTotals: totalsTemplate,
+        renderTotals: this.renderPartialHtml.bind(this, totalsTemplate),
         tabs: this.serializeTabs(),
         totals: this.serializeTotals(),
         selectedPaint: {
@@ -1093,6 +1095,7 @@ define([
             partial: 'integer',
             finished: 'integer',
             delivered: 'integer',
+            aside: 'integer',
             cancelled: 'integer'
           },
           data: paintPickerView.serialize().paints.map(function(paint)
@@ -1109,6 +1112,7 @@ define([
               partial: paint.totals.partial,
               finished: paint.totals.finished,
               delivered: paint.totals.delivered,
+              aside: paint.totals.aside,
               cancelled: paint.totals.cancelled
             };
           })
