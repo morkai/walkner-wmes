@@ -563,8 +563,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 2000,
-          text: t(
-            'production',
+          text: this.t(
             orderNoOrNc12 === ''
               ? 'newOrderPicker:msg:emptyOrder'
               : ('newOrderPicker:msg:invalidOrderId:' + orderIdType)
@@ -581,8 +580,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 2000,
-          text: t(
-            'production',
+          text: this.t(
             orderNoOrNc12 === ''
               ? 'newOrderPicker:msg:emptyOrder'
               : 'newOrderPicker:msg:invalidOperationNo'
@@ -598,6 +596,43 @@ define([
       while (operationNo.length < 4)
       {
         operationNo = '0' + operationNo;
+      }
+
+      var statuses = orderInfo.statuses;
+
+      if (Array.isArray(statuses) && statuses.length)
+      {
+        if (_.intersection(statuses, ['TECO', 'DLT', 'DLFL']).length)
+        {
+          this.$id('order').select();
+          this.$id('submit').prop('disabled', false);
+
+          return viewport.msg.show({
+            type: 'error',
+            time: 2000,
+            text: this.t('newOrderPicker:msg:orderDeleted')
+          });
+        }
+
+        var qtyDone = orderInfo.qtyDone
+          && orderInfo.qtyDone.byOperation
+          && orderInfo.qtyDone.byOperation[operationNo]
+          || 0;
+        var qtyMax = orderInfo.qtyMax
+          && orderInfo.qtyMax[operationNo]
+          || orderInfo.qty;
+
+        if (qtyMax && qtyDone >= qtyMax && _.intersection(statuses, ['CNF', 'DLV']).length)
+        {
+          this.$id('order').select();
+          this.$id('submit').prop('disabled', false);
+
+          return viewport.msg.show({
+            type: 'error',
+            time: 2000,
+            text: this.t('newOrderPicker:msg:orderCompleted')
+          });
+        }
       }
 
       if (!this.options.correctingOrder && this.model.hasOrder())

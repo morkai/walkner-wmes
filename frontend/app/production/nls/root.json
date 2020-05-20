@@ -177,6 +177,8 @@
     "newOrderPicker:msg:emptyOrder": "Order is required.",
     "newOrderPicker:msg:emptyOperation": "Operation is required.",
     "newOrderPicker:msg:noOperations": "The selected order doesn't have any operations. You can manually enter a 4-digit operation no.",
+    "newOrderPicker:msg:orderDeleted": "Order deleted.",
+    "newOrderPicker:msg:orderCompleted": "Order completed.",
     "newOrderPicker:online:info:no": "Enter the order no and choose an operation from the list to start a new order.",
     "newOrderPicker:online:info:nc12": "Enter the order's 12NC and choose an operation from the list to start a new order.",
     "newOrderPicker:offline:warning:no": "Enter the order no and operation no to start a new order.",
