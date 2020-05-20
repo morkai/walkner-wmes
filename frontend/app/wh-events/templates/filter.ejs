@@ -7,7 +7,7 @@
   }) %>
   <div class="form-group">
     <label for="<%- idPrefix %>-type"><%- t('PROPERTY:type') %></label>
-    <select id="<%- idPrefix %>-type" name="type" class="form-control is-expandable" multiple size="1">
+    <select id="<%- idPrefix %>-type" name="type[]" class="form-control is-expandable" multiple size="1">
       <% TYPES.forEach(function(type) { %>
       <option value="<%- type %>"><%- t('type:' + type) %></option>
       <% }) %>

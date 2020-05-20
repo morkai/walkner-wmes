@@ -42,7 +42,8 @@ define([
       {
         formData[propertyName] = Array.isArray(term.args[1]) ? term.args[1].join(',') : term.args[1];
       },
-      'user': 'order'
+      'user': 'order',
+      'type': 'order'
     },
 
     destroy: function()
