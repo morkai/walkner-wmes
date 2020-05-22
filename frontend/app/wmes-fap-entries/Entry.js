@@ -861,21 +861,20 @@ define([
         }
       });
 
-      var observers = (data.observers || []).concat(entry.get('observers'));
+      var observers = {};
+
+      (data.observers || []).concat(entry.get('observers')).forEach(function(o)
+      {
+        if (o && o.user)
+        {
+          observers[o.user.id] = o.user;
+        }
+      });
+
+      observers = _.values(observers);
+
       var observerIndex = _.findIndex(observers, function(o)
       {
-        // TODO Remove if there are no errors in the future
-        if ((!o || !o.user) && window.WMES_LOG_BROWSER_ERROR)
-        {
-          window.WMES_LOG_BROWSER_ERROR(new Error( // eslint-disable-line new-cap
-            'Invalid observer: ' + JSON.stringify({
-              change: change,
-              observer: o,
-              observers: observers
-            })
-          ));
-        }
-
         return o && !!o.user && o.user.id === user.data._id;
       });
 
