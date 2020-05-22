@@ -270,6 +270,7 @@ define([
         }
 
         change.data = data;
+        change.comment = '';
       }
 
       this.model.handleChange(change, message.notify);
