@@ -754,6 +754,10 @@ app/vis/assets/main.css
 ----------------
 app/vis/assets/main.css
 
+app/wh/assets/blockedPickup.css
+----------------
+app/wh/assets/blockedPickup.css
+
 app/wh/assets/delivery.css
 ----------------
 app/wh/assets/delivery.css
@@ -775,6 +779,7 @@ app/wh/assets/./problems.css
 app/wh/assets/./downtimePicker.css
 app/wh/assets/./pickup.css
 app/wh/assets/./delivery.css
+app/wh/assets/./blockedPickup.css
 app/wh/assets/main.css
 
 app/wh/assets/message.css
@@ -3894,6 +3899,8 @@ app/wh/views/WhPickupStatusView.js
 app/core/util/transliterate.js
 app/wh/templates/downtimePicker.js
 app/wh/views/DowntimePickerView.js
+app/wh/templates/pickup/blockedPickup.js
+app/wh/views/BlockedPickupView.js
 app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
