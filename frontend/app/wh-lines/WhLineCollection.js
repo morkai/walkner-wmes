@@ -67,9 +67,14 @@ define([
 
     can: {
 
-      redir: function()
+      manage: function()
       {
         return user.isAllowedTo('WH:MANAGE', 'PLANNING:MANAGE', 'PLANNING:PLANNER');
+      },
+
+      redir: function()
+      {
+        return this.manage();
       }
 
     }

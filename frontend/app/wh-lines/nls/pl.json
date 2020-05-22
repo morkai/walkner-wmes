@@ -33,5 +33,13 @@
   "redirLine:error:UNKNOWN_SOURCE_LINE": "Nieznana linia źródłowa.",
   "redirLine:error:UNKNOWN_TARGET_LINE": "Nieznana linia docelowa.",
   "redirLine:error:INVALID_TARGET_LINE": "Nieprawidłowa linia docelowa.",
-  "redirLine:error:LINE_NOT_REDIRECTED": "Linia źródłowa nie ma przekierowania."
+  "redirLine:error:LINE_NOT_REDIRECTED": "Linia źródłowa nie ma przekierowania.",
+
+  "editStartedPlan:tooltip": "Zmień datę rozpoczętego planu",
+  "editStartedPlan:title": "Zmiana daty rozpoczętego planu na linii",
+  "editStartedPlan:message": "<p>Sety podczas kompletacji tworzone są dla linii, które mają zlecenia zaplanowane do daty aktualnie rozpoczętego planu lub aktualnego daty aktualnego dnia, jeżeli jest późniejsza (włącznie).</p><p>Data rozpoczętego planu jest automatycznie zmieniana, jeżeli na linii rozpoczęte zostanie zlecenie z Datą startu (plan.) późniejszą niż aktualna wartość.</p><p>Zmieniając aktualną datę rozpoczęcia planu dla linii na nową, można aktywować na niej kompletacje zleceń do wybranej daty.</p>",
+  "editStartedPlan:line": "Linia",
+  "editStartedPlan:oldValue": "Aktualnie rozpoczęty plan",
+  "editStartedPlan:newValue": "Nowy rozpoczęty plan",
+  "editStartedPlan:submit": "Zmień datę"
 }

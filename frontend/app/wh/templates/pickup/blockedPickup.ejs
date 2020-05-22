@@ -1,0 +1,105 @@
+<div class="wh-blockedPickup">
+  <div class="message message-inline message-warning">
+    <p>
+      Brak zleceń gotowych do kompletacji dla rozpoczętych planów poszczególnych linii.
+    </p>
+  </div>
+  <div class="message message-inline message-info">
+    <p>
+      Poniżej znajduje się lista linii, które mają zlecenia gotowe do kompletacji, ale których
+      zaplanowany czas rozpoczęcia na linii jest późniejszy niż aktualnie rozpoczęty plan tej
+      linii.
+    </p>
+  </div>
+  <% if (unpaintedLines.length) { %>
+  <div class="message message-inline message-warning">
+    <p>
+      <%- unpaintedLines.lines %> linie mają jeszcze zlecenia zaplanowane na dzisiaj, ale zostały
+      one pominięte z powodu niegotowości malarnii.
+    </p>
+  </div>
+  <div class="message message-inline message-info">
+    <p>
+      Jeżeli chcesz kontynuować kompletację, to poczekaj na gotowość malarnii lub ustaw nowe daty
+      rozpoczętych planów dla wybranych linii i zeskanuj się ponownie.
+    </p>
+  </div>
+  <% } else { %>
+  <div class="message message-inline message-info">
+    <p>
+      Jeżeli chcesz kontynuować kompletację, to ustaw nowe daty rozpoczętych planów dla wybranych
+      linii i zeskanuj się ponownie.
+    </p>
+  </div>
+  <% } %>
+  <h3 data-action="toggleLines"><i class="fa fa-chevron-down"></i><span>Linie gotowe do kompletacji</span></h3>
+  <table id="<%- id('ignoredLines') %>" class="table table-bordered table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="is-min">Linia</th>
+        <th class="is-min">MRP</th>
+        <th class="is-min">Czas<br>skompl.</th>
+        <th class="is-min">Czas<br>dost.</th>
+        <th class="is-min">Następna<br>zaplanowana zmiana</th>
+        <th class="is-min">Następne<br>gotowe zlecenie</th>
+        <th class="is-min">Aktualnie<br>rozpoczęty plan</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ignoredLines.forEach(function(line) { %>
+      <tr data-id="<%= line._id %>">
+        <td class="is-min"><%= line._id %></td>
+        <td class="is-min"><%= line.mrps %></td>
+        <td class="is-min" data-prop="completed"><%- line.completed %></td>
+        <td class="is-min" data-prop="delivered"><%- line.delivered %></td>
+        <td class="is-min" data-action="setNextShift">
+          <a href="javascript:void(0)" data-prop="nextShift"><%- line.nextShift %></a>
+        </td>
+        <td class="is-min" data-action="setStartTime">
+          <a href="javascript:void(0)"><%- line.startTime %></a>
+        </td>
+        <td class="is-min">
+          <form>
+            <input class="form-control" type="date" value="<%- line.startedPlan %>" required min="<%- minValue %>" max="<%- maxValue %>">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i></button>
+          </form>
+        </td>
+        <th></th>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <h3 data-action="toggleLines" style="margin-bottom: 0"><i class="fa fa-chevron-right"></i><span>Pozostałe linie</span></h3>
+  <table id="<%- id('remainingLines') %>" class="table table-bordered table-condensed table-hover hidden" style="margin-top: 10px; margin-bottom: 0">
+    <thead>
+    <tr>
+      <th class="is-min">Linia</th>
+      <th class="is-min">Czas<br>skompl.</th>
+      <th class="is-min">Czas<br>dost.</th>
+      <th class="is-min">Następna<br>zaplanowana zmiana</th>
+      <th class="is-min">Aktualnie<br>rozpoczęty plan</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% remainingLines.forEach(function(line) { %>
+      <tr data-id="<%= line._id %>">
+        <td class="is-min"><%= line._id %></td>
+        <td class="is-min" data-prop="completed"><%- line.completed %></td>
+        <td class="is-min" data-prop="delivered"><%- line.delivered %></td>
+        <td class="is-min" data-action="setNextShift">
+          <a href="javascript:void(0)" data-prop="nextShift"><%- line.nextShift %></a>
+        </td>
+        <td class="is-min">
+          <form>
+            <input class="form-control" type="date" value="<%- line.startedPlan %>" required min="<%- minValue %>" max="<%- maxValue %>">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i></button>
+          </form>
+        </td>
+        <th></th>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

@@ -226,5 +226,7 @@
   "delivery:forceLine:message": "Wybierz linię i zeskanuj się, aby wymusić wysyłkę wózków na daną linię.",
   "delivery:forceLine:line": "Linia",
   "delivery:forceLine:card": "ID karty",
-  "delivery:forceLine:submit": "Rozpocznij wysyłkę"
+  "delivery:forceLine:submit": "Rozpocznij wysyłkę",
+
+  "blockedPickup:title": "Kompletacja zablokowana"
 }

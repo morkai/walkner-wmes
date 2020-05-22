@@ -81,7 +81,7 @@ define([
         }
         else
         {
-          html.push(prop('lines', data.lines.map(_.escape).join(', ')));
+          html.push(prop(data.lines.length === 1 ? 'line' : 'lines', data.lines.map(_.escape).join(', ')));
         }
       }
 
@@ -128,19 +128,25 @@ define([
         }).join('; ')));
       }
 
-      if (data.qty)
+      ['qty', 'problemArea'].forEach(function(p)
       {
-        html.push(prop('qty', data.qty));
-      }
+        if (data[p] != null)
+        {
+          html.push(prop(p, _.escape(String(data[p]))));
+        }
+      });
+
+      ['oldStartedPlan', 'newStartedPlan'].forEach(function(p)
+      {
+        if (data[p] != null)
+        {
+          html.push(prop(p, time.utc.format(data[p], 'L')));
+        }
+      });
 
       if (data.duration)
       {
         html.push(prop('duration', time.toString(data.duration / 1000)));
-      }
-
-      if (data.problemArea)
-      {
-        html.push(prop('problemArea', _.escape(data.problemArea)));
       }
 
       if (type === 'deliveredOrderEdited')
@@ -187,6 +193,7 @@ define([
       'deliveryStarted',
       'deliveryFinished',
       'deliveredOrderEdited',
+      'startedPlanEdited',
       'lineRedirStarted',
       'lineRedirStopped'
     ]

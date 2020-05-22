@@ -15,6 +15,7 @@
   "data:picklistDone": "LP10",
   "data:picklist": "Picklista",
   "data:pickup": "Kompletacja",
+  "data:line": "Linia",
   "data:lines": "Linie",
   "data:sourceLine": "Linia źródłowa",
   "data:targetLine": "Linia docelowa",
@@ -27,6 +28,8 @@
   "data:problemArea": "Pole problemów",
   "data:status": "Status",
   "data:duration": "Czas trwania",
+  "data:oldStartedPlan": "Stary plan",
+  "data:newStartedPlan": "Nowy plan",
 
   "kind:components": "FIFO",
   "kind:packaging": "Opakowania",
@@ -65,6 +68,7 @@
   "type:deliveryStarted": "Rozpoczęcie dostawy",
   "type:deliveryFinished": "Zakończenie dostawy",
   "type:deliveredOrderEdited": "Edycja dostarczonego zlecenia",
+  "type:startedPlanEdited": "Edycja rozpoczęcia planu linii",
   "type:lineRedirStarted": "Rozpoczęcie przekierowania linii",
   "type:lineRedirStopped": "Zakończenie przekierowania linii"
 }

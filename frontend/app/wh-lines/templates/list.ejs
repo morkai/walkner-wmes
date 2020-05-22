@@ -27,7 +27,7 @@
         </tr>
         <% } %>
         <% rows.forEach(function(row) { %>
-        <%- renderRow({row: row, canRedir: canRedir}) %>
+        <%- renderRow({row: row, canManage: canManage}) %>
         <% }) %>
       </tbody>
     </table>

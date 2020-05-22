@@ -34,7 +34,14 @@
     "redirLine:error:UNKNOWN_SOURCE_LINE": "Unknown source line.",
     "redirLine:error:UNKNOWN_TARGET_LINE": "Unknown target line.",
     "redirLine:error:INVALID_TARGET_LINE": "Invalid target line.",
-    "redirLine:error:LINE_NOT_REDIRECTED": "Source line isn't redirected."
+    "redirLine:error:LINE_NOT_REDIRECTED": "Source line isn't redirected.",
+
+    "editStartedPlan:tooltip": "Edit the started plan date",
+    "editStartedPlan:title": "Editing the started plan date",
+    "editStartedPlan:line": "Line",
+    "editStartedPlan:oldValue": "Currently started plan",
+    "editStartedPlan:newValue": "New started plan",
+    "editStartedPlan:submit": "Edit date"
   },
   "pl": true
 }

@@ -24,6 +24,7 @@ define([
   '../views/WhPickupSetView',
   '../views/WhPickupStatusView',
   '../views/DowntimePickerView',
+  '../views/BlockedPickupView',
   '../templates/messages',
   'app/wh/templates/pickup/page',
   'app/wh/templates/resolveAction',
@@ -52,6 +53,7 @@ define([
   WhPickupSetView,
   WhPickupStatusView,
   DowntimePickerView,
+  BlockedPickupView,
   messageTemplates,
   pageTemplate,
   resolveActionTemplate,
@@ -124,7 +126,8 @@ define([
           template: function()
           {
             return page.renderPartialHtml(resolveActionTemplate, {
-              pattern: window.ENV === 'development' ? '' : '^[0-9]{5,}$'
+              pattern: window.ENV === 'development' ? '' : '^[0-9]{5,}$',
+              value: page.lastPersonnelId || currentUser.data.cardUid
             });
           },
           afterRender: function($action)
@@ -549,6 +552,10 @@ define([
         return;
       }
 
+      viewport.closeAllDialogs();
+
+      this.lastPersonnelId = personnelId;
+
       if (window.ENV !== 'production' && DEV_PERSONNEL[personnelId])
       {
         personnelId = DEV_PERSONNEL[personnelId];
@@ -629,6 +636,10 @@ define([
 
         case 'pickDowntimeReason':
           this.pickDowntimeReason(res.personnelId, res.user, res.startedAt);
+          break;
+
+        case 'ignoredLines':
+          this.handleIgnoredLines(res.ignoredLines, res.unpaintedLines, res.user);
           break;
 
         default:
@@ -741,6 +752,20 @@ define([
       {
         page.resolveAction(personnelId, result);
       });
+    },
+
+    handleIgnoredLines: function(ignoredLines, unpaintedLines, whUser)
+    {
+      var dialogView = new BlockedPickupView({
+        model: {
+          whLines: this.whLines,
+          ignoredLines: ignoredLines,
+          unpaintedLines: unpaintedLines,
+          whUser: whUser
+        }
+      });
+
+      viewport.showDialog(dialogView, this.t('blockedPickup:title'));
     },
 
     focusOrder: function(id, smooth)

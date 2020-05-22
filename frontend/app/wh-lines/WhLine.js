@@ -59,22 +59,35 @@ define([
     {
       var obj = this.serialize();
 
-      if (obj.nextShiftAt)
+      obj.nextShiftAt = this.serializeNextShiftAt();
+
+      obj.startedPlan = obj.startedPlan && obj.startedPlan !== '1970-01-01T00:00:00.000Z'
+        ? time.utc.format(obj.startedPlan, 'L')
+        : '';
+
+      return obj;
+    },
+
+    serializeNextShiftAt: function()
+    {
+      var nextShiftAt = this.get('nextShiftAt');
+
+      if (nextShiftAt)
       {
-        var shiftDate = shiftUtil.getPlanDate(obj.nextShiftAt).format('L');
+        var shiftDate = shiftUtil.getPlanDate(nextShiftAt, false).format('L');
         var currentDate = shiftUtil.getPlanDate(Date.now(), true).format('L');
-        var shiftTime = time.utc.format(obj.nextShiftAt, 'LTS');
+        var shiftTime = time.utc.format(nextShiftAt, 'LTS');
         var shiftNo = shiftUtil.getShiftNoFromStartTime(shiftTime);
 
         if (shiftNo)
         {
           if (shiftDate === currentDate)
           {
-            obj.nextShiftAt = t('core', 'SHIFT:' + shiftNo);
+            nextShiftAt = t('core', 'SHIFT:' + shiftNo);
           }
           else
           {
-            obj.nextShiftAt = t('core', 'SHIFT', {
+            nextShiftAt = t('core', 'SHIFT', {
               date: shiftDate,
               shift: shiftNo
             });
@@ -82,23 +95,19 @@ define([
         }
         else if (shiftDate === currentDate)
         {
-          obj.nextShiftAt = shiftTime;
+          nextShiftAt = shiftTime;
         }
         else
         {
-          obj.nextShiftAt = shiftDate + ', ' + shiftTime;
+          nextShiftAt = shiftDate + ', ' + shiftTime;
         }
       }
       else
       {
-        obj.nextShiftAt = '';
+        nextShiftAt = '';
       }
 
-      obj.startedPlan = obj.startedPlan && obj.startedPlan !== '1970-01-01T00:00:00.000Z'
-        ? time.utc.format(obj.startedPlan, 'L')
-        : '';
-
-      return obj;
+      return nextShiftAt;
     }
 
   });

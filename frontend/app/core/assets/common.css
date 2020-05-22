@@ -268,17 +268,19 @@ code.multiline {
   background-color: #428BCA;
 }
 
-@-webkit-keyframes yellow-fade {
-  0% { background: yellow; }
-  100% { background: none; }
-}
 @keyframes yellow-fade {
   0% { background: yellow; }
   100% { background: none; }
 }
+@keyframes green-fade {
+  0% { background: #0F0; }
+  100% { background: none; }
+}
 .highlight {
-  -webkit-animation: yellow-fade 1s ease-out 1;
   animation: yellow-fade 1s ease-out 1;
+}
+.highlight.highlight-success {
+  animation: green-fade 1s ease-out 1;
 }
 
 .btn-default.zeroclipboard-is-hover {

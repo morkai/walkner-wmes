@@ -6,6 +6,7 @@ define([
   'app/core/views/ListView',
   '../WhLineCollection',
   './RedirLineDialogView',
+  './EditStartedPlanDialogView',
   'app/wh-lines/templates/list',
   'app/wh-lines/templates/row'
 ], function(
@@ -14,6 +15,7 @@ define([
   ListView,
   WhLineCollection,
   RedirLineDialogView,
+  EditStartedPlanDialogView,
   listTemplate,
   rowTemplate
 ) {
@@ -41,6 +43,11 @@ define([
       'click a[data-action="redirLine"]': function(e)
       {
         this.redirLine(this.$(e.currentTarget).closest('.list-item')[0].dataset.id);
+      },
+
+      'click a[data-action="editStartedPlan"]': function(e)
+      {
+        this.editStartedPlan(this.$(e.currentTarget).closest('.list-item')[0].dataset.id);
       }
 
     }, ListView.prototype.events),
@@ -64,7 +71,7 @@ define([
     {
       return {
         renderRow: this.renderPartialHtml.bind(this, rowTemplate),
-        canRedir: WhLineCollection.can.redir()
+        canManage: WhLineCollection.can.manage()
       };
     },
 
@@ -73,7 +80,7 @@ define([
       var $row = this.$row(line.id);
       var html = this.renderPartialHtml(rowTemplate, {
         row: line.serializeRow(),
-        canRedir: WhLineCollection.can.redir()
+        canManage: WhLineCollection.can.manage()
       });
 
       if ($row.length)
@@ -109,6 +116,15 @@ define([
         dialogView,
         this.t('redirLine:title:' + (sourceLine.get('redirLine') ? 'stop' : 'start'))
       );
+    },
+
+    editStartedPlan: function(lineId)
+    {
+      var dialogView = new EditStartedPlanDialogView({
+        model: this.collection.get(lineId)
+      });
+
+      viewport.showDialog(dialogView, this.t('editStartedPlan:title'));
     }
 
   });

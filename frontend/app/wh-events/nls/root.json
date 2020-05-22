@@ -16,6 +16,7 @@
     "data:picklistDone": "LP10",
     "data:picklist": "Picklist",
     "data:pickup": "Pickup",
+    "data:line": "Line",
     "data:lines": "Lines",
     "data:sourceLine": "Source line",
     "data:targetLine": "Target line",
@@ -28,6 +29,8 @@
     "data:problemArea": "Problem area",
     "data:status": "Status",
     "data:duration": "Duration",
+    "data:oldStartedPlan": "Old plan",
+    "data:newStartedPlan": "New plan",
 
     "kind:components": "FIFO",
     "kind:packaging": "Packaging",
@@ -66,6 +69,7 @@
     "type:deliveryStarted": "Delivery started",
     "type:deliveryFinished": "Delivery finished",
     "type:deliveredOrderEdited": "Delivered order edited",
+    "type:startedPlanEdited": "Line started plan edited",
     "type:lineRedirStarted": "Line redirection started",
     "type:lineRedirStopped": "Line redirection stopped"
   },

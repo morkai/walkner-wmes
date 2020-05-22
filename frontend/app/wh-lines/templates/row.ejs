@@ -14,7 +14,7 @@
     </a>
   </td>
   <td class="is-min text-fixed" data-id="redirLine">
-    <% if (canRedir) { %>
+    <% if (canManage) { %>
     <% if (row.redirLine) { %>
     <a href="javascript:void(0)" data-action="redirLine" title="<%- t('redirLine:stop') %>" style="display: block"><i class="fa fa-arrow-right"></i><span><%= row.redirLine %></span></a>
     <% } else { %>
@@ -30,6 +30,12 @@
     <% } %>
   </td>
   <td class="is-min"><%- row.nextShiftAt %></td>
-  <td class="is-min"><%- row.startedPlan %></td>
+  <td class="is-min">
+    <% if(canManage) { %>
+    <a href="javascript:void(0)" data-action="editStartedPlan" title="<%- t('editStartedPlan:tooltip') %>" style="display: block; text-align: right"><span style="margin-right: 7px"><%- row.startedPlan %></span><i class="fa fa-edit"></i></a>
+    <% } else { %>
+    <%- row.startedPlan %>
+    <% } %>
+  </td>
   <td></td>
 </tr>

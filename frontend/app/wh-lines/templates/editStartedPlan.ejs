@@ -1,0 +1,37 @@
+<form>
+  <% if (t.has('editStartedPlan:message')) { %>
+  <div class="message message-inline message-info" style="margin-bottom: 15px; text-align: justify">
+    <%- t('editStartedPlan:message') %>
+  </div>
+  <% } %>
+  <div class="form-group">
+    <label class="control-label"><%- t('editStartedPlan:line') %></label>
+    <p class="form-control-static"><%= line._id %></p>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="control-label"><%- t('editStartedPlan:oldValue') %></label>
+      <p class="form-control-static"><%- time.utc.format(line.startedPlan, 'L') %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('PROPERTY:nextShiftAt') %></label>
+      <p class="form-control-static">
+        <% if (nextShiftAt) { %>
+        <a id="<%- id('setNextShift') %>" href="javascript:void(0)">
+          <i class="fa fa-calendar-check-o"></i><span><%- nextShiftAt %></span>
+        </a>
+        <% } else { %>
+        -
+        <% } %>
+      </p>
+    </div>
+  </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- id('newValue') %>" class="control-label is-required"><%- t('editStartedPlan:newValue') %></label>
+    <input id="<%- id('newValue') %>" class="form-control" type="date" required value="<%- curValue %>" min="<%- minValue %>" max="<%- maxValue %>">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('editStartedPlan:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>
