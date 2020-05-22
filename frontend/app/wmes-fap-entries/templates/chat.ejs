@@ -1,14 +1,14 @@
 <div class="fap-chat">
-  <div class="fap-chat-title"><%- helpers.t('chat:title') %></div>
-  <div id="<%- idPrefix %>-messages" class="fap-chat-messages">
+  <div class="fap-chat-title"><%- t('chat:title') %></div>
+  <div id="<%- id('messages') %>" class="fap-chat-messages">
     <% model.chat.forEach(function(message) { %>
     <%- renderMessage({message: message}) %>
     <% }) %>
   </div>
   <form class="fap-chat-form">
-    <textarea id="<%- idPrefix %>-send" class="form-control fap-chat-send" rows="1" placeholder="<%- helpers.t('chat:send') %>"></textarea>
-    <div id="<%- idPrefix %>-new" class="fap-chat-new-outer hidden">
-      <span class="fap-chat-new-inner"><%- helpers.t('chat:new') %></span>
+    <textarea id="<%- id('send') %>" class="form-control fap-chat-send" rows="1" placeholder="<%- t('chat:send') %>"></textarea>
+    <div id="<%- id('new') %>" class="fap-chat-new-outer hidden">
+      <span class="fap-chat-new-inner"><%- t('chat:new') %></span>
     </div>
   </form>
 </div>

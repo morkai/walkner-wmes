@@ -39,7 +39,7 @@
   text-align: left;
   overflow-y: scroll;
   background: #eceff1;
-  height: 493px;
+  height: 527px;
 }
 .fap-chat-message {
   line-height: 1.5;
@@ -89,21 +89,17 @@
   margin-left: 2px;
   margin-right: 2px;
 }
-.fap-chat-send {
-  padding: 4px 24px;
+textarea.fap-chat-send {
+  padding: 8px 24px;
   resize: none;
   overflow-y: hidden;
   text-rendering: geometricPrecision;
+  height: 36px;
+  min-height: 36px;
+  max-height: 215px;
 }
-.fap-chat-send-scroll {
+textarea.fap-chat-send-scroll {
   overflow-y: scroll;
-}
-.fap-chat-send[rows="1"] {
-  padding: 24px 24px;
-  height: 70px;
-}
-.fap-chat-send[rows="2"] {
-  padding: 14px 24px;
 }
 
 @media (max-width: 1272px) {

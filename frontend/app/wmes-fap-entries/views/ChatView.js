@@ -60,33 +60,9 @@ define([
           return false;
         }
       },
-      'keyup #-send': function()
+      'input #-send': function()
       {
-        var $messages = this.$id('messages');
-        var $send = this.$id('send');
-        var oldHeight = $send[0].offsetHeight;
-        var rows = $send.val().split('\n').length;
-        var scroll = false;
-
-        if (rows > 10)
-        {
-          rows = 10;
-          scroll = true;
-        }
-
-        $send.attr('rows', rows).toggleClass('fap-chat-send-scroll', scroll);
-
-        var newHeight = $send[0].offsetHeight;
-        var heightDiff = newHeight - oldHeight;
-
-        $messages.css('height', 563 - newHeight);
-
-        if (heightDiff < 0 && this.isScrolledToBottom())
-        {
-          return;
-        }
-
-        $messages[0].scrollTop += newHeight - oldHeight;
+        this.resizeSend();
       },
       'click #-new': function()
       {
@@ -138,6 +114,8 @@ define([
       var data = {};
 
       $send.val('');
+
+      this.resizeSend();
 
       if (user.isLoggedIn() && !view.model.isObserver())
       {
@@ -396,6 +374,8 @@ define([
 
         sendEl.value = caret + suffix;
         sendEl.setSelectionRange(caret.length, caret.length);
+
+        view.resizeSend();
       }
     },
 
@@ -470,6 +450,8 @@ define([
       sendEl.value = text.substring(0, from) + text.substring(to);
       sendEl.setSelectionRange(from, from);
 
+      this.resizeSend();
+
       return true;
     },
 
@@ -480,6 +462,37 @@ define([
       return Math.abs(messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight) < 5;
     },
 
+    resizeSend: function()
+    {
+      var $messages = this.$id('messages');
+      var $send = this.$id('send');
+      var oldHeight = $send[0].offsetHeight;
+      var minHeight = parseInt($send.css('minHeight'), 10);
+
+      $send.outerHeight(minHeight);
+
+      var scroll = false;
+      var newHeight = Math.max(minHeight, $send[0].scrollHeight);
+
+      if (newHeight > 215)
+      {
+        scroll = true;
+        newHeight = 215;
+      }
+
+      var heightDiff = newHeight - oldHeight;
+
+      $messages.css('height', 563 - newHeight);
+      $send.outerHeight(newHeight).toggleClass('fap-chat-send-scroll', scroll);
+
+      if (heightDiff < 0 && this.isScrolledToBottom())
+      {
+        return;
+      }
+
+      $messages[0].scrollTop += newHeight - oldHeight;
+    },
+
     onScroll: function(e)
     {
       this.chatScrollTop = e.target.scrollTop;
@@ -488,6 +501,11 @@ define([
       {
         this.$id('new').addClass('hidden');
       }
+    },
+
+    onResize: function()
+    {
+      this.resizeSend();
     }
 
   });
