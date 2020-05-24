@@ -1093,6 +1093,9 @@ define([
         var view = this;
         var id = $attachment[0].dataset.attachmentId;
         var oldValue = _.findWhere(view.model.get('attachments'), {_id: id});
+
+        $attachment[0].scrollIntoView();
+
         var rect = $attachment[0].getBoundingClientRect();
         var $form = $('<form class="fap-editor fap-attachments-editor"></form>').css({
           top: $attachment.offset().top + 'px',
