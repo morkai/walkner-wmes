@@ -77,6 +77,11 @@ define([
       {
         return this.prepareLineGroups(newValue);
       }
+
+      if (/pendingOnly$/.test(id))
+      {
+        return !!newValue;
+      }
     },
 
     prepareFormValue: function(id, value)

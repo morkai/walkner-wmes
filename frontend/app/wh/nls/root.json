@@ -124,6 +124,8 @@
     "settings:planning:maxSetDuration:help": "Set duration cannot exceed the specified number of minutes.",
     "settings:planning:maxSetDifference": "Maximum set time difference [min]",
     "settings:planning:maxSetDifference:help": "Set creation will stop, if the difference between the start time of the next potential order to the finish time of the set's last order is greater than the specified number of minutes.",
+    "settings:planning:pendingOnly": "Only pending orders",
+    "settings:planning:pendingOnly:help": "If the option is enabled, only pending orders will be used to calculate the <em>Maximum set time difference</em>.",
     "settings:planning:minPickupDowntime": "Maximum time between pickups [s]",
     "settings:planning:minPickupDowntime:help": "Minimum time that has to pass between an end of the last pickup and a start of the new pickup to register a downtime.",
     "settings:planning:maxPickupDowntime": "Maximum downtime duration [min]",
