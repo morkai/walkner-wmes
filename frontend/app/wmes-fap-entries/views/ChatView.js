@@ -47,13 +47,30 @@ define([
 
         var enter = key === 'Enter';
         var whitespace = enter || key === ' ';
+        var empty = e.target.value.trim() === '';
 
-        if (whitespace && e.target.value.trim() === '')
+        if (whitespace && empty)
         {
+          this.toggleMultiLine();
+
           return false;
         }
 
-        if (enter && !e.shiftKey)
+        if (!this.multiLine && enter && e.shiftKey && !empty)
+        {
+          this.toggleMultiLine(true);
+
+          return;
+        }
+
+        if (this.multiLine && enter && e.shiftKey)
+        {
+          this.send();
+
+          return false;
+        }
+
+        if (!this.multiLine && enter && !e.shiftKey)
         {
           this.send();
 
@@ -75,6 +92,10 @@ define([
       'click .fap-chat-attachment': function(e)
       {
         this.model.trigger('focusAttachment', e.currentTarget.dataset.attachmentId);
+      },
+      'click #-submit': function()
+      {
+        this.send();
       }
 
     },
@@ -82,6 +103,7 @@ define([
     initialize: function()
     {
       this.chatScrollTop = -1;
+      this.multiLine = false;
 
       this.listenTo(this.model, 'change:changes', this.onChange);
     },
@@ -104,6 +126,20 @@ define([
 
         $messages.on('scroll', this.onScroll.bind(this));
       }
+
+      this.toggleMultiLine(this.multiLine);
+    },
+
+    toggleMultiLine: function(multiLine)
+    {
+      this.multiLine = typeof multiLine === 'boolean' ? multiLine : !this.multiLine;
+
+      this.$el.toggleClass('fap-chat-multiLine', this.multiLine);
+
+      if (this.multiLine)
+      {
+        this.$id('submit')[0].style.marginLeft = (this.$id('submit').outerWidth() / 2 * -1) + 'px';
+      }
     },
 
     send: function()
@@ -115,6 +151,7 @@ define([
 
       $send.val('');
 
+      this.toggleMultiLine(false);
       this.resizeSend();
 
       if (user.isLoggedIn() && !view.model.isObserver())

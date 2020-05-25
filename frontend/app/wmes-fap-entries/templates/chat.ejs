@@ -7,6 +7,9 @@
   </div>
   <form class="fap-chat-form">
     <textarea id="<%- id('send') %>" class="form-control fap-chat-send" rows="1" placeholder="<%- t('chat:send') %>"></textarea>
+    <button id="<%- id('submit') %>" class="btn btn-primary fap-chat-submit" type="button">
+      <i class="fa fa-comment"></i><span><%- t('chat:submit') %></span><kbd>Shift+Enter</kbd>
+    </button>
     <div id="<%- id('new') %>" class="fap-chat-new-outer hidden">
       <span class="fap-chat-new-inner"><%- t('chat:new') %></span>
     </div>

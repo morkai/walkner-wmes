@@ -137,6 +137,7 @@
     "upload:failure": "Failed to upload file: {file}",
 
     "chat:title": "Chat",
+    "chat:submit": "Send message",
     "chat:send": "Send message",
     "chat:send:auth": "Log in to send a message",
     "chat:new": "Click here to see new messages...",

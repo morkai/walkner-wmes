@@ -101,6 +101,27 @@ textarea.fap-chat-send {
 textarea.fap-chat-send-scroll {
   overflow-y: scroll;
 }
+.fap-chat-submit {
+  position: absolute;
+  left: 50%;
+  margin-left: 0;
+  padding-right: 7px;
+  display: none;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.fap-chat-multiLine .fap-chat-submit {
+  display: flex;
+  align-items: center;
+}
+.fap-chat-submit kbd {
+  margin-left: 7px;
+  border: none;
+  text-shadow: none;
+  font-size: 11px;
+  line-height: 1;
+  background: #FFF;
+}
 
 @media (max-width: 1272px) {
   .fap-chat {

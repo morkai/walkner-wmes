@@ -142,6 +142,7 @@
   "upload:failure": "Nie udało się załadować pliku: {file}",
 
   "chat:title": "Czat",
+  "chat:submit": "Wyślij wiadomość",
   "chat:send": "Wyślij wiadomość",
   "chat:send:auth": "Zaloguj się, aby wysłać wiadomość",
   "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
