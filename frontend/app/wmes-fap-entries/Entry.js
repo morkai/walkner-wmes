@@ -867,7 +867,7 @@ define([
       {
         if (o && o.user)
         {
-          observers[o.user.id] = o.user;
+          observers[o.user.id] = o;
         }
       });
 
@@ -875,7 +875,7 @@ define([
 
       var observerIndex = _.findIndex(observers, function(o)
       {
-        return o && !!o.user && o.user.id === user.data._id;
+        return o.user.id === user.data._id;
       });
 
       if (observerIndex !== -1)
@@ -884,6 +884,11 @@ define([
 
         if (change.user.id === user.data._id)
         {
+          if (observer.notify === false && !Object.keys(data).length)
+          {
+            return;
+          }
+
           observers[observerIndex] = _.defaults({
             lastSeenAt: change.date,
             notify: false,
