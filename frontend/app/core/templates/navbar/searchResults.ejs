@@ -55,6 +55,9 @@
   <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
   <li class="navbar-search-result"><a href="#xiconf/orders/<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfDetails') %></a></li>
   <% } %>
+  <% if (loadedModules.isLoaded('wh') && user.isAllowedTo('WH:VIEW', 'PLANNING:VIEW')) { %>
+  <li class="navbar-search-result"><a href="#wh/deliveredOrders?sort(date,set,startTime)&limit(-1337)&sapOrder=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:deliveredOrders') %></a></li>
+  <% } %>
   <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
   <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:prodShiftOrders') %></a></li>
   <% } %>
