@@ -34,9 +34,9 @@
       </div>
     </div>
   </div>
-  <p id="<%- id('noSourceMsg') %>" class="message message-inline message-warning text-justify" style="margin-top: 15px"><%- t('redir:msg:noSource') %></p>
+  <p id="<%- id('noSourceMsg') %>" class="message message-inline message-warning text-justify hidden" style="margin-top: 15px"><%- t('redir:msg:noSource') %></p>
   <div class="form-actions">
-    <button class="btn btn-primary" type="submit"><%- t('redir:submit') %></button>
+    <button id="<%- id('submit') %>" class="btn btn-primary" type="submit"><%- t('redir:submit') %></button>
     <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
 </form>

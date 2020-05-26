@@ -139,6 +139,7 @@ define([
       view.$id('sourcePceTime').text('?').attr('data-value', '');
       view.$id('targetQty').val('');
       view.$id('targetPceTime').val('');
+      view.$id('submit').prop('disabled', true);
 
       view.checkLineValidity();
 
@@ -160,6 +161,8 @@ define([
         else
         {
           viewport.msg.loadingFailed();
+
+          view.$id('submit').prop('disabled', false);
         }
       });
 
@@ -171,6 +174,8 @@ define([
         view.updateSourceInfo();
 
         viewport.msg.loaded();
+
+        view.$id('submit').prop('disabled', false);
       });
 
       req.always(function()
@@ -252,7 +257,7 @@ define([
 
       this.$id('sourceQty').text(qtyDone + '/' + qtyTodo).attr('data-value', qtyTodo - qtyDone);
 
-      if (qtyDone)
+      if (qtyDone < qtyTodo)
       {
         this.$id('sourceQty').append(' <a href="javascript:void(0)"><i class="fa fa-copy"></i></a>');
       }
