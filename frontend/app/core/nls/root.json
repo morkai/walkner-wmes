@@ -111,6 +111,7 @@
     "NAVBAR:PLANNING:wh:delivery:components": "FIFO delivery",
     "NAVBAR:PLANNING:wh:delivery:packaging": "Packaging delivery",
     "NAVBAR:PLANNING:wh:problems": "Problems",
+    "NAVBAR:PLANNING:wh:deliveredOrders": "Delivered orders",
     "NAVBAR:PLANNING:wh:downtimes": "Downtimes",
     "NAVBAR:PLANNING:wh:setCarts": "Carts",
     "NAVBAR:PLANNING:wh:lines": "Lines",
