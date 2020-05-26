@@ -177,9 +177,9 @@ define([
     onUpdated: function(message)
     {
       var view = this;
-      var refresh = false;
       var line = view.collection.getLineFilter();
       var sapOrder = view.collection.getSapOrderFilter();
+      var refresh = !line && !sapOrder;
 
       (message.added || []).forEach(function(data)
       {
@@ -197,7 +197,7 @@ define([
         {
           model.set(data);
 
-          if (model.get('line') !== line)
+          if (line && model.get('line') !== line)
           {
             refresh = true;
           }
