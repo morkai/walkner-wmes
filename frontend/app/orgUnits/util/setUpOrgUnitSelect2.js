@@ -49,6 +49,7 @@ define([
     options = _.assign({orgUnitType: 'prodLine'}, options);
 
     var noDescription = NO_DESCRIPTION[options.orgUnitType] === true;
+    var idOnly = !!options.idOnly;
     var maxIdLength = 0;
     var items = cachedItems[options.orgUnitType];
 
@@ -159,6 +160,11 @@ define([
           else
           {
             html.push(e(id));
+          }
+
+          if (idOnly)
+          {
+            return html.join('') + '</span>';
           }
         }
 

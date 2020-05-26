@@ -24,6 +24,7 @@
   "LIST:ACTION:finish": "Zakończ",
   "LIST:ACTION:block": "Zablokuj",
   "LIST:ACTION:unblock": "Odblokuj",
+  "LIST:ACTION:redir": "Przenieś",
 
   "confirm:cancel": "Anuluj",
   "confirm:finish": "Zakończ",
@@ -32,5 +33,17 @@
 
   "status:todo": "Do zrobienia",
   "status:done": "Zrobione",
-  "status:blocked": "Zablokowane"
+  "status:blocked": "Zablokowane",
+
+  "redir:title": "Przenoszenie dostarczonych zleceń",
+  "redir:submit": "Przenieś",
+  "redir:sapOrder": "Zlecenie",
+  "redir:sourceLine": "Linia źródłowa",
+  "redir:sourceQty": "Ilość źrodłowa",
+  "redir:targetLine": "Linia docelowa",
+  "redir:targetQty": "Docelowa ilość do zrobienia",
+  "redir:pceTime": "Czas sztuki",
+  "redir:msg:noSource": "Jeżeli nie wybierzesz linii źródłowej, to zostanie tylko stworzone nowe dostarczone zlecenie. Ilość do zrobienia w istniejących zleceniach nie zostanie pomniejszona o podaną ilość docelową.",
+  "redir:error:sameLines": "Linia docelowa nie może być jednocześnie linią źródłową.",
+  "redir:error:failure": "Przenoszenie nie powiodło się."
 }

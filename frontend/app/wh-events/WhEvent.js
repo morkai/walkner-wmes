@@ -74,10 +74,17 @@ define([
 
       if (Array.isArray(data.lines) && data.lines.length)
       {
-        if (/^lineRedir/.test(type))
+        if (/Redir/.test(type))
         {
-          html.push(prop('sourceLine', data.lines[0]));
-          html.push(prop('targetLine', data.lines[1]));
+          if (data.lines.length > 1)
+          {
+            html.push(prop('sourceLine', data.lines[0]));
+            html.push(prop('targetLine', data.lines[1]));
+          }
+          else
+          {
+            html.push(prop('targetLine', data.lines[0]));
+          }
         }
         else
         {
@@ -106,7 +113,7 @@ define([
 
         if (orders.length)
         {
-          html.push(prop('orders', _.map(data.orders, 'sapOrder').join(', ')));
+          html.push(prop('orders', _.uniq(_.map(data.orders, 'sapOrder')).join(', ')));
         }
       }
 
@@ -169,6 +176,15 @@ define([
           ));
         }
       }
+      else if (type === 'deliveredOrderRedired')
+      {
+        if (data.sourceQtyTodo)
+        {
+          html.push(prop('sourceQty', data.sourceQtyDone + '/' + data.sourceQtyTodo));
+        }
+
+        html.push(prop('targetQty', data.targetQtyDone + '/' + data.targetQtyTodo));
+      }
       else if (/^lineRedir/.test(type))
       {
         html.push(prop('redirDelivered', t('core', 'BOOL:' + !!data.redirDelivered)));
@@ -193,6 +209,7 @@ define([
       'deliveryStarted',
       'deliveryFinished',
       'deliveredOrderEdited',
+      'deliveredOrderRedired',
       'startedPlanEdited',
       'lineRedirStarted',
       'lineRedirStopped'

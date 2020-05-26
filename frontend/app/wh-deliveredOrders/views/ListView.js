@@ -7,6 +7,7 @@ define([
   'app/core/views/ListView',
   '../WhDeliveredOrderCollection',
   './FormView',
+  './RedirView',
   'app/wh-deliveredOrders/templates/confirm'
 ], function(
   $,
@@ -15,6 +16,7 @@ define([
   ListView,
   WhDeliveredOrderCollection,
   FormView,
+  RedirView,
   confirmTemplate
 ) {
   'use strict';
@@ -49,6 +51,19 @@ define([
         });
 
         viewport.showDialog(dialogView, this.t('FORM:edit:title'));
+      },
+
+      'click .action-redir': function(e)
+      {
+        this.hidePopover();
+
+        var id = this.$(e.currentTarget).closest('.list-item')[0].dataset.id;
+        var model = this.collection.get(id);
+        var dialogView = new RedirView({
+          model: model
+        });
+
+        viewport.showDialog(dialogView, this.t('redir:title'));
       },
 
       'click .action-finish': function(e)
@@ -97,6 +112,13 @@ define([
           id: 'finish',
           icon: 'check',
           label: view.t('LIST:ACTION:finish'),
+          className: row.status === 'done' ? 'disabled' : ''
+        });
+
+        actions.push({
+          id: 'redir',
+          icon: 'arrow-right',
+          label: view.t('LIST:ACTION:redir'),
           className: row.status === 'done' ? 'disabled' : ''
         });
 

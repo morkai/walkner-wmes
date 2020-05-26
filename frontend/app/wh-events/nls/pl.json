@@ -29,7 +29,8 @@
   "data:status": "Status",
   "data:duration": "Czas trwania",
   "data:oldStartedPlan": "Stary plan",
-  "data:newStartedPlan": "Nowy plan",
+  "data:sourceQty": "Ilość źródłowa",
+  "data:targetQty": "Ilość docelowa",
 
   "kind:components": "FIFO",
   "kind:packaging": "Opakowania",
@@ -68,6 +69,7 @@
   "type:deliveryStarted": "Rozpoczęcie dostawy",
   "type:deliveryFinished": "Zakończenie dostawy",
   "type:deliveredOrderEdited": "Edycja dostarczonego zlecenia",
+  "type:deliveredOrderRedired": "Przeniesienie dostarczonego zlecenia",
   "type:startedPlanEdited": "Edycja rozpoczęcia planu linii",
   "type:lineRedirStarted": "Rozpoczęcie przekierowania linii",
   "type:lineRedirStopped": "Zakończenie przekierowania linii"

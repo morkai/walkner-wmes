@@ -25,6 +25,7 @@
     "FORM:edit:finish": "Finish",
     "LIST:ACTION:block": "Block",
     "LIST:ACTION:unblock": "Unblock",
+    "LIST:ACTION:redir": "Move",
 
     "confirm:cancel": "Cancel",
     "confirm:finish": "Finish",
@@ -33,7 +34,19 @@
 
     "status:todo": "Todo",
     "status:done": "Done",
-    "status:blocked": "Blocked"
+    "status:blocked": "Blocked",
+
+    "redir:title": "Moving delivered orders",
+    "redir:submit": "Move",
+    "redir:sapOrder": "Order",
+    "redir:sourceLine": "Source line",
+    "redir:sourceQty": "Source quantity",
+    "redir:targetLine": "Target line",
+    "redir:targetQty": "Target quantity todo",
+    "redir:pceTime": "PCE time",
+    "redir:msg:noSource": "If you don't specify a source line, only a new delivered order will be created. Quantity todo of the existing orders will not be changed by the specified target quantity.",
+    "redir:error:sameLines": "Target line cannot be equal to the source line.",
+    "redir:error:failure": "Failed to move orders."
   },
   "pl": true
 }
