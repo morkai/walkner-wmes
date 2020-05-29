@@ -66,6 +66,26 @@ define([
       return 0;
     },
 
+    getStartHourFromShiftNo: function(shiftNo)
+    {
+      if (shiftNo === 1)
+      {
+        return 6;
+      }
+
+      if (shiftNo === 2)
+      {
+        return 14;
+      }
+
+      if (shiftNo === 3)
+      {
+        return 22;
+      }
+
+      throw new Error('Invalid shift!');
+    },
+
     getShiftStartTime: function(time)
     {
       var date = new Date(time);

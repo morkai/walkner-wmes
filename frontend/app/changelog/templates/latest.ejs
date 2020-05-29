@@ -17,6 +17,8 @@
 <ul>
   <li>Zmieniono opcję ignorowania statusów malarnii podczas kompletacji tak, aby można było wybrać poszczególne
     ignorowane statusy.</li>
+  <li>Zmieniono wysyłkę wózków tak, aby wózki ze zleceniami zaplanowanymi na początek I zmiany trafiały do realizacji
+    pod koniec ostatniej pracującej zmiany fabryki, a nie godzinę przed rozpoczęciem zaplanowanego zlecenia.</li>
   <li>Dodano nową opcję konfiguracyjną kompletacji: Próg czasu dostępności - jeżeli całkowity dostępny czas linii
     (suma czas skompletowanego i dostępnego) podczas tworzenia nowego seta jest mniejszy niż dany próg, to
     traktowany jest jakby wynosił 0. Całkowity dostępny czas ma priorytet w określaniu dla jakiej linii zostanie

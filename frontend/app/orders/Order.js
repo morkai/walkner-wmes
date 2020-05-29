@@ -51,7 +51,7 @@ define([
 
     parse: function(data, xhr)
     {
-      data = Model.prototype.parse.call(this, data, xhr);
+      data = Model.prototype.parse.call(this, data || {}, xhr);
 
       data.operations = new OperationCollection(data.operations);
       data.documents = new DocumentCollection(data.documents);

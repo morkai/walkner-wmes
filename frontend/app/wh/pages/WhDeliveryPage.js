@@ -10,6 +10,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/embedded',
+  'app/planning/util/shift',
   'app/wh-lines/WhLineCollection',
   'app/wh-setCarts/WhSetCart',
   'app/wh-setCarts/WhSetCartCollection',
@@ -17,6 +18,7 @@ define([
   'app/wh/WhOrderCollection',
   'app/wh/WhPendingComponentsCollection',
   'app/wh/WhPendingPackagingCollection',
+  'app/wh/PlanStatsCollection',
   'app/wh/views/DeliverySectionView',
   'app/wh/views/DeliverySetView',
   'app/wh/views/ForceLineDeliveryView',
@@ -32,6 +34,7 @@ define([
   View,
   bindLoadingMessage,
   embedded,
+  shiftUtil,
   WhLineCollection,
   WhSetCart,
   WhSetCartCollection,
@@ -39,6 +42,7 @@ define([
   WhOrderCollection,
   WhPendingComponentsCollection,
   WhPendingPackagingCollection,
+  PlanStatsCollection,
   DeliverySectionView,
   DeliverySetView,
   ForceLineDeliveryView,
@@ -86,7 +90,8 @@ define([
     {
       var topics = {
         'old.wh.lines.updated': 'onLinesUpdated',
-        'old.wh.setCarts.updated': 'onSetCartsUpdated'
+        'old.wh.setCarts.updated': 'onSetCartsUpdated',
+        'planning.stats.updated': 'onPlanStatsUpdated'
       };
 
       if (this.pendingComponents)
@@ -157,6 +162,8 @@ define([
       });
 
       this.whSettings = whSettings.bind(this);
+
+      this.planStats = bindLoadingMessage(new PlanStatsCollection(), this);
 
       this.lines = bindLoadingMessage(new WhLineCollection(null, {
         rqlQuery: 'limit(0)',
@@ -234,10 +241,18 @@ define([
         page.listenTo(page.setCarts, 'remove', page.onSetCartRemoved);
         page.listenTo(page.setCarts, 'add', page.onSetCartAdded);
         page.listenTo(page.setCarts, 'change', page.onSetCartChanged);
+        page.listenTo(page.whSettings, 'change', page.onSettingChanged);
+        page.listenTo(page.planStats, 'change', page.onPlanStatsChanged);
 
         page.model.set('loading', false);
 
         window.parent.postMessage({type: 'ready', app: window.WMES_APP_ID}, '*');
+
+        clearTimeout(page.timers.scheduleLineUpdate);
+        page.timers.scheduleLineUpdate = setTimeout(
+          page.scheduleLineUpdate.bind(page, null, false),
+          LINE_UPDATE_INTERVAL * 2
+        );
       });
 
       $(window)
@@ -249,6 +264,7 @@ define([
     load: function(when)
     {
       return when(
+        this.planStats.fetch({reset: true}),
         this.lines.fetch({reset: true}),
         this.pendingComponents ? this.pendingComponents.fetch({reset: true}) : null,
         this.pendingPackaging ? this.pendingPackaging.fetch({reset: true}) : null,
@@ -266,6 +282,7 @@ define([
 
       var req = page.promised($.when(
         page.whSettings.fetch({reset: true}),
+        page.planStats.fetch({reset: true}),
         page.lines.fetch({reset: true}),
         page.pendingComponents ? page.pendingComponents.fetch({reset: true}) : null,
         page.pendingPackaging ? page.pendingPackaging.fetch({reset: true}) : null,
@@ -441,12 +458,27 @@ define([
       }
     },
 
+    onPlanStatsUpdated: function(message)
+    {
+      this.planStats.update(message.plan, message.stats);
+    },
+
+    onPlanStatsChanged: function()
+    {
+      this.scheduleLineUpdate(null, false);
+    },
+
     onLoadingChanged: function()
     {
       if (!this.model.get('loading'))
       {
         this.reset();
       }
+    },
+
+    onSettingChanged: function()
+    {
+      this.scheduleLineUpdate(null, false);
     },
 
     utcNow: function()
@@ -550,10 +582,13 @@ define([
 
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
       var maxDeliveryStartTime = page.whSettings.getMaxDeliveryStartTime();
-      var startTime = Date.parse(setCart.get('startTime'));
+      var startTime = new Date(setCart.get('startTime'));
       var startTimeDiff = startTime - utcNow;
       var timeForDelivery = startTimeDiff < maxDeliveryStartTime;
-      var line = setCart.get('lines').find(function(lineId)
+      var minStartTimeHour = 6;
+      var maxStartTimeHour = minStartTimeHour + maxDeliveryStartTime / 60000 / 60;
+
+      return setCart.get('lines').some(function(lineId)
       {
         var whLine = page.lines.get(lineId);
 
@@ -567,10 +602,42 @@ define([
           return false;
         }
 
-        return whLine.get('working') || timeForDelivery;
-      });
+        if (timeForDelivery || whLine.get('working'))
+        {
+          return true;
+        }
 
-      return !!line;
+        var startTimeHour = startTime.getUTCHours();
+
+        if (startTimeHour < minStartTimeHour || startTimeHour >= maxStartTimeHour)
+        {
+          return false;
+        }
+
+        var firstWorkingPlan = page.planStats.getFirstWorkingPlanBefore(startTime);
+
+        if (!firstWorkingPlan)
+        {
+          return false;
+        }
+
+        var endOfWork = time.utc.getMoment(firstWorkingPlan.get('date').valueOf());
+        var workingShifts = firstWorkingPlan.get('workingShifts');
+
+        for (var shiftNo = 3; shiftNo > 0; --shiftNo)
+        {
+          if (workingShifts[shiftNo])
+          {
+            endOfWork.hours(shiftUtil.getStartHourFromShiftNo(shiftNo));
+
+            break;
+          }
+        }
+
+        endOfWork.add(shiftUtil.SHIFT_DURATION - maxDeliveryStartTime, 'ms');
+
+        return utcNow >= endOfWork.valueOf();
+      });
     },
 
     loadPartialSetCarts: function(ids)
@@ -635,6 +702,12 @@ define([
 
       page.completedView.highlight();
       page.pendingView.highlight();
+
+      clearTimeout(page.timers.scheduleLineUpdate);
+      page.timers.scheduleLineUpdate = setTimeout(
+        page.scheduleLineUpdate.bind(page, null, false),
+        LINE_UPDATE_INTERVAL * 2
+      );
     },
 
     onWindowKeyDown: function(e)

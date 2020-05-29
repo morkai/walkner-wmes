@@ -58,7 +58,9 @@ exports.updater = {
 exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   broadcastTopics: [
     'events.saved',
-    'planning.generator.started', 'planning.generator.finished', 'planning.changes.created',
+    'planning.generator.started', 'planning.generator.finished',
+    'planning.changes.created',
+    'planning.stats.updated',
     'paintShop.orders.changed.*',
     'drilling.orders.changed.*',
     'wiring.orders.changed.*',
