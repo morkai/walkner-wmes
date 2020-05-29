@@ -500,7 +500,8 @@ define([
       if (viewport.currentDialog
         || e.target.tagName === 'INPUT'
         || e.target.tagName === 'TEXTAREA'
-        || !e.key)
+        || !e.key
+        || !/^[A-Za-z0-9]$/.test(e.key))
       {
         return;
       }
