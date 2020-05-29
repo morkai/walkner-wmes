@@ -4248,6 +4248,7 @@ app/wh/WhPendingComponents.js
 app/wh/WhPendingComponentsCollection.js
 app/wh/WhPendingPackaging.js
 app/wh/WhPendingPackagingCollection.js
+app/wh/PlanStatsCollection.js
 app/wh/templates/delivery/section.js
 app/wh/templates/delivery/item.js
 app/wh/templates/resolveAction.js
@@ -4416,6 +4417,7 @@ app/wh/WhPendingComponents.js
 app/wh/WhPendingComponentsCollection.js
 app/wh/WhPendingPackaging.js
 app/wh/WhPendingPackagingCollection.js
+app/wh/PlanStatsCollection.js
 app/wh/templates/delivery/section.js
 app/wh/templates/delivery/item.js
 app/wh/templates/resolveAction.js
