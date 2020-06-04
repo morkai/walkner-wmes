@@ -128,7 +128,7 @@ define([
           template: function()
           {
             return page.renderPartialHtml(resolveActionTemplate, {
-              pattern: window.ENV === 'development' ? '' : '^[0-9]{5,}$',
+              pattern: window.ENV !== 'production' ? '' : '^[0-9]{5,}$',
               value: page.lastPersonnelId || currentUser.data.cardUid
             });
           },

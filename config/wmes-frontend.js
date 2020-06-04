@@ -273,7 +273,7 @@ exports.updater = {
       frontendVersionKey: 'wh-delivery-components',
       path: '/wh-delivery-components/manifest.appcache',
       mainJsFile: '/wmes-wh-delivery-components.js',
-      mainCssFile: '/assets/wmes-wh-delivery-components.css',
+      mainCssFile: '/assets/wmes-wh-delivery.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
       dictionaryModules: whDictionaryModules
@@ -282,7 +282,16 @@ exports.updater = {
       frontendVersionKey: 'wh-delivery-packaging',
       path: '/wh-delivery-packaging/manifest.appcache',
       mainJsFile: '/wmes-wh-delivery-packaging.js',
-      mainCssFile: '/assets/wmes-wh-delivery-packaging.css',
+      mainCssFile: '/assets/wmes-wh-delivery.css',
+      template: manifestTemplates.wh,
+      frontendAppData: {},
+      dictionaryModules: whDictionaryModules
+    },
+    {
+      frontendVersionKey: 'wh-delivery-ps',
+      path: '/wh-delivery-ps/manifest.appcache',
+      mainJsFile: '/wmes-wh-delivery-ps.js',
+      mainCssFile: '/assets/wmes-wh-delivery.css',
       template: manifestTemplates.wh,
       frontendAppData: {},
       dictionaryModules: whDictionaryModules

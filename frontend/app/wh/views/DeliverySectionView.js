@@ -81,7 +81,7 @@ define([
         items: this.serializeItems(),
         actions: !!this.options.actions,
         resolveAction: !this.options.actions ? '' : this.renderPartialHtml(resolveActionTemplate, {
-          pattern: window.ENV === 'development' ? '' : '^[0-9]{5,}$',
+          pattern: window.ENV !== 'production' ? '' : '^[0-9]{5,}$',
           value: this.model.get('personnelId')
         })
       };
