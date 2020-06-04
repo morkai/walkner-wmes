@@ -395,7 +395,7 @@ exports.express = {
   sessionCookie: {
     httpOnly: true,
     path: '/',
-    maxAge: 3600 * 24 * 30 * 1000,
+    maxAge: 3600 * 24 * 90 * 1000,
     sameSite: 'lax',
     secure: false
   },
