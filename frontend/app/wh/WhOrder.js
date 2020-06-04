@@ -60,7 +60,8 @@ define([
     fmx: 0,
     kitter: 1,
     platformer: 2,
-    packer: 3
+    packer: 3,
+    painter: 4
   };
 
   return Model.extend({
@@ -124,7 +125,8 @@ define([
       obj.distIcons = {
         dist: DIST_STATUS_TO_ICON[obj.distStatus],
         fifo: DIST_STATUS_TO_ICON[obj.fifoStatus],
-        pack: DIST_STATUS_TO_ICON[obj.packStatus]
+        pack: DIST_STATUS_TO_ICON[obj.packStatus],
+        psDist: DIST_STATUS_TO_ICON[obj.psDistStatus]
       };
       obj.picklistDoneIcon = PICKLIST_DONE_TO_ICON[obj.picklistDone];
       obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
@@ -180,9 +182,26 @@ define([
 
       obj.clickable.platformer.picklist = false;
       obj.clickable.platformer.pickup = obj.clickable.platformer.pickup && obj.funcs[0].pickup === 'success';
-      obj.clickable.printLabels = canManage || isUser;
+
+      obj.clickable.painter.picklist = false;
+      obj.clickable.painter.pickup = obj.clickable.painter.pickup && obj.psStatus === 'finished';
+
+      obj.clickable.printLabels = canManage
+        || (isUser && userFunc._id !== 'platformer' && userFunc._id !== 'painter');
 
       return obj;
+    },
+
+    serializeProblemFuncs: function()
+    {
+      var problemFuncs = {};
+
+      ['lp10', 'fmx', 'kitter', 'platformer', 'packer', 'painter'].forEach(function(funcId)
+      {
+        problemFuncs[funcId] = this.serializeProblemFunc(funcId);
+      }, this);
+
+      return problemFuncs;
     },
 
     serializeProblemFunc: function(funcId)

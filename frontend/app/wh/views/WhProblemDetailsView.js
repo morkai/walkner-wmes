@@ -113,13 +113,7 @@ define([
         renderOrderInfo: orderInfoTemplate,
         renderFuncs: funcsTemplate,
         whOrder: this.model.serialize(this.plan, 0, this.whOrders.getFilters(this.plan)),
-        funcs: {
-          lp10: this.model.serializeProblemFunc('lp10'),
-          fmx: this.model.serializeProblemFunc('fmx'),
-          kitter: this.model.serializeProblemFunc('kitter'),
-          platformer: this.model.serializeProblemFunc('platformer'),
-          packer: this.model.serializeProblemFunc('packer')
-        }
+        funcs: this.model.serializeProblemFuncs()
       };
     },
 

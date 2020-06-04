@@ -56,14 +56,16 @@ define([
     fmx2: '13370012',
     kit: '13370021',
     kit2: '13370022',
-    pack: '13370031',
-    pack2: '13370032',
-    plat: '13370041',
-    plat2: '13370042',
+    plat: '13370031',
+    plat2: '13370032',
+    pack: '13370041',
+    pack2: '13370042',
     dfifo: '13370051',
     dfifo2: '13370052',
     dpack: '13370061',
-    dpack2: '13370061'
+    dpack2: '13370062',
+    ps: '13370071',
+    ps2: '13370072'
   };
 
   var LINE_UPDATE_INTERVAL = 10000;
@@ -569,8 +571,7 @@ define([
     {
       var page = this;
 
-      if ((page.pendingComponents && page.pendingComponents.isPendingSetCart(setCart))
-        || (page.pendingPackaging && page.pendingPackaging.isPendingSetCart(setCart)))
+      if (setCart.get('pending'))
       {
         return true;
       }
@@ -583,7 +584,7 @@ define([
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
       var maxDeliveryStartTime = page.whSettings.getMaxDeliveryStartTime();
       var startTime = new Date(setCart.get('startTime'));
-      var startTimeDiff = startTime - utcNow;
+      var startTimeDiff = startTime.getTime() - utcNow;
       var timeForDelivery = startTimeDiff < maxDeliveryStartTime;
       var minStartTimeHour = 6;
       var maxStartTimeHour = minStartTimeHour + maxDeliveryStartTime / 60000 / 60;

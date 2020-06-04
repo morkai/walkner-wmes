@@ -52,6 +52,18 @@
         <% }) %>
       </div>
       <div class="form-group">
+        <label class="control-label"><%- t('settings:planning:psPickupStatus') %></label>
+        <span class="help-block" style="display: block; margin-bottom: -5px"><%- t('settings:planning:psPickupStatus:help') %></span>
+        <% ['new', 'aside', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="wh.planning.psPickupStatus[]" value="<%- psStatus %>">
+            <%- t('planning', 'orders:psStatus:' + psStatus) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
         <label for="<%- id('planning-maxSetSize') %>"><%- t('settings:planning:maxSetSize') %></label>
         <input id="<%- id('planning-maxSetSize') %>" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
       </div>
@@ -99,6 +111,17 @@
     </div>
     <div class="panel-body" data-tab="delivery">
       <div class="form-group">
+        <label for="<%- id('planning-deliveryFuncs') %>" style="display: block; margin-bottom: -5px"><%- t('settings:planning:deliveryFuncs') %></label>
+        <% ['fmx', 'kitter', 'platformer', 'packer', 'painter', 'dist-components', 'dist-packaging'].forEach(function(func) { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="wh.planning.deliveryFuncs[]" value="<%- func %>">
+            <%- t('func:' + func) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
         <label for="<%- id('planning-minTimeForDelivery') %>"><%- t('settings:planning:minTimeForDelivery') %></label>
         <span class="help-block"><%- t('settings:planning:minTimeForDelivery:help') %></span>
         <input id="<%- id('planning-minTimeForDelivery') %>" class="form-control" name="wh.planning.minTimeForDelivery" type="number" step="1" min="1" max="480">
@@ -130,7 +153,7 @@
       </div>
     </div>
     <div class="panel-body" data-tab="users">
-      <% ['fmx', 'kitter', 'platformer', 'packer', 'dist-components', 'dist-packaging'].forEach(function(func) { %>
+      <% ['fmx', 'kitter', 'platformer', 'packer', 'painter', 'dist-components', 'dist-packaging'].forEach(function(func) { %>
       <div class="form-group">
         <label><%- t('func:' + func) %></label>
         <input type="text" autocomplete="new-password" data-user-func="<%- func %>">

@@ -110,6 +110,7 @@
     "NAVBAR:PLANNING:wh:pickup": "Pickup",
     "NAVBAR:PLANNING:wh:delivery:components": "FIFO delivery",
     "NAVBAR:PLANNING:wh:delivery:packaging": "Packaging delivery",
+    "NAVBAR:PLANNING:wh:delivery:ps": "Paint-shop delivery",
     "NAVBAR:PLANNING:wh:problems": "Problems",
     "NAVBAR:PLANNING:wh:deliveredOrders": "Delivered orders",
     "NAVBAR:PLANNING:wh:downtimes": "Downtimes",

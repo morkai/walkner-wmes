@@ -25,5 +25,6 @@
   "status:delivered": "Dostarczony",
 
   "kind:components": "FIFO",
-  "kind:packaging": "Opakowania"
+  "kind:packaging": "Opakowania",
+  "kind:ps": "Malarnia"
 }

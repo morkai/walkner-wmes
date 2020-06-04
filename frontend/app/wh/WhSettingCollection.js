@@ -68,9 +68,9 @@ define([
         return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
       }
 
-      if (/ignorePsStatus$/.test(id))
+      if (/(ignorePsStatus|psPickupStatus|deliveryFuncs)$/.test(id))
       {
-        return !Array.isArray(newValue) ? [] : newValue.filter(function(v) { return /^[a-z]{1,30}$/.test(v); });
+        return !Array.isArray(newValue) ? [] : newValue.filter(function(v) { return /^[a-z\-]{1,30}$/.test(v); });
       }
 
       if (/lineGroups$/.test(id))

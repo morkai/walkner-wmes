@@ -39,36 +39,36 @@
       <div class="wh-problems-prop-value"><%- item.finishTime %></div>
     </div>
   </div>
-  <% ['lp10', 'fmx', 'kitter', 'platformer', 'packer'].forEach(function(func) { %>
-  <div class="wh-problems-column wh-problems-func <%- item[func].problem ? '' : 'wh-problems-func-noProblem' %> <%- item[func].className %>">
+  <% Object.keys(item.funcs).forEach(function(func) { %>
+  <div class="wh-problems-column wh-problems-func <%- item.funcs[func].problem ? '' : 'wh-problems-func-noProblem' %> <%- item.funcs[func].className %>">
     <div class="wh-problems-prop">
-      <div class="wh-problems-prop-name"><%- item[func].label %></div>
-      <div class="wh-problems-prop-value"><%- item[func].status %></div>
+      <div class="wh-problems-prop-name"><%- item.funcs[func].label %></div>
+      <div class="wh-problems-prop-value"><%- item.funcs[func].status %></div>
     </div>
-    <% if (item[func].user) { %>
+    <% if (item.funcs[func].user) { %>
     <div class="wh-problems-prop">
       <div class="wh-problems-prop-name"><%- t('wh', 'prop:user') %></div>
-      <div class="wh-problems-prop-value"><%- item[func].user %></div>
+      <div class="wh-problems-prop-value"><%- item.funcs[func].user %></div>
     </div>
     <% } %>
-    <% if (item[func].carts) { %>
+    <% if (item.funcs[func].carts) { %>
     <div class="wh-problems-prop">
       <div class="wh-problems-prop-name"><%- t('wh', 'prop:carts') %></div>
-      <div class="wh-problems-prop-value"><%- item[func].carts %></div>
+      <div class="wh-problems-prop-value"><%- item.funcs[func].carts %></div>
     </div>
     <% } %>
-    <% if (item[func].problemArea) { %>
+    <% if (item.funcs[func].problemArea) { %>
     <div class="wh-problems-prop">
       <div class="wh-problems-prop-name"><%- t('wh', 'prop:problemArea') %></div>
-      <div class="wh-problems-prop-value"><%- item[func].problemArea %></div>
+      <div class="wh-problems-prop-value"><%- item.funcs[func].problemArea %></div>
     </div>
     <% } %>
   </div>
-  <% if (item[func].problem) { %>
-  <div class="wh-problems-column wh-problems-problem <%- item[func].className %>">
+  <% if (item.funcs[func].problem) { %>
+  <div class="wh-problems-column wh-problems-problem <%- item.funcs[func].className %>">
     <div class="wh-problems-prop">
       <div class="wh-problems-prop-name"><%- t('wh', 'prop:problem') %></div>
-      <div class="wh-problems-prop-value"><%- item[func].problem %></div>
+      <div class="wh-problems-prop-value"><%- item.funcs[func].problem %></div>
     </div>
   </div>
   <% } %>

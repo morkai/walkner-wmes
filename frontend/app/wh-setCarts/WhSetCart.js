@@ -76,7 +76,7 @@ define([
   }, {
 
     STATUSES: ['completing', 'completed', 'delivering', 'delivered'],
-    KINDS: ['components', 'packaging'],
+    KINDS: ['components', 'packaging', 'ps'],
 
     parse: function(obj)
     {

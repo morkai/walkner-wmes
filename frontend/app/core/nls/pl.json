@@ -117,6 +117,7 @@
   "NAVBAR:PLANNING:wh:pickup": "Kompletacja",
   "NAVBAR:PLANNING:wh:delivery:components": "Wysyłka FIFO",
   "NAVBAR:PLANNING:wh:delivery:packaging": "Wysyłka opakowań",
+  "NAVBAR:PLANNING:wh:delivery:ps": "Wysyłka malarnii",
   "NAVBAR:PLANNING:wh:problems": "Problemy",
   "NAVBAR:PLANNING:wh:deliveredOrders": "Dostarczone zlecenia",
   "NAVBAR:PLANNING:wh:downtimes": "Przestoje",

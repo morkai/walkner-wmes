@@ -1,6 +1,6 @@
 @media (min-width: 768px) {
   .wh-set-dialog .modal-dialog {
-    width: 1200px;
+    width: 1265px;
   }
 }
 .wh-set {
@@ -153,7 +153,9 @@
 .wh-set-editor-carts .form-control::-webkit-input-placeholder {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-.wh-set-editor-carts[data-func="platformer"] {
+.wh-set-editor-carts[data-func="platformer"],
+.wh-set-editor-carts[data-func="painter"],
+.wh-set-editor-problem[data-func="painter"] {
   margin-left: -200px;
 }
 .wh-set-editor-carts.wh-is-multiline {
@@ -265,4 +267,8 @@ th[data-func] > .wh-set-summary {
   width: 112px;
   white-space: nowrap;
   overflow: hidden;
+}
+.wh-set-action > .fa[tabindex]:focus {
+  outline: 2px solid #0af;
+  outline-offset: 3px;
 }

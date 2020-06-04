@@ -73,7 +73,9 @@ define([
     dfifo: '13370051',
     dfifo2: '13370052',
     dpack: '13370061',
-    dpack2: '13370061'
+    dpack2: '13370062',
+    ps: '13370071',
+    ps2: '13370072'
   };
 
   return View.extend({

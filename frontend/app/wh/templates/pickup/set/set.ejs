@@ -15,7 +15,7 @@
     <th class="text-center" data-prop="picklistDone"><%- t('prop:picklist') %></th>
     <% items[0].funcs.forEach(function(func) { %>
     <th class="wh-set-separator"></th>
-    <th class="text-center" data-prop="func" data-func="<%- func._id %>" colspan="<%- func._id === 'platformer' ? 1 : 2%>">
+    <th class="text-center" data-prop="func" data-func="<%- func._id %>" colspan="<%- func._id === 'platformer' || func._id === 'painter' ? 1 : 2 %>">
       <%- t('prop:' + func._id) %>
       <span id="<%- idPrefix %>-<%- func._id %>" class="wh-set-summary">?</span>
     </th>

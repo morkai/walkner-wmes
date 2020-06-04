@@ -6,22 +6,22 @@
     <td data-prop="startTime"><%- item.startTime %></td>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <td class="wh-set-action <%- item.clickable.picklistDone ? 'is-clickable' : '' %>" data-prop="picklistDone" data-status="<%- item.picklistDone %>" rowspan="2">
-      <i class="fa fa-play"></i>
+      <i class="fa fa-play" <%- item.clickable.picklistDone ? 'tabindex="0"' : '' %>></i>
     </td>
     <% item.funcs.forEach(function(func) { %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
-    <% if (func._id !== 'platformer') { %>
+    <% if (func._id !== 'platformer' && func._id !== 'painter') { %>
     <td class="wh-set-action <%- item.clickable[func._id].picklist ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="picklist" data-status="<%- func.picklist %>" rowspan="2">
-      <i class="fa fa-file-text-o"></i>
+      <i class="fa fa-file-text-o" <%- item.clickable[func._id].picklist ? 'tabindex="0"' : '' %>></i>
     </td>
     <% } %>
     <td class="wh-set-action <%- item.clickable[func._id].pickup ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="pickup" data-status="<%- func.pickup %>" data-popover="pickup" rowspan="2">
-      <i class="fa fa-shopping-cart"></i>
+      <i class="fa fa-shopping-cart" <%- item.clickable[func._id].pickup ? 'tabindex="0"' : '' %>></i>
     </td>
     <% }) %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <td class="wh-set-actions" rowspan="2">
-      <button class="btn btn-default" type="button" data-action="printLabels" <%- !item.clickable.printLabels ? 'disabled style="visibility: hidden"' : '' %>><i class="fa fa-print"></i></button>
+      <button class="btn btn-default" type="button" data-action="printLabels" <%- !item.clickable.printLabels ? 'disabled style="visibility: hidden"' : 'tabindex="0"' %>><i class="fa fa-print"></i></button>
     </td>
   </tr>
   <tr>

@@ -212,104 +212,115 @@ define([
         },
         content: function()
         {
-          var whOrder = view.whOrders.get($(this).closest('.wh-list-item')[0].dataset.id);
-
-          if (!whOrder)
-          {
-            return '';
-          }
-
-          var columnId = this.dataset.columnId;
-
-          if (columnId === 'line')
-          {
-            var lines = whOrder.get('lines');
-            var redirLines = whOrder.get('redirLines');
-
-            return view.renderPartial(linePopoverTemplate, {
-              orderId: whOrder.id,
-              lines: lines.map(function(whOrderLine, i)
-              {
-                var whLine = view.whLines.get(whOrderLine._id) || new WhLine({_id: whOrderLine._id});
-                var redirLine = view.whLines.get(redirLines && redirLines[i] || null);
-                var line = whLine.toJSON();
-
-                if (redirLine)
-                {
-                  line._id = redirLine.id;
-                  line.redirLine = whLine.id;
-                }
-
-                return line;
-              })
-            });
-          }
-
-          var templateData = {
-            user: null,
-            status: null,
-            carts: [],
-            problemArea: '',
-            comment: '',
-            qtyPerLine: []
-          };
-
-          if (columnId === 'qty')
-          {
-            templateData.qtyPerLine = whOrder.get('lines').map(function(line)
-            {
-              return {
-                line: line._id,
-                qty: line.qty,
-                max: whOrder.get('qty')
-              };
-            });
-          }
-          else if (columnId === 'fifoStatus' || columnId === 'packStatus')
-          {
-            templateData.status = view.t('status:' + whOrder.get(columnId));
-          }
-          else if (columnId === 'picklist')
-          {
-            var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
-            var picklistDone = whOrder.get('picklistDone');
-
-            if (picklistDone !== 'pending')
-            {
-              templateData.user = picklistFunc ? picklistFunc.user.label : null;
-              templateData.status = view.t('status:picklistDone:' + picklistDone);
-            }
-            else
-            {
-              templateData.status = view.t('status:pending');
-            }
-          }
-          else if (columnId === 'fmx'
-            || columnId === 'kitter'
-            || columnId === 'platformer'
-            || columnId === 'packer')
-          {
-            var func = whOrder.getFunc(this.dataset.columnId);
-
-            templateData.status = view.t('status:' + func.status);
-            templateData.carts = func.carts;
-            templateData.problemArea = func.problemArea;
-            templateData.comment = func.comment;
-
-            if (func.user)
-            {
-              templateData.user = func.user.label;
-            }
-          }
-
-          return view.renderPartial(popoverTemplate, templateData);
+          return view.renderPopoverContent(this);
         }
       });
     },
 
+    renderPopoverContent: function(el)
+    {
+      var view = this;
+      var whOrder = view.whOrders.get($(el).closest('.wh-list-item')[0].dataset.id);
+
+      if (!whOrder)
+      {
+        return '';
+      }
+
+      var columnId = el.dataset.columnId;
+
+      if (columnId === 'line')
+      {
+        var lines = whOrder.get('lines');
+        var redirLines = whOrder.get('redirLines');
+
+        return view.renderPartial(linePopoverTemplate, {
+          orderId: whOrder.id,
+          lines: lines.map(function(whOrderLine, i)
+          {
+            var whLine = view.whLines.get(whOrderLine._id) || new WhLine({_id: whOrderLine._id});
+            var redirLine = view.whLines.get(redirLines && redirLines[i] || null);
+            var line = whLine.toJSON();
+
+            if (redirLine)
+            {
+              line._id = redirLine.id;
+              line.redirLine = whLine.id;
+            }
+
+            return line;
+          })
+        });
+      }
+
+      var templateData = {
+        user: null,
+        status: null,
+        carts: [],
+        problemArea: '',
+        comment: '',
+        qtyPerLine: []
+      };
+
+      switch (columnId)
+      {
+        case 'qty':
+          templateData.qtyPerLine = whOrder.get('lines').map(function(line)
+          {
+            return {
+              line: line._id,
+              qty: line.qty,
+              max: whOrder.get('qty')
+            };
+          });
+          break;
+
+        case 'fifoStatus':
+        case 'packStatus':
+        case 'psDistStatus':
+          templateData.status = view.t('status:' + whOrder.get(columnId));
+          break;
+
+        case 'picklist':
+          var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
+          var picklistDone = whOrder.get('picklistDone');
+
+          if (picklistDone !== 'pending')
+          {
+            templateData.user = picklistFunc ? picklistFunc.user.label : null;
+            templateData.status = view.t('status:picklistDone:' + picklistDone);
+          }
+          else
+          {
+            templateData.status = view.t('status:pending');
+          }
+          break;
+
+        case 'fmx':
+        case 'kitter':
+        case 'platformer':
+        case 'packer':
+        case 'painter':
+          var func = whOrder.getFunc(columnId);
+
+          templateData.status = view.t('status:' + func.status);
+          templateData.carts = func.carts;
+          templateData.problemArea = func.problemArea;
+          templateData.comment = func.comment;
+
+          if (func.user)
+          {
+            templateData.user = func.user.label;
+          }
+          break;
+      }
+
+      return view.renderPartial(popoverTemplate, templateData);
+    },
+
     setUpStickyHeaders: function()
     {
-      this.$stickyHeaders = $('<div class="planning-wh-list wh-list-sticky"></div>').html(
+      this.$stickyHeaders = $('<div class="planning-wh-list wh-list-sticky hidden"></div>').html(
         '<table class="planning-mrp-lineOrders-table">'
         + this.$('thead').first()[0].outerHTML
         + '</table>'
@@ -348,7 +359,7 @@ define([
         return;
       }
 
-      this.$stickyHeaders[0].classList.toggle('hidden', window.scrollY < this.el.offsetTop);
+      this.$stickyHeaders[0].classList.toggle('hidden', window.scrollY <= this.el.offsetTop);
     },
 
     hideMenu: function()

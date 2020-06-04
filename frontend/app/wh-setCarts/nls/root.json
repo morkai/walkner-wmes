@@ -26,7 +26,8 @@
     "status:delivered": "Delivered",
 
     "kind:components": "FIFO",
-    "kind:packaging": "Packaging"
+    "kind:packaging": "Packaging",
+    "kind:ps": "Paint-shop"
   },
   "pl": true
 }

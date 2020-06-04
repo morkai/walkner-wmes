@@ -102,11 +102,7 @@ define([
         date: time.utc.format(whOrder.get('date'), 'LL'),
         startTime: time.utc.format(whOrder.get('startTime'), 'L HH:mm:ss'),
         finishTime: time.utc.format(whOrder.get('finishTime'), 'L HH:mm:ss'),
-        lp10: whOrder.serializeProblemFunc('lp10'),
-        fmx: whOrder.serializeProblemFunc('fmx'),
-        kitter: whOrder.serializeProblemFunc('kitter'),
-        platformer: whOrder.serializeProblemFunc('platformer'),
-        packer: whOrder.serializeProblemFunc('packer'),
+        funcs: whOrder.serializeProblemFuncs(),
         urls: urls
       };
     },

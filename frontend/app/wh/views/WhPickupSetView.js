@@ -68,13 +68,51 @@ define([
     modelProperty: 'whOrders',
 
     events: {
+      'focus .fa[tabindex]': function(e)
+      {
+        var $action = this.$(e.target).closest('.wh-set-action');
+        var $item = $action.closest('.wh-set-item');
+
+        this.focused.whOrderId = $item[0].dataset.id;
+        this.focused.func = $action[0].dataset.func;
+        this.focused.prop = $action[0].dataset.prop;
+      },
+      'keydown [tabindex]': function(e)
+      {
+        if (e.originalEvent.code !== 'Tab'
+          || this.$editor
+          || contextMenu.isVisible(this))
+        {
+          return;
+        }
+
+        if (e.shiftKey && e.currentTarget === this.el.querySelector('.fa[tabindex]'))
+        {
+          this.$('[tabindex]').last().focus();
+
+          return false;
+        }
+        else if (!e.shiftKey && e.currentTarget === this.$('[tabindex]').last()[0])
+        {
+          this.el.querySelector('.fa[tabindex]').focus();
+
+          return false;
+        }
+      },
+      'keyup .is-clickable': function(e)
+      {
+        var code = e.originalEvent.code;
+
+        if (code === 'Enter' || code === 'Space')
+        {
+          this.timers.showUpdateMenu = setTimeout(this.showUpdateMenuByEvent.bind(this, e), 1);
+
+          return false;
+        }
+      },
       'click .is-clickable': function(e)
       {
-        var whOrder = this.whOrders.get(this.$(e.target).closest('.wh-set-item').attr('data-id'));
-        var func = e.currentTarget.dataset.func;
-        var prop = e.currentTarget.dataset.prop;
-
-        this.showUpdateMenu(whOrder, func, prop, e);
+        this.showUpdateMenuByEvent(e);
       },
       'contextmenu .wh-set-action': function()
       {
@@ -101,6 +139,7 @@ define([
       'click': function()
       {
         this.hideEditor();
+        this.focus();
       },
       'click .btn[data-action="printLabels"]': function(e)
       {
@@ -142,6 +181,8 @@ define([
               .find('.fa')
               .removeClass('fa-spinner fa-spin')
               .addClass('fa-print');
+
+            view.focus();
           });
 
           return false;
@@ -155,9 +196,19 @@ define([
       }
     },
 
+    localTopics: {
+      'planning.contextMenu.hidden': 'focus'
+    },
+
     initialize: function()
     {
       var view = this;
+
+      view.focused = {
+        whOrderId: null,
+        func: null,
+        prop: null
+      };
 
       view.listenTo(view.plan.sapOrders, 'reset', view.onOrdersReset);
 
@@ -171,6 +222,7 @@ define([
           if (view.$editor)
           {
             view.hideEditor();
+            view.focus();
           }
           else
           {
@@ -244,6 +296,8 @@ define([
       {
         $('.wh-set-popover').remove();
       });
+
+      view.focus();
     },
 
     scheduleRender: function()
@@ -270,12 +324,7 @@ define([
       var qtyPlan = 0;
       var qtyTodo = 0;
       var duration = 0;
-      var funcs = {
-        fmx: '',
-        kitter: '',
-        platformer: '',
-        packer: ''
-      };
+      var funcs = {};
 
       this.$('.wh-set-item').each(function()
       {
@@ -299,6 +348,11 @@ define([
 
         whOrder.get('funcs').forEach(function(func)
         {
+          if (funcs[func._id] === undefined)
+          {
+            funcs[func._id] = '';
+          }
+
           if (func.user)
           {
             funcs[func._id] = func.user.label;
@@ -323,9 +377,64 @@ define([
       });
     },
 
+    focus: function()
+    {
+      if (this.$editor || contextMenu.isVisible(this))
+      {
+        return;
+      }
+
+      var focused = this.focused;
+      var $item = this.$('.wh-set-item[data-id="' + focused.whOrderId + '"]');
+      var actionSelector = 'td[data-prop="' + focused.prop + '"]';
+
+      if (focused.func)
+      {
+        actionSelector += '[data-func="' + focused.func + '"]';
+      }
+
+      var $action = $item.find(actionSelector);
+      var $focus = $action.find('.fa[tabindex]');
+
+      if (!$focus.length)
+      {
+        $action = this.$('.is-clickable').first();
+
+        if (!$action.length)
+        {
+          focused.whOrderId = null;
+          focused.func = null;
+          focused.prop = null;
+
+          return;
+        }
+
+        $item = $action.closest('.wh-set-item');
+        $focus = $action.find('.fa[tabindex]');
+
+        focused.whOrderId = $item[0].dataset.id;
+        focused.func = $action[0].dataset.func;
+        focused.prop = $action[0].dataset.prop;
+      }
+
+      if ($action.hasClass('is-clickable'))
+      {
+        $focus.focus();
+      }
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
+    },
+
+    showUpdateMenuByEvent: function(e)
+    {
+      var whOrder = this.whOrders.get(this.$(e.currentTarget).closest('.wh-set-item').attr('data-id'));
+      var func = e.currentTarget.dataset.func;
+      var prop = e.currentTarget.dataset.prop;
+
+      this.showUpdateMenu(whOrder, func, prop, e);
     },
 
     showUpdateMenu: function(whOrder, func, prop, e)
@@ -333,6 +442,22 @@ define([
       var view = this;
       var canManage = user.isAllowedTo('WH:MANAGE');
       var menu = [];
+      var $item = view.$('.wh-set-item[data-id="' + whOrder.id + '"]');
+      var actionSelector = '.is-clickable[data-prop="' + prop + '"]';
+
+      if (func)
+      {
+        actionSelector += '[data-func="' + func + '"]';
+      }
+
+      var $action = $item.find(actionSelector);
+
+      if ($action.length)
+      {
+        view.focused.whOrderId = whOrder.id;
+        view.focused.func = func;
+        view.focused.prop = prop;
+      }
 
       if (!canManage
         && prop === 'pickup'
@@ -363,7 +488,9 @@ define([
             return;
           }
 
-          if (func === 'platformer' && prop === 'pickup' && item.value === 'failure')
+          if (func === 'platformer'
+            && prop === 'pickup'
+            && item.value === 'failure')
           {
             return;
           }
@@ -378,7 +505,30 @@ define([
 
       if (menu.length)
       {
-        contextMenu.show(view, e.pageY - 17, e.pageX - 17, {
+        var top = e.pageY;
+        var left = e.pageX;
+
+        if (!top)
+        {
+          var $icon = $action.find('.fa');
+
+          if (!$icon.length)
+          {
+            return;
+          }
+
+          var box = $icon[0].getBoundingClientRect();
+
+          top = Math.round(box.y + box.height / 2) + document.scrollingElement.scrollTop;
+          left = Math.round(box.x + box.width / 2);
+        }
+        else
+        {
+          top -= 17;
+          left -= 17;
+        }
+
+        contextMenu.show(view, top, left, {
           className: 'wh-set-menu',
           menu: menu
         });
@@ -450,6 +600,7 @@ define([
         if (e.key === 'Escape')
         {
           view.hideEditor();
+          view.focus();
 
           return false;
         }
@@ -478,7 +629,8 @@ define([
         .removeClass('is-clickable')
         .find('.fa')
         .removeClass()
-        .addClass('fa fa-spinner fa-spin');
+        .addClass('fa fa-spinner fa-spin')
+        .blur();
 
       view.updateHandlers[prop].call(view, newData, newValue, func, options || {}, function(update)
       {
@@ -873,6 +1025,16 @@ define([
           this.model.user
         )
       }));
+
+      if (this.focused.whOrderId === whOrder.id)
+      {
+        this.focus();
+      }
+    },
+
+    onDialogShown: function()
+    {
+      this.focus();
     }
 
   });
