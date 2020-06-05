@@ -3,9 +3,10 @@
   "BREADCRUMB:browse": "Linie",
 
   "PROPERTY:_id": "ID",
-  "PROPERTY:pickup": "Skompletowane",
-  "PROPERTY:components": "Dostępne",
-  "PROPERTY:packaging": "Wysyłka opakowań",
+  "PROPERTY:pickup": "Kompletacja",
+  "PROPERTY:pickup:started": "Kompletowane",
+  "PROPERTY:pickup:finished": "Skompletowane",
+  "PROPERTY:available": "Dostępne",
   "PROPERTY:sets": "Sety",
   "PROPERTY:qty": "Sztuki",
   "PROPERTY:time": "Czas",

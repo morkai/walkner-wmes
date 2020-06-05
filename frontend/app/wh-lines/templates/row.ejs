@@ -1,16 +1,19 @@
 <tr class="list-item" data-id="<%= row._id %>">
-  <td class="is-min text-fixed"><%= row._id %></td>
-  <td class="is-min is-number"><%- row.pickup.sets.toLocaleString() %></td>
-  <td class="is-min is-number"><%- row.pickup.qty.toLocaleString() %></td>
-  <td class="is-min is-number"><%- time.toString(row.pickup.time / 1000, true, false) %></td>
+  <td class="is-min text-fixed wh-lines-group-start"><%= row._id %></td>
+  <td class="is-min is-number"><%- row.pickup.started.sets.toLocaleString() %></td>
+  <td class="is-min is-number"><%- row.pickup.started.qty.toLocaleString() %></td>
+  <td class="is-min is-number wh-lines-group-start"><%- time.toString(row.pickup.started.time / 1000, true, false) %></td>
+  <td class="is-min is-number"><%- row.pickup.finished.sets.toLocaleString() %></td>
+  <td class="is-min is-number"><%- row.pickup.finished.qty.toLocaleString() %></td>
+  <td class="is-min is-number wh-lines-group-start"><%- time.toString(row.pickup.finished.time / 1000, true, false) %></td>
   <td class="is-min is-number">
     <a href="#wh/deliveredOrders?line=<%= row._id %>&status=in=(todo,blocked)&sort(date,set,startTime)&limit(-1337)">
-      <%- row.components.qty.toLocaleString() %>
+      <%- row.available.qty.toLocaleString() %>
     </a>
   </td>
-  <td class="is-min is-number">
+  <td class="is-min is-number wh-lines-group-start">
     <a href="#wh/deliveredOrders?line=<%= row._id %>&status=in=(todo,blocked)&sort(date,set,startTime)&limit(-1337)">
-      <%- time.toString(row.components.time / 1000, true, false) %>
+      <%- time.toString(row.available.time / 1000, true, false) %>
     </a>
   </td>
   <td class="is-min text-fixed" data-id="redirLine">

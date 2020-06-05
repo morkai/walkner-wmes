@@ -167,8 +167,8 @@ define([
         ignoredLines.push({
           _id: whLine.id,
           mrps: ignoredLine.mrps.join(', '),
-          completed: time.toString(whLine.get('pickup').time / 1000, true, false),
-          delivered: time.toString(whLine.get('components').time / 1000, true, false),
+          completed: time.toString(whLine.get('pickup').finished.time / 1000, true, false),
+          delivered: time.toString(whLine.get('available').time / 1000, true, false),
           nextShift: whLine.serializeNextShiftAt(),
           startTime: time.utc.format(ignoredLine.startTime, 'L, HH:mm:ss'),
           startedPlan: time.utc.format(whLine.get('startedPlan'), 'YYYY-MM-DD')
@@ -184,8 +184,8 @@ define([
 
         remainingLines.push({
           _id: whLine.id,
-          completed: time.toString(whLine.get('pickup').time / 1000, true, false),
-          delivered: time.toString(whLine.get('components').time / 1000, true, false),
+          completed: time.toString(whLine.get('pickup').finished.time / 1000, true, false),
+          delivered: time.toString(whLine.get('available').time / 1000, true, false),
           nextShift: whLine.serializeNextShiftAt(),
           startedPlan: time.utc.format(whLine.get('startedPlan'), 'YYYY-MM-DD')
         });
@@ -232,8 +232,8 @@ define([
         return;
       }
 
-      $row.find('[data-prop="completed"]').text(time.toString(whLine.get('pickup').time / 1000, true, false));
-      $row.find('[data-prop="delivered"]').text(time.toString(whLine.get('components').time / 1000, true, false));
+      $row.find('[data-prop="completed"]').text(time.toString(whLine.get('pickup').finished.time / 1000, true, false));
+      $row.find('[data-prop="delivered"]').text(time.toString(whLine.get('available').time / 1000, true, false));
       $row.find('[data-prop="nextShift"]').text(whLine.serializeNextShiftAt());
       $row.find('.form-control').val(time.utc.format(whLine.get('startedPlan'), 'YYYY-MM-DD'));
     },

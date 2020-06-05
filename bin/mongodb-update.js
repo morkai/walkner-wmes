@@ -26,6 +26,89 @@ db.oldwhsetcarts.updateMany({'pending': {$exists: false}}, {$set: {
   pending: false
 }});
 
+db.oldwhlines.find({}).forEach(whLine =>
+{
+  if (whLine.components)
+  {
+    whLine.available = whLine.components;
+
+    delete whLine.components;
+  }
+
+  delete whLine.packaging;
+
+  var whOrders = db.oldwhorders.find({
+    distStatus: 'pending',
+    'lines._id': whLine._id,
+    status: {$in: ['started', 'finished']}
+  }).toArray();
+  var sets = {};
+
+  whOrders.forEach(whOrder =>
+  {
+    const whOrderLine = whOrder.lines.find(({_id}) => _id === whLine._id);
+
+    if (!whOrderLine)
+    {
+      return;
+    }
+
+    const key = `${whOrder.date.getTime()}:${whOrder.set}`;
+
+    if (!sets[key])
+    {
+      sets[key] = {
+        started: 0,
+        finished: 0,
+        orders: []
+      };
+    }
+
+    const set = sets[key];
+
+    set[whOrder.status] += 1;
+    set.orders.push(whOrderLine);
+  });
+
+  var pickup = {
+    started: {
+      sets: 0,
+      qty: 0,
+      time: 0
+    },
+    finished: {
+      sets: 0,
+      qty: 0,
+      time: 0
+    },
+    total: {
+      sets: 0,
+      qty: 0,
+      time: 0
+    }
+  };
+
+  Object.values(sets).forEach(set =>
+  {
+    const status = set.started ? 'started' : 'finished';
+
+    pickup.total.sets += 1;
+    pickup[status].sets += 1;
+
+    set.orders.forEach(({qty, pceTime}) =>
+    {
+      pickup.total.qty += qty;
+      pickup.total.time += qty * pceTime;
+      pickup[status].qty += qty;
+      pickup[status].time += qty * pceTime;
+    });
+  });
+
+  whLine.pickup = pickup;
+
+  db.oldwhlines.replaceOne({_id: whLine._id}, whLine);
+});
+
 db.oldwhlinesnapshots.createIndex({line: 1, time: -1});
 db.oldwhlinesnapshots.createIndex({time: -1});
 db.oldwhorders.dropIndex('lines._id_1_date_-1');
@@ -35,6 +118,8 @@ db.oldwhsetcarts.dropIndex('line_1_date_-1');
 db.paintshoporders.dropIndex('status_1');
 db.plans.dropIndex('orders._id_-1');
 db.users.dropIndex('lastName_1');
+db.oldwhpendingcomponents.drop();
+db.oldwhpendingpackagings.drop();
 
 try
 {

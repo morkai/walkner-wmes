@@ -4,9 +4,10 @@
     "BREADCRUMB:browse": "Lines",
 
     "PROPERTY:_id": "ID",
-    "PROPERTY:pickup": "Picked",
-    "PROPERTY:components": "Available",
-    "PROPERTY:packaging": "Packaging delivery",
+    "PROPERTY:pickup": "Pickup",
+    "PROPERTY:pickup:started": "Picking up",
+    "PROPERTY:pickup:finished": "Picked",
+    "PROPERTY:available": "Available",
     "PROPERTY:sets": "Sets",
     "PROPERTY:qty": "PCE",
     "PROPERTY:time": "Time",

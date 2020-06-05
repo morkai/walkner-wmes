@@ -16,8 +16,6 @@ define([
   'app/wh-setCarts/WhSetCartCollection',
   'app/wh/settings',
   'app/wh/WhOrderCollection',
-  'app/wh/WhPendingComponentsCollection',
-  'app/wh/WhPendingPackagingCollection',
   'app/wh/PlanStatsCollection',
   'app/wh/views/DeliverySectionView',
   'app/wh/views/DeliverySetView',
@@ -40,8 +38,6 @@ define([
   WhSetCartCollection,
   whSettings,
   WhOrderCollection,
-  WhPendingComponentsCollection,
-  WhPendingPackagingCollection,
   PlanStatsCollection,
   DeliverySectionView,
   DeliverySetView,
@@ -95,16 +91,6 @@ define([
         'old.wh.setCarts.updated': 'onSetCartsUpdated',
         'planning.stats.updated': 'onPlanStatsUpdated'
       };
-
-      if (this.pendingComponents)
-      {
-        topics['old.wh.pending.components.updated'] = 'onPendingComponentsUpdated';
-      }
-
-      if (this.pendingPackaging)
-      {
-        topics['old.wh.pending.packaging.updated'] = 'onPendingPackagingUpdated';
-      }
 
       return topics;
     },
@@ -171,19 +157,6 @@ define([
         rqlQuery: 'limit(0)',
         paginate: false
       }), this);
-
-      this.pendingComponents = bindLoadingMessage(new WhPendingComponentsCollection(null, {
-        rqlQuery: 'limit(0)',
-        paginate: false
-      }), this);
-
-      if (this.options.kind === 'packaging')
-      {
-        this.pendingPackaging = bindLoadingMessage(new WhPendingPackagingCollection(null, {
-          rqlQuery: 'limit(0)',
-          paginate: false
-        }), this);
-      }
 
       this.setCarts = bindLoadingMessage(new WhSetCartCollection(null, {
         rqlQuery: 'limit(0)&status=in=(completed,delivering)&kind=' + this.options.kind,
@@ -268,8 +241,6 @@ define([
       return when(
         this.planStats.fetch({reset: true}),
         this.lines.fetch({reset: true}),
-        this.pendingComponents ? this.pendingComponents.fetch({reset: true}) : null,
-        this.pendingPackaging ? this.pendingPackaging.fetch({reset: true}) : null,
         this.setCarts.fetch({reset: true})
       );
     },
@@ -286,8 +257,6 @@ define([
         page.whSettings.fetch({reset: true}),
         page.planStats.fetch({reset: true}),
         page.lines.fetch({reset: true}),
-        page.pendingComponents ? page.pendingComponents.fetch({reset: true}) : null,
-        page.pendingPackaging ? page.pendingPackaging.fetch({reset: true}) : null,
         page.setCarts.fetch({reset: true})
       ));
 
@@ -324,38 +293,6 @@ define([
       {
         this.promised(this.lines.handleUpdate(message));
       }
-    },
-
-    onPendingComponentsUpdated: function(message)
-    {
-      this.onPendingDeliveriesUpdated(this.pendingComponents, message);
-    },
-
-    onPendingPackagingUpdated: function(message)
-    {
-      this.onPendingDeliveriesUpdated(this.pendingPackaging, message);
-    },
-
-    onPendingDeliveriesUpdated: function(pendingDeliveries, message)
-    {
-      var page = this;
-
-      if (page.model.get('loading'))
-      {
-        return;
-      }
-
-      (message.deleted || []).forEach(function(pendingDelivery)
-      {
-        pendingDeliveries.remove(pendingDelivery._id);
-        page.scheduleLineUpdate(null, true);
-      });
-
-      (message.added || []).forEach(function(pendingDelivery)
-      {
-        pendingDeliveries.add(pendingDelivery);
-        page.scheduleLineUpdate(null, true);
-      });
     },
 
     onLineUpdated: function(line)
@@ -598,7 +535,7 @@ define([
           return false;
         }
 
-        if (whLine.get('components').time >= minTimeForDelivery)
+        if (whLine.get('available').time >= minTimeForDelivery)
         {
           return false;
         }

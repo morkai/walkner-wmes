@@ -34,17 +34,25 @@
   <% } %>
   <% if (line.whLine) { %>
   <tr>
-    <th><%- t('lines:wh:pickup') %></th>
+    <th><%- t('lines:wh:pickup:started') %></th>
     <td>
-      <strong><%- t('lines:wh:sets') %>: </strong><%= line.whLine.pickup.sets %>&nbsp;&nbsp;
-      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.pickup.qty %>&nbsp;&nbsp;
-      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.pickup.time / 1000, true) %>
+      <strong><%- t('lines:wh:sets') %>: </strong><%= line.whLine.pickup.started.sets.toLocaleString() %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.pickup.started.qty.toLocaleString() %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.pickup.started.time / 1000, true) %>
+    </td>
+  </tr>
+  <tr>
+    <th><%- t('lines:wh:pickup:finished') %></th>
+    <td>
+      <strong><%- t('lines:wh:sets') %>: </strong><%= line.whLine.pickup.finished.sets.toLocaleString() %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.pickup.finished.qty.toLocaleString() %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.pickup.finished.time / 1000, true) %>
     </td>
   </tr>
   <tr>
     <th><%- t('lines:wh:components') %></th>
     <td>
-      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.components.qty %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.components.qty.toLocaleString() %>&nbsp;&nbsp;
       <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.components.time / 1000, true) %>
     </td>
   </tr>

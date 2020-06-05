@@ -15,35 +15,54 @@
     <% }) %>
   </tr>
   <tr>
-    <td rowspan="3"><%- t('wh-lines', 'PROPERTY:pickup') %></td>
+    <td rowspan="3"><%- t('wh-lines', 'PROPERTY:pickup:started') %></td>
     <td><%- t('wh-lines', 'PROPERTY:sets') %></td>
     <% lines.forEach(function(line) { %>
-      <td class="text-center"><%- line.pickup.sets %></td>
+      <td class="text-center"><%- line.pickup.started.sets.toLocaleString() %></td>
     <% }) %>
   </tr>
   <tr>
     <td><%- t('wh-lines', 'PROPERTY:qty') %></td>
     <% lines.forEach(function(line) { %>
-    <td class="text-center"><%- line.pickup.qty %></td>
+    <td class="text-center"><%- line.pickup.started.qty.toLocaleString() %></td>
     <% }) %>
   </tr>
   <tr>
     <td><%- t('wh-lines', 'PROPERTY:time') %></td>
     <% lines.forEach(function(line) { %>
-    <td class="text-center"><%- time.toString(line.pickup.time / 1000, true, false) %></td>
+    <td class="text-center"><%- time.toString(line.pickup.started.time / 1000, true, false) %></td>
     <% }) %>
   </tr>
   <tr>
-    <td rowspan="2"><%- t('wh-lines', 'PROPERTY:components') %></td>
+    <td rowspan="3"><%- t('wh-lines', 'PROPERTY:pickup:finished') %></td>
+    <td><%- t('wh-lines', 'PROPERTY:sets') %></td>
+    <% lines.forEach(function(line) { %>
+      <td class="text-center"><%- line.pickup.finished.sets.toLocaleString() %></td>
+    <% }) %>
+  </tr>
+  <tr>
     <td><%- t('wh-lines', 'PROPERTY:qty') %></td>
     <% lines.forEach(function(line) { %>
-    <td class="text-center"><%- line.components.qty %></td>
+    <td class="text-center"><%- line.pickup.finished.qty.toLocaleString() %></td>
     <% }) %>
   </tr>
   <tr>
     <td><%- t('wh-lines', 'PROPERTY:time') %></td>
     <% lines.forEach(function(line) { %>
-    <td class="text-center"><%- time.toString(line.components.time / 1000, true, false) %></td>
+    <td class="text-center"><%- time.toString(line.pickup.finished.time / 1000, true, false) %></td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td rowspan="2"><%- t('wh-lines', 'PROPERTY:available') %></td>
+    <td><%- t('wh-lines', 'PROPERTY:qty') %></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center"><%- line.available.qty.toLocaleString() %></td>
+    <% }) %>
+  </tr>
+  <tr>
+    <td><%- t('wh-lines', 'PROPERTY:time') %></td>
+    <% lines.forEach(function(line) { %>
+    <td class="text-center"><%- time.toString(line.available.time / 1000, true, false) %></td>
     <% }) %>
   </tr>
   </tbody>

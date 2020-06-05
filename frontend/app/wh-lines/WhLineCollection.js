@@ -15,7 +15,7 @@ define([
 ) {
   'use strict';
 
-  var REFRESH_PROPS = ['pickup', 'components', 'packaging', 'redirLine'];
+  var REFRESH_PROPS = ['pickup', 'available', 'redirLine'];
 
   return Collection.extend({
 

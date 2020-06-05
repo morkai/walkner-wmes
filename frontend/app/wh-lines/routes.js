@@ -20,6 +20,7 @@ define([
         'app/core/pages/ListPage',
         'app/wh-lines/WhLineCollection',
         'app/wh-lines/views/ListView',
+        'css!app/wh-lines/assets/main',
         'i18n!app/nls/wh-lines'
       ],
       function(ListPage, WhLineCollection, ListView)

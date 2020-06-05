@@ -29,15 +29,23 @@ define([
     {
       return {
         pickup: {
-          sets: 0,
-          qty: 0,
-          time: 0
+          started: {
+            sets: 0,
+            qty: 0,
+            time: 0
+          },
+          finished: {
+            sets: 0,
+            qty: 0,
+            time: 0
+          },
+          total: {
+            sets: 0,
+            qty: 0,
+            time: 0
+          }
         },
-        components: {
-          qty: 0,
-          time: 0
-        },
-        packaging: {
+        available: {
           qty: 0,
           time: 0
         },

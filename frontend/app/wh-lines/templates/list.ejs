@@ -3,9 +3,10 @@
     <table class="table <%- tableClassName %>">
       <thead>
       <tr>
-        <th class="is-min" rowspan="2"><%- t('PROPERTY:_id') %></th>
-        <th class="is-min" colspan="3"><%- t('PROPERTY:pickup') %></th>
-        <th class="is-min" colspan="2"><%- t('PROPERTY:components') %></th>
+        <th class="is-min wh-lines-group-start" rowspan="2"><%- t('PROPERTY:_id') %></th>
+        <th class="is-min wh-lines-group-start" colspan="3"><%- t('PROPERTY:pickup:started') %></th>
+        <th class="is-min wh-lines-group-start" colspan="3"><%- t('PROPERTY:pickup:finished') %></th>
+        <th class="is-min wh-lines-group-start" colspan="2"><%- t('PROPERTY:available') %></th>
         <th class="is-min" rowspan="2"><%- t('PROPERTY:redirLine') %></th>
         <th class="is-min" rowspan="2"><%- t('PROPERTY:working') %></th>
         <th class="is-min" rowspan="2" style="line-height: 1.2"><%- t('LIST:COLUMN:nextShiftAt') %></th>
@@ -15,9 +16,12 @@
       <tr>
         <td class="is-min text-center"><%- t('PROPERTY:sets') %></td>
         <td class="is-min text-center"><%- t('PROPERTY:qty') %></td>
-        <td class="is-min text-center"><%- t('PROPERTY:time') %></td>
+        <td class="is-min text-center wh-lines-group-start"><%- t('PROPERTY:time') %></td>
+        <td class="is-min text-center"><%- t('PROPERTY:sets') %></td>
         <td class="is-min text-center"><%- t('PROPERTY:qty') %></td>
-        <td class="is-min text-center"><%- t('PROPERTY:time') %></td>
+        <td class="is-min text-center wh-lines-group-start"><%- t('PROPERTY:time') %></td>
+        <td class="is-min text-center"><%- t('PROPERTY:qty') %></td>
+        <td class="is-min text-center wh-lines-group-start"><%- t('PROPERTY:time') %></td>
       </tr>
       </thead>
       <tbody>

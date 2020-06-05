@@ -215,17 +215,16 @@ define([
           continue;
         }
 
-        // TODO Change based on kind?
-        var remainingTime = line.get('components').time;
+        var availableTime = line.get('available').time;
 
-        if (remainingTime < lateDeliveryTime)
+        if (availableTime < lateDeliveryTime)
         {
           className = 'wh-status-late';
 
           break;
         }
 
-        if (remainingTime < minTimeForDelivery)
+        if (availableTime < minTimeForDelivery)
         {
           className = 'wh-status-deliverable';
         }

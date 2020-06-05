@@ -58,6 +58,17 @@ define([
       {value: 'pending', manage: true}
     ]
   };
+  var NAVIGATION_KEYS = {
+    Tab: true,
+    ArrowUp: true,
+    ArrowDown: true,
+    ArrowLeft: true,
+    ArrowRight: true,
+    KeyW: true,
+    KeyS: true,
+    KeyA: true,
+    KeyD: true
+  };
 
   return View.extend({
 
@@ -79,32 +90,68 @@ define([
       },
       'keydown [tabindex]': function(e)
       {
-        if (e.originalEvent.code !== 'Tab'
-          || this.$editor
-          || contextMenu.isVisible(this))
+        if (this.$editor || contextMenu.isVisible(this))
         {
           return;
         }
 
-        if (e.shiftKey && e.currentTarget === this.el.querySelector('.fa[tabindex]'))
-        {
-          this.$('[tabindex]').last().focus();
+        var code = e.originalEvent.code;
 
-          return false;
+        if (!NAVIGATION_KEYS[code])
+        {
+          return;
         }
-        else if (!e.shiftKey && e.currentTarget === this.$('[tabindex]').last()[0])
-        {
-          this.el.querySelector('.fa[tabindex]').focus();
 
-          return false;
+        var target = e.currentTarget;
+
+        if (code === 'Tab')
+        {
+          if (e.shiftKey && target === this.el.querySelector('.fa[tabindex]'))
+          {
+            this.$('[tabindex]').last().focus();
+
+            return false;
+          }
+          else if (!e.shiftKey && target === this.$('[tabindex]').last()[0])
+          {
+            this.el.querySelector('.fa[tabindex]').focus();
+
+            return false;
+          }
+
+          return;
+        }
+
+        switch (code)
+        {
+          case 'ArrowUp':
+          case 'KeyW':
+            this.focusUp(target);
+            break;
+
+          case 'ArrowDown':
+          case 'KeyS':
+            this.focusDown(target);
+            break;
+
+          case 'ArrowLeft':
+          case 'KeyA':
+            this.focusPrev(target);
+            break;
+
+          case 'ArrowRight':
+          case 'KeyD':
+            this.focusNext(target);
+            break;
         }
       },
-      'keyup .is-clickable': function(e)
+      'keydown .is-clickable': function(e)
       {
         var code = e.originalEvent.code;
 
         if (code === 'Enter' || code === 'Space')
         {
+          clearTimeout(this.timers.showUpdateMenu);
           this.timers.showUpdateMenu = setTimeout(this.showUpdateMenuByEvent.bind(this, e), 1);
 
           return false;
@@ -828,11 +875,22 @@ define([
 
           var $fields = $editor.find('.form-control, .btn').prop('disabled', true);
 
+          var kind = 'components';
+
+          if (propFunc === 'packer')
+          {
+            kind = 'packaging';
+          }
+          else if (propFunc === 'painter')
+          {
+            kind = 'ps';
+          }
+
           var req = view.ajax({
             url: '/old/wh/setCarts'
               + '?select(date,set,cart)'
               + 'status=in=(completing,completed,delivering)'
-              + '&kind=' + (propFunc === 'packer' ? 'packaging' : 'components')
+              + '&kind=' + kind
               + '&cart=in=(' + carts.join(',') + ')'
           });
 
@@ -1035,6 +1093,154 @@ define([
     onDialogShown: function()
     {
       this.focus();
+    },
+
+    focusUp: function(target)
+    {
+      var $action = this.$(target).parent();
+      var current = $action[0];
+      var selector = '';
+
+      if (target.classList.contains('btn'))
+      {
+        current = target;
+        selector = '.btn[data-action="' + target.dataset.action + '"]';
+      }
+      else
+      {
+        selector = '.is-clickable[data-prop="' + $action[0].dataset.prop + '"]';
+
+        if ($action[0].dataset.func)
+        {
+          selector += '[data-func="' + $action[0].dataset.func + '"]';
+        }
+      }
+
+      var $candidates = this.$(selector);
+      var candidateI = -1;
+
+      for (var i = 0; i < $candidates.length; ++i)
+      {
+        if ($candidates[i] === current)
+        {
+          candidateI = i - 1;
+
+          break;
+        }
+      }
+
+      if (!$candidates[candidateI])
+      {
+        candidateI = $candidates.length - 1;
+      }
+
+      var $candidate = $candidates.eq(candidateI);
+
+      if ($candidate[0].tabIndex === -1)
+      {
+        $candidate.find('[tabindex]').focus();
+      }
+      else
+      {
+        $candidate.focus();
+      }
+    },
+
+    focusDown: function(target)
+    {
+      var $action = this.$(target).parent();
+      var current = $action[0];
+      var selector = '';
+
+      if (target.classList.contains('btn'))
+      {
+        current = target;
+        selector = '.btn[data-action="' + target.dataset.action + '"]';
+      }
+      else
+      {
+        selector = '.is-clickable[data-prop="' + $action[0].dataset.prop + '"]';
+
+        if ($action[0].dataset.func)
+        {
+          selector += '[data-func="' + $action[0].dataset.func + '"]';
+        }
+      }
+
+      var $candidates = this.$(selector);
+      var candidateI = -1;
+
+      for (var i = 0; i < $candidates.length; ++i)
+      {
+        if ($candidates[i] === current)
+        {
+          candidateI = i + 1;
+
+          break;
+        }
+      }
+
+      if (!$candidates[candidateI])
+      {
+        candidateI = 0;
+      }
+
+      var $candidate = $candidates.eq(candidateI);
+
+      if ($candidate[0].tabIndex === -1)
+      {
+        $candidate.find('[tabindex]').focus();
+      }
+      else
+      {
+        $candidate.focus();
+      }
+    },
+
+    focusPrev: function(target)
+    {
+      var $candidates = this.$('[tabindex]');
+      var candidateI = -1;
+
+      for (var i = 0; i < $candidates.length; ++i)
+      {
+        if ($candidates[i] === target)
+        {
+          candidateI = i - 1;
+
+          break;
+        }
+      }
+
+      if (!$candidates[candidateI])
+      {
+        candidateI = $candidates.length - 1;
+      }
+
+      $candidates[candidateI].focus();
+    },
+
+    focusNext: function(target)
+    {
+      var $candidates = this.$('[tabindex]');
+      var candidateI = -1;
+
+      for (var i = 0; i < $candidates.length; ++i)
+      {
+        if ($candidates[i] === target)
+        {
+          candidateI = i + 1;
+
+          break;
+        }
+      }
+
+      if (!$candidates[candidateI])
+      {
+        candidateI = 0;
+      }
+
+      $candidates[candidateI].focus();
     }
 
   });
