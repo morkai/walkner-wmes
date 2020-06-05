@@ -1,3 +1,6 @@
 .wh-lines-group-start {
   border-right-width: 4px!important;
 }
+.wh-lines-filter .filter-btn-group > .btn {
+  min-width: 60px;
+}

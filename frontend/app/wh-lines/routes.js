@@ -17,19 +17,21 @@ define([
   {
     viewport.loadPage(
       [
-        'app/core/pages/ListPage',
+        'app/core/pages/FilteredListPage',
         'app/wh-lines/WhLineCollection',
+        'app/wh-lines/views/FilterView',
         'app/wh-lines/views/ListView',
         'css!app/wh-lines/assets/main',
         'i18n!app/nls/wh-lines'
       ],
-      function(ListPage, WhLineCollection, ListView)
+      function(FilteredListPage, WhLineCollection, FilterView, ListView)
       {
-        return new ListPage({
+        return new FilteredListPage({
           baseBreadcrumb: '#wh/pickup/0d',
           pageClassName: 'page-max-flex',
+          FilterView: FilterView,
           ListView: ListView,
-          collection: new WhLineCollection(null, {rqlQuery: req.rql}),
+          collection: WhLineCollection.fromQuery(req.query),
           actions: []
         });
       }

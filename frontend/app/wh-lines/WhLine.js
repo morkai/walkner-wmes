@@ -52,7 +52,8 @@ define([
         redirLine: null,
         nextShiftAt: null,
         startedPlan: null,
-        working: false
+        working: false,
+        mrps: []
       };
     },
 
@@ -63,15 +64,26 @@ define([
       return obj;
     },
 
-    serializeRow: function()
+    serializeRow: function(options)
     {
+      var currentPlan = options && options.currentPlan || shiftUtil.getPlanDate(Date.now(), true).valueOf();
+
       var obj = this.serialize();
 
       obj.nextShiftAt = this.serializeNextShiftAt();
 
-      obj.startedPlan = obj.startedPlan && obj.startedPlan !== '1970-01-01T00:00:00.000Z'
-        ? time.utc.format(obj.startedPlan, 'L')
-        : '';
+      if (!obj.startedPlan || obj.startedPlan === '')
+      {
+        obj.startedPlan = '';
+      }
+      else if (Date.parse(obj.startedPlan) < currentPlan)
+      {
+        obj.startedPlan = '<i>' + time.utc.format(currentPlan, 'L') + '</i>';
+      }
+      else
+      {
+        obj.startedPlan = time.utc.format(obj.startedPlan, 'L');
+      }
 
       return obj;
     },

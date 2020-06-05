@@ -2,7 +2,7 @@
   "BREADCRUMB:base": "Magazyn (nowy)",
   "BREADCRUMB:browse": "Linie",
 
-  "PROPERTY:_id": "ID",
+  "PROPERTY:_id": "Linia",
   "PROPERTY:pickup": "Kompletacja",
   "PROPERTY:pickup:started": "Kompletowane",
   "PROPERTY:pickup:finished": "Skompletowane",
@@ -14,6 +14,7 @@
   "PROPERTY:working": "Pracuje?",
   "PROPERTY:nextShiftAt": "Następna zmiana",
   "PROPERTY:startedPlan": "Rozpoczęty plan",
+  "PROPERTY:mrps": "Planowane MRP",
 
   "LIST:COLUMN:nextShiftAt": "Następna<br>zaplanowana<br>zmiana",
   "LIST:COLUMN:startedPlan": "Rozpoczęty<br>plan",
@@ -38,9 +39,13 @@
 
   "editStartedPlan:tooltip": "Zmień datę rozpoczętego planu",
   "editStartedPlan:title": "Zmiana daty rozpoczętego planu na linii",
-  "editStartedPlan:message": "<p>Sety podczas kompletacji tworzone są dla linii, które mają zlecenia zaplanowane do daty aktualnie rozpoczętego planu lub aktualnego daty aktualnego dnia, jeżeli jest późniejsza (włącznie).</p><p>Data rozpoczętego planu jest automatycznie zmieniana, jeżeli na linii rozpoczęte zostanie zlecenie z Datą startu (plan.) późniejszą niż aktualna wartość.</p><p>Zmieniając aktualną datę rozpoczęcia planu dla linii na nową, można aktywować na niej kompletacje zleceń do wybranej daty.</p>",
+  "editStartedPlan:message": "<p>Sety podczas kompletacji tworzone są dla linii, które mają zlecenia zaplanowane do daty aktualnie rozpoczętego planu lub daty aktualnego dnia, jeżeli jest późniejsza (włącznie).</p><p>Data rozpoczętego planu jest automatycznie zmieniana, jeżeli na linii rozpoczęte zostanie zlecenie z Datą startu (plan.) późniejszą niż aktualna wartość.</p><p>Zmieniając aktualną datę rozpoczęcia planu dla linii na nową, można aktywować na niej kompletacje zleceń do wybranej daty.</p>",
   "editStartedPlan:line": "Linia",
   "editStartedPlan:oldValue": "Aktualnie rozpoczęty plan",
   "editStartedPlan:newValue": "Nowy rozpoczęty plan",
-  "editStartedPlan:submit": "Zmień datę"
+  "editStartedPlan:submit": "Zmień datę",
+
+  "filter:working:1": "Tak",
+  "filter:working:0": "Nie",
+  "filter:mrps": "Wszystkie MRP"
 }

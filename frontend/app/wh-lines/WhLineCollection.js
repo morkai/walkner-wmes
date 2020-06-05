@@ -5,12 +5,14 @@ define([
   'app/user',
   'app/core/Collection',
   'app/core/util/getShiftStartInfo',
+  'app/data/localStorage',
   './WhLine'
 ], function(
   _,
   user,
   Collection,
   getShiftStartInfo,
+  localStorage,
   WhLine
 ) {
   'use strict';
@@ -22,6 +24,50 @@ define([
     model: WhLine,
 
     rqlQuery: 'sort(_id)&limit(0)',
+
+    initialize: function(models, options)
+    {
+      this.filters = {working: null, mrps: []};
+
+      this.on('filtered', function()
+      {
+        localStorage.setItem('WMES_WH_LINES_FILTERS', JSON.stringify(this.filters));
+      });
+
+      if (options && options.filters)
+      {
+        this.setFilters(options.filters);
+      }
+    },
+
+    getFilters: function()
+    {
+      return this.filters;
+    },
+
+    setFilters: function(filters)
+    {
+      Object.assign(this.filters, filters);
+
+      this.trigger('filtered');
+    },
+
+    isVisible: function(line)
+    {
+      var filters = this.filters;
+
+      if (filters.working !== null && line.get('working') !== filters.working)
+      {
+        return false;
+      }
+
+      if (filters.mrps.length && !line.get('mrps').some(function(mrp) { return filters.mrps.includes(mrp); }))
+      {
+        return false;
+      }
+
+      return true;
+    },
 
     comparator: function(a, b)
     {
@@ -77,6 +123,22 @@ define([
         return this.manage();
       }
 
+    },
+
+    fromQuery: function(query)
+    {
+      var WhLineCollection = this;
+      var filters = JSON.parse(localStorage.getItem('WMES_WH_LINES_FILTERS') || '{}');
+
+      if (Object.keys(query).length)
+      {
+        filters.working = query.working === '1' ? true : query.working === '0' ? false : null;
+        filters.mrps = (query.mrps || '').split(',').filter(function(v) { return !!v.length; });
+      }
+
+      return new WhLineCollection(null, {
+        filters: filters
+      });
     }
 
   });

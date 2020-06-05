@@ -154,6 +154,11 @@ define([
       },
       tokenizer: function(input, selection, selectCallback)
       {
+        if (input === '' || input === options.placeholder)
+        {
+          return null;
+        }
+
         var result = input;
         var items = {};
 

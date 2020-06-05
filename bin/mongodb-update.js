@@ -28,6 +28,11 @@ db.oldwhsetcarts.updateMany({'pending': {$exists: false}}, {$set: {
 
 db.oldwhlines.find({}).forEach(whLine =>
 {
+  if (!Array.isArray(whLine.mrps))
+  {
+    whLine.mrps = [];
+  }
+
   if (whLine.components)
   {
     whLine.available = whLine.components;

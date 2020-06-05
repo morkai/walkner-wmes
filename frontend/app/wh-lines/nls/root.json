@@ -3,7 +3,7 @@
     "BREADCRUMB:base": "WH (new)",
     "BREADCRUMB:browse": "Lines",
 
-    "PROPERTY:_id": "ID",
+    "PROPERTY:_id": "Line",
     "PROPERTY:pickup": "Pickup",
     "PROPERTY:pickup:started": "Picking up",
     "PROPERTY:pickup:finished": "Picked",
@@ -15,6 +15,7 @@
     "PROPERTY:working": "Working?",
     "PROPERTY:nextShiftAt": "Next shift",
     "PROPERTY:startedPlan": "Started plan",
+    "PROPERTY:mrps": "Planned MRP",
 
     "LIST:COLUMN:nextShiftAt": "Next<br>planned<br>shift",
     "LIST:COLUMN:startedPlan": "Started<br>plan",

@@ -1,0 +1,13 @@
+<form class="well filter-form wh-lines-filter">
+  <div class="form-group">
+    <label class="control-label"><%- t('PROPERTY:working') %></label>
+    <div id="<%- id('working') %>" class="btn-group filter-btn-group">
+      <button id="<%- id('working-1') %>" type="button" class="btn btn-default" value="1"><%- t('filter:working:1') %></button>
+      <button id="<%- id('working-0') %>" type="button" class="btn btn-default" value="0"><%- t('filter:working:0') %></button>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('mrps') %>" class="control-label"><%- t('PROPERTY:mrps') %></label>
+    <input id="<%- id('mrps') %>" type="text" value="<%- filters.mrps.join(',') %>">
+  </div>
+</form>

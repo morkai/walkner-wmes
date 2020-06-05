@@ -4,6 +4,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
+  'app/planning/util/shift',
   '../WhLineCollection',
   './RedirLineDialogView',
   './EditStartedPlanDialogView',
@@ -13,6 +14,7 @@ define([
   user,
   viewport,
   ListView,
+  shiftUtil,
   WhLineCollection,
   RedirLineDialogView,
   EditStartedPlanDialogView,
@@ -58,6 +60,7 @@ define([
 
       this.once('afterRender', function()
       {
+        this.listenTo(this.collection, 'filtered', this.render);
         this.listenTo(this.collection, 'add change', this.renderRow);
       });
     },
@@ -75,21 +78,70 @@ define([
       };
     },
 
+    serializeRows: function()
+    {
+      var view = this;
+      var rows = [];
+      var options = {
+        currentPlan: shiftUtil.getPlanDate(Date.now(), true).valueOf()
+      };
+
+      view.collection.forEach(function(line)
+      {
+        if (view.collection.isVisible(line))
+        {
+          rows.push(line.serializeRow(options));
+        }
+      });
+
+      return rows;
+    },
+
     renderRow: function(line)
     {
-      var $row = this.$row(line.id);
-      var html = this.renderPartialHtml(rowTemplate, {
+      var $oldRow = this.$row(line.id);
+
+      if (!this.collection.isVisible(line))
+      {
+        if ($oldRow.length)
+        {
+          $oldRow.remove();
+        }
+
+        return;
+      }
+
+      var $newRow = this.renderPartial(rowTemplate, {
         row: line.serializeRow(),
         canManage: WhLineCollection.can.manage()
       });
 
-      if ($row.length)
+      if ($oldRow.length)
       {
-        $row.replaceWith(html);
+        $oldRow.replaceWith($newRow);
       }
       else
       {
-        this.$('tbody').append(html);
+        var tds = this.$('.list-item > td:first-child').get();
+        var lines = tds.map(function(td) { return td.textContent.trim(); });
+
+        lines.push(line.id);
+
+        lines.sort(function(a, b)
+        {
+          return a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true});
+        });
+
+        var pos = lines.indexOf(line.id);
+
+        if (tds[pos])
+        {
+          $newRow.insertBefore(tds[pos].parentNode);
+        }
+        else
+        {
+          this.$('tbody').append($newRow);
+        }
       }
     },
 
