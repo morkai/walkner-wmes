@@ -114,6 +114,7 @@ define([
       obj.finishTime = time.utc.format(finishTime, 'HH:mm:ss');
       obj.comment = sapOrder ? sapOrder.getCommentWithIcon() : '';
       obj.comments = sapOrder ? sapOrder.get('comments') : [];
+      obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
       obj.rowClassName = STATUS_TO_CLASS_NAME[obj.status];
       obj.funcIcons = {};
       obj.funcs.forEach(function(func)
@@ -126,10 +127,9 @@ define([
         dist: DIST_STATUS_TO_ICON[obj.distStatus],
         fifo: DIST_STATUS_TO_ICON[obj.fifoStatus],
         pack: DIST_STATUS_TO_ICON[obj.packStatus],
-        psDist: DIST_STATUS_TO_ICON[obj.psDistStatus]
+        psDist: obj.psStatus === 'unknown' ? DIST_STATUS_TO_ICON.ignored : DIST_STATUS_TO_ICON[obj.psDistStatus]
       };
       obj.picklistDoneIcon = PICKLIST_DONE_TO_ICON[obj.picklistDone];
-      obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
       obj.hidden = !filters
         || startTime < filters.startTime.from
         || startTime >= filters.startTime.to

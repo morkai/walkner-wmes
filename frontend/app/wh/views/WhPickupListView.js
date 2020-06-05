@@ -277,8 +277,18 @@ define([
 
         case 'fifoStatus':
         case 'packStatus':
-        case 'psDistStatus':
           templateData.status = view.t('status:' + whOrder.get(columnId));
+          break;
+
+        case 'psDistStatus':
+          var psDistStatus = whOrder.get(columnId);
+
+          if (whOrder.get('psStatus') === 'unknown')
+          {
+            psDistStatus = 'ignored';
+          }
+
+          templateData.status = view.t('status:' + psDistStatus);
           break;
 
         case 'picklist':
