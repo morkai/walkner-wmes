@@ -2,10 +2,12 @@
 
 define([
   'underscore',
-  '../settings/SettingCollection',
+  'app/core/util/padString',
+  'app/settings/SettingCollection',
   './PaintShopSetting'
 ], function(
   _,
+  padString,
   SettingCollection,
   PaintShopSetting
 ) {
@@ -37,6 +39,61 @@ define([
       {
         return newValue;
       }
+
+      if (/documents$/.test(id))
+      {
+        return this.prepareDocumentsValue(newValue);
+      }
+    },
+
+    prepareDocumentsValue: function(rawValue)
+    {
+      var documents = [];
+
+      (rawValue || '').split('\n').forEach(function(line)
+      {
+        var matches = line.trim().match(/^([0-9]+)(.*?)$/);
+
+        if (matches)
+        {
+          var nc15 = padString.start(matches[1], 15, '0');
+          var name = (matches[2] || '').trim();
+
+          documents.push({
+            nc15: nc15,
+            name: name
+          });
+        }
+      });
+
+      return documents;
+    },
+
+    prepareDocumentsFormValue: function(documents)
+    {
+      if (!Array.isArray(documents))
+      {
+        return '';
+      }
+
+      var lines = [];
+
+      documents.forEach(function(d)
+      {
+        if (d.nc15)
+        {
+          var line = d.nc15;
+
+          if (d.name.length)
+          {
+            line += ' ' + d.name;
+          }
+
+          lines.push(line);
+        }
+      });
+
+      return lines.join('\n');
     },
 
     getLoadStatus: function(d)
@@ -50,6 +107,16 @@ define([
         icon: 'question',
         color: '#0AF'
       };
+    },
+
+    prepareFormValue: function(id, value)
+    {
+      if (id === 'paintShop.documents')
+      {
+        return this.prepareDocumentsFormValue(value);
+      }
+
+      return SettingCollection.prototype.prepareFormValue.apply(this, arguments);
     }
 
   });

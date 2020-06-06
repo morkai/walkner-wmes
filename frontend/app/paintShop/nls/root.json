@@ -20,6 +20,7 @@
     "PAGE_ACTION:paints": "Paints",
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:exportPlanExecution": "Export plan",
+    "PAGE_ACTION:openDocument": "Documents",
 
     "PROPERTY:order": "Order",
     "PROPERTY:nc12": "Product 12NC",
@@ -129,8 +130,11 @@
     "load:report:avgDuration": "Average cycle time",
     "load:report:count": "Count",
 
+    "settings:tab:general": "General",
     "settings:tab:planning": "Planning",
     "settings:tab:load": "Load",
+    "settings:general:documents": "Documents",
+    "settings:general:documents:help": "List of documents that should be available to open on the PS queue page. Each line of format <code>15NC NAME</code> is a separate document.",
     "settings:planning:workCenters": "WorkCenters",
     "settings:planning:workCenters:help": "WorkCenters used during the generation of the paint shop order queue to load paint shop child orders for the planned production orders.",
     "settings:planning:drillingWorkCenters": "Drilling WorkCenters",

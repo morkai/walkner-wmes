@@ -35,7 +35,8 @@ define([
   'app/paintShop/templates/mrpTabs',
   'app/paintShop/templates/totals',
   'app/paintShop/templates/printPage',
-  'app/paintShop/templates/userPageAction'
+  'app/paintShop/templates/userPageAction',
+  'app/paintShop/templates/openDocumentPageAction'
 ], function(
   _,
   $,
@@ -71,7 +72,8 @@ define([
   mrpTabsTemplate,
   totalsTemplate,
   printPageTemplate,
-  userPageActionTemplate
+  userPageActionTemplate,
+  openDocumentPageActionTemplate
 ) {
   'use strict';
 
@@ -81,6 +83,8 @@ define([
     finished: 3,
     delivered: 4
   };
+
+  var ORDER_DOCUMENT_PREVIEW_WINDOW = null;
 
   return View.extend({
 
@@ -113,14 +117,38 @@ define([
     {
       var page = this;
       var actions = [];
+      var documents = page.settings.getValue('documents', []);
+      var documentsAction = {
+        id: 'openDocument',
+        visible: documents.length > 0,
+        template: page.renderPartialHtml.bind(page, openDocumentPageActionTemplate, {
+          documents: documents
+        }),
+        afterRender: function($action)
+        {
+          $action.on('click', 'a[data-nc15]', function(e)
+          {
+            e.preventDefault();
+
+            if (1 || embedded.isEnabled())
+            {
+              page.openDocumentWindow(this);
+            }
+            else
+            {
+              window.open(this.href);
+            }
+          });
+        }
+      };
 
       if (embedded.isEnabled())
       {
-        actions.push({
+        actions.push(documentsAction, {
           id: 'user',
           template: function()
           {
-            return userPageActionTemplate({
+            return page.renderPartialHtml(userPageActionTemplate, {
               signedIn: !!page.orders.user,
               user: page.orders.user
             });
@@ -137,7 +165,7 @@ define([
           type: 'link',
           icon: 'arrows-alt',
           callback: page.toggleFullscreen.bind(page)
-        }, {
+        }, documentsAction, {
           icon: 'download',
           privileges: 'PAINT_SHOP:VIEW',
           label: page.t('PAGE_ACTION:exportPlanExecution'),
@@ -370,6 +398,12 @@ define([
       {
         this.orderDetailsWindow.close();
         this.orderDetailsWindow = null;
+      }
+
+      if (ORDER_DOCUMENT_PREVIEW_WINDOW)
+      {
+        ORDER_DOCUMENT_PREVIEW_WINDOW.close();
+        ORDER_DOCUMENT_PREVIEW_WINDOW = null;
       }
     },
 
@@ -1407,6 +1441,10 @@ define([
       {
         this.renderTotals();
       }
+      else if (this.layout && setting.id === 'paintShop.documents')
+      {
+        this.layout.setActions(this.actions, this);
+      }
     },
 
     onActionRequested: function(action)
@@ -1687,6 +1725,68 @@ define([
 
         this.classList.toggle('is-disabled', paint !== 'all' && !paintMrps[mrp]);
       });
+    },
+
+    openDocumentWindow: function(aEl)
+    {
+      var view = this;
+      var ready = false;
+      var screen = window.screen;
+      var availHeight = screen.availHeight;
+
+      if (screen.availWidth === window.innerWidth && screen.availHeight !== window.innerHeight)
+      {
+        availHeight *= 0.9;
+      }
+
+      var width = screen.availWidth * 0.8;
+      var height = availHeight * 0.9;
+      var left = Math.floor((screen.availWidth - width) / 2);
+      var top = Math.floor((availHeight - height) / 2);
+      var windowFeatures = 'resizable,scrollbars,location=no'
+        + ',top=' + top
+        + ',left=' + left
+        + ',width=' + Math.floor(width)
+        + ',height=' + Math.floor(height);
+      var windowName = 'WMES_ORDER_DOCUMENT_PREVIEW';
+      var win = window.open(aEl.href, windowName, windowFeatures);
+
+      if (!win)
+      {
+        return;
+      }
+
+      win.onfocus = function()
+      {
+        clearTimeout(view.timers.closeDocument);
+      };
+
+      win.onblur = function()
+      {
+        view.timers.closeDocument = setTimeout(function() { win.close(); }, 30000);
+      };
+
+      ORDER_DOCUMENT_PREVIEW_WINDOW = win;
+
+      clearInterval(view.timers[windowName]);
+      clearTimeout(view.timers.closeDocument);
+
+      view.timers[windowName] = setInterval(function()
+      {
+        if (win.closed)
+        {
+          ORDER_DOCUMENT_PREVIEW_WINDOW = null;
+
+          clearInterval(view.timers[windowName]);
+          clearTimeout(view.timers.closeDocument);
+        }
+        else if (!ready && (win.ready || (win.document.title && win.document.title.indexOf('404') !== -1)))
+        {
+          ready = true;
+
+          win.focus();
+        }
+      }, 250);
     }
 
   });

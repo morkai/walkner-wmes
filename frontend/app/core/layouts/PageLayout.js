@@ -323,7 +323,9 @@ define([
       actions = [actions];
     }
 
-    this.model.actions = actions.map(this.prepareAction.bind(this, context));
+    this.model.actions = actions
+      .filter(_.isObject)
+      .map(this.prepareAction.bind(this, context));
 
     if (this.$actions)
     {
@@ -452,6 +454,12 @@ define([
     for (var i = 0, l = actions.length; i < l; ++i)
     {
       var action = actions[i];
+
+      if (action.visible === false)
+      {
+        continue;
+      }
+
       var privileges = action.privileges;
 
       if (privileges)

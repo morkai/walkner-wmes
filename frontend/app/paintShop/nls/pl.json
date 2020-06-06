@@ -19,6 +19,7 @@
   "PAGE_ACTION:paints": "Farby",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:exportPlanExecution": "Eksportuj plan",
+  "PAGE_ACTION:openDocument": "Dokumenty",
 
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:nc12": "12NC wyrobu",
@@ -133,8 +134,11 @@
   "load:report:avgDuration": "Średni czas cyklu",
   "load:report:count": "Ilość",
 
+  "settings:tab:general": "Ogólne",
   "settings:tab:planning": "Planowanie",
   "settings:tab:load": "Obciążenie",
+  "settings:general:documents": "Dokumenty",
+  "settings:general:documents:help": "Lista dokumentów możliwych do otworzenia z poziomu kolejki malarnii. Każda linia w formacie <code>15NC NAZWA</code> to oddzielny dokument.",
   "settings:planning:workCenters": "WorkCentra",
   "settings:planning:workCenters:help": "Lista WorkCenter wykorzystywana podczas generowania kolejki malarnii do pobierania zleceń malarnii podrzędnych do zaplanowanych zleceń produkcyjnych.",
   "settings:planning:drillingWorkCenters": "WorkCentra wiercenia",
