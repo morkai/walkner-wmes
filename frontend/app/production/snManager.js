@@ -40,7 +40,6 @@ define([
     time: 0
   };
   var scanInfoQueue = null;
-  var scanBufferLog = [];
 
   function handleScanBuffer(buffer)
   {
@@ -51,13 +50,6 @@ define([
 
     buffer = scanBuffer.trim();
     scanBuffer = '';
-
-    if (scanBufferLog.length > 100)
-    {
-      scanBufferLog.pop();
-    }
-
-    scanBufferLog.unshift({buffer: buffer, timestamp: new Date()});
 
     if (buffer === '<ESC>' || buffer === '1337000027')
     {
@@ -96,7 +88,6 @@ define([
     }
   }
 
-  window.scanBufferLog = scanBufferLog;
   window.fakeSN = handleScanBuffer;
 
   return {

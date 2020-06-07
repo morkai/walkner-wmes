@@ -280,6 +280,7 @@
   "snMessage:UNKNOWN_CODE": "Zeskanowany kod nie zawiera numeru seryjnego.",
   "snMessage:INVALID_LINE": "Nieprawidłowa linia produkcyjna.",
   "snMessage:INVALID_LINE_STATE": "Nieprawidłowa zmiana produkcyjna lub zlecenie.",
+  "snMessage:INVALID_STATE:null": "Nieprawidłowa zmiana produkcyjna.",
   "snMessage:INVALID_STATE:idle": "Rozpocznij zlecenie, aby móc skanować numery seryjne.",
   "snMessage:INVALID_STATE:downtime": "Zakończ przestój, aby móc skanować numery seryjne.",
   "snMessage:INVALID_ORDER": "Zeskanowano numer seryjny z nieprawidłowego zlecenia.",
