@@ -227,6 +227,7 @@
   "delivery:title:delivering": "W realizacji",
   "delivery:set": "Set {set}",
   "delivery:set:title": "Wysyłka wózków {kind, select, components{FIFO} packaging{z opakowaniami} ps{malarnii} other{{kind}}}",
+  "delivery:set:addCarts": "Dodaj wózki",
   "delivery:set:finish": "Zakończ dostawę",
   "delivery:set:cancel": "Zamknij",
   "delivery:set:msg": "Zeskanuj się ponownie, aby zakończyć dostawę.",

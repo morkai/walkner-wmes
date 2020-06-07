@@ -508,7 +508,7 @@ define([
     {
       var page = this;
 
-      if (setCart.get('pending'))
+      if (setCart.get('pending') && !setCart.get('deliveringAt'))
       {
         return true;
       }
@@ -859,7 +859,7 @@ define([
     {
       var setCarts = new WhSetCartCollection(res.setCarts);
 
-      this.showSetDialog(setCarts, res.user);
+      this.showSetDialog(setCarts, res.user, res.personnelId);
     },
 
     showSetDialog: function(setCarts, user, personnelId)
@@ -873,6 +873,7 @@ define([
 
       var dialogView = new DeliverySetView({
         model: {
+          pendingSetCarts: this.setCarts.pending,
           setCarts: setCarts,
           personnelId: personnelId
         }

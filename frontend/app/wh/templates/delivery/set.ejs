@@ -22,14 +22,18 @@
     </tbody>
   </table>
   <div class="form-actions wh-delivery-set-actions">
-    <% if (allowFinish) { %>
-    <button id="<%- idPrefix %>-finish" class="btn btn-lg btn-primary" type="button">
+    <% if (canManage) { %>
+    <button id="<%- idPrefix %>-finish" class="btn btn-lg btn-success" type="button">
       <i class="fa fa-spinner fa-spin hidden"></i>
       <span><%- t('delivery:set:finish') %></span>
     </button>
+    <button id="<%- idPrefix %>-addCarts" class="btn btn-lg btn-primary" type="button">
+      <i class="fa fa-spinner fa-spin hidden"></i>
+      <span><%- t('delivery:set:addCarts') %></span>
+    </button>
     <% } %>
     <button class="btn btn-lg btn-link cancel" type="button"><%- t('delivery:set:cancel') %></button>
-    <% if (allowFinish) { %>
+    <% if (canManage) { %>
     <p style="margin-left: auto"><%- t('delivery:set:msg') %></p>
     <% } %>
   </div>

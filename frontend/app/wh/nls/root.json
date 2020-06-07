@@ -226,6 +226,7 @@
     "delivery:title:delivering": "Delivering",
     "delivery:set": "Set {set}",
     "delivery:set:title": "Delivering {kind, select, components{FIFO} packaging{packaging} ps{paint-shop} other{{kind}}} carts",
+    "delivery:set:addCarts": "Add carts",
     "delivery:set:finish": "Finish delivery",
     "delivery:set:cancel": "Close",
     "delivery:set:msg": "Scan again to finish the delivery.",
