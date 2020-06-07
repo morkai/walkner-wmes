@@ -116,6 +116,8 @@
     "settings:planning:ignorePsStatus:help": "Orders with one of the following statuses will be ignored during creation of a new set.",
     "settings:planning:psPickupStatus": "Paint-shop statuses for pickup",
     "settings:planning:psPickupStatus:help": "Started set will be ready for pickup by the paint-shop only if all painted orders have one of the following paint-shop statuses.",
+    "settings:planning:psPickupReadyFuncs": "Finished functions for paint-shop pickup",
+    "settings:planning:psPickupReadyFuncs:help": "Started set will be ready for pickup by the paint-shop only if the following functions completed pickup in all of the set's painted orders.",
     "settings:planning:groupDuration": "Order group duration [h]",
     "settings:planning:groupExtraItems": "Minimum quantity in group",
     "settings:planning:groupExtraItems:help": "If quantity of an order in the first/last group of a given line is lower or equal to the specified value, then that group will be merged with the next/previous group.",

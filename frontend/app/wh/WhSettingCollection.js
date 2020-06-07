@@ -68,7 +68,7 @@ define([
         return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
       }
 
-      if (/(ignorePsStatus|psPickupStatus|deliveryFuncs)$/.test(id))
+      if (/(ignorePsStatus|psPickupStatus|Funcs)$/.test(id))
       {
         return !Array.isArray(newValue) ? [] : newValue.filter(function(v) { return /^[a-z\-]{1,30}$/.test(v); });
       }

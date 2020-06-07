@@ -64,6 +64,18 @@
         <% }) %>
       </div>
       <div class="form-group">
+        <label class="control-label"><%- t('settings:planning:psPickupReadyFuncs') %></label>
+        <span class="help-block" style="display: block; margin-bottom: -5px"><%- t('settings:planning:psPickupReadyFuncs:help') %></span>
+        <% ['fmx', 'kitter', 'platformer', 'packer'].forEach(function(func) { %>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="wh.planning.psPickupReadyFuncs[]" value="<%- func %>">
+              <%- t('func:' + func) %>
+            </label>
+          </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
         <label for="<%- id('planning-maxSetSize') %>"><%- t('settings:planning:maxSetSize') %></label>
         <input id="<%- id('planning-maxSetSize') %>" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
       </div>
