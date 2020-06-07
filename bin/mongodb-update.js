@@ -26,6 +26,18 @@ db.oldwhsetcarts.updateMany({'pending': {$exists: false}}, {$set: {
   pending: false
 }});
 
+db.oldwhorders.updateMany(
+  {
+    status: {$in: ['finished', 'started', 'cancelled']}
+  },
+  {$set: {
+    psDistStatus: 'ignored',
+    'funcs.4.status': 'finished',
+    'funcs.4.picklist': 'ignore',
+    'funcs.4.pickup': 'ignore'
+  }}
+);
+
 db.oldwhlines.find({}).forEach(whLine =>
 {
   if (!Array.isArray(whLine.mrps))
@@ -125,6 +137,40 @@ db.plans.dropIndex('orders._id_-1');
 db.users.dropIndex('lastName_1');
 db.oldwhpendingcomponents.drop();
 db.oldwhpendingpackagings.drop();
+
+try
+{
+  db.settings.insertOne({
+    "_id": "wh.planning.psPickupReadyFuncs",
+    "__v": 0,
+    "updatedAt": new Date("2020-06-07T17:09:06.730Z"),
+    "updater": {
+      "id": "583849c0e46f3a12bc9e5103",
+      "ip": "192.168.1.250",
+      "label": "Walukiewicz ŁUKASZ"
+    },
+    "value": []
+  });
+} catch (x) {}
+
+try
+{
+  db.settings.insertOne({
+    "_id": "wh.planning.deliveryFuncs",
+    "__v": 0,
+    "updatedAt": new Date("2020-06-07T17:11:09.378Z"),
+    "updater": {
+      "id": "583849c0e46f3a12bc9e5103",
+      "ip": "192.168.1.250",
+      "label": "Walukiewicz ŁUKASZ"
+    },
+    "value": [
+      "painter",
+      "dist-components",
+      "dist-packaging"
+    ]
+  });
+} catch (x) {}
 
 try
 {
