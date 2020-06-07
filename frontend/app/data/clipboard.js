@@ -46,11 +46,13 @@ define([
         y = box.top + box.height;
       }
 
+      var tooltip;
+
       if (id)
       {
         clearTimeout(view.timers[id]);
 
-        var tooltip = $el.data('bs.tooltip');
+        tooltip = $el.data('bs.tooltip');
 
         if (tooltip)
         {
@@ -67,14 +69,23 @@ define([
         placement: 'bottom'
       }, options));
 
-      $el.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
-        left: x + 'px',
-        top: y + 'px'
-      });
+      tooltip = $el.tooltip('show').data('bs.tooltip');
 
-      $el.data('bs.tooltip.id', id);
+      if (tooltip)
+      {
+        tooltip.tip().addClass('result success').css({
+          left: x + 'px',
+          top: y + 'px'
+        });
 
-      view.timers[id] = setTimeout(function() { $el.tooltip('destroy').removeData('bs.tooltip.id'); }, 1337);
+        $el.data('bs.tooltip.id', id);
+
+        view.timers[id] = setTimeout(function() { $el.tooltip('destroy').removeData('bs.tooltip.id'); }, 1337);
+      }
+      else
+      {
+        $el.tooltip('destroy').removeData('bs.tooltip.id');
+      }
     }
 
   };
