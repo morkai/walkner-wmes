@@ -122,7 +122,7 @@
   "lines:redirLine": "Przekierowanie linii",
   "lines:wh:pickup:started": "Kompletowane",
   "lines:wh:pickup:finished": "Skompletowane",
-  "lines:wh:components": "Dostępne",
+  "lines:wh:available": "Dostępne",
   "lines:wh:sets": "sety",
   "lines:wh:qty": "sztuki",
   "lines:wh:time": "czas",

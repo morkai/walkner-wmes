@@ -50,10 +50,10 @@
     </td>
   </tr>
   <tr>
-    <th><%- t('lines:wh:components') %></th>
+    <th><%- t('lines:wh:available') %></th>
     <td>
-      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.components.qty.toLocaleString() %>&nbsp;&nbsp;
-      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.components.time / 1000, true) %>
+      <strong><%- t('lines:wh:qty') %>: </strong><%= line.whLine.available.qty.toLocaleString() %>&nbsp;&nbsp;
+      <strong><%- t('lines:wh:time') %>: </strong><%= time.toString(line.whLine.available.time / 1000, true) %>
     </td>
   </tr>
   <% } %>

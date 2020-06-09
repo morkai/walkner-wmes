@@ -123,7 +123,7 @@
     "lines:redirLine": "Line redirection",
     "lines:wh:pickup:started": "Picking",
     "lines:wh:pickup:finished": "Picked",
-    "lines:wh:components": "Available",
+    "lines:wh:available": "Available",
     "lines:wh:sets": "sets",
     "lines:wh:qty": "pce",
     "lines:wh:time": "time",
