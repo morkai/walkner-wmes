@@ -62,6 +62,11 @@ define([
       var sets = {};
       var html = [];
 
+      if (!data.func && data.whUser && data.whUser.func)
+      {
+        data.func = data.whUser.func;
+      }
+
       if (data.func)
       {
         html.push(prop('func', t('func:' + data.func)));
