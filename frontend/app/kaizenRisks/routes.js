@@ -30,6 +30,7 @@ define([
       function(ListPage, KaizenRiskCollection)
       {
         return new ListPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           collection: new KaizenRiskCollection(null, {rqlQuery: req.rql}),
           columns: [
@@ -54,6 +55,7 @@ define([
       function(DetailsPage, KaizenRisk, detailsTemplate)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenRisk({_id: req.params.id}),
           detailsTemplate: detailsTemplate
@@ -74,6 +76,7 @@ define([
       function(AddFormPage, KaizenRisk, KaizenRiskFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenRiskFormView,
           model: new KaizenRisk()
@@ -94,6 +97,7 @@ define([
       function(EditFormPage, KaizenRisk, KaizenRiskFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenRiskFormView,
           model: new KaizenRisk({_id: req.params.id})

@@ -32,14 +32,16 @@ define([
       function(ListPage, KaizenCategoryCollection)
       {
         return new ListPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           collection: new KaizenCategoryCollection(null, {rqlQuery: req.rql}),
           columns: [
             {id: '_id', className: 'is-min'},
             'name',
+            {id: 'active', className: 'is-min'},
             {id: 'inNearMiss', className: 'is-min'},
             {id: 'inSuggestion', className: 'is-min'},
-            {id: 'position', className: 'is-min'}
+            {id: 'position', className: 'is-min', tdClassName: 'is-number'}
           ]
         });
       }
@@ -58,6 +60,7 @@ define([
       function(DetailsPage, KaizenCategory, detailsTemplate)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenCategory({_id: req.params.id}),
           detailsTemplate: detailsTemplate
@@ -78,6 +81,7 @@ define([
       function(AddFormPage, KaizenCategory, KaizenCategoryFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenCategoryFormView,
           model: new KaizenCategory()
@@ -98,6 +102,7 @@ define([
       function(EditFormPage, KaizenCategory, KaizenCategoryFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenCategoryFormView,
           model: new KaizenCategory({_id: req.params.id})

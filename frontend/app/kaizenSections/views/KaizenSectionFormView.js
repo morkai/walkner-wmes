@@ -4,11 +4,13 @@ define([
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
+  'app/users/util/setUpUserSelect2',
   'app/kaizenSections/templates/form'
 ], function(
   FormView,
   idAndLabel,
   orgUnits,
+  setUpUserSelect2,
   template
 ) {
   'use strict';
@@ -22,6 +24,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.subdivisions = Array.isArray(formData.subdivisions) ? formData.subdivisions.join(',') : '';
+      formData.coordinators = '';
 
       return formData;
     },
@@ -29,6 +32,7 @@ define([
     serializeForm: function(formData)
     {
       formData.subdivisions = formData.subdivisions ? formData.subdivisions.split(',') : [];
+      formData.coordinators = setUpUserSelect2.getUserInfo(this.$id('coordinators')) || [];
 
       return formData;
     },
@@ -54,6 +58,19 @@ define([
           };
         })
       });
+
+      var $coordinators = setUpUserSelect2(this.$id('coordinators'), {
+        multiple: true,
+        noPersonnelId: true
+      });
+
+      $coordinators.select2('data', (this.model.get('coordinators') || []).map(function(u)
+      {
+        return {
+          id: u.id,
+          text: u.label
+        };
+      }));
     }
 
   });

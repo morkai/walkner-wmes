@@ -44,7 +44,7 @@ define([
     getTemplateData: function()
     {
       return {
-        statuses: kaizenDictionaries.statuses
+        statuses: kaizenDictionaries.kzStatuses
       };
     },
 

@@ -189,7 +189,7 @@ define([
         multiType: !!window.KAIZEN_MULTI || this.model.isMulti(),
         multiOwner: this.isMultiOwner(),
         today: time.format(new Date(), 'YYYY-MM-DD'),
-        statuses: kaizenDictionaries.statuses,
+        statuses: kaizenDictionaries.nmStatuses,
         types: kaizenDictionaries.types,
         attachments: attachments,
         backTo: this.serializeBackTo()
@@ -463,16 +463,6 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.$id('section').select2({
-        data: kaizenDictionaries.sections.map(idAndLabel)
-      });
-
-      this.$id('area').select2({
-        allowClear: true,
-        placeholder: ' ',
-        data: kaizenDictionaries.areas.map(idAndLabel)
-      });
-
       var formatResult = formatResultWithDescription.bind(null, 'text', 'description');
 
       this.$id('cause').select2({
@@ -480,22 +470,6 @@ define([
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         data: kaizenDictionaries.causes.map(idLabelAndDescription),
-        formatResult: formatResult
-      });
-
-      this.$id('nearMissCategory').select2({
-        allowClear: true,
-        placeholder: ' ',
-        dropdownCssClass: 'is-bigdrop',
-        data: kaizenDictionaries.categories.where({inNearMiss: true}).map(idLabelAndDescription),
-        formatResult: formatResult
-      });
-
-      this.$id('suggestionCategory').select2({
-        allowClear: true,
-        placeholder: ' ',
-        dropdownCssClass: 'is-bigdrop',
-        data: kaizenDictionaries.categories.where({inSuggestion: true}).map(idLabelAndDescription),
         formatResult: formatResult
       });
 
@@ -515,6 +489,10 @@ define([
         activeOnly: !this.options.editMode
       });
 
+      this.setUpSectionSelect2();
+      this.setUpAreaSelect2();
+      this.setUpCategorySelect2('nearMissCategory', 'inNearMiss');
+      this.setUpCategorySelect2('suggestionCategory', 'inSuggestion');
       this.setUpConfirmerSelect2();
       this.setUpOwnerSelect2();
       this.toggleStatuses();
@@ -524,6 +502,105 @@ define([
       this.toggleRelatedSuggestion();
 
       this.$('input[autofocus]').focus();
+    },
+
+    setUpSectionSelect2: function()
+    {
+      var id = this.model.get('section');
+      var model = kaizenDictionaries.sections.get(id);
+      var map = {};
+
+      kaizenDictionaries.sections.forEach(function(s)
+      {
+        if (s.get('active'))
+        {
+          map[s.id] = idAndLabel(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idAndLabel(model);
+        }
+      }
+
+      this.$id('section').select2({
+        data: _.values(map)
+      });
+    },
+
+    setUpAreaSelect2: function()
+    {
+      var id = this.model.get('area');
+      var model = kaizenDictionaries.areas.get(id);
+      var map = {};
+
+      kaizenDictionaries.areas.forEach(function(s)
+      {
+        if (s.get('active'))
+        {
+          map[s.id] = idAndLabel(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idAndLabel(model);
+        }
+      }
+
+      this.$id('area').select2({
+        data: _.values(map)
+      });
+    },
+
+    setUpCategorySelect2: function(prop, flag)
+    {
+      var id = this.model.get('category');
+      var model = kaizenDictionaries.categories.get(id);
+      var map = {};
+
+      kaizenDictionaries.categories.forEach(function(s)
+      {
+        if (s.get('active') && s.get(flag))
+        {
+          map[s.id] = idLabelAndDescription(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idLabelAndDescription(model);
+        }
+      }
+
+
+      this.$id(prop).select2({
+        allowClear: true,
+        placeholder: ' ',
+        dropdownCssClass: 'is-bigdrop',
+        multiple: false,
+        data: _.values(map),
+        formatResult: formatResultWithDescription
+      });
     },
 
     setUpConfirmerSelect2: function()

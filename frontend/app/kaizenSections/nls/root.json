@@ -4,9 +4,11 @@
     "BREADCRUMB:browse": "Sections",
 
     "PROPERTY:_id": "ID",
+    "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
-    "PROPERTY:subdivisions": "Subdivisions"
+    "PROPERTY:subdivisions": "Subdivisions",
+    "PROPERTY:coordinators": "Coordinators"
   },
   "pl": true
 }

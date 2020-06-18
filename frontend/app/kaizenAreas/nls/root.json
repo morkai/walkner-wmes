@@ -4,6 +4,7 @@
     "BREADCRUMB:browse": "Areas",
 
     "PROPERTY:_id": "ID",
+    "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position"
   },

@@ -30,12 +30,14 @@ define([
       function(ListPage, KaizenAreaCollection)
       {
         return new ListPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           collection: new KaizenAreaCollection(null, {rqlQuery: req.rql}),
           columns: [
             {id: '_id', className: 'is-min'},
             'name',
-            {id: 'position', className: 'is-min'}
+            {id: 'active', className: 'is-min'},
+            {id: 'position', className: 'is-min', tdClassName: 'is-number'}
           ]
         });
       }
@@ -54,6 +56,7 @@ define([
       function(DetailsPage, KaizenArea, detailsTemplate)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenArea({_id: req.params.id}),
           detailsTemplate: detailsTemplate
@@ -74,6 +77,7 @@ define([
       function(AddFormPage, KaizenArea, KaizenAreaFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenAreaFormView,
           model: new KaizenArea()
@@ -94,6 +98,7 @@ define([
       function(EditFormPage, KaizenArea, KaizenAreaFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenAreaFormView,
           model: new KaizenArea({_id: req.params.id})

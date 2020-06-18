@@ -20,15 +20,15 @@ define([
       this.listenTo(this.model, 'change', this.render);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         buttonType: this.options.buttonType,
         buttonUrl: this.options.buttonUrl,
         buttonLabel: this.options.buttonLabel,
         browseUrl: this.options.browseUrl,
         sortProperty: this.options.sortProperty,
+        openStatuses: this.options.openStatuses,
         total: this.model.get('total'),
         user: this.model.get('user')
       };

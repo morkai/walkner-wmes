@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../core/Model',
+  'app/i18n',
+  'app/core/Model',
   'app/core/templates/userInfo'
 ], function(
+  t,
   Model,
   renderUserInfo
 ) {
@@ -23,7 +25,9 @@ define([
 
     labelAttribute: 'name',
 
-    defaults: {},
+    defaults: {
+      active: true
+    },
 
     serialize: function()
     {
@@ -37,6 +41,8 @@ define([
       {
         obj.owners = obj.owners.map(function(o) { return renderUserInfo({userInfo: o}); });
       }
+
+      obj.active = t('core', 'BOOL:' + obj.active);
 
       return obj;
     },

@@ -3,110 +3,113 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div id="<%- idPrefix %>-statusGroup" class="form-group clearfix">
-        <label for="<%- idPrefix %>-status" class="control-label"><%- helpers.t('PROPERTY:status') %></label>
-        <div id="<%- idPrefix %>-status" class="btn-group suggestions-form-statusBtnGroup" data-toggle="buttons">
+      <div id="<%- id('statusGroup') %>" class="form-group clearfix">
+        <label for="<%- id('status') %>" class="control-label"><%- t('PROPERTY:status') %></label>
+        <div id="<%- id('status') %>" class="btn-group suggestions-form-statusBtnGroup" data-toggle="buttons">
           <% statuses.forEach(function(status) { %>
           <label class="btn btn-default">
-            <input type="radio" name="status" value="<%- status %>"><%- helpers.t('status:' + status) %>
+            <input type="radio" name="status" value="<%- status %>"><%- t('status:' + status) %>
           </label>
           <% }) %>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- helpers.t('PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required placeholder="<%- helpers.t('FORM:help:subject') %>">
+        <label for="<%- id('subject') %>" class="control-label is-required"><%- t('PROPERTY:subject') %></label>
+        <input id="<%- id('subject') %>" class="form-control" type="text" autocomplete="new-password" name="subject" required placeholder="<%- t('FORM:help:subject') %>">
       </div>
       <div class="row">
         <div class="form-group col-lg-4 has-required-select2">
-          <label for="<%- idPrefix %>-section" class="control-label is-required"><%- helpers.t('PROPERTY:section') %></label>
-          <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required placeholder="<%- helpers.t('FORM:help:section') %>">
+          <label for="<%- id('section') %>" class="control-label is-required"><%- t('PROPERTY:section') %></label>
+          <input id="<%- id('section') %>" type="text" autocomplete="new-password" name="section" required placeholder="<%- t('FORM:help:section') %>">
         </div>
         <div class="form-group col-lg-8 has-required-select2">
-          <label for="<%- idPrefix %>-confirmer" class="control-label is-required"><%- helpers.t('PROPERTY:confirmer') %></label>
-          <input id="<%- idPrefix %>-confirmer" type="text" autocomplete="new-password" name="confirmer" required placeholder="<%- helpers.t('FORM:help:confirmer') %>">
+          <label for="<%- id('confirmer') %>" class="control-label is-required is-required-first-child" style="display: flex">
+            <span><%- t('PROPERTY:confirmer') %></span>
+            <a id="<%- id('confirmer-other') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('FORM:confirmer:other') %></a>
+          </label>
+          <input id="<%- id('confirmer') %>" type="text" autocomplete="new-password" name="confirmer" required>
         </div>
       </div>
-      <div id="<%- idPrefix %>-panel-suggestion" class="panel panel-warning suggestions-form-typePanel">
-        <div class="panel-heading"><%- helpers.t('type:suggestion') %></div>
-        <div id="<%- idPrefix %>-suggestionPanelBody" class="panel-body has-lastElementRow">
+      <div id="<%- id('panel-suggestion') %>" class="panel panel-warning suggestions-form-typePanel">
+        <div class="panel-heading"><%- t('type:suggestion') %></div>
+        <div id="<%- id('suggestionPanelBody') %>" class="panel-body has-lastElementRow">
           <div class="form-group has-required-select2">
-            <label for="<%- idPrefix %>-suggestionOwners" class="control-label is-required"><%- helpers.t('PROPERTY:suggestionOwners') %></label>
-            <input id="<%- idPrefix %>-suggestionOwners" type="text" autocomplete="new-password" name="suggestionOwners" required>
+            <label for="<%- id('suggestionOwners') %>" class="control-label is-required"><%- t('PROPERTY:suggestionOwners') %></label>
+            <input id="<%- id('suggestionOwners') %>" type="text" autocomplete="new-password" name="suggestionOwners" required>
           </div>
           <div class="row">
             <div class="col-lg-2 form-group has-required-select2">
-              <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
-              <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
+              <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
+              <input id="<%- id('date') %>" class="form-control" type="date" name="date" required max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
             </div>
           </div>
           <div class="row">
             <div class="col-lg-8 form-group has-required-select2">
-              <label for="<%- idPrefix %>-categories" class="control-label is-required"><%- helpers.t('PROPERTY:categories') %></label>
-              <input id="<%- idPrefix %>-categories" type="text" autocomplete="new-password" name="categories" required>
+              <label for="<%- id('categories') %>" class="control-label is-required"><%- t('PROPERTY:categories') %></label>
+              <input id="<%- id('categories') %>" type="text" autocomplete="new-password" name="categories" required>
             </div>
             <div class="col-lg-4 form-group">
-              <label for="<%- idPrefix %>-productFamily" class="control-label is-required-first-child" style="display: flex">
-                <span><%- helpers.t('PROPERTY:productFamily') %></span>
-                <a id="<%- idPrefix %>-productFamily-other" href="javascript:void(0)" style="margin-left: auto"><%- helpers.t('FORM:productFamily:other') %></a>
+              <label for="<%- id('productFamily') %>" class="control-label is-required-first-child" style="display: flex">
+                <span><%- t('PROPERTY:productFamily') %></span>
+                <a id="<%- id('productFamily-other') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('FORM:productFamily:other') %></a>
               </label>
-              <input id="<%- idPrefix %>-productFamily" type="text" autocomplete="new-password" name="productFamily">
-              <input id="<%- idPrefix %>-kaizenEvent" class="form-control hidden" type="text" autocomplete="new-password" name="kaizenEvent" placeholder="<%- helpers.t('FORM:productFamily:kaizenEvent') %>">
+              <input id="<%- id('productFamily') %>" type="text" autocomplete="new-password" name="productFamily">
+              <input id="<%- id('kaizenEvent') %>" class="form-control hidden" type="text" autocomplete="new-password" name="kaizenEvent" placeholder="<%- t('FORM:productFamily:kaizenEvent') %>">
             </div>
           </div>
           <div class="row">
             <div class="col-lg-4 form-group">
-              <label for="<%- idPrefix %>-howItIs" class="control-label is-required"><%- helpers.t('PROPERTY:howItIs') %></label>
-              <textarea id="<%- idPrefix %>-howItIs" class="form-control" name="howItIs" rows="3" required></textarea>
+              <label for="<%- id('howItIs') %>" class="control-label is-required"><%- t('PROPERTY:howItIs') %></label>
+              <textarea id="<%- id('howItIs') %>" class="form-control" name="howItIs" rows="3" required></textarea>
             </div>
             <div class="col-lg-4 form-group">
-              <label for="<%- idPrefix %>-howItShouldBe" class="control-label is-required"><%- helpers.t('PROPERTY:howItShouldBe') %></label>
-              <textarea id="<%- idPrefix %>-howItShouldBe" class="form-control" name="howItShouldBe" rows="3" required></textarea>
+              <label for="<%- id('howItShouldBe') %>" class="control-label is-required"><%- t('PROPERTY:howItShouldBe') %></label>
+              <textarea id="<%- id('howItShouldBe') %>" class="form-control" name="howItShouldBe" rows="3" required></textarea>
             </div>
             <div class="col-lg-4 form-group">
-              <label for="<%- idPrefix %>-suggestion" class="control-label"><%- helpers.t('PROPERTY:suggestion') %></label>
-              <textarea id="<%- idPrefix %>-suggestion" class="form-control" name="suggestion" rows="3"></textarea>
+              <label for="<%- id('suggestion') %>" class="control-label"><%- t('PROPERTY:suggestion') %></label>
+              <textarea id="<%- id('suggestion') %>" class="form-control" name="suggestion" rows="3"></textarea>
             </div>
           </div>
         </div>
       </div>
-      <div id="<%- idPrefix %>-panel-kaizen" class="panel panel-success suggestions-form-typePanel">
-        <div class="panel-heading"><%- helpers.t('type:kaizen') %></div>
+      <div id="<%- id('panel-kaizen') %>" class="panel panel-success suggestions-form-typePanel">
+        <div class="panel-heading"><%- t('type:kaizen') %></div>
         <div class="panel-body has-lastElementRow">
-          <div id="<%- idPrefix %>-kaizenOwnersFormGroup" class="form-group has-required-select2">
-            <label for="<%- idPrefix %>-kaizenOwners" class="control-label is-required"><%- helpers.t('PROPERTY:kaizenOwners') %></label>
-            <input id="<%- idPrefix %>-kaizenOwners" type="text" autocomplete="new-password" name="kaizenOwners">
+          <div id="<%- id('kaizenOwnersFormGroup') %>" class="form-group has-required-select2">
+            <label for="<%- id('kaizenOwners') %>" class="control-label is-required"><%- t('PROPERTY:kaizenOwners') %></label>
+            <input id="<%- id('kaizenOwners') %>" type="text" autocomplete="new-password" name="kaizenOwners">
           </div>
           <div class="row">
             <div class="form-group col-lg-2">
-              <label for="<%- idPrefix %>-kaizenStartDate" class="control-label is-requiredToFinish"><%- helpers.t('PROPERTY:kaizenStartDate') %></label>
-              <input id="<%- idPrefix %>-kaizenStartDate" class="form-control" type="date" name="kaizenStartDate" max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
+              <label for="<%- id('kaizenStartDate') %>" class="control-label is-requiredToFinish"><%- t('PROPERTY:kaizenStartDate') %></label>
+              <input id="<%- id('kaizenStartDate') %>" class="form-control" type="date" name="kaizenStartDate" max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
             </div>
             <div class="form-group col-lg-2">
-              <label for="<%- idPrefix %>-kaizenFinishDate" class="control-label is-requiredToFinish"><%- helpers.t('PROPERTY:kaizenFinishDate') %></label>
-              <input id="<%- idPrefix %>-kaizenFinishDate" class="form-control" type="date" name="kaizenFinishDate" max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
+              <label for="<%- id('kaizenFinishDate') %>" class="control-label is-requiredToFinish"><%- t('PROPERTY:kaizenFinishDate') %></label>
+              <input id="<%- id('kaizenFinishDate') %>" class="form-control" type="date" name="kaizenFinishDate" max="<%- today %>" placeholder="<%- t('core', 'placeholder:date') %>">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-4">
-              <label for="<%- idPrefix %>-kaizenImprovements" class="control-label is-requiredToFinish"><%- helpers.t('PROPERTY:kaizenImprovements') %></label>
-              <textarea id="<%- idPrefix %>-kaizenImprovements" class="form-control" name="kaizenImprovements" rows="3"></textarea>
+              <label for="<%- id('kaizenImprovements') %>" class="control-label is-requiredToFinish"><%- t('PROPERTY:kaizenImprovements') %></label>
+              <textarea id="<%- id('kaizenImprovements') %>" class="form-control" name="kaizenImprovements" rows="3"></textarea>
             </div>
             <div class="form-group col-md-4">
-              <label for="<%- idPrefix %>-kaizenEffect" class="control-label is-requiredToFinish"><%- helpers.t('PROPERTY:kaizenEffect') %></label>
-              <textarea id="<%- idPrefix %>-kaizenEffect" class="form-control" name="kaizenEffect" rows="3"></textarea>
+              <label for="<%- id('kaizenEffect') %>" class="control-label is-requiredToFinish"><%- t('PROPERTY:kaizenEffect') %></label>
+              <textarea id="<%- id('kaizenEffect') %>" class="form-control" name="kaizenEffect" rows="3"></textarea>
             </div>
           </div>
         </div>
       </div>
       <% if (editMode) { %>
       <div class="message message-inline message-warning">
-        <p><%- helpers.t('FORM:MSG:attachmentEdit') %></p>
+        <p><%- t('FORM:MSG:attachmentEdit') %></p>
       </div>
       <div class="row suggestions-form-attachments">
         <% ['scan', 'before', 'after'].forEach(function(attachment) { %>
         <div class="col-md-4 form-group">
-          <label class="control-label"><%- helpers.t('attachments:' + attachment + ':current') %></label>
+          <label class="control-label"><%- t('attachments:' + attachment + ':current') %></label>
           <p class="form-control-static">
             <% if (attachments[attachment]) { %>
             <a href="/suggestions/<%- model._id %>/attachments/<%- attachments[attachment]._id %>"><%= attachments[attachment].name %></a>
@@ -121,25 +124,25 @@
       <div class="row">
         <% ['scan', 'before', 'after'].forEach(function(attachment) { %>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-attachments-<%- attachment %>" class="control-label"><%- helpers.t('attachments:' + attachment + (editMode ? ':new' : '')) %></label>
-          <input id="<%- idPrefix %>-attachments-<%- attachment %>" class="form-control" type="file" data-name="<%- attachment %>">
+          <label for="<%- id('attachments-' + attachment) %>" class="control-label"><%- t('attachments:' + attachment + (editMode ? ':new' : '')) %></label>
+          <input id="<%- id('attachments-' + attachment) %>" class="form-control" type="file" data-name="<%- attachment %>">
         </div>
         <% }) %>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-subscribers" class="control-label"><%- helpers.t('PROPERTY:subscribers') %></label>
-        <input id="<%- idPrefix %>-subscribers" type="text" autocomplete="new-password" name="subscribers">
-        <p class="help-block"><%- helpers.t('FORM:help:subscribers') %></p>
+        <label for="<%- id('subscribers') %>" class="control-label"><%- t('PROPERTY:subscribers') %></label>
+        <input id="<%- id('subscribers') %>" type="text" autocomplete="new-password" name="subscribers">
+        <p class="help-block"><%- t('FORM:help:subscribers') %></p>
       </div>
       <% if (editMode) { %>
       <div class="form-group suggestions-form-comment">
-        <label for="<%- idPrefix %>-comment" class="control-label"><%- helpers.t('PROPERTY:comment') %></label>
-        <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>
+        <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
+        <textarea id="<%- id('comment') %>" class="form-control" name="comment" rows="3"></textarea>
       </div>
       <% } %>
     </div>
     <div class="panel-footer">
-      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
         <i class="fa fa-spinner fa-spin"></i>
         <span><%- backTo ? backTo.submitLabel : formActionText %></span>
       </button>

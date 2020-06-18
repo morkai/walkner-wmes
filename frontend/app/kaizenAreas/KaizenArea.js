@@ -1,8 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../core/Model'
+  'app/i18n',
+  'app/core/Model'
 ], function(
+  t,
   Model
 ) {
   'use strict';
@@ -21,7 +23,18 @@ define([
 
     labelAttribute: 'name',
 
-    defaults: {}
+    defaults: {
+      active: true
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.active = t('core', 'BOOL:' + obj.active);
+
+      return obj;
+    }
 
   });
 });

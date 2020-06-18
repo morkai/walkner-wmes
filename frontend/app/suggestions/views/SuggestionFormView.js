@@ -95,6 +95,11 @@ define([
         this.toggleRequiredFlags();
       },
 
+      'change [name="section"]': function()
+      {
+        this.setUpConfirmerSelect2();
+      },
+
       'change [name="categories"]': function()
       {
         this.toggleProductFamily();
@@ -164,6 +169,15 @@ define([
         }
       },
 
+      'click #-confirmer-other': function()
+      {
+        this.otherConfirmer = !this.otherConfirmer;
+
+        this.setUpConfirmerSelect2();
+
+        this.$id('confirmer').select2('focus');
+      },
+
       'change #-confirmer': 'checkOwnerValidity',
       'change #-suggestionOwners': 'checkOwnerValidity',
       'change #-kaizenOwners': 'checkOwnerValidity'
@@ -175,6 +189,9 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.productFamilyObservers = {};
+      this.otherConfirmer = false;
+
+      this.listenTo(kaizenDictionaries.sections, 'add remove change', this.onSectionUpdated);
     },
 
     serialize: function()
@@ -191,7 +208,7 @@ define([
 
       return _.assign(FormView.prototype.serialize.call(this), {
         today: time.format(new Date(), 'YYYY-MM-DD'),
-        statuses: kaizenDictionaries.statuses,
+        statuses: kaizenDictionaries.kzStatuses,
         attachments: attachments,
         backTo: this.serializeBackTo()
       });
@@ -262,11 +279,22 @@ define([
         }
 
         var owners = $owners.select2('data');
-        var valid = !confirmer
-          || owners.length === 0
-          || _.every(owners, function(owner) { return owner.id !== confirmer.id; });
+        var error = '';
+        var data = {};
 
-        $owners[0].setCustomValidity(valid ? '' : view.t('FORM:ERROR:ownerConfirmer'));
+        if (confirmer && _.some(owners, function(owner) { return owner.id === confirmer.id; }))
+        {
+          error = 'FORM:ERROR:ownerConfirmer';
+          data.prop = $owners[0].name;
+        }
+
+        if (!error && owners.length > 2)
+        {
+          error = 'FORM:ERROR:tooManyOwners';
+          data.max = 2;
+        }
+
+        $owners[0].setCustomValidity(error ? view.t(error, data) : '');
       });
     },
 
@@ -412,19 +440,6 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.$id('section').select2({
-        data: kaizenDictionaries.sections.map(idAndLabel)
-      });
-
-      this.$id('categories').select2({
-        allowClear: true,
-        placeholder: ' ',
-        dropdownCssClass: 'is-bigdrop',
-        multiple: true,
-        data: kaizenDictionaries.categories.where({inSuggestion: true}).map(idLabelAndDescription),
-        formatResult: formatResultWithDescription
-      });
-
       buttonGroup.toggle(this.$id('status'));
 
       setUpUserSelect2(this.$id('subscribers'), {
@@ -433,6 +448,8 @@ define([
         activeOnly: !this.options.editMode
       });
 
+      this.setUpSectionSelect2();
+      this.setUpCategorySelect2();
       this.setUpProductFamily();
       this.setUpConfirmerSelect2();
       this.setUpOwnerSelect2();
@@ -440,6 +457,74 @@ define([
       this.togglePanels();
 
       this.$('input[autofocus]').focus();
+    },
+
+    setUpSectionSelect2: function()
+    {
+      var id = this.model.get('section');
+      var model = kaizenDictionaries.sections.get(id);
+      var map = {};
+
+      kaizenDictionaries.sections.forEach(function(s)
+      {
+        if (s.get('active'))
+        {
+          map[s.id] = idAndLabel(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idAndLabel(model);
+        }
+      }
+
+      this.$id('section').select2({
+        data: _.values(map)
+      });
+    },
+
+    setUpCategorySelect2: function()
+    {
+      var id = this.model.get('category');
+      var model = kaizenDictionaries.categories.get(id);
+      var map = {};
+
+      kaizenDictionaries.categories.forEach(function(s)
+      {
+        if (s.get('active') && s.get('inSuggestion'))
+        {
+          map[s.id] = idLabelAndDescription(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idLabelAndDescription(model);
+        }
+      }
+
+
+      this.$id('categories').select2({
+        allowClear: true,
+        placeholder: ' ',
+        dropdownCssClass: 'is-bigdrop',
+        multiple: true,
+        data: _.values(map),
+        formatResult: formatResultWithDescription
+      });
     },
 
     setUpProductFamily: function()
@@ -470,11 +555,94 @@ define([
 
     setUpConfirmerSelect2: function()
     {
+      var section = kaizenDictionaries.sections.get(this.$id('section').val());
+      var coordinatorsList = section ? section.get('coordinators') : [];
+      var coordinatorsMap = {};
       var confirmer = this.model.get('confirmer');
-      var $confirmer = setUpUserSelect2(this.$id('confirmer'), {
-        textFormatter: formatUserSelect2Text,
-        activeOnly: !this.options.editMode
+      var $confirmer = this.$id('confirmer');
+      var $other = this.$id('confirmer-other');
+
+      coordinatorsList.forEach(function(u)
+      {
+        coordinatorsMap[u.id] = {
+          id: u.id,
+          text: u.label
+        };
       });
+
+      $confirmer.val('');
+
+      if (!section)
+      {
+        $confirmer
+          .select2('destroy')
+          .addClass('form-control')
+          .prop('disabled', true)
+          .attr('placeholder', this.t('FORM:confirmer:section'));
+
+        $other.addClass('hidden');
+
+        return;
+      }
+
+      $confirmer
+        .removeClass('form-control')
+        .prop('disabled', false)
+        .attr('placeholder', null);
+
+      if (coordinatorsList.length)
+      {
+        $other
+          .text(this.t('FORM:confirmer:' + (this.otherConfirmer ? 'list' : 'other')))
+          .removeClass('hidden');
+      }
+      else
+      {
+        $other.addClass('hidden');
+      }
+
+      if (this.otherConfirmer || !coordinatorsList.length)
+      {
+        setUpUserSelect2($confirmer, {
+          placeholder: this.t('FORM:confirmer:search'),
+          textFormatter: formatUserSelect2Text,
+          activeOnly: !this.options.editMode
+        });
+      }
+      else
+      {
+        if (confirmer)
+        {
+          coordinatorsMap[confirmer.id] = {
+            id: confirmer.id,
+            text: confirmer.label
+          };
+        }
+
+        var coordinators = _.values(coordinatorsMap);
+
+        coordinators.sort(function(a, b)
+        {
+          return a.text.localeCompare(b.text);
+        });
+
+        $confirmer.select2({
+          width: '100%',
+          allowClear: false,
+          placeholder: this.t('FORM:confirmer:select'),
+          data: coordinators
+        });
+
+        if (coordinators.length === 1)
+        {
+          confirmer = {
+            id: coordinators[0].id,
+            label: coordinators[0].text
+          };
+        }
+      }
+
+      $confirmer.select2('container').attr('title', '');
 
       if (confirmer)
       {
@@ -520,7 +688,7 @@ define([
       {
         if (!isEditMode)
         {
-          return currentUser;
+          return [currentUser];
         }
 
         var owners = model.get(type + 'Owners');
@@ -653,6 +821,12 @@ define([
       });
 
       this.$id('subscribers').select2('data', subscribers);
+    },
+
+    onSectionUpdated: function()
+    {
+      this.setUpSectionSelect2();
+      this.setUpConfirmerSelect2();
     }
 
   });

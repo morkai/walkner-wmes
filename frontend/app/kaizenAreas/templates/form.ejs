@@ -4,16 +4,22 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
-        <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
+        <label for="<%- id('id') %>" class="control-label is-required"><%- t('PROPERTY:_id') %></label>
+        <input id="<%- id('id') %>" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
+        <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
+        <input id="<%- id('name') %>" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-position" class="control-label is-required"><%- helpers.t('PROPERTY:position') %></label>
-        <input id="<%- idPrefix %>-position" class="form-control" type="number" name="position" min="0" required>
+        <label for="<%- id('position') %>" class="control-label is-required"><%- t('PROPERTY:position') %></label>
+        <input id="<%- id('position') %>" class="form-control" type="number" name="position" min="0" required>
       </div>
     </div>
     <div class="panel-footer">

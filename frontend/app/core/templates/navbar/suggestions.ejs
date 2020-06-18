@@ -6,7 +6,7 @@
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('NAVBAR:SUGGESTIONS:orders') %>
     <li data-privilege="LOCAL USER" data-module class="navbar-with-button"><a href="#suggestions"><%- t('NAVBAR:SUGGESTIONS:all') %></a><button class="btn btn-default" data-href="#suggestions;add"><i class="fa fa-plus"></i></button>
-    <li data-privilege="LOCAL USER" data-module><a href="#suggestions?status=in=(new,accepted,todo,inProgress,paused)&sort(-date)&limit(20)"><%- t('NAVBAR:SUGGESTIONS:open') %></a>
+    <li data-privilege="LOCAL USER" data-module><a href="#suggestions?status=in=(new,accepted,inProgress,verification)&sort(-date)&limit(20)"><%- t('NAVBAR:SUGGESTIONS:open') %></a>
     <li data-privilege="USER" data-module><a href="#suggestions?observers.user.id=mine&sort(-date)&limit(20)"><%- t('NAVBAR:SUGGESTIONS:mine') %></a>
     <li data-privilege="USER" data-module><a href="#suggestions?observers.user.id=unseen&sort(-date)&limit(20)"><%- t('NAVBAR:SUGGESTIONS:unseen') %></a>
     <li class="divider">

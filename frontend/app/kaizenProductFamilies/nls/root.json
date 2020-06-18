@@ -4,6 +4,7 @@
     "BREADCRUMB:browse": "Product families",
 
     "PROPERTY:_id": "ID",
+    "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
     "PROPERTY:owners": "Owners"

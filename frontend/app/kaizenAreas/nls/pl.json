@@ -3,6 +3,7 @@
   "BREADCRUMB:browse": "Miejsca zdarzeń",
 
   "PROPERTY:_id": "ID",
+  "PROPERTY:active": "Aktywne?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja"
 }

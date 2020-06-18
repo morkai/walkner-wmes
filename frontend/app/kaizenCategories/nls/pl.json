@@ -3,9 +3,10 @@
   "BREADCRUMB:browse": "Kategorie",
 
   "PROPERTY:_id": "ID",
+  "PROPERTY:active": "Aktywna?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:description": "Opis",
-  "PROPERTY:inNearMiss": "W zdarzeniach potencjalnie wypadkowych?",
+  "PROPERTY:inNearMiss": "W ZPW?",
   "PROPERTY:inSuggestion": "W sugestiach?",
   "PROPERTY:position": "Pozycja"
 }

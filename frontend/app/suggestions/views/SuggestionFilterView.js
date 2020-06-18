@@ -94,7 +94,7 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.call(this), {
-        statuses: kaizenDictionaries.statuses,
+        statuses: kaizenDictionaries.kzStatuses,
         sections: kaizenDictionaries.sections.toJSON(),
         areas: kaizenDictionaries.areas.toJSON(),
         categories: _.invoke(kaizenDictionaries.categories.inSuggestion(), 'toJSON'),

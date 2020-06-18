@@ -51,14 +51,14 @@ define([
       this.defineModels();
       this.defineViews();
 
-      this.setView('#' + this.idPrefix + '-nearMiss-metrics', this.nearMissMetricsView);
-      this.setView('#' + this.idPrefix + '-nearMiss-list', this.nearMissListView);
-      this.setView('#' + this.idPrefix + '-nearMiss-top10-current', this.nearMissCurrentTop10View);
-      this.setView('#' + this.idPrefix + '-nearMiss-top10-previous', this.nearMissPreviousTop10View);
-      this.setView('#' + this.idPrefix + '-suggestion-metrics', this.suggestionMetricsView);
-      this.setView('#' + this.idPrefix + '-suggestion-list', this.suggestionListView);
-      this.setView('#' + this.idPrefix + '-suggestion-top10-current', this.suggestionCurrentTop10View);
-      this.setView('#' + this.idPrefix + '-suggestion-top10-previous', this.suggestionPreviousTop10View);
+      this.setView('#-nearMiss-metrics', this.nearMissMetricsView);
+      this.setView('#-nearMiss-list', this.nearMissListView);
+      this.setView('#-nearMiss-top10-current', this.nearMissCurrentTop10View);
+      this.setView('#-nearMiss-top10-previous', this.nearMissPreviousTop10View);
+      this.setView('#-suggestion-metrics', this.suggestionMetricsView);
+      this.setView('#-suggestion-list', this.suggestionListView);
+      this.setView('#-suggestion-top10-current', this.suggestionCurrentTop10View);
+      this.setView('#-suggestion-top10-previous', this.suggestionPreviousTop10View);
 
       this.load();
 
@@ -84,7 +84,7 @@ define([
         paginate: false,
         rqlQuery: 'select(rid,status,subject)&sort(-updatedAt)&limit(11)'
         + '&observers.user.id=mine'
-        + '&status=in=(new,accepted,todo,inProgress,paused)'
+        + '&status=in=(new,accepted,inProgress,verification)'
       });
     },
 
@@ -101,7 +101,8 @@ define([
         buttonUrl: '#kaizenOrders;add',
         buttonLabel: t.bound('dashboard', 'addButton:nearMiss'),
         browseUrl: '#kaizenOrders',
-        sortProperty: 'eventDate'
+        sortProperty: 'eventDate',
+        openStatuses: 'new,accepted,todo,inProgress,paused'
       });
       this.nearMissListView = new KaizenOrderListView({
         collection: this.nearMisses,
@@ -127,7 +128,8 @@ define([
         buttonUrl: '#suggestions;add',
         buttonLabel: t.bound('dashboard', 'addButton:suggestion'),
         browseUrl: '#suggestions',
-        sortProperty: 'date'
+        sortProperty: 'date',
+        openStatuses: 'new,accepted,inProgress,verification'
       });
       this.suggestionListView = new SuggestionListView({
         collection: this.suggestions,

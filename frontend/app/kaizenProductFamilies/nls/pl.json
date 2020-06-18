@@ -3,6 +3,7 @@
   "BREADCRUMB:browse": "Rodziny produktów",
 
   "PROPERTY:_id": "ID",
+  "PROPERTY:active": "Aktywna?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja",
   "PROPERTY:owners": "Właściciele"

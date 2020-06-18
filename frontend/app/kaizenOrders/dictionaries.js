@@ -69,7 +69,8 @@ define([
     },
     settings: settings.acquire(),
     types: [],
-    statuses: [],
+    nmStatuses: [],
+    kzStatuses: [],
     sections: new KaizenSectionCollection(),
     areas: new KaizenAreaCollection(),
     categories: new KaizenCategoryCollection(),
@@ -186,7 +187,8 @@ define([
     });
 
     dictionaries.types = data ? data.types : [];
-    dictionaries.statuses = data ? data.statuses : [];
+    dictionaries.nmStatuses = data ? data.nmStatuses : [];
+    dictionaries.kzStatuses = data ? data.kzStatuses : [];
 
     dictionaries.settings.reset(data ? data.settings : []);
   }
@@ -214,7 +216,8 @@ define([
 
     dictionaries.loaded = false;
     dictionaries.types = [];
-    dictionaries.statuses = [];
+    dictionaries.nmStatuses = [];
+    dictionaries.kzStatuses = [];
 
     resetDictionaries();
 

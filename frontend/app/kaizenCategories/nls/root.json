@@ -4,6 +4,7 @@
     "BREADCRUMB:browse": "Categories",
 
     "PROPERTY:_id": "ID",
+    "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
     "PROPERTY:description": "Description",
     "PROPERTY:inNearMiss": "In near misses?",

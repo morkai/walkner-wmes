@@ -33,10 +33,12 @@ define([
           baseBreadcrumb: true,
           collection: new KaizenSectionCollection(null, {rqlQuery: req.rql}),
           columns: [
-            {id: 'position', className: 'is-min', tdClassName: 'is-number'},
             {id: '_id', className: 'is-min'},
             {id: 'name', className: 'is-min'},
-            {id: 'subdivisions'}
+            {id: 'active', className: 'is-min'},
+            {id: 'subdivisions'},
+            {id: 'coordinators'},
+            {id: 'position', className: 'is-min', tdClassName: 'is-number'}
           ]
         });
       }
@@ -55,6 +57,7 @@ define([
       function(DetailsPage, KaizenSection, detailsTemplate)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenSection({_id: req.params.id}),
           detailsTemplate: detailsTemplate
@@ -75,6 +78,7 @@ define([
       function(AddFormPage, KaizenSection, KaizenSectionFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenSectionFormView,
           model: new KaizenSection()
@@ -95,6 +99,7 @@ define([
       function(EditFormPage, KaizenSection, KaizenSectionFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenSectionFormView,
           model: new KaizenSection({_id: req.params.id})

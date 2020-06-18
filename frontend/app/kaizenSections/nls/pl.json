@@ -3,7 +3,9 @@
   "BREADCRUMB:browse": "Działy",
 
   "PROPERTY:_id": "ID",
+  "PROPERTY:active": "Aktywny?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja",
-  "PROPERTY:subdivisions": "Działy WMES"
+  "PROPERTY:subdivisions": "Działy WMES",
+  "PROPERTY:coordinators": "Koordynatorzy"
 }

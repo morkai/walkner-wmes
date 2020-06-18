@@ -47,7 +47,7 @@ define([
     {
       return {
         types: [].concat(kaizenDictionaries.types),
-        status: [].concat(kaizenDictionaries.statuses),
+        status: [].concat(kaizenDictionaries.nmStatuses),
         section: null,
         area: null,
         category: null,
@@ -110,7 +110,7 @@ define([
       return _.assign(FilterView.prototype.serialize.call(this), {
         multi: !!window.KAIZEN_MULTI,
         types: kaizenDictionaries.types,
-        statuses: kaizenDictionaries.statuses,
+        statuses: kaizenDictionaries.nmStatuses,
         sections: kaizenDictionaries.sections.toJSON(),
         areas: kaizenDictionaries.areas.toJSON(),
         nearMissCategories: _.invoke(kaizenDictionaries.categories.inNearMiss(), 'toJSON'),

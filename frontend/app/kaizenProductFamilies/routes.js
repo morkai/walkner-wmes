@@ -30,11 +30,13 @@ define([
       function(ListPage, KaizenProductFamilyCollection)
       {
         return new ListPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           collection: new KaizenProductFamilyCollection(null, {rqlQuery: req.rql}),
           columns: [
             {id: '_id', className: 'is-min'},
             {id: 'name', className: 'is-min'},
+            {id: 'active', className: 'is-min'},
             'owners',
             {id: 'position', className: 'is-min'}
           ]
@@ -55,6 +57,7 @@ define([
       function(DetailsPage, KaizenProductFamily, detailsTemplate)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenProductFamily({_id: req.params.id}),
           detailsTemplate: detailsTemplate
@@ -75,6 +78,7 @@ define([
       function(AddFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenProductFamilyFormView,
           model: new KaizenProductFamily()
@@ -95,6 +99,7 @@ define([
       function(EditFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenProductFamilyFormView,
           model: new KaizenProductFamily({_id: req.params.id})

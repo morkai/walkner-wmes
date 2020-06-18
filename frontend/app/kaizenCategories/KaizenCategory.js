@@ -23,7 +23,9 @@ define([
 
     labelAttribute: 'name',
 
-    defaults: {},
+    defaults: {
+      active: true
+    },
 
     serialize: function()
     {
@@ -31,11 +33,12 @@ define([
 
       if (!obj.description)
       {
-        obj.description = '-';
+        obj.description = '';
       }
 
-      obj.inNearMiss = t('core', 'BOOL:' + this.get('inNearMiss'));
-      obj.inSuggestion = t('core', 'BOOL:' + this.get('inSuggestion'));
+      obj.active = t('core', 'BOOL:' + obj.active);
+      obj.inNearMiss = t('core', 'BOOL:' + obj.inNearMiss);
+      obj.inSuggestion = t('core', 'BOOL:' + obj.inSuggestion);
 
       return obj;
     }

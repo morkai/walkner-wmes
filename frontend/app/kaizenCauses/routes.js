@@ -30,6 +30,7 @@ define([
       function(ListPage, KaizenCauseCollection)
       {
         return new ListPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           collection: new KaizenCauseCollection(null, {rqlQuery: req.rql}),
           columns: [
@@ -54,6 +55,7 @@ define([
       function(DetailsPage, KaizenCause, detailsTemplate)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenCause({_id: req.params.id}),
           detailsTemplate: detailsTemplate
@@ -74,6 +76,7 @@ define([
       function(AddFormPage, KaizenCause, KaizenCauseFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenCauseFormView,
           model: new KaizenCause()
@@ -94,6 +97,7 @@ define([
       function(EditFormPage, KaizenCause, KaizenCauseFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenCauseFormView,
           model: new KaizenCause({_id: req.params.id})

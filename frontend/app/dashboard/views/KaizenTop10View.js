@@ -35,10 +35,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         state: this.state,
         month: time.getMoment().add(this.options.month || 0, 'months').month() + 1,
         top10: this.getData()
