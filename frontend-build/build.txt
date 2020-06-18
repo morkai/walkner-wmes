@@ -1728,6 +1728,7 @@ app/aors/routes.js
 app/companies/routes.js
 app/core/util/bindLoadingMessage.js
 app/data/createSettings.js
+app/core/templates/userInfo.js
 app/kaizenSections/KaizenSection.js
 app/kaizenSections/KaizenSectionCollection.js
 app/kaizenAreas/KaizenArea.js
@@ -1740,7 +1741,6 @@ app/kaizenRisks/KaizenRisk.js
 app/kaizenRisks/KaizenRiskCollection.js
 app/kaizenBehaviours/KaizenBehaviour.js
 app/kaizenBehaviours/KaizenBehaviourCollection.js
-app/core/templates/userInfo.js
 app/kaizenProductFamilies/KaizenProductFamily.js
 app/kaizenProductFamilies/KaizenProductFamilyCollection.js
 app/settings/Setting.js
@@ -2223,6 +2223,7 @@ app/aors/routes.js
 app/companies/routes.js
 app/core/util/bindLoadingMessage.js
 app/data/createSettings.js
+app/core/templates/userInfo.js
 app/kaizenSections/KaizenSection.js
 app/kaizenSections/KaizenSectionCollection.js
 app/kaizenAreas/KaizenArea.js
@@ -2235,7 +2236,6 @@ app/kaizenRisks/KaizenRisk.js
 app/kaizenRisks/KaizenRiskCollection.js
 app/kaizenBehaviours/KaizenBehaviour.js
 app/kaizenBehaviours/KaizenBehaviourCollection.js
-app/core/templates/userInfo.js
 app/kaizenProductFamilies/KaizenProductFamily.js
 app/kaizenProductFamilies/KaizenProductFamilyCollection.js
 app/settings/Setting.js
