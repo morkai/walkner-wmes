@@ -165,15 +165,17 @@ define([
 
       obj.funcs.forEach(function(func)
       {
+        var isAssigned = !!func.user;
+
         obj.clickable[func._id] = {
           picklist: undelivered
             && (
-              (canManage && picklistDone)
+              (isAssigned && canManage && picklistDone)
               || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist')
             ),
           pickup: undelivered
             && (
-              (canManage && func.picklist === 'require')
+              (isAssigned && canManage && func.picklist === 'require')
               || (canManageCarts && func.pickup === 'success')
               || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
             )
