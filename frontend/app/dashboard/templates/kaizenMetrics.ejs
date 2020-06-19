@@ -19,7 +19,7 @@
       <span class="dashboard-metric-value"><%- user ? user.allCount : '?' %></span>
       <span class="dashboard-metric-name"><%- t('dashboard', 'metrics:user:allCount') %></span>
     </a>
-    <a class="well dashboard-metric" href="<%- browseUrl %>?status=in=(<%- openStatuses %>>)&sort(-<%- sortProperty %>)&limit(20)&observers.user.id=mine">
+    <a class="well dashboard-metric" href="<%- browseUrl %>?status=in=(<%- openStatuses %>)&sort(-<%- sortProperty %>)&limit(20)&observers.user.id=mine">
       <span class="dashboard-metric-value"><%- user ? user.openCount : '?' %></span>
       <span class="dashboard-metric-name"><%- t('dashboard', 'metrics:user:openCount') %></span>
     </a>
