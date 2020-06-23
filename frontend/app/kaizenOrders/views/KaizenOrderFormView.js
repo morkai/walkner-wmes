@@ -592,14 +592,13 @@ define([
         }
       }
 
-
       this.$id(prop).select2({
         allowClear: true,
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
         multiple: false,
         data: _.values(map),
-        formatResult: formatResultWithDescription
+        formatResult: formatResultWithDescription.bind(null, 'text', 'description')
       });
     },
 
