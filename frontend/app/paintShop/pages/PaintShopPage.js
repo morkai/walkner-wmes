@@ -188,6 +188,12 @@ define([
           label: page.t('PAGE_ACTION:paints'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
+          icon: 'ban',
+          href: '#paintShop/ignoredComponents',
+          privileges: 'PAINT_SHOP:MANAGE',
+          label: page.t('PAGE_ACTION:ignoredComponents'),
+          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
+        }, {
           href: '#paintShop;settings?tab=planning',
           icon: 'cogs',
           label: page.t('PAGE_ACTION:settings'),

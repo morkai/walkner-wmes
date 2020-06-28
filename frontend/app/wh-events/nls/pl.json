@@ -57,6 +57,8 @@
   "func:platformer": "Platformowy",
   "func:packer": "Opakowania",
   "func:painter": "Malarnia",
+  "func:dist-components": "Wysyłka FIFO",
+  "func:dist-packaging": "Wysyłka opakowań",
 
   "type:newSetStarted": "Rozpoczęcie nowego seta",
   "type:assignedToSet": "Przypisanie do seta",

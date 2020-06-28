@@ -18,6 +18,7 @@
     "PAGE_ACTION:drilling": "Drilling",
     "PAGE_ACTION:load": "Load",
     "PAGE_ACTION:paints": "Paints",
+    "PAGE_ACTION:ignoredComponents": "Ignored components",
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:exportPlanExecution": "Export plan",
     "PAGE_ACTION:openDocument": "Documents",

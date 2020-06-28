@@ -15,77 +15,77 @@ define([
 ) {
   'use strict';
 
-  var nls = 'i18n!app/nls/paintShopPaints';
+  var nls = 'i18n!app/nls/ps-ignoredComponents';
   var canView = user.auth('PAINT_SHOP:VIEW');
   var canManage = user.auth('PAINT_SHOP:MANAGE');
 
-  router.map('/paintShop/paints/:id', canView, function(req)
+  router.map('/paintShop/ignoredComponents/:id', canView, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
-        'app/paintShopPaints/PaintShopPaint',
-        'app/paintShopPaints/templates/details',
+        'app/ps-ignoredComponents/PsIgnoredComponent',
+        'app/ps-ignoredComponents/templates/details',
         nls
       ],
-      function(DetailsPage, PaintShopPaint, detailsTemplate)
+      function(DetailsPage, PsIgnoredComponent, detailsTemplate)
       {
         return new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
-          model: new PaintShopPaint({_id: req.params.id}),
+          model: new PsIgnoredComponent({_id: req.params.id}),
           detailsTemplate: detailsTemplate
         });
       }
     );
   });
 
-  router.map('/paintShop/paints;add', canManage, function()
+  router.map('/paintShop/ignoredComponents;add', canManage, function()
   {
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
-        'app/paintShopPaints/PaintShopPaint',
-        'app/paintShopPaints/views/PaintShopPaintFormView',
+        'app/ps-ignoredComponents/PsIgnoredComponent',
+        'app/ps-ignoredComponents/views/FormView',
         nls
       ],
-      function(AddFormPage, PaintShopPaint, PaintShopPaintFormView)
+      function(AddFormPage, PsIgnoredComponent, FormView)
       {
         return new AddFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
-          FormView: PaintShopPaintFormView,
-          model: new PaintShopPaint()
+          FormView: FormView,
+          model: new PsIgnoredComponent()
         });
       }
     );
   });
 
-  router.map('/paintShop/paints/:id;edit', canManage, function(req)
+  router.map('/paintShop/ignoredComponents/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
-        'app/paintShopPaints/PaintShopPaint',
-        'app/paintShopPaints/views/PaintShopPaintFormView',
+        'app/ps-ignoredComponents/PsIgnoredComponent',
+        'app/ps-ignoredComponents/views/FormView',
         nls
       ],
-      function(EditFormPage, PaintShopPaint, PaintShopPaintFormView)
+      function(EditFormPage, PsIgnoredComponent, FormView)
       {
         return new EditFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
-          FormView: PaintShopPaintFormView,
-          model: new PaintShopPaint({_id: req.params.id})
+          FormView: FormView,
+          model: new PsIgnoredComponent({_id: req.params.id})
         });
       }
     );
   });
 
   router.map(
-    '/paintShop/paints/:id;delete',
+    '/paintShop/ignoredComponents/:id;delete',
     canManage,
-    _.partial(showDeleteFormPage, 'app/paintShopPaints/PaintShopPaint', _, _, {
+    _.partial(showDeleteFormPage, 'app/ps-ignoredComponents/PsIgnoredComponent', _, _, {
       baseBreadcrumb: true
     })
   );

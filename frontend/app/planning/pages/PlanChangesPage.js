@@ -351,6 +351,9 @@ define([
         case 'kind':
           return t('planning', 'orderPriority:' + value);
 
+        case 'source':
+          return t('planning', 'orders:source:' + value);
+
         case 'orderPriority':
           return value.map(function(v) { return t('planning', 'orderPriority:' + v); }).join(', ');
 

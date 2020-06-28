@@ -59,6 +59,8 @@
     "func:platformer": "Platformer",
     "func:packer": "Packer",
     "func:painter": "Paint-shop",
+    "func:dist-components": "FIFO transporter",
+    "func:dist-packaging": "Packaging transporter",
 
     "type:newSetStarted": "New set started",
     "type:assignedToSet": "Assigned to set",

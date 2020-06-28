@@ -17,6 +17,7 @@
   "PAGE_ACTION:drilling": "Wiercenie",
   "PAGE_ACTION:load": "Obciążenie",
   "PAGE_ACTION:paints": "Farby",
+  "PAGE_ACTION:ignoredComponents": "Ignorowane komponenty",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:exportPlanExecution": "Eksportuj plan",
   "PAGE_ACTION:openDocument": "Dokumenty",

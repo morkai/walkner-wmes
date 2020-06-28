@@ -197,6 +197,7 @@
     "orders:eto": "ETO",
     "orders:priority": "{priority, select, E{ETO Pilot} E{ETO Pilot continuation} other{Order priority}}",
     "orders:lines": "Line",
+    "orders:source": "Source",
     "orders:source:plan": "Planned",
     "orders:source:added": "Added",
     "orders:source:incomplete": "Incomplete",

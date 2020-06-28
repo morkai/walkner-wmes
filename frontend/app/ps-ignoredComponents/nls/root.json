@@ -1,0 +1,17 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Paint shop",
+    "BREADCRUMB:browse": "Ignored components",
+
+    "PAGE_ACTION:jump:placeholder": "12NC...",
+
+    "PROPERTY:_id": "12NC",
+    "PROPERTY:mrps": "MRP",
+    "PROPERTY:name": "Name",
+
+    "filter:submit": "Filter",
+
+    "FORM:ERROR:alreadyExists": "Component with the specified 12NC already exists."
+  },
+  "pl": true
+}

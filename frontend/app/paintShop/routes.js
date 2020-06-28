@@ -68,8 +68,26 @@ define([
       function(PaintShopPaintCollection, PaintShopPaintListPage)
       {
         return new PaintShopPaintListPage({
-          date: req.query.date,
+          pageClassName: 'page-max-flex',
           collection: new PaintShopPaintCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
+  });
+
+  router.map('/paintShop/ignoredComponents', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/ps-ignoredComponents/PsIgnoredComponentCollection',
+        'app/ps-ignoredComponents/pages/ListPage',
+        nls[0]
+      ],
+      function(PsIgnoredComponentCollection, ListPage)
+      {
+        return new ListPage({
+          pageClassName: 'page-max-flex',
+          collection: new PsIgnoredComponentCollection(null, {rqlQuery: req.rql})
         });
       }
     );

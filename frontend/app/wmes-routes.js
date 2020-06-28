@@ -70,6 +70,7 @@ define([
   './changelog/routes',
   './isaPalletKinds/routes',
   './isa/routes',
+  './ps-ignoredComponents/routes',
   './paintShopPaints/routes',
   './paintShop/routes',
   './qiResults/routes',

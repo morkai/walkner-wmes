@@ -1,4 +1,76 @@
 <div class="hidden">
+  <h1>v0.150.0</h1>
+  <h2><%- time.format('2020-06-07', 'LL') %></h2>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący traktowanie zeskanowanej etykiety komponentu jako etykiety oprawy z numerem
+      seryjnym, jeżeli nr sztuki przekracza wartośc 9999.</li>
+    <li>Zmieniono rozpoczynanie nowych zleceń tak, aby nie można było rozpocząć zamkniętego zlecenia (CNF, DLV,
+      TECO, DLT lub DLFL).</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować utratę wartości MRP zlecenia podczas edycji wyniku inspekcji.</li>
+    <li>Dodano do raportu Outgoing quality wyświetlanie Kategorii błędu do listy wyników 4C oraz w dymku wady
+      na wykresie Co.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Zmieniono opcję ignorowania statusów malarnii podczas kompletacji tak, aby można było wybrać poszczególne
+      ignorowane statusy.</li>
+    <li>Zmieniono wysyłkę wózków tak, aby wózki ze zleceniami zaplanowanymi na początek I zmiany trafiały do realizacji
+      pod koniec ostatniej pracującej zmiany fabryki, a nie godzinę przed rozpoczęciem zaplanowanego zlecenia.</li>
+    <li>Zmieniono kompletację tak, aby FMX oraz Kitter mogli zignorować kompletację. Od teraz w danym zleceniu musi być
+      podany przynajmniej jeden wózek przez dowolną funkcję.</li>
+    <li>Zmieniono licznik linii Skompletowane tak, aby zliczał tylko sety, w których kompletacja została zakończona.</li>
+    <li>Zmieniono przydzielanie do istniejących setów tak, aby najpierw wybierany był set, który ma najwcześniejsze
+      zlecenie (wcześniej wg nr grupy, ID linii, czasu zlecenia).</li>
+    <li>Zmieniono kompletację tak, aby użytkownik z uprawnieniami 'Magazyn: zarządzanie' nie mógł zmieniać statusów
+      dla funkcji, które jeszcze nie zostały przypisane do seta.</li>
+    <li>Dodano licznik linii Kompletowane zliczający sety, w których kompletacja nie została jeszcze zakończona.</li>
+    <li>Dodano nową opcję konfiguracyjną kompletacji: Próg czasu dostępności - jeżeli całkowity dostępny czas linii
+      (suma czas skompletowanego i dostępnego) podczas tworzenia nowego seta jest mniejszy niż dany próg, to
+      traktowany jest jakby wynosił 0. Całkowity dostępny czas ma priorytet w określaniu dla jakiej linii zostanie
+      stworzony kolejny set.</li>
+    <li>Dodano możliwość wymuszenia rozpoczęcia wysyłki na wybraną linię.</li>
+    <li>Dodano blokowanie kompletacji zleceń zaplanowanych na dzień, który nie został jeszcze rozpoczęty na danej
+      linii.</li>
+    <li>Dodano możliwość przenoszenia dostarczonych zleceń na inne linie.</li>
+    <li>Dodano odnośniki do 'Dostarczonych zleceń' do menu 'Planowanie > Magazyn' oraz do wyników wyszukiwania
+      po pełnym numerze zlecenia.</li>
+    <li>Dodano kompletację i wysyłkę dla malarnii.</li>
+    <li>Dodano możliwość filtrowania linii.</li>
+    <li>Dodano możliwość dodawania wózków do wysyłki po rozpoczęciu wysyłki.</li>
+  </ul>
+  <h3>Obserwacje zachowań</h3>
+  <ul>
+    <li>Dodano do raportu Ilość obserwacji wykres Ilość bezpiecznych zachowań wg kategorii.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Dodano nowy status: Odstawione.</li>
+    <li>Dodano nową opcję konfiguracyjną: Dokumenty - umożliwia zdefiniowanie listy dokumentów, które mogą być łatwo
+      otwarte z poziomu ekranu kolejki malarnii.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że przy Odblokowywaniu MRP komunikat o skompletowaniu zleceń w magazynie
+      widoczny jest, jeżeli w planie magazynu na dany dzień istnieje jakiekolwiek zlecenie z danym MRP, zamiast
+      sprawdzać czy istnieje zlecenie Rozpoczęte lub Zakończone.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlenie zduplikowanej wiadomości dla użytkownika, który ją wysłał, jeżeli
+      dany użytkownik nie znajdował się na liście uczestników.</li>
+    <li>Poprawiono błąd powodujący duplikowanie użytkowników na liście uczestników po dodaniu nowego uczestnika.</li>
+    <li>Poprawiono błąd powodujący blokowanie dokonywania zmian w zgłoszeniach, które zostały automatycznie
+      oznaczne jako przeczytane (starsze niż 14 dni i nieprzeczytane przez przynajmniej 7 dni).</li>
+    <li>Zmieniono pole 'Wyślij wiadomość...' w czacie tak, aby jego wysokość dostosowywała się do treści.</li>
+    <li>Dodano możliwość włączenia trybu wieloliniowego dla wysyłanej wiadomości w czacie wciskając <kbd>Enter</kbd>
+      w pustym polu lub <kbd>Shift+Enter</kbd> po wpisaniu czegokolowiek.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.149.0</h1>
   <h2><%- time.format('2020-05-17', 'LL') %></h2>
   <h3>Magazyn</h3>

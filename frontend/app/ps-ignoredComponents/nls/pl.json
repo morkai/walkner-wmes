@@ -1,0 +1,14 @@
+{
+  "BREADCRUMB:base": "Malarnia",
+  "BREADCRUMB:browse": "Ignorowane komponenty",
+
+  "PAGE_ACTION:jump:placeholder": "12NC...",
+
+  "PROPERTY:_id": "12NC",
+  "PROPERTY:mrps": "MRP",
+  "PROPERTY:name": "Nazwa",
+
+  "filter:submit": "Filtruj",
+
+  "FORM:ERROR:alreadyExists": "Komponent o danym 12NC już istnieje."
+}

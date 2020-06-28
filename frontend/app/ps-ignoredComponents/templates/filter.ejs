@@ -1,0 +1,18 @@
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-_id"><%- t('PROPERTY:_id') %></label>
+    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text" autocomplete="new-password" maxlength="12" style="width: 110px">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-mrps"><%- t('PROPERTY:mrps') %></label>
+    <input id="<%- idPrefix %>-mrps" name="mrps" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-name"><%- t('PROPERTY:name') %></label>
+    <input id="<%- idPrefix %>-name" class="form-control" name="name" type="text" autocomplete="new-password">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('filter:submit') %></span></button>
+  </div>
+</form>
