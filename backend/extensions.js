@@ -4,7 +4,8 @@
 
 'use strict';
 
-const util = require('util');
+const {inspect} = require('util');
+const {formatDateTime} = require('util/dateFormatter');
 
 Object.defineProperty(Error.prototype, 'toJSON', {
   configurable: false,
@@ -32,7 +33,7 @@ Object.defineProperty(Error.prototype, 'toJSON', {
 
 console.inspect = function(value, depth, colors)
 {
-  console.log(util.inspect(value, {depth: depth || null, colors: colors !== false}));
+  console.log(inspect(value, {depth: depth || null, colors: colors !== false}));
 };
 
 console.bench = function(label, context, func)
@@ -63,14 +64,14 @@ if (chalk && process.env.NODE_ENV === 'development')
     error: chalk.bgRgb(255, 0, 0).rgb(255, 255, 255)
   };
 
-  Object.assign(util.inspect.styles, {
+  Object.assign(inspect.styles, {
     name: 'white',
     date: 'yellow'
   });
 
   require('h5.main/lib/utils/log').write = (log) =>
   {
-    let line = `>>> ${log.severity.padEnd(5)} ${log.time.toISOString()}`;
+    let line = `>>> ${log.severity.padEnd(5)} ${formatDateTime(log.time, true)}`;
 
     if (log.module)
     {
@@ -147,7 +148,7 @@ if (chalk && process.env.NODE_ENV === 'development')
 
     if (Object.keys(log).length)
     {
-      console.log(chalk.rgb(255, 255, 255)(util.inspect(log, {colors: true})));
+      console.log(chalk.rgb(255, 255, 255)(inspect(log, {colors: true})));
     }
   };
 }

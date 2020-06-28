@@ -36,8 +36,15 @@
 .suggestions-history-changes:last-child > tbody > tr:last-child > td {
   padding-bottom: 0;
 }
-.suggestions-history-changes .fa {
+.suggestions-history-changes .fa-arrow-right {
   padding: 0 5px;
+}
+.suggestions-history-changes .fa + span {
+  margin-left: 4px;
+  margin-right: 6px;
+}
+.suggestions-history-changes .fa + span:last-child {
+  margin-right: 0;
 }
 .suggestions-history-comment {
   margin: 5px 0 0 0;

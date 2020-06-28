@@ -1,0 +1,24 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <div class="form-group">
+    <label for="<%- id('kaizenImprovements') %>" class="control-label is-required"><%- t('PROPERTY:kaizenImprovements') %></label>
+    <textarea id="<%- id('kaizenImprovements') %>" name="kaizenImprovements" class="form-control" rows="3" required></textarea>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('kaizenEffect') %>" class="control-label is-required"><%- t('PROPERTY:kaizenEffect') %></label>
+    <textarea id="<%- id('kaizenEffect') %>" name="kaizenEffect" class="form-control" rows="3" required></textarea>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
+    <textarea id="<%- id('comment') %>" name="comment" class="form-control" rows="3"></textarea>
+  </div>
+  <div class="form-actions">
+    <button id="<%- id('accept') %>" class="btn btn-success" type="button">
+      <i class="fa fa-thumbs-up"></i><span><%- t('complete:accept') %></span>
+    </button>
+    <button id="<%- id('reject') %>" class="btn btn-danger" type="button">
+      <i class="fa fa-times"></i><span><%- t('complete:cancel') %></span>
+    </button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

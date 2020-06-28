@@ -9,10 +9,12 @@ define([
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
+  'app/core/templates/userInfo',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
   '../Suggestion',
-  'app/suggestions/templates/form'
+  'app/suggestions/templates/form',
+  'app/suggestions/templates/formCoordSectionRow'
 ], function(
   _,
   $,
@@ -22,10 +24,12 @@ define([
   buttonGroup,
   idAndLabel,
   FormView,
+  userInfoTemplate,
   setUpUserSelect2,
   kaizenDictionaries,
   Suggestion,
-  template
+  template,
+  coordSectionRowTemplate
 ) {
   'use strict';
 
@@ -93,11 +97,13 @@ define([
       {
         this.togglePanels();
         this.toggleRequiredFlags();
+        this.setUpCoordSectionSelect2();
       },
 
       'change [name="section"]': function()
       {
         this.setUpConfirmerSelect2();
+        this.checkSectionValidity();
       },
 
       'change [name="categories"]': function()
@@ -180,7 +186,31 @@ define([
 
       'change #-confirmer': 'checkOwnerValidity',
       'change #-suggestionOwners': 'checkOwnerValidity',
-      'change #-kaizenOwners': 'checkOwnerValidity'
+      'change #-kaizenOwners': 'checkOwnerValidity',
+
+      'change #-coordSection': function(e)
+      {
+        if (e.added)
+        {
+          this.addCoordSection({_id: e.added.id});
+
+          e.target.value = '';
+        }
+
+        this.setUpCoordSectionSelect2();
+      },
+
+      'change #-coordSections': function()
+      {
+        this.checkSectionValidity();
+      },
+
+      'click .btn[data-value="removeCoordSection"]': function(e)
+      {
+        this.$(e.currentTarget).closest('tr').remove();
+
+        this.setUpCoordSectionSelect2();
+      }
 
     }, FormView.prototype.events),
 
@@ -194,7 +224,7 @@ define([
       this.listenTo(kaizenDictionaries.sections, 'add remove change', this.onSectionUpdated);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var attachments = {};
 
@@ -206,12 +236,12 @@ define([
         });
       }
 
-      return _.assign(FormView.prototype.serialize.call(this), {
+      return {
         today: time.format(new Date(), 'YYYY-MM-DD'),
         statuses: kaizenDictionaries.kzStatuses,
         attachments: attachments,
         backTo: this.serializeBackTo()
-      });
+      };
     },
 
     serializeBackTo: function()
@@ -271,7 +301,7 @@ define([
       var $confirmer = view.$id('confirmer');
       var confirmer = $confirmer.select2('data');
 
-      [this.$id('suggestionOwners'), view.$id('kaizenOwners')].forEach(function($owners)
+      [view.$id('suggestionOwners'), view.$id('kaizenOwners')].forEach(function($owners)
       {
         if (!$owners.length)
         {
@@ -296,6 +326,28 @@ define([
 
         $owners[0].setCustomValidity(error ? view.t(error, data) : '');
       });
+    },
+
+    checkSectionValidity: function()
+    {
+      var $section = this.$id('section');
+      var $coordSections = this.$id('coordSections');
+      var sectionId = $section.val();
+      var error = false;
+
+      if (sectionId)
+      {
+        if (this.options.editMode)
+        {
+          error = $coordSections.find('tr[data-id="' + sectionId + '"]').length !== 0;
+        }
+        else
+        {
+          error = _.some($coordSections.select2('data'), function(d) { return d.id === sectionId; });
+        }
+      }
+
+      $section[0].setCustomValidity(error ? this.t('FORM:ERROR:sectionCoord') : '');
     },
 
     submitRequest: function($submitEl, formData)
@@ -415,6 +467,48 @@ define([
         formData[property] = dateMoment.isValid() ? dateMoment.toISOString() : null;
       });
 
+      if (this.options.editMode)
+      {
+        var oldCoordSections = {};
+        var newCoordSections = {};
+
+        this.model.get('coordSections').forEach(function(coordSection)
+        {
+          oldCoordSections[coordSection._id] = coordSection;
+        });
+
+        this.$id('coordSections').find('tr').each(function()
+        {
+          var id = this.dataset.id;
+          var section = kaizenDictionaries.sections.get(id);
+
+          newCoordSections[id] = oldCoordSections[id] || {
+            _id: id,
+            name: section ? section.getLabel() : id,
+            status: 'pending',
+            user: null,
+            time: null,
+            comment: ''
+          };
+        });
+
+        formData.coordSections = _.values(newCoordSections);
+      }
+      else
+      {
+        formData.coordSections = this.$id('coordSections').select2('data').map(function(item)
+        {
+          return {
+            _id: item.id,
+            name: item.text,
+            status: 'pending',
+            user: null,
+            time: null,
+            comment: ''
+          };
+        });
+      }
+
       delete formData.attachments;
 
       return formData;
@@ -453,6 +547,17 @@ define([
       this.setUpProductFamily();
       this.setUpConfirmerSelect2();
       this.setUpOwnerSelect2();
+
+      if (this.options.editMode)
+      {
+        this.renderCoordSections();
+        this.setUpCoordSectionSelect2();
+      }
+      else
+      {
+        this.setUpCoordSectionsSelect2();
+      }
+
       this.toggleStatuses();
       this.togglePanels();
 
@@ -550,21 +655,21 @@ define([
         });
       }
 
-      this.toggleProductFamily();
+      this.toggleProductFamily(true);
     },
 
     setUpConfirmerSelect2: function()
     {
       var section = kaizenDictionaries.sections.get(this.$id('section').val());
-      var coordinatorsList = section ? section.get('coordinators') : [];
-      var coordinatorsMap = {};
+      var confirmersList = section ? section.get('confirmers') : [];
+      var confirmersMap = {};
       var confirmer = this.model.get('confirmer');
       var $confirmer = this.$id('confirmer');
       var $other = this.$id('confirmer-other');
 
-      coordinatorsList.forEach(function(u)
+      confirmersList.forEach(function(u)
       {
-        coordinatorsMap[u.id] = {
+        confirmersMap[u.id] = {
           id: u.id,
           text: u.label
         };
@@ -590,7 +695,7 @@ define([
         .prop('disabled', false)
         .attr('placeholder', null);
 
-      if (coordinatorsList.length)
+      if (confirmersList.length)
       {
         $other
           .text(this.t('FORM:confirmer:' + (this.otherConfirmer ? 'list' : 'other')))
@@ -601,7 +706,7 @@ define([
         $other.addClass('hidden');
       }
 
-      if (this.otherConfirmer || !coordinatorsList.length)
+      if (this.otherConfirmer || !confirmersList.length)
       {
         setUpUserSelect2($confirmer, {
           placeholder: this.t('FORM:confirmer:search'),
@@ -613,13 +718,13 @@ define([
       {
         if (confirmer)
         {
-          coordinatorsMap[confirmer.id] = {
+          confirmersMap[confirmer.id] = {
             id: confirmer.id,
             text: confirmer.label
           };
         }
 
-        var coordinators = _.values(coordinatorsMap);
+        var coordinators = _.values(confirmersMap);
 
         coordinators.sort(function(a, b)
         {
@@ -708,6 +813,105 @@ define([
       }
     },
 
+    setUpCoordSectionsSelect2: function()
+    {
+      var $coordSection = this.$id('coordSections');
+
+      var data = kaizenDictionaries.sections
+        .filter(function(s)
+        {
+          return s.get('coordinators').length > 0;
+        })
+        .map(idAndLabel);
+
+      $coordSection.select2({
+        width: '100%',
+        multiple: true,
+        allowClear: true,
+        placeholder: this.t('coordSections:add:placeholder'),
+        data: data
+      });
+    },
+
+    renderCoordSections: function()
+    {
+      this.$id('coordSections').html('');
+
+      this.model.get('coordSections').forEach(this.addCoordSection, this);
+    },
+
+    setUpCoordSectionSelect2: function()
+    {
+      var $coordSections = this.$id('coordSections').find('tr');
+      var $coordSection = this.$id('coordSection');
+
+      var data = kaizenDictionaries.sections
+        .filter(function(s)
+        {
+          return s.get('coordinators').length > 0
+            && $coordSections.filter('tr[data-id="' + s.id + '"]').length === 0;
+        })
+        .map(idAndLabel);
+
+      $coordSection.select2({
+        width: '300px',
+        placeholder: this.t('coordSections:edit:placeholder'),
+        data: data
+      });
+
+      $coordSection.select2(data.length === 0 || !this.canManageCoordinators() ? 'disable' : 'enable');
+
+      this.checkSectionValidity();
+    },
+
+    addCoordSection: function(coordSection)
+    {
+      if (!coordSection.status)
+      {
+        coordSection = _.find(this.model.get('coordSections'), function(s) { return s._id === coordSection._id; })
+          || coordSection;
+      }
+
+      var section = kaizenDictionaries.sections.get(coordSection._id);
+
+      var $row = this.renderPartial(coordSectionRowTemplate, {
+        section: {
+          _id: coordSection._id,
+          name: section ? section.get('name') : coordSection.name,
+          status: this.t('coordSections:status:' + (coordSection.status || 'pending')),
+          user: coordSection.user ? userInfoTemplate({userInfo: coordSection.user}) : '',
+          time: coordSection.time ? time.format(coordSection.time, 'L, LT') : '',
+          comment: coordSection.comment || ''
+        },
+        canManage: this.canManageCoordinators()
+      });
+
+      this.$id('coordSections').append($row);
+    },
+
+    canManageCoordinators: function()
+    {
+      if (this.model.canManage())
+      {
+        return true;
+      }
+
+      var status = buttonGroup.getValue(this.$id('status'));
+
+      if (status === 'accepted' && this.model.isConfirmer())
+      {
+        return true;
+      }
+
+      if (status === 'new'
+        && (this.model.isConfirmer() || this.model.isCreator() || this.model.isSuggestionOwner()))
+      {
+        return true;
+      }
+
+      return false;
+    },
+
     toggleRequiredFlags: function()
     {
       this.$('.suggestions-form-typePanel').each(function()
@@ -726,38 +930,32 @@ define([
     {
       if (this.options.editMode)
       {
-        if (user.isAllowedTo('SUGGESTIONS:MANAGE'))
+        if (this.model.canManage() || this.model.isConfirmer())
         {
           return;
         }
 
-        var disabled = ['new'];
-        var isNotConfirmer = !this.model.isConfirmer();
+        var enabled = {};
+        var status = this.model.get('status');
+        var $status = this.$id('status');
 
-        if (isNotConfirmer)
+        enabled[status] = true;
+
+        if (status === 'new' && (this.model.isCreator() || this.model.isSuggestionOwner()))
         {
-          disabled.push('accepted', 'finished');
+          enabled.cancelled = true;
         }
 
-        if ((!this.model.isCreator() || this.model.get('status') !== 'new') && isNotConfirmer)
+        $status.find('input').each(function()
         {
-          disabled.push('cancelled');
-        }
-
-        var viewEl = this.el;
-
-        disabled.forEach(function(status)
-        {
-          var statusEl = viewEl.querySelector('input[name="status"][value="' + status + '"]');
-
-          statusEl.parentNode.classList.toggle('disabled', !statusEl.checked);
+          this.parentNode.classList.toggle('disabled', !this.checked && !enabled[this.value]);
         });
 
         this.$id('statusGroup').removeClass('hidden');
       }
       else
       {
-        this.$id('statusGroup').toggleClass('hidden', !user.isAllowedTo('SUGGESTIONS:MANAGE'));
+        this.$id('statusGroup').addClass('hidden');
       }
     },
 
@@ -768,7 +966,7 @@ define([
       this.$id('panel-kaizen').toggleClass('hidden', status === 'new' || status === 'cancelled');
     },
 
-    toggleProductFamily: function()
+    toggleProductFamily: function(keepValue)
     {
       var isConstruction = _.includes(this.$id('categories').val().split(','), 'KON');
       var $input = this.$id('productFamily');
@@ -779,7 +977,11 @@ define([
 
       if (!isConstruction)
       {
-        $input.select2('data', null);
+        if (!keepValue)
+        {
+          $input.select2('data', null);
+        }
+
         this.updateProductFamilySubscribers();
       }
 
@@ -827,6 +1029,15 @@ define([
     {
       this.setUpSectionSelect2();
       this.setUpConfirmerSelect2();
+
+      if (this.options.editMode)
+      {
+        this.setUpCoordSectionSelect2();
+      }
+      else
+      {
+        this.setUpCoordSectionsSelect2();
+      }
     }
 
   });

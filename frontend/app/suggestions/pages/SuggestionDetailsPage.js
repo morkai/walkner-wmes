@@ -10,6 +10,10 @@ define([
   'app/kaizenOrders/dictionaries',
   '../views/SuggestionDetailsView',
   '../views/SuggestionHistoryView',
+  '../views/CoordinateView',
+  '../views/AcceptView',
+  '../views/CompleteView',
+  '../views/VerifyView',
   'app/suggestions/templates/detailsPage'
 ], function(
   $,
@@ -21,6 +25,10 @@ define([
   kaizenDictionaries,
   SuggestionDetailsView,
   SuggestionHistoryView,
+  CoordinateView,
+  AcceptView,
+  CompleteView,
+  VerifyView,
   template
 ) {
   'use strict';
@@ -28,6 +36,8 @@ define([
   return DetailsPage.extend({
 
     template: template,
+
+    pageClassName: 'page-max-flex',
 
     baseBreadcrumb: true,
     breadcrumbs: function()
@@ -38,7 +48,7 @@ define([
       }
 
       return [
-        t.bound('suggestions', 'BREADCRUMB:base'),
+        this.t('BREADCRUMB:base'),
         this.model.get('rid') + ''
       ];
     },
@@ -54,6 +64,43 @@ define([
 
       if (user.isLoggedIn())
       {
+        if (model.canCoordinate())
+        {
+          actions.push({
+            id: 'coordinate',
+            icon: 'gavel',
+            label: this.t('PAGE_ACTION:coordinate'),
+            callback: this.coordinate.bind(this)
+          });
+        }
+        else if (model.canAccept())
+        {
+          actions.push({
+            id: 'accept',
+            icon: 'gavel',
+            label: this.t('PAGE_ACTION:accept'),
+            callback: this.accept.bind(this)
+          });
+        }
+        else if (model.canComplete())
+        {
+          actions.push({
+            id: 'complete',
+            icon: 'gavel',
+            label: this.t('PAGE_ACTION:complete'),
+            callback: this.complete.bind(this)
+          });
+        }
+        else if (model.canVerify())
+        {
+          actions.push({
+            id: 'verify',
+            icon: 'gavel',
+            label: this.t('PAGE_ACTION:verify'),
+            callback: this.verify.bind(this)
+          });
+        }
+
         if (model.isNotSeen())
         {
           actions.push({
@@ -109,8 +156,8 @@ define([
     {
       DetailsPage.prototype.initialize.apply(this, arguments);
 
-      this.setView('.suggestions-detailsPage-properties', this.detailsView);
-      this.setView('.suggestions-detailsPage-history', this.historyView);
+      this.setView('#-props', this.detailsView);
+      this.setView('#-history', this.historyView);
     },
 
     destroy: function()
@@ -152,18 +199,19 @@ define([
 
     markAsSeen: function(e)
     {
+      var view = this;
       var btnEl = e.currentTarget.querySelector('.btn');
 
       btnEl.disabled = true;
 
-      this.socket.emit('suggestions.markAsSeen', {_id: this.model.id}, function(err)
+      view.socket.emit('suggestions.markAsSeen', {_id: view.model.id}, function(err)
       {
         if (err)
         {
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('suggestions', 'MSG:markAsSeen:failure')
+            text: view.t('MSG:markAsSeen:failure')
           });
 
           btnEl.disabled = false;
@@ -173,18 +221,19 @@ define([
 
     observe: function(e)
     {
+      var view = this;
       var btnEl = e.currentTarget.querySelector('.btn');
 
       btnEl.disabled = true;
 
-      this.socket.emit('suggestions.observe', {_id: this.model.id, state: true}, function(err)
+      view.socket.emit('suggestions.observe', {_id: view.model.id, state: true}, function(err)
       {
         if (err)
         {
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('suggestions', 'MSG:observe:failure')
+            text: view.t('MSG:observe:failure')
           });
 
           btnEl.disabled = false;
@@ -194,18 +243,19 @@ define([
 
     unobserve: function(e)
     {
+      var view = this;
       var btnEl = e.currentTarget.querySelector('.btn');
 
       btnEl.disabled = true;
 
-      this.socket.emit('suggestions.observe', {_id: this.model.id, state: false}, function(err)
+      view.socket.emit('suggestions.observe', {_id: view.model.id, state: false}, function(err)
       {
         if (err)
         {
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('suggestions', 'MSG:unobserve:failure')
+            text: view.t('MSG:unobserve:failure')
           });
 
           btnEl.disabled = false;
@@ -219,6 +269,42 @@ define([
       {
         this.model.markAsSeen();
       }
+    },
+
+    coordinate: function()
+    {
+      var dialogView = new CoordinateView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('coordinate:title', {rid: this.model.get('rid')}));
+    },
+
+    accept: function()
+    {
+      var dialogView = new AcceptView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('accept:title', {rid: this.model.get('rid')}));
+    },
+
+    complete: function()
+    {
+      var dialogView = new CompleteView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('complete:title', {rid: this.model.get('rid')}));
+    },
+
+    verify: function()
+    {
+      var dialogView = new VerifyView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('verify:title', {rid: this.model.get('rid')}));
     }
 
   });

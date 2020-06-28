@@ -7,5 +7,6 @@
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja",
   "PROPERTY:subdivisions": "Działy WMES",
+  "PROPERTY:confirmers": "Zatwierdzający",
   "PROPERTY:coordinators": "Koordynatorzy"
 }

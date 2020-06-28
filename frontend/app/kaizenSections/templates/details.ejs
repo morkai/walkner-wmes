@@ -1,6 +1,14 @@
 <div class="panel panel-primary">
   <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <%- helpers.props(model, ['_id', 'name', 'active', 'position', 'subdivisions', '!coordinators']) %>
+    <%- helpers.props(model, [
+      '_id',
+      'name',
+      'active',
+      'position',
+      'subdivisions',
+      '!confirmers',
+      '!coordinators'
+    ]) %>
   </div>
 </div>

@@ -24,6 +24,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.subdivisions = Array.isArray(formData.subdivisions) ? formData.subdivisions.join(',') : '';
+      formData.confirmers = '';
       formData.coordinators = '';
 
       return formData;
@@ -32,6 +33,7 @@ define([
     serializeForm: function(formData)
     {
       formData.subdivisions = formData.subdivisions ? formData.subdivisions.split(',') : [];
+      formData.confirmers = setUpUserSelect2.getUserInfo(this.$id('confirmers')) || [];
       formData.coordinators = setUpUserSelect2.getUserInfo(this.$id('coordinators')) || [];
 
       return formData;
@@ -39,15 +41,17 @@ define([
 
     afterRender: function()
     {
-      FormView.prototype.afterRender.call(this);
+      var view = this;
 
-      if (this.options.editMode)
+      FormView.prototype.afterRender.call(view);
+
+      if (view.options.editMode)
       {
-        this.$id('id').prop('readonly', true);
-        this.$id('name').focus();
+        view.$id('id').prop('readonly', true);
+        view.$id('name').focus();
       }
 
-      this.$id('subdivisions').select2({
+      view.$id('subdivisions').select2({
         allowClear: true,
         multiple: true,
         data: orgUnits.getAllByType('subdivision').map(function(s)
@@ -59,18 +63,21 @@ define([
         })
       });
 
-      var $coordinators = setUpUserSelect2(this.$id('coordinators'), {
-        multiple: true,
-        noPersonnelId: true
-      });
-
-      $coordinators.select2('data', (this.model.get('coordinators') || []).map(function(u)
+      ['confirmers', 'coordinators'].forEach(function(prop)
       {
-        return {
-          id: u.id,
-          text: u.label
-        };
-      }));
+        var $users = setUpUserSelect2(view.$id(prop), {
+          multiple: true,
+          noPersonnelId: true
+        });
+
+        $users.select2('data', (view.model.get(prop) || []).map(function(u)
+        {
+          return {
+            id: u.id,
+            text: u.label
+          };
+        }));
+      });
     }
 
   });

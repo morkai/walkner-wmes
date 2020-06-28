@@ -37,6 +37,7 @@ define([
             {id: 'name', className: 'is-min'},
             {id: 'active', className: 'is-min'},
             {id: 'subdivisions'},
+            {id: 'confirmers'},
             {id: 'coordinators'},
             {id: 'position', className: 'is-min', tdClassName: 'is-number'}
           ]

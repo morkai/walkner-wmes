@@ -8,15 +8,15 @@
         <div class="col-md-4">
           <div class="props first">
             <div class="prop">
-              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:subject') %></div>
+              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- t('PROPERTY:subject') %></div>
               <div class="prop-value"><%= model.subject %></div>
             </div>
             <div class="prop">
-              <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:status') %></div>
+              <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('PROPERTY:status') %></div>
               <div class="prop-value"><%- model.status %></div>
             </div>
             <div class="prop">
-              <div class="prop-name <%- model.changed.section ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:section') %></div>
+              <div class="prop-name <%- model.changed.section ? 'is-changed' : '' %>"><%- t('PROPERTY:section') %></div>
               <div class="prop-value"><%- model.section %></div>
             </div>
           </div>
@@ -24,15 +24,15 @@
         <div class="col-md-4">
           <div class="props">
             <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:creator') %></div>
+              <div class="prop-name"><%- t('PROPERTY:creator') %></div>
               <div class="prop-value"><%- model.creator %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:updater') %></div>
+              <div class="prop-name"><%- t('PROPERTY:updater') %></div>
               <div class="prop-value"><%- model.updater %></div>
             </div>
             <div class="prop">
-              <div class="prop-name <%- model.changed.confirmer ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:confirmer') %></div>
+              <div class="prop-name <%- model.changed.confirmer ? 'is-changed' : '' %>"><%- t('PROPERTY:confirmer') %></div>
               <div class="prop-value"><%- model.confirmer %></div>
             </div>
           </div>
@@ -40,15 +40,15 @@
         <div class="col-md-4">
           <div class="props">
             <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
+              <div class="prop-name"><%- t('PROPERTY:createdAt') %></div>
               <div class="prop-value"><%- model.createdAt %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:updatedAt') %></div>
+              <div class="prop-name"><%- t('PROPERTY:updatedAt') %></div>
               <div class="prop-value"><%- model.updatedAt %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:confirmedAt') %></div>
+              <div class="prop-name"><%- t('PROPERTY:confirmedAt') %></div>
               <div class="prop-value"><%- model.confirmedAt || '-' %></div>
             </div>
           </div>
@@ -62,14 +62,95 @@
     <% include detailsKaizenPanel.ejs %>
     <% } %>
   </div>
-  <div class="suggestions-details-tabs">
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#<%- idPrefix %>-attachments" data-toggle="tab" data-tab="attachments"><%- helpers.t('tab:attachments') %></a></li>
-      <li><a href="#<%- idPrefix %>-observers" data-toggle="tab" data-tab="observers"><%- helpers.t('tab:observers') %></a></li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" id="<%- idPrefix %>-attachments"><% include attachments.ejs %></div>
-      <div class="tab-pane" id="<%- idPrefix %>-observers"><% include observers.ejs %></div>
-    </div>
+  <div class="panel panel-default">
+    <div class="panel-heading <%- model.changed.coordSections ? 'is-changed' : '' %>"><%- t('PANEL:TITLE:coordSections') %></div>
+    <table class="table table-bordered table-condensed table-hover suggestions-details-coordSections">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('PROPERTY:coordSections:name') %></th>
+        <th class="is-min"><%- t('PROPERTY:coordSections:status') %></th>
+        <th class="is-min"><%- t('PROPERTY:coordSections:user') %></th>
+        <th class="is-min"><%- t('PROPERTY:coordSections:time') %></th>
+        <th><%- t('PROPERTY:coordSections:comment') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if (!model.coordSections.length) { %>
+        <tr>
+          <td colspan="5"><%- t('coordSections:noData') %></td>
+        </tr>
+      <% } %>
+      <% model.coordSections.forEach(function(coordSection) { %>
+        <tr>
+          <td class="is-min"><%= coordSection.name %></td>
+          <td class="is-min"><%- t('coordSections:status:' + coordSection.status) %></td>
+          <td class="is-min"><%- coordSection.user %></td>
+          <td class="is-min"><%- coordSection.time ? time.format(coordSection.time, 'LLLL') : '' %></td>
+          <td><%= coordSection.comment %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PANEL:TITLE:attachments') %></div>
+    <table class="table table-bordered table-condensed table-hover suggestions-details-attachments">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('PROPERTY:attachments:description') %></th>
+        <th><%- t('PROPERTY:attachments:file') %></th>
+        <% if (model.attachments.length) { %>
+        <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+        <% } %>
+      </tr>
+      </thead>
+      <tbody>
+      <% if (!model.attachments.length) { %>
+        <tr>
+          <td colspan="2"><%- t('attachments:noData') %></td>
+        </tr>
+      <% } %>
+      <% model.attachments.forEach(function(attachment) { %>
+        <tr>
+          <td class="is-min"><%= t.has('suggestions', 'attachments:' + attachment.description) ? t('attachments:' + attachment.description) : attachment.description %></td>
+          <td><%= attachment.name %></td>
+          <% if (model.attachments.length) { %>
+          <td class="actions">
+            <div class="actions-group">
+              <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>" title="<%- t('attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
+              <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- t('attachments:actions:download') %>"><i class="fa fa-download"></i></a>
+            </div>
+          </td>
+          <% } %>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PANEL:TITLE:observers') %></div>
+    <table class="table table-bordered table-condensed table-hover suggestions-details-observers">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('PROPERTY:observers:name') %></th>
+        <th class="is-min"><%- t('PROPERTY:observers:role') %></th>
+        <th><%- t('PROPERTY:observers:lastSeenAt') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if (!model.observers.length) { %>
+        <tr>
+          <td colspan="3"><%- t('observers:noData') %></td>
+        </tr>
+      <% } %>
+      <% model.observers.forEach(function(observer) { %>
+        <tr>
+          <td class="is-min"><span class="userInfo" data-user-id="<%- observer.user.id %>"><span class="userInfo-label"><%= observer.user.label %></span></span></td>
+          <td class="is-min"><%= t('role:' + observer.role) %></td>
+          <td><%= observer.lastSeenAt ? time.format(observer.lastSeenAt, 'LLLL') : '-' %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
   </div>
 </div>

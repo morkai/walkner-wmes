@@ -8,6 +8,7 @@
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
     "PROPERTY:subdivisions": "Subdivisions",
+    "PROPERTY:confirmers": "Confirmers",
     "PROPERTY:coordinators": "Coordinators"
   },
   "pl": true

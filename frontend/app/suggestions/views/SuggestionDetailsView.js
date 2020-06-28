@@ -28,16 +28,16 @@ define([
       }
     }, DetailsView.prototype.events),
 
-    serialize: function()
+    getTemplateData: function()
     {
       var status = this.model.get('status');
-      var showKaizenPanel = status !== 'new' && status !== 'cancelled';
+      var showKaizenPanel = status !== 'new' && status !== 'accepted';
 
-      return _.assign(DetailsView.prototype.serialize.call(this), {
+      return {
         showKaizenPanel: showKaizenPanel,
         suggestionColumnSize: showKaizenPanel ? 6 : 12,
         kaizenColumnSize: showKaizenPanel ? 6 : 0
-      });
+      };
     },
 
     afterRender: function()
@@ -48,7 +48,9 @@ define([
 
       this.$('.prop[data-dictionary]').each(function()
       {
-        var descriptionHolder = kaizenDictionaries[this.dataset.dictionary].get(view.model.get(this.dataset.property));
+        var descriptionHolder = kaizenDictionaries[this.dataset.dictionary].get(
+          view.model.get(this.dataset.property)
+        );
 
         if (!descriptionHolder)
         {

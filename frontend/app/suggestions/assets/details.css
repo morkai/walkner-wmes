@@ -2,8 +2,8 @@
   margin-left: -15px;
   margin-right: -15px;
 }
-.suggestions-details-types > .row .panel {
-  margin-bottom: 15px;
+.suggestions-details-types .panel {
+  margin-bottom: 20px;
 }
 .suggestions-details-types .props,
 .suggestions-details-types .prop,

@@ -1,0 +1,14 @@
+<tr data-id="<%- section._id %>">
+  <td class="is-min"><%= section.name %></td>
+  <td class="is-min"><%= section.status %></td>
+  <td class="is-min"><%- section.user %></td>
+  <td class="is-min"><%- section.time %></td>
+  <td><%= section.comment %></td>
+  <td class="actions">
+    <div class="actions-group">
+      <% if (canManage) { %>
+      <button type="button" class="btn btn-default" data-value="removeCoordSection"><i class="fa fa-times"></i></button>
+      <% } %>
+    </div>
+  </td>
+</tr>

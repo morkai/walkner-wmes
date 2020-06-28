@@ -100,7 +100,7 @@ define([
         return false;
       }
 
-      var $submitEl = this.$('[type="submit"]').attr('disabled', true);
+      var $submitEl = this.$('.form-actions .btn:not(.cancel)').attr('disabled', true);
 
       this.submitRequest($submitEl, formData);
 

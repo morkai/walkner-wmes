@@ -30,6 +30,30 @@
           <input id="<%- id('confirmer') %>" type="text" autocomplete="new-password" name="confirmer" required>
         </div>
       </div>
+      <% if (editMode) { %>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:coordSections') %></label>
+        <table class="table table-condensed table-bordered table-hover">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('PROPERTY:coordSections:name') %></th>
+            <th class="is-min"><%- t('PROPERTY:coordSections:status') %></th>
+            <th class="is-min"><%- t('PROPERTY:coordSections:user') %></th>
+            <th class="is-min"><%- t('PROPERTY:coordSections:time') %></th>
+            <th><%- t('PROPERTY:coordSections:comment') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('coordSections') %>"></tbody>
+        </table>
+        <input id="<%- id('coordSection') %>" type="text">
+      </div>
+      <% } else { %>
+      <div class="form-group">
+        <label for="<%- id('coordSections') %>" class="control-label"><%- t('PROPERTY:coordSections') %></label>
+        <input id="<%- id('coordSections') %>" type="text">
+      </div>
+      <% } %>
       <div id="<%- id('panel-suggestion') %>" class="panel panel-warning suggestions-form-typePanel">
         <div class="panel-heading"><%- t('type:suggestion') %></div>
         <div id="<%- id('suggestionPanelBody') %>" class="panel-body has-lastElementRow">

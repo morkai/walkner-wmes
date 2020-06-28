@@ -190,6 +190,14 @@ input.no-controls[type="number"] {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: thin dotted;
+}
 .select2-result-with-description > h3 {
   font-size: 1em;
   font-weight: bold;

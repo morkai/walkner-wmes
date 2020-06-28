@@ -27,6 +27,12 @@ define([
 ) {
   'use strict';
 
+  var COORD_SECTION_STATUS_ICONS = {
+    pending: 'fa-question',
+    rejected: 'fa-thumbs-down',
+    accepted: 'fa-thumbs-up'
+  };
+
   return View.extend({
 
     template: template,
@@ -204,6 +210,13 @@ define([
 
         case 'subscribers':
           return value.join('; ');
+
+        case 'coordSections':
+          return value.map(function(coordSection)
+          {
+            return '<i class="fa ' + COORD_SECTION_STATUS_ICONS[coordSection.status] + '"></i><span>'
+              + _.escape(coordSection._id) + '</span>';
+          }).join(' ');
 
         default:
           return value || '';

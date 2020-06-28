@@ -48,6 +48,11 @@ define([
           : '';
       }).filter(function(s) { return !!s.length; }).join('; ');
 
+      o.confirmers = _.map(
+        o.confirmers,
+        function(u) { return userInfoTemplate({userInfo: u}); }
+      ).join(', ');
+
       o.coordinators = _.map(
         o.coordinators,
         function(u) { return userInfoTemplate({userInfo: u}); }

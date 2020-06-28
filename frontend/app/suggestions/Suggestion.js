@@ -92,6 +92,16 @@ define([
         });
       });
 
+      obj.coordSections = (obj.coordSections || []).map(function(coordSection)
+      {
+        var section = kaizenDictionaries.sections.get(coordSection._id);
+
+        return _.defaults({
+          name: section ? section.getLabel() : coordSection._id,
+          user: renderUserInfo({userInfo: coordSection.user})
+        }, coordSection);
+      });
+
       if (!Array.isArray(obj.attachments))
       {
         obj.attachments = [];
@@ -145,43 +155,150 @@ define([
       return this.attributes.confirmer && this.attributes.confirmer.id === user.data._id;
     },
 
+    isSuggestionOwner: function()
+    {
+      return _.some(this.get('suggestionOwners'), function(owner)
+      {
+        return owner.id === user.data._id;
+      });
+    },
+
+    isKaizenOwner: function()
+    {
+      return _.some(this.get('kaizenOwners'), function(owner)
+      {
+        return owner.id === user.data._id;
+      });
+    },
+
+    isOwner: function()
+    {
+      return this.isSuggestionOwner() || this.isKaizenOwner();
+    },
+
+    isCoordinator: function()
+    {
+      return _.some(this.get('coordSections'), function(coordSection)
+      {
+        var section = kaizenDictionaries.sections.get(coordSection._id);
+
+        if (!section)
+        {
+          return false;
+        }
+
+        return _.some(section.get('coordinators'), function(coordinator)
+        {
+          return coordinator.id === user.data._id;
+        });
+      });
+    },
+
     isNotSeen: function()
     {
       return this.attributes.observer.notify;
     },
 
-    canEdit: function()
+    canManage: function()
     {
-      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
-      {
-        return true;
-      }
+      return user.isAllowedTo(this.privilegePrefix + ':MANAGE');
+    },
 
-      var attrs = this.attributes;
-
-      if (!user.isLoggedIn() || attrs.status === 'finished' || attrs.status === 'cancelled')
+    canCoordinate: function()
+    {
+      if (this.get('status') !== 'new')
       {
         return false;
       }
 
-      if (this.isCreator() || this.isConfirmer())
+      if (this.canManage())
       {
         return true;
       }
 
-      return _.any(OWNER_PROPERTIES, function(ownerProperty)
+      return this.isCoordinator();
+    },
+
+    canAccept: function()
+    {
+      if (this.get('status') !== 'accepted')
       {
-        return _.any(attrs[ownerProperty], function(owner)
-        {
-          return owner.id === user.data._id;
-        });
-      });
+        return false;
+      }
+
+      if (this.canManage())
+      {
+        return true;
+      }
+
+      return this.isConfirmer();
+    },
+
+    canComplete: function()
+    {
+      if (this.get('status') !== 'inProgress')
+      {
+        return false;
+      }
+
+      if (this.canManage())
+      {
+        return true;
+      }
+
+      return this.isConfirmer() || this.isKaizenOwner();
+    },
+
+    canVerify: function()
+    {
+      if (this.get('status') !== 'verification')
+      {
+        return false;
+      }
+
+      if (this.canManage())
+      {
+        return true;
+      }
+
+      return this.isConfirmer();
+    },
+
+    canEdit: function()
+    {
+      if (this.canManage())
+      {
+        return true;
+      }
+
+      var status = this.get('status');
+
+      if (!user.isLoggedIn() || status === 'finished' || status === 'cancelled')
+      {
+        return false;
+      }
+
+      if (this.isConfirmer())
+      {
+        return true;
+      }
+
+      if (status === 'new' && (this.isCreator() || this.isSuggestionOwner()))
+      {
+        return true;
+      }
+
+      return status === 'inProgress' && this.isKaizenOwner();
     },
 
     canDelete: function()
     {
-      return user.isLoggedIn()
-        && (user.isAllowedTo(this.privilegePrefix + ':MANAGE') || (this.get('status') === 'new' && this.isCreator()));
+      if (this.canManage())
+      {
+        return true;
+      }
+
+      return this.get('status') === 'new' && this.isCreator();
     },
 
     markAsSeen: function()

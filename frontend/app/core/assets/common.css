@@ -346,6 +346,9 @@ code.multiline {
 .is-changed {
   color: #e00;
 }
+.panel-heading.is-changed {
+ color: #e00;
+}
 
 .tooltip.in.result {
   opacity: 1;
