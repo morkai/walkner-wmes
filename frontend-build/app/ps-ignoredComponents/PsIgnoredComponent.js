@@ -1,0 +1,1 @@
+define(["../core/Model"],function(n){"use strict";return n.extend({urlRoot:"/paintShop/ignoredComponents",clientUrlRoot:"#paintShop/ignoredComponents",topicPrefix:"paintShop.ignoredComponents",privilegePrefix:"PAINT_SHOP",nlsDomain:"ps-ignoredComponents",serialize:function(){var n=this.toJSON();return n.mrps=n.mrps.join("; "),n}})});

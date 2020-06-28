@@ -1989,6 +1989,7 @@ app/cags/routes.js
 app/changelog/routes.js
 app/isaPalletKinds/routes.js
 app/isa/routes.js
+app/ps-ignoredComponents/routes.js
 app/paintShopPaints/routes.js
 app/paintShop/routes.js
 app/qiResults/routes.js
@@ -2484,6 +2485,7 @@ app/cags/routes.js
 app/changelog/routes.js
 app/isaPalletKinds/routes.js
 app/isa/routes.js
+app/ps-ignoredComponents/routes.js
 app/paintShopPaints/routes.js
 app/paintShop/routes.js
 app/qiResults/routes.js

@@ -1,0 +1,1 @@
+define(["app/core/Collection","./PsIgnoredComponent"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"sort(_id)&limit(-1337)"})});
