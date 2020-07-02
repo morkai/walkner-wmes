@@ -38,7 +38,7 @@ define([
         });
       },
 
-      'change #-mrps': function(e)
+      'change #-mrps': function()
       {
         this.model.setFilters({
           mrps: this.$id('mrps').val().split(',').filter(function(v) { return !!v.length; })
