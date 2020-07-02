@@ -3,12 +3,6 @@
 
 'use strict';
 
-db.suggestions.updateMany({status: {$in: ['todo', 'paused']}}, {$set: {status: 'inProgress'}});
-db.suggestions.updateMany({coordSections: {$exists: false}}, {$set: {coordSections: []}});
+db.oldwhdeliveredorders.createIndex({whOrder: 1}, {background: true});
 
-db.kaizensections.updateMany({coordinators: {$exists: false}}, {$set: {coordinators: []}});
-db.kaizensections.updateMany({confirmers: {$exists: false}}, {$set: {confirmers: []}});
-db.kaizensections.updateMany({active: {$exists: false}}, {$set: {active: true}});
-db.kaizencategories.updateMany({active: {$exists: false}}, {$set: {active: true}});
-db.kaizenareas.updateMany({active: {$exists: false}}, {$set: {active: true}});
-db.kaizenproductfamilies.updateMany({active: {$exists: false}}, {$set: {active: true}});
+db.oldwhorders.updateMany({psDistStatus: {$exists: false}}, {$set: {psDistStatus: 'pending'}});

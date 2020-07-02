@@ -209,6 +209,7 @@
   "problem:editor:solveProblem:yes": "Rozwiąż problem",
   "problem:editor:solveProblem:no": "Nie rozwiązuj",
   "problem:editor:solveProblem:message": "Rozwiązano problem {func, select, fmx{FMX} kitter{Kittera} packer{Opakowań} painter{Malarnii} other{LP10}} z kompletacją {qty} szt. na linię {line}.",
+  "problem:msg:STATE_DLV": "Nie można resetować wysłanych zleceń.",
 
   "downtimePicker:title": "Przestój",
   "downtimePicker:submit": "Wybierz powód przestoju",

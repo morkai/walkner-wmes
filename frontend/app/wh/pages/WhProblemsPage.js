@@ -147,7 +147,7 @@ define([
           {
             oldWhOrder.set(newWhOrder);
 
-            if (newWhOrder.status !== 'problem')
+            if (oldWhOrder.get('status') !== 'problem')
             {
               page.whOrders.remove(oldWhOrder);
             }

@@ -208,6 +208,7 @@
     "problem:editor:solveProblem:yes": "Solve problem",
     "problem:editor:solveProblem:no": "Do not solve",
     "problem:editor:solveProblem:message": "Solved {func, select, fmx{FMX's} kitter{Kitter's} packer{Packer's} painter{Paint-shop's} other{LP10}} problem with a pickup of {qty} PCE for line {line}.",
+    "problem:msg:STATE_DLV": "Delivered orders cannot be reset.",
 
     "downtimePicker:title": "Downtime",
     "downtimePicker:submit": "Choose downtime reason",

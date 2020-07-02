@@ -4,6 +4,16 @@
 <ul>
   <li>Zmieniono przydzielanie do istniejącego seta tak, aby odbywało się wg najwcześniejszego czasu
     rozpoczęcia kompletacji seta a nie wg najwcześniejszego czasu rozpoczęcia zlecenia w secie.</li>
+  <li>Zmieniono obsługę problemów:
+    <ul>
+      <li>Problem podczas kompletacji nie usuwa zlecenia z seta. Problem z transakcją LP10 nadal
+        usuwa zlecenie z seta.</li>
+      <li>Sety z problemami mogą być wysyłane.</li>
+      <li>Dostarczone zlecenia, które mają problem są automatycznie blokowane podczas wysyłki.</li>
+      <li>Zablokowane, dostarczone zlecenia są automatycznie odblokowywane podczas wysyłki wózków zawierających
+        zablokowane zlecenie, jeżeli zlecenie to nie ma żadnego problemu.</li>
+    </ul>
+  </li>
   <li>Dodano automatyczne drukowanie picklisty malarnii po rozpoczęciu kompletacji przez malarnię.</li>
 </ul>
 <h3>Usprawnienia</h3>

@@ -161,23 +161,37 @@ define([
 
       this.hideEditor();
 
+      var funcId = this.$(e.target).closest('.wh-problems-func').attr('data-func');
+      var menu = [];
+
+      if (funcId !== 'lp10' && funcId !== 'fmx' && funcId !== 'kitter')
+      {
+        menu.push({
+          icon: 'fa-thumbs-up',
+          label: this.t('problem:menu:solveProblem'),
+          handler: this.solveProblem.bind(this, funcId)
+        });
+      }
+
+      menu.push(
+        {
+          icon: 'fa-eraser',
+          label: this.t('problem:menu:resetOrder'),
+          handler: this.resetOrder.bind(this, false)
+        },
+        {
+          icon: 'fa-times',
+          label: this.t('problem:menu:cancelOrder'),
+          handler: this.resetOrder.bind(this, true)
+        }
+      );
+
       var options = {
         className: 'wh-problems-menu',
-        menu: [
-          {
-            icon: 'fa-thumbs-up',
-            label: this.t('problem:menu:resetOrder'),
-            handler: this.resetOrder.bind(this, false)
-          },
-          {
-            icon: 'fa-times',
-            label: this.t('problem:menu:cancelOrder'),
-            handler: this.resetOrder.bind(this, true)
-          }
-        ]
+        menu: menu
       };
 
-      contextMenu.show(this, e.pageY, e.pageX, options);
+      contextMenu.show(this, e.pageY - 24, e.pageX - 24, options);
     },
 
     solveProblem: function(funcId, e)
@@ -280,27 +294,46 @@ define([
       $editor.find('.btn-primary').on('click', function()
       {
         var $fields = $editor.find('input, textarea, button').prop('disabled', true);
-        var comment = $editor.find('textarea').val();
+        var comment = $editor.find('textarea').val().trim();
 
         viewport.msg.saving();
 
-        var cancelReq = WhOrderCollection.act(view.model.get('date'), 'resetOrders', {
+        var req = WhOrderCollection.act(view.model.get('date'), 'resetOrders', {
           cancel: cancel,
           orders: [view.model.id]
         });
 
-        cancelReq.done(function()
+        req.done(function()
         {
           viewport.msg.saved();
 
           view.hideEditor();
 
-          view.chatView.send(comment);
+          if (comment.length)
+          {
+            view.chatView.send(comment);
+          }
         });
 
-        cancelReq.fail(function()
+        req.fail(function()
         {
-          viewport.msg.savingFailed();
+          var errorCode = req.responseJSON && req.responseJSON.error && req.responseJSON.error.code || null;
+
+          if (view.t.has('problem:msg:' + errorCode))
+          {
+            viewport.msg.saved();
+
+            viewport.msg.show({
+              type: 'error',
+              time: 3000,
+              text: view.t('problem:msg:' + errorCode)
+            });
+          }
+          else
+          {
+            viewport.msg.savingFailed();
+          }
+
 
           $fields.prop('disabled', false);
         });

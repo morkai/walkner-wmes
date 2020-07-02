@@ -208,6 +208,14 @@ define([
         }
       });
 
+      (message.deleted || []).forEach(function(data)
+      {
+        if (view.collection.get(data._id))
+        {
+          refresh = true;
+        }
+      });
+
       if (refresh)
       {
         view.refreshCollection();

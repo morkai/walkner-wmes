@@ -80,6 +80,10 @@
   outline: 2px solid #e00;
   cursor: pointer;
 }
+.wh-problems-progress.wh-problems-solvable[data-func="platformer"]:hover {
+  outline: 2px solid #0af;
+  cursor: pointer;
+}
 @media (min-width: 768px) {
   .wh-problems-dialog .modal-dialog {
     width: auto;

@@ -23,7 +23,10 @@ define([
     {
       return rql.Query.fromObject({
         sort: {
-          date: -1
+          date: -1,
+          set: 1,
+          kind: 1,
+          cart: 1
         },
         limit: -1337
       });

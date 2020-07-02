@@ -614,6 +614,11 @@ define([
           {
             return;
           }
+
+          if (userFunc._id === 'platformer' && userFunc.status === 'problem')
+          {
+            return;
+          }
           break;
       }
 

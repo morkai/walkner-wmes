@@ -1,10 +1,10 @@
-<form class="wh-problems-editor wh-problems-editor-solveProblem">
+<form class="wh-problems-editor wh-problems-editor-solveProblem" autocomplete="off">
   <% if (carts) { %>
-  <input class="form-control" name="carts" placeholder="<%- helpers.t('problem:editor:carts') %>" required>
+  <input class="form-control" name="carts" placeholder="<%- t('problem:editor:carts') %>" required autocomplete="off">
   <% } %>
-  <textarea class="form-control" name="comment" rows="3" placeholder="<%- helpers.t('problem:editor:comment') %>"><%= comment %></textarea>
+  <textarea class="form-control" name="comment" rows="3" placeholder="<%- t('problem:editor:comment') %>"><%= comment %></textarea>
   <div class="wh-problems-editor-actions">
-    <button class="btn btn-lg btn-primary" type="submit"><%- helpers.t('problem:editor:solveProblem:yes') %></button>
-    <button class="btn btn-lg btn-default" type="button"><%- helpers.t('problem:editor:solveProblem:no') %></button>
+    <button class="btn btn-lg btn-primary" type="submit"><%- t('problem:editor:solveProblem:yes') %></button>
+    <button class="btn btn-lg btn-default" type="button"><%- t('problem:editor:solveProblem:no') %></button>
   </div>
 </form>

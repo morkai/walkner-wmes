@@ -125,7 +125,9 @@ define([
       view.listenTo(plan.displayOptions, 'change:psStatuses', view.onPsStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
 
-      $(window).on('scroll.' + view.idPrefix, view.positionStickyHeaders.bind(view));
+      $(window)
+        .on('scroll.' + view.idPrefix, view.positionStickyHeaders.bind(view))
+        .on('resize.' + view.idPrefix, view.adjustStickyHeaders.bind(view));
     },
 
     destroy: function()

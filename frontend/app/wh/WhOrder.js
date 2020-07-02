@@ -166,27 +166,30 @@ define([
       obj.funcs.forEach(function(func)
       {
         var isAssigned = !!func.user;
+        var isFunc = isUser && userFunc._id === func._id;
 
         obj.clickable[func._id] = {
           picklist: undelivered
             && (
               (isAssigned && canManage && picklistDone)
-              || (picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist')
+              || (picklistDone && isUser && isFunc && func.status === 'picklist')
             ),
           pickup: undelivered
             && (
               (isAssigned && canManage && func.picklist === 'require')
               || (canManageCarts && func.pickup === 'success')
-              || (picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
+              || (picklistDone && isUser && isFunc && func.status === 'pickup')
             )
         };
       });
 
       obj.clickable.platformer.picklist = false;
-      obj.clickable.platformer.pickup = obj.clickable.platformer.pickup && obj.funcs[0].pickup === 'success';
+      obj.clickable.platformer.pickup = obj.clickable.platformer.pickup
+        && this.getFunc('fmx').pickup === 'success'
+        && this.getFunc('kitter').status !== 'problem'
+        && this.getFunc('platformer').status !== 'problem';
 
       obj.clickable.painter.picklist = false;
-      obj.clickable.painter.pickup = obj.clickable.painter.pickup && obj.psStatus === 'finished';
 
       obj.clickable.printLabels = canManage
         || (isUser && userFunc._id !== 'platformer' && userFunc._id !== 'painter');
@@ -226,7 +229,8 @@ define([
           }),
           carts: '',
           problemArea: '',
-          problem: this.get('problem')
+          problem: this.get('problem'),
+          solvable: false
         };
       }
       else
@@ -244,13 +248,24 @@ define([
           }),
           carts: func.carts.join(', '),
           problemArea: func.problemArea,
-          problem: func.comment
+          problem: func.comment,
+          solvable: false
         };
       }
 
-      problemFunc.solvable = this.get('status') === 'problem'
-        && problemFunc.className === 'wh-problems-failure'
-        && user.isAllowedTo('WH:SOLVER', 'WH:MANAGE');
+      if (user.isAllowedTo('WH:SOLVER', 'WH:MANAGE'))
+      {
+        var status = this.get('status');
+
+        if (status === 'problem' && problemFunc.className === 'wh-problems-failure')
+        {
+          problemFunc.solvable = true;
+        }
+        else if (problemFunc.className === 'wh-problems-progress' && funcId === 'platformer')
+        {
+          problemFunc.solvable = true;
+        }
+      }
 
       return problemFunc;
     },
