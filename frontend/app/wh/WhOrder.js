@@ -119,9 +119,18 @@ define([
       obj.funcIcons = {};
       obj.funcs.forEach(function(func)
       {
-        obj.funcIcons[func._id] = func.picklist === 'ignore'
-          ? FUNC_STATUS_TO_ICON.ignored
-          : FUNC_STATUS_TO_ICON[func.status];
+        if (func.picklist === 'ignore')
+        {
+          obj.funcIcons[func._id] = FUNC_STATUS_TO_ICON.ignored;
+        }
+        else if (func._id === 'painter' && func.status === 'pickup' && !func.user)
+        {
+          obj.funcIcons[func._id] = FUNC_STATUS_TO_ICON.pending;
+        }
+        else
+        {
+          obj.funcIcons[func._id] = FUNC_STATUS_TO_ICON[func.status];
+        }
       });
       obj.distIcons = {
         dist: DIST_STATUS_TO_ICON[obj.distStatus],
