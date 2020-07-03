@@ -347,11 +347,15 @@ define([
         .on('keydown.' + page.idPrefix, page.onWindowKeyDown.bind(page))
         .on('keypress.' + page.idPrefix, page.onWindowKeyPress.bind(page));
 
-      if (page.options.focus)
+      var focus = page.options.focus;
+
+      if (focus)
       {
         page.listenToOnce(page, 'afterRender', function()
         {
-          page.timers.focus = setTimeout(page.focusOrder.bind(page, page.options.focus, true), 1);
+          var fn = focus.type === 'set' ? 'focusSet' : 'focusOrder';
+
+          page.timers.focus = setTimeout(page[fn].bind(page, page.options.focus.order, true), 1);
         });
       }
 
@@ -791,6 +795,28 @@ define([
       }
     },
 
+    focusSet: function(whOrderId)
+    {
+      var whOrder = this.whOrders.get(whOrderId);
+
+      if (!whOrder || !whOrder.get('set'))
+      {
+        return;
+      }
+
+      var func = _.find(whOrder.get('funcs'), function(f)
+      {
+        return f.user && f.user.id === currentUser.data._id;
+      });
+      var user = !func ? null : {
+        _id: currentUser.data._id,
+        label: currentUser.getLabel(),
+        func: func._id
+      };
+
+      this.continueSet(user, whOrder.get('date'), whOrder.get('set'), false);
+    },
+
     showMessage: function(type, time, message, messageData)
     {
       if (this.timers.hideMessage)
@@ -1034,24 +1060,7 @@ define([
 
     onSetClicked: function(whOrderId)
     {
-      var whOrder = this.whOrders.get(whOrderId);
-
-      if (!whOrder || !whOrder.get('set'))
-      {
-        return;
-      }
-
-      var func = _.find(whOrder.get('funcs'), function(f)
-      {
-        return f.user && f.user.id === currentUser.data._id;
-      });
-      var user = !func ? null : {
-        _id: currentUser.data._id,
-        label: currentUser.getLabel(),
-        func: func._id
-      };
-
-      this.continueSet(user, whOrder.get('date'), whOrder.get('set'), false);
+      this.focusSet(whOrderId);
     }
 
   });

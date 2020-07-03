@@ -31,6 +31,13 @@ define([
       var term = this.findRqlTerm('sapOrder', 'eq');
 
       return term ? term.args[1] : null;
+    },
+
+    getStatusFilter: function()
+    {
+      var term = this.findRqlTerm('status', 'in');
+
+      return term && term.args[1].length ? term.args[1] : ['todo', 'done', 'blocked'];
     }
 
   }, {

@@ -8,7 +8,8 @@ define([
   '../WhDeliveredOrderCollection',
   './FormView',
   './RedirView',
-  'app/wh-deliveredOrders/templates/confirm'
+  'app/wh-deliveredOrders/templates/confirm',
+  'i18n!app/nls/wh-deliveredOrders'
 ], function(
   $,
   user,
@@ -83,16 +84,25 @@ define([
 
     }, ListView.prototype.events),
 
-    columns: [
-      {id: 'line', className: 'is-min', tdClassName: 'text-fixed', titleProperty: 'redirLine'},
-      {id: 'sapOrder', className: 'is-min'},
-      {id: 'qty', className: 'is-min text-right', tdClassName: 'text-right'},
-      {id: 'pceTime', className: 'is-min'},
-      {id: 'date', className: 'is-min'},
-      {id: 'set', className: 'is-min'},
-      {id: 'status', valueProperty: 'statusText', className: 'is-min'},
-      '-'
-    ],
+    columns: function()
+    {
+      return [
+        {
+          id: 'line',
+          className: 'is-min',
+          tdClassName: 'text-fixed',
+          titleProperty: 'redirLine',
+          visible: this.options.showLineColumn !== false
+        },
+        {id: 'sapOrder', className: 'is-min'},
+        {id: 'qty', className: 'is-min text-right', tdClassName: 'text-right'},
+        {id: 'pceTime', className: 'is-min'},
+        {id: 'date', className: 'is-min'},
+        {id: 'set', className: 'is-min'},
+        {id: 'status', valueProperty: 'statusText', className: 'is-min'},
+        '-'
+      ];
+    },
 
     actions: function()
     {
@@ -157,7 +167,8 @@ define([
       this.once('afterRender', function()
       {
         this.listenTo(this.collection, 'change', this.render);
-        this.listenTo(this.collection, 'reset', this.onReset);
+        this.listenTo(this.collection, 'remove', this.onRemoved);
+        this.listenTo(this.collection, 'change:status', this.onStatusChanged);
       });
 
       $(window)
@@ -327,9 +338,11 @@ define([
 
     onWindowKeyDown: function(e)
     {
-      if (e.key === 'Escape')
+      if (e.key === 'Escape' && this.$popover)
       {
         this.hidePopover();
+
+        return false;
       }
     },
 
@@ -340,6 +353,38 @@ define([
       if (this.$popover && !this.collection.get(this.$popover.data('modelId')))
       {
         this.hidePopover();
+      }
+    },
+
+    onStatusChanged: function(deliveredOrder)
+    {
+      clearTimeout(this.timers[deliveredOrder.id]);
+
+      if (this.collection.getStatusFilter().indexOf(deliveredOrder.get('status')) === -1)
+      {
+        this.timers[deliveredOrder.id] = setTimeout(this.removeOrder.bind(this), 30000, deliveredOrder);
+      }
+    },
+
+    removeOrder: function(deliveredOrder)
+    {
+      delete this.timers[deliveredOrder.id];
+
+      if (this.collection.getStatusFilter().indexOf(deliveredOrder.get('status')) !== -1)
+      {
+        return;
+      }
+
+      this.collection.remove(deliveredOrder);
+    },
+
+    onRemoved: function(deliveredOrder)
+    {
+      this.$row(deliveredOrder.id).remove();
+
+      if (!this.$('.list-item').length)
+      {
+        this.refreshCollectionNow();
       }
     }
 

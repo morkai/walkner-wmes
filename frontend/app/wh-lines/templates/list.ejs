@@ -1,4 +1,4 @@
-<div class="list is-colored">
+<div class="list is-colored wh-lines-list">
   <div class="table-responsive">
     <table class="table <%- tableClassName %>">
       <thead>
@@ -28,6 +28,9 @@
         <% rows.forEach(function(row) { %>
         <%- renderRow({row: row, canManage: canManage}) %>
         <% }) %>
+        <tr id="<%- id('details-outer') %>" class="wh-lines-details hidden">
+          <td id="<%- id('details-inner') %>" colspan="14">?</td>
+        </tr>
       </tbody>
     </table>
   </div>

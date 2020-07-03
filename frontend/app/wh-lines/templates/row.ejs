@@ -1,27 +1,19 @@
 <tr class="list-item" data-id="<%= row._id %>">
   <td class="is-min text-fixed wh-lines-group-start"><%= row._id %></td>
-  <td class="is-min is-number"><%- row.pickup.started.sets.toLocaleString() %></td>
-  <td class="is-min is-number"><%- row.pickup.started.qty.toLocaleString() %></td>
-  <td class="is-min is-number wh-lines-group-start"><%- time.toString(row.pickup.started.time / 1000, true, false) %></td>
-  <td class="is-min is-number"><%- row.pickup.finished.sets.toLocaleString() %></td>
-  <td class="is-min is-number"><%- row.pickup.finished.qty.toLocaleString() %></td>
-  <td class="is-min is-number wh-lines-group-start"><%- time.toString(row.pickup.finished.time / 1000, true, false) %></td>
-  <td class="is-min is-number">
-    <a href="#wh/deliveredOrders?line=<%= row._id %>&status=in=(todo,blocked)&sort(date,set,startTime)&limit(-1337)">
-      <%- row.available.qty.toLocaleString() %>
-    </a>
-  </td>
-  <td class="is-min is-number wh-lines-group-start">
-    <a href="#wh/deliveredOrders?line=<%= row._id %>&status=in=(todo,blocked)&sort(date,set,startTime)&limit(-1337)">
-      <%- time.toString(row.available.time / 1000, true, false) %>
-    </a>
-  </td>
-  <td class="is-min text-fixed" data-id="redirLine">
+  <td class="is-min is-number <%- !row.pickup.started.qty ? 'wh-lines-details-empty' : '' %>" data-details="started"><%- row.pickup.started.sets.toLocaleString() %></td>
+  <td class="is-min is-number <%- !row.pickup.started.qty ? 'wh-lines-details-empty' : '' %>" data-details="started"><%- row.pickup.started.qty.toLocaleString() %></td>
+  <td class="is-min is-number wh-lines-group-start <%- !row.pickup.started.qty ? 'wh-lines-details-empty' : '' %>" data-details="started"><%- time.toString(row.pickup.started.time / 1000, true, false) %></td>
+  <td class="is-min is-number <%- !row.pickup.finished.qty ? 'wh-lines-details-empty' : '' %>" data-details="finished"><%- row.pickup.finished.sets.toLocaleString() %></td>
+  <td class="is-min is-number <%- !row.pickup.finished.qty ? 'wh-lines-details-empty' : '' %>" data-details="finished"><%- row.pickup.finished.qty.toLocaleString() %></td>
+  <td class="is-min is-number wh-lines-group-start <%- !row.pickup.finished.qty ? 'wh-lines-details-empty' : '' %>" data-details="finished"><%- time.toString(row.pickup.finished.time / 1000, true, false) %></td>
+  <td class="is-min is-number <%- !row.available.qty ? 'wh-lines-details-empty' : '' %>" data-details="available"><%- row.available.qty.toLocaleString() %></td>
+  <td class="is-min is-number wh-lines-group-start <%- !row.available.qty ? 'wh-lines-details-empty' : '' %>" data-details="available"><%- time.toString(row.available.time / 1000, true, false) %></td>
+  <td class="is-min text-fixed wh-lines-clickable" data-id="redirLine">
     <% if (canManage) { %>
     <% if (row.redirLine) { %>
-    <a href="javascript:void(0)" data-action="redirLine" title="<%- t('redirLine:stop') %>" style="display: block"><i class="fa fa-arrow-right"></i><span><%= row.redirLine %></span></a>
+    <a href="javascript:void(0)" data-action="redirLine" title="<%- t('redirLine:stop') %>"><i class="fa fa-arrow-right"></i><span><%= row.redirLine %></span></a>
     <% } else { %>
-    <a href="javascript:void(0)" data-action="redirLine" title="<%- t('redirLine:start') %>" style="display: block"><i class="fa fa-plus"></i></a>
+    <a href="javascript:void(0)" data-action="redirLine" title="<%- t('redirLine:start') %>"><i class="fa fa-plus"></i></a>
     <% } %>
     <% } else { %>
     <%= row.redirLine || '' %>
@@ -33,9 +25,9 @@
     <% } %>
   </td>
   <td class="is-min"><%- row.nextShiftAt %></td>
-  <td class="is-min">
+  <td class="is-min <%- canManage ? 'wh-lines-clickable' : '' %>">
     <% if(canManage) { %>
-    <a href="javascript:void(0)" data-action="editStartedPlan" title="<%- t('editStartedPlan:tooltip') %>" style="display: block; text-align: right"><span style="margin-right: 7px"><%- row.startedPlan %></span><i class="fa fa-edit"></i></a>
+    <a href="javascript:void(0)" data-action="editStartedPlan" title="<%- t('editStartedPlan:tooltip') %>" style="text-align: right"><span style="margin-right: 7px"><%- row.startedPlan %></span><i class="fa fa-edit"></i></a>
     <% } else { %>
     <%- row.startedPlan %>
     <% } %>

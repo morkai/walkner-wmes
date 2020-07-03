@@ -49,7 +49,7 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.model, 'filtered', this.updateUrl);
+      this.listenTo(this.model, 'filtered detailed', this.updateUrl);
     },
 
     getTemplateData: function()
@@ -81,10 +81,16 @@ define([
     updateUrl: function()
     {
       var filters = this.model.getFilters();
+      var details = this.model.getDetails();
       var query = [
         'working=' + (filters.working === false ? '0' : filters.working ? '1' : ''),
         'mrps=' + filters.mrps.map(function(mrp) { return encodeURIComponent(mrp); }).join(',')
       ];
+
+      if (details.type && details.line)
+      {
+        query.push('details=' + details.type + '_' + encodeURIComponent(details.line));
+      }
 
       this.broker.publish('router.navigate', {
         replace: true,

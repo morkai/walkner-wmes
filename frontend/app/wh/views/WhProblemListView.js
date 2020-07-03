@@ -87,11 +87,11 @@ define([
 
       if (this.options.embedded)
       {
-        urls.pickup = '/wh-pickup#?date=' + date + '&focus=' + whOrder.id;
+        urls.pickup = '/wh-pickup#?date=' + date + '&order=' + whOrder.id;
       }
       else
       {
-        urls.pickup = '#wh/pickup/' + date + '?focus=' + whOrder.id;
+        urls.pickup = '#wh/pickup/' + date + '?order=' + whOrder.id;
       }
 
       return {

@@ -27,7 +27,14 @@ define([
 
     initialize: function(models, options)
     {
-      this.filters = {working: null, mrps: []};
+      this.filters = {
+        working: null,
+        mrps: []
+      };
+      this.details = {
+        type: null,
+        line: null
+      };
 
       this.on('filtered', function()
       {
@@ -37,6 +44,11 @@ define([
       if (options && options.filters)
       {
         this.setFilters(options.filters);
+      }
+
+      if (options && options.details)
+      {
+        this.setDetails(options.details.type, options.details.line);
       }
     },
 
@@ -50,6 +62,42 @@ define([
       Object.assign(this.filters, filters);
 
       this.trigger('filtered');
+    },
+
+    getDetails: function()
+    {
+      return this.details;
+    },
+
+    setDetails: function(type, line)
+    {
+      if (!type || !line)
+      {
+        type = null;
+        line = null;
+      }
+
+      if (this.details.type === type && this.details.line === line)
+      {
+        if (!type)
+        {
+          return;
+        }
+
+        this.details = {
+          type: null,
+          line: null
+        };
+      }
+      else
+      {
+        this.details = {
+          type: type,
+          line: line
+        };
+      }
+
+      this.trigger('detailed', this.details);
     },
 
     isVisible: function(line)
@@ -129,6 +177,10 @@ define([
     {
       var WhLineCollection = this;
       var filters = JSON.parse(localStorage.getItem('WMES_WH_LINES_FILTERS') || '{}');
+      var details = {
+        type: null,
+        line: null
+      };
 
       if (Object.keys(query).length)
       {
@@ -136,8 +188,20 @@ define([
         filters.mrps = (query.mrps || '').split(',').filter(function(v) { return !!v.length; });
       }
 
+      if (query.details)
+      {
+        var matches = query.details.match(/^(started|finished|available)_(.*?)$/);
+
+        if (matches)
+        {
+          details.type = matches[1];
+          details.line = matches[2];
+        }
+      }
+
       return new WhLineCollection(null, {
-        filters: filters
+        filters: filters,
+        details: details
       });
     }
 

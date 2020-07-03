@@ -593,6 +593,7 @@ define([
         view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
       });
     },
+
     handleResetAction: function(filter)
     {
       viewport.msg.saving();

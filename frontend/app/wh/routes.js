@@ -48,10 +48,19 @@ define([
 
     var options = {
       date: req.params.id,
-      focus: req.query.focus,
+      focus: null,
       from: req.query.from === undefined ? '06:00' : req.query.from,
       to: req.query.to === undefined ? '06:00' : req.query.to
     };
+
+    if (req.query.order)
+    {
+      options.focus = {type: 'order', order: req.query.order};
+    }
+    else if (req.query.set)
+    {
+      options.focus = {type: 'set', order: req.query.set};
+    }
 
     ['whStatuses', 'psStatuses'].forEach(function(prop)
     {
