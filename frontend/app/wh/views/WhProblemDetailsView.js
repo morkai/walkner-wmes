@@ -164,7 +164,10 @@ define([
       var funcId = this.$(e.target).closest('.wh-problems-func').attr('data-func');
       var menu = [];
 
-      if (funcId !== 'lp10' && funcId !== 'fmx' && funcId !== 'kitter')
+      if (funcId === 'platformer'
+        || funcId === 'packer'
+        || funcId === 'painter'
+        || (funcId === 'kitter' && this.model.getFunc('platformer').picklist === 'ignore'))
       {
         menu.push({
           icon: 'fa-thumbs-up',
