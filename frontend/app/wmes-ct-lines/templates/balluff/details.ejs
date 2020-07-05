@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><%- t('stations:title', {no: stationIndex + 1}) %></div>
+  <div class="panel-details">
+    <%- helpers.props(station, [
+      {id: 'processorIp', label: t('PROPERTY:stations:processorIp')},
+      {id: 'headPort', label: t('PROPERTY:stations:headPort')},
+      {id: 'headNo', label: t('PROPERTY:stations:headNo')},
+      {id: 'redLampI', label: t('PROPERTY:stations:redLampI')},
+      {id: 'orangeLampI', label: t('PROPERTY:stations:orangeLampI')}
+    ]) %>
+  </div>
+</div>

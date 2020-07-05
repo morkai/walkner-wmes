@@ -8,10 +8,12 @@ define([
   'app/data/orgUnits',
   'app/orgUnits/util/setUpOrgUnitSelect2',
   'app/wmes-ct-lines/templates/form',
-  'app/wmes-ct-lines/templates/_inveoCommonForm',
-  'app/wmes-ct-lines/templates/_inveoStationForm',
-  'app/wmes-ct-lines/templates/_luma2CommonForm',
-  'app/wmes-ct-lines/templates/_luma2StationForm'
+  'app/wmes-ct-lines/templates/inveo/commonForm',
+  'app/wmes-ct-lines/templates/inveo/stationForm',
+  'app/wmes-ct-lines/templates/luma2/commonForm',
+  'app/wmes-ct-lines/templates/luma2/stationForm',
+  'app/wmes-ct-lines/templates/balluff/commonForm',
+  'app/wmes-ct-lines/templates/balluff/stationForm'
 ], function(
   _,
   $,
@@ -23,7 +25,9 @@ define([
   inveoCommonForm,
   inveoStationForm,
   luma2CommonForm,
-  luma2StationForm
+  luma2StationForm,
+  balluffCommonForm,
+  balluffStationForm
 ) {
   'use strict';
 
@@ -35,6 +39,10 @@ define([
     luma2: {
       common: luma2CommonForm,
       station: luma2StationForm
+    },
+    balluff: {
+      common: balluffCommonForm,
+      station: balluffStationForm
     }
   };
 

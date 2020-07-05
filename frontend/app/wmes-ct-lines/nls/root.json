@@ -12,9 +12,13 @@
     "PROPERTY:stations:lampIp": "Lamp IP address",
     "PROPERTY:stations:redLampI": "Red lamp index",
     "PROPERTY:stations:orangeLampI": "Orange lamp index",
+    "PROPERTY:stations:processorIp": "Processor IP address",
+    "PROPERTY:stations:headPort": "Head port",
+    "PROPERTY:stations:headNo": "Head no",
 
     "type:inveo": "INVEO",
     "type:luma2": "LUMA2",
+    "type:balluff": "BALLUFF",
 
     "stations:title": "Station {no}",
     "form:stations:add": "Add station"

@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+  <div class="panel-heading is-with-actions">
+    <span class="panel-heading-title"></span>
+    <% include ../_stationPanelActions.ejs %>
+  </div>
+  <div class="panel-body">
+    <table>
+      <tbody>
+      <tr>
+        <td>
+          <label for="<%- id('processorIp') %>" class="control-label"><%- t('PROPERTY:stations:processorIp') %></label>
+          <input id="<%- id('processorIp') %>" class="form-control" type="text" name="stations[<%- stationIndex %>].processorIp">
+        </td>
+        <td>
+          <label for="<%- id('headPort') %>" class="control-label"><%- t('PROPERTY:stations:headPort') %></label>
+          <input id="<%- id('headPort') %>" class="form-control" type="text" name="stations[<%- stationIndex %>].headPort">
+        </td>
+        <td>
+          <label for="<%- id('headNo') %>" class="control-label"><%- t('PROPERTY:stations:headNo') %></label>
+          <input id="<%- id('headNo') %>" class="form-control" type="text" name="stations[<%- stationIndex %>].headNo">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="<%- id('redLampI') %>" class="control-label"><%- t('PROPERTY:stations:redLampI') %></label>
+          <input id="<%- id('redLampI') %>" class="form-control" type="text" name="stations[<%- stationIndex %>].redLampI">
+        </td>
+        <td>
+          <label for="<%- id('orangeLampI') %>" class="control-label"><%- t('PROPERTY:stations:orangeLampI') %></label>
+          <input id="<%- id('orangeLampI') %>" class="form-control" type="text" name="stations[<%- stationIndex %>].orangeLampI">
+        </td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -11,9 +11,13 @@
   "PROPERTY:stations:lampIp": "Adres IP lampy",
   "PROPERTY:stations:redLampI": "Indeks czerwonej lampy",
   "PROPERTY:stations:orangeLampI": "Indeks pomarańczowej lampy",
+  "PROPERTY:stations:processorIp": "Adres IP procesora",
+  "PROPERTY:stations:headPort": "Port głowicy",
+  "PROPERTY:stations:headNo": "Nr głowicy",
 
   "type:inveo": "INVEO",
   "type:luma2": "LUMA2",
+  "type:balluff": "BALLUFF",
 
   "stations:title": "Stanowisko {no}",
   "form:stations:add": "Dodaj stanowisko"

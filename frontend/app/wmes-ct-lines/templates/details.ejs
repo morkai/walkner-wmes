@@ -7,15 +7,21 @@
         'active',
         'type',
         'stationCount',
-        {id: 'common:lampControllerIp', value: model.common.lampControllerIp, visible: type === 'inveo'}
+        {
+          id: 'common:lampControllerIp',
+          value: model.common.lampControllerIp,
+          visible: type === 'inveo' || type === 'balluff'
+        }
       ]) %>
     </div>
   </div>
   <% model.stations.forEach(function(station, stationIndex) { %>
   <% if (type === 'inveo') { %>
-  <% include _inveoDetails.ejs %>
+  <% include inveo/details.ejs %>
   <% } else if (type === 'luma2') { %>
-  <% include _luma2Details.ejs %>
+  <% include luma2/details.ejs %>
+  <% } else if (type === 'balluff') { %>
+  <% include balluff/details.ejs %>
   <% } %>
   <% }) %>
 </div>
