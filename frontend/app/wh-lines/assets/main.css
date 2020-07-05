@@ -35,6 +35,9 @@
   box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
   background: #fff!important;
 }
+.wh-lines-details .fa-spinner {
+  margin-bottom: 20px;
+}
 @media (min-width: 1330px) {
   .wh-lines-list > .table-responsive {
     overflow-x: hidden;
