@@ -739,13 +739,80 @@ define([
 
       picklistDone: function(newData, newValue, propFunc, options, done)
       {
-        done(function(newData)
+        var view = this;
+
+        if (newValue === 'pending' || newValue === 'success')
         {
-          return {
-            whOrderId: newData._id,
-            newValue: newValue
-          };
+          return done(function(newData)
+          {
+            return {
+              whOrderId: newData._id,
+              newValue: newValue
+            };
+          });
+        }
+
+        if (newValue === 'failure')
+        {
+          return view.updateHandlers.handlePicklistDoneFailure.call(view, newData, done);
+        }
+
+        throw new Error('Invalid pickup value.');
+      },
+
+      handlePicklistDoneFailure: function(newData, done)
+      {
+        var view = this;
+        var $item = view.$('.wh-set-item[data-id="' + newData._id + '"]');
+        var $prop = $item.find('.wh-set-action[data-prop="picklistDone"]');
+        var $editor = $(problemEditorTemplate({
+          func: 'lp10',
+          problemArea: null,
+          comment: newData.problem,
+          placeholder: view.t('set:problemEditor:comment:lp10', {
+            qty: newData.qty,
+            line: newData.line
+          })
+        }));
+
+        $editor.find('textarea').on('focus', function(e)
+        {
+          if (e.target.value !== '')
+          {
+            return;
+          }
+
+          e.target.value = view.t('set:problemEditor:comment:lp10', {
+            qty: newData.qty,
+            line: newData.line
+          });
+
+          e.target.setSelectionRange(e.target.value.length, e.target.value.length);
         });
+
+        $editor.on('submit', function()
+        {
+          done(function(newData)
+          {
+            var comment = $editor.find('textarea').val().trim()
+              || view.t('set:problemEditor:comment:lp10', {
+                qty: newData.qty,
+                line: newData.line
+              });
+
+            return {
+              whOrderId: newData._id,
+              newValue: 'failure',
+              comment: comment
+            };
+          });
+
+          return false;
+        });
+
+        view.showEditor($editor, $prop[0]);
+
+        $editor.find('.btn').focus();
       },
 
       picklist: function(newData, newValue, propFunc, options, done)
@@ -983,20 +1050,64 @@ define([
         var $item = view.$('.wh-set-item[data-id="' + newData._id + '"]');
         var $prop = $item.find('.wh-set-action[data-prop="pickup"][data-func="' + propFunc + '"]');
         var $editor = $(problemEditorTemplate({
+          func: propFunc,
           problemArea: func.problemArea,
-          comment: func.comment
+          comment: func.comment,
+          placeholder: view.t('set:problemEditor:comment:pickup', {
+            problemArea: ' ',
+            func: propFunc,
+            qty: newData.qty,
+            line: newData.line
+          })
         }));
+
+        $editor.find('textarea').on('focus', function(e)
+        {
+          if (e.target.value !== '')
+          {
+            return;
+          }
+
+          var problemArea = ' ' + $editor.find('input').val().trim();
+
+          if (problemArea.length)
+          {
+            problemArea += ' ';
+          }
+
+          e.target.value = view.t('set:problemEditor:comment:pickup', {
+            problemArea: problemArea,
+            func: propFunc,
+            qty: newData.qty,
+            line: newData.line
+          });
+
+          e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+        });
 
         $editor.on('submit', function()
         {
           done(function(newData)
           {
+            var problemArea = $editor.find('input').val().trim();
+            var comment = $editor.find('textarea').val().trim();
+
+            if (!comment.length)
+            {
+              comment = view.t('set:problemEditor:comment:pickup', {
+                problemArea: ' ' + problemArea + ' ',
+                func: propFunc,
+                qty: newData.qty,
+                line: newData.line
+              });
+            }
+
             return {
               whOrderId: newData._id,
               funcId: propFunc,
               newValue: 'failure',
-              problemArea: $editor.find('input').val().trim(),
-              comment: $editor.find('textarea').val().trim()
+              problemArea: problemArea,
+              comment: comment
             };
           });
 

@@ -299,7 +299,7 @@ define([
 
           if (picklistDone !== 'pending')
           {
-            templateData.user = picklistFunc ? picklistFunc.user.label : null;
+            templateData.user = picklistFunc && picklistFunc.user ? picklistFunc.user.label : null;
             templateData.status = view.t('status:picklistDone:' + picklistDone);
           }
           else

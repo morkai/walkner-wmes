@@ -222,14 +222,36 @@
 }
 .wh-set-editor-problem textarea.form-control {
   width: 323px;
-  height: 48px;
+  height: 74px;
+  min-height: 74px;
   font-size: 14px;
+  resize: vertical;
 }
 .wh-set-editor-problem .btn {
   padding: 0;
   width: 48px;
   height: 48px;
   font-size: 28px;
+}
+.wh-set-editor-problem[data-func="lp10"] {
+  margin-left: -255px;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row-reverse;
+}
+.wh-set-editor-problem[data-func="lp10"] input.form-control {
+  display: none;
+}
+.wh-set-editor-problem[data-func="lp10"] textarea.form-control {
+  order: 2;
+  height: 54px;
+  min-height: 54px;
+}
+.wh-set-editor-problem[data-func="lp10"] .btn {
+  order: 1;
+  width: 54px;
+  height: auto;
+  flex: 0 0 auto;
 }
 .wh-set-editor-printLabels {
   display: flex;

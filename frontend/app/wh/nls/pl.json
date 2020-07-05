@@ -162,7 +162,8 @@
   "set:cartsEditor:used:error": "{count, plural, one{Podany wózek jest w użyciu:} other{Podane wózki są już w użyciu:}}",
   "set:cartsEditor:used:cart": "{cart} ({date}, set {set})",
   "set:problemEditor:problemArea": "Nr pola problemów...",
-  "set:problemEditor:comment": "Komentarz...",
+  "set:problemEditor:comment:pickup": "Odłożone na pole problemów{problemArea}w związku z problemem kompletacji {qty} szt. na linię {line} przez {func, select, fmx{FMX} kitter{kittera} platformer{platformowego} packer{opakowań} painter{malarnii} other{{func}}}.",
+  "set:problemEditor:comment:lp10": "Problem LP10 podczas kompletacji {qty} szt. na linię {line}.",
 
   "menu:picklistDone:success": "Transakcja wykonana",
   "menu:picklistDone:failure": "Transakcja nieudana",

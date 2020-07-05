@@ -162,6 +162,8 @@
     "set:cartsEditor:used:cart": "{cart} ({date}, set {set})",
     "set:problemEditor:problemArea": "Problem areas...",
     "set:problemEditor:comment": "Comment...",
+    "set:problemEditor:comment:pickup": "Set aside to problem area{problemArea}because of a {func, select, fmx{FMX} kitter{kitter} platformer{platformer} packer{packer} painter{paint-shop} other{{func}}} pickup problem of {qty} PCE for {line} line.",
+    "set:problemEditor:comment:lp10": "LP10 problem during pickup of {qty} PCE for {line} line.",
 
     "menu:picklistDone:success": "Transaction succeeded",
     "menu:picklistDone:failure": "Transaction failed",
