@@ -1,1 +1,1 @@
-define(["jquery","app/time","app/core/Collection","app/core/util/getShiftStartInfo","./WhSetCart"],function(t,e,r,i,n){"use strict";return r.extend({model:n,rqlQuery:function(t){return t.Query.fromObject({sort:{date:-1},limit:-1337})}})});
+define(["jquery","app/time","app/core/Collection","app/core/util/getShiftStartInfo","./WhSetCart"],function(t,e,r,i,n){"use strict";return r.extend({model:n,rqlQuery:function(t){return t.Query.fromObject({sort:{date:-1,set:1,kind:1,cart:1},limit:-1337})}})});
