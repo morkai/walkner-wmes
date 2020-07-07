@@ -637,7 +637,16 @@ define([
           title: t('planning', 'lineOrders:menu:copy:success')
         });
 
-        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
+        var tip = $btn.tooltip('show').data('bs.tooltip').tip();
+
+        if (!tip)
+        {
+          $btn.tooltip('destroy');
+
+          return;
+        }
+
+        tip.addClass('result success').css({
           left: x + 'px',
           top: y + 'px'
         });
