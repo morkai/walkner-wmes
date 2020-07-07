@@ -190,11 +190,11 @@ define([
         view.handleAction({action: 'comment'});
       });
 
-      $changes.appendTo(this.$el.parent());
+      $changes.appendTo(view.$el.parent());
 
-      this.$changes = $changes;
+      view.$changes = $changes;
 
-      this.resizeChanges();
+      view.resizeChanges();
     },
 
     reloadChanges: function()
@@ -203,6 +203,11 @@ define([
 
       view.promised(view.psEvents.fetch({reset: true})).done(function()
       {
+        if (!view.$changes.length)
+        {
+          return;
+        }
+
         var html = view.psEvents.map(function(event)
         {
           return orderChangeTemplate({change: event.serialize()});
