@@ -140,11 +140,12 @@ define([
 
     serializeRow: function(whOrder)
     {
+      var set = whOrder.get('set');
       var row = {
         sapOrder: whOrder.get('order'),
         qty: whOrder.get('qty').toLocaleString(),
         date: time.utc.format(whOrder.get('date'), 'L'),
-        set: whOrder.get('set').toLocaleString(),
+        set: set ? set.toLocaleString() : '?',
         status: this.t('wh', 'status:' + whOrder.get('status'))
       };
 
