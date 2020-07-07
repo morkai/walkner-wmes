@@ -30,7 +30,7 @@ define([
 
   function handleWindowMessage(e)
   {
-    var msg = e.data || {};
+    var msg = e.data || {data: {}};
 
     switch (msg.type)
     {
