@@ -1667,7 +1667,7 @@ define([
       {
         var step = steps[stepI];
 
-        if (!step.source.cluster || !step.target.cluster)
+        if (!step || !step.source.cluster || !step.target.cluster)
         {
           continue;
         }
