@@ -129,6 +129,11 @@ define([
 
     onKeyUp: function(e)
     {
+      if (!e.key)
+      {
+        return;
+      }
+
       var view = this;
       var key = e.key.toUpperCase();
 
