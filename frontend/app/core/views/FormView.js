@@ -137,7 +137,7 @@ define([
       {
         this.options.done(true);
       }
-      else
+      else if (this.broker)
       {
         this.broker.publish('router.navigate', {
           url: this.model.genClientUrl(),
