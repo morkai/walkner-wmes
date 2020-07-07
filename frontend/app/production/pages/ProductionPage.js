@@ -845,9 +845,23 @@ define([
         return;
       }
 
+      var prodDowntime = model.prodDowntimes.findFirstUnfinished();
+
+      if (!prodDowntime)
+      {
+        if (window.WMES_LOG_BROWSER_ERROR)
+        {
+          window.WMES_LOG_BROWSER_ERROR( // eslint-disable-line new-cap
+            'Spigot downtime without downtime?!? ' + localStorage.getItem(model.getDataStorageKey())
+          );
+        }
+
+        return;
+      }
+
       var settings = model.settings;
       var expectedReason = settings.getValue('rearmDowntimeReason');
-      var actualReason = model.prodDowntimes.findFirstUnfinished().get('reason');
+      var actualReason = prodDowntime.get('reason');
 
       if (actualReason === expectedReason && spigotComponent)
       {
