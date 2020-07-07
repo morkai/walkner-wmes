@@ -937,12 +937,19 @@ define([
             return false;
           }
 
-          var oldCarts = view.whOrders.get(newData._id).getFunc(propFunc).carts
-            .sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true}); });
+          var whOrder = view.whOrders.get(newData._id);
 
-          if (_.isEqual(carts, oldCarts))
+          if (whOrder)
           {
-            return done();
+            var oldCarts = whOrder.getFunc(propFunc).carts.sort(function(a, b)
+            {
+              return a.localeCompare(b, undefined, {numeric: true});
+            });
+
+            if (_.isEqual(carts, oldCarts))
+            {
+              return done();
+            }
           }
 
           var $fields = $editor.find('.form-control, .btn').prop('disabled', true);
