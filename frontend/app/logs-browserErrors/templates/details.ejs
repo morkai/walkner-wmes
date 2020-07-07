@@ -10,12 +10,12 @@
     </ol>
     <dl>
       <dt><%- helpers.t('PROPERTY:location') %></dt>
-      <dd><a href="<%= error.browser.location %>" target="_blank"><%= error.browser.location %></a></dd>
+      <dd><a href="<%= replaceDevDomain(error.browser.location) %>" target="_blank"><%= error.browser.location %></a></dd>
       <dt><%- helpers.t('PROPERTY:history') %></dt>
       <dd>
         <ol>
           <% error.browser.history.forEach(function(history) { %>
-          <li><%- time.format(history.date, 'L, HH:mm:ss.SSS') %> <a href="<%= history.href %>" target="_blank"><%= history.href %></a></li>
+          <li><%- time.format(history.date, 'L, HH:mm:ss.SSS') %> <a href="<%= replaceDevDomain(history.href) %>" target="_blank"><%= history.href %></a></li>
           <% }) %>
         </ol>
       </dd>

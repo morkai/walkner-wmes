@@ -13,6 +13,16 @@ define([
 ) {
   'use strict';
 
+  function replaceDevDomain(input)
+  {
+    if (window.location.host !== 'dev.wmes.pl')
+    {
+      return input;
+    }
+
+    return input.replace(/\/\/(192.*?|168.*?|[a-z0-9]+\.wmes\.pl)\//, '//dev.wmes.pl/');
+  }
+
   return ListView.extend({
 
     remoteTopics: {
@@ -138,7 +148,8 @@ define([
       this.collection.expanded[id] = true;
 
       var $details = this.renderPartial(detailsTemplate, {
-        error: this.collection.get(id).serializeDetails()
+        error: this.collection.get(id).serializeDetails(),
+        replaceDevDomain: replaceDevDomain
       });
 
       $details.insertAfter($tr);
