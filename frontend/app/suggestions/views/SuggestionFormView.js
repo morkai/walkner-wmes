@@ -793,7 +793,7 @@ define([
       {
         if (!isEditMode)
         {
-          return [currentUser];
+          return currentUser ? [currentUser] : [];
         }
 
         var owners = model.get(type + 'Owners');
