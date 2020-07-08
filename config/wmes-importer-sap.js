@@ -52,7 +52,7 @@ exports.mongoose = {
 exports['mysql:ipt'] = frontend['mysql:ipt'];
 
 exports.events = {
-  collection: function(app) { return app.mongoose.model('Event').collection; },
+  collection: app => app.mongoose.model('Event').collection,
   insertDelay: 1000,
   topics: {
     debug: [
@@ -89,10 +89,10 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
-    'orderDocuments.synced', 'orderDocuments.eto.synced',
+    'orderDocuments.synced', 'orderDocuments.eto.synced', 'orderDocuments.missing.updated',
     'cags.plan.synced', 'cags.plan.syncFailed',
     'kanban.import.*',
-    'old.wh.orders.updated', 'old.wh.events.updated'
+    'old.wh.cancelQueue.updated'
   ]
 });
 
@@ -180,4 +180,9 @@ exports['kanban/importer'] = {
 
 exports['orders/iptChecker'] = {
   mysqlId: 'mysql:ipt'
+};
+
+exports['wmes-scrap/importer'] = {
+  filterRe: /^SCRAP\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
