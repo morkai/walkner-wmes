@@ -387,7 +387,8 @@ define([
             args: [
               {name: 'in', args: ['status', ['started', 'finished', 'problem']]},
               {name: 'eq', args: ['lines._id', details.line]},
-              {name: 'eq', args: ['distStatus', 'pending']}
+              {name: 'eq', args: ['distStatus', 'pending']},
+              {name: 'ne', args: ['set', null]}
             ]
           },
           sort: {
