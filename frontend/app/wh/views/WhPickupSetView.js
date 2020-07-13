@@ -481,7 +481,10 @@ define([
       var func = e.currentTarget.dataset.func;
       var prop = e.currentTarget.dataset.prop;
 
-      this.showUpdateMenu(whOrder, func, prop, e);
+      if (whOrder)
+      {
+        this.showUpdateMenu(whOrder, func, prop, e);
+      }
     },
 
     showUpdateMenu: function(whOrder, func, prop, e)

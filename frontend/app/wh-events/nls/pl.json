@@ -69,6 +69,7 @@
   "type:labelsPrinted": "Drukowanie etykiet",
   "type:ordersCancelled": "Anulowanie zleceń",
   "type:ordersReset": "Resetowanie zleceń",
+  "type:ordersFinished": "Kończenie zleceń",
   "type:problemSolved": "Rozwiązanie problemu",
   "type:deliveryStarted": "Rozpoczęcie dostawy",
   "type:deliveryFinished": "Zakończenie dostawy",

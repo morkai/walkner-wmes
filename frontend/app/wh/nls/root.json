@@ -239,6 +239,7 @@
     "delivery:set:date": "Plan",
     "delivery:set:set": "Set",
     "delivery:set:sapOrders": "Orders",
+    "delivery:set:completedSapOrders": "Warning: carts contain orders that are marked as complete in SAP!",
     "delivery:forceLine:action": "Force delivery",
     "delivery:forceLine:title": "Delivery for line",
     "delivery:forceLine:message": "Choose a line and scan yourself to force a delivery to the specified line.",

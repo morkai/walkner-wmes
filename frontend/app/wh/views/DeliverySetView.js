@@ -47,12 +47,15 @@ define([
     {
       return {
         canManage: !!this.model.personnelId,
-        setCarts: this.serializeSetCarts()
+        setCarts: this.serializeSetCarts(),
+        completedSapOrders: this.model.completedSapOrders
       };
     },
 
     serializeSetCarts: function()
     {
+      var completedSapOrders = this.model.completedSapOrders;
+
       return this.model.setCarts.map(function(setCart)
       {
         var obj = setCart.toJSON();
@@ -60,7 +63,17 @@ define([
         obj.date = time.format(obj.date, 'L');
         obj.sapOrders = {};
         obj.orders.forEach(function(o) { obj.sapOrders[o.sapOrder] = 1; });
-        obj.sapOrders = Object.keys(obj.sapOrders).join(', ');
+        obj.sapOrders = Object.keys(obj.sapOrders)
+          .map(function(sapOrder)
+          {
+            if (completedSapOrders.includes(sapOrder))
+            {
+              return '<span class="wh-delivery-is-completed">' + sapOrder + '</span>';
+            }
+
+            return sapOrder;
+          })
+          .join(', ');
 
         if (obj.redirLine)
         {
@@ -109,7 +122,14 @@ define([
         {
           view.model.setCarts.add(res.setCarts);
 
+          if (res.completedSapOrders)
+          {
+            view.model.completedSapOrders = view.model.completedSapOrders.concat(res.completedSapOrders);
+          }
+
           view.$('tbody').replaceWith(view.renderPartial(template, view.getTemplateData()).find('tbody'));
+
+          view.$id('completedSapOrders').toggleClass('hidden', view.model.completedSapOrders.length > 0);
         }
       });
 

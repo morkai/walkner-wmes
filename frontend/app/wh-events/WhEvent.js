@@ -210,6 +210,7 @@ define([
       'labelsPrinted',
       'ordersCancelled',
       'ordersReset',
+      'ordersFinished',
       'problemSolved',
       'deliveryStarted',
       'deliveryFinished',

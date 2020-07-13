@@ -14,8 +14,8 @@
   <% if (unpaintedLines.length) { %>
   <div class="message message-inline message-warning">
     <p>
-      <%- unpaintedLines.lines %> linie mają jeszcze zlecenia zaplanowane na dzisiaj, ale zostały
-      one pominięte z powodu niegotowości malarnii.
+      Linie mają jeszcze zlecenia zaplanowane na dzisiaj, ale zostały one pominięte z powodu
+      niegotowości malarnii: <%= unpaintedLines.join(', ') %>
     </p>
   </div>
   <div class="message message-inline message-info">

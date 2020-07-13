@@ -859,10 +859,10 @@ define([
     {
       var setCarts = new WhSetCartCollection(res.setCarts);
 
-      this.showSetDialog(setCarts, res.user, res.personnelId);
+      this.showSetDialog(setCarts, res.user, res.personnelId, res.completedSapOrders);
     },
 
-    showSetDialog: function(setCarts, user, personnelId)
+    showSetDialog: function(setCarts, user, personnelId, completedSapOrders)
     {
       if (!setCarts.length)
       {
@@ -875,7 +875,8 @@ define([
         model: {
           pendingSetCarts: this.setCarts.pending,
           setCarts: setCarts,
-          personnelId: personnelId
+          personnelId: personnelId,
+          completedSapOrders: completedSapOrders || []
         }
       });
 

@@ -239,6 +239,7 @@
   "delivery:set:date": "Plan",
   "delivery:set:set": "Set",
   "delivery:set:sapOrders": "Zlecenia",
+  "delivery:set:completedSapOrders": "Uwaga: wózki zawierają zlecenia, które zostały oznaczone w SAP jako zakończone!",
   "delivery:forceLine:action": "Wymuś wysyłkę",
   "delivery:forceLine:title": "Wysyłka na linię",
   "delivery:forceLine:message": "Wybierz linię i zeskanuj się, aby wymusić wysyłkę wózków na daną linię.",

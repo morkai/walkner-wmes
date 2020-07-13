@@ -1,4 +1,7 @@
 <div class="wh-delivery-set">
+  <p id="<%- id('completedSapOrders') %>" class="message message-inline message-warning <%- completedSapOrders.length ? '' : 'hidden' %>" style="margin-bottom: 15px">
+    <%- t('delivery:set:completedSapOrders') %>
+  </p>
   <table class="table table-hover">
     <thead>
     <tr>

@@ -19,6 +19,12 @@
   <li>Zmieniono wyświetlanie statusu kompletacji Malarnii tak, aby status Kompletacja miał taką samą ikonę
     jak status Oczekiwanie (znak zapytania zamiast wózek), jeżeli do funkcji Malarnii nie została jeszcze
     przypisana osoba.</li>
+  <li>Zmieniono automatyczne anulowanie wykonanych zleceń tak, aby zlecenia z magazynu, które otrzymają status
+    CNF, DLV, TECO, DLT lub DLFL zostały anulowane, jeżeli ich status to 'Oczekiwanie', a dla zleceń z rozpoczętą
+    kompletacją kończone były wszystkie dostarczone zlecenia o takich samych numerach.</li>
+  <li>Zmieniono wysyłkę wózków tak, aby dostarczone zlecenia, które w momencie rozpoczęcia wysyłki są oznaczone
+    w SAP jako zakończone (status CNF, DLV, TECO, DLT lub DLFL), były automatycznie tworzone ze statusem
+    'Zrobione'.</li>
   <li>Dodano automatyczne drukowanie picklisty malarnii po rozpoczęciu kompletacji przez malarnię.</li>
   <li>Dodano do listy stanów linii możliwość wyświetlenia listy zleceń kompletowanych, skompletowanych oraz
     dostępnych (dostarczonych).</li>

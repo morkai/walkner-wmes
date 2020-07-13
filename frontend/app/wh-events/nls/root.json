@@ -71,6 +71,7 @@
     "type:labelsPrinted": "Labels printed",
     "type:ordersCancelled": "Orders cancelled",
     "type:ordersReset": "Orders reset",
+    "type:ordersFinished": "Orders finished",
     "type:problemSolved": "Problem solved",
     "type:deliveryStarted": "Delivery started",
     "type:deliveryFinished": "Delivery finished",

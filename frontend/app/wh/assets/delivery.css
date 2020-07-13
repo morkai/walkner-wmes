@@ -126,6 +126,11 @@
   line-height: 1;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
+.wh-delivery-is-completed {
+  padding: 5px;
+  background: #E00;
+  color: #fff;
+}
 .wh-delivery-set .table > thead > tr > th {
   padding-top: 0;
 }
