@@ -73,10 +73,17 @@ define([
 
       if (tooltip)
       {
-        tooltip.tip().addClass('result success').css({
-          left: x + 'px',
-          top: y + 'px'
-        });
+        var $tip = tooltip.tip();
+
+        $tip.addClass('result success');
+
+        if (x !== -1 && y !== -1)
+        {
+          $tip.css({
+            left: x + 'px',
+            top: y + 'px'
+          });
+        }
 
         $el.data('bs.tooltip.id', id);
 

@@ -3,13 +3,13 @@
 define([
   'underscore',
   'jquery',
-  'app/ZeroClipboard',
   'app/i18n',
   'app/user',
   'app/viewport',
   'app/core/Model',
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
+  'app/core/util/uuid',
   'app/orgUnits/views/OrgUnitDropdownsView',
   'app/data/aors',
   'app/data/companies',
@@ -18,6 +18,7 @@ define([
   'app/data/prodFunctions',
   'app/data/privileges',
   'app/data/loadedModules',
+  'app/data/clipboard',
   'app/vendors/util/setUpVendorSelect2',
   'app/mrpControllers/util/setUpMrpSelect2',
   '../User',
@@ -26,13 +27,13 @@ define([
 ], function(
   _,
   $,
-  ZeroClipboard,
   t,
   user,
   viewport,
   Model,
   FormView,
   idAndLabel,
+  uuid,
   OrgUnitDropdownsView,
   aors,
   companies,
@@ -41,6 +42,7 @@ define([
   prodFunctions,
   privileges,
   loadedModules,
+  clipboard,
   setUpVendorSelect2,
   setUpMrpSelect2,
   User,
@@ -102,7 +104,9 @@ define([
         {
           return false;
         }
-      }
+      },
+      'click #-copyPrivileges': 'copyPrivileges',
+      'click #-genApiKey': 'genApiKey'
     },
 
     initialize: function()
@@ -131,12 +135,6 @@ define([
     {
       $(window).off('.' + this.idPrefix);
       $(document).off('.' + this.idPrefix);
-
-      if (this.privilegesCopyClient)
-      {
-        this.privilegesCopyClient.destroy();
-        this.privilegesCopyClient = null;
-      }
     },
 
     afterRender: function()
@@ -225,8 +223,6 @@ define([
           };
         }
       });
-
-      this.setUpPrivilegesCopy();
     },
 
     serializePrivileges: function()
@@ -241,61 +237,24 @@ define([
       return selectedOptions.map(function(data) { return data.text; }).join(';') + ';';
     },
 
-    setUpPrivilegesCopy: function()
+    copyPrivileges: function(e)
     {
       var view = this;
-      var $btn = view.$id('copyPrivileges');
-      var client = view.privilegesCopyClient = new ZeroClipboard($btn);
 
-      client.on('copy', function(e)
+      clipboard.copy(function(clipboardData)
       {
-        e.clipboardData.setData('text/plain', view.serializePrivileges());
-      });
+        clipboardData.setData('text/plain', view.serializePrivileges());
 
-      client.on('aftercopy', function()
-      {
-        viewport.msg.show({
-          type: 'info',
-          time: 2000,
-          text: t('users', 'FORM:copyPrivileges:success')
-        });
-      });
-
-      client.on('error', function(err)
-      {
-        console.error(err);
-
-        ZeroClipboard.destroy();
-
-        $(document).on('copy.' + view.idPrefix, view.onCopy.bind(view));
-
-        $btn.on('mousedown', function()
-        {
-          view.captureCopy = true;
-
-          document.execCommand('copy');
+        clipboard.showTooltip(view, e.currentTarget, -1, -1, {
+          title: view.t('FORM:copyPrivileges:success'),
+          placement: 'left'
         });
       });
     },
 
-    onCopy: function(e)
+    genApiKey: function()
     {
-      if (!this.captureCopy)
-      {
-        return;
-      }
-
-      this.captureCopy = false;
-
-      e.preventDefault();
-
-      e.originalEvent.clipboardData.setData('text/plain', this.serializePrivileges());
-
-      viewport.msg.show({
-        type: 'info',
-        time: 2000,
-        text: t('users', 'FORM:copyPrivileges:success')
-      });
+      this.$id('apiKey').val((uuid() + uuid()).replace(/-/g, '').toLowerCase());
     },
 
     setUpProdFunctionSelect2: function()

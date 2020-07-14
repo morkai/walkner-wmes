@@ -6,23 +6,23 @@
       <div class="row">
         <div class="col-lg-3">
           <div class="form-group">
-            <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('PROPERTY:login') %></label>
-            <input id="<%- idPrefix %>-login" class="form-control" type="text" autocomplete="new-password" name="login" required maxlength="50">
+            <label for="<%- id('login') %>" class="control-label is-required"><%- t('PROPERTY:login') %></label>
+            <input id="<%- id('login') %>" class="form-control" type="text" name="login" required maxlength="50">
           </div>
           <div class="form-group">
-            <label for="<%- idPrefix %>-password" class="control-label <%- editMode ? '' : 'is-required' %>"><%- t('PROPERTY:' + (editMode ? 'newPassword' : 'password')) %></label>
-            <input id="<%- idPrefix %>-password" class="form-control" type="password" name="password" <%- editMode ? '' : 'required' %>>
+            <label for="<%- id('password') %>" class="control-label <%- editMode ? '' : 'is-required' %>"><%- t('PROPERTY:' + (editMode ? 'newPassword' : 'password')) %></label>
+            <input id="<%- id('password') %>" class="form-control" type="password" name="password" <%- editMode ? '' : 'required' %>>
           </div>
           <div class="form-group">
-            <label for="<%- idPrefix %>-password2" class="control-label <%- editMode ? '' : 'is-required' %>"><%- t('PROPERTY:password2') %></label>
-            <input id="<%- idPrefix %>-password2" class="form-control" type="password" <%- editMode ? '' : 'required' %>>
+            <label for="<%- id('password2') %>" class="control-label <%- editMode ? '' : 'is-required' %>"><%- t('PROPERTY:password2') %></label>
+            <input id="<%- id('password2') %>" class="form-control" type="password" <%- editMode ? '' : 'required' %>>
             <% if (editMode) { %>
             <p class="help-block"><%- t('FORM:HELP:password') %></p>
             <% } %>
           </div>
           <% if (!accountMode) { %>
           <div class="form-group users-form-active">
-            <label for="<%- idPrefix %>-active" class="control-label is-required"><%- t('PROPERTY:active') %></label>
+            <label for="<%- id('active') %>" class="control-label is-required"><%- t('PROPERTY:active') %></label>
             <div>
               <% ['true', 'false'].forEach(function(active) { %>
               <label class="radio-inline">
@@ -36,50 +36,50 @@
         <div class="col-lg-3">
           <div class="row">
             <div class="col-lg-6 form-group">
-                <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('PROPERTY:firstName') %></label>
-                <input id="<%- idPrefix %>-firstName" class="form-control" type="text" autocomplete="new-password" name="firstName" autofocus maxlength="50">
+                <label for="<%- id('firstName') %>" class="control-label"><%- t('PROPERTY:firstName') %></label>
+                <input id="<%- id('firstName') %>" class="form-control" type="text" name="firstName" maxlength="50">
             </div>
             <div class="col-lg-6 form-group">
-                <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('PROPERTY:lastName') %></label>
-                <input id="<%- idPrefix %>-lastName" class="form-control" type="text" autocomplete="new-password" name="lastName" maxlength="50">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 form-group">
-              <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('PROPERTY:personellId') %></label>
-              <input id="<%- idPrefix %>-personellId" class="form-control" type="text" autocomplete="new-password" name="personellId" maxlength="15">
-            </div>
-            <div class="col-lg-6 form-group">
-              <label for="<%- idPrefix %>-kdId" class="control-label"><%- t('PROPERTY:kdId') %></label>
-              <input id="<%- idPrefix %>-kdId" class="form-control" type="text" autocomplete="new-password" name="kdId" pattern="^-?[0-9]+$">
+                <label for="<%- id('lastName') %>" class="control-label"><%- t('PROPERTY:lastName') %></label>
+                <input id="<%- id('lastName') %>" class="form-control" type="text" name="lastName" maxlength="50">
             </div>
           </div>
           <div class="row">
             <div class="col-lg-6 form-group">
-              <label for="<%- idPrefix %>-card" class="control-label"><%- t('PROPERTY:card') %></label>
-              <input id="<%- idPrefix %>-card" class="form-control" type="text" autocomplete="new-password" name="card" maxlength="15">
+              <label for="<%- id('personellId') %>" class="control-label"><%- t('PROPERTY:personellId') %></label>
+              <input id="<%- id('personellId') %>" class="form-control" type="text" name="personellId" maxlength="15">
             </div>
             <div class="col-lg-6 form-group">
-              <label for="<%- idPrefix %>-cardUid" class="control-label"><%- t('PROPERTY:cardUid') %></label>
-              <input id="<%- idPrefix %>-cardUid" class="form-control" type="text" autocomplete="new-password" name="cardUid" maxlength="15">
+              <label for="<%- id('kdId') %>" class="control-label"><%- t('PROPERTY:kdId') %></label>
+              <input id="<%- id('kdId') %>" class="form-control" type="text" name="kdId" pattern="^-?[0-9]+$">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 form-group">
+              <label for="<%- id('card') %>" class="control-label"><%- t('PROPERTY:card') %></label>
+              <input id="<%- id('card') %>" class="form-control" type="text" name="card" maxlength="15">
+            </div>
+            <div class="col-lg-6 form-group">
+              <label for="<%- id('cardUid') %>" class="control-label"><%- t('PROPERTY:cardUid') %></label>
+              <input id="<%- id('cardUid') %>" class="form-control" type="text" name="cardUid" maxlength="15">
             </div>
           </div>
         </div>
         <div class="col-lg-3">
           <div class="form-group">
-            <label for="<%- idPrefix %>-email" class="control-label"><%- t('PROPERTY:email') %></label>
-            <input id="<%- idPrefix %>-email" class="form-control" type="email" name="email" maxlength="100">
+            <label for="<%- id('email') %>" class="control-label"><%- t('PROPERTY:email') %></label>
+            <input id="<%- id('email') %>" class="form-control" type="email" name="email" maxlength="100">
           </div>
           <div class="form-group">
             <label class="control-label"><%- t('PROPERTY:mobile') %></label>
-            <div id="<%- idPrefix %>-mobile-list"></div>
-            <div id="<%- idPrefix %>-mobile" class="users-form-mobile">
-              <input id="<%- idPrefix %>-mobile-number" class="form-control users-form-mobile-number" type="text" autocomplete="new-password" placeholder="+00 000 000 000">
+            <div id="<%- id('mobile-list') %>"></div>
+            <div id="<%- id('mobile') %>" class="users-form-mobile">
+              <input id="<%- id('mobile-number') %>" class="form-control users-form-mobile-number" type="text" placeholder="+00 000 000 000">
               <span><%- t('FORM:mobile:from') %></span>
-              <input id="<%- idPrefix %>-mobile-from" class="form-control users-form-mobile-hours" type="text" autocomplete="new-password" placeholder="00:00">
+              <input id="<%- id('mobile-from') %>" class="form-control users-form-mobile-hours" type="text" placeholder="00:00">
               <span><%- t('FORM:mobile:to') %></span>
-              <input id="<%- idPrefix %>-mobile-to" class="form-control users-form-mobile-hours" type="text" autocomplete="new-password" placeholder="00:00">
-              <button id="<%- idPrefix %>-mobile-add" class="btn btn-link" type="button"><i class="fa fa-plus"></i></button>
+              <input id="<%- id('mobile-to') %>" class="form-control users-form-mobile-hours" type="text" placeholder="00:00">
+              <button id="<%- id('mobile-add') %>" class="btn btn-link" type="button"><i class="fa fa-plus"></i></button>
             </div>
           </div>
           <div class="form-group">
@@ -96,15 +96,15 @@
         <% if (accountMode) { %>
         <div class="col-lg-3">
           <div class="form-group users-form-mrp">
-            <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('PROPERTY:mrps') %></label>
-            <input id="<%- idPrefix %>-mrps" name="mrps">
+            <label for="<%- id('mrps') %>" class="control-label"><%- t('PROPERTY:mrps') %></label>
+            <input id="<%- id('mrps') %>" name="mrps">
           </div>
         </div>
         <% } else { %>
         <div class="col-lg-3">
           <div class="form-group">
-            <label for="<%- idPrefix %>-company" class="control-label"><%- t('PROPERTY:company') %></label>
-            <select id="<%- idPrefix %>-company" name="company" data-placeholder="<%- t('NO_DATA:company') %>">
+            <label for="<%- id('company') %>" class="control-label"><%- t('PROPERTY:company') %></label>
+            <select id="<%- id('company') %>" name="company" data-placeholder="<%- t('NO_DATA:company') %>">
               <option></option>
               <% companies.forEach(function(company) { %>
               <option value="<%- company._id %>"><%= company.name %></option>
@@ -112,13 +112,13 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="<%- idPrefix %>-prodFunction" class="control-label"><%- t('PROPERTY:prodFunction') %></label>
-            <input id="<%- idPrefix %>-prodFunction" name="prodFunction" type="text" autocomplete="new-password" data-placeholder="<%- t('NO_DATA:prodFunction') %>">
+            <label for="<%- id('prodFunction') %>" class="control-label"><%- t('PROPERTY:prodFunction') %></label>
+            <input id="<%- id('prodFunction') %>" name="prodFunction" type="text" data-placeholder="<%- t('NO_DATA:prodFunction') %>">
           </div>
           <div class="orgUnitDropdowns-container"></div>
           <div class="form-group users-form-aor">
-            <label for="<%- idPrefix %>-aors" class="control-label"><%- t('PROPERTY:aors') %></label>
-            <select id="<%- idPrefix %>-aors" name="aors[]" multiple data-placeholder="<%- t('NO_DATA:aors') %>">
+            <label for="<%- id('aors') %>" class="control-label"><%- t('PROPERTY:aors') %></label>
+            <select id="<%- id('aors') %>" name="aors[]" multiple data-placeholder="<%- t('NO_DATA:aors') %>">
               <option></option>
               <% aors.forEach(function(aor) { %>
               <option value="<%- aor._id %>"><%= aor.name %>
@@ -126,31 +126,36 @@
             </select>
           </div>
           <div class="form-group users-form-mrp">
-            <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('PROPERTY:mrps') %></label>
-            <input id="<%- idPrefix %>-mrps" name="mrps">
+            <label for="<%- id('mrps') %>" class="control-label"><%- t('PROPERTY:mrps') %></label>
+            <input id="<%- id('mrps') %>" name="mrps">
           </div>
           <div class="form-group">
-            <label for="<%- idPrefix %>-vendor" class="control-label"><%- t('PROPERTY:vendor') %></label>
-            <input id="<%- idPrefix %>-vendor" type="text" autocomplete="new-password" name="vendor" maxlength="15">
+            <label for="<%- id('vendor') %>" class="control-label"><%- t('PROPERTY:vendor') %></label>
+            <input id="<%- id('vendor') %>" type="text" name="vendor" maxlength="15">
           </div>
         </div>
         <% } %>
       </div>
       <% if (!accountMode) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-privileges" class="control-label"><%- t('PROPERTY:privileges') %></label>
+        <label for="<%- id('privileges') %>" class="control-label"><%- t('PROPERTY:privileges') %></label>
         <div class="input-group">
-          <input id="<%- idPrefix %>-privileges" type="text" autocomplete="new-password" name="privileges">
+          <input id="<%- id('privileges') %>" type="text" name="privileges">
           <span class="input-group-btn">
-            <button id="<%- idPrefix %>-copyPrivileges" class="btn btn-default" type="button"><i class="fa fa-copy"></i></button>
+            <button id="<%- id('copyPrivileges') %>" class="btn btn-default" type="button"><i class="fa fa-copy"></i></button>
           </span>
         </div>
       </div>
       <% } %>
       <% if (user.isAllowedTo('SUPER')) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-apiKey" class="control-label"><%- t('PROPERTY:apiKey') %></label>
-        <input id="<%- idPrefix %>-apiKey" class="form-control" type="text" autocomplete="new-password" name="apiKey" pattern="^[a-zA-Z0-9-_]{64}$">
+        <label for="<%- id('apiKey') %>" class="control-label"><%- t('PROPERTY:apiKey') %></label>
+        <div class="input-group">
+          <input id="<%- id('apiKey') %>" type="text" name="apiKey" class="form-control text-fixed" pattern="^[a-zA-Z0-9-_]{64}$">
+          <span class="input-group-btn">
+            <button id="<%- id('genApiKey') %>" class="btn btn-default" type="button"><i class="fa fa-refresh"></i></button>
+          </span>
+        </div>
       </div>
       <%} %>
     </div>
