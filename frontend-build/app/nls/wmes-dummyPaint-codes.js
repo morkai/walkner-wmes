@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:base":function(n){return"Dummy paint"},"BREADCRUMB:browse":function(n){return"Dummy codes"},"PROPERTY:_id":function(n){return"12NC"},"PROPERTY:name":function(n){return"Name"}},pl:!0}});

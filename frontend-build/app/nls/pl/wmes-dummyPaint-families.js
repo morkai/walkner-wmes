@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"Dummy paint"},"BREADCRUMB:browse":function(n){return"Rodziny"},"PROPERTY:_id":function(n){return"Rodzina wyrobu"},"PROPERTY:paintFamily":function(n){return"Rodzina farby"},"FORM:ERROR:duplicateKey":function(n){return"Rodzina o podanym kodzie już istnieje."}}});

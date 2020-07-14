@@ -1,0 +1,1 @@
+define(["../core/Collection","./DpFamily"],function(i,t){"use strict";return i.extend({model:t,rqlQuery:"limit(-1337)&sort(paintFamily,_id)",comparator:"paintFamily"})});

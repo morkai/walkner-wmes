@@ -1,0 +1,1 @@
+define(["../core/Collection","./DpCode"],function(e,o){"use strict";return e.extend({model:o,rqlQuery:"sort(name)",comparator:"name"})});

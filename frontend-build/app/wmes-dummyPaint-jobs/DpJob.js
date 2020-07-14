@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/dummyPaint/jobs",clientUrlRoot:"#dummyPaint/jobs",topicPrefix:"dummyPaint.jobs",privilegePrefix:"DUMMY_PAINT",nlsDomain:"wmes-dummyPaint-jobs"})});

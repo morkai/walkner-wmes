@@ -1,0 +1,1 @@
+define(["../core/Model"],function(i){"use strict";return i.extend({urlRoot:"/dummyPaint/families",clientUrlRoot:"#dummyPaint/families",topicPrefix:"dummyPaint.families",privilegePrefix:"DUMMY_PAINT",nlsDomain:"wmes-dummyPaint-families"})});

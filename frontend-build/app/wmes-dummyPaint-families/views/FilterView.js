@@ -1,0 +1,1 @@
+define(["app/core/views/FilterView","app/wmes-dummyPaint-families/templates/filter"],function(e,i){"use strict";return e.extend({template:i,termToForm:{_id:function(e,i,t){t[e]=this.unescapeRegExp(i.args[1])},paintFamily:"_id"},serializeFormToQuery:function(e){this.serializeRegexTerm(e,"_id",20,null,!0,!1),this.serializeRegexTerm(e,"paintFamily",12,null,!0,!1)}})});
