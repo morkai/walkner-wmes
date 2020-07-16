@@ -1,1 +1,1 @@
-define(["../core/Collection","./DpOrder"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)&sort(-createdAt)&stage=finished"})});
+define(["app/core/Collection","app/core/util/getShiftStartInfo","./DpOrder"],function(e,t,r){"use strict";return e.extend({model:r,rqlQuery:function(e){return e.Query.fromObject({limit:-1337,sort:{createdAt:-1},selector:{name:"and",args:[{name:"ge",args:["createdAt",t(Date.now()).moment.hours(6).valueOf()]},{name:"eq",args:["changed",!1]}]}})}})});
