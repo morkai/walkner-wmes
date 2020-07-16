@@ -1,0 +1,11 @@
+{
+  "BREADCRUMB:base": "Dummy paint",
+  "BREADCRUMB:browse": "Farby",
+
+  "PROPERTY:family": "Rodzina",
+  "PROPERTY:code": "Kod",
+  "PROPERTY:nc12": "12NC",
+  "PROPERTY:name": "Nazwa",
+
+  "FORM:ERROR:duplicateKey": "Farba o podanym kodzie już istnieje w danej rodzinie."
+}

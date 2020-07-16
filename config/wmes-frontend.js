@@ -108,6 +108,7 @@ exports.modules = [
   'wmes-wiring',
   'wmes-ct-frontend',
   'wmes-clients',
+  'wmes-dummyPaint',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',

@@ -1,0 +1,9 @@
+{
+  "BREADCRUMB:base": "Dummy paint",
+  "BREADCRUMB:browse": "Rodziny",
+
+  "PROPERTY:_id": "Rodzina wyrobu",
+  "PROPERTY:paintFamily": "Rodzina farby",
+
+  "FORM:ERROR:duplicateKey": "Rodzina o podanym kodzie już istnieje."
+}

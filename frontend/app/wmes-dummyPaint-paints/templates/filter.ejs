@@ -1,0 +1,22 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('code') %>" class="control-label"><%- t('PROPERTY:code') %></label>
+    <input id="<%- id('code') %>" name="code" type="text" style="width: 125px">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('family') %>" class="control-label"><%- t('PROPERTY:family') %></label>
+    <input id="<%- id('family') %>" name="family" type="text" style="width: 125px">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('nc12') %>" class="control-label"><%- t('PROPERTY:nc12') %></label>
+    <input id="<%- id('nc12') %>" name="nc12" class="form-control" type="text" style="width: 115px">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('name') %>" class="control-label"><%- t('PROPERTY:name') %></label>
+    <input id="<%- id('name') %>" name="name" class="form-control" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

@@ -1,0 +1,34 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <datalist id="<%- id('paintCodes') %>">
+    <% paintCodes.forEach(function(v) { %><option value="<%= v %>"><% }) %>
+  </datalist>
+  <datalist id="<%- id('paintFamilies') %>">
+    <% paintFamilies.forEach(function(v) { %><option value="<%= v %>"><% }) %>
+  </datalist>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- id('code') %>" class="control-label is-required"><%- t('PROPERTY:code') %></label>
+        <input id="<%- id('code') %>" class="form-control" type="text" name="code" required maxlength="30" list="<%- id('paintCodes') %>">
+        <a id="<%- id('duplicateKey') %>" class="form-control-static hidden" style="display: inline-block; padding-bottom: 0"><%- t('FORM:ERROR:duplicateKey') %></a>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('family') %>" class="control-label is-required"><%- t('PROPERTY:family') %></label>
+        <input id="<%- id('family') %>" class="form-control" type="text" name="family" required maxlength="10" list="<%- id('paintFamilies') %>">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('nc12') %>" class="control-label is-required"><%- t('PROPERTY:nc12') %></label>
+        <input id="<%- id('nc12') %>" class="form-control" type="text" name="nc12" required maxlength="12">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('name') %>" class="control-label"><%- t('PROPERTY:name') %></label>
+        <input id="<%- id('name') %>" class="form-control" type="text" name="name" maxlength="100">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

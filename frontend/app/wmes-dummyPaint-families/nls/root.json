@@ -1,0 +1,12 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Dummy paint",
+    "BREADCRUMB:browse": "Families",
+
+    "PROPERTY:_id": "Product family",
+    "PROPERTY:paintFamily": "Paint family",
+
+    "FORM:ERROR:duplicateKey": "The specified family code already exists."
+  },
+  "pl": true
+}

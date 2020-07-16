@@ -42,6 +42,43 @@ If Not IsObj($connection) Then
   LogError("ERR_NO_CONNECTION", $ERR_NO_CONNECTION)
 EndIf
 
+LogDebug("CLOSING_ERROR_SESSIONS")
+
+For $sessionI = 1 To ($connection.Children.Length - 1)
+  LogDebug("SESSION_INDEX=" & $sessionI)
+
+  $session = $connection.Children($sessionI)
+
+  If Not IsObj($session) Then
+    LogDebug("SESSION_NOT_OBJECT")
+    ContinueLoop
+  EndIf
+
+  If $session.Busy Then
+    LogDebug("SESSION_BUSY")
+    ContinueLoop
+  EndIf
+
+  $sessionId = $session.Id
+
+  LogDebug("SESSION_ID=" & $sessionId)
+
+  If Not IsObj($connection) Then
+    LogDebug("CONNECTION_NOT_OBJECT")
+    ContinueLoop
+  EndIf
+
+  $wnd = $session.FindById("wnd[0]")
+
+  If IsObj($wnd) And StringInStr($wnd.Text, "Error") Then
+    LogDebug("CLOSING_SESSION=" & $sessionId)
+    $connection.CloseSession($session.Id)
+    LogDebug("SESSION_CLOSED=" & $sessionId)
+  Else
+    LogDebug("SESSION_SKIPPED=" & $sessionId)
+  EndIf
+Next
+
 LogDebug("CHECKING_SESSION")
 
 $session = $connection.Children(0)

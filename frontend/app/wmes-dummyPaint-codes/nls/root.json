@@ -1,0 +1,10 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Dummy paint",
+    "BREADCRUMB:browse": "Dummy codes",
+
+    "PROPERTY:_id": "12NC",
+    "PROPERTY:name": "Name"
+  },
+  "pl": true
+}

@@ -1,0 +1,19 @@
+<form class="settings" autocomplete="off">
+  <div class="list-group">
+    <a class="list-group-item" href="#dummyPaint/settings?tab=general" data-tab="general"><%- t('settings:tab:general') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="general">
+      <div class="form-group">
+        <label for="<%- id('nonAkzoCategories') %>"><%- t('settings:nonAkzoCategories') %></label>
+        <p class="help-block"><%- t('settings:nonAkzoCategories:help') %></p>
+        <textarea id="<%- id('nonAkzoCategories') %>" name="dummyPaint.nonAkzoCategories" class="form-control" rows="7" autocomplete="off" data-setting></textarea>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('nonRalCharacteristics') %>"><%- t('settings:nonRalCharacteristics') %></label>
+        <p class="help-block"><%- t('settings:nonRalCharacteristics:help') %></p>
+        <textarea id="<%- id('nonRalCharacteristics') %>" name="dummyPaint.nonRalCharacteristics" class="form-control" rows="7" autocomplete="off" data-setting></textarea>
+      </div>
+    </div>
+  </div>
+</form>

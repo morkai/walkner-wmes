@@ -1,0 +1,19 @@
+<form class="dummyPaint-startJob" method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <div class="form-group has-required-select2">
+    <label for="<%- id('codes') %>" class="control-label is-required"><%- t('startJob:codes') %></label>
+    <input id="<%- id('codes') %>" name="codes" type="text" required>
+  </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- id('worker') %>" class="control-label is-required"><%- t('startJob:worker') %></label>
+    <input id="<%- id('worker') %>" name="worker" type="text" required>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('notify') %>" class="control-label"><%- t('startJob:notify') %></label>
+    <input id="<%- id('notify') %>" name="notify" type="text">
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('startJob:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('startJob:cancel') %></button>
+  </div>
+</form>

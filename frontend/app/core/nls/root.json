@@ -200,6 +200,7 @@
     "NAVBAR:logs:browserErrors": "Client-side errors",
     "NAVBAR:ct": "Cycle time",
     "NAVBAR:fa": "Fixed Assets",
+    "NAVBAR:dummyPaint": "Dummy paint",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",

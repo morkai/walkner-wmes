@@ -1,0 +1,36 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Dummy paint",
+    "BREADCRUMB:browse": "Dummy paint",
+    "BREADCRUMB:settings": "Settings",
+
+    "PAGE_ACTION:dictionaries": "Dictionaries",
+    "PAGE_ACTION:dictionaries:codes": "Dummy codes",
+    "PAGE_ACTION:dictionaries:paints": "Paints",
+    "PAGE_ACTION:dictionaries:families": "Families",
+    "PAGE_ACTION:settings": "Settings",
+    "PAGE_ACTION:startJob": "Start replacement",
+
+    "PROPERTY:_id": "Dummy order",
+
+    "startJob:title": "Starting paint replacement",
+    "startJob:submit": "Start replacement",
+    "startJob:cancel": "Cancel",
+    "startJob:codes": "Dummy code",
+    "startJob:worker": "SAP GUI instance",
+    "startJob:notify": "Users to notify",
+    "startJob:msg:starting": "<i class='fa fa-spinner fa-spin'></i><span>Starting paint replacement...</span>",
+    "startJob:msg:failure": "Failed to start the paint replacement.",
+    "startJob:msg:success": "Paint replacement started.",
+    "startJob:msg:CODE_IN_PROGRESS": "Replacement of dummy code already started: {code}.",
+    "startJob:msg:WORKER_IN_PROGRESS": "SAP GUI instance is already in use.",
+    "startJob:msg:WORKER_OFFLINE": "SAP GUI instance is unavailable.",
+
+    "settings:tab:general": "General",
+    "settings:nonAkzoCategories": "AKZO",
+    "settings:nonAkzoCategories:help": "If the CLR characteristic's value is not on the following list, then paints from the AKZO family are used, otherwise paints from a family in the PFAM characteristic are used.",
+    "settings:nonRalCharacteristics": "Paint code characteristics",
+    "settings:nonRalCharacteristics:help": "If the CLR characteristic's value is on the following list, then the paint code is taken from a characteristic of the same name as the value, otherwise the code is taken from the RAL characteristic."
+  },
+  "pl": true
+}

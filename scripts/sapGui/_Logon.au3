@@ -1,85 +1,6 @@
 #include <WinAPI.au3>
 #include "_Common.au3"
 
-$SAP_LOGON_EXE = ReadIni("Logon", "SapLogonExe", "")
-$SAP_CONNECTION_FILTER = ReadIni("Logon", "ConnectionFilter", "PUBLIC")
-$SAP_LOGON_CLIENT = ReadIni("Logon", "Client", "000")
-$SAP_LOGON_USER = ReadIni("Logon", "User", "test")
-$SAP_LOGON_PASSWORD = ReadIni("Logon", "Password", "test")
-$SAP_LOGON_LANGUAGE = ReadIni("Logon", "Language", "")
-$SAP_TIMEOUT_LOGON = Number(ReadIni("Logon", "SapLogonWindowTimeout", "10"))
-$SAP_TIMEOUT_FRONTEND = Number(ReadIni("Logon", "SapFrontendSessionWindowTimeout", "10"))
-$SAP_TIMEOUT_SESSION = Number(ReadIni( "Logon", "SapFreeSessionCreationTimeout", "10")) * 1000
-$SAP_LOGON_REGEX = ReadIni("Logon", "SapLogonWindowTitleRegex", "^SAP Logon [0-9]+$")
-$SAP_FREE_SESSION_REGEX = ReadIni("Logon", "SapFreeSessionWindowTitleRegex", "^SAP Easy Access.*")
-$SAP_LOGIN_FORM_WINDOW_TITLE = "[REGEXPTITLE:^SAP$; CLASS:SAP_FRONTEND_SESSION]"
-
-$wrapper = Null
-$sapgui = Null
-$application = Null
-
-Global $connection = Null
-Global $session = Null
-
-Func TryToLogIn()
-  LogDebug("LOGGING_IN")
-
-  $session.findById("wnd[0]/usr/txtRSYST-MANDT").text = $SAP_LOGON_CLIENT
-  $session.findById("wnd[0]/usr/txtRSYST-BNAME").text = $SAP_LOGON_USER
-  $session.findById("wnd[0]/usr/pwdRSYST-BCODE").text = $SAP_LOGON_PASSWORD
-  $session.findById("wnd[0]/usr/txtRSYST-LANGU").text = $SAP_LOGON_LANGUAGE
-  $session.findById("wnd[0]/tbar[0]/btn[0]").press()
-
-  $sbar = $session.findById("wnd[0]/sbar").text
-
-  If $sbar = "" Then
-    LogDebug("LOGGED_IN")
-    Return Null
-  EndIf
-
-  $terminateOpt = $session.findById("wnd[1]/usr/radMULTI_LOGON_OPT1")
-
-  If IsObj($terminateOpt) Then
-    $terminateOpt.select()
-    $session.findById("wnd[1]/tbar[0]/btn[0]").press()
-  EndIf
-
-  $sbar = $session.findById("wnd[0]/sbar").text
-
-  If $sbar <> "" Then
-    LogDebug('"' & $session.findById("wnd[0]/sbar").Text & '"')
-    LogError("ERR_INVALID_CREDENTIALS", $ERR_INVALID_CREDENTIALS)
-  EndIf
-
-  LogDebug("LOGGED_IN")
-EndFunc
-
-Func CloseSession()
-  LogDebug("CLOSING_SESSION")
-  If IsObj($session) Then
-    $session.TestToolMode = 0
-    $connection.CloseSession($session.Id)
-  EndIf
-EndFunc
-
-Func FindFreeSession()
-  For $freeSessionIdx = 1 To ($connection.Children.Length - 1)
-    $freeSessionCandidate = $connection.Children($freeSessionIdx)
-
-    If $freeSessionCandidate.Busy Then
-      ContinueLoop
-    EndIf
-
-    $window = $freeSessionCandidate.findById("wnd[0]")
-
-    If IsObj($window) And StringRegExp($window.Text, $SAP_FREE_SESSION_REGEX) And Not IsWinLocked($window.Handle) Then
-      Return $freeSessionCandidate
-    EndIf
-  Next
-
-  Return Null
-EndFunc
-
 $wrapper = ObjCreate("SapROTWr.SAPROTWrapper")
 
 LogDebug("CHECKING_WRAPPER_1")
@@ -108,8 +29,6 @@ If IsObj($wrapper) Then
     EndIf
   EndIf
 EndIf
-
-Unlock()
 
 LogDebug("CHECKING_SESSION_1")
 
@@ -229,8 +148,6 @@ If WinExists($SAP_LOGIN_FORM_WINDOW_TITLE) Then
   TryToLogIn()
 EndIf
 
-Unlock()
-
 LogDebug("SEARCHING_FREE_SESSION")
 
 $freeSession = FindFreeSession()
@@ -283,8 +200,15 @@ Else
   LogDebug("FOUND_FREE_SESSION")
 EndIf
 
+$mainSession = $session
 $session = $freeSession
 
 LogDebug("SESSION_ID=" & $session.Id)
+
+$win = $session.FindById("wnd[0]")
+
+If IsObj($win) Then
+  $win.Maximize()
+EndIf
 
 $session.TestToolMode = 1

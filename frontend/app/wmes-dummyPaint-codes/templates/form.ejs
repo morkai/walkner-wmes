@@ -1,0 +1,19 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- id('_id') %>" class="control-label is-required"><%- t('PROPERTY:_id') %></label>
+        <input id="<%- id('_id') %>" class="form-control" type="text" name="_id" required maxlength="12" <%- editMode ? 'disabled' : '' %>>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('name') %>" class="control-label"><%- t('PROPERTY:name') %></label>
+        <input id="<%- id('name') %>" class="form-control" type="text" name="name" maxlength="50">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

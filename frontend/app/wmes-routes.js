@@ -124,7 +124,11 @@ define([
   './wmes-ct-state/routes',
   './wmes-ct-balancing/routes',
   './wmes-orders-productNotes/routes',
-  './wmes-orders-productTags/routes'
+  './wmes-orders-productTags/routes',
+  './wmes-dummyPaint-orders/routes',
+  './wmes-dummyPaint-codes/routes',
+  './wmes-dummyPaint-paints/routes',
+  './wmes-dummyPaint-families/routes'
 ], function()
 {
   'use strict';

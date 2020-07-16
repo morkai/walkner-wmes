@@ -146,9 +146,9 @@ define([
       }
     },
 
-    handleFailure: function()
+    handleFailure: function(jqXhr)
     {
-      this.showErrorMessage(this.getFailureText());
+      this.showErrorMessage(this.getFailureText(jqXhr));
     },
 
     getFailureText: function()

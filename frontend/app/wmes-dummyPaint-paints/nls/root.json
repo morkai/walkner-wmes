@@ -1,0 +1,14 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Dummy paint",
+    "BREADCRUMB:browse": "Paints",
+
+    "PROPERTY:family": "Family",
+    "PROPERTY:code": "Code",
+    "PROPERTY:nc12": "12NC",
+    "PROPERTY:name": "Name",
+
+    "FORM:ERROR:duplicateKey": "The specified paint code already exists in the specified family."
+  },
+  "pl": true
+}

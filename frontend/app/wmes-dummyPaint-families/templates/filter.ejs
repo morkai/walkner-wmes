@@ -1,0 +1,14 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('_id') %>" class="control-label"><%- t('PROPERTY:_id') %></label>
+    <input id="<%- id('_id') %>" name="_id" class="form-control" type="text" style="width: 125px">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('paintFamily') %>" class="control-label"><%- t('PROPERTY:paintFamily') %></label>
+    <input id="<%- id('paintFamily') %>" name="paintFamily" class="form-control" type="text" style="width: 125px">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

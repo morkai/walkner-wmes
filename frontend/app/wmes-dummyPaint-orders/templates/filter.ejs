@@ -1,0 +1,23 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label><%- t('PROPERTY:changed') %></label>
+    <div id="<%- id('changed') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default"><input type="radio" name="changed" value="true"> <%- t('core', 'BOOL:true') %></label>
+      <label class="btn btn-default"><input type="radio" name="changed" value="false"> <%- t('core', 'BOOL:false') %></label>
+    </div>
+  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'createdAt',
+    type: 'date+time',
+    startHour: 6,
+    labels: {
+      text: t('PROPERTY:createdAt'),
+      ranges: true
+    }
+  }) %>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

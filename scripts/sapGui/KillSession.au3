@@ -91,7 +91,9 @@ For $sessionI = 1 To ($connection.Children.Length - 1)
     ContinueLoop
   EndIf
 
-  If $sessionIds.Count = 0 Or $sessionIds.Exists($session.Id) Then
+  $wnd = $session.FindById("wnd[0]")
+
+  If $sessionIds.Count = 0 Or $sessionIds.Exists($session.Id) Or (IsObj($wnd) And StringInStr($wnd.Text, "Error")) Then
     LogDebug("CLOSING_SESSION=" & $sessionId)
     $connection.CloseSession($session.Id)
     LogDebug("SESSION_CLOSED=" & $sessionId)

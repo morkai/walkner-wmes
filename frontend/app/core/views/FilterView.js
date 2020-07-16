@@ -276,6 +276,21 @@ define([
 
     },
 
+    serializeEqTerm: function(selector, property)
+    {
+      var $el = this.$id(property.replace(/\./g, '-'));
+      var value = $el.val().trim();
+
+      if (value === '-')
+      {
+        selector.push({name: 'eq', args: [property, null]});
+      }
+      else if (value.length)
+      {
+        selector.push({name: 'eq', args: [property, value]});
+      }
+    },
+
     serializeRegexTerm: function(selector, property, maxLength, replaceRe, ignoreCase, startAnchor)
     {
       var $el = this.$id(property.replace(/\./g, '-'));
