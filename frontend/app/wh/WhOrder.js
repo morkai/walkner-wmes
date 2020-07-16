@@ -192,11 +192,23 @@ define([
         };
       });
 
+      var fmx = this.getFunc('fmx');
+      var kitter = this.getFunc('kitter');
+      var platformer = this.getFunc('platformer');
+
+      if (platformer.status === 'finished')
+      {
+        obj.clickable.fmx.picklist = false;
+        obj.clickable.fmx.pickup = false;
+        obj.clickable.kitter.picklist = false;
+        obj.clickable.kitter.pickup = false;
+      }
+
       obj.clickable.platformer.picklist = false;
       obj.clickable.platformer.pickup = obj.clickable.platformer.pickup
-        && this.getFunc('fmx').pickup === 'success'
-        && this.getFunc('kitter').status !== 'problem'
-        && this.getFunc('platformer').status !== 'problem';
+        && fmx.pickup === 'success'
+        && kitter.status !== 'problem'
+        && platformer.status !== 'problem';
 
       obj.clickable.painter.picklist = false;
 
