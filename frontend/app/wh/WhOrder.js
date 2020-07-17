@@ -196,7 +196,7 @@ define([
       var kitter = this.getFunc('kitter');
       var platformer = this.getFunc('platformer');
 
-      if (platformer.status === 'finished')
+      if (platformer.status === 'finished' && platformer.pickup === 'success')
       {
         obj.clickable.fmx.picklist = false;
         obj.clickable.fmx.pickup = false;
