@@ -1,6 +1,10 @@
 <form class="well filter-form" autocomplete="off">
   <div class="form-group">
-    <label><%- t('PROPERTY:changed') %></label>
+    <label for="<%- id('dummyNc12') %>" class="control-label"><%- t('PROPERTY:dummyFamily') %></label>
+    <input id="<%- id('dummyNc12') %>" name="dummyNc12" type="text">
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('PROPERTY:changed') %></label>
     <div id="<%- id('changed') %>" class="btn-group filter-btn-group" data-toggle="buttons">
       <label class="btn btn-default"><input type="radio" name="changed" value="true"> <%- t('core', 'BOOL:true') %></label>
       <label class="btn btn-default"><input type="radio" name="changed" value="false"> <%- t('core', 'BOOL:false') %></label>

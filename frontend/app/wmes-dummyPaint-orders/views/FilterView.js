@@ -3,13 +3,17 @@
 define([
   'underscore',
   'app/core/views/FilterView',
+  'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
+  '../dictionaries',
   'app/wmes-dummyPaint-orders/templates/filter',
   'app/core/util/ExpandableSelect'
 ], function(
   _,
   FilterView,
+  idAndLabel,
   dateTimeRange,
+  dictionaries,
   template
 ) {
   'use strict';
@@ -44,6 +48,10 @@ define([
       'changed': function(propertyName, term, formData)
       {
         formData.changed = !!term.args[1];
+      },
+      'dummyNc12': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
       }
     },
 
@@ -65,6 +73,7 @@ define([
     {
       var view = this;
       var changed = view.getButtonGroupValue('changed');
+      var dummyNc12 = view.$id('dummyNc12').val();
 
       dateTimeRange.formToRql(view, selector);
 
@@ -76,6 +85,11 @@ define([
       {
         selector.push({name: 'eq', args: ['changed', false]});
       }
+
+      if (dummyNc12)
+      {
+        selector.push({name: 'eq', args: ['dummyNc12', dummyNc12]});
+      }
     },
 
     afterRender: function()
@@ -85,6 +99,18 @@ define([
       this.toggleButtonGroup('changed');
 
       this.$('.is-expandable').expandableSelect();
+
+      this.setUpDummyNc12Select2();
+    },
+
+    setUpDummyNc12Select2: function()
+    {
+      this.$id('dummyNc12').select2({
+        width: '150px',
+        allowClear: true,
+        placeholder: ' ',
+        data: dictionaries.codes.map(idAndLabel)
+      });
     },
 
     destroy: function()

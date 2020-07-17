@@ -4,12 +4,14 @@ define([
   'underscore',
   '../i18n',
   '../time',
-  '../core/Model'
+  '../core/Model',
+  './dictionaries'
 ], function(
   _,
   t,
   time,
-  Model
+  Model,
+  dictionaries
 ) {
   'use strict';
 
@@ -34,6 +36,18 @@ define([
       obj.changed = t('core', 'BOOL:' + obj.changed);
       obj.stage = t(this.nlsDomain, 'stage:' + obj.stage);
 
+      if (t.has(this.nlsDomain, 'error:' + obj.error))
+      {
+        obj.error = t(this.nlsDomain, 'error:' + obj.error);
+      }
+
+      var code = dictionaries.codes.get(obj.dummyNc12);
+
+      if (code)
+      {
+        obj.dummyFamily = code.getLabel();
+      }
+
       return obj;
     },
 
@@ -55,6 +69,11 @@ define([
       else if (changed)
       {
         row.className = 'success';
+      }
+
+      if (row.salesItem)
+      {
+        row.salesNo += '/' + row.salesItem;
       }
 
       return row;

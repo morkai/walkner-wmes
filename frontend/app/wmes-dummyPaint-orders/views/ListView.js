@@ -18,6 +18,7 @@ define([
     serializeColumns: function()
     {
       return [
+        {id: 'dummyFamily', className: 'is-min'},
         {id: '_id', className: 'is-min'},
         {id: 'nc12', className: 'is-min'},
         {id: 'name', className: 'is-min'},

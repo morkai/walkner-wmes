@@ -10,10 +10,11 @@
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:startJob": "Rozpocznij podmianę",
 
+  "PROPERTY:dummyFamily": "Rodzina dummy",
   "PROPERTY:_id": "Zlecenie dummy",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:leadingNo": "Zlecenie prod.",
+  "PROPERTY:leadingNo": "Zlecenie nadrzędne",
   "PROPERTY:leadingNc12": "12NC",
   "PROPERTY:leadingName": "Nazwa",
   "PROPERTY:salesNo": "Zlecenie sprzedaży",
@@ -32,13 +33,22 @@
   "PROPERTY:stage": "Etap",
   "PROPERTY:job": "Zadanie",
 
-  "stage:dpLo": "Wyszukiwanie zleceń",
-  "stage:dpBom": "Wyszukiwanie komponentów dummy",
-  "stage:dpSo": "Wyszukiwanie zleceń sprzedaży",
-  "stage:dpCh": "Pobieranie charakterystyk",
-  "stage:dpClr": "Wyszukiwanie komponentów farb",
-  "stage:paint": "Mapowanie farb",
-  "stage:dpUpdate": "Podmiana komponentów dummy",
+  "LIST:COLUMN:dummyFamily": "Rodzina<br>dummy",
+  "LIST:COLUMN:_id": "Zlecenie<br>dummy",
+  "LIST:COLUMN:leadingNo": "Zlecenie<br>nadrzędne",
+  "LIST:COLUMN:salesNo": "Zlecenie<br>sprzedaży",
+  "LIST:COLUMN:productFamily": "Rodzina<br>wyrobu",
+  "LIST:COLUMN:paintFamily": "Rodzina<br>farby",
+  "LIST:COLUMN:paintCategory": "Kategoria<br>farby",
+  "LIST:COLUMN:paintCode": "Kod<br>farby",
+
+  "stage:dpLo": "Wyszukiwanie komponentów dummy",
+  "stage:dpBom": "Wyszukiwanie zleceń sprzedaży",
+  "stage:dpSo": "Wyszukiwanie charakterystyk",
+  "stage:dpCh": "Wyszukiwanie komponentów farb",
+  "stage:dpClr": "Mapowanie farb",
+  "stage:paint": "Podmiana komponentów dummy",
+  "stage:dpUpdate": "Finalizowanie zadania",
   "stage:finished": "Zadanie zakończone",
   "stage:cancelled": "Zadanie anulowane",
 
@@ -59,5 +69,8 @@
   "settings:nonAkzoCategories": "AKZO",
   "settings:nonAkzoCategories:help": "Jeżeli wartość charakterystyki CLR nie znajduje się na poniższej liście, to farby pobierane są dla rodziny AKZO, a nie dla rodziny z charakterystyki PFAM.",
   "settings:nonRalCharacteristics": "Charakterystyki kodu farby",
-  "settings:nonRalCharacteristics:help": "Jeżeli wartość charakterystyki CLR znajduje się na poniższej liście, to kod farby pobierany jest z charakterystyki o danej nazwie, a nie z charakterystyki RAL."
+  "settings:nonRalCharacteristics:help": "Jeżeli wartość charakterystyki CLR znajduje się na poniższej liście, to kod farby pobierany jest z charakterystyki o danej nazwie, a nie z charakterystyki RAL.",
+
+  "error:NO_PAINT_FAMILY": "Nie znaleziono rodziny farby.",
+  "error:NO_PAINT": "Nie znaleziono farby."
 }
