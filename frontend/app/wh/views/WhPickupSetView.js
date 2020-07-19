@@ -867,14 +867,39 @@ define([
         var templateData = {
           multiline: propFunc === 'packer',
           carts: newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]].carts.join(' '),
-          fmxCarts: [],
-          kitterCarts: []
+          otherCarts: []
         };
 
         if (propFunc === 'platformer')
         {
-          templateData.fmxCarts = newData.funcs[WhOrder.FUNC_TO_INDEX.fmx].carts;
-          templateData.kitterCarts = newData.funcs[WhOrder.FUNC_TO_INDEX.kitter].carts;
+          templateData.otherCarts.push({
+            _id: 'fmx',
+            carts: newData.funcs[WhOrder.FUNC_TO_INDEX.fmx].carts
+          });
+          templateData.otherCarts.push({
+            _id: 'kitter',
+            carts: newData.funcs[WhOrder.FUNC_TO_INDEX.kitter].carts
+          });
+        }
+
+        var allCarts = {};
+
+        view.whOrders.getOrdersBySet(view.model.set).forEach(function(setOrder)
+        {
+          setOrder.order.getFunc(propFunc).carts.forEach(function(cartNo)
+          {
+            allCarts[cartNo] = 1;
+          });
+        });
+
+        allCarts = Object.keys(allCarts);
+
+        if (allCarts.length)
+        {
+          templateData.otherCarts.push({
+            _id: propFunc,
+            carts: allCarts
+          });
         }
 
         var $editor = view.renderPartial(cartsEditorTemplate, templateData);

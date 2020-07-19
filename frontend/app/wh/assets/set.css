@@ -190,15 +190,13 @@
   width: 246px;
   padding-left: 0!important;
 }
-.wh-set-editor-carts-other tr:first-child th,
-.wh-set-editor-carts-other tr:first-child td {
+.wh-set-editor-carts-other th,
+.wh-set-editor-carts-other td {
   padding-right: 10px;
   padding-left: 10px;
 }
 .wh-set-editor-carts-other tr:last-child th,
 .wh-set-editor-carts-other tr:last-child td {
-  padding-right: 10px;
-  padding-left: 10px;
   padding-bottom: 7px;
 }
 .wh-set-editor-carts-other td a {

@@ -7,29 +7,19 @@
     <% } %>
     <button class="btn btn-success"><i class="fa fa-shopping-cart"></i></button>
   </div>
-  <% if (fmxCarts.length || kitterCarts.length) { %>
+  <% if (otherCarts.length) { %>
   <table class="wh-set-editor-carts-other">
     <tbody>
-      <% if (fmxCarts.length) { %>
+      <% otherCarts.forEach(function(otherFunc) { %>
       <tr>
-        <th><a href="javascript:void(0)" data-func="fmx" data-cart="all"><%- t('func:fmx') %></a>:</th>
+        <th><a href="javascript:void(0)" data-func="<%- otherFunc._id %>" data-cart="all"><%- t('prop:' + otherFunc._id) %></a>:</th>
         <td>
-          <% fmxCarts.forEach(function(cart) { %>
-          <a href="javascript:void(0)" data-func="fmx" data-cart="<%- cart %>"><%- cart %></a>
+          <% otherFunc.carts.forEach(function(cart) { %>
+          <a href="javascript:void(0)" data-func="<%- otherFunc._id %>" data-cart="<%- cart %>"><%- cart %></a>
           <% }) %>
         </td>
       </tr>
-      <% } %>
-      <% if (kitterCarts.length) { %>
-      <tr>
-        <th><a href="javascript:void(0)" data-func="kitter" data-cart="all"><%- t('func:kitter') %></a>:</th>
-        <td>
-          <% kitterCarts.forEach(function(cart) { %>
-          <a href="javascript:void(0)" data-func="kitter" data-cart="<%- cart %>"><%- cart %></a>
-          <% }) %>
-        </td>
-      </tr>
-      <% } %>
+      <% }) %>
     </tbody>
   </table>
   <% } %>
