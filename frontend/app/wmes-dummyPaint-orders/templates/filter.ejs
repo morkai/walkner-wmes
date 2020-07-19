@@ -20,8 +20,12 @@
       ranges: true
     }
   }) %>
+  <div class="form-group" data-filter="job">
+    <label for="<%- idPrefix %>-job"><%- t('PROPERTY:job') %></label>
+    <input id="<%- idPrefix %>-job" name="job" class="form-control" type="text" maxlength="36" style="width: 77px">
+  </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('core', 'filter:submit') %></span></button>
+    <%- renderButton() %>
   </div>
 </form>

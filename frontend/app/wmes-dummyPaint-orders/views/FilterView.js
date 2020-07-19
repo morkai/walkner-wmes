@@ -6,8 +6,7 @@ define([
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
   '../dictionaries',
-  'app/wmes-dummyPaint-orders/templates/filter',
-  'app/core/util/ExpandableSelect'
+  'app/wmes-dummyPaint-orders/templates/filter'
 ], function(
   _,
   FilterView,
@@ -19,6 +18,14 @@ define([
   'use strict';
 
   return FilterView.extend({
+
+    filterList: [
+      'job',
+      'limit'
+    ],
+    filterMap: {
+
+    },
 
     template: template,
 
@@ -52,21 +59,8 @@ define([
       'dummyNc12': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
-      }
-    },
-
-    initialize: function()
-    {
-      FilterView.prototype.initialize.apply(this, arguments);
-
-
-    },
-
-    getTemplateData: function()
-    {
-      return {
-
-      };
+      },
+      'job': 'dummyNc12'
     },
 
     serializeFormToQuery: function(selector)
@@ -74,6 +68,7 @@ define([
       var view = this;
       var changed = view.getButtonGroupValue('changed');
       var dummyNc12 = view.$id('dummyNc12').val();
+      var job = view.$id('job').val();
 
       dateTimeRange.formToRql(view, selector);
 
@@ -90,6 +85,11 @@ define([
       {
         selector.push({name: 'eq', args: ['dummyNc12', dummyNc12]});
       }
+
+      if (job)
+      {
+        selector.push({name: 'eq', args: ['job', job]});
+      }
     },
 
     afterRender: function()
@@ -97,8 +97,6 @@ define([
       FilterView.prototype.afterRender.call(this);
 
       this.toggleButtonGroup('changed');
-
-      this.$('.is-expandable').expandableSelect();
 
       this.setUpDummyNc12Select2();
     },
@@ -111,13 +109,6 @@ define([
         placeholder: ' ',
         data: dictionaries.codes.map(idAndLabel)
       });
-    },
-
-    destroy: function()
-    {
-      FilterView.prototype.destroy.call(this);
-
-      this.$('.is-expandable').expandableSelect('destroy');
     }
 
   });
