@@ -521,7 +521,25 @@
     "TYPE:ct.mrpConfigs.edited": "Cycle time > Carts: edited",
     "TEXT:ct.mrpConfigs.edited": "Edited family: <em>{model->_id}</em>",
     "TYPE:ct.mrpConfigs.deleted": "Cycle time > Carts: deleted",
-    "TEXT:ct.mrpConfigs.deleted": "Deleted family: <em>{model->_id}</em>"
+    "TEXT:ct.mrpConfigs.deleted": "Deleted family: <em>{model->_id}</em>",
+    "TYPE:dummyPaint.paints.added": "Dummy paint > Paints: added",
+    "TEXT:dummyPaint.paints.added": "Added paint: <a href='\\#dummyPaint/paints/{model->_id}'>{model->name}</a>",
+    "TYPE:dummyPaint.paints.edited": "Dummy paint > Paints: edited",
+    "TEXT:dummyPaint.paints.edited": "Edited paint: <a href='\\#dummyPaint/paints/{model->_id}'>{model->name}</a>",
+    "TYPE:dummyPaint.paints.deleted": "Dummy paint > Paints: deleted",
+    "TEXT:dummyPaint.paints.deleted": "Deleted paint: <em>{model->name}</em>",
+    "TYPE:dummyPaint.codes.added": "Dummy paint > Dummy codes: added",
+    "TEXT:dummyPaint.codes.added": "Added dummy code: <a href='\\#dummyPaint/codes/{model->_id}'>{model->name}</a>",
+    "TYPE:dummyPaint.codes.edited": "Dummy paint > Dummy codes: edited",
+    "TEXT:dummyPaint.codes.edited": "Edited dummy code: <a href='\\#dummyPaint/codes/{model->_id}'>{model->name}</a>",
+    "TYPE:dummyPaint.codes.deleted": "Dummy paint > Dummy codes: deleted",
+    "TEXT:dummyPaint.codes.deleted": "Deleted dummy code: <em>{model->name}</em>",
+    "TYPE:dummyPaint.families.added": "Dummy paint > Families: added",
+    "TEXT:dummyPaint.families.added": "Added family: <a href='\\#dummyPaint/families/{model->_id}'>{model->_id}</a>",
+    "TYPE:dummyPaint.families.edited": "Dummy paint > Families: edited",
+    "TEXT:dummyPaint.families.edited": "Edited family: <a href='\\#dummyPaint/families/{model->_id}'>{model->_id}</a>",
+    "TYPE:dummyPaint.families.deleted": "Dummy paint > Families: deleted",
+    "TEXT:dummyPaint.families.deleted": "Deleted family: <em>{model->_id}</em>"
   },
   "pl": true
 }

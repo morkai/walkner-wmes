@@ -195,6 +195,9 @@
   "PRIVILEGE:WMES:CLIENTS:VIEW": "Klienci WMES: przeglądanie",
   "PRIVILEGE:WMES:CLIENTS:MANAGE": "Klienci WMES: zarządzanie",
   "PRIVILEGE:CT:MANAGE:ORDER_GROUPS": "Czas cyklu: zarządzanie grupami wyrobów",
+  "PRIVILEGE:DUMMY_PAINT:VIEW": "Dummy paint: przeglądanie",
+  "PRIVILEGE:DUMMY_PAINT:MANAGE": "Dummy paint: zarządzanie",
+  "PRIVILEGE:DUMMY_PAINT:WORKER": "Dummy paint: instancja SAP GUI",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",
