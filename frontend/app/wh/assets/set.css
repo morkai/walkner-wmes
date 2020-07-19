@@ -77,6 +77,10 @@
 }
 .wh-set-action.is-clickable {
   color: #337ab7;
+  text-shadow: 2px 2px 2px #CCC;
+}
+.wh-set-action.is-clickable:hover {
+  text-shadow: 3px 3px 6px #999;
 }
 .wh-set-action.is-clickable:hover .fa {
   transform: scale(1.2);
