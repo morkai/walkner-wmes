@@ -203,7 +203,7 @@ define([
 
       view.promised(view.psEvents.fetch({reset: true})).done(function()
       {
-        if (!view.$changes.length)
+        if (!view.$changes || !view.$changes.length)
         {
           return;
         }
