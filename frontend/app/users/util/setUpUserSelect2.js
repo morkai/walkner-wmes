@@ -229,7 +229,9 @@ define([
             return user.text.toLowerCase().indexOf(query.term.toLowerCase()) !== -1;
           });
 
-          var users = results.concat(filterDuplicates(data.collection || []));
+          var users = options.filterDuplicates === false
+            ? results.concat(data.collection || [])
+            : results.concat(filterDuplicates(data.collection || []));
 
           if (userFilter)
           {

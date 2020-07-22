@@ -166,6 +166,7 @@ define([
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
       var undelivered = !setData.delivered;
+      var funcs = [];
 
       obj.clickable = {
         picklistDone: undelivered
@@ -176,6 +177,11 @@ define([
       {
         var isAssigned = !!func.user;
         var isFunc = isUser && userFunc._id === func._id;
+
+        if (!isUser || isFunc)
+        {
+          funcs.push(func);
+        }
 
         obj.clickable[func._id] = {
           picklist: undelivered
@@ -191,6 +197,9 @@ define([
             )
         };
       });
+
+      obj.showPicklistDone = funcs.length !== 1 || (isUser && userFunc._id === obj.picklistFunc);
+      obj.funcs = funcs;
 
       var fmx = this.getFunc('fmx');
       var kitter = this.getFunc('kitter');

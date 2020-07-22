@@ -156,7 +156,7 @@
     "settings:planning:availableTimeThreshold:help": "When picking a line during creation of a new set, the sum of picked up time and delivered time will be changed to 0, if it's less than the specified number of minutes.",
     "settings:planning:deliveryFuncs": "Delivery functions",
 
-    "set:title": "Order set no {set} for line {line}",
+    "set:title": "Set #{set} for line {line}",
     "set:cartsEditor:carts": "Carts...",
     "set:cartsEditor:used:error": "{count, plural, one{Cart already in use:} other{Carts already in use:}}",
     "set:cartsEditor:used:cart": "{cart} ({date}, set {set})",

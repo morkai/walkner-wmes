@@ -117,7 +117,8 @@ define([
           multiple: true,
           allowClear: true,
           placeholder: ' ',
-          noPersonnelId: false
+          noPersonnelId: false,
+          filterDuplicates: false
         });
 
         view.updateUsers(this.dataset.userFunc);

@@ -157,7 +157,7 @@
   "settings:planning:availableTimeThreshold:help": "Przy wyborze linii do nowego seta, suma czasu skompletowanego oraz czasu dostępnego zostanie zamieniona na 0, jeżeli jest mniejsza niż podana ilość minut.",
   "settings:planning:deliveryFuncs": "Funkcje wysyłki",
 
-  "set:title": "Zestaw zleceń nr {set} dla linii {line}",
+  "set:title": "Zestaw #{set} dla linii {line}",
   "set:cartsEditor:carts": "Numery wózków...",
   "set:cartsEditor:used:error": "{count, plural, one{Podany wózek jest w użyciu:} other{Podane wózki są już w użyciu:}}",
   "set:cartsEditor:used:cart": "{cart} ({date}, set {set})",

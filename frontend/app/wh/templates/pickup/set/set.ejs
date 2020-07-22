@@ -11,8 +11,10 @@
       <%- t('prop:time') %>
       <span id="<%- idPrefix %>-time" class="wh-set-summary">00:00:00</span>
     </th>
+    <% if (items[0].showPicklistDone) { %>
     <th class="wh-set-separator"></th>
     <th class="text-center" data-prop="picklistDone"><%- t('prop:picklist') %></th>
+    <% } %>
     <% items[0].funcs.forEach(function(func) { %>
     <th class="wh-set-separator"></th>
     <th class="text-center" data-prop="func" data-func="<%- func._id %>" colspan="<%- func._id === 'platformer' || func._id === 'painter' ? 1 : 2 %>">

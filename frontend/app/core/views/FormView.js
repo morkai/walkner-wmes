@@ -5,12 +5,14 @@ define([
   'form2js',
   'js2form',
   'app/viewport',
+  '../Model',
   '../View'
 ], function(
   _,
   form2js,
   js2form,
   viewport,
+  Model,
   View
 ) {
   'use strict';
@@ -28,6 +30,11 @@ define([
     initialize: function()
     {
       this.$errorMessage = null;
+
+      if (!this.model)
+      {
+        this.model = new Model();
+      }
 
       this.listenTo(this.model, 'change', function()
       {

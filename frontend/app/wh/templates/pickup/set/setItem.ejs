@@ -4,10 +4,12 @@
     <td data-prop="nc12"><%- item.nc12 %></td>
     <td data-prop="qty"><%- item.qty %>/<%- item.qtyTodo %></td>
     <td data-prop="startTime"><%- item.startTime %></td>
+    <% if (item.showPicklistDone) { %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <td class="wh-set-action <%- item.clickable.picklistDone ? 'is-clickable' : '' %>" data-prop="picklistDone" data-status="<%- item.picklistDone %>" rowspan="2">
       <i class="fa fa-play" <%- item.clickable.picklistDone ? 'tabindex="0"' : '' %>></i>
     </td>
+    <% } %>
     <% item.funcs.forEach(function(func) { %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <% if (func._id !== 'platformer' && func._id !== 'painter') { %>
