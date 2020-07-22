@@ -28,9 +28,10 @@ define([
         'app/wmes-dummyPaint-orders/dictionaries',
         'app/wmes-dummyPaint-paints/DpPaintCollection',
         'app/wmes-dummyPaint-paints/views/FilterView',
+        'app/wmes-dummyPaint-paints/views/MassUpdateView',
         nls
       ],
-      function(FilteredListPage, dictionaries, DpPaintCollection, FilterView)
+      function(FilteredListPage, dictionaries, DpPaintCollection, FilterView, MassUpdateView)
       {
         return dictionaries.bind(new FilteredListPage({
           pageClassName: 'page-max-flex',
@@ -42,7 +43,23 @@ define([
             {id: 'name'}
           ],
           collection: new DpPaintCollection(null, {rqlQuery: req.rql}),
-          FilterView: FilterView
+          FilterView: FilterView,
+          actions: function()
+          {
+            var page = this;
+
+            return FilteredListPage.prototype.actions.apply(page, arguments).concat([
+              {
+                label: page.t('massUpdate:pageAction'),
+                icon: 'edit',
+                privileges: 'DUMMY_PAINT:MANAGE',
+                callback: function()
+                {
+                  viewport.showDialog(new MassUpdateView(), page.t('massUpdate:title'));
+                }
+              }
+            ]);
+          }
         }));
       }
     );

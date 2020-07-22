@@ -8,7 +8,16 @@
     "PROPERTY:nc12": "12NC",
     "PROPERTY:name": "Name",
 
-    "FORM:ERROR:duplicateKey": "The specified paint code already exists in the specified family."
+    "FORM:ERROR:duplicateKey": "The specified paint code already exists in the specified family.",
+
+    "massUpdate:pageAction": "Zamień",
+    "massUpdate:title": "Masowa edycja farb",
+    "massUpdate:submit": "Edytuj farby",
+    "massUpdate:cancel": "Anuluj",
+    "massUpdate:code": "Kod farby",
+    "massUpdate:old12": "Stare 12NC",
+    "massUpdate:new12": "Nowe 12NC",
+    "massUpdate:newName": "Nowa nazwa"
   },
   "pl": true
 }

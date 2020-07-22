@@ -7,5 +7,14 @@
   "PROPERTY:nc12": "12NC",
   "PROPERTY:name": "Nazwa",
 
-  "FORM:ERROR:duplicateKey": "Farba o podanym kodzie już istnieje w danej rodzinie."
+  "FORM:ERROR:duplicateKey": "Farba o podanym kodzie już istnieje w danej rodzinie.",
+
+  "massUpdate:pageAction": "Zamień",
+  "massUpdate:title": "Masowa edycja farb",
+  "massUpdate:submit": "Edytuj farby",
+  "massUpdate:cancel": "Anuluj",
+  "massUpdate:code": "Kod farby",
+  "massUpdate:old12": "Stare 12NC",
+  "massUpdate:new12": "Nowe 12NC",
+  "massUpdate:newName": "Nowa nazwa"
 }
