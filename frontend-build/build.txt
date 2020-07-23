@@ -4059,6 +4059,8 @@ app/wh/templates/downtimePicker.js
 app/wh/views/DowntimePickerView.js
 app/wh/templates/pickup/blockedPickup.js
 app/wh/views/BlockedPickupView.js
+app/wh/templates/pickup/forceLine.js
+app/wh/views/ForceLinePickupView.js
 app/wh/templates/messages/noAction.js
 app/wh/templates/messages/resolvingAction.js
 app/wh/templates/messages/text.js
