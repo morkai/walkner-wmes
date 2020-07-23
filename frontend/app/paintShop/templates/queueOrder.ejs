@@ -101,7 +101,13 @@
       <%- childOrder.order %>
       <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder, order) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
     </td>
-    <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>
+    <td class="paintShop-property" data-property="nc12">
+      <% if (details) { %>
+        <a href="/orderDocuments/110<%- childOrder.nc12 %>?order=<%- order.order %>" target="_blank" data-action="openDocument"><%- childOrder.nc12 %></a>
+      <% } else { %>
+        <%- childOrder.nc12 %>
+      <% } %>
+    </td>
     <td class="paintShop-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>
     <td class="paintShop-property">PCE</td>
     <td class="paintShop-property" data-property="name"><%= childOrder.name %></td>
