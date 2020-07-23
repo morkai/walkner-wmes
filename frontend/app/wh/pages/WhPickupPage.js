@@ -25,6 +25,7 @@ define([
   '../views/WhPickupStatusView',
   '../views/DowntimePickerView',
   '../views/BlockedPickupView',
+  '../views/ForceLinePickupView',
   '../templates/messages',
   'app/wh/templates/pickup/page',
   'app/wh/templates/resolveAction',
@@ -54,6 +55,7 @@ define([
   WhPickupStatusView,
   DowntimePickerView,
   BlockedPickupView,
+  ForceLinePickupView,
   messageTemplates,
   pageTemplate,
   resolveActionTemplate,
@@ -107,6 +109,16 @@ define([
     actions: function()
     {
       var page = this;
+      var forceLine = {
+        label: page.t('pickup:forceLine:action'),
+        icon: 'crosshairs',
+        callback: function()
+        {
+          page.showForceLineDialog();
+
+          return false;
+        }
+      };
       var legend = {
         label: page.t('PAGE_ACTION:legend'),
         icon: 'question-circle',
@@ -120,7 +132,7 @@ define([
 
       if (embedded.isEnabled())
       {
-        return [legend];
+        return [forceLine, legend];
       }
 
       return [
@@ -142,6 +154,7 @@ define([
             });
           }
         },
+        forceLine,
         {
           label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
@@ -558,14 +571,30 @@ define([
         return;
       }
 
-      viewport.closeAllDialogs();
-
-      this.lastPersonnelId = personnelId;
-
       if (window.ENV !== 'production' && DEV_PERSONNEL[personnelId])
       {
         personnelId = DEV_PERSONNEL[personnelId];
       }
+
+      page.lastPersonnelId = personnelId;
+
+      var dialog = viewport.currentDialog;
+
+      if (dialog instanceof ForceLinePickupView)
+      {
+        if (dialog.getCard() === personnelId)
+        {
+          dialog.$id('submit').click();
+        }
+        else
+        {
+          dialog.setCard(personnelId);
+        }
+
+        return;
+      }
+
+      viewport.closeAllDialogs();
 
       page.acting = true;
 
@@ -1061,6 +1090,30 @@ define([
     onSetClicked: function(whOrderId)
     {
       this.focusSet(whOrderId);
+    },
+
+    showForceLineDialog: function()
+    {
+      var page = this;
+      var dialogView = new ForceLinePickupView({
+        model: {
+          personnelId: page.lastPersonnelId || currentUser.data.cardUid,
+          whLines: page.whLines
+        }
+      });
+
+      page.listenTo(dialogView, 'picked', function(data)
+      {
+        viewport.closeAllDialogs();
+
+        page.broker.subscribe('viewport.dialog.hidden').setLimit(1).on('message', function()
+        {
+          console.log('currentDialog', viewport.currentDialog);
+          page.resolveAction(data.card, {forceLine: data.line});
+        });
+      });
+
+      viewport.showDialog(dialogView, page.t('pickup:forceLine:title'));
     }
 
   });

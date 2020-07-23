@@ -736,15 +736,17 @@ define([
       {
         if (dialog.getCard() === personnelId)
         {
-          viewport.closeAllDialogs();
+          dialog.$id('submit').click();
         }
         else
         {
           dialog.setCard(personnelId);
-
-          return;
         }
+
+        return;
       }
+
+      viewport.closeAllDialogs();
 
       page.acting = true;
 
@@ -1009,7 +1011,10 @@ define([
       {
         viewport.closeAllDialogs();
 
-        page.resolveAction(data.card, {forceLine: data.line});
+        page.broker.subscribe('viewport.dialog.hidden').setLimit(1).on('message', function()
+        {
+          page.resolveAction(data.card, {forceLine: data.line});
+        });
       });
 
       viewport.showDialog(dialogView, page.t('delivery:forceLine:title'));

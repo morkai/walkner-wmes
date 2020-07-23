@@ -420,25 +420,27 @@ define([
 
   Viewport.prototype.onDialogHidden = function()
   {
-    if (!this.currentDialog)
+    var dialog = this.currentDialog;
+
+    if (!dialog)
     {
       return;
     }
 
-    if (this.currentDialog.dialogClassName)
-    {
-      this.$dialog.removeClass(_.result(this.currentDialog, 'dialogClassName'));
-    }
-
-    if (_.isFunction(this.currentDialog.remove))
-    {
-      this.currentDialog.trigger('dialog:hidden');
-      this.currentDialog.remove();
-
-      this.broker.publish('viewport.dialog.hidden', this.currentDialog);
-    }
-
     this.currentDialog = null;
+
+    if (dialog.dialogClassName)
+    {
+      this.$dialog.removeClass(_.result(dialog, 'dialogClassName'));
+    }
+
+    if (_.isFunction(dialog.remove))
+    {
+      dialog.trigger('dialog:hidden');
+      dialog.remove();
+
+      this.broker.publish('viewport.dialog.hidden', dialog);
+    }
 
     if (this.dialogQueue.length)
     {

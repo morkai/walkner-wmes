@@ -178,7 +178,7 @@ define([
         var isAssigned = !!func.user;
         var isFunc = isUser && userFunc._id === func._id;
 
-        if (!isUser || isFunc)
+        if (true || !isUser || isFunc) // TODO
         {
           funcs.push(func);
         }
