@@ -1,7 +1,10 @@
 <form class="dummyPaint-startJob" method="post" action="<%- formAction %>">
   <input type="hidden" name="_method" value="<%= formMethod %>">
   <div class="form-group has-required-select2">
-    <label for="<%- id('codes') %>" class="control-label is-required"><%- t('startJob:codes') %></label>
+    <label for="<%- id('codes') %>" class="control-label is-required is-required-first-child" style="display: flex">
+      <span><%- t('startJob:codes') %></span>
+      <a id="<%- id('codes-all') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('startJob:codes:all') %></a>
+    </label>
     <input id="<%- id('codes') %>" name="codes" type="text" required>
   </div>
   <div class="form-group has-required-select2">

@@ -56,6 +56,7 @@
   "startJob:submit": "Rozpocznij podmianę",
   "startJob:cancel": "Anuluj",
   "startJob:codes": "Kod dummy",
+  "startJob:codes:all": "Dodaj wszystkie",
   "startJob:worker": "Instancja SAP GUI",
   "startJob:notify": "Użytkownicy do powiadomienia",
   "startJob:msg:starting": "<i class='fa fa-spinner fa-spin'></i><span>Uruchamianie podmiany farb...</span>",
@@ -72,5 +73,11 @@
   "settings:nonRalCharacteristics:help": "Jeżeli wartość charakterystyki CLR znajduje się na poniższej liście, to kod farby pobierany jest z charakterystyki o danej nazwie, a nie z charakterystyki RAL.",
 
   "error:NO_PAINT_FAMILY": "Nie znaleziono rodziny farby.",
-  "error:NO_PAINT": "Nie znaleziono farby."
+  "error:NO_PAINT_CODE": "Brak kodu farby.",
+  "error:NO_PAINT": "Nie znaleziono farby.",
+  "error:NOT_VERIFIED": "Niezweryfikowane.",
+  "error:NOT_CHANGED": "Niezmienione.",
+  "error:NO_PFAM_CONFIG": "Brak charakterystyki PFAM.",
+  "error:NO_CLR_CONFIG": "Brak charakterystyki CLR.",
+  "error:NO_PAINT_CODE_CONFIG": "Brak charakterystyki kodu farby (RAL)."
 }

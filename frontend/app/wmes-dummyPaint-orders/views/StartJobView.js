@@ -36,6 +36,22 @@ define([
       'dummyPaint.workers.updated': 'onWorkerUpdated'
     },
 
+    events: Object.assign({
+
+      'click #-codes-all': function()
+      {
+        var $codes = this.$id('codes');
+
+        window.$codes = $codes;
+
+        $codes.select2('data', $codes.data('select2').opts.data.filter(function(item)
+        {
+          return !item.disabled;
+        }));
+      }
+
+    }, FormView.prototype.events),
+
     initialize: function()
     {
       FormView.prototype.initialize.apply(this, arguments);
@@ -137,11 +153,18 @@ define([
         $worker.val('');
       }
 
+      var data = workers.map(idAndLabel);
+
       $worker.select2({
-        data: workers.map(idAndLabel)
+        data: data
       });
 
       $worker.select2('enable');
+
+      if (!$worker.val() && data.length === 1)
+      {
+        $worker.select2('data', data[0]);
+      }
     },
 
     setUpNotifySelect2: function()
