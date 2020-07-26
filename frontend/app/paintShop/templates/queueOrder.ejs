@@ -101,13 +101,7 @@
       <%- childOrder.order %>
       <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder, order) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
     </td>
-    <td class="paintShop-property" data-property="nc12">
-      <% if (details) { %>
-        <a href="/orderDocuments/110<%- childOrder.nc12 %>?order=<%- order.order %>" target="_blank" data-action="openDocument"><%- childOrder.nc12 %></a>
-      <% } else { %>
-        <%- childOrder.nc12 %>
-      <% } %>
-    </td>
+    <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>
     <td class="paintShop-property">PCE</td>
     <td class="paintShop-property" data-property="name"><%= childOrder.name %></td>
@@ -126,7 +120,13 @@
   <% } %>
   <% childOrder.components.forEach(function(component) { %>
   <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
-    <td class="paintShop-property" data-property="nc12"><%- component.nc12 %></td>
+    <td class="paintShop-property" data-property="nc12">
+      <% if (details && component.unit === 'PCE') { %>
+        <a href="/orderDocuments/110<%- component.nc12 %>?order=<%- order.order %>" target="_blank" data-action="openDocument"><%- component.nc12 %></a>
+      <% } else { %>
+        <%- component.nc12 %>
+      <% } %>
+    </td>
     <td class="paintShop-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit"><%- component.unit %></td>
     <td class="paintShop-property" data-property="name"><%= component.name %></td>
