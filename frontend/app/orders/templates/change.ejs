@@ -2,7 +2,7 @@
   <% if (change.values.length) { %>
   <tr>
     <td class="is-min orders-changes-time" rowspan="<%- change.rowSpan %>">
-      <% if (change.timeEditable) { %>
+      <% if (canEditTime && change.timeEditable) { %>
       <a class="link orders-changes-time-editable"><%- change.timeText %></a>
       <% } else { %>
       <%- change.timeText %>

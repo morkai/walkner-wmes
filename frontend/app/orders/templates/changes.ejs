@@ -1,45 +1,40 @@
 <div class="<%- showPanel ? 'panel panel-default' : '' %> orders-changes <%- noSystemChanges ? 'orders-no-system-changes' : '' %>">
   <% if (showPanel) { %>
   <div class="panel-heading is-with-actions">
-    <%- helpers.t('PANEL:TITLE:changes') %>
+    <%- t('PANEL:TITLE:changes') %>
     <div class="panel-actions">
-      <button id="<%- idPrefix %>-toggleSystemChanges" class="btn btn-default <%- noSystemChanges ? 'active' : '' %>" type="button"><%- helpers.t('changes:toggleSystemChanges') %></button>
+      <button id="<%- id('toggleSystemChanges') %>" class="btn btn-default <%- noSystemChanges ? 'active' : '' %>" type="button"><%- t('changes:toggleSystemChanges') %></button>
     </div>
   </div>
   <% } %>
   <div class="list">
     <div class="table-responsive">
-      <table id="<%- idPrefix %>-table" class="table table-condensed table-bordered table-hover">
+      <table id="<%- id('table') %>" class="table table-condensed table-bordered table-hover">
         <thead>
           <tr>
-            <th class="is-min"><%- helpers.t('changes:time') %>
-            <th class="is-min"><%- helpers.t('changes:user') %>
-            <th class="is-min"><%- helpers.t('changes:property') %>
-            <th class="is-min"><%- helpers.t('changes:oldValue') %>
-            <th><%- helpers.t('changes:newValue') %>
+            <th class="is-min"><%- t('changes:time') %>
+            <th class="is-min"><%- t('changes:user') %>
+            <th class="is-min"><%- t('changes:property') %>
+            <th class="is-min"><%- t('changes:oldValue') %>
+            <th><%- t('changes:newValue') %>
           </tr>
         </thead>
         <% if (canComment) { %>
         <tfoot>
           <tr>
-            <td id="<%- idPrefix %>-commentForm" class="orders-commentForm-container" colspan="5"></td>
+            <td id="<%- id('commentForm') %>" class="orders-commentForm-container" colspan="5"></td>
           </tr>
         </tfoot>
         <% } %>
         <% if (!changes.length) { %>
-        <tbody id="<%- idPrefix %>-empty">
+        <tbody id="<%- id('empty') %>">
           <tr>
-            <td colspan="5"><%- helpers.t('changes:NO_DATA') %></td>
+            <td colspan="5"><%- t('changes:NO_DATA') %></td>
           </tr>
         </tbody>
         <% } %>
         <% changes.forEach(function(change, i) { %>
-        <%- renderChange({
-          renderPropertyLabel: renderPropertyLabel,
-          renderValueChange: renderValueChange,
-          change: change,
-          i: i
-        }) %>
+        <%- renderChange(change, i) %>
         <% }) %>
       </table>
     </div>

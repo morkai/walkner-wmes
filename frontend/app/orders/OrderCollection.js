@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../user',
   '../time',
   '../core/Collection',
   './Order'
 ], function(
+  user,
   time,
   Collection,
   Order
@@ -39,6 +41,22 @@ define([
           ]
         }
       });
+    }
+
+  }, {
+
+    can: {
+
+      comment: function()
+      {
+        return user.can.commentOrders();
+      },
+
+      editStatusChange: function()
+      {
+        return user.isAllowedTo('SUPER');
+      }
+
     }
 
   });

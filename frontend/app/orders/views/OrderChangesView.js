@@ -16,6 +16,7 @@ define([
   './ComponentListView',
   './NoteListView',
   '../Order',
+  '../OrderCollection',
   '../OperationCollection',
   '../DocumentCollection',
   '../ComponentCollection',
@@ -39,6 +40,7 @@ define([
   ComponentListView,
   NoteListView,
   Order,
+  OrderCollection,
   OperationCollection,
   DocumentCollection,
   ComponentCollection,
@@ -91,6 +93,7 @@ define([
 
     initialize: function()
     {
+      this.renderChange = this.renderChange.bind(this);
       this.renderPropertyLabel = this.renderPropertyLabel.bind(this);
       this.renderValueChange = this.renderValueChange.bind(this);
 
@@ -126,12 +129,9 @@ define([
       return {
         showPanel: this.options.showPanel !== false,
         changes: this.serializeChanges(),
-        renderChange: renderChange,
-        renderPropertyLabel: this.renderPropertyLabel,
-        renderValueChange: this.renderValueChange,
-        canEditTime: user.isAllowedTo('ORDERS:MANAGE'),
-        canComment: user.can.commentOrders(),
-        noSystemChanges: localStorage.getItem('WMES_NO_SYSTEM_CHANGES') === '1'
+        canComment: OrderCollection.can.comment(),
+        noSystemChanges: localStorage.getItem('WMES_NO_SYSTEM_CHANGES') === '1',
+        renderChange: this.renderChange
       };
     },
 
@@ -189,6 +189,17 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change:changes', this.render);
+    },
+
+    renderChange: function(change, i)
+    {
+      return this.renderPartialHtml(renderChange, {
+        canEditTime: OrderCollection.can.editStatusChange(),
+        renderPropertyLabel: this.renderPropertyLabel,
+        renderValueChange: this.renderValueChange,
+        change: change,
+        i: i
+      });
     },
 
     renderPropertyLabel: function(valueChange)
@@ -404,6 +415,7 @@ define([
       var $table = view.$id('table');
       var changes = view.model.get('changes');
       var changedChange = change.newValues.change;
+      var canEditTime = OrderCollection.can.editStatusChange();
 
       view.$id('empty').remove();
 
@@ -436,12 +448,7 @@ define([
               changeI = i;
             }
 
-            html += view.renderPartialHtml(renderChange, {
-              renderPropertyLabel: view.renderPropertyLabel,
-              renderValueChange: view.renderValueChange,
-              change: view.serializeChange(c),
-              i: i
-            });
+            html += view.renderChange(view.serializeChange(c), i);
           });
 
           $table
@@ -455,12 +462,7 @@ define([
         }
       }
 
-      var $change = view.renderPartial(renderChange, {
-        renderPropertyLabel: view.renderPropertyLabel,
-        renderValueChange: view.renderValueChange,
-        change: view.serializeChange(change),
-        i: changes.length - 1
-      });
+      var $change = $(view.renderChange(view.serializeChange(change), changes.length - 1));
 
       $change.appendTo($table).find('td').addClass('highlight');
     },
