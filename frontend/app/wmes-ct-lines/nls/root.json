@@ -15,6 +15,7 @@
     "PROPERTY:stations:processorIp": "Processor IP address",
     "PROPERTY:stations:headPort": "Head port",
     "PROPERTY:stations:headNo": "Head no",
+    "PROPERTY:stations:beamPower": "Beam power [dBm]",
 
     "type:inveo": "INVEO",
     "type:luma2": "LUMA2",

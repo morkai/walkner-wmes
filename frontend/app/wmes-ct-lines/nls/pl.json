@@ -14,6 +14,7 @@
   "PROPERTY:stations:processorIp": "Adres IP procesora",
   "PROPERTY:stations:headPort": "Port głowicy",
   "PROPERTY:stations:headNo": "Nr głowicy",
+  "PROPERTY:stations:beamPower": "Moc wiązki [dBm]",
 
   "type:inveo": "INVEO",
   "type:luma2": "LUMA2",
