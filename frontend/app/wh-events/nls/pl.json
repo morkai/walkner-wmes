@@ -29,6 +29,7 @@
   "data:status": "Status",
   "data:duration": "Czas trwania",
   "data:oldStartedPlan": "Stary plan",
+  "data:newStartedPlan": "Nowy plan",
   "data:sourceQty": "Ilość źródłowa",
   "data:targetQty": "Ilość docelowa",
 
