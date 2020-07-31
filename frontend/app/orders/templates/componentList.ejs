@@ -18,9 +18,9 @@
             <th class="is-min"><%- t('PROPERTY:bom.nc12') %>
             <th class="is-min"><%- t('PROPERTY:bom.name') %>
             <th class="is-min" colspan="3"><%- t('PROPERTY:bom.qty') %>
+            <th class="is-min"><%- t('PROPERTY:bom.distStrategy') %>
             <th class="is-min"><%- t('PROPERTY:bom.unloadingPoint') %>
             <th class="is-min"><%- t('PROPERTY:bom.supplyArea') %>
-            <th class="is-min"><%- t('PROPERTY:bom.distStrategy') %>
             <th>
           </tr>
         </thead>
@@ -44,9 +44,9 @@
             <td class="is-min is-number" style="padding-right: 0; border-right: 0"><%- component.qty[0] %>
             <td class="is-min is-number" style="text-align: left; padding-left: 0; border-left: 0; border-right: 0"><%- component.qty[1] %></td>
             <td class="is-min" style="border-left: 0"><%- component.unit %>
+            <td class="is-min"><%= component.distStrategy || '' %>
             <td class="is-min"><%= component.unloadingPoint || '' %>
             <td class="is-min"><%= component.supplyArea || '' %>
-            <td class="is-min"><%= component.distStrategy || '' %>
             <td>
           </tr>
           <% }) %>
