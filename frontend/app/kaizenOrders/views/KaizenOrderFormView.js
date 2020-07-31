@@ -203,36 +203,42 @@ define([
         return this.backTo;
       }
 
-      var type = 'behaviorObsCards';
-      var data = JSON.parse(sessionStorage.getItem('BOC_LAST') || 'null');
+      var type;
+      var data;
+      var types = {
+        BOC_LAST: 'behaviorObsCards',
+        MFS_LAST: 'minutesForSafetyCards'
+      };
 
-      if (!data)
+      _.forEach(types, function(v, k)
       {
-        data = JSON.parse(sessionStorage.getItem('MFS_LAST') || 'null');
-
-        if (!data)
+        if (type)
         {
-          cleanUp();
-
-          return this.backTo = null;
+          return;
         }
 
-        type = 'minutesForSafetyCards';
+        data = JSON.parse(sessionStorage.getItem(k) || 'null');
+
+        if (data)
+        {
+          type = v;
+        }
+      });
+
+      if (!type)
+      {
+        _.forEach(types, function(k) { sessionStorage.removeItem(k); });
+
+        return this.backTo = null;
       }
 
-      cleanUp();
-
       return this.backTo = {
+        type: type,
+        data: data,
         submitLabel: this.t('FORM:backTo:' + type + ':' + (data._id ? 'edit' : 'add')),
         cancelLabel: this.t('FORM:backTo:' + type + ':cancel'),
         cancelUrl: '#' + type + (data._id ? ('/' + data._id + ';edit') : ';add')
       };
-
-      function cleanUp()
-      {
-        sessionStorage.removeItem('BOC_LAST');
-        sessionStorage.removeItem('MFS_LAST');
-      }
     },
 
     isMultiOwner: function()
@@ -298,16 +304,11 @@ define([
 
     handleSuccess: function()
     {
-      var lastBoc = JSON.parse(sessionStorage.getItem('BOC_LAST') || 'null');
-      var lastMfs = JSON.parse(sessionStorage.getItem('MFS_LAST') || 'null');
-      var type = lastBoc ? 'behaviorObsCards' : lastMfs ? 'minutesForSafetyCards' : null;
-      var data = lastBoc || lastMfs;
-
-      if (!this.options.editMode && type)
+      if (!this.options.editMode && this.backTo)
       {
         this.broker.publish('router.navigate', {
-          url: '/' + type
-            + (data._id ? ('/' + data._id + ';edit') : ';add')
+          url: '/' + this.backTo.type
+            + (this.backTo.data._id ? ('/' + this.backTo.data._id + ';edit') : ';add')
             + '?nearMiss=' + this.model.get('rid'),
           trigger: true
         });
@@ -316,8 +317,8 @@ define([
       {
         this.broker.publish('router.navigate', {
           url: this.model.genClientUrl() + '?'
-          + (this.options.editMode ? '' : '&thank=you')
-          + (!this.options.standalone ? '' : '&standalone=1'),
+            + (this.options.editMode ? '' : '&thank=you')
+            + (!this.options.standalone ? '' : '&standalone=1'),
           trigger: true
         });
       }
