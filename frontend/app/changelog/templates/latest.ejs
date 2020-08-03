@@ -1,66 +1,6 @@
-<h1>v0.151.0</h1>
-<h2><%- time.format('2020-08-02', 'LL') %></h2>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Magazyn</h3>
 <ul>
-  <li>Zmieniono przydzielanie do istniejącego seta tak, aby odbywało się wg najwcześniejszego czasu
-    rozpoczęcia kompletacji seta a nie wg najwcześniejszego czasu rozpoczęcia zlecenia w secie.</li>
-  <li>Zmieniono przydzielanie Platformowego do istniejącego seta tak, aby przydzielany był najpierw
-    do setów dla linii, które mają najmniejszy dostępny czas.</li>
-  <li>Zmieniono obsługę problemów:
-    <ul>
-      <li>Problem podczas kompletacji nie usuwa zlecenia z seta. Problem z transakcją LP10 nadal
-        usuwa zlecenie z seta.</li>
-      <li>Sety z problemami mogą być wysyłane.</li>
-      <li>Dostarczone zlecenia, które mają problem są automatycznie blokowane podczas wysyłki.</li>
-      <li>Zablokowane, dostarczone zlecenia są automatycznie odblokowywane podczas wysyłki wózków zawierających
-        zablokowane zlecenie, jeżeli zlecenie to nie ma żadnego problemu.</li>
-    </ul>
-  </li>
-  <li>Zmieniono wyświetlanie statusu kompletacji Malarnii tak, aby status Kompletacja miał taką samą ikonę
-    jak status Oczekiwanie (znak zapytania zamiast wózek), jeżeli do funkcji Malarnii nie została jeszcze
-    przypisana osoba.</li>
-  <li>Zmieniono automatyczne anulowanie wykonanych zleceń tak, aby zlecenia z magazynu, które otrzymają status
-    CNF, DLV, TECO, DLT lub DLFL zostały anulowane, jeżeli ich status to 'Oczekiwanie', a dla zleceń z rozpoczętą
-    kompletacją kończone były wszystkie dostarczone zlecenia o takich samych numerach.</li>
-  <li>Zmieniono wysyłkę wózków tak, aby dostarczone zlecenia, które w momencie rozpoczęcia wysyłki są oznaczone
-    w SAP jako zakończone (status CNF, DLV, TECO, DLT lub DLFL), były automatycznie tworzone ze statusem
-    'Zrobione'.</li>
-  <li>Zmieniono kompletację setów tak, aby FMX oraz Kitter nie mogli zmieniać statusu zlecenia, jeżeli
-    Platformowy skompletował już wózki.</li>
-  <li>Dodano automatyczne drukowanie picklisty malarnii po rozpoczęciu kompletacji przez malarnię.</li>
-  <li>Dodano do listy stanów linii możliwość wyświetlenia listy zleceń kompletowanych, skompletowanych oraz
-    dostępnych (dostarczonych).</li>
-  <li>Dodano możliwość podania komentarza do problemu LP10.</li>
-  <li>Dodano automatyczne dodawanie komentarza problemu do historii zlecenia.</li>
-  <li>Dodano możliwość wymuszenia kompletacji na wybraną linię.</li>
-</ul>
-<h3>ZPW</h3>
-<ul>
-  <li>Poprawiono błąd powodujący utratę danych po powrocie do Karty obserwacji/Minut dla Bezpieczeństwa
-    po dodaniu/anulowaniu dodawania powiązanego ZPW.</li>
-</ul>
-<h3>Usprawnienia</h3>
-<ul>
-  <li>Zmieniono przepływ zgłoszeń.</li>
-</ul>
-<h3>Narzędzia pomiarowe</h3>
-<ul>
-  <li>Poprawiono błąd powodujący usuwanie załączników po 30 minutach od momentu załadowania na serwer.</li>
-</ul>
-<h3>Czas cyklu</h3>
-<ul>
-  <li>Dodano wsparcie dla linii z systemami Balluff RFID.</li>
-</ul>
-<h3>Dummy paint</h3>
-<ul>
-  <li>Dodano nowy moduł do podmiany w SAP komponentów dummy na rzeczywiste farby.</li>
-</ul>
-<h3>Malarnia</h3>
-<ul>
-  <li>Dodano możliwość otworzenia dokumentu po kliknięciu na 12NC podzlecenia. Otwierany jest dokument
-    o 15NC równym <code>110<12NC podzlecenia></code> (jeżeli istnieje).</li>
-</ul>
-<h3>Zlecenia produkcyjne</h3>
-<ul>
-  <li>Zmieniono edycję czasu zmiany statusów zlecenia tak, aby akcja dostępna była tylko dla superadministratorów.</li>
+  <li>Zmieniono wysyłkę wózków tak, aby Malarnia nie mogła wysyłać wózków Magazynu i na odwrót.</li>
 </ul>
