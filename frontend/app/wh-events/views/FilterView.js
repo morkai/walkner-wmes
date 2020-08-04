@@ -42,6 +42,16 @@ define([
       {
         formData[propertyName] = Array.isArray(term.args[1]) ? term.args[1].join(',') : term.args[1];
       },
+      'set': function(propertyName, term, formData)
+      {
+        var matches = term.args[1].match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})(?:-([0-9]+))$/);
+
+        if (matches)
+        {
+          formData.setDate = matches[1];
+          formData.setNo = matches[2] || '';
+        }
+      },
       'user': 'order',
       'type': 'order'
     },
@@ -81,6 +91,8 @@ define([
       var type = this.$id('type').val();
       var order = this.$id('order').val();
       var line = this.$id('line').val();
+      var setDate = this.$id('setDate').val();
+      var setNo = parseInt(this.$id('setNo').val(), 10);
 
       dateTimeRange.formToRql(this, selector);
 
@@ -102,6 +114,16 @@ define([
       if (line)
       {
         selector.push({name: 'eq', args: ['line', line]});
+      }
+
+      if (setDate)
+      {
+        if (setNo > 0)
+        {
+          setDate += '-' + setNo;
+        }
+
+        selector.push({name: 'eq', args: ['set', setDate]});
       }
     }
 

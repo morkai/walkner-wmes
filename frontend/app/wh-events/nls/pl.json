@@ -10,6 +10,7 @@
 
   "filter:order": "Zlecenie",
   "filter:line": "Linia",
+  "filter:set": "Set",
 
   "data:func": "Funkcja",
   "data:picklistDone": "LP10",

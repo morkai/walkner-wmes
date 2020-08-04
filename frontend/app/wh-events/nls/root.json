@@ -11,6 +11,7 @@
 
     "filter:order": "Order",
     "filter:line": "Line",
+    "filter:set": "Set",
 
     "data:func": "Function",
     "data:picklistDone": "LP10",
