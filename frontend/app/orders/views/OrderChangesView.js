@@ -416,7 +416,6 @@ define([
       var $table = view.$id('table');
       var changes = view.model.get('changes');
       var changedChange = change.newValues.change;
-      var canEditTime = OrderCollection.can.editStatusChange();
 
       view.$id('empty').remove();
 
