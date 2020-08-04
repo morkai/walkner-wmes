@@ -238,6 +238,11 @@ define([
 
     onKeyDown: function(e)
     {
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       if (e.key === 'Escape')
       {
         this.hideAddForm();
