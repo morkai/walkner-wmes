@@ -183,6 +183,7 @@ function(
   {
     this.destroy();
     this.cleanupSelect2();
+    this.cleanupPopovers();
 
     util.cleanupSandboxedProperties(this);
 
@@ -202,9 +203,19 @@ function(
   {
     var view = this;
 
-    this.$('.select2-container').each(function()
+    view.$('.select2-container').each(function()
     {
       view.$('#' + this.id.replace('s2id_', '')).select2('destroy');
+    });
+  };
+
+  View.prototype.cleanupPopovers = function()
+  {
+    var view = this;
+
+    view.$('.popover').each(function()
+    {
+      view.$('[aria-describedby="' + this.id + '"]').popover('destroy');
     });
   };
 

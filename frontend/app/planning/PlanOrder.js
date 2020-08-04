@@ -22,6 +22,7 @@ define([
     ignored: 'fa-ban',
     psStatus: 'fa-paint-brush',
     whStatus: 'fa-level-down',
+    drillStatus: 'fa-circle-o',
     eto: 'fa-wrench'
   };
 

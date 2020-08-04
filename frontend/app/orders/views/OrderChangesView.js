@@ -289,6 +289,7 @@ define([
         case 'whStatus':
         case 'm4':
         case 'psStatus':
+        case 'drillStatus':
           return this.t(valueChange.property + ':' + value);
 
         case 'qtyMax':

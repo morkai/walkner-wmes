@@ -1174,21 +1174,6 @@ define([
       }
     },
 
-    onPsStatusChanged: function(sapOrder)
-    {
-      var $item = this.$('.wh-set-item[data-order="' + sapOrder.id + '"]');
-
-      if ($item.length)
-      {
-        var psStatus = this.plan.sapOrders.getPsStatus(sapOrder.id);
-
-        $item
-          .find('.planning-mrp-list-property-psStatus')
-          .attr('title', t('planning', 'orders:psStatus:' + psStatus))
-          .attr('data-ps-status', psStatus);
-      }
-    },
-
     onOrderChanged: function(whOrder)
     {
       var view = this;
@@ -1224,15 +1209,13 @@ define([
         return;
       }
 
+      var setData = {
+        i: this.whOrders.indexOf(whOrder),
+        delivered: this.whOrders.isSetDelivered(whOrder.get('set'))
+      };
+
       $item.replaceWith(this.renderPartialHtml(setItemTemplate, {
-        item: whOrder.serializeSet(
-          {
-            i: this.whOrders.indexOf(whOrder),
-            delivered: this.whOrders.isSetDelivered(whOrder.get('set'))
-          },
-          this.plan,
-          this.model.user
-        )
+        item: whOrder.serializeSet(setData, this.plan, this.model.user)
       }));
 
       if (this.focused.whOrderId === whOrder.id)

@@ -114,7 +114,6 @@ define([
       obj.finishTime = time.utc.format(finishTime, 'HH:mm:ss');
       obj.comment = sapOrder ? sapOrder.getCommentWithIcon() : '';
       obj.comments = sapOrder ? sapOrder.get('comments') : [];
-      obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
       obj.rowClassName = STATUS_TO_CLASS_NAME[obj.status];
       obj.funcIcons = {};
       obj.funcs.forEach(function(func)

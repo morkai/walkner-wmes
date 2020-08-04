@@ -60,9 +60,12 @@
 }
 .planning-darker .is-completed .planning-mrp-list-property-psStatus[data-ps-status="finished"],
 .planning-darker .planning-mrp-lineOrders-status[data-status="completed"] .planning-mrp-list-property-psStatus[data-ps-status="finished"],
+.planning-darker .success .planning-mrp-list-property-psStatus[data-ps-status="finished"],
+.planning-darker .is-completed .planning-mrp-list-property-drillStatus[data-drill-status="finished"],
+.planning-darker .planning-mrp-lineOrders-status[data-status="completed"] .planning-mrp-list-property-drillStatus[data-drill-status="finished"],
+.planning-darker .success .planning-mrp-list-property-drillStatus[data-drill-status="finished"],
 .planning-darker .is-completed .planning-mrp-list-property-whStatus[data-wh-status="done"],
 .planning-darker .planning-mrp-lineOrders-status[data-status="completed"] .planning-mrp-list-property-whStatus[data-wh-status="done"],
-.planning-darker .success .planning-mrp-list-property-psStatus[data-ps-status="finished"],
 .planning-darker .success .planning-mrp-list-property-whStatus[data-wh-status="done"] {
   color: greenyellow;
   text-shadow: 1px 1px 1px #000;

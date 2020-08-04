@@ -586,6 +586,10 @@ exports.orders = {
   syncPsStatus: {
     generator: false,
     updater: true
+  },
+  syncDrillStatus: {
+    generator: false,
+    updater: true
   }
 };
 

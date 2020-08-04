@@ -45,6 +45,13 @@ define([
       return (order ? order.get('whStatus') : null) || 'unknown';
     },
 
+    getDrillStatus: function(orderNo)
+    {
+      var order = this.get(orderNo);
+
+      return (order ? order.get('drillStatus') : null) || 'unknown';
+    },
+
     isEto: function(orderNo)
     {
       var order = this.get(orderNo);

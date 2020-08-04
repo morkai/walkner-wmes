@@ -36,6 +36,7 @@ define([
     var sapOrder = plan.sapOrders.get(orderNo);
     var psStatus = plan.sapOrders.getPsStatus(orderNo);
     var whStatus = plan.sapOrders.getWhStatus(orderNo);
+    var drillStatus = plan.sapOrders.getDrillStatus(orderNo);
 
     if (planOrder.get('ignored'))
     {
@@ -98,6 +99,11 @@ define([
       + 'title="' + t('planning', 'orders:psStatus:' + psStatus) + '" '
       + 'data-ps-status="' + psStatus + '">'
       + '<i class="fa ' + planOrder.getIcon('psStatus') + '"></i></span>');
+
+    statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-drillStatus" '
+      + 'title="' + t('planning', 'orders:drillStatus:' + drillStatus) + '" '
+      + 'data-drill-status="' + drillStatus + '">'
+      + '<i class="fa ' + planOrder.getIcon('drillStatus') + '"></i></span>');
 
     statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-whStatus" '
       + 'title="' + t('planning', 'orders:whStatus:' + whStatus) + '" '

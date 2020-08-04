@@ -80,6 +80,10 @@ exports.orders = {
   syncPsStatus: {
     generator: true,
     updater: false
+  },
+  syncDrillStatus: {
+    generator: true,
+    updater: false
   }
 };
 

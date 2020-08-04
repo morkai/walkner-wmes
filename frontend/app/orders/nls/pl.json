@@ -84,6 +84,7 @@
   "PROPERTY:whDropZone": "Grupa drop zone",
   "PROPERTY:whStatus": "Status drop zone",
   "PROPERTY:psStatus": "Status malarnii",
+  "PROPERTY:drillStatus": "Status wiercenia",
   "PROPERTY:enteredBy": "Stworzone przez",
   "PROPERTY:changedBy": "Zmienione przez",
   "PROPERTY:m4": "4M",
@@ -107,6 +108,14 @@
   "psStatus:finished": "Zakończone",
   "psStatus:aside": "Odstawione",
   "psStatus:cancelled": "Anulowane",
+
+  "drillStatus:unknown": "Nieokreślony",
+  "drillStatus:new": "Oczekiwanie",
+  "drillStatus:started": "W trakcie",
+  "drillStatus:partial": "Niekompletne",
+  "drillStatus:finished": "Zakończone",
+  "drillStatus:aside": "Odstawione",
+  "drillStatus:cancelled": "Anulowane",
 
   "OPERATIONS:NO_DATA": "Brak operacji.",
   "DOCUMENTS:NO_DATA": "Brak dokumentów.",
