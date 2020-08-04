@@ -88,6 +88,7 @@ define([
   './wh-lines/routes',
   './wh-deliveredOrders/routes',
   './wh-events/routes',
+  './wh-redirReasons/routes',
   './printers/routes',
   './kanban/routes',
   './kanbanComponents/routes',

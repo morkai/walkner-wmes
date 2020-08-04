@@ -25,7 +25,14 @@ define([
 
     ListView: ListView,
 
-    actions: [],
+    actions: function()
+    {
+      return [{
+        label: this.t('PAGE_ACTION:redirReasons'),
+        privileges: ['WH:MANAGE'],
+        href: '#wh/redirReasons'
+      }];
+    },
 
     remoteTopics: function()
     {

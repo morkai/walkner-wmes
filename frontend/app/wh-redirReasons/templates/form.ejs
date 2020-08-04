@@ -1,0 +1,21 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- id('label') %>" class="control-label is-required"><%- t('PROPERTY:label') %></label>
+        <input id="<%- id('label') %>" class="form-control" type="text" name="label" required maxlength="100">
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

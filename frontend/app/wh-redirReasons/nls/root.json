@@ -1,0 +1,10 @@
+{
+  "root": {
+    "BREADCRUMB:base": "WH",
+    "BREADCRUMB:browse": "Redir reasons",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:label": "Name"
+  },
+  "pl": true
+}

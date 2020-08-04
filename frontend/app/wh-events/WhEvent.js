@@ -195,6 +195,11 @@ define([
         html.push(prop('redirDelivered', t('core', 'BOOL:' + !!data.redirDelivered)));
       }
 
+      if (data.redirReason && data.redirReason.label)
+      {
+        html.push(prop('redirReason', _.escape(data.redirReason.label)));
+      }
+
       return html.join('');
     }
 

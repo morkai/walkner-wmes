@@ -32,6 +32,7 @@
   "data:newStartedPlan": "Nowy plan",
   "data:sourceQty": "Ilość źródłowa",
   "data:targetQty": "Ilość docelowa",
+  "data:redirReason": "Powód przekierowania",
 
   "kind:components": "FIFO",
   "kind:packaging": "Opakowania",

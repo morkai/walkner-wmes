@@ -2,6 +2,8 @@
   "BREADCRUMB:base": "Magazyn (nowy)",
   "BREADCRUMB:browse": "Dostarczone zlecenia",
 
+  "PAGE_ACTION:redirReasons": "Powody przekierowań",
+
   "PROPERTY:status": "Status",
   "PROPERTY:line": "Linia",
   "PROPERTY:qtyTodo": "Ilość do zrobienia",
@@ -37,6 +39,7 @@
 
   "redir:title": "Przenoszenie dostarczonych zleceń",
   "redir:submit": "Przenieś",
+  "redir:redirReason": "Powód przekierowania",
   "redir:sapOrder": "Zlecenie",
   "redir:sourceLine": "Linia źródłowa",
   "redir:sourceQty": "Ilość źrodłowa",

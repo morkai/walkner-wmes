@@ -5,16 +5,20 @@ define([
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
+  'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/orgUnits/util/setUpOrgUnitSelect2',
+  'app/wh-redirReasons/WhRedirReasonCollection',
   'app/wh-deliveredOrders/templates/redir'
 ], function(
   select2,
   time,
   viewport,
   FormView,
+  idAndLabel,
   orgUnits,
   setUpOrgUnitSelect2,
+  WhRedirReasonCollection,
   template
 ) {
   'use strict';
@@ -99,6 +103,7 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
+      this.setUpRedirReasonSelect2();
       this.setUpSourceLineSelect2();
 
       setUpOrgUnitSelect2(this.$id('targetLine'), {
@@ -184,6 +189,25 @@ define([
       });
 
       view.req = req;
+    },
+
+    setUpRedirReasonSelect2: function()
+    {
+      if (!this.redirReasons)
+      {
+        this.redirReasons = new WhRedirReasonCollection(null, {
+          rqlQuery: 'active=true'
+        });
+
+        this.redirReasons.fetch({reset: true}).always(this.setUpRedirReasonSelect2.bind(this));
+      }
+
+      this.$id('redirReason').select2({
+        width: '100%',
+        data: this.redirReasons.length ? this.redirReasons.map(idAndLabel) : []
+      });
+
+      this.$id('redirReason').select('enable', !!this.redirReasons.length);
     },
 
     setUpSourceLineSelect2: function()

@@ -58,7 +58,7 @@
   top: 9px;
   font-family: FontAwesome;
   font-size: 12px;
-  background: none;
+  background: none!important;
   color: #777;
 }
 .select2-container .select2-choice abbr:hover {

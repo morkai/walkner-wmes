@@ -3,6 +3,8 @@
     "BREADCRUMB:base": "WH (new)",
     "BREADCRUMB:browse": "Delivered orders",
 
+    "PAGE_ACTION:redirReasons": "Redir reasons",
+
     "PROPERTY:status": "Status",
     "PROPERTY:line": "Line",
     "PROPERTY:qtyTodo": "Quantity todo",
@@ -38,6 +40,7 @@
 
     "redir:title": "Moving delivered orders",
     "redir:submit": "Move",
+    "redir:redirReason": "Redir reason",
     "redir:sapOrder": "Order",
     "redir:sourceLine": "Source line",
     "redir:sourceQty": "Source quantity",
