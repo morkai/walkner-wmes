@@ -16,5 +16,7 @@
   "massUpdate:code": "Kod farby",
   "massUpdate:old12": "Stare 12NC",
   "massUpdate:new12": "Nowe 12NC",
-  "massUpdate:newName": "Nowa nazwa"
+  "massUpdate:newName": "Nowa nazwa",
+  "massUpdate:required": "Kod farby i/lub Stare 12NC jest wymagane.",
+  "massUpdate:failure": "Edycja farb nie powiodła się."
 }

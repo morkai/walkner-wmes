@@ -10,14 +10,16 @@
 
     "FORM:ERROR:duplicateKey": "The specified paint code already exists in the specified family.",
 
-    "massUpdate:pageAction": "Zamień",
-    "massUpdate:title": "Masowa edycja farb",
-    "massUpdate:submit": "Edytuj farby",
-    "massUpdate:cancel": "Anuluj",
-    "massUpdate:code": "Kod farby",
-    "massUpdate:old12": "Stare 12NC",
-    "massUpdate:new12": "Nowe 12NC",
-    "massUpdate:newName": "Nowa nazwa"
+    "massUpdate:pageAction": "Update",
+    "massUpdate:title": "Mass paint update",
+    "massUpdate:submit": "Update paints",
+    "massUpdate:cancel": "Cancel",
+    "massUpdate:code": "Paint code",
+    "massUpdate:old12": "Old 12NC",
+    "massUpdate:new12": "New 12NC",
+    "massUpdate:newName": "New name",
+    "massUpdate:required": "Paint code and/or Old 12NC is required.",
+    "massUpdate:failure": "Failed to update the paints."
   },
   "pl": true
 }
