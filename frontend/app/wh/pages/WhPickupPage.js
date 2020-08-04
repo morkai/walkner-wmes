@@ -112,6 +112,7 @@ define([
       var forceLine = {
         label: page.t('pickup:forceLine:action'),
         icon: 'crosshairs',
+        privileges: ['WH:MANAGE'],
         callback: function()
         {
           page.showForceLineDialog();
