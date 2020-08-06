@@ -2011,6 +2011,7 @@ app/wh-setCarts/routes.js
 app/wh-lines/routes.js
 app/wh-deliveredOrders/routes.js
 app/wh-events/routes.js
+app/wh-redirReasons/routes.js
 app/printers/tags.js
 app/printers/Printer.js
 app/nls/printers.js
@@ -2511,6 +2512,7 @@ app/wh-setCarts/routes.js
 app/wh-lines/routes.js
 app/wh-deliveredOrders/routes.js
 app/wh-events/routes.js
+app/wh-redirReasons/routes.js
 app/printers/tags.js
 app/printers/Printer.js
 app/nls/printers.js

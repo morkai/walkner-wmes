@@ -1,0 +1,1 @@
+define(["../core/Collection","./WhRedirReason"],function(e,o){"use strict";return e.extend({model:o,comparator:function(e,o){return e.get("label").localeCompare(o.get("label"),void 0,{ignorePunctuation:!0})}})});
