@@ -38,6 +38,15 @@
 }
 .wh-problems-prop-value {
   font-size: 16px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wh-problems-details-details .wh-problems-prop-value {
+  overflow: visible;
+  text-overflow: initial;
+  max-width: 250px;
+  white-space: normal;
 }
 .wh-problems-problem {
   padding-right: 7px;
