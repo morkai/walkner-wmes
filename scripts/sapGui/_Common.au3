@@ -132,7 +132,7 @@ Func Unlock()
   LogDebug("UNLOCKING")
   LogDebug("SEARCHING_MODAL_WINDOW")
 
-  $modalWin = FindModalWin("^(SAP GUI|Information)")
+  $modalWin = FindModalWin("^(SAP GUI|Information|Stop)")
 
   If Not IsHWnd($modalWin) Then
     LogDebug("MODAL_WINDOW_NOT_FOUND")

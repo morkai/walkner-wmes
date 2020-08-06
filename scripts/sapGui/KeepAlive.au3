@@ -84,17 +84,18 @@ LogDebug("CHECKING_SESSION")
 $session = $connection.Children(0)
 
 If IsObj($session) Then
-  If $session.IsBusy Then
+  If $session.Busy Then
     LogDebug("BUSY")
     Sleep(1337)
   EndIf
 
-  If Not $session.IsBusy Then
+  If Not $session.Busy Then
     LogDebug("KEEPING_ALIVE")
     $session.findById("wnd[0]/tbar[0]/btn[80]").press
   EndIf
 
   Unlock()
+
   Exit(0)
 EndIf
 
@@ -110,12 +111,12 @@ EndIf
 
 #include "_Logon.au3"
 
-If $session.IsBusy Then
+If $session.Busy Then
   LogDebug("BUSY")
   Sleep(1337)
 EndIf
 
-If Not $session.IsBusy Then
+If Not $session.Busy Then
   LogDebug("KEEPING_ALIVE")
   $session.findById("wnd[0]/tbar[0]/btn[80]").press
 EndIf
