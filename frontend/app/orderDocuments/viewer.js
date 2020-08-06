@@ -90,6 +90,19 @@ var viewer = new Viewer(document.getElementById('images'), {
   }
 });
 
+window.addEventListener('contextmenu', function(e)
+{
+  e.preventDefault();
+});
+
+window.addEventListener('touchstart', function(e)
+{
+  if (e.touches && e.touches.length > 1)
+  {
+    e.preventDefault();
+  }
+}, {passive: false});
+
 window.addEventListener('load', function()
 {
   viewer.show();

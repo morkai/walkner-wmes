@@ -122,6 +122,16 @@ define([
       if (embedded.isEnabled())
       {
         $(window).on('contextmenu.' + page.idPrefix, function(e) { e.preventDefault(); });
+
+        page.cancelPinchZoom = function(e)
+        {
+          if (e.touches && e.touches.length > 1)
+          {
+            e.preventDefault();
+          }
+        };
+
+        window.addEventListener('touchstart', page.cancelPinchZoom, {passive: false});
       }
     },
 
@@ -161,6 +171,11 @@ define([
     {
       $('body').removeClass('no-overflow orderDocuments');
       $(window).off('.' + this.idPrefix);
+
+      if (this.cancelPinchZoom)
+      {
+        window.removeEventListener('touchstart', this.cancelPinchZoom);
+      }
     },
 
     load: function(when)

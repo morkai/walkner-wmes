@@ -161,6 +161,11 @@ define([
       delayReasonsStorage.release();
       fapDictionaries.unload();
       $(window).off('.' + this.idPrefix);
+
+      if (this.cancelPinchZoom)
+      {
+        window.removeEventListener('touchstart', this.cancelPinchZoom);
+      }
     },
 
     defineModels: function()
@@ -278,6 +283,21 @@ define([
       this.listenTo(this.model, 'panelToggle', this.renderJumpList);
 
       $(window).on('keypress.' + this.idPrefix, this.onKeyPress.bind(this));
+
+      if (embedded.isEnabled())
+      {
+        $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
+
+        this.cancelPinchZoom = function(e)
+        {
+          if (e.touches && e.touches.length > 1)
+          {
+            e.preventDefault();
+          }
+        };
+
+        window.addEventListener('touchstart', this.cancelPinchZoom, {passive: false});
+      }
     },
 
     load: function(when)
