@@ -169,6 +169,8 @@
   "settings:wh.planning.availableTimeThreshold": "Próg dostępnego czasu [min]",
   "settings:wh.planning.availableTimeThreshold:help": "Przy wyborze linii do nowego seta, suma czasu skompletowanego oraz czasu dostępnego zostanie zamieniona na 0, jeżeli jest mniejsza niż podana ilość minut.",
   "settings:wh.planning.deliveryFuncs": "Funkcje wysyłki",
+  "settings:wh.planning.unassignSetDelay": "Opóźnienie automatycznego odpięcia od seta [min]",
+  "settings:wh.planning.unassignSetDelay:help": "Po upłynięciu podanej ilości minut od rozpoczęcia nowej zmiany produkcyjnej, funkcje mające niezakończone sety stworzone na poprzednich zmianach są automatycznie odpinane.",
 
   "set:title": "Zestaw #{set} dla linii {line}",
   "set:cartsEditor:carts": "Numery wózków...",

@@ -65,6 +65,7 @@
 
   "type:newSetStarted": "Rozpoczęcie nowego seta",
   "type:assignedToSet": "Przypisanie do seta",
+  "type:unassignedFromSet": "Odpięcie od seta",
   "type:setContinued": "Kontynuacja seta",
   "type:picklistDone": "LP10",
   "type:picklist": "Picklista",

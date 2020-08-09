@@ -208,6 +208,7 @@ define([
     TYPES: [
       'newSetStarted',
       'assignedToSet',
+      'unassignedFromSet',
       'setContinued',
       'picklistDone',
       'picklist',

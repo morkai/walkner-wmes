@@ -24,6 +24,7 @@ define([
         lines: [],
         whStatuses: [],
         psStatuses: [],
+        distStatuses: [],
         printOrderTimes: false,
         useLatestOrderData: true,
         useDarkerTheme: false,
@@ -130,7 +131,7 @@ define([
 
       displayOptions.readFromLocalStorage();
 
-      ['mrps', 'lines', 'whStatuses', 'psStatuses'].forEach(function(prop)
+      ['mrps', 'lines', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
       {
         if (Array.isArray(attrs[prop]))
         {

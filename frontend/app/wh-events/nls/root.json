@@ -66,6 +66,7 @@
 
     "type:newSetStarted": "New set started",
     "type:assignedToSet": "Assigned to set",
+    "type:unassignedFromSet": "Unassigned from set",
     "type:setContinued": "Set continued",
     "type:picklistDone": "LP10",
     "type:picklist": "Picklist",

@@ -34,7 +34,8 @@ define([
     'maxDeliveryDowntime',
     'maxFifoCartsPerDelivery',
     'maxPackCartsPerDelivery',
-    'availableTimeThreshold'
+    'availableTimeThreshold',
+    'unassignSetDelay'
   ].join('|'));
 
   return SettingCollection.extend({
