@@ -7,7 +7,7 @@ define([
   'app/time',
   'app/core/View',
   'app/mrpControllers/util/setUpMrpSelect2',
-  'app/wh/templates/planFilter',
+  'app/wh/templates/pickup/filter',
   'app/core/util/ExpandableSelect'
 ], function(
   _,
@@ -30,6 +30,7 @@ define([
       'change #-date': 'changeFilter',
       'change #-whStatuses': 'changeFilter',
       'change #-psStatuses': 'changeFilter',
+      'change #-distStatuses': 'changeFilter',
       'change #-from': 'changeFilter',
       'change #-to': 'changeFilter',
       'click #-useDarkerTheme': function()
@@ -38,6 +39,8 @@ define([
       }
 
     },
+
+    nlsDomain: 'wh',
 
     initialize: function()
     {
@@ -66,6 +69,7 @@ define([
         maxDate: displayOptions.get('maxDate'),
         whStatuses: displayOptions.get('whStatuses'),
         psStatuses: displayOptions.get('psStatuses'),
+        distStatuses: displayOptions.get('distStatuses'),
         from: displayOptions.get('from'),
         to: displayOptions.get('to'),
         useDarkerTheme: displayOptions.isDarkerThemeUsed()
@@ -87,10 +91,12 @@ define([
       var view = this;
       var $whStatuses = view.$id('whStatuses');
       var $psStatuses = view.$id('psStatuses');
+      var $distStatuses = view.$id('distStatuses');
       var date = view.$id('date').val();
       var data = {
         whStatuses: $whStatuses.val(),
         psStatuses: $psStatuses.val(),
+        distStatuses: $distStatuses.val(),
         from: view.$id('from').val() || '06:00',
         to: view.$id('to').val() || '06:00'
       };
@@ -105,9 +111,14 @@ define([
         data.psStatuses = [];
       }
 
+      if (!data.distStatuses || data.distStatuses.length === $psStatuses[0].options.length)
+      {
+        data.distStatuses = [];
+      }
+
       var displayOptions = {};
 
-      ['whStatuses', 'psStatuses', 'from', 'to'].forEach(function(prop)
+      ['whStatuses', 'psStatuses', 'distStatuses', 'from', 'to'].forEach(function(prop)
       {
         if (!_.isEqual(data[prop], view.plan.displayOptions.get(prop)))
         {
@@ -131,7 +142,7 @@ define([
       var view = this;
       var loading = view.plan.get('loading');
 
-      ['date', 'whStatuses', 'psStatuses', 'from', 'to'].forEach(function(prop)
+      ['date', 'whStatuses', 'psStatuses', 'distStatuses', 'from', 'to'].forEach(function(prop)
       {
         view.$id(prop).prop('disabled', loading);
       });

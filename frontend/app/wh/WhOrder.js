@@ -142,7 +142,8 @@ define([
         || startTime < filters.startTime.from
         || startTime >= filters.startTime.to
         || (filters.whStatuses.length > 0 && filters.whStatuses.indexOf(obj.status) === -1)
-        || (filters.psStatuses.length > 0 && filters.psStatuses.indexOf(obj.psStatus) === -1);
+        || (filters.psStatuses.length > 0 && filters.psStatuses.indexOf(obj.psStatus) === -1)
+        || (filters.distStatuses.length > 0 && filters.distStatuses.indexOf(obj.distStatus) === -1);
 
       if (obj.hidden)
       {

@@ -9,7 +9,8 @@ define([
   'app/socket',
   'app/pubsub',
   'app/i18n',
-  './util'
+  './util',
+  './util/forms/formGroup'
 ],
 function(
   _,
@@ -20,7 +21,8 @@ function(
   socket,
   pubsub,
   t,
-  util
+  util,
+  formGroup
 ) {
   'use strict';
 
@@ -253,7 +255,8 @@ function(
       {
         return idPrefix + '-' + Array.prototype.slice.call(arguments).join('-');
       },
-      props: this.props.bind(this)
+      props: this.props.bind(this),
+      formGroup: formGroup.bind(null, this)
     };
   };
 

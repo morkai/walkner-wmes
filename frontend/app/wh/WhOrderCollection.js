@@ -80,6 +80,7 @@ define([
       return {
         whStatuses: plan.displayOptions.get('whStatuses') || [],
         psStatuses: plan.displayOptions.get('psStatuses') || [],
+        distStatuses: plan.displayOptions.get('distStatuses') || [],
         startTime: plan.displayOptions.getStartTimeRange(plan.id)
       };
     },

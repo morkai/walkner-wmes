@@ -123,6 +123,7 @@ define([
 
       view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:psStatuses', view.onPsStatusesFilterChanged);
+      view.listenTo(plan.displayOptions, 'change:distStatuses', view.onDistStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
 
       $(window)
@@ -778,6 +779,11 @@ define([
       this.toggleOrderRowVisibility();
     },
 
+    onDistStatusesFilterChanged: function()
+    {
+      this.toggleOrderRowVisibility();
+    },
+
     onStartTimeFilterChanged: function()
     {
       this.toggleOrderRowVisibility();
@@ -790,20 +796,31 @@ define([
 
       view.$('.wh-list-item').each(function()
       {
+        var whOrder = view.whOrders.get(this.dataset.id);
+
+        if (!whOrder)
+        {
+          this.parentNode.removeChild(this);
+
+          return;
+        }
+
         var startTime = +this.dataset.startTime;
         var hidden = startTime < filters.startTime.from || startTime >= filters.startTime.to;
 
         if (!hidden && filters.whStatuses.length)
         {
-          hidden = filters.whStatuses.indexOf(this.dataset.status) === -1;
+          hidden = filters.whStatuses.indexOf(whOrder.get('status')) === -1;
         }
 
         if (!hidden && filters.psStatuses.length)
         {
-          var psStatusEl = this.querySelector('.planning-mrp-list-property-psStatus');
-          var psStatus = psStatusEl ? psStatusEl.dataset.psStatus : 'unknown';
+          hidden = filters.psStatuses.indexOf(whOrder.get('psStatus')) === -1;
+        }
 
-          hidden = filters.psStatuses.indexOf(psStatus) === -1;
+        if (!hidden && filters.distStatuses.length)
+        {
+          hidden = filters.distStatuses.indexOf(whOrder.get('distStatus')) === -1;
         }
 
         this.classList.toggle('hidden', hidden);
@@ -814,12 +831,14 @@ define([
 
     toggleSeparatorRowVisibility: function()
     {
+      var options = this.plan.displayOptions;
       var $table = this.$('.planning-mrp-lineOrders-table');
 
-      if (_.isEmpty(this.plan.displayOptions.get('whStatuses'))
-        && _.isEmpty(this.plan.displayOptions.get('psStatuses'))
-        && this.plan.displayOptions.get('from') === '06:00'
-        && this.plan.displayOptions.get('to') === '06:00')
+      if (_.isEmpty(options.get('whStatuses'))
+        && _.isEmpty(options.get('psStatuses'))
+        && _.isEmpty(options.get('distStatuses'))
+        && options.get('from') === '06:00'
+        && options.get('to') === '06:00')
       {
         $table.find('.planning-wh-newLine-tr.hidden').removeClass('hidden');
         $table.find('.planning-wh-newGroup-tr.hidden').removeClass('hidden');

@@ -92,7 +92,7 @@ define([
 
       SettingsView.prototype.afterRender.apply(view, arguments);
 
-      setUpMrpSelect2(view.$id('planning-ignoredMrps'), {
+      setUpMrpSelect2(view.$id('wh-planning-ignoredMrps'), {
         width: '100%',
         placeholder: ' ',
         sortable: true,
@@ -100,7 +100,7 @@ define([
         view: this
       });
 
-      setUpMrpSelect2(view.$id('planning-enabledMrps'), {
+      setUpMrpSelect2(view.$id('wh-planning-enabledMrps'), {
         width: '100%',
         placeholder: ' ',
         sortable: true,

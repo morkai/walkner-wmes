@@ -286,6 +286,7 @@ define([
         displayOptions: PlanDisplayOptions.fromLocalStorage({
           whStatuses: page.options.whStatuses,
           psStatuses: page.options.psStatuses,
+          distStatuses: page.options.distStatuses,
           from: page.options.from,
           to: page.options.to
         }, {
@@ -348,6 +349,7 @@ define([
 
       page.listenTo(plan.displayOptions, 'change:whStatuses', page.onWhStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:psStatuses', page.onPsStatusesFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:distStatuses', page.onDistStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
@@ -465,7 +467,8 @@ define([
             + '?from=' + encodeURIComponent(plan.displayOptions.get('from'))
             + '&to=' + encodeURIComponent(plan.displayOptions.get('to'))
             + '&whStatuses=' + plan.displayOptions.get('whStatuses')
-            + '&psStatuses=' + plan.displayOptions.get('psStatuses'),
+            + '&psStatuses=' + plan.displayOptions.get('psStatuses')
+            + '&distStatuses=' + plan.displayOptions.get('distStatuses'),
           replace: true,
           trigger: false
         });
@@ -1036,6 +1039,11 @@ define([
     },
 
     onPsStatusesFilterChanged: function()
+    {
+      this.updateUrl();
+    },
+
+    onDistStatusesFilterChanged: function()
     {
       this.updateUrl();
     },

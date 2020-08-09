@@ -1,18 +1,18 @@
 <form class="well filter-form planning-mrp-filter">
   <div class="form-group">
-    <label for="<%- idPrefix %>-date" class="control-label"><%- t('wh', 'filter:date') %></label>
+    <label for="<%- idPrefix %>-date" class="control-label"><%- t('filter:date') %></label>
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-whStatuses" class="control-label"><%- t('wh', 'filter:whStatuses') %></label>
+    <label for="<%- idPrefix %>-whStatuses" class="control-label"><%- t('filter:whStatuses') %></label>
     <select id="<%- idPrefix %>-whStatuses" name="whStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="5">
       <% ['pending', 'started', 'finished', 'problem', 'cancelled'].forEach(function(whStatus) { %>
-      <option value="<%- whStatus %>" <%- _.includes(whStatuses, whStatus) ? 'selected' : '' %>><%- t('wh', 'status:' + whStatus) %></option>
+      <option value="<%- whStatus %>" <%- _.includes(whStatuses, whStatus) ? 'selected' : '' %>><%- t('status:' + whStatus) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-psStatuses" class="control-label"><%- t('wh', 'filter:psStatuses') %></label>
+    <label for="<%- idPrefix %>-psStatuses" class="control-label"><%- t('filter:psStatuses') %></label>
     <select id="<%- idPrefix %>-psStatuses" name="psStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="7">
       <% ['unknown', 'new', 'started', 'partial', 'finished', 'aside', 'cancelled'].forEach(function(psStatus) { %>
       <option value="<%- psStatus %>" <%- _.includes(psStatuses, psStatus) ? 'selected' : '' %>><%- t('planning', 'orders:psStatus:' + psStatus) %></option>
@@ -20,10 +20,18 @@
     </select>
   </div>
   <div class="form-group">
+    <label for="<%- idPrefix %>-distStatuses" class="control-label"><%- t('filter:distStatuses') %></label>
+    <select id="<%- idPrefix %>-distStatuses" name="distStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="7">
+      <% ['pending', 'started', 'finished'].forEach(function(distStatus) { %>
+        <option value="<%- distStatus %>" <%- _.includes(distStatuses, distStatus) ? 'selected' : '' %>><%- t('distStatus:' + distStatus) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
     <div class="dateTimeRange">
       <div class="dateTimeRange-labels">
         <div class="dateTimeRange-label">
-          <label for="<%- idPrefix %>-from" class="control-label"><%- t('wh', 'filter:startTime') %></label>
+          <label for="<%- idPrefix %>-from" class="control-label"><%- t('filter:startTime') %></label>
         </div>
       </div>
       <div class="dateTimeRange-fields">
@@ -41,7 +49,7 @@
     <div class="btn-group">
       <button id="<%- idPrefix %>-useDarkerTheme" type="button" class="btn btn-default <%- useDarkerTheme ? 'active' : '' %>">
         <i class="fa fa-adjust"></i>
-        <span><%- t('wh', 'filter:useDarkerTheme') %></span>
+        <span><%- t('filter:useDarkerTheme') %></span>
       </button>
     </div>
   </div>

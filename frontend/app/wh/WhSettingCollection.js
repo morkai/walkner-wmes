@@ -32,7 +32,8 @@ define([
     'lateDeliveryTime',
     'minDeliveryDowntime',
     'maxDeliveryDowntime',
-    'maxSetCartsPerDelivery',
+    'maxFifoCartsPerDelivery',
+    'maxPackCartsPerDelivery',
     'availableTimeThreshold'
   ].join('|'));
 
