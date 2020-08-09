@@ -114,6 +114,11 @@
   "menu:resetOrder": "Resetuj zlecenie",
   "menu:resetSet": "Resetuj zestaw zleceń",
 
+  "unassignSet:menu": "Odepnij użytkownika",
+  "unassignSet:failure": "Odpinanie użytkownika nie powiodło się.",
+  "unassignSet:FINISHED": "Set został już zakończony.",
+  "unassignSet:DELIVERED": "Set został już wysłany.",
+
   "settings:tab:planning": "Planowanie",
   "settings:tab:pickup": "Kompletacja",
   "settings:tab:delivery": "Wysyłka",

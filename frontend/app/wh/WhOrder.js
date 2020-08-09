@@ -192,7 +192,7 @@ define([
           pickup: undelivered
             && (
               (isAssigned && canManage && func.picklist === 'require')
-              || (canManageCarts && func.pickup === 'success')
+              || (isAssigned && canManageCarts && func.pickup === 'success')
               || (picklistDone && isUser && isFunc && func.status === 'pickup')
             )
         };

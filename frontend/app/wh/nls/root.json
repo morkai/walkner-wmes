@@ -115,6 +115,11 @@
     "menu:resetOrder": "Reset order",
     "menu:resetSet": "Reset set",
 
+    "unassignSet:menu": "Unassign user",
+    "unassignSet:failure": "Failed to unassign the user.",
+    "unassignSet:FINISHED": "Set is already finished.",
+    "unassignSet:DELIVERED": "Set is already delivered.",
+
     "settings:tab:planning": "Planning",
     "settings:tab:pickup": "Pickup",
     "settings:tab:delivery": "Delivery",

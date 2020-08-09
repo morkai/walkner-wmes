@@ -145,7 +145,7 @@ define([
             break;
         }
       },
-      'keydown .is-clickable': function(e)
+      'keydown td.is-clickable': function(e)
       {
         var code = e.originalEvent.code;
 
@@ -159,11 +159,14 @@ define([
       },
       'click .is-clickable': function(e)
       {
+        if (e.currentTarget.tagName === 'TH' && e.currentTarget.dataset.prop === 'func')
+        {
+          this.showFuncMenu(e.currentTarget.dataset.func, e.pageX, e.pageY);
+
+          return false;
+        }
+
         this.showUpdateMenuByEvent(e);
-      },
-      'contextmenu .wh-set-action': function()
-      {
-        return false;
       },
       'mousedown .wh-set-action': function(e)
       {
@@ -397,12 +400,15 @@ define([
         {
           if (funcs[func._id] === undefined)
           {
-            funcs[func._id] = '';
+            funcs[func._id] = {
+              _id: func._id,
+              user: {id: '', label: ''}
+            };
           }
 
           if (func.user)
           {
-            funcs[func._id] = func.user.label;
+            funcs[func._id] = func;
           }
         });
       });
@@ -410,17 +416,25 @@ define([
       view.$id('qty').text(qtyPlan.toLocaleString() + '/' + qtyTodo.toLocaleString());
       view.$id('time').text(time.toString(duration / 1000, true, false));
 
-      _.forEach(funcs, function(label, func)
+      var canManage = user.isAllowedTo('WH:MANAGE');
+      var whUser = view.model.user && view.model.user._id || '';
+
+      _.forEach(funcs, function(func)
       {
-        var parts = label.split(/\s+/);
-        var name = parts[0];
+        var full = func.user.label;
+        var parts = full.split(/\s+/);
+        var short = parts[0];
 
         if (parts.length > 1)
         {
-          name += ' ' + parts[1].charAt(0) + (parts[1].length > 1 ? '.' : '');
+          short += ' ' + parts[1].charAt(0) + (parts[1].length > 1 ? '.' : '');
         }
 
-        view.$id(func).text(name).attr('title', label);
+        view.$id(func._id)
+          .text(short)
+          .attr('title', full)
+          .parent()
+          .toggleClass('is-clickable', !!short && (canManage || (func.user && func.user.id === whUser)));
       });
     },
 
@@ -445,7 +459,7 @@ define([
 
       if (!$focus.length)
       {
-        $action = this.$('.is-clickable').first();
+        $action = this.$('td.is-clickable').first();
 
         if (!$action.length)
         {
@@ -493,7 +507,7 @@ define([
       var canManage = user.isAllowedTo('WH:MANAGE');
       var menu = [];
       var $item = view.$('.wh-set-item[data-id="' + whOrder.id + '"]');
-      var actionSelector = '.is-clickable[data-prop="' + prop + '"]';
+      var actionSelector = 'td.is-clickable[data-prop="' + prop + '"]';
 
       if (func)
       {
@@ -626,6 +640,62 @@ define([
       }
 
       this.showUpdateMenu(whOrder, propFunc, prop, e);
+    },
+
+    showFuncMenu: function(funcId, x, y)
+    {
+      var view = this;
+      var menu = [
+        {
+          icon: 'fa-eraser',
+          label: view.t('unassignSet:menu'),
+          handler: view.handleUnassignSet.bind(view, funcId)
+        }
+      ];
+
+      if (menu.length)
+      {
+        contextMenu.show(view, y - 17, x - 17, {
+          className: 'wh-set-menu',
+          menu: menu
+        });
+      }
+    },
+
+    handleUnassignSet: function(funcId)
+    {
+      var view = this;
+
+      viewport.msg.saving();
+
+      var req = view.whOrders.act('unassignSet', {
+        date: view.model.date,
+        set: view.model.set,
+        func: funcId
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.saved();
+
+        var error = req.responseJSON && req.responseJSON.error && req.responseJSON.error.code || 'failure';
+
+        if (!view.t.has('unassignSet:' + error))
+        {
+          error = 'failure';
+        }
+
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: view.t('unassignSet:' + error)
+        });
+      });
+
+      req.done(function()
+      {
+        viewport.msg.saved();
+      });
     },
 
     showEditor: function($editor, el)
@@ -1184,7 +1254,7 @@ define([
         return;
       }
 
-      this.updateSummary();
+      view.updateSummary();
 
       if (whOrder.get('date') !== this.model.date
        || whOrder.get('set') !== this.model.set)
@@ -1210,17 +1280,17 @@ define([
       }
 
       var setData = {
-        i: this.whOrders.indexOf(whOrder),
-        delivered: this.whOrders.isSetDelivered(whOrder.get('set'))
+        i: view.whOrders.indexOf(whOrder),
+        delivered: view.whOrders.isSetDelivered(whOrder.get('set'))
       };
 
-      $item.replaceWith(this.renderPartialHtml(setItemTemplate, {
-        item: whOrder.serializeSet(setData, this.plan, this.model.user)
+      $item.replaceWith(view.renderPartialHtml(setItemTemplate, {
+        item: whOrder.serializeSet(setData, view.plan, view.model.user)
       }));
 
-      if (this.focused.whOrderId === whOrder.id)
+      if (view.focused.whOrderId === whOrder.id)
       {
-        this.focus();
+        view.focus();
       }
     },
 
@@ -1242,7 +1312,7 @@ define([
       }
       else
       {
-        selector = '.is-clickable[data-prop="' + $action[0].dataset.prop + '"]';
+        selector = 'td.is-clickable[data-prop="' + $action[0].dataset.prop + '"]';
 
         if ($action[0].dataset.func)
         {
@@ -1293,7 +1363,7 @@ define([
       }
       else
       {
-        selector = '.is-clickable[data-prop="' + $action[0].dataset.prop + '"]';
+        selector = 'td.is-clickable[data-prop="' + $action[0].dataset.prop + '"]';
 
         if ($action[0].dataset.func)
         {
