@@ -1,1 +1,1 @@
-define(["./forms/dateTimeRange"],function(e){"use strict";return{dateTimeRange:e}});
+define(["./forms/dateTimeRange","./forms/formGroup"],function(e,r){"use strict";return{dateTimeRange:e,formGroup:r}});
