@@ -237,7 +237,18 @@ define([
           quietMillis: 300,
           url: function(term)
           {
-            return '/orders/components?limit(100)&_id=regex=' + encodeURIComponent('^' + term);
+            var url = '/orders/components?limit(100)&_id=';
+
+            if (/^[0-9]{12}$/.test(term))
+            {
+              url += 'string:' + term;
+            }
+            else
+            {
+              url += 'regex=' + encodeURIComponent('^' + term);
+            }
+
+            return url;
           },
           results: function(data)
           {
