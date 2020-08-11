@@ -3,14 +3,4 @@
 
 'use strict';
 
-db.prodserialnumbers.distinct('orderNo').forEach(orderNo =>
-{
-  print(orderNo);
-
-  var sapOrder = db.orders.findOne({_id: orderNo}, {_id: 0, mrp: 1});
-
-  if (sapOrder)
-  {
-    db.prodserialnumbers.updateMany({orderNo}, {$set: {mrp: sapOrder.mrp}});
-  }
-});
+db.orderdocumentfiles.updateMany({confirmable: {$exists: false}}, {$set: {confirmable: true}});

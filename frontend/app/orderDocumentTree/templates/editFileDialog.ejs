@@ -1,15 +1,18 @@
 <form class="orderDocumentTree-editFile" method="post" action="<%- formAction %>">
   <input type="hidden" name="_method" value="<%= formMethod %>">
+  <%- helpers.formGroup({
+    name: 'nc15',
+    label: 'files:',
+    type: 'static',
+    value: _.escape(model._id)
+  }) %>
+  <%- helpers.formGroup({
+    name: 'name',
+    label: 'files:',
+    required: true
+  }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-nc15" class="control-label"><%- t('files:nc15') %></label>
-    <p class="form-control-static"><%= model._id %></p>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-name" class="control-label"><%- t('files:name') %></label>
-    <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required autofocus>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-folders" class="control-label"><%- t('files:folders') %></label>
+    <label class="control-label"><%- t('files:folders') %></label>
     <% folders.forEach(function(folder) { %>
     <div class="checkbox">
       <label>
@@ -19,25 +22,31 @@
     <% }) %>
   </div>
   <div class="form-group" style="position: relative">
-    <label for="<%- idPrefix %>-components" class="control-label" style="display: flex">
+    <label for="<%- id('components') %>" class="control-label" style="display: flex">
       <span title="<%- t('files:components:help') %>">
         <%- t('files:components') %>
         <i class="fa fa-question-circle"></i>
       </span>
-      <a id="<%- idPrefix %>-components-addByName-toggle" href="javascript:void(0)" style="margin-left: auto"><%- t('files:components:addByName') %></a>
+      <a id="<%- id('components-addByName-toggle') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('files:components:addByName') %></a>
     </label>
-    <input id="<%- idPrefix %>-components" name="components" type="text">
-    <div id="<%- idPrefix %>-components-addByName" class="hidden" style="position: absolute; top: 0; right: 0; width: 200px; display: flex; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)">
+    <input id="<%- id('components') %>" name="components" type="text">
+    <div id="<%- id('components-addByName') %>" class="hidden" style="position: absolute; top: 0; right: 0; width: 200px; display: flex; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)">
       <input type="text" class="form-control" placeholder="<%- t('files:components:addByName:placeholder') %>" style="flex: 1 1 auto">
       <button type="button" class="btn btn-default" style="flex: 0; margin-left: -1px"><i class="fa fa-plus"></i></button>
     </div>
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-stations" class="control-label"><%- t('files:stations') %></label>
-    <input id="<%- idPrefix %>-stations" name="stations" class="form-control" type="text" autocomplete="new-password" placeholder="1, 2, 3, 4, 5, 6, 7">
+  <%- helpers.formGroup({
+    name: 'stations',
+    label: 'files:',
+    placeholder: '1, 2, 3, 4, 5, 6, 7'
+  }) %>
+  <div class="checkbox">
+    <label class="control-label">
+      <input id="<%- id('confirmable') %>" name="confirmable" type="checkbox" value="true"> <%- t('files:confirmable') %>
+    </label>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-folders" class="control-label"><%- t('files:files') %></label>
+    <label class="control-label"><%- t('files:files') %></label>
     <% files.forEach(function(file, i) { %>
     <div class="checkbox">
       <label>

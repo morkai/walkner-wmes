@@ -7,11 +7,21 @@ define([
 ) {
   'use strict';
 
+  var NO_FORM_CONTROL_TYPES = {
+    select2: true,
+    static: true
+  };
+
   return function formGroup(view, options)
   {
     if (typeof options === 'string')
     {
       options = {name: options};
+    }
+
+    if (!options.name && options.id)
+    {
+      options.name = options.id;
     }
 
     var id = view.idPrefix + '-' + (options.id || options.name.replace(/\./g, '-'));
@@ -25,10 +35,11 @@ define([
       id: id,
       name: options.name,
       type: 'text',
-      required: options.required === true
+      required: options.required === true,
+      placeholder: options.placeholder || ''
     };
     var inputInner = '';
-    var inputClassNames = [options.noFormControl || options.type === 'select2' ? '' : 'form-control'];
+    var inputClassNames = [options.noFormControl || NO_FORM_CONTROL_TYPES[options.type] ? '' : 'form-control'];
     var labelOption = options.label;
 
     if (labelOption !== false)
@@ -96,6 +107,14 @@ define([
         inputAttrs.rows = options.rows == null ? false : options.rows;
         inputAttrs.cols = options.cols == null ? false : options.cols;
         inputInner = options.value == null ? '' : String(options.value);
+        break;
+
+      case 'static':
+        inputTag = 'p';
+        inputAttrs.type = false;
+        inputAttrs.name = false;
+        inputInner = options.value == null ? '' : String(options.value);
+        inputClassNames.push('form-control-static');
         break;
     }
 

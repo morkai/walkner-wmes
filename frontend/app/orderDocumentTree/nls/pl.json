@@ -54,10 +54,11 @@
   "files:updatedAt": "Ostatnia zmiana",
   "files:updatedAt:value": "{user}<br>{date}",
   "files:components": "Komponenty",
-  "files:components:help": "Komponenty, do których dany dokument jest przypisany. Jeżeli zlecenie ma jeden ze zdefiniowanych komponentów, to ten dokument będzie dodany do listy w przeglądarce dokumentów z wymogiem potwierdzenia zapoznania się z treścią.",
+  "files:components:help": "Komponenty, do których dany dokument jest przypisany. Jeżeli zlecenie ma jeden ze zdefiniowanych komponentów, to ten dokument będzie dodany do listy w przeglądarce dokumentów.",
   "files:components:addByName": "Dodaj po nazwie",
   "files:components:addByName:placeholder": "Nazwa komponentu...",
   "files:stations": "Stanowiska",
+  "files:confirmable": "Wymagaj potwierdzenia przez operatora",
   "files:msg:nc15:copied": "15NC skopiowano do schowka.",
   "files:msg:nc15:set": "15NC ustawiono w pliku do załadowania.",
 
