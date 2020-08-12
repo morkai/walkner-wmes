@@ -1,3 +1,4 @@
 frontend-build/**
 frontend/vendor/**
 backend/modules/gdrive/**
+!backend/node_modules/**
