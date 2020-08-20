@@ -5,8 +5,8 @@
   "version": "0.151.0",
   "updater": {
     "wmes": {
-      "backend": 588,
-      "frontend": 737,
+      "backend": 589,
+      "frontend": 738,
       "reports": 123,
       "attachments": 3,
       "importer-sap": 62,
@@ -30,7 +30,7 @@
       "luca": 7,
       "drilling": 10,
       "wiring": 3,
-      "ct": 14
+      "ct": 15
     },
     "pos": {
       "backend": 89,
@@ -74,6 +74,7 @@
     "deep-equal": "^2.0.1",
     "ejs": "~2.7.4",
     "ejs-amd": "morkai/ejs-amd",
+    "eslint": "^7.6.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "fresh": "^0.5.2",
