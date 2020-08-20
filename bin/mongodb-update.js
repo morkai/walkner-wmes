@@ -3,4 +3,8 @@
 
 'use strict';
 
-db.orderdocumentfiles.updateMany({confirmable: {$exists: false}}, {$set: {confirmable: true}});
+db.kanbanentries.updateMany({children: {$exists: true}}, {$unset: {children: 1}});
+
+db.ctcarts.updateMany({type: {$exists: false}}, {$set: {type: 'other'}});
+
+db.ctcarts.createIndex({type: 1});

@@ -23,10 +23,15 @@ define([
 
     labelAttribute: 'description',
 
+    defaults: {
+      type: 'other'
+    },
+
     serialize: function()
     {
       var obj = this.toJSON();
 
+      obj.type = t(this.nlsDomain, 'type:' + obj.type);
       obj.cards = obj.cards.join(' ');
 
       return obj;

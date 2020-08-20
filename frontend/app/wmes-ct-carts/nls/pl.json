@@ -3,5 +3,9 @@
   "BREADCRUMB:browse": "Wózki",
 
   "PROPERTY:description": "Opis",
-  "PROPERTY:cards": "Karty"
+  "PROPERTY:type": "Typ",
+  "PROPERTY:cards": "Karty",
+
+  "type:balluff": "BALLUFF",
+  "type:other": "Inny"
 }

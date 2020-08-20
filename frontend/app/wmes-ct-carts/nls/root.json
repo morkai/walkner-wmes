@@ -4,7 +4,11 @@
     "BREADCRUMB:browse": "Carts",
 
     "PROPERTY:description": "Description",
-    "PROPERTY:cards": "Cards"
+    "PROPERTY:type": "Type",
+    "PROPERTY:cards": "Cards",
+
+    "type:balluff": "BALLUFF",
+    "type:other": "Other"
   },
   "pl": true
 }

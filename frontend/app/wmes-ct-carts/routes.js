@@ -37,6 +37,7 @@ define([
           collection: new CartCollection(null, {rqlQuery: req.rql}),
           columns: [
             {id: 'description', className: 'is-min'},
+            {id: 'type', className: 'is-min'},
             {id: 'cards', tdClassName: 'text-fixed'}
           ]
         });
