@@ -3,8 +3,4 @@
 
 'use strict';
 
-db.kanbanentries.updateMany({children: {$exists: true}}, {$unset: {children: 1}});
-
-db.ctcarts.updateMany({type: {$exists: false}}, {$set: {type: 'other'}});
-
-db.ctcarts.createIndex({type: 1});
+db.fapentries.createIndex({'changes.user.id': 1});

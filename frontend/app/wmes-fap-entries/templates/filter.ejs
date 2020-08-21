@@ -6,71 +6,68 @@
     hidden: true
   }) %>
   <div class="form-group" data-filter="search">
-    <label for="<%- idPrefix %>-search"><%- helpers.t('PROPERTY:search') %></label>
-    <input id="<%- idPrefix %>-search" name="search" class="form-control" type="text" maxlength="50" style="width: 125px">
+    <label for="<%- id('search') %>"><%- t('PROPERTY:search') %></label>
+    <input id="<%- id('search') %>" name="search" class="form-control" type="text" maxlength="50" style="width: 125px">
   </div>
   <div class="form-group">
     <div class="filter-radioLabels">
-      <label>
-        <input name="userType" type="radio" value="mine">
-        <%- helpers.t('filter:user:mine') %>
-      </label><label>
-        <input name="userType" type="radio" value="unseen">
-        <%- helpers.t('filter:user:unseen') %>
-      </label><label>
-        <input name="userType" type="radio" value="others">
-        <%- helpers.t('filter:user:others') %>
+      <% ['mine', 'unseen', 'others', 'active'].forEach(function(userType) { %>
+      <label title="<%- t('filter:user:' + userType + ':title') %>">
+        <input name="userType" type="radio" value="<%- userType %>">
+        <%- t('filter:user:' + userType) %>
       </label>
+      <% }) %>
     </div>
-    <input id="<%- idPrefix %>-user" name="user" type="text">
+    <input id="<%- id('user') %>" name="user" type="text">
   </div>
   <div class="form-group" style="min-width: 150px">
     <div class="filter-radioLabels">
       <label>
         <input name="statusType" type="radio" value="specific">
-        <%- helpers.t('filter:status:specific') %>
-      </label><label class="fap-entries-filter-analysis">
+        <%- t('filter:status:specific') %>
+      </label>
+      <label class="fap-entries-filter-analysis">
         <input name="statusType" type="radio" value="analysis">
-        <%- helpers.t('filter:status:analysis') %>
+        <%- t('filter:status:analysis') %>
       </label>
     </div>
-    <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
+    <select id="<%- id('status') %>" name="status[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% statuses.forEach(function(status) { %>
-      <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
+      <option value="<%- status %>"><%- t('status:' + status) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group hidden" data-filter="order">
-    <label for="<%- idPrefix %>-order"><%- helpers.t('PROPERTY:order') %></label>
-    <input id="<%- idPrefix %>-order" name="order" class="form-control text-mono" type="text" pattern="^[A-Za-z0-9]{7,12}$" style="width: 110px">
+    <label for="<%- id('order') %>"><%- t('PROPERTY:order') %></label>
+    <input id="<%- id('order') %>" name="order" class="form-control text-mono" type="text" pattern="^[A-Za-z0-9]{7,12}$" style="width: 110px">
   </div>
   <div class="form-group hidden" data-filter="mrp">
-    <label for="<%- idPrefix %>-mrp"><%- helpers.t('PROPERTY:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
+    <label for="<%- id('mrp') %>"><%- t('PROPERTY:mrp') %></label>
+    <input id="<%- id('mrp') %>" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div class="form-group hidden" data-filter="category">
-    <label for="<%- idPrefix %>-category"><%- helpers.t('PROPERTY:category') %></label>
-    <input id="<%- idPrefix %>-category" name="category" type="text" autocomplete="new-password" data-placeholder=" ">
+    <label for="<%- id('category') %>"><%- t('PROPERTY:category') %></label>
+    <input id="<%- id('category') %>" name="category" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div class="form-group hidden" data-filter="subdivisionType">
-    <label for="<%- idPrefix %>-subdivisionType"><%- helpers.t('PROPERTY:subdivisionType') %></label>
-    <select id="<%- idPrefix %>-subdivisionType" name="subdivisionType[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
+    <label for="<%- id('subdivisionType') %>"><%- t('PROPERTY:subdivisionType') %></label>
+    <select id="<%- id('subdivisionType') %>" name="subdivisionType[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% subdivisionTypes.forEach(function(subdivisionType) { %>
-      <option value="<%= subdivisionType %>"><%- helpers.t('subdivisionType:' + subdivisionType) %></option>
+      <option value="<%= subdivisionType %>"><%- t('subdivisionType:' + subdivisionType) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group hidden" data-filter="divisions">
-    <label for="<%- idPrefix %>-divisions"><%- helpers.t('PROPERTY:divisions') %></label>
-    <select id="<%- idPrefix %>-divisions" name="divisions[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
+    <label for="<%- id('divisions') %>"><%- t('PROPERTY:divisions') %></label>
+    <select id="<%- id('divisions') %>" name="divisions[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% divisions.forEach(function(division) { %>
       <option value="<%= division.id %>"><%= division.text %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group hidden" data-filter="level">
-    <label for="<%- idPrefix %>-level"><%- helpers.t('PROPERTY:level') %></label>
-    <div id="<%- idPrefix %>-level" class="btn-group filter-btn-group" data-toggle="buttons">
+    <label for="<%- id('level') %>"><%- t('PROPERTY:level') %></label>
+    <div id="<%- id('level') %>" class="btn-group filter-btn-group" data-toggle="buttons">
       <% [0, 1, 2, 3, 4].forEach(function(level) { %>
       <label class="btn btn-default">
         <input type="radio" name="level" value="<%- level %>"> <%- level %>

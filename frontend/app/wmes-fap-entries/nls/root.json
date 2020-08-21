@@ -92,8 +92,13 @@
     "message:finished:false": "Entry is finished.",
 
     "filter:user:mine": "Mine",
+    "filter:user:mine:title": "You are one of the participants",
     "filter:user:unseen": "Unread",
+    "filter:user:unseen:title": "You are one of the participants in entries changed since your last visit",
     "filter:user:others": "User",
+    "filter:user:others:title": "The specified user is one of the participants",
+    "filter:user:active": "Active",
+    "filter:user:active:title": "The specified user made a change in a FAP entry",
     "filter:status:specific": "Status",
     "filter:status:analysis": "Analysis",
     "filter:submit": "Filter",

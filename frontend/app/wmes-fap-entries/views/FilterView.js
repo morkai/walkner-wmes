@@ -106,6 +106,11 @@ define([
           formData.user = term.args[1];
         }
       },
+      'changes.user.id': function(propertyName, term, formData)
+      {
+        formData.userType = 'active';
+        formData.user = term.args[1];
+      },
       'status': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
@@ -187,6 +192,10 @@ define([
       else if (userType === 'unseen')
       {
         selector.push({name: 'eq', args: ['observers.user.id', userType]});
+      }
+      else if (userType === 'active')
+      {
+        selector.push({name: 'eq', args: ['changes.user.id', user]});
       }
       else if (user)
       {
@@ -284,7 +293,7 @@ define([
 
       setUpUserSelect2(this.$id('user'), {
         view: this,
-        width: '300px'
+        width: '100%'
       });
 
       setUpMrpSelect2(this.$id('mrp'), {
@@ -349,7 +358,7 @@ define([
     toggleUserSelect2: function(resetUser)
     {
       var userType = this.$('input[name="userType"]:checked').val();
-      var $user = this.$id('user').select2('enable', userType === 'others');
+      var $user = this.$id('user').select2('enable', userType === 'others' || userType === 'active');
 
       if (resetUser && $user.val() === currentUser.data._id)
       {
