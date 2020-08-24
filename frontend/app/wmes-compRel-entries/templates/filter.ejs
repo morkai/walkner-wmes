@@ -18,7 +18,7 @@
     <input id="<%- id('user') %>" name="user" type="text">
   </div>
   <div class="form-group" style="min-width: 150px">
-    <label for="<%- id('status') %>"><%- t('filter:status:specific') %></label>
+    <label for="<%- id('status') %>"><%- t('PROPERTY:status') %></label>
     <select id="<%- id('status') %>" name="status[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% statuses.forEach(function(status) { %>
       <option value="<%- status %>"><%- t('status:' + status) %></option>
