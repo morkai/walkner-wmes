@@ -132,7 +132,7 @@ Func Unlock()
   LogDebug("UNLOCKING")
   LogDebug("SEARCHING_MODAL_WINDOW")
 
-  $modalWin = FindModalWin("^(SAP GUI|Information|Stop)")
+  $modalWin = FindModalWin("^(SAP GUI|SAP Frontend|Information|Stop)")
 
   If Not IsHWnd($modalWin) Then
     LogDebug("MODAL_WINDOW_NOT_FOUND")
@@ -156,13 +156,18 @@ Func Unlock()
 
     LogDebug("CANCEL_BUTTON_FOUND=" & ControlGetText($modalWin, "", $buttonId))
 
+    WinActivate($modalWin)
+    Sleep(250)
     ControlClick($modalWin, "", $buttonId)
     Sleep(250)
 
     ExitLoop
   Next
 
-  If Not $buttonFound Then
+  If $buttonFound Then
+    Sleep(250)
+    Unlock()
+  Else
     LogDebug("CANCEL_BUTTON_NOT_FOUND")
   EndIf
 EndFunc
