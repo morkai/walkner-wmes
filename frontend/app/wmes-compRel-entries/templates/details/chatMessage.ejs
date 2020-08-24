@@ -1,0 +1,8 @@
+<div class="compRel-chat-message <%- message.user.self ? 'compRel-is-self' : '' %>" data-user-id="<%- message.user.id %>">
+  <div class="compRel-chat-user"><%- message.user.label %></div>
+  <div class="compRel-chat-lines" style="border-color: <%- message.color %>">
+    <% message.lines.forEach(function(line) { %>
+    <div class="compRel-chat-line" title="<%- line.time %>"><%- line.text %></div>
+    <% }) %>
+  </div>
+</div>

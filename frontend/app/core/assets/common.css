@@ -367,6 +367,10 @@ code.multiline {
   margin-top: 0;
 }
 
+.autolink {
+  cursor: pointer;
+}
+
 @media (max-width: 767px) {
   .page-actions {
     float: none;

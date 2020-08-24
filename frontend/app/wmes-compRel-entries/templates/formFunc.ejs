@@ -1,0 +1,46 @@
+<div class="compRel-form-func" data-id="<%- func._id %>">
+  <button class="btn btn-link compRel-form-removeFunc" type="button"><i class="fa fa-times"></i></button>
+  <% if (status === 'pending') { %>
+    <div class="form-group">
+      <%- helpers.formGroup({
+        name: 'funcs[' + i + '].users',
+        label: func.label,
+        type: 'select2',
+        required: true
+      }) %>
+    </div>
+  <% } else { %>
+    <div class="form-group">
+      <%- helpers.formGroup({
+        name: 'funcs[' + i + '].acceptedBy',
+        label: func.label,
+        type: 'static',
+        value: func.acceptedBy
+      }) %>
+    </div>
+    <div class="form-group">
+      <%- helpers.formGroup({
+        name: 'funcs[' + i + '].status',
+        label: 'PROPERTY:status',
+        type: 'static',
+        value: func.status
+      }) %>
+    </div>
+    <div class="form-group">
+      <%- helpers.formGroup({
+        name: 'funcs[' + i + '].acceptedAt',
+        label: 'PROPERTY:funcs.acceptedAt',
+        type: 'static',
+        value: func.acceptedAt
+      }) %>
+    </div>
+    <div class="form-group">
+      <%- helpers.formGroup({
+        name: 'funcs[' + i + '].users',
+        label: 'PROPERTY:funcs.users',
+        type: 'select2',
+        required: true
+      }) %>
+    </div>
+  <% } %>
+</div>

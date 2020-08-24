@@ -1,0 +1,20 @@
+<div class="compRel-attachments panel panel-default is-with-actions">
+  <div class="panel-heading">
+    <div class="panel-heading-title"><%- t('PROPERTY:attachments') %></div>
+    <div class="panel-heading-actions">
+      <button id="<%- id('upload') %>" type="button" class="btn btn-link" title="<%- t('attachments:upload') %>">
+        <i class="fa fa-upload"></i>
+      </button>
+      <input id="<%- id('files') %>" type="file" multiple tabindex="-1">
+    </div>
+  </div>
+  <div id="<%- id('attachments') %>" class="panel-body"></div>
+  <div id="<%- id('preview') %>" class="compRel-attachment-preview hidden">
+    <span class="compRel-attachment-preview-label"></span>
+    <img class="compRel-attachment-preview-image">
+  </div>
+  <form id="<%- id('editor') %>" class="compRel-attachments-editor hidden">
+    <input type="text" name="name" class="form-control">
+    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>
+  </form>
+</div>

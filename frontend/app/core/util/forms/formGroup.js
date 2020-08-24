@@ -24,9 +24,14 @@ define([
       options.name = options.id;
     }
 
-    var id = view.idPrefix + '-' + (options.id || options.name.replace(/\./g, '-'));
+    var id = view.idPrefix + '-' + (options.id || options.name.replace(/[\[\].]/g, '-'));
     var formGroupAttrs = Object.assign({
-      className: html.className('form-group', options.groupClassName)
+      className: html.className(
+        'form-group',
+        options.groupClassName,
+        options.required && options.type === 'select2' ? 'has-required-select2' : null
+      ),
+      style: options.groupStyle || false
     }, options.groupAttrs);
     var labelTag = '';
     var helpBlockTag = '';
@@ -36,7 +41,8 @@ define([
       name: options.name,
       type: 'text',
       required: options.required === true,
-      placeholder: options.placeholder || ''
+      placeholder: options.placeholder || false,
+      style: options.inputStyle || false
     };
     var inputInner = '';
     var inputClassNames = [options.noFormControl || NO_FORM_CONTROL_TYPES[options.type] ? '' : 'form-control'];
@@ -65,7 +71,8 @@ define([
 
       var labelAttrs = Object.assign({
         for: id,
-        className: html.className(labelClassName, options.labelClassName)
+        className: html.className(labelClassName, options.labelClassName),
+        style: options.labelStyle || false
       }, options.labelAttrs);
 
       labelTag = html.tag('label', labelAttrs, labelText);
@@ -85,7 +92,8 @@ define([
       }
 
       var helpBlockAttrs = Object.assign({
-        className: html.className('help-block', options.helpBlockClassName)
+        className: html.className('help-block', options.helpBlockClassName),
+        style: options.helpBlockStyle || false
       }, options.helpBlockAttrs);
 
       helpBlockTag = html.tag('span', helpBlockAttrs, helpBlockText);
@@ -113,8 +121,14 @@ define([
         inputTag = 'p';
         inputAttrs.type = false;
         inputAttrs.name = false;
+        inputAttrs.required = false;
         inputInner = options.value == null ? '' : String(options.value);
         inputClassNames.push('form-control-static');
+        break;
+
+      case 'text':
+        inputAttrs.pattern = options.pattern || false;
+        inputAttrs.maxlength = options.maxLength > 0 ? options.maxLength : false;
         break;
     }
 

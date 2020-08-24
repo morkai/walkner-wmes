@@ -1,0 +1,22 @@
+<div class="compRel-entries-history-item <%- item.comment !== '' ? 'has-comment' : '' %>">
+  <span class="compRel-entries-history-user"><%- item.user %></span>,
+  <time class="compRel-entries-history-time" datetime="<%- item.time.iso %>" title="<%- item.time.long %>"><%- item.time.daysAgo > 5 ? item.time.long : item.time.human %></time>:
+  <% if (item.changes.length) { %>
+  <table class="table table-condensed compRel-entries-history-changes">
+    <tbody>
+      <% item.changes.forEach(function(change) { %>
+      <tr>
+        <td class="is-min"><%- change.label %>:</td>
+        <td class="is-min"><span class="<%- change.oldValue.more ? 'has-more' : '' %>" data-content="<%= change.oldValue.more %>"><%- change.oldValue %></span></td>
+        <td class="is-min"><i class="fa fa-arrow-right"></i></td>
+        <td><span class="<%- change.newValue.more ? 'has-more' : '' %>" data-content="<%= change.newValue.more %>"><%- change.newValue %></span></td>
+        <td></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } %>
+  <% if (item.comment !== '') { %>
+  <p class="compRel-entries-history-comment"><%= item.comment %></p>
+  <% } %>
+</div>

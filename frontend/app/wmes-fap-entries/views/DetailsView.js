@@ -77,7 +77,7 @@ define([
 
         this.showEditor($prop, $prop[0].dataset.prop);
       },
-      'mouseup .fap-autolink': function(e)
+      'mouseup .autolink': function(e)
       {
         var id = e.currentTarget.dataset.id;
 
@@ -414,7 +414,7 @@ define([
       }
       else
       {
-        html = '<a class="fap-autolink" data-type="order" data-id="' + details.orderNo + '">'
+        html = '<a class="autolink" data-type="order" data-id="' + details.orderNo + '">'
           + details.orderNo
           + '</a>';
       }

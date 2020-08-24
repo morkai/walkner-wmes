@@ -1,0 +1,30 @@
+.compRel-form-funcs {
+  display: flex;
+  margin-top: 7px;
+  overflow-x: auto;
+  border: 1px solid #ccc;
+}
+.compRel-form-funcs:empty {
+  display: none;
+}
+.compRel-form-func {
+  position: relative;
+  padding: 15px;
+  width: 300px;
+}
+.compRel-form-func + .compRel-form-func {
+  border-left: 1px dotted #ccc;
+}
+.compRel-form-func .select2-container-multi .select2-choices {
+  padding: 0 5px 0 5px;
+}
+.compRel-form-func .select2-container-multi .select2-choices .select2-search-choice {
+  width: 100%;
+  margin: 5px 0 0 0;
+}
+.compRel-form-removeFunc {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}

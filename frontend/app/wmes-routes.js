@@ -129,7 +129,8 @@ define([
   './wmes-dummyPaint-orders/routes',
   './wmes-dummyPaint-codes/routes',
   './wmes-dummyPaint-paints/routes',
-  './wmes-dummyPaint-families/routes'
+  './wmes-dummyPaint-families/routes',
+  './wmes-compRel-entries/routes'
 ], function()
 {
   'use strict';

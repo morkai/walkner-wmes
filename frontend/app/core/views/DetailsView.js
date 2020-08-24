@@ -26,6 +26,16 @@ define([
       return topics;
     },
 
+    initialize: function()
+    {
+      View.prototype.initialize.apply(this, arguments);
+
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change', this.onModelChanged);
+      });
+    },
+
     serialize: function()
     {
       var nlsDomain = this.model.getNlsDomain();
@@ -51,16 +61,6 @@ define([
       return model.toJSON();
     },
 
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'change', this.render);
-    },
-
-    afterRender: function()
-    {
-      this.listenToOnce(this.model, 'change', this.render);
-    },
-
     onModelEdited: function(message)
     {
       var remoteModel = message.model;
@@ -74,6 +74,11 @@ define([
     onModelDeleted: function(message)
     {
       onModelDeleted(this.broker, this.model, message);
+    },
+
+    onModelChanged: function()
+    {
+      this.render();
     }
 
   });

@@ -109,6 +109,7 @@ exports.modules = [
   'wmes-ct-frontend',
   'wmes-clients',
   'wmes-dummyPaint',
+  'wmes-compRel',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -695,4 +696,12 @@ exports['wmes-luca-frontend'] = {
 
 exports['wmes-ct-frontend'] = {
   messengerClientId: 'messenger/client:wmes-ct'
+};
+
+exports['wmes-dummyPaint'] = {
+
+};
+
+exports['wmes-compRel'] = {
+
 };

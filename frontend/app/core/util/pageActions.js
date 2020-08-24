@@ -295,7 +295,12 @@ define([
     exportXlsx: exportXlsx,
     jump: function(page, collection, options)
     {
-      options = _.assign({mode: 'rid', pattern: '^ *[0-9]+ *$', autoFocus: !window.IS_MOBILE}, options);
+      options = _.assign({
+        mode: 'rid',
+        pattern: '^ *[0-9]+ *$',
+        autoFocus: !window.IS_MOBILE,
+        width: 150
+      }, options);
 
       return {
         template: function()
@@ -304,7 +309,8 @@ define([
             title: options.title || i18n(collection, 'PAGE_ACTION:jump:title'),
             placeholder: options.placeholder || i18n(collection, 'PAGE_ACTION:jump:placeholder'),
             autoFocus: options.autoFocus,
-            pattern: options.pattern
+            pattern: options.pattern,
+            width: options.width
           });
         },
         afterRender: function($action)

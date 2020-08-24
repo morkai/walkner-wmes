@@ -1,0 +1,17 @@
+<div class="compRel-chat">
+  <div class="compRel-chat-title"><%- t('chat:title') %></div>
+  <div id="<%- id('messages') %>" class="compRel-chat-messages">
+    <% chat.forEach(function(message) { %>
+    <%- renderMessage({message: message}) %>
+    <% }) %>
+  </div>
+  <form class="compRel-chat-form">
+    <textarea id="<%- id('send') %>" class="form-control compRel-chat-send" rows="1" placeholder="<%- t('chat:send') %>"></textarea>
+    <button id="<%- id('submit') %>" class="btn btn-primary compRel-chat-submit" type="button">
+      <i class="fa fa-comment"></i><span><%- t('chat:submit') %></span><kbd>Shift+Enter</kbd>
+    </button>
+    <div id="<%- id('new') %>" class="compRel-chat-new-outer hidden">
+      <span class="compRel-chat-new-inner"><%- t('chat:new') %></span>
+    </div>
+  </form>
+</div>

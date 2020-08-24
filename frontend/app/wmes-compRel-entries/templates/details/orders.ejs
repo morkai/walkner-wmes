@@ -1,0 +1,34 @@
+<div class="panel panel-default is-with-actions">
+  <div class="panel-heading">
+    <div class="panel-heading-title"><%- t('PANEL:TITLE:orders') %></div>
+    <div class="panel-heading-actions">
+      <button id="<%- id('add') %>" class="btn btn-default" type="button" title="<%- t('orders:add') %>"><i class="fa fa-plus"></i></button>
+    </div>
+  </div>
+  <table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('PROPERTY:orders._id') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.releasedAt') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.releasedBy') %></th>
+      <th></th>
+      <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% orders.forEach(function(order) { %>
+    <tr>
+      <td class="is-min text-mono"><a href="#orders/<%- order._id %>" target="_blank"><%- order._id %></a></td>
+      <td class="is-min"><%- order.releasedAt %></td>
+      <td class="is-min"><%- order.releasedBy %></td>
+      <td></td>
+      <td class="actions">
+        <div class="actions-group">
+          <button data-action="remove" class="btn btn-default" type="button" title="<%- t('orders:remove') %>"><i class="fa fa-times"></i></button>
+        </div>
+      </td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

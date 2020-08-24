@@ -197,6 +197,9 @@
     "PRIVILEGE:DUMMY_PAINT:VIEW": "Dummy paint: view",
     "PRIVILEGE:DUMMY_PAINT:MANAGE": "Dummy paint: manage",
     "PRIVILEGE:DUMMY_PAINT:WORKER": "Dummy paint: worker",
+    "PRIVILEGE:COMP_REL:VIEW": "Comp. releases: view",
+    "PRIVILEGE:COMP_REL:MANAGE": "Comp. releases: manage",
+    "PRIVILEGE:COMP_REL:ADD": "Comp. releases: add",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

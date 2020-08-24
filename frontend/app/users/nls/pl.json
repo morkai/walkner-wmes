@@ -198,6 +198,9 @@
   "PRIVILEGE:DUMMY_PAINT:VIEW": "Dummy paint: przeglądanie",
   "PRIVILEGE:DUMMY_PAINT:MANAGE": "Dummy paint: zarządzanie",
   "PRIVILEGE:DUMMY_PAINT:WORKER": "Dummy paint: instancja SAP GUI",
+  "PRIVILEGE:COMP_REL:VIEW": "Dopuszczenia: przeglądanie",
+  "PRIVILEGE:COMP_REL:MANAGE": "Dopuszczenia: zarządzanie",
+  "PRIVILEGE:COMP_REL:ADD": "Dopuszczenia: dodawanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

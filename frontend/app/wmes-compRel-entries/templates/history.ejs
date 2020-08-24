@@ -1,0 +1,6 @@
+<div class="panel panel-default compRel-entries-history">
+  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:changes') %></div>
+  <% items.forEach(function(item, itemIndex) { %>
+  <% include historyItem.ejs %>
+  <% }) %>
+</div>

@@ -41,6 +41,17 @@ define([
       {
         k = 'class';
       }
+      else if (k === 'style' && !!v && typeof v === 'object')
+      {
+        var styles = '';
+
+        Object.keys(v).forEach(function(k)
+        {
+          styles += k + ':' + v[k] + ';';
+        });
+
+        v = styles;
+      }
 
       html += ' ' + k;
 

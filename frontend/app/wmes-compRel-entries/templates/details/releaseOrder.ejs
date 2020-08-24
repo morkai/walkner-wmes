@@ -1,0 +1,22 @@
+<form>
+  <%- helpers.formGroup({
+    name: 'orders',
+    type: 'textarea',
+    label: 'orders:',
+    rows: 4,
+    required: true,
+    inputClassName: 'text-mono'
+  }) %>
+  <%- helpers.formGroup({
+    name: 'comment',
+    type: 'textarea',
+    label: 'orders:',
+    rows: 4
+  }) %>
+  <div class="form-actions">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary" style="min-width: 125px">
+      <i class="fa fa-save"></i><span><%- t('orders:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

@@ -1,0 +1,69 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'mrps',
+        label: 'PROPERTY:',
+        type: 'select2',
+        required: true
+      }) %>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'oldCode',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-3',
+          pattern: '^[0-9]{12}$'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'oldName',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-9'
+        }) %>
+      </div>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'newCode',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-3',
+          pattern: '^[0-9]{12}$'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'newName',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-9'
+        }) %>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('availableFuncs') %>" class="control-label is-required"><%- t('PROPERTY:funcs') %></label>
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="input-group">
+              <select id="<%- id('availableFuncs') %>" class="form-control"></select>
+              <span class="input-group-btn">
+                <button id="<%- id('addFunc') %>" class="btn btn-default" type="button"><i class="fa fa-plus"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div id="<%- id('funcs') %>" class="compRel-form-funcs"></div>
+      </div>
+      <% if (editMode) { %>
+      <%- helpers.formGroup({
+        name: 'comment',
+        label: 'PROPERTY:',
+        type: 'textarea',
+        rows: 4
+      }) %>
+      <% } %>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

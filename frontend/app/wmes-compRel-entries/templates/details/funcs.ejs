@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><%- t('PANEL:TITLE:funcs') %></div>
+  <div class="panel-details compRel-details-funcs">
+    <% funcs.forEach(function(func) { %>
+    <div class="compRel-details-func" data-id="<%- func._id %>" data-status="<%- func.status %>">
+      <% if (func.canAccept) { %>
+      <button class="btn btn-default compRel-details-accept" type="button" title="<%- t('accept:button') %>"><i class="fa fa-gavel"></i></button>
+      <% } %>
+      <div class="form-group">
+        <label class="control-label"><%= func.label %></label>
+        <p class="form-control-static"><%- func.acceptedBy %></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:funcs.status') %></label>
+        <p class="form-control-static"><%- func.statusText %></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:funcs.acceptedAt') %></label>
+        <p class="form-control-static"><%- func.acceptedAt %></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:funcs.comment') %></label>
+        <p class="form-control-static text-lines"><%= func.comment %></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:funcs.users') %></label>
+        <ul>
+          <% func.users.forEach(function(user) { %>
+          <li><%- user %></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>

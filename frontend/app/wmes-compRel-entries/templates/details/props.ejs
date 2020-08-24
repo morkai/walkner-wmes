@@ -1,0 +1,23 @@
+<div class="panel panel-<%- model.className %>">
+  <div class="panel-heading"><%- panelTitle %></div>
+  <div class="panel-details">
+    <div class="row">
+      <div class="col-md-6">
+        <%- helpers.props(model, [
+          '!mrps',
+          'oldComponent',
+          'newComponent',
+          'status'
+        ]) %>
+      </div>
+      <div class="col-md-6">
+        <%- helpers.props(model, [
+          'createdAt',
+          '!creator',
+          'updatedAt',
+          '!updater'
+        ]) %>
+      </div>
+    </div>
+  </div>
+</div>

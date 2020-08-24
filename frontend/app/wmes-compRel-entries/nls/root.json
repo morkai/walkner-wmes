@@ -1,0 +1,57 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Component releases",
+    "BREADCRUMB:browse": "Component releases",
+    "BREADCRUMB:settings": "Settings",
+    "BREADCRUMB:history": "Changelog",
+
+    "PAGE_ACTION:settings": "Settings",
+    "PAGE_ACTION:jump:title": "Jump to entry by ID",
+    "PAGE_ACTION:jump:placeholder": "Entry ID",
+    "PAGE_ACTION:history": "Changelog",
+
+    "PANEL:TITLE:changes": "History",
+
+    "PROPERTY:rid": "ID",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:status": "Status",
+
+    "status:pending": "Pending",
+    "status:accepted": "Accepted",
+    "status:rejected": "Rejected",
+
+    "filter:user:mine": "Mine",
+    "filter:user:unseen": "Unread",
+    "filter:user:others": "User",
+
+    "history:added": "<i>Entry created at {time} on {ddd}, {date}.</i>",
+
+    "settings:tab:general": "General",
+    "settings:general:pendingFunctions": "Functions requiring verification",
+    "settings:general:pendingFunctions:help": "Entries added by a user without assigned Function or with a Function from the following list will be added with the <em>Pending</em> status and will have to be verified by a leader.",
+    "settings:general:categoryFunctions": "Functions allowing category changes",
+
+    "upload:drop": "Drop here any files you want to attach to the entry.",
+    "upload:tooMany": "You can attach at most {max} {max, plural, one{file} other{files}}.",
+    "upload:auth": "Log in to add files.",
+    "upload:failure": "Failed to upload file: {file}",
+
+    "chat:title": "Chat",
+    "chat:submit": "Send message",
+    "chat:send": "Send message",
+    "chat:send:auth": "Log in to send a message",
+    "chat:new": "Click here to see new messages...",
+
+    "autolink:attachment": "Attachment",
+    "autolink:product": "12NC",
+    "autolink:document": "15NC",
+    "autolink:order": "Order no",
+    "autolink:entry": "Entry",
+
+    "attachments:upload": "Add attachments",
+    "attachments:menu:rename": "Change name",
+    "attachments:menu:remove": "Remove file"
+  },
+  "pl": true
+}

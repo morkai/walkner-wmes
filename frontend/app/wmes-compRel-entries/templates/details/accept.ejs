@@ -1,0 +1,25 @@
+<form>
+  <%- helpers.formGroup({
+    name: 'func',
+    type: 'select2',
+    label: 'accept:'
+  }) %>
+  <%- helpers.formGroup({
+    name: 'comment',
+    type: 'textarea',
+    label: 'accept:',
+    rows: 4
+  }) %>
+  <div class="form-actions">
+    <button id="<%- id('accept') %>" type="button" class="btn btn-success" style="min-width: 125px">
+      <i class="fa fa-thumbs-up"></i><span><%- t('accept:accept') %></span>
+    </button>
+    <button id="<%- id('reject') %>" type="button" class="btn btn-danger" style="min-width: 125px">
+      <i class="fa fa-thumbs-down"></i><span><%- t('accept:reject') %></span>
+    </button>
+    <button id="<%- id('reset') %>" type="button" class="btn btn-default" style="min-width: 125px">
+      <i class="fa fa-eraser"></i><span><%- t('accept:reset') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

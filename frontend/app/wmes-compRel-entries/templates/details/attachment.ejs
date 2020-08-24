@@ -1,0 +1,11 @@
+<div class="compRel-attachment" data-attachment-id="<%- attachment._id %>" data-preview="<%- attachment.preview ? '1' : '0' %>">
+  <span class="compRel-attachment-icon">
+    <i class="fa <%- uploaded ? attachment.icon : 'fa-spinner fa-spin' %>"></i>
+  </span>
+  <% if (uploaded) { %>
+  <a class="compRel-attachment-label" href="/compRel/entries/<%- entryId %>/attachments/<%- attachment._id %>" target="_blank"><%= attachment.label %></a>
+  <% } else { %>
+  <span class="compRel-attachment-label"><%= attachment.label %></span>
+  <% } %>
+  <button class="compRel-attachment-action btn btn-link" type="button" data-action="<%- uploaded ? 'showMenu' : 'removeUpload' %>" <%- uploaded && !attachment.menu ? 'disabled' : '' %>><i class="fa <%- uploaded ? 'fa-wrench' : 'fa-times' %>"></i></button>
+</div>

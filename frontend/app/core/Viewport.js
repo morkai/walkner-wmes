@@ -138,7 +138,7 @@ define([
     var pageCounter = ++this.pageCounter;
 
     require(
-      [].concat(dependencies),
+      _.flatten([].concat(dependencies), true),
       function()
       {
         if (pageCounter === viewport.pageCounter)

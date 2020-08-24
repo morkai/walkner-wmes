@@ -22,9 +22,6 @@
   font-size: 28px;
   min-width: 320px;
 }
-.fap-autolink {
-  cursor: pointer;
-}
 .fap-props {
   display: flex;
   line-height: 1;
@@ -227,13 +224,17 @@
   top: -7px;
   padding: 10px;
   color: #337ab7;
+  opacity: 0.2;
 }
 .fap-editable-toggle:hover {
   color: #23527c;
   cursor: pointer;
 }
-.fap-is-editable:hover .fap-editable-toggle {
+.fap-is-editable .fap-editable-toggle {
   display: inline-block;
+}
+.fap-is-editable:hover .fap-editable-toggle {
+  opacity: 1;
 }
 .fap-is-editing .fap-editable-toggle {
   display: none!important;
