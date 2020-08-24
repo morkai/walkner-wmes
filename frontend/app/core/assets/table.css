@@ -184,6 +184,14 @@ td.is-overflow {
   width: 400px;
   max-width: 400px;
 }
+.w425 {
+  width: 425px;
+  max-width: 425px;
+}
+.w450 {
+  width: 450px;
+  max-width: 450px;
+}
 .is-colored .table,
 .is-colored .table tr th,
 .is-colored .table tr td,
