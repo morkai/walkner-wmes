@@ -4,13 +4,17 @@ define([
   'jquery',
   'app/viewport',
   'app/core/View',
+  'app/wmes-compRel-entries/Entry',
   './AcceptView',
+  './AddUserView',
   'app/wmes-compRel-entries/templates/details/funcs'
 ], function(
   $,
   viewport,
   View,
+  Entry,
   AcceptView,
+  AddUserView,
   template
 ) {
   'use strict';
@@ -24,6 +28,11 @@ define([
       'click .compRel-details-accept': function(e)
       {
         this.showAcceptDialog(this.$(e.target).closest('.compRel-details-func')[0].dataset.id);
+      },
+
+      'click [data-action="addUser"]': function(e)
+      {
+        this.showAddUserDialog(this.$(e.target).closest('.compRel-details-func')[0].dataset.id);
       }
 
     },
@@ -46,6 +55,7 @@ define([
     getTemplateData: function()
     {
       return {
+        addUser: Entry.can.addUser(this.model),
         funcs: this.model.serializeFuncs()
       };
     },
@@ -65,6 +75,18 @@ define([
       });
 
       viewport.showDialog(dialogView, this.t('accept:title'));
+    },
+
+    showAddUserDialog: function(funcId)
+    {
+      var dialogView = new AddUserView({
+        model: {
+          entry: this.model,
+          func: this.model.getFunc(funcId)
+        }
+      });
+
+      viewport.showDialog(dialogView, this.t('addUser:title'));
     },
 
     toggleOverflowX: function()

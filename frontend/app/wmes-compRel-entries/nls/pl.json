@@ -110,5 +110,11 @@
   "orders:remove:title": "Usuwanie dopuszczonego zlecenia",
   "orders:remove:message": "Czy na pewno chcesz usunąć dopuszczenie zlecenia {orderNo}?",
   "orders:remove:yes": "Usuń zlecenie",
-  "orders:remove:no": "Anuluj"
+  "orders:remove:no": "Anuluj",
+
+  "addUser:tooltip": "Dodaj użytkowników",
+  "addUser:title": "Dodawanie użytkowników do funkcji opiniującej",
+  "addUser:func": "Funkcja opiniująca",
+  "addUser:users": "Nowi użytkownicy",
+  "addUser:submit": "Dodaj użytkowników"
 }

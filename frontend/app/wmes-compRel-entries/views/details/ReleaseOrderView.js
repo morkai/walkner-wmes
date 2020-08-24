@@ -3,14 +3,10 @@
 define([
   'app/viewport',
   'app/core/View',
-  'app/wmes-compRel-entries/dictionaries',
-  'app/wmes-compRel-entries/Entry',
   'app/wmes-compRel-entries/templates/details/releaseOrder'
 ], function(
   viewport,
   View,
-  dictionaries,
-  Entry,
   template
 ) {
   'use strict';

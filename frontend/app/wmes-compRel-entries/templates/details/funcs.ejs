@@ -24,7 +24,12 @@
         <p class="form-control-static text-lines"><%= func.comment %></p>
       </div>
       <div class="form-group">
-        <label class="control-label"><%- t('PROPERTY:funcs.users') %></label>
+        <label class="control-label">
+          <%- t('PROPERTY:funcs.users') %>
+          <% if (addUser) { %>
+          <a data-action="addUser" href="javascript:void(0)" style="padding: 0 7px 0 3px" title="<%- t('addUser:tooltip') %>"><i class="fa fa-plus"></i></a>
+          <% } %>
+        </label>
         <ul>
           <% func.users.forEach(function(user) { %>
           <li><%- user %></li>

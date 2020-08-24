@@ -290,7 +290,8 @@ define([
 
       var $users = setUpUserSelect2($func.find('input[name$=".users"]'), {
         view: this,
-        multiple: true
+        multiple: true,
+        noPersonnelId: true
       });
 
       $users.select2('data', entryFunc.users.map(function(user)

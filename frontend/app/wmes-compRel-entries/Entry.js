@@ -621,6 +621,11 @@ define([
         return func.users.some(function(u) { return u.id === user.data._id; });
       },
 
+      addUser: function(model)
+      {
+        return user.isAllowedTo('FN:production-planner') || (this.can || this).accept(model);
+      },
+
       releaseOrder: function(model)
       {
         return model.get('status') === 'accepted'

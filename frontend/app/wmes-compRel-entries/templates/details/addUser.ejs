@@ -1,0 +1,19 @@
+<form>
+  <%- helpers.formGroup({
+    name: 'func',
+    type: 'select2',
+    label: 'addUser:func'
+  }) %>
+  <%- helpers.formGroup({
+    name: 'users',
+    type: 'select2',
+    label: 'addUser:users',
+    required: true
+  }) %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" style="min-width: 125px">
+      <i class="fa fa-save"></i><span><%- t('addUser:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>
