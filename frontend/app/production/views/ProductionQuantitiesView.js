@@ -210,7 +210,7 @@ define([
         {
           $value.text(newValue + ' ' + t('production', 'quantities:unit'));
 
-          view.model.changeQuantitiesDone(parseInt(hour, 0), newValue, {render: false});
+          view.model.changeQuantitiesDone(parseInt(hour, 10), newValue, {render: false});
         }
       }
     },

@@ -22,7 +22,7 @@ define([
   var css = ['css!app/wmes-compRel-entries/assets/main'];
   var nls = ['i18n!app/nls/wmes-compRel-entries'];
   var canView = user.auth('PROD_DATA:VIEW', 'COMP_REL:VIEW');
-  var canAdd = user.auth('PROD_DATA:MANAGE', 'COMP_REL:ADD');
+  var canAdd = user.auth('PROD_DATA:MANAGE', 'COMP_REL:MANAGE', 'COMP_REL:ADD');
   var canManage = user.auth('PROD_DATA:MANAGE', 'COMP_REL:MANAGE');
 
   router.map('/compRel/entries', canView, function(req)
@@ -69,7 +69,7 @@ define([
     );
   });
 
-  router.map('/compRel/entries;add', canManage, function()
+  router.map('/compRel/entries;add', canAdd, function()
   {
     viewport.loadPage(
       [
@@ -90,7 +90,7 @@ define([
     );
   });
 
-  router.map('/compRel/entries/:id;edit', canManage, function(req)
+  router.map('/compRel/entries/:id;edit', canAdd, function(req)
   {
     viewport.loadPage(
       [
