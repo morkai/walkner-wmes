@@ -98,6 +98,9 @@
   "accept:reject": "Odrzuć",
   "accept:reset": "Resetuj",
 
+  "funcs:empty": "Nie przypisano jeszcze żadnych funkcji opiniujących.",
+
+  "orders:empty": "Nie przypisano jeszcze żadnych zleceń.",
   "orders:add": "Dopuść zlecenia",
   "orders:remove": "Usuń zlecenie",
   "orders:title": "Dopuszczanie zleceń",

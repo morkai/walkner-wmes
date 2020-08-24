@@ -1,6 +1,7 @@
 .compRel-details-funcs {
   display: flex;
   overflow-x: auto;
+  padding: 0;
 }
 .compRel-details-func {
   position: relative;

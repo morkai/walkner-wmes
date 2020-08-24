@@ -27,7 +27,7 @@ define([
 
     events: {
 
-      'click #-add': function()
+      'click .btn[data-action="add"]': function()
       {
         this.showReleaseOrderDialog();
       },

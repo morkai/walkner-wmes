@@ -1,6 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading"><%- t('PANEL:TITLE:funcs') %></div>
-  <div class="panel-details compRel-details-funcs">
+  <% if (funcs.length) { %>
+  <div class="panel-body compRel-details-funcs">
     <% funcs.forEach(function(func) { %>
     <div class="compRel-details-func" data-id="<%- func._id %>" data-status="<%- func.status %>">
       <% if (func.canAccept) { %>
@@ -33,4 +34,9 @@
     </div>
     <% }) %>
   </div>
+  <% } else { %>
+  <div class="panel-body">
+    <p><%- t('funcs:empty') %></p>
+  </div>
+  <% } %>
 </div>

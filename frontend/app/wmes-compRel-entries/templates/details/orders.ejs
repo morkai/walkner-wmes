@@ -2,9 +2,10 @@
   <div class="panel-heading">
     <div class="panel-heading-title"><%- t('PANEL:TITLE:orders') %></div>
     <div class="panel-heading-actions">
-      <button id="<%- id('add') %>" class="btn btn-default" type="button" title="<%- t('orders:add') %>"><i class="fa fa-plus"></i></button>
+      <button data-action="add" class="btn btn-default" type="button" title="<%- t('orders:add') %>"><i class="fa fa-plus"></i></button>
     </div>
   </div>
+  <% if (orders.length) { %>
   <table class="table table-bordered table-condensed table-hover">
     <thead>
     <tr>
@@ -31,4 +32,9 @@
     <% }) %>
     </tbody>
   </table>
+  <% } else { %>
+  <div class="panel-body">
+    <p><%- t('orders:empty') %></p>
+  </div>
+  <% } %>
 </div>

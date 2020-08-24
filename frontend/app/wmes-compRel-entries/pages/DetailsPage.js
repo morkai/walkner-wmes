@@ -100,7 +100,7 @@ define([
           callback: function()
           {
             $('.btn', this).blur();
-            page.ordersView.$id('add').click();
+            page.ordersView.showReleaseOrderDialog();
           }
         });
       }
