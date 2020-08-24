@@ -1,0 +1,1 @@
+define(["../settings/Setting"],function(e){"use strict";return e.extend({urlRoot:"/compRel/settings",nlsDomain:"wmes-compRel-entries"})});

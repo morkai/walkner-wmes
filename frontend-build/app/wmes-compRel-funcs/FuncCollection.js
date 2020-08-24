@@ -1,0 +1,1 @@
+define(["../core/Collection","./Func"],function(e,t){"use strict";return e.extend({model:t,getLabel:function(e){var t=this.get(e);return t?t.getLabel():e}})});

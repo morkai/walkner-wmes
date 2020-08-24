@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"Czas cyklu"},"BREADCRUMB:browse":function(n){return"Wózki"},"PROPERTY:description":function(n){return"Opis"},"PROPERTY:type":function(n){return"Typ"},"PROPERTY:cards":function(n){return"Karty"},"type:balluff":function(n){return"BALLUFF"},"type:other":function(n){return"Inny"}}});

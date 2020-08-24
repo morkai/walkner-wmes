@@ -1,0 +1,1 @@
+define(["../core/Model","../data/prodFunctions"],function(e,t){"use strict";return e.extend({urlRoot:"/compRel/funcs",clientUrlRoot:"#compRel/funcs",topicPrefix:"compRel.funcs",privilegePrefix:"COMP_REL",nlsDomain:"wmes-compRel-funcs",getLabel:function(){var e=t.get(this.id);return e?e.getLabel():this.id}})});
