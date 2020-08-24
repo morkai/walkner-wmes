@@ -482,60 +482,70 @@ define([
         data.funcs = newFuncs;
       },
 
-      attachments: function(data, entry, newAttachments)
+      attachments: function(data, entry, newOrders)
       {
-        var oldAttachments = entry.get('attachments');
+        this.list('attachments', data, entry, newOrders);
+      },
 
-        if (newAttachments[0] === null)
+      orders: function(data, entry, newOrders)
+      {
+        this.list('orders', data, entry, newOrders);
+      },
+
+      list: function(property, data, entry, newList)
+      {
+        var oldList = entry.get(property);
+
+        if (newList[0] === null)
         {
-          this.addAttachments(data, entry, oldAttachments, newAttachments[1]);
+          this.addList(property, data, entry, oldList, newList[1]);
         }
-        else if (newAttachments[1] === null)
+        else if (newList[1] === null)
         {
-          this.removeAttachments(data, entry, oldAttachments, newAttachments[0]);
+          this.removeList(property, data, entry, oldList, newList[0]);
         }
         else
         {
-          this.editAttachments(data, entry, oldAttachments, newAttachments[1]);
+          this.editList(property, data, entry, oldList, newList[1]);
         }
       },
-      addAttachments: function(data, entry, oldAttachments, addedAttachments)
+      addList: function(property, data, entry, oldList, added)
       {
-        var attachmentMap = {};
+        var map = {};
 
-        oldAttachments.forEach(function(a) { attachmentMap[a._id] = true; });
+        oldList.forEach(function(item) { map[item._id] = true; });
 
-        var newAttachments = [].concat(oldAttachments);
+        var newList = [].concat(oldList);
 
-        addedAttachments.forEach(function(attachment)
+        added.forEach(function(item)
         {
-          if (!attachmentMap[attachment._id])
+          if (!map[item._id])
           {
-            newAttachments.push(attachment);
+            newList.push(item);
 
-            attachmentMap[attachment.id] = true;
+            map[item.id] = true;
           }
         });
 
-        data.attachments = newAttachments;
+        data[property] = newList;
       },
-      removeAttachments: function(data, entry, oldAttachments, removedAttachments)
+      removeList: function(property, data, entry, oldList, removed)
       {
-        var attachmentMap = {};
+        var map = {};
 
-        removedAttachments.forEach(function(a) { attachmentMap[a._id] = true; });
+        removed.forEach(function(item) { map[item._id] = true; });
 
-        data.attachments = oldAttachments.filter(function(a) { return !attachmentMap[a._id]; });
+        data[property] = oldList.filter(function(item) { return !map[item._id]; });
       },
-      editAttachments: function(data, entry, oldAttachments, editedAttachments)
+      editList: function(property, data, entry, oldList, edited)
       {
-        var attachmentMap = {};
+        var map = {};
 
-        editedAttachments.forEach(function(a) { attachmentMap[a._id] = a; });
+        edited.forEach(function(item) { map[item._id] = item; });
 
-        data.attachments = oldAttachments.map(function(attachment)
+        data[property] = oldList.map(function(item)
         {
-          return attachmentMap[attachment._id] || attachment;
+          return map[item._id] || item;
         });
       }
 

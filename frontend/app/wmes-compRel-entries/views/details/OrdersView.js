@@ -4,16 +4,20 @@ define([
   'underscore',
   'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/wmes-compRel-entries/Entry',
   './ReleaseOrderView',
-  'app/wmes-compRel-entries/templates/details/orders'
+  'app/wmes-compRel-entries/templates/details/orders',
+  'app/wmes-compRel-entries/templates/details/removeOrder'
 ], function(
   _,
   viewport,
   View,
+  DialogView,
   Entry,
   ReleaseOrderView,
-  template
+  template,
+  removeOrderTemplate
 ) {
   'use strict';
 
@@ -23,9 +27,14 @@ define([
 
     events: {
 
-      'click #-add': function(e)
+      'click #-add': function()
       {
         this.showReleaseOrderDialog();
+      },
+
+      'click .btn[data-action="remove"]': function(e)
+      {
+        this.showRemoveOrderDialog(e.currentTarget.dataset.order);
       }
 
     },
@@ -66,6 +75,55 @@ define([
       });
 
       viewport.showDialog(dialogView, this.t('orders:title'));
+    },
+
+    showRemoveOrderDialog: function(orderNo)
+    {
+      var dialogView = new DialogView({
+        template: removeOrderTemplate,
+        model: {
+          orderNo: orderNo
+        }
+      });
+
+      viewport.showDialog(dialogView, this.t('orders:remove:title'));
+
+      this.listenTo(dialogView, 'answered', function(answer)
+      {
+        if (answer !== 'yes')
+        {
+          return;
+        }
+
+        this.removeOrder([orderNo]);
+      });
+    },
+
+    removeOrder: function(orders)
+    {
+      var view = this;
+
+      viewport.msg.saving();
+
+      var req = view.ajax({
+        method: 'POST',
+        url: '/compRel/entries/' + view.model.id + ';release-order',
+        data: JSON.stringify({
+          orders: orders,
+          remove: true
+        })
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.savingFailed();
+      });
+
+      req.done(function()
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
     }
 
   });

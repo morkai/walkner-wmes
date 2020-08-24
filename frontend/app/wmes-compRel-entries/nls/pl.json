@@ -103,5 +103,9 @@
   "orders:title": "Dopuszczanie zleceń",
   "orders:orders": "Zlecenia",
   "orders:comment": "Komentarz",
-  "orders:submit": "Dopuść zlecenia"
+  "orders:submit": "Dopuść zlecenia",
+  "orders:remove:title": "Usuwanie dopuszczonego zlecenia",
+  "orders:remove:message": "Czy na pewno chcesz usunąć dopuszczenie zlecenia {orderNo}?",
+  "orders:remove:yes": "Usuń zlecenie",
+  "orders:remove:no": "Anuluj"
 }
