@@ -116,5 +116,11 @@
   "addUser:title": "Dodawanie użytkowników do funkcji opiniującej",
   "addUser:func": "Funkcja opiniująca",
   "addUser:users": "Nowi użytkownicy",
-  "addUser:submit": "Dodaj użytkowników"
+  "addUser:submit": "Dodaj użytkowników",
+
+  "addFunc:tooltip": "Dodaj funkcję opiniującą",
+  "addFunc:title": "Dodawanie funkcji opiniującej",
+  "addFunc:func": "Funkcja opiniująca",
+  "addFunc:users": "Użytkownicy",
+  "addFunc:submit": "Dodaj funkcję"
 }

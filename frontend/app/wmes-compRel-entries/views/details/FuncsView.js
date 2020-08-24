@@ -7,6 +7,7 @@ define([
   'app/wmes-compRel-entries/Entry',
   './AcceptView',
   './AddUserView',
+  './AddFuncView',
   'app/wmes-compRel-entries/templates/details/funcs'
 ], function(
   $,
@@ -15,6 +16,7 @@ define([
   Entry,
   AcceptView,
   AddUserView,
+  AddFuncView,
   template
 ) {
   'use strict';
@@ -27,12 +29,17 @@ define([
 
       'click .compRel-details-accept': function(e)
       {
-        this.showAcceptDialog(this.$(e.target).closest('.compRel-details-func')[0].dataset.id);
+        this.showAcceptDialog(this.resolveFuncId(e));
       },
 
       'click [data-action="addUser"]': function(e)
       {
-        this.showAddUserDialog(this.$(e.target).closest('.compRel-details-func')[0].dataset.id);
+        this.showAddUserDialog(this.resolveFuncId(e));
+      },
+
+      'click [data-action="addFunc"]': function()
+      {
+        this.showAddFuncDialog();
       }
 
     },
@@ -55,7 +62,7 @@ define([
     getTemplateData: function()
     {
       return {
-        addUser: Entry.can.addUser(this.model),
+        canAddUser: Entry.can.addUser(this.model),
         funcs: this.model.serializeFuncs()
       };
     },
@@ -89,12 +96,26 @@ define([
       viewport.showDialog(dialogView, this.t('addUser:title'));
     },
 
+    showAddFuncDialog: function()
+    {
+      var dialogView = new AddFuncView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('addFunc:title'));
+    },
+
     toggleOverflowX: function()
     {
       this.$('.compRel-details-funcs').css(
         'overflow-x',
         (this.$el.outerWidth() + 50) < window.innerWidth ? 'visible' : ''
       );
+    },
+
+    resolveFuncId: function(e)
+    {
+      return this.$(e.target).closest('.compRel-details-func')[0].dataset.id;
     },
 
     onWindowResize: function()
