@@ -221,6 +221,9 @@ code.multiline {
   margin-left: auto;
   font-weight: normal;
 }
+.panel-heading-actions > .btn {
+  margin-left: 7px;
+}
 .panel-actions > p {
   padding: 10px 10px 0 0;
   line-height: 1;

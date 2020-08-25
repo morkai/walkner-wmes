@@ -2,6 +2,7 @@
   <div class="panel-heading">
     <div class="panel-heading-title"><%- t('PANEL:TITLE:funcs') %></div>
     <div class="panel-heading-actions">
+      <button data-action="notify" class="btn btn-default" type="button" title="<%- t('notify:tooltip') %>"><i class="fa fa-bell"></i></button>
       <% if (canAddUser) { %>
       <button data-action="addFunc" class="btn btn-default" type="button" title="<%- t('addFunc:tooltip') %>"><i class="fa fa-plus"></i></button>
       <% } %>

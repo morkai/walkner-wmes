@@ -122,5 +122,11 @@
   "addFunc:title": "Dodawanie funkcji opiniującej",
   "addFunc:func": "Funkcja opiniująca",
   "addFunc:users": "Użytkownicy",
-  "addFunc:submit": "Dodaj funkcję"
+  "addFunc:submit": "Dodaj funkcję",
+
+  "notify:tooltip": "Wyślij powiadomienia",
+  "notify:title": "Wysyłanie powiadomień",
+  "notify:message": "Czy chcesz wysłać prośbę o opinię do wszystkich uczestników wniosku?",
+  "notify:yes": "Wyślij powiadomienia",
+  "notify:no": "Anuluj"
 }

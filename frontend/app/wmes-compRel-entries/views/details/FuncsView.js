@@ -4,20 +4,24 @@ define([
   'jquery',
   'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/wmes-compRel-entries/Entry',
   './AcceptView',
   './AddUserView',
   './AddFuncView',
-  'app/wmes-compRel-entries/templates/details/funcs'
+  'app/wmes-compRel-entries/templates/details/funcs',
+  'app/wmes-compRel-entries/templates/details/notify'
 ], function(
   $,
   viewport,
   View,
+  DialogView,
   Entry,
   AcceptView,
   AddUserView,
   AddFuncView,
-  template
+  template,
+  notifyTemplate
 ) {
   'use strict';
 
@@ -40,6 +44,11 @@ define([
       'click [data-action="addFunc"]': function()
       {
         this.showAddFuncDialog();
+      },
+
+      'click [data-action="notify"]': function()
+      {
+        this.showNotifyDialog();
       }
 
     },
@@ -103,6 +112,48 @@ define([
       });
 
       viewport.showDialog(dialogView, this.t('addFunc:title'));
+    },
+
+    showNotifyDialog: function()
+    {
+      var dialogView = new DialogView({
+        template: notifyTemplate,
+        nlsDomain: this.model.getNlsDomain()
+      });
+
+      viewport.showDialog(dialogView, this.t('notify:title'));
+
+      this.listenTo(dialogView, 'answered', function(answer)
+      {
+        if (answer === 'yes')
+        {
+          this.notify();
+        }
+      });
+    },
+
+    notify: function()
+    {
+      var view = this;
+
+      viewport.msg.saving();
+
+      var req = view.ajax({
+        method: 'POST',
+        url: '/compRel/entries/' + view.model.id + ';notify',
+        data: JSON.stringify({})
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.savingFailed();
+      });
+
+      req.done(function()
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
     },
 
     toggleOverflowX: function()
