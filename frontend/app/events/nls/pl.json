@@ -538,5 +538,13 @@
   "TYPE:dummyPaint.families.edited": "Dummy paint > Rodziny: edycja",
   "TEXT:dummyPaint.families.edited": "Zmodyfikowano rodzinę: <a href='\\#dummyPaint/families/{model->_id}'>{model->_id}</a>",
   "TYPE:dummyPaint.families.deleted": "Dummy paint > Rodziny: usunięcie",
-  "TEXT:dummyPaint.families.deleted": "Usunięto rodzinę: <em>{model->_id}</em>"
+  "TEXT:dummyPaint.families.deleted": "Usunięto rodzinę: <em>{model->_id}</em>",
+  "TYPE:compRel.entries.deleted": "Dopuszczenia > Wnioski: usunięcie",
+  "TEXT:compRel.entries.deleted": "Usunięto wniosek: <em>{model->rid}</em>",
+  "TYPE:compRel.funcs.added": "Dopuszczenia > Funkcje: dodanie",
+  "TEXT:compRel.funcs.added": "Dodano funkcję opiniującą: <a href='\\#compRel/funcs/{model->_id}'>{model->_id}</a>",
+  "TYPE:compRel.funcs.edited": "Dopuszczenia > Funkcje: edycja",
+  "TEXT:compRel.funcs.edited": "Zmodyfikowano funkcję opiniującą: <a href='\\#compRel/funcs/{model->_id}'>{model->_id}</a>",
+  "TYPE:compRel.funcs.deleted": "Dopuszczenia > Funkcje: usunięcie",
+  "TEXT:compRel.funcs.deleted": "Usunięto funkcję opiniującą: <em>{model->_id}</em>"
 }

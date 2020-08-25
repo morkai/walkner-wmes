@@ -16,8 +16,6 @@
   "PANEL:TITLE:orders": "Dopuszczone zlecenia",
   "PANEL:TITLE:changes": "Historia zmian",
 
-  "LIST:COLUMN:name": "Nazwa wyrobu/komponentu",
-
   "FORM:ERROR:noFuncs": "Wybierz przynajmniej jedną funkcję opiniującą.",
 
   "PROPERTY:rid": "ID",
@@ -66,9 +64,6 @@
   "history:added": "<i>Utworzono wniosek o {time} {day, select, =7{w niedzielę} =6{w sobotę} =3{w środę} =2{we wtorek} other{w {ddd}}}, {date}.</i>",
 
   "settings:tab:general": "Ogólne",
-  "settings:general:pendingFunctions": "Funkcje wymagające zatwierdzenia",
-  "settings:general:pendingFunctions:help": "Zgłoszenia dodane przez użytkownika bez przypisanej funkcji lub z przypisaną jedną z poniższych funkcji zostaną dodane ze statusem <em>Oczekujące</em> i będą musiały być zatwierdzone przez lidera.",
-  "settings:general:categoryFunctions": "Funkcje zmiany kategorii",
 
   "upload:drop": "Upuść tutaj pliki jakie chcesz dodać do tego wniosku.",
   "upload:tooMany": "Możesz załączyć maksymalnie {max} {max, plural, few{pliki} one{plik} other{plików}}.",
