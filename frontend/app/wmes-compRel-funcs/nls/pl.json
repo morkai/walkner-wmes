@@ -1,0 +1,12 @@
+{
+  "BREADCRUMB:base": "Dopuszczenia",
+  "BREADCRUMB:browse": "Funkcje",
+
+  "PROPERTY:name": "Funkcja",
+  "PROPERTY:mor": "Matryca odpowiedzialności",
+  "PROPERTY:users": "Użytkowicy",
+
+  "mor:none": "Ignoruj",
+  "mor:mrp": "Ogranicz do MRP",
+  "mor:all": "Wszyscy"
+}

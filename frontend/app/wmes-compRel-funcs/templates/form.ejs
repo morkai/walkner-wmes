@@ -1,0 +1,41 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <% if (editMode) { %>
+      <%- helpers.formGroup({
+        name: '_id',
+        label: 'PROPERTY:name',
+        type: 'static',
+        value: model.name
+      }) %>
+      <% } else { %>
+      <%- helpers.formGroup({
+        name: '_id',
+        label: 'PROPERTY:name',
+        type: 'select2',
+        required: true
+      }) %>
+      <% } %>
+      <div class="form-group">
+        <label class="control-label is-required"><%- t('PROPERTY:mor') %></label>
+        <% ['none', 'mrp', 'all'].forEach(function(type) { %>
+          <br>
+          <label class="radio-inline">
+            <input type="radio" name="mor" value="<%- type %>" required>
+            <%- t('mor:' + type) %>
+          </label>
+        <% }) %>
+      </div>
+      <%- helpers.formGroup({
+        name: 'users',
+        label: 'PROPERTY:',
+        type: 'select2'
+      }) %>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

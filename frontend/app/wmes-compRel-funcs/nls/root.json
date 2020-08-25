@@ -1,0 +1,15 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Component releases",
+    "BREADCRUMB:browse": "Functions",
+
+    "PROPERTY:name": "Function",
+    "PROPERTY:mor": "Matrix of Responsibility",
+    "PROPERTY:users": "Users",
+
+    "mor:none": "None",
+    "mor:mrp": "MRP",
+    "mor:all": "All"
+  },
+  "pl": true
+}

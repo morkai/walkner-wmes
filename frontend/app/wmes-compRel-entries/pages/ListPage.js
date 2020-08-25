@@ -26,12 +26,20 @@ define([
         pageActions.jump(page, page.collection),
         pageActions.add(page.collection),
         {
+          label: page.t('PAGE_ACTION:funcs'),
+          icon: 'users',
+          privileges: 'COMP_REL:MANAGE',
+          href: '#compRel/funcs'
+        }
+        /*
+        {
           label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'COMP_REL:MANAGE',
           href: '#compRel/settings',
           disabled: true
         }
+        */
       ];
     }
 

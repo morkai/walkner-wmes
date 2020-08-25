@@ -4,6 +4,7 @@
   "BREADCRUMB:settings": "Ustawienia",
   "BREADCRUMB:history": "Historia zmian",
 
+  "PAGE_ACTION:funcs": "Funkcje opiniujące",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do wniosku po ID",
   "PAGE_ACTION:jump:placeholder": "ID wniosku",
