@@ -557,7 +557,7 @@ define([
 
       add: function()
       {
-        return user.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:ADD', 'FN:production-planner');
+        return user.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:ADD', 'FN:logistic-buyer');
       },
 
       manage: function()
@@ -623,7 +623,7 @@ define([
 
       addUser: function(model)
       {
-        return user.isAllowedTo('FN:production-planner') || (this.can || this).accept(model);
+        return user.isAllowedTo('FN:logistic-buyer') || (this.can || this).accept(model);
       },
 
       releaseOrder: function(model)
