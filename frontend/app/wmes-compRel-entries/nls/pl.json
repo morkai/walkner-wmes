@@ -29,7 +29,7 @@
   "PROPERTY:mrps": "MRP",
   "PROPERTY:oldComponent": "Materiał podstawowy",
   "PROPERTY:newComponent": "Materiał zastępczy",
-  "PROPERTY:oldCode": "1NC podstawowe",
+  "PROPERTY:oldCode": "12NC podstawowe",
   "PROPERTY:oldName": "Nazwa podstawowa",
   "PROPERTY:newCode": "12NC zastępcze",
   "PROPERTY:newName": "Nazwa zastępcza",

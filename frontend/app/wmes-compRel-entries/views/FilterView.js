@@ -79,8 +79,16 @@ define([
       },
       'users': function(propertyName, term, formData)
       {
-        formData.userType = term.args[1] === currentUser.data._id ? 'mine' : 'others';
-        formData.user = term.args[1];
+        if (term.args[1] === 'mine')
+        {
+          formData.userType = 'mine';
+          formData.user = currentUser.data._id;
+        }
+        else
+        {
+          formData.userType = term.args[1] === currentUser.data._id ? 'mine' : 'others';
+          formData.user = term.args[1];
+        }
       },
       'status': function(propertyName, term, formData)
       {
