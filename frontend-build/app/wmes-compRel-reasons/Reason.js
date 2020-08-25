@@ -1,0 +1,1 @@
+define(["app/i18n","app/core/Model"],function(e,o){"use strict";return o.extend({urlRoot:"/compRel/reasons",clientUrlRoot:"#compRel/reasons",topicPrefix:"compRel.reasons",privilegePrefix:"COMP_REL",nlsDomain:"wmes-compRel-reasons",labelAttribute:"name",defaults:{active:!0},serialize:function(){var o=this.toJSON();return o.active=e("core","BOOL:"+o.active),o}})});

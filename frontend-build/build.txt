@@ -2111,6 +2111,8 @@ app/nls/wmes-compRel-entries.js
 app/nls/pl/wmes-compRel-entries.js
 i18n!app/nls/wmes-compRel-entries
 app/wmes-compRel-entries/routes.js
+app/wmes-compRel-funcs/routes.js
+app/wmes-compRel-reasons/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
@@ -2619,6 +2621,8 @@ app/nls/wmes-compRel-entries.js
 app/nls/pl/wmes-compRel-entries.js
 i18n!app/nls/wmes-compRel-entries
 app/wmes-compRel-entries/routes.js
+app/wmes-compRel-funcs/routes.js
+app/wmes-compRel-reasons/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
