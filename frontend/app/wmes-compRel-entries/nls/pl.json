@@ -5,6 +5,7 @@
   "BREADCRUMB:history": "Historia zmian",
 
   "PAGE_ACTION:funcs": "Funkcje opiniujące",
+  "PAGE_ACTION:reasons": "Powody",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do wniosku po ID",
   "PAGE_ACTION:jump:placeholder": "ID wniosku",
@@ -32,6 +33,7 @@
   "PROPERTY:oldName": "Nazwa podstawowa",
   "PROPERTY:newCode": "12NC zastępcze",
   "PROPERTY:newName": "Nazwa zastępcza",
+  "PROPERTY:reason": "Powód",
   "PROPERTY:funcs": "Funkcje opiniujące",
   "PROPERTY:funcs.status": "Status",
   "PROPERTY:funcs.acceptedBy": "Opiniujący",
@@ -75,6 +77,10 @@
   "chat:send": "Wyślij wiadomość",
   "chat:send:auth": "Zaloguj się, aby wysłać wiadomość",
   "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
+  "chat:reason": "<i>Zmieniono powód na: {newReason}</i>",
+  "chat:opinion:pending": "<i>Zresetowano funkcję: {func}</i>",
+  "chat:opinion:accepted": "<i>Zaakceptowano funkcję: {func}</i>",
+  "chat:opinion:rejected": "<i>Odrzucono funkcję: {func}</i>",
 
   "autolink:attachment": "Załącznik",
   "autolink:product": "12NC",
@@ -124,5 +130,8 @@
   "notify:title": "Wysyłanie powiadomień",
   "notify:message": "Czy chcesz wysłać prośbę o opinię do wszystkich uczestników wniosku?",
   "notify:yes": "Wyślij powiadomienia",
-  "notify:no": "Anuluj"
+  "notify:no": "Anuluj",
+
+  "changeReason:action": "Zmień powód",
+  "changeReason:header": "Nowy powód"
 }

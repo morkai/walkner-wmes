@@ -103,6 +103,7 @@ define([
       FormView.prototype.afterRender.apply(view, arguments);
 
       view.setUpMrpSelect2();
+      view.setUpReasonSelect2();
 
       (view.model.get('funcs') || []).forEach(function(func)
       {
@@ -150,6 +151,18 @@ define([
         view: this,
         own: false,
         width: '100%'
+      });
+    },
+
+    setUpReasonSelect2: function()
+    {
+      var current = this.model.get('reason');
+
+      this.$id('reason').select2({
+        width: '100%',
+        data: dictionaries.reasons
+          .filter(function(r) { return r.id === current || r.get('active'); })
+          .map(idAndLabel)
       });
     },
 

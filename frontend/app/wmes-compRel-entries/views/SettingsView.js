@@ -2,14 +2,10 @@
 
 define([
   'underscore',
-  'app/data/prodFunctions',
-  'app/core/util/idAndLabel',
   'app/settings/views/SettingsView',
   'app/wmes-compRel-entries/templates/settings'
 ], function(
   _,
-  prodFunctions,
-  idAndLabel,
   SettingsView,
   template
 ) {
@@ -31,33 +27,16 @@ define([
     afterRender: function()
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
-
-      this.setUpPendingFunctions();
     },
 
     setUpPendingFunctions: function()
     {
-      this.$id('pendingFunctions').select2({
-        width: '100%',
-        allowClear: true,
-        multiple: true,
-        data: prodFunctions.map(idAndLabel)
-      });
 
-      this.$id('categoryFunctions').select2({
-        width: '100%',
-        allowClear: true,
-        multiple: true,
-        data: prodFunctions.map(idAndLabel)
-      });
-
-      this.updateSettingField(this.settings.get('compRel.pendingFunctions'));
-      this.updateSettingField(this.settings.get('compRel.categoryFunctions'));
     },
 
-    shouldAutoUpdateSettingField: function(setting)
+    shouldAutoUpdateSettingField: function(setting) // eslint-disable-line no-unused-vars
     {
-      return !/Functions$/i.test(setting.id);
+      return true;
     },
 
     updateSettingField: function(setting)
@@ -65,21 +44,6 @@ define([
       if (!setting)
       {
         return;
-      }
-
-      if (/Functions$/i.test(setting.id))
-      {
-        var data = setting.getValue().map(function(f)
-        {
-          var prodFunction = prodFunctions.get(f);
-
-          return {
-            id: f,
-            text: prodFunction ? prodFunction.getLabel() : f
-          };
-        });
-
-        this.$id(setting.id.split('.')[1]).select2('data', data);
       }
     }
 

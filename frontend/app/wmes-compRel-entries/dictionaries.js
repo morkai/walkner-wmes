@@ -6,20 +6,23 @@ define([
   '../pubsub',
   '../user',
   './SettingCollection',
-  'app/wmes-compRel-funcs/FuncCollection'
+  'app/wmes-compRel-funcs/FuncCollection',
+  'app/wmes-compRel-reasons/ReasonCollection'
 ], function(
   $,
   broker,
   pubsub,
   user,
   SettingCollection,
-  FuncCollection
+  FuncCollection,
+  ReasonCollection
 ) {
   'use strict';
 
   var TOPIC_PREFIX = 'compRel.';
   var PROP_TO_DICT = {
-    funcs: 'funcs'
+    funcs: 'funcs',
+    reason: 'reasons'
   };
 
   var req = null;
@@ -29,6 +32,7 @@ define([
     statuses: ['pending', 'accepted', 'rejected'],
     settings: new SettingCollection(),
     funcs: new FuncCollection(),
+    reasons: new ReasonCollection(),
     loaded: false,
     load: function()
     {

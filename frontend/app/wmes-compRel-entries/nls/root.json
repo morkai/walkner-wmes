@@ -6,6 +6,7 @@
     "BREADCRUMB:history": "Changelog",
 
     "PAGE_ACTION:funcs": "Opinion functions",
+    "PAGE_ACTION:reasons": "Reasons",
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:jump:title": "Jump to entry by ID",
     "PAGE_ACTION:jump:placeholder": "Entry ID",
@@ -33,6 +34,7 @@
     "PROPERTY:oldName": "Base name",
     "PROPERTY:newCode": "Substitute 12NC",
     "PROPERTY:newName": "Substitute name",
+    "PROPERTY:reason": "Reason",
     "PROPERTY:funcs": "Opinion functions",
     "PROPERTY:funcs.status": "Status",
     "PROPERTY:funcs.acceptedBy": "Opinioner",
@@ -76,6 +78,10 @@
     "chat:send": "Send message",
     "chat:send:auth": "Log in to send a message",
     "chat:new": "Click here to see new messages...",
+    "chat:reason": "<i>Changed the reason to: {newReason}</i>",
+    "chat:opinion:pending": "<i>Reset as: {func}</i>",
+    "chat:opinion:accepted": "<i>Accepted as: {func}</i>",
+    "chat:opinion:rejected": "<i>Rejected as: {func}</i>",
 
     "autolink:attachment": "Attachment",
     "autolink:product": "12NC",

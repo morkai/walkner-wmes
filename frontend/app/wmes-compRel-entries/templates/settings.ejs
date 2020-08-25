@@ -1,18 +1,10 @@
 <form class="settings compRel-settings" autocomplete="off">
   <div class="list-group">
-    <a class="list-group-item" href="#compRel/settings?tab=general" data-tab="general"><%- helpers.t('settings:tab:general') %></a>
+    <a class="list-group-item" href="#compRel/settings?tab=general" data-tab="general"><%- t('settings:tab:general') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="general">
-      <div class="form-group">
-        <label for="<%- idPrefix %>-pendingFunctions"><%- helpers.t('settings:general:pendingFunctions') %></label>
-        <p class="help-block"><%- helpers.t('settings:general:pendingFunctions:help') %></p>
-        <input id="<%- idPrefix %>-pendingFunctions" name="compRel.pendingFunctions" type="text" autocomplete="off" data-setting>
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-categoryFunctions"><%- helpers.t('settings:general:categoryFunctions') %></label>
-        <input id="<%- idPrefix %>-categoryFunctions" name="compRel.categoryFunctions" type="text" autocomplete="off" data-setting>
-      </div>
+
     </div>
   </div>
 </form>

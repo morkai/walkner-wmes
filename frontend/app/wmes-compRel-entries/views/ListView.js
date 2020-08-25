@@ -49,6 +49,7 @@ define([
         {id: 'oldName', className: 'is-min'},
         {id: 'newCode', className: 'is-min', thClassName: 'is-filter'},
         {id: 'newName', className: 'is-min'},
+        {id: 'reason', className: 'is-min'},
         '-'
       ];
     },

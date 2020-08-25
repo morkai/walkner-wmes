@@ -1,0 +1,22 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'name',
+        label: 'PROPERTY:',
+        required: true
+      }) %>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

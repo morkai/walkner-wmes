@@ -30,6 +30,12 @@ define([
           icon: 'users',
           privileges: 'COMP_REL:MANAGE',
           href: '#compRel/funcs'
+        },
+        {
+          label: page.t('PAGE_ACTION:reasons'),
+          icon: 'question',
+          privileges: 'COMP_REL:MANAGE',
+          href: '#compRel/reasons'
         }
         /*
         {

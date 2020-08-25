@@ -2,16 +2,16 @@
 
 define([
   '../core/Collection',
-  './Func'
+  './Reason'
 ], function(
   Collection,
-  Func
+  Reason
 ) {
   'use strict';
 
   return Collection.extend({
 
-    model: Func,
+    model: Reason,
 
     getLabel: function(id)
     {

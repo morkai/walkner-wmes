@@ -131,7 +131,8 @@ define([
   './wmes-dummyPaint-paints/routes',
   './wmes-dummyPaint-families/routes',
   './wmes-compRel-entries/routes',
-  './wmes-compRel-funcs/routes'
+  './wmes-compRel-funcs/routes',
+  './wmes-compRel-reasons/routes'
 ], function()
 {
   'use strict';

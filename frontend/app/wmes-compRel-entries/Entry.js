@@ -89,6 +89,7 @@ define([
       obj.creator = userInfoTemplate({userInfo: obj.creator, noIp: true});
       obj.updater = userInfoTemplate({userInfo: obj.updater, noIp: true});
       obj.status = t(this.nlsDomain, 'status:' + obj.status);
+      obj.reason = dictionaries.reasons.getLabel(obj.reason);
 
       return obj;
     },
@@ -212,9 +213,21 @@ define([
         var hasAttachmentsAdded = !!change.data.attachments
           && !change.data.attachments[0]
           && !!change.data.attachments[1];
+        var reasonChanged = !!change.data.reason;
+        var funcs = change.data.funcs;
+        var opinionChanged = !!funcs && Object.keys(funcs[0]).some(function(f)
+        {
+          return funcs[0][f]
+            && funcs[1][f]
+            && funcs[0][f].status
+            && funcs[1][f].status
+            && funcs[0][f].status !== funcs[1][f].status;
+        });
 
         if (hasComment
-          || hasAttachmentsAdded)
+          || hasAttachmentsAdded
+          || reasonChanged
+          || opinionChanged)
         {
           entry.serializeChatMessage(change, chat, availableAttachments);
         }
@@ -262,6 +275,42 @@ define([
               + '<i class="fa ' + attachment.icon + '"></i><a>'
               + _.escape(attachment.label)
               + '</a></span>'
+          });
+        });
+      }
+
+      var reason = change.data.reason;
+
+      if (reason)
+      {
+        lines.push({
+          time: longTime,
+          text: t(entry.nlsDomain, 'chat:reason', {
+            oldReason: dictionaries.reasons.getLabel(reason[0]),
+            newReason: dictionaries.reasons.getLabel(reason[1])
+          })
+        });
+      }
+
+      var funcs = change.data.funcs;
+
+      if (funcs)
+      {
+        Object.keys(funcs[0]).forEach(function(f)
+        {
+          var oldFunc = funcs[0][f];
+          var newFunc = funcs[1][f];
+
+          if (!oldFunc || !newFunc || !oldFunc.status || !newFunc.status || oldFunc.status === newFunc.status)
+          {
+            return;
+          }
+
+          lines.push({
+            time: longTime,
+            text: t(entry.nlsDomain, 'chat:opinion:' + newFunc.status, {
+              func: dictionaries.funcs.getLabel(newFunc._id)
+            })
           });
         });
       }
@@ -471,8 +520,8 @@ define([
             return;
           }
 
-          Object.assign(oldFunc, newFunc);
-          newFuncs.push(oldFunc);
+          newFunc = Object.assign({}, oldFunc, newFunc);
+          newFuncs.push(newFunc);
         });
 
         Object.values(oldFuncs).forEach(function(func) { newFuncs.push(func); });
@@ -635,6 +684,11 @@ define([
       uploadAttachments: function()
       {
         return true;
+      },
+
+      changeReason: function()
+      {
+        return (this.can || this).manage() || user.isAllowedTo('FN:logistic-buyer');
       }
 
     }

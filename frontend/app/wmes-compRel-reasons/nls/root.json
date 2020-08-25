@@ -1,0 +1,10 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Component releases",
+    "BREADCRUMB:browse": "Reasons",
+
+    "PROPERTY:name": "Name",
+    "PROPERTY:active": "Active?"
+  },
+  "pl": true
+}

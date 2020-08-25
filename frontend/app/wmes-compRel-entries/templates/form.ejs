@@ -39,6 +39,12 @@
           groupClassName: 'col-md-9'
         }) %>
       </div>
+      <%- helpers.formGroup({
+        name: 'reason',
+        label: 'PROPERTY:',
+        type: 'select2',
+        required: true
+      }) %>
       <div class="form-group">
         <label for="<%- id('availableFuncs') %>" class="control-label is-required"><%- t('PROPERTY:funcs') %></label>
         <div class="row">
