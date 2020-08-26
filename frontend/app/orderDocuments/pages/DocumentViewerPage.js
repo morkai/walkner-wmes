@@ -88,7 +88,7 @@ define([
       var joinProdLine = _.debounce(page.joinProdLine.bind(page), 1);
 
       page.listenTo(page.model, 'change:prodLine change:station', joinProdLine);
-      page.listenTo(page.model, 'change:prodLkine', page.onProdLineChanged);
+      page.listenTo(page.model, 'change:prodLine', page.onProdLineChanged);
       page.listenTo(page.model, 'change:spigotCheck', page.defineSpigotBindings);
       page.listenTo(page.model, 'change:bom', page.onBomChanged);
       page.listenTo(page.model, 'save', function()
