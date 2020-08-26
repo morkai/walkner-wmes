@@ -110,7 +110,12 @@ define([
         delayReasons: this.delayReasons
       }));
 
-      this.listenTo(this.model, 'push:change', this.onChangePush);
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'push:change', this.onChangePush);
+        this.listenTo(this.model, 'change:changes', this.render);
+      });
+
 
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
     },
@@ -179,16 +184,6 @@ define([
       change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
 
       return change;
-    },
-
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'change:changes', this.render);
-    },
-
-    afterRender: function()
-    {
-      this.listenToOnce(this.model, 'change:changes', this.render);
     },
 
     renderChange: function(change, i)

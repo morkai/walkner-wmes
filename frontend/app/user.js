@@ -212,15 +212,17 @@ function(
       for (var ii = 0; ii < requiredMatches; ++ii)
       {
         var requiredPrivilege = allPrivileges[ii];
+        var type = typeof requiredPrivilege;
 
-        if (typeof requiredPrivilege !== 'string')
+        if (type === 'function')
+        {
+          actualMatches += requiredPrivilege() ? 1 : 0;
+        }
+        else if (type !== 'string')
         {
           requiredMatches -= 1;
-
-          continue;
         }
-
-        if (requiredPrivilege === 'USER')
+        else if (requiredPrivilege === 'USER')
         {
           actualMatches += isLoggedIn ? 1 : 0;
         }

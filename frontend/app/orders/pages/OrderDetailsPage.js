@@ -329,8 +329,9 @@ define([
     onOrderUpdated: function(message)
     {
       var order = this.model;
+      var change = message.change;
 
-      if (order.id !== message._id || !message.change)
+      if (order.id !== message._id || !change)
       {
         return;
       }
@@ -343,7 +344,7 @@ define([
         changes = order.attributes.changes = [];
       }
 
-      _.forEach(message.change.newValues, function(newValue, property)
+      _.forEach(change.newValues, function(newValue, property)
       {
         if (property === 'qtyMax')
         {
@@ -357,9 +358,18 @@ define([
         attrs[property] = newValue;
       });
 
-      changes.push(message.change);
+      if (change.source !== 'system')
+      {
+        changes.push(change);
+      }
+
       order.set(attrs);
-      order.trigger('push:change', message.change);
+
+      if (change.source !== 'system')
+      {
+        order.trigger('push:change', change);
+      }
+
       this.renderPanelToggles();
     },
 

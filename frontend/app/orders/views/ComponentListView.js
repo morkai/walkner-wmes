@@ -3,14 +3,18 @@
 define([
   'app/user',
   'app/viewport',
+  'app/time',
   'app/core/View',
   'app/core/util/decimalSeparator',
+  'app/core/templates/userInfo',
   'app/orders/templates/componentList'
 ], function(
   user,
   viewport,
+  time,
   View,
   decimalSeparator,
+  userInfoTemplate,
   template
 ) {
   'use strict';
@@ -107,32 +111,69 @@ define([
 
       this.once('afterRender', function()
       {
-        this.listenTo(this.model, 'change:bom', this.onChange);
+        this.listenTo(this.model, 'change:bom change:compRels', this.onChange);
       });
     },
 
     getTemplateData: function()
     {
       var bom = [];
+      var replacements = {};
+      var colored = false;
+
+      (this.model.get('compRels') || []).forEach(function(compRel)
+      {
+        if (!replacements[compRel.oldCode])
+        {
+          replacements[compRel.oldCode] = [];
+        }
+
+        replacements[compRel.oldCode].push(compRel);
+      });
 
       this.model.get('bom').forEach(function(component)
       {
-        if (component.get('nc12'))
+        if (!component.get('nc12'))
         {
-          component = component.toJSON();
-
-          var qty = component.qty.toString().split('.');
-
-          component.qty = [
-            qty[0].toString(),
-            qty[1] ? (decimalSeparator + qty[1]) : ''
-          ];
-
-          bom.push(component);
+          return;
         }
+
+        component = component.toJSON();
+
+        var qty = component.qty.toString().split('.');
+
+        component.qty = [
+          qty[0].toString(),
+          qty[1] ? (decimalSeparator + qty[1]) : ''
+        ];
+
+        bom.push(component);
+
+        var compRels = replacements[component.nc12];
+
+        if (!compRels)
+        {
+          return;
+        }
+
+        colored = true;
+        component.replaced = true;
+
+        compRels.forEach(function(compRel)
+        {
+          bom.push({
+            orderNo: component.orderNo,
+            mrp: component.mrp,
+            nc12: compRel.newCode,
+            name: compRel.newName,
+            releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
+            releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+          });
+        });
       });
 
       return {
+        colored: colored,
         empty: bom.length === 0,
         paint: !!this.options.paint,
         linkPfep: !!this.options.linkPfep && user.isAllowedTo('PFEP:VIEW'),

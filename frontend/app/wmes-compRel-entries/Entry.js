@@ -604,9 +604,14 @@ define([
 
     can: {
 
+      view: function()
+      {
+        return user.isAllowedTo('PROD_DATA:VIEW', 'COMP_REL:VIEW');
+      },
+
       add: function()
       {
-        return user.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:ADD', 'FN:logistic-buyer');
+        return user.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:MANAGE', 'COMP_REL:ADD', 'FN:logistic-buyer');
       },
 
       manage: function()

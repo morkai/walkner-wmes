@@ -5,7 +5,7 @@
     <%- t('BOM:NO_DATA') %>
   </div>
   <% } else { %>
-  <div class="list">
+  <div class="list <%- colored ? 'is-colored' : '' %>">
     <div class="table-responsive">
       <table class="table table-condensed table-hover table-bordered table-striped">
         <thead>
@@ -26,12 +26,16 @@
         </thead>
         <tbody>
           <% _.forEach(bom, function(component) { %>
-          <tr>
+          <tr class="<%- component.replaced ? 'danger' : component.releasedAt ? 'success' : '' %>">
             <% if (component.orderNo) { %>
             <td class="is-min is-number"><a href="#orders/<%- component.orderNo %>"><%- component.orderNo %></a>
             <td class="is-min"><%= component.mrp %>
             <% } %>
-            <td class="is-min is-number orders-bom-item"><%- component.item %>
+            <% if (component.releasedAt) { %>
+            <td class="is-min text-center"><i class="fa fa-exchange"></i>
+            <% } else { %>
+            <td class="is-min is-number orders-bom-item"><%- component.item || '' %>
+            <% } %>
             <td class="is-min is-number">
               <% if (component.nc12) { %>
               <% if (linkPfep) { %>
@@ -41,13 +45,17 @@
               <% } %>
               <% } %>
             <td class="is-min"><%= component.name  %>
-            <td class="is-min is-number" style="padding-right: 0; border-right: 0"><%- component.qty[0] %>
-            <td class="is-min is-number" style="text-align: left; padding-left: 0; border-left: 0; border-right: 0"><%- component.qty[1] %></td>
-            <td class="is-min" style="border-left: 0"><%- component.unit %>
+            <% if (component.releasedAt) { %>
+            <td colspan="7">Dopuszczony <%- component.releasedAt %> przez <%- component.releasedBy %></td>
+            <% } else { %>
+            <td class="is-min is-number" style="padding-right: 0; border-right: 0"><%- component.qty ? component.qty[0] : '' %>
+            <td class="is-min is-number" style="text-align: left; padding-left: 0; border-left: 0; border-right: 0"><%- component.qty ? component.qty[1] : '' %></td>
+            <td class="is-min" style="border-left: 0"><%- component.unit || '' %>
             <td class="is-min"><%= component.distStrategy || '' %>
             <td class="is-min"><%= component.unloadingPoint || '' %>
             <td class="is-min"><%= component.supplyArea || '' %>
             <td>
+            <% } %>
           </tr>
           <% }) %>
         </tbody>

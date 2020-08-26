@@ -7,6 +7,7 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
+  './Entry',
   'i18n!app/nls/wmes-compRel-entries'
 ], function(
   _,
@@ -14,16 +15,17 @@ define([
   router,
   viewport,
   user,
-  showDeleteFormPage
+  showDeleteFormPage,
+  Entry
 ) {
   'use strict';
 
   var model = 'app/wmes-compRel-entries/Entry';
   var css = ['css!app/wmes-compRel-entries/assets/main'];
   var nls = ['i18n!app/nls/wmes-compRel-entries'];
-  var canView = user.auth('PROD_DATA:VIEW', 'COMP_REL:VIEW');
-  var canAdd = user.auth('PROD_DATA:MANAGE', 'COMP_REL:MANAGE', 'COMP_REL:ADD');
-  var canManage = user.auth('PROD_DATA:MANAGE', 'COMP_REL:MANAGE');
+  var canView = user.auth(Entry.can.view.bind(Entry));
+  var canAdd = user.auth(Entry.can.add.bind(Entry));
+  var canManage = user.auth(Entry.can.manage.bind(Entry));
 
   router.map('/compRel/entries', canView, function(req)
   {
