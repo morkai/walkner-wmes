@@ -43,7 +43,8 @@ define([
 
     remoteTopics: {
       'orderDocuments.remoteChecked.*': 'onRemoteDocumentChecked',
-      'orderDocuments.eto.synced': 'onEtoSynced'
+      'orderDocuments.eto.synced': 'onEtoSynced',
+      'compRel.orders.updated.*': 'onCompRelOrderUpdated'
     },
 
     initialize: function()
@@ -629,6 +630,25 @@ define([
     onDocumentConfirmed: function(confirmation)
     {
       this.model.handleConfirmation(confirmation);
+    },
+
+    onCompRelOrderUpdated: function(message)
+    {
+      [this.model.get('localOrder'), this.model.get('remoteOrder')].forEach(function(order)
+      {
+        if (order.no === message.orderNo)
+        {
+          order.compRels = message.compRels;
+        }
+      });
+
+      var orderInfo = this.model.getCurrentOrderInfo();
+
+      if (orderInfo.orderNo === message.orderNo
+        && orderInfo.documentNc15 === 'BOM')
+      {
+        this.previewView.loadDocument();
+      }
     }
 
   });
