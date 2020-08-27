@@ -86,5 +86,7 @@
   "spigot:success": "Zeskanowano prawidłowy Spigot.",
 
   "notes:hd": "Uwagi do zlecenia",
-  "notes:ft": "Dotknij w dowolnym miejscu, aby ukryć ten komunikat."
+  "notes:ft": "Dotknij w dowolnym miejscu, aby ukryć ten komunikat.",
+
+  "compRels:hd": "Dopuszczenie"
 }

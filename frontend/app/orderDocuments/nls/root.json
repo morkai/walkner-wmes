@@ -87,7 +87,9 @@
     "spigot:success": "Scanned a valid Spigot.",
 
     "notes:hd": "Order notes",
-    "notes:ft": "Touch anywhere to close this message."
+    "notes:ft": "Touch anywhere to close this message.",
+
+    "compRels:hd": "Component release"
   },
   "pl": true
 }

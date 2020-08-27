@@ -41,7 +41,8 @@ define([
       documents: {},
       confirmations: {},
       nc15: null,
-      notes: []
+      notes: [],
+      compRels: []
     };
   }
 
@@ -338,19 +339,20 @@ define([
         documents: {},
         confirmations: {},
         nc15: null,
-        notes: orderData.notes || []
+        notes: orderData.notes || [],
+        compRels: orderData.compRels || []
       };
 
-      newOrder.documents.ORDER = t('orderDocuments', 'order');
+      newOrder.documents.ORDER = t(this.nlsDomain, 'order');
 
       if (orderData.hasBom)
       {
-        newOrder.documents.BOM = t('orderDocuments', 'bom');
+        newOrder.documents.BOM = t(this.nlsDomain, 'bom');
       }
 
       if (orderData.hasEto)
       {
-        newOrder.documents.ETO = t('orderDocuments', 'eto');
+        newOrder.documents.ETO = t(this.nlsDomain, 'eto');
       }
 
       delete orderData.documents.ETO;

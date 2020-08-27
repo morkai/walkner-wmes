@@ -15,7 +15,8 @@ define([
   './DocumentViewerSettingsView',
   'app/orderDocuments/templates/documentListItem',
   'app/orderDocuments/templates/controls',
-  'app/orderDocuments/templates/uiLock'
+  'app/orderDocuments/templates/uiLock',
+  'app/orderDocuments/templates/compRel'
 ], function(
   _,
   $,
@@ -31,7 +32,8 @@ define([
   DocumentViewerSettingsView,
   renderDocumentListItem,
   template,
-  uiLockTemplate
+  uiLockTemplate,
+  compRelTemplate
 ) {
   'use strict';
 
@@ -1180,7 +1182,8 @@ define([
         return;
       }
 
-      if (!Array.isArray(currentOrder.notes) || !currentOrder.notes.length)
+      if ((!Array.isArray(currentOrder.notes) || !currentOrder.notes.length)
+        && (!Array.isArray(currentOrder.compRels) || !currentOrder.compRels.length))
       {
         return;
       }
@@ -1204,9 +1207,10 @@ define([
       this.hideNotes();
 
       var $notes = this.$id('notes');
+      var notes = this.model.getCurrentOrder().notes;
       var html = '<ul>';
 
-      this.model.getCurrentOrder().notes.forEach(function(note)
+      notes.forEach(function(note)
       {
         html += '<li>► ' + _.escape(note.text);
       });
@@ -1215,19 +1219,80 @@ define([
 
       $notes.find('.orderDocuments-notes-bd').html(html);
 
-      $notes.removeClass('hidden');
-
       var $content = $notes.find('.orderDocuments-notes-content');
 
-      $content.css({
-        marginTop: ($content.outerHeight() / 2 * -1) + 'px',
-        marginLeft: ($content.outerWidth() / 2 * -1) + 'px'
-      });
+      $content.toggleClass('hidden', !notes.length);
+
+      $notes.removeClass('hidden');
+
+      if (notes.length)
+      {
+        $content.css({
+          left: '50%',
+          marginTop: ($content.outerHeight() / 2 * -1) + 'px',
+          marginLeft: ($content.outerWidth() / 2 * -1) + 'px'
+        });
+      }
+
+      this.showCompRels();
     },
 
     hideNotes: function()
     {
       this.$id('notes').addClass('hidden');
+      this.hideCompRels();
+    },
+
+    showCompRels: function()
+    {
+      var compRels = this.model.getCurrentOrder().compRels || [];
+
+      if (!compRels.length)
+      {
+        return;
+      }
+
+      var $top = this.$('.orderDocuments-compRels-top');
+      var $bot = this.$('.orderDocuments-compRels-bot');
+      var $container = $top;
+
+      for (var i = 0; i < compRels.length; ++i)
+      {
+        var compRel = compRels[i];
+        var $compRel = this.renderPartial(compRelTemplate, {
+          compRel: compRel
+        });
+
+        if ((compRels.length === 4 && i === 2)
+          || (compRels.length === 5 && i === 3)
+          || (compRels.length === 6 && i === 3)
+          || (compRels.length > 6 && i === 4))
+        {
+          $container = $bot;
+        }
+
+        $compRel.appendTo($container);
+
+        if (i === 7)
+        {
+          break;
+        }
+      }
+
+      if ($top[0].childElementCount)
+      {
+        $top.removeClass('hidden');
+      }
+
+      if ($bot[0].childElementCount)
+      {
+        $bot.removeClass('hidden');
+      }
+    },
+
+    hideCompRels: function()
+    {
+      this.$('.orderDocuments-compRels').addClass('hidden').html('');
     },
 
     confirmNotes: function()
