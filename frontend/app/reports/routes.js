@@ -49,7 +49,7 @@ define([
     loadReportPage(1, req);
   });
 
-  router.map('/reports/clip', auth(2), function(req)
+  router.map('/reports/clip', auth('CLIP'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.pageId === 'clipReport')
     {
@@ -102,6 +102,29 @@ define([
   router.map('/reports/9', auth(9), function(req)
   {
     loadReportPage(9, req);
+  });
+
+  router.map('/reports/rearm', auth('REARM'), function(req)
+  {
+    loadReportPage('Rearm', req);
+  });
+
+  router.map('/reports/rearm', auth('REARM'), function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/reports/RearmReport',
+        'app/reports/pages/RearmReportPage',
+        'css!app/reports/assets/rearm',
+        'i18n!app/nls/reports'
+      ],
+      function(Report, ReportPage)
+      {
+        return new ReportPage({
+          model: Report.fromQuery(req.query)
+        });
+      }
+    );
   });
 
   router.map('/reports;settings', user.auth('REPORTS:MANAGE'), function(req)

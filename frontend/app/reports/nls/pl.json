@@ -694,5 +694,24 @@
   "orgUnitPicker:submit": "Wybierz",
   "orgUnitPicker:reset": "Resetuj",
 
-  "remaining": "Pozostałe"
+  "remaining": "Pozostałe",
+
+  "rearm:breadcrumb": "Przezbrojenie",
+  "rearm:filter:mrps": "MRP",
+  "rearm:column:line": "Linia",
+  "rearm:column:orderNo": "Zlecenie",
+  "rearm:column:mrp": "MRP",
+  "rearm:column:date": "Data",
+  "rearm:column:shift": "Zmiana",
+  "rearm:column:startedAt": "Rozp.",
+  "rearm:column:finishedAt": "Zak.",
+  "rearm:column:firstAt": "Pierwszy",
+  "rearm:column:lastAt": "Ostatni",
+  "rearm:column:avgTaktTime": "Śr. TT",
+  "rearm:column:idle": "Bezczynność",
+  "rearm:column:downtime": "Przestoje",
+  "rearm:column:metric1": "P1",
+  "rearm:column:metric2": "P2",
+  "rearm:export:fileName": "WMES_Przezbrojenie",
+  "rearm:export:sheetName": "Przezbrojenie"
 }

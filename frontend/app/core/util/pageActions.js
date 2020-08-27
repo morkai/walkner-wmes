@@ -109,6 +109,7 @@ define([
 
     req.fail(function()
     {
+      viewport.msg.hide($msg, true);
       viewport.msg.show({
         type: 'error',
         time: 2500,
@@ -118,12 +119,8 @@ define([
 
     req.done(function(res)
     {
-      window.open('/express/exports/' + res);
-    });
-
-    req.always(function()
-    {
       viewport.msg.hide($msg);
+      window.open('/express/exports/' + res);
     });
 
     return req;

@@ -14,6 +14,7 @@ module.exports = {
   '7': require(`${MODULES}/reports/report7`),
   '8': require(`${MODULES}/reports/report8`),
   '9': require(`${MODULES}/reports/report9`),
+  'rearm': require(`${MODULES}/reports/rearm`),
   'qi/count': require(`${MODULES}/qi/countReport`),
   'qi/okRatio': require(`${MODULES}/qi/okRatioReport`),
   'qi/nokRatio': require(`${MODULES}/qi/nokRatioReport`),

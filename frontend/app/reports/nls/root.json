@@ -689,7 +689,26 @@
     "orgUnitPicker:submit": "Pick",
     "orgUnitPicker:reset": "Reset",
 
-    "remaining": "Remaining"
+    "remaining": "Remaining",
+
+    "rearm:breadcrumb": "Retooling",
+    "rearm:filter:mrps": "MRP",
+    "rearm:column:line": "Line",
+    "rearm:column:orderNo": "Order",
+    "rearm:column:mrp": "MRP",
+    "rearm:column:date": "Date",
+    "rearm:column:shift": "Shift",
+    "rearm:column:startedAt": "Start",
+    "rearm:column:finishedAt": "Finish",
+    "rearm:column:firstAt": "First",
+    "rearm:column:lastAt": "Last",
+    "rearm:column:avgTaktTime": "Avg. TT",
+    "rearm:column:idle": "Idle",
+    "rearm:column:downtime": "Downtime",
+    "rearm:column:metric1": "R1",
+    "rearm:column:metric2": "R2",
+    "rearm:export:fileName": "WMES_Retooling",
+    "rearm:export:sheetName": "Retooling"
   },
   "pl": true
 }

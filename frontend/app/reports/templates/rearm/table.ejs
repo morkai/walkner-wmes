@@ -1,0 +1,38 @@
+<table class="table table-bordered table-condensed table-hover table-striped reports-rearm-table">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('rearm:column:orderNo') %></th>
+    <th class="is-min"><%- t('rearm:column:mrp') %></th>
+    <th class="is-min"><%- t('rearm:column:shift') %></th>
+    <th class="is-min"><%- t('rearm:column:startedAt') %></th>
+    <th class="is-min"><%- t('rearm:column:finishedAt') %></th>
+    <th class="is-min"><%- t('rearm:column:firstAt') %></th>
+    <th class="is-min"><%- t('rearm:column:lastAt') %></th>
+    <th class="is-min"><%- t('rearm:column:avgTaktTime') %></th>
+    <th class="is-min"><%- t('rearm:column:metric1') %></th>
+    <th class="is-min"><%- t('rearm:column:metric2') %></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% orders.forEach(function(order, i) { %>
+  <tr class="<%- orders[i + 1] && order.shiftAt !== orders[i + 1].shiftAt ? 'is-eos' : '' %>">
+    <td class="is-min"><%- order.orderNo %></td>
+    <td class="is-min"><%= order.mrp %></td>
+    <td class="is-min"><%- t('core', 'SHIFT', {date: time.format(order.shiftAt, 'L'), shift: order.shiftNo}) %></td>
+    <td class="is-min"><%- order.startedAt ? time.format(order.startedAt, 'HH:mm:ss') : '' %></td>
+    <td class="is-min"><%- order.finishedAt ? time.format(order.finishedAt, 'HH:mm:ss') : '' %></td>
+    <td class="is-min"><%- time.format(order.firstAt, 'HH:mm:ss') %></td>
+    <td class="is-min"><%- time.format(order.lastAt, 'HH:mm:ss') %></td>
+    <td class="is-min"><%= order.avgTaktTime ? time.toString(order.avgTaktTime, true, false) : '' %></td>
+    <td class="is-min"><%= order.metric1 ? time.toString(order.metric1, true, false) : '' %></td>
+    <td class="is-min text-right">
+      <% if (order.metric2 !== null) { %>
+      <%- order.metric2 < 0 ? '-' : '+' %><%- time.toString(Math.abs(order.metric2), true, false) %>
+      <% } %>
+    </td>
+    <td></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>
