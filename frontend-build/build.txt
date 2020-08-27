@@ -682,6 +682,10 @@ app/reports/assets/main.css
 app/reports/assets/./report9.css
 app/reports/assets/main.css
 
+app/reports/assets/rearm.css
+----------------
+app/reports/assets/rearm.css
+
 app/reports/assets/report9.css
 ----------------
 app/reports/assets/report9.css
@@ -2795,6 +2799,7 @@ app/orderDocuments/views/DocumentViewerSettingsView.js
 app/orderDocuments/templates/documentListItem.js
 app/orderDocuments/templates/controls.js
 app/orderDocuments/templates/uiLock.js
+app/orderDocuments/templates/compRel.js
 app/orderDocuments/views/DocumentViewerControlsView.js
 app/orderDocuments/templates/preview.js
 app/orderDocuments/templates/documentWindow.js

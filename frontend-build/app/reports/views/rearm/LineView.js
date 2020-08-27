@@ -1,0 +1,1 @@
+define(["app/core/View","./TableView","app/reports/templates/rearm/line"],function(e,t,i){"use strict";return e.extend({template:i,initialize:function(){this.setView("#-table",new t({model:this.model,line:this.line}))},getTemplateData:function(){return{line:this.line.attributes}}})});
