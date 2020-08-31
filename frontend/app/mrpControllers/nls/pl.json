@@ -20,5 +20,8 @@
   "ownMrps:trigger": "moje",
   "ownMrps:empty": "Nie masz przypisanych żadnych MRP do swojego konta.",
   "ownMrps:info": "MRP możesz przypisać <a href='{link}'>edytując swoje konto</a> lub wybierając MRP z listy poniżej i wciskając przycisk:",
-  "ownMrps:save": "Przypisz wybrane MRP do mnie"
+  "ownMrps:save": "Przypisz wybrane MRP do mnie",
+
+  "select2:noMatches": "Brak pasujących MRP.",
+  "select2:noMatches:virtual": "Brak pasujących MRP. Wciśnij spację aby dodać: {mrp}"
 }

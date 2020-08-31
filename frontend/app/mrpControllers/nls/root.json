@@ -21,7 +21,10 @@
     "ownMrps:trigger": "mine",
     "ownMrps:empty": "You don't have any MRPs assigned to your account.",
     "ownMrps:info": "You can assign MRPs by <a href='{link}'>by editing your account</a> or selecting MRPs from the list below and clicking the button:",
-    "ownMrps:save": "Assign selected MRPs to me"
+    "ownMrps:save": "Assign selected MRPs to me",
+
+    "select2:noMatches": "No matching MRP.",
+    "select2:noMatches:virtual": "No matching MRP. Press space to add: {mrp}"
   },
   "pl": true
 }

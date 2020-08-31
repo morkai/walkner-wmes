@@ -6,6 +6,7 @@ define([
   'Sortable',
   'app/broker',
   'app/user',
+  'app/i18n',
   'app/data/orgUnits',
   './ownMrps'
 ], function(
@@ -14,6 +15,7 @@ define([
   Sortable,
   broker,
   user,
+  t,
   orgUnits,
   ownMrps
 ) {
@@ -100,6 +102,17 @@ define([
 
         return item.id.toUpperCase().indexOf(term) >= 0
           || item.text.toUpperCase().indexOf(term) >= 0;
+      },
+      formatNoMatches: function(term)
+      {
+        if (/^[A-Z0-9]{3,}$/i.test(term))
+        {
+          return t('mrpControllers', 'select2:noMatches:virtual', {
+            mrp: term.toUpperCase()
+          });
+        }
+
+        return t('mrpControllers', 'select2:noMatches');
       },
       formatSelection: function(item)
       {
