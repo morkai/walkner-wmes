@@ -1,0 +1,9 @@
+<tr data-id="<%= component._id %>">
+  <td style="width: 154px"><input class="form-control" name="oldComponents[<%- i %>]._id" value="<%= component._id %>" pattern="^[0-9]{12}$" placeholder="<%- t('PROPERTY:oldCode') %>"></td>
+  <td><input class="form-control" name="oldComponents[<%- i %>].name" value="<%= component.name %>" placeholder="<%- t('PROPERTY:oldName') %>"></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button" class="btn btn-default" data-action="removeComponent"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+</tr>

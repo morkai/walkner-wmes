@@ -234,8 +234,8 @@ define([
       }
       else
       {
-        orderInfo.orderNo = t('orderDocuments', 'controls:emptyOrderNo');
-        orderInfo.orderName = t('orderDocuments', 'controls:emptyOrderName');
+        orderInfo.orderNo = t(this.nlsDomain, 'controls:emptyOrderNo');
+        orderInfo.orderName = t(this.nlsDomain, 'controls:emptyOrderName');
       }
 
       if (localFile)
@@ -244,14 +244,14 @@ define([
         var localDocumentNc15 = (matches[1] || '').trim();
         var localDocumentName = (matches[2] || '').trim();
 
-        orderInfo.documentNc15 = localDocumentNc15 || t('orderDocuments', 'controls:localDocumentNc15');
-        orderInfo.documentName = localDocumentName || t('orderDocuments', 'controls:localDocumentName');
+        orderInfo.documentNc15 = localDocumentNc15 || t(this.nlsDomain, 'controls:localDocumentNc15');
+        orderInfo.documentName = localDocumentName || t(this.nlsDomain, 'controls:localDocumentName');
       }
       else
       {
         var documentName = currentOrder.documents[currentOrder.nc15];
 
-        if (currentOrder.nc15 === 'ORDER')
+        if (currentOrder.nc15 === 'ORDER' || currentOrder.nc15 === 'COMP_REL')
         {
           orderInfo.documentNc15 = documentName;
           orderInfo.documentName = '';
@@ -264,12 +264,12 @@ define([
         else if (currentOrder.nc15)
         {
           orderInfo.documentNc15 = currentOrder.nc15;
-          orderInfo.documentName = t('orderDocuments', 'controls:externalDocumentName');
+          orderInfo.documentName = t(this.nlsDomain, 'controls:externalDocumentName');
         }
         else
         {
-          orderInfo.documentNc15 = t('orderDocuments', 'controls:emptyDocumentNc15');
-          orderInfo.documentName = t('orderDocuments', 'controls:emptyDocumentName');
+          orderInfo.documentNc15 = t(this.nlsDomain, 'controls:emptyDocumentNc15');
+          orderInfo.documentName = t(this.nlsDomain, 'controls:emptyDocumentName');
         }
       }
 
@@ -350,12 +350,18 @@ define([
         newOrder.documents.BOM = t(this.nlsDomain, 'bom');
       }
 
+      if (orderData.compRels && orderData.compRels.length)
+      {
+        newOrder.documents.COMP_REL = t(this.nlsDomain, 'compRel');
+      }
+
       if (orderData.hasEto)
       {
         newOrder.documents.ETO = t(this.nlsDomain, 'eto');
       }
 
       delete orderData.documents.ETO;
+      delete orderData.documents.COMP_REL;
       delete orderData.documents.BOM;
       delete orderData.documents.ORDER;
 
@@ -441,7 +447,14 @@ define([
         nc15s.shift();
       }
 
-      newDocuments.ETO = t('orderDocuments', 'eto');
+      if (orderData.documents.COMP_REL)
+      {
+        newDocuments.COMP_REL = orderData.documents.COMP_REL;
+
+        nc15s.shift();
+      }
+
+      newDocuments.ETO = t(this.nlsDomain, 'eto');
 
       _.forEach(nc15s, function(nc15)
       {

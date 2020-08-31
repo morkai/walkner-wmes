@@ -98,6 +98,14 @@ define([
     {
       var obj = this.serialize();
 
+      obj.newComponent = obj.newCode + ': ' + _.escape(obj.newName);
+      obj.oldComponent = obj.oldComponents[0]._id + ': ' + _.escape(obj.oldComponents[0].name);
+
+      if (obj.oldComponents.length > 1)
+      {
+        obj.oldComponent += ' +' + (obj.oldComponents.length - 1);
+      }
+
       obj.mrps = obj.mrps.map(function(id)
       {
         var mrpController = mrpControllers.get(id);
@@ -112,6 +120,7 @@ define([
     serializeDetails: function()
     {
       var obj = this.serialize();
+      var oldComponents = obj.oldComponents;
       var mrps = obj.mrps;
 
       if (mrps.length === 1)
@@ -144,7 +153,22 @@ define([
         obj.mrps += '</ul>';
       }
 
-      obj.oldComponent = obj.oldCode + ': ' + _.escape(obj.oldName);
+      if (oldComponents.length === 1)
+      {
+        obj.oldComponent = oldComponents[0]._id + ': ' + _.escape(oldComponents[0].name);
+      }
+      else
+      {
+        obj.oldComponent = '<ul>';
+
+        oldComponents.forEach(function(c)
+        {
+          obj.oldComponent += '<li>' + c._id + ': ' + _.escape(c.name);
+        });
+
+        obj.oldComponent += '</ul>';
+      }
+
       obj.newComponent = obj.newCode + ': ' + _.escape(obj.newName);
 
       return obj;

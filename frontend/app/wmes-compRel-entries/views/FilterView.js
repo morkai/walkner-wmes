@@ -35,8 +35,8 @@ define([
     filterList: [
       'createdAt',
       'mrps',
-      'oldCode',
-      'newCode',
+      'oldComponent',
+      'newComponent',
       'orderNo',
       'limit'
     ],
@@ -66,7 +66,14 @@ define([
       {
         formData.order = term.args[1];
       },
-      'nc12': 'orderNo',
+      'oldComponents._id': function(propertyName, term, formData)
+      {
+        formData.oldComponent = term.args[1];
+      },
+      'newCode': function(propertyName, term, formData)
+      {
+        formData.newComponent = term.args[1];
+      },
       'creator.id': function(propertyName, term, formData)
       {
         formData.userType = 'creator';
@@ -113,8 +120,8 @@ define([
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var user = this.$id('user').val();
       var orderNo = this.$id('orderNo').val().trim();
-      var oldCode = this.$id('oldCode').val().trim();
-      var newCode = this.$id('newCode').val().trim();
+      var oldComponent = this.$id('oldComponent').val().trim();
+      var newComponent = this.$id('newComponent').val().trim();
       var mrps = this.$id('mrps').val();
 
       dateTimeRange.formToRql(this, selector);
@@ -156,14 +163,14 @@ define([
         selector.push({name: 'eq', args: ['orders._id', orderNo]});
       }
 
-      if (oldCode.length)
+      if (oldComponent.length)
       {
-        selector.push({name: 'eq', args: ['oldCode', oldCode]});
+        selector.push({name: 'eq', args: ['oldComponents._id', oldComponent]});
       }
 
-      if (newCode.length)
+      if (newComponent.length)
       {
-        selector.push({name: 'eq', args: ['newCode', newCode]});
+        selector.push({name: 'eq', args: ['newCode', newComponent]});
       }
     },
 

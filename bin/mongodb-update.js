@@ -3,4 +3,24 @@
 
 'use strict';
 
-db.prodserialnumbers.createIndex({mrp: 1, startedAt: -1});
+db.comprelentries.dropIndex({oldCode: 1});
+db.comprelentries.createIndex({'oldComponents._id': 1});
+
+db.comprelentries.find({oldCode: {$exists: true}}).forEach(entry =>
+{
+  entry.oldComponents = [{
+    _id: entry.oldCode,
+    name: entry.oldName
+  }];
+
+  entry.orders.forEach(o =>
+  {
+    o.validFrom = new Date('2000-01-01 00:00:00');
+    o.validTo = new Date('2100-01-01 00:00:00');
+  });
+
+  delete entry.oldCode;
+  delete entry.oldName;
+
+  db.comprelentries.replaceOne({_id: entry._id}, entry);
+});

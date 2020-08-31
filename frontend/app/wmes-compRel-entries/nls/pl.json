@@ -17,6 +17,7 @@
   "PANEL:TITLE:orders": "Dopuszczone zlecenia",
   "PANEL:TITLE:changes": "Historia zmian",
 
+  "FORM:components:add": "Dodaj komponent",
   "FORM:ERROR:noFuncs": "Wybierz przynajmniej jedną funkcję opiniującą.",
 
   "PROPERTY:rid": "ID",

@@ -127,7 +127,7 @@ define([
         var nlsDomain = options && options.nlsDomain;
         var nlsProp = 'autolink:' + type;
         var title = nlsDomain && t.has(nlsDomain, nlsProp) ? t(nlsDomain, nlsProp) : t('core', nlsProp);
-console.log({type, nlsDomain, nlsProp, title});
+
         return prefix
           + '<a class="autolink"'
           + ' title="' + title + '"'

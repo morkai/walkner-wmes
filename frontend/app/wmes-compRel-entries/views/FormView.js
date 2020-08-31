@@ -16,6 +16,7 @@ define([
   '../dictionaries',
   '../Entry',
   'app/wmes-compRel-entries/templates/form',
+  'app/wmes-compRel-entries/templates/formComponent',
   'app/wmes-compRel-entries/templates/formFunc'
 ], function(
   _,
@@ -33,6 +34,7 @@ define([
   dictionaries,
   Entry,
   formTemplate,
+  componentTemplate,
   funcTemplate
 ) {
   'use strict';
@@ -43,7 +45,8 @@ define([
 
     events: _.assign({
 
-      'input #-oldCode': 'resolveComponent',
+      'change #-oldComponents': 'checkOldComponentValidity',
+      'input input[name$="._id"]': 'resolveComponent',
       'input #-newCode': 'resolveComponent',
       'click #-addFunc': function()
       {
@@ -65,6 +68,24 @@ define([
       'click .compRel-form-removeFunc': function(e)
       {
         this.removeFunc(this.$(e.target).closest('.compRel-form-func')[0].dataset.id);
+      },
+      'click #-addComponent': function()
+      {
+        this.addComponent({
+          _id: '',
+          name: ''
+        });
+
+        this.$id('oldComponents').children().last().find('input').first().focus();
+        this.checkOldComponentValidity();
+      },
+      'click [data-action="removeComponent"]': function(e)
+      {
+        if (this.$id('oldComponents').children().length > 1)
+        {
+          this.$(e.target).closest('tr').remove();
+          this.checkOldComponentValidity();
+        }
       },
       'change #-mrps': function()
       {
@@ -88,12 +109,8 @@ define([
     {
       FormView.prototype.initialize.apply(this, arguments);
 
+      this.compI = 0;
       this.funcI = 0;
-    },
-
-    destroy: function()
-    {
-      FormView.prototype.destroy.apply(this, arguments);
     },
 
     afterRender: function()
@@ -104,6 +121,13 @@ define([
 
       view.setUpMrpSelect2();
       view.setUpReasonSelect2();
+
+      (view.model.get('oldComponents') || []).forEach(function(comp)
+      {
+        view.addComponent(comp);
+      });
+
+      view.addComponent({_id: '', name: ''});
 
       (view.model.get('funcs') || []).forEach(function(func)
       {
@@ -228,7 +252,9 @@ define([
     {
       var view = this;
       var codeEl = e.currentTarget;
-      var nameEl = view.$(codeEl).closest('.form-group').next().find('input')[0];
+      var nameEl = codeEl.name === 'newCode'
+        ? view.$(codeEl).closest('.form-group').next().find('input')[0]
+        : view.$(codeEl).closest('tr').find('input[name$=".name"]')[0];
 
       nameEl.value = '';
 
@@ -262,6 +288,42 @@ define([
       {
         viewport.msg.loaded();
       });
+    },
+
+    checkOldComponentValidity: function()
+    {
+      var anyRequired = false;
+      var $rows = this.$id('oldComponents').children();
+
+      $rows.each(function()
+      {
+        var $inputs = $(this).find('input');
+        var required = false;
+
+        $inputs.each(function()
+        {
+          required = required || this.value.trim().length > 0;
+        });
+
+        $inputs.prop('required', required);
+
+        anyRequired = anyRequired || required;
+      });
+
+      if (!anyRequired)
+      {
+        $rows.first().find('input').prop('required', true);
+      }
+    },
+
+    addComponent: function(component)
+    {
+      var $comp = this.renderPartial(componentTemplate, {
+        i: ++this.compI,
+        component: component
+      });
+
+      this.$id('oldComponents').append($comp);
     },
 
     addFunc: function(funcId, loadUsers)

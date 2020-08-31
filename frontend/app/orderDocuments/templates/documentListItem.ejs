@@ -1,6 +1,6 @@
 <a class="orderDocuments-document <%- search ? 'is-search' : '' %> <%- locked ? 'is-locked' : '' %>" tabindex="<%- locked ? -1 : 0 %>" data-nc15="<%- nc15 %>">
   <span class="orderDocuments-document-name"><%- name %></span>
-  <span class="orderDocuments-document-nc15"><%- nc15 === 'ORDER' ? '&nbsp;' : nc15 %></span>
+  <span class="orderDocuments-document-nc15"><%- nc15 === 'ORDER' || nc15 === 'COMP_REL' ? '&nbsp;' : nc15 %></span>
   <% if (external) { %>
   <button type="button" class="btn btn-link orderDocuments-document-remove" tabindex="-1"><i class="fa fa-remove"></i></button>
   <% } %>

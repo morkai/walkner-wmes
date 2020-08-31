@@ -123,12 +123,15 @@ define([
 
       (this.model.get('compRels') || []).forEach(function(compRel)
       {
-        if (!replacements[compRel.oldCode])
+        compRel.oldComponents.forEach(function(oldComponent)
         {
-          replacements[compRel.oldCode] = [];
-        }
+          if (!replacements[oldComponent._id])
+          {
+            replacements[oldComponent._id] = [];
+          }
 
-        replacements[compRel.oldCode].push(compRel);
+          replacements[oldComponent._id].push(compRel);
+        });
       });
 
       this.model.get('bom').forEach(function(component)

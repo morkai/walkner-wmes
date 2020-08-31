@@ -9,20 +9,14 @@
         type: 'select2',
         required: true
       }) %>
-      <div class="row">
-        <%- helpers.formGroup({
-          name: 'oldCode',
-          label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-md-3',
-          pattern: '^[0-9]{12}$'
-        }) %>
-        <%- helpers.formGroup({
-          name: 'oldName',
-          label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-md-9'
-        }) %>
+      <div class="form-group">
+        <label class="control-label is-required"><%- t('PROPERTY:oldComponent') %></label>
+        <table class="table table-bordered table-condensed" style="margin-bottom: 7px">
+          <tbody id="<%- id('oldComponents') %>"></tbody>
+        </table>
+        <button id="<%- id('addComponent') %>" type="button" class="btn btn-default">
+          <i class="fa fa-plus"></i><span><%- t('FORM:components:add') %></span>
+        </button>
       </div>
       <div class="row">
         <%- helpers.formGroup({

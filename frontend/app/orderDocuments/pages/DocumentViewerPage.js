@@ -645,7 +645,7 @@ define([
       var orderInfo = this.model.getCurrentOrderInfo();
 
       if (orderInfo.orderNo === message.orderNo
-        && orderInfo.documentNc15 === 'BOM')
+        && (orderInfo.documentNc15 === 'BOM' || orderInfo.documentNc15 === t(this.nlsDomain, 'compRel')))
       {
         this.previewView.loadDocument();
       }

@@ -18,6 +18,7 @@
     "PANEL:TITLE:orders": "Released orders",
     "PANEL:TITLE:changes": "History",
 
+    "FORM:components:add": "Add component",
     "FORM:ERROR:noFuncs": "Specify at least one function.",
 
     "PROPERTY:rid": "ID",

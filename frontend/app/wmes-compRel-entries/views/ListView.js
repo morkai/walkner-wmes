@@ -45,10 +45,8 @@ define([
         {id: 'rid', className: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'creator', className: 'is-min', thClassName: 'is-filter'},
         {id: 'mrps', className: 'is-min', thClassName: 'is-filter'},
-        {id: 'oldCode', className: 'is-min', thClassName: 'is-filter'},
-        {id: 'oldName', className: 'is-min'},
-        {id: 'newCode', className: 'is-min', thClassName: 'is-filter'},
-        {id: 'newName', className: 'is-min'},
+        {id: 'oldComponent', className: 'is-min', thClassName: 'is-filter'},
+        {id: 'newComponent', className: 'is-min', thClassName: 'is-filter'},
         {id: 'reason', className: 'is-min'},
         '-'
       ];
