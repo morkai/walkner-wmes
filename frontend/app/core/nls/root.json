@@ -142,6 +142,7 @@
     "NAVBAR:REPORTS:7": "Downtimes in AORs",
     "NAVBAR:REPORTS:8": "Lean",
     "NAVBAR:REPORTS:9": "Planned line utilization",
+    "NAVBAR:REPORTS:rearm": "Retooling",
     "NAVBAR:REPORTS:ct": "Cycle Time",
     "NAVBAR:REPORTS:ct:pce": "PCEs",
     "NAVBAR:REPORTS:ct:groups": "Product groups",

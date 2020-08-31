@@ -120,6 +120,7 @@
   "PRIVILEGE:REPORTS:7:VIEW": "Raporty: Przestoje w obszarach",
   "PRIVILEGE:REPORTS:8:VIEW": "Raporty: Lean",
   "PRIVILEGE:REPORTS:9:VIEW": "Raporty: Planowane obciążenie linii",
+  "PRIVILEGE:REPORTS:rearm:VIEW": "Raporty: Przezbrojenie",
   "PRIVILEGE:XICONF:VIEW": "Xiconf: przeglądanie",
   "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
   "PRIVILEGE:XICONF:MANAGE:HID_LAMPS": "Xiconf: Oprawy HID: zarządzanie",
