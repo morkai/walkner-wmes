@@ -695,7 +695,7 @@ define([
         .prop('disabled', false)
         .attr('placeholder', null);
 
-      if (confirmersList.length)
+      if (confirmersList.length && (user.isAllowedTo('SUGGESTIONS:MANAGE') || this.model.isConfirmer()))
       {
         $other
           .text(this.t('FORM:confirmer:' + (this.otherConfirmer ? 'list' : 'other')))
