@@ -333,6 +333,13 @@ define([
         cabin: parseInt(dataset.cabin, 10) || undefined
       };
 
+      if (action === 'start'
+        && view.model.get('qtyDone') === 0
+        && view.orders.settings.isMspOrder(view.model))
+      {
+        action = 'startMsp';
+      }
+
       if (action === 'comment' && !comment)
       {
         viewport.closeDialog();

@@ -250,7 +250,11 @@ define([
         obj.finishedAtDate = finishedAt.format('DD.MM, HH:mm:ss');
       }
 
-      if (obj.status === 'finished' && obj.qtyDlv >= obj.qty)
+      if (obj.status === 'startedMsp')
+      {
+        obj.status = 'started';
+      }
+      else if (obj.status === 'finished' && obj.qtyDlv >= obj.qty)
       {
         obj.status = 'delivered';
       }

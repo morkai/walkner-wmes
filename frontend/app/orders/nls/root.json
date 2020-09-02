@@ -105,6 +105,7 @@
     "psStatus:unknown": "Unknown",
     "psStatus:new": "Waiting",
     "psStatus:started": "Started",
+    "psStatus:startedMsp": "Started (MSP)",
     "psStatus:partial": "Partial",
     "psStatus:finished": "Finished",
     "psStatus:aside": "Set aside",

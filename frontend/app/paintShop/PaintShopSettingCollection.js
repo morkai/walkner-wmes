@@ -117,6 +117,19 @@ define([
       }
 
       return SettingCollection.prototype.prepareFormValue.apply(this, arguments);
+    },
+
+    isMspOrder: function(order)
+    {
+      var mspPaints = this.getValue('mspPaints') || [];
+
+      return order.get('childOrders').some(function(childOrder)
+      {
+        return childOrder.components.some(function(component)
+        {
+          return mspPaints.includes(component.nc12);
+        });
+      });
     }
 
   });

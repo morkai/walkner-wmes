@@ -204,6 +204,7 @@
   "orders:psStatus:unknown": "Brak malowania",
   "orders:psStatus:new": "Oczekuje na malowanie",
   "orders:psStatus:started": "W trakcie malowania",
+  "orders:psStatus:startedMsp": "W trakcie malowania (MSP)",
   "orders:psStatus:partial": "Niekompletne malowanie",
   "orders:psStatus:finished": "Malowanie zakończone",
   "orders:psStatus:aside": "Malowanie odstawione",

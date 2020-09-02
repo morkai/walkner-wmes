@@ -57,7 +57,7 @@
             <%- t('planning', 'orders:psStatus:unknown') %>
           </label>
         </div>
-        <% ['new', 'aside', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+        <% ['new', 'aside', 'started', 'startedMsp', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
         <div class="checkbox">
           <label>
             <input type="checkbox" name="wh.planning.ignorePsStatus[]" value="<%- psStatus %>">
@@ -69,7 +69,7 @@
       <div class="form-group">
         <label class="control-label"><%- t('settings:wh.planning.psPickupStatus') %></label>
         <span class="help-block" style="display: block; margin-bottom: -5px"><%- t('settings:wh.planning.psPickupStatus:help') %></span>
-        <% ['new', 'aside', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+        <% ['new', 'aside', 'started', 'startedMsp', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
         <div class="checkbox">
           <label>
             <input type="checkbox" name="wh.planning.psPickupStatus[]" value="<%- psStatus %>">

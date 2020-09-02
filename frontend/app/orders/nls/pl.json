@@ -104,6 +104,7 @@
   "psStatus:unknown": "Nieokreślony",
   "psStatus:new": "Oczekiwanie",
   "psStatus:started": "W trakcie",
+  "psStatus:startedMsp": "W trakcie (MSP)",
   "psStatus:partial": "Niekompletne",
   "psStatus:finished": "Zakończone",
   "psStatus:aside": "Odstawione",

@@ -6,6 +6,9 @@
 .planning-mrp-list-property-drillStatus[data-drill-status="started"] {
   color: #5bc0de;
 }
+.planning-mrp-list-property-psStatus[data-ps-status="startedMsp"] {
+  color: #9c64a6;
+}
 .planning-mrp-list-property-psStatus[data-ps-status="partial"],
 .planning-mrp-list-property-drillStatus[data-drill-status="partial"] {
   color: #f0ad4e;

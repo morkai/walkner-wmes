@@ -205,6 +205,7 @@
     "orders:psStatus:unknown": "Not painted",
     "orders:psStatus:new": "Painting pending",
     "orders:psStatus:started": "Painting started",
+    "orders:psStatus:startedMsp": "Painting started (MSP)",
     "orders:psStatus:partial": "Painted partially",
     "orders:psStatus:finished": "Painting finished",
     "orders:psStatus:aside": "Painting set aside",
