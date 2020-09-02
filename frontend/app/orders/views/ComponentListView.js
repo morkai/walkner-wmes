@@ -118,19 +118,29 @@ define([
     getTemplateData: function()
     {
       var bom = [];
-      var replacements = {};
+      var oldToNew = {};
+      var newToOld = {};
       var colored = false;
 
       (this.model.get('compRels') || []).forEach(function(compRel)
       {
+        if (!newToOld[compRel.newCode])
+        {
+          newToOld[compRel.newCode] = [];
+        }
+
         compRel.oldComponents.forEach(function(oldComponent)
         {
-          if (!replacements[oldComponent._id])
+          if (!oldToNew[oldComponent._id])
           {
-            replacements[oldComponent._id] = [];
+            oldToNew[oldComponent._id] = [];
           }
 
-          replacements[oldComponent._id].push(compRel);
+          oldToNew[oldComponent._id].push(compRel);
+          newToOld[compRel.newCode].push({
+            compRel: compRel,
+            oldComponent: oldComponent
+          });
         });
       });
 
@@ -152,27 +162,51 @@ define([
 
         bom.push(component);
 
-        var compRels = replacements[component.nc12];
+        var newComponents = oldToNew[component.nc12];
 
-        if (!compRels)
+        if (newComponents)
         {
+          colored = true;
+          component.rowClassName = 'danger';
+
+          newComponents.forEach(function(compRel)
+          {
+            bom.push({
+              rowClassName: 'success',
+              orderNo: component.orderNo,
+              mrp: component.mrp,
+              nc12: compRel.newCode,
+              name: compRel.newName,
+              releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
+              releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+            });
+          });
+
           return;
         }
 
-        colored = true;
-        component.replaced = true;
+        var oldComponents = newToOld[component.nc12];
 
-        compRels.forEach(function(compRel)
+        if (oldComponents)
         {
-          bom.push({
-            orderNo: component.orderNo,
-            mrp: component.mrp,
-            nc12: compRel.newCode,
-            name: compRel.newName,
-            releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
-            releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+          colored = true;
+          component.rowClassName = 'success';
+
+          oldComponents.forEach(function(old)
+          {
+            var compRel = old.compRel;
+
+            bom.push({
+              rowClassName: 'danger',
+              orderNo: component.orderNo,
+              mrp: component.mrp,
+              nc12: old.oldComponent._id,
+              name: old.oldComponent.name,
+              releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
+              releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+            });
           });
-        });
+        }
       });
 
       return {

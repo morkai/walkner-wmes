@@ -1,11 +1,36 @@
 <form>
+  <div class="form-group">
+    <label class="control-label"><%- t('orders:mode') %></label>
+    <div class="radio">
+      <label><input type="radio" name="mode" value="date" checked> <%- t('orders:mode:date') %></label>
+    </div>
+    <div class="radio">
+      <label><input type="radio" name="mode" value="orders"> <%- t('orders:mode:orders') %></label>
+    </div>
+  </div>
+  <div class="form-row">
+    <%- helpers.formGroup({
+      name: 'validFrom',
+      type: 'date',
+      label: 'orders:',
+      min: minDate,
+      max: maxDate
+    }) %>
+    <%- helpers.formGroup({
+      name: 'validTo',
+      type: 'date',
+      label: 'orders:',
+      min: minDate,
+      max: maxDate
+    }) %>
+  </div>
   <%- helpers.formGroup({
     name: 'orders',
     type: 'textarea',
     label: 'orders:',
     rows: 4,
-    required: true,
-    inputClassName: 'text-mono'
+    inputClassName: 'text-mono',
+    disabled: true
   }) %>
   <%- helpers.formGroup({
     name: 'comment',

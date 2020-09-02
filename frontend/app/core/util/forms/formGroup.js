@@ -41,6 +41,8 @@ define([
       name: options.name,
       type: 'text',
       required: options.required === true,
+      disabled: options.disabled === true,
+      readonly: options.readOnly === true,
       placeholder: options.placeholder || false,
       style: options.inputStyle || false
     };
@@ -102,7 +104,8 @@ define([
     switch (options.type)
     {
       case 'number':
-        inputAttrs.type = 'number';
+      case 'date':
+        inputAttrs.type = options.type;
         inputAttrs.min = options.min == null ? false : options.min;
         inputAttrs.max = options.max == null ? false : options.max;
         inputAttrs.step = options.step == null ? false : options.step;
@@ -122,6 +125,8 @@ define([
         inputAttrs.type = false;
         inputAttrs.name = false;
         inputAttrs.required = false;
+        inputAttrs.disabled = false;
+        inputAttrs.readonly = false;
         inputInner = options.value == null ? '' : String(options.value);
         inputClassNames.push('form-control-static');
         break;

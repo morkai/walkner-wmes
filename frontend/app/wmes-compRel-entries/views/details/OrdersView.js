@@ -34,7 +34,7 @@ define([
 
       'click .btn[data-action="remove"]': function(e)
       {
-        this.showRemoveOrderDialog(e.currentTarget.dataset.order);
+        this.showRemoveOrderDialog(e.currentTarget.dataset.id);
       }
 
     },
@@ -77,12 +77,13 @@ define([
       viewport.showDialog(dialogView, this.t('orders:title'));
     },
 
-    showRemoveOrderDialog: function(orderNo)
+    showRemoveOrderDialog: function(id)
     {
+      var order = this.model.get('orders').find(function(o) { return o._id === id; });
       var dialogView = new DialogView({
         template: removeOrderTemplate,
         model: {
-          orderNo: orderNo
+          orderNo: order.orderNo
         }
       });
 
@@ -90,16 +91,14 @@ define([
 
       this.listenTo(dialogView, 'answered', function(answer)
       {
-        if (answer !== 'yes')
+        if (answer === 'yes')
         {
-          return;
+          this.removeOrder(id);
         }
-
-        this.removeOrder([orderNo]);
       });
     },
 
-    removeOrder: function(orders)
+    removeOrder: function(id)
     {
       var view = this;
 
@@ -109,8 +108,7 @@ define([
         method: 'POST',
         url: '/compRel/entries/' + view.model.id + ';release-order',
         data: JSON.stringify({
-          orders: orders,
-          remove: true
+          remove: id
         })
       });
 

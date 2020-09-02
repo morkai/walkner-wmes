@@ -1,4 +1,55 @@
 <div class="hidden">
+  <h1>v0.152.0</h1>
+  <h2><%- time.format('2020-08-31', 'LL') %></h2>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Zmieniono wysyłkę wózków tak, aby Malarnia nie mogła wysyłać wózków Magazynu i na odwrót.</li>
+    <li>Zmieniono kompletację tak, aby Malarnia mogła kompletować zlecenia z wierceniem ale bez malowania.</li>
+    <li>Zmieniono wymuszenie kompletacji na linię tak, aby akcja była dostępna tylko dla użytkowników z uprawnieniem
+      Magazyn: zarządzanie.</li>
+    <li>Zmieniono listę problemów tak, aby wyświetlane było tylko kilka pierwszych przypisanych wózków.</li>
+    <li>Dodano wymóg wyboru Powodu przekierowania podczas przenoszenia dostarczonego zlecenia na inną linię.</li>
+    <li>Dodano filtr Set do listy Zdarzeń.</li>
+    <li>Dodano filtr Status wysyłki do listy Kompletacji.</li>
+    <li>Dodano nową opcję konfiguracyjną wysyłki: Maksymalna ilość wózków opakowań.</li>
+    <li>Dodano możliwość odepnięcia od seta użytkownika przypisanego do funkcji kompletacji.</li>
+    <li>Dodano nową opcję konfiguracyjną kompletacji: Opóźnienie automatycznego odpięcia od seta - po upłynięciu
+      podanej ilości minut od rozpoczęcia nowej zmiany produkcyjnej, funkcje mające niezakończone sety, które zostały
+      stworzone na poprzednich zmianach są automatycznie odpinane.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Zmieniono aplikację do wyświetlania dokumentów tak, aby nie można było zmieniać rozmiaru interfejsu za pomocą
+      dotyku.</li>
+    <li>Dodano możliwość odtwarzania dokumentów wideo typu MP4 w trybie wsadowym aplikacji do wyświetlania
+      dokumentów.</li>
+    <li>Dodano możliwość wyłączenia wymogu potwierdzenia zapoznania się przez operatora z dokumentem powiązanym przez
+      komponenty.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Dodano nowy filtr listy: Aktywny użytkownik - pokazuje zgłoszenia, w których wybrany użytkownik bierze
+      aktywny udział, tzn. dokonał zmiany w zgłoszeniu lub napisał coś na czacie.</li>
+  </ul>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono szerokość kolumn na liście tak, aby wartość kolumny Wyrób była widoczna w całości.</li>
+  </ul>
+  <h3>Dopuszczenia</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Dodano nowy raport: Przezbrojenie.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono filtr MRP tak, aby komunikat 'Brak wyników' podpowiadał o możliwości dodania MRP nieznajdującego się
+      na liście poprzez wciśnięcie klawisza <kbd>Spacja</kbd>.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.151.0</h1>
   <h2><%- time.format('2020-08-02', 'LL') %></h2>
   <h3>Magazyn</h3>

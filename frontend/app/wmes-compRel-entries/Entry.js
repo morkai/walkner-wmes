@@ -390,8 +390,12 @@ define([
       {
         return {
           _id: order._id,
-          releasedAt: time.format(order.releasedAt, 'L HH:mm'),
-          releasedBy: userInfoTemplate({userInfo: order.releasedBy, noIp: true})
+          orderNo: order.orderNo,
+          releasedAt: order.releasedAt,
+          releasedAtText: time.format(order.releasedAt, 'L HH:mm'),
+          releasedBy: userInfoTemplate({userInfo: order.releasedBy, noIp: true}),
+          validFrom: time.format(order.validFrom, 'L'),
+          validTo: time.format(order.validTo, 'L')
         };
       });
     },

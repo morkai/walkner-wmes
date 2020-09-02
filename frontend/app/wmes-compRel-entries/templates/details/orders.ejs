@@ -9,7 +9,9 @@
   <table class="table table-bordered table-condensed table-hover">
     <thead>
     <tr>
-      <th class="is-min"><%- t('PROPERTY:orders._id') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.orderNo') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.validFrom') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.validTo') %></th>
       <th class="is-min"><%- t('PROPERTY:orders.releasedAt') %></th>
       <th class="is-min"><%- t('PROPERTY:orders.releasedBy') %></th>
       <th></th>
@@ -19,13 +21,21 @@
     <tbody>
     <% orders.forEach(function(order) { %>
     <tr>
-      <td class="is-min text-mono"><a href="#orders/<%- order._id %>" target="_blank"><%- order._id %></a></td>
-      <td class="is-min"><%- order.releasedAt %></td>
+      <% if (order.orderNo === '000000000') { %>
+      <td class="is-min"><%- t('orders:all') %></td>
+      <td class="is-min"><%- order.validFrom %></td>
+      <td class="is-min"><%- order.validTo %></td>
+      <% } else { %>
+      <td class="is-min text-mono"><a href="#orders/<%- order.orderNo %>" target="_blank"><%- order.orderNo %></a></td>
+      <td class="is-min"></td>
+      <td class="is-min"></td>
+      <% } %>
+      <td class="is-min"><%- order.releasedAtText %></td>
       <td class="is-min"><%- order.releasedBy %></td>
       <td></td>
       <td class="actions">
         <div class="actions-group">
-          <button data-action="remove" data-order="<%- order._id %>" class="btn btn-default" type="button" title="<%- t('orders:remove') %>"><i class="fa fa-times"></i></button>
+          <button data-action="remove" data-id="<%- order._id %>" class="btn btn-default" type="button" title="<%- t('orders:remove') %>"><i class="fa fa-times"></i></button>
         </div>
       </td>
     </tr>

@@ -26,7 +26,7 @@
         </thead>
         <tbody>
           <% _.forEach(bom, function(component) { %>
-          <tr class="<%- component.replaced ? 'danger' : component.releasedAt ? 'success' : '' %>">
+          <tr class="<%- component.rowClassName || '' %>">
             <% if (component.orderNo) { %>
             <td class="is-min is-number"><a href="#orders/<%- component.orderNo %>"><%- component.orderNo %></a>
             <td class="is-min"><%= component.mrp %>
