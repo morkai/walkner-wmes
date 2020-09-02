@@ -333,6 +333,11 @@ define([
 
     onPaste: function(e)
     {
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       var dt = e.originalEvent.clipboardData;
 
       if (dt && dt.files && dt.files.length)
