@@ -85,7 +85,7 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   broadcastTopics: [
     'events.saved',
     'settings.updated.**',
-    'orders.synced', 'orders.operationsChanged', 'orders.*.synced',
+    'orders.synced', 'orders.operationsChanged', 'orders.leadingOrdersChanged', 'orders.*.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
