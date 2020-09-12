@@ -13,14 +13,14 @@
   <% if (columns.map.workstations.visible) { %>
   <% for (var i = 0; i < columns.map.workstations.colSpan; ++i){ %>
   <td class="kanban-td" data-column-id="workstations" data-array-index="<%- i %>" title="<%- t('kanban', 'column:workstation:title', {n: i + 1}) %>">
-    <span class="kanban-td-label"><%- i + 1 %></span>
+    <span class="kanban-td-label <%- i > 6 ? 'kanban-is-rotated' : '' %>"><%- t('kanban', 'column:workstation:label', {n: i + 1}) %></span>
   </td>
   <% } %>
   <% } %>
   <% if (columns.map.locations.visible) { %>
   <% for (var i = 0; i < columns.map.locations.colSpan; ++i){ %>
   <td class="kanban-td" data-column-id="locations" data-array-index="<%- i %>" title="<%- t('kanban', 'column:location:title', {n: i + 1}) %>">
-    <span class="kanban-td-label"><%- i + 1 %></span>
+    <span class="kanban-td-label <%- i > 6 ? 'kanban-is-rotated' : '' %>"><%- t('kanban', 'column:location:label', {n: i + 1}) %></span>
   </td>
   <% } %>
   <% } %>

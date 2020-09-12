@@ -39,7 +39,7 @@
     "job:kanbanId": "Kanban ID",
     "job:status": "Status",
     "job:labels": "Labels",
-    "job:workstation:short": "W{n}",
+    "job:workstation:short": "{n, select, 8{PRE1} 9{PRE2} 10{PRE3} other{W{n}}}",
     "job:workstation:long": "Workstation",
 
     "action:ignore": "Ignore",

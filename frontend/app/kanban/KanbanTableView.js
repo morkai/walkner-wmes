@@ -69,7 +69,7 @@ define([
     return value || entry.storageType === 100 ? '' : 'kanban-is-invalid';
   };
 
-  var WORKSTATION_COUNT = 7;
+  var WORKSTATION_COUNT = 10;
   var VALIDATION_FILTER_PROPERTIES = {
     workstations: 'invalidWorkstations',
     locations: 'invalidLocations'

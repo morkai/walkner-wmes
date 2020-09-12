@@ -3,10 +3,16 @@
 
 'use strict';
 
-db.comprelentries.dropIndex({'orders._id': 1});
-db.comprelentries.createIndex({'orders.orderNo': 1});
-db.comprelentries.createIndex({mrps: 1, status: 1, 'orders.orderNo': 1});
+db.kanbanentries.find({}, {workstations: 1, locations: 1}).forEach(k =>
+{
+  while (k.workstations.length < 10)
+  {
+    k.workstations.push(0);
+    k.locations.push('');
+  }
 
-db.plansettings.updateMany({_id: {$gte: new Date('2020-09-09T00:00:00.000Z')}}, {$set: {
-  schedulingRate: {ANY: 1}
-}});
+  db.kanbanentries.updateOne({_id: k._id}, {$set: {
+    workstations: k.workstations,
+    locations: k.locations
+  }});
+});
