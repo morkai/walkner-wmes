@@ -59,6 +59,7 @@ define([
     {
       var canManage = this.model.canManage();
       var data = [];
+      var selected = this.options.coordSection ? this.options.coordSection._id : null;
 
       this.model.get('coordSections').forEach(function(coordSection)
       {
@@ -78,7 +79,7 @@ define([
         }
 
         if (canManage
-          || _.any(section.get('coordinators'), function(coordinator) { return coordinator.id === user.data._id; }))
+          || _.any(coordSection.users, function(coordinator) { return coordinator.id === user.data._id; }))
         {
           data.push({
             id: section.id,
@@ -87,7 +88,14 @@ define([
         }
       });
 
-      var $section = this.$id('section').select2({
+      var $section = this.$id('section');
+
+      if (selected && data.some(function(d) { return d.id === selected; }))
+      {
+        $section.val(selected);
+      }
+
+      $section.select2({
         width: '100%',
         data: data
       });

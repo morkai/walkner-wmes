@@ -98,7 +98,9 @@ define([
 
         return _.defaults({
           name: section ? section.getLabel() : coordSection._id,
-          user: renderUserInfo({userInfo: coordSection.user})
+          user: coordSection.user ? renderUserInfo({userInfo: coordSection.user}) : '-',
+          time: coordSection.time ? time.format(coordSection.time, 'LLLL') : '-',
+          users: (coordSection.users || []).map(function(u) { return renderUserInfo({userInfo: u}); })
         }, coordSection);
       });
 
@@ -136,11 +138,18 @@ define([
 
     serializeDetails: function()
     {
+      var suggestion = this;
+      var Suggestion = this.constructor;
       var obj = this.serialize({longDateTime: true});
 
       obj.changed = obj.observer.changes || {};
       delete obj.changed.all;
       obj.changed.all = obj.observer.notify && _.isEmpty(obj.observer.changes);
+
+      obj.coordSections.forEach(function(coordSection)
+      {
+        coordSection.canCoordinate = Suggestion.can.coordinateSection(suggestion, coordSection._id);
+      });
 
       return obj;
     },
@@ -180,14 +189,7 @@ define([
     {
       return _.some(this.get('coordSections'), function(coordSection)
       {
-        var section = kaizenDictionaries.sections.get(coordSection._id);
-
-        if (!section)
-        {
-          return false;
-        }
-
-        return _.some(section.get('coordinators'), function(coordinator)
+        return _.some(coordSection.users, function(coordinator)
         {
           return coordinator.id === user.data._id;
         });
@@ -381,11 +383,57 @@ define([
       attrs.owners = _.values(owners);
 
       this.trigger('change:owners');
+    },
+
+    getCoordSection: function(sectionId)
+    {
+      return this.get('coordSections').find(function(s) { return s._id === sectionId; });
     }
 
   }, {
 
-    DATE_PROPERTIES: DATE_PROPERTIES
+    DATE_PROPERTIES: DATE_PROPERTIES,
+
+    can: {
+
+      manage: function()
+      {
+        return user.isAllowedTo('SUGGESTIONS:MANAGE');
+      },
+
+      coordinate: function(model)
+      {
+        var can = this.can || this;
+
+        return (model.get('coordSections') || []).some(function(coordSection)
+        {
+          return can.coordinateSection(model, coordSection._id);
+        });
+      },
+
+      coordinateSection: function(model, sectionId)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.get('status') !== 'new')
+        {
+          return false;
+        }
+
+        var coordSection = model.getCoordSection(sectionId);
+
+        if (!coordSection)
+        {
+          return false;
+        }
+
+        return coordSection.users.some(function(u) { return u.id === user.data._id; });
+      }
+
+    }
 
   });
 });

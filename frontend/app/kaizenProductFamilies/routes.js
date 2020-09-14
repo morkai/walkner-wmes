@@ -38,6 +38,7 @@ define([
             {id: 'name', className: 'is-min'},
             {id: 'active', className: 'is-min'},
             'owners',
+            'mrps',
             {id: 'position', className: 'is-min'}
           ]
         });

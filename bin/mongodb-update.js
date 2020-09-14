@@ -3,7 +3,7 @@
 
 'use strict';
 
-db.kanbanentries.find({}, {workstations: 1, locations: 1}).forEach(k =>
+db.kanbanentries.find({workstations: {$size: 7}}, {workstations: 1, locations: 1}).forEach(k =>
 {
   while (k.workstations.length < 10)
   {
@@ -15,4 +15,35 @@ db.kanbanentries.find({}, {workstations: 1, locations: 1}).forEach(k =>
     workstations: k.workstations,
     locations: k.locations
   }});
+});
+
+db.kaizenproductfamilies.updateMany({mrps: {$exists: false}}, {$set: {mrps: []}});
+
+db.kaizencategories.updateMany({coordSections: {$exists: false}}, {$set: {coordSections: []}});
+
+db.kaizensections.find({'coordinators._id': {$exists: true}}).forEach(s =>
+{
+  s.coordinators.forEach(u => delete u._id);
+
+  db.kaizensections.updateOne({_id: s._id}, {$set: {coordinators: s.coordinators}});
+});
+
+db.kaizensections.find({'confirmers._id': {$exists: true}}).forEach(s =>
+{
+  s.confirmers.forEach(u => delete u._id);
+
+  db.kaizensections.updateOne({_id: s._id}, {$set: {confirmers: s.confirmers}});
+});
+
+db.suggestions.find({'coordSections.0': {$exists: true}}).forEach(s =>
+{
+  s.coordSections.forEach(section =>
+  {
+    if (!section.users)
+    {
+      section.users = [];
+    }
+  });
+
+  db.suggestions.updateOne({_id: s._id}, {$set: {coordSections: s.coordSections}});
 });

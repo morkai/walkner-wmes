@@ -13,7 +13,16 @@
           return '';
         }
 
-        return '<ul>' + owners.map(function(owner) { return '<li>' + owner; }) + '</ul>';
+        return '<ul>' + owners.map(function(owner) { return '<li>' + owner; }).join('') + '</ul>';
+      }},
+      {id: '!mrps', value: function(mrps)
+      {
+        if (!mrps.length)
+        {
+          return '';
+        }
+
+        return '<ul>' + mrps.map(function(mrp) { return '<li>' + mrp; }).join('') + '</ul>';
       }}
     ]) %>
   </div>

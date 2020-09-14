@@ -57,11 +57,6 @@ define([
     return html;
   }
 
-  function formatUserSelect2Text(user, name)
-  {
-    return name;
-  }
-
   return FormView.extend({
 
     template: template,
@@ -538,7 +533,7 @@ define([
 
       setUpUserSelect2(this.$id('subscribers'), {
         multiple: true,
-        textFormatter: formatUserSelect2Text,
+        noPersonnelId: true,
         activeOnly: !this.options.editMode
       });
 
@@ -710,7 +705,7 @@ define([
       {
         setUpUserSelect2($confirmer, {
           placeholder: this.t('FORM:confirmer:search'),
-          textFormatter: formatUserSelect2Text,
+          noPersonnelId: true,
           activeOnly: !this.options.editMode
         });
       }
@@ -779,13 +774,13 @@ define([
 
       setUpUserSelect2(this.$id('suggestionOwners'), {
         multiple: true,
-        textFormatter: formatUserSelect2Text,
+        noPersonnelId: true,
         activeOnly: activeOnly
       }).select2('data', prepareOwners('suggestion'));
 
       setUpUserSelect2(this.$id('kaizenOwners'), {
         multiple: true,
-        textFormatter: formatUserSelect2Text,
+        noPersonnelId: true,
         activeOnly: activeOnly
       }).select2('data', prepareOwners('kaizen'));
 

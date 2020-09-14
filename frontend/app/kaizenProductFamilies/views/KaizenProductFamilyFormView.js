@@ -4,11 +4,13 @@ define([
   'underscore',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/kaizenProductFamilies/templates/form'
 ], function(
   _,
   FormView,
   setUpUserSelect2,
+  setUpMrpSelect2,
   template
 ) {
   'use strict';
@@ -21,7 +23,8 @@ define([
     {
       var formData = this.model.toJSON();
 
-      formData.owners = _.isEmpty(formData.owners) ? '' : formData.owners.map(function(o) { return o.id; }).join(',');
+      formData.owners = (formData.owners || []).map(function(o) { return o.id; }).join(',');
+      formData.mrps = (formData.mrps || []).join(',');
 
       return formData;
     },
@@ -36,6 +39,8 @@ define([
         };
       });
 
+      formData.mrps = (formData.mrps || '').split(',').filter(function(v) { return !!v.length; });
+
       return formData;
     },
 
@@ -45,13 +50,17 @@ define([
 
       if (this.options.editMode)
       {
-        this.$id('id').prop('readonly', true);
+        this.$id('_id').prop('readonly', true);
         this.$id('name').focus();
       }
 
       setUpUserSelect2(this.$id('owners'), {
         view: this,
         multiple: true
+      });
+
+      setUpMrpSelect2(this.$id('mrps'), {
+        width: '100%'
       });
     }
 

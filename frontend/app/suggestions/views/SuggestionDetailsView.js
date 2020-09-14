@@ -3,14 +3,18 @@
 define([
   'underscore',
   'jquery',
+  'app/viewport',
   'app/core/views/DetailsView',
   'app/kaizenOrders/dictionaries',
+  './CoordinateView',
   'app/suggestions/templates/details'
 ], function(
   _,
   $,
+  viewport,
   DetailsView,
   kaizenDictionaries,
+  CoordinateView,
   template
 ) {
   'use strict';
@@ -25,8 +29,33 @@ define([
       'click a[data-toggle="tab"]': function(e)
       {
         this.currentTab = e.currentTarget.dataset.tab;
+      },
+      'click .suggestions-details-coordSection-coordinate': function(e)
+      {
+        var $coordSection = this.$(e.target).closest('.suggestions-details-coordSection');
+
+        var dialogView = new CoordinateView({
+          model: this.model,
+          coordSection: this.model.getCoordSection($coordSection[0].dataset.section)
+        });
+
+        viewport.showDialog(dialogView, this.t('coordinate:title', {rid: this.model.get('rid')}));
       }
     }, DetailsView.prototype.events),
+
+    initialize: function()
+    {
+      DetailsView.prototype.initialize.call(this);
+
+      $(window).on('resize.' + this.idPrefix, this.onWindowResize.bind(this));
+    },
+
+    destroy: function()
+    {
+      DetailsView.prototype.destroy.call(this);
+
+      $(window).off('.' + this.idPrefix);
+    },
 
     getTemplateData: function()
     {
@@ -98,7 +127,22 @@ define([
         }
       });
 
+      this.toggleOverflowX();
+
       this.$('a[data-tab="' + (this.currentTab || this.options.initialTab) + '"]').click();
+    },
+
+    toggleOverflowX: function()
+    {
+      this.$('.suggestions-details-coordSections').css(
+        'overflow-x',
+        (this.$el.outerWidth() + 50) < window.innerWidth ? 'visible' : ''
+      );
+    },
+
+    onWindowResize: function()
+    {
+      this.toggleOverflowX();
     }
 
   });

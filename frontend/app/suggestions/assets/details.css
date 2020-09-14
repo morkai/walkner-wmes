@@ -68,6 +68,43 @@
   margin: 0;
   font-style: oblique;
 }
+.suggestions-details-coordSections {
+  display: flex;
+  overflow-x: auto;
+  padding: 0;
+}
+.suggestions-details-coordSection {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 15px;
+  width: 300px;
+  border-right: 1px dotted #ccc;
+}
+.suggestions-details-coordSection[data-status="accepted"] {
+  background-color: #dff0d8;
+}
+.suggestions-details-coordSection[data-status="rejected"] {
+  background-color: #f2dede;
+}
+.suggestions-details-coordSection .control-label {
+  margin-bottom: 0;
+}
+.suggestions-details-coordSection .form-group {
+  margin-bottom: 10px;
+}
+.suggestions-details-coordSection .form-group:last-child {
+  margin-bottom: 0;
+}
+.suggestions-details-coordSection ul {
+  margin-bottom: 0;
+  padding-left: 17px;
+}
+.suggestions-details-coordSection-coordinate {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 28px;
+}
 @media print {
   .suggestions-details-tabs > .tab-content > .tab-pane {
     display: block!important;

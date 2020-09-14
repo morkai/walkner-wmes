@@ -64,33 +64,55 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-heading <%- model.changed.coordSections ? 'is-changed' : '' %>"><%- t('PANEL:TITLE:coordSections') %></div>
-    <table class="table table-bordered table-condensed table-hover suggestions-details-coordSections">
-      <thead>
-      <tr>
-        <th class="is-min"><%- t('PROPERTY:coordSections:name') %></th>
-        <th class="is-min"><%- t('PROPERTY:coordSections:status') %></th>
-        <th class="is-min"><%- t('PROPERTY:coordSections:user') %></th>
-        <th class="is-min"><%- t('PROPERTY:coordSections:time') %></th>
-        <th><%- t('PROPERTY:coordSections:comment') %></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% if (!model.coordSections.length) { %>
-        <tr>
-          <td colspan="5"><%- t('coordSections:noData') %></td>
-        </tr>
-      <% } %>
+    <% if (!model.coordSections.length) { %>
+    <div class="panel-body">
+      <p><%- t('coordSections:noData') %></p>
+    </div>
+    <% } else { %>
+    <div class="panel-body suggestions-details-coordSections">
       <% model.coordSections.forEach(function(coordSection) { %>
-        <tr>
-          <td class="is-min"><%= coordSection.name %></td>
-          <td class="is-min"><%- t('coordSections:status:' + coordSection.status) %></td>
-          <td class="is-min"><%- coordSection.user %></td>
-          <td class="is-min"><%- coordSection.time ? time.format(coordSection.time, 'LLLL') : '' %></td>
-          <td><%= coordSection.comment %></td>
-        </tr>
+      <div class="suggestions-details-coordSection" data-section="<%- coordSection._id %>" data-status="<%- coordSection.status %>">
+        <% if (coordSection.canCoordinate) { %>
+        <button class="btn btn-default suggestions-details-coordSection-coordinate" type="button" title="<%- t('PAGE_ACTION:coordinate') %>"><i class="fa fa-gavel"></i></button>
+        <% } %>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:name') %></label>
+          <p class="form-control-static"><%= coordSection.name %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:status') %></label>
+          <p class="form-control-static"><%- t('coordSections:status:' + coordSection.status) %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:user') %></label>
+          <p class="form-control-static"><%- coordSection.user %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:time') %></label>
+          <p class="form-control-static"><%- coordSection.time %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:comment') %></label>
+          <p class="form-control-static text-lines"><%= coordSection.comment || '-' %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label">
+            <%- t('PROPERTY:coordSections:users') %>
+          </label>
+          <% if (coordSection.users.length) { %>
+          <ul>
+            <% coordSection.users.forEach(function(user) { %>
+            <li><%- user %></li>
+            <% }) %>
+          </ul>
+          <% } else { %>
+          <p class="form-control-static">-</p>
+          <% } %>
+        </div>
+      </div>
       <% }) %>
-      </tbody>
-    </table>
+    </div>
+    <% } %>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading"><%- t('PANEL:TITLE:attachments') %></div>

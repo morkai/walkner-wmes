@@ -3,28 +3,40 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div class="form-group">
-        <label for="<%- id('id') %>" class="control-label is-required"><%- t('PROPERTY:_id') %></label>
-        <input id="<%- id('id') %>" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
-      </div>
-      <div class="form-group">
-        <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
-        <input id="<%- id('name') %>" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
-      </div>
+      <%- helpers.formGroup({
+        name: '_id',
+        label: 'PROPERTY:',
+        type: 'text',
+        maxLength: 20,
+        required: true,
+        pattern: '^[A-Za-z0-9-]+$'
+      }) %>
+      <%- helpers.formGroup({
+        name: 'name',
+        label: 'PROPERTY:',
+        type: 'text',
+        maxLength: 100,
+        required: true
+      }) %>
       <div class="checkbox">
         <label class="control-label">
           <input type="checkbox" name="active" value="true">
           <%- t('PROPERTY:active') %>
         </label>
       </div>
-      <div class="form-group">
-        <label for="<%- id('description') %>" class="control-label"><%- t('PROPERTY:description') %></label>
-        <textarea id="<%- id('description') %>" class="form-control" name="description" rows="4"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="<%- id('position') %>" class="control-label is-required"><%- t('PROPERTY:position') %></label>
-        <input id="<%- id('position') %>" class="form-control" type="number" name="position" min="0" required>
-      </div>
+      <%- helpers.formGroup({
+        name: 'description',
+        label: 'PROPERTY:',
+        type: 'textarea',
+        rows: 3
+      }) %>
+      <%- helpers.formGroup({
+        name: 'position',
+        label: 'PROPERTY:',
+        type: 'number',
+        min: 0,
+        required: true
+      }) %>
       <div class="checkbox">
         <label class="control-label">
           <input type="checkbox" name="inNearMiss" value="true">
@@ -36,6 +48,21 @@
           <input type="checkbox" name="inSuggestion" value="true">
           <%- t('PROPERTY:inSuggestion') %>
         </label>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:coordSections') %></label>
+        <table class="table table-bordered table-condensed">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('coordSections:section') %></th>
+            <th class="is-min"><%- t('coordSections:funcs') %></th>
+            <th><%- t('coordSections:mor') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('coordSections') %>"></tbody>
+        </table>
+        <button data-action="addCoordSection" type="button" class="btn btn-default"><i class="fa fa-plus"></i><span><%- t('coordSections:add') %></span></button>
       </div>
     </div>
     <div class="panel-footer">

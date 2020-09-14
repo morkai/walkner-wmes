@@ -6,5 +6,6 @@
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja",
-  "PROPERTY:owners": "Właściciele"
+  "PROPERTY:owners": "Właściciele",
+  "PROPERTY:mrps": "MRP"
 }

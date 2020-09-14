@@ -5,15 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './KaizenCategory'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  KaizenCategory
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -53,18 +51,19 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategory',
         'app/kaizenCategories/templates/details',
         nls
       ],
-      function(DetailsPage, KaizenCategory, detailsTemplate)
+      function(DetailsPage, dictionaries, KaizenCategory, detailsTemplate)
       {
-        return new DetailsPage({
+        return dictionaries.bind(new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenCategory({_id: req.params.id}),
           detailsTemplate: detailsTemplate
-        });
+        }));
       }
     );
   });
@@ -74,18 +73,19 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategory',
         'app/kaizenCategories/views/KaizenCategoryFormView',
         nls
       ],
-      function(AddFormPage, KaizenCategory, KaizenCategoryFormView)
+      function(AddFormPage, dictionaries, KaizenCategory, KaizenCategoryFormView)
       {
-        return new AddFormPage({
+        return dictionaries.bind(new AddFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenCategoryFormView,
           model: new KaizenCategory()
-        });
+        }));
       }
     );
   });
@@ -95,23 +95,27 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategory',
         'app/kaizenCategories/views/KaizenCategoryFormView',
         nls
       ],
-      function(EditFormPage, KaizenCategory, KaizenCategoryFormView)
+      function(EditFormPage, dictionaries, KaizenCategory, KaizenCategoryFormView)
       {
-        return new EditFormPage({
+        return dictionaries.bind(new EditFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenCategoryFormView,
           model: new KaizenCategory({_id: req.params.id})
-        });
+        }));
       }
     );
   });
 
-  router.map('/kaizenCategories/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenCategory, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map('/kaizenCategories/:id;delete', canManage, _.partial(
+    showDeleteFormPage,
+    'app/kaizenCategories/KaizenCategory', _, _, {
+      baseBreadcrumb: true
+    })
+  );
 });

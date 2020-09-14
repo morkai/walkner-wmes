@@ -9,7 +9,17 @@
     "PROPERTY:description": "Description",
     "PROPERTY:inNearMiss": "In near misses?",
     "PROPERTY:inSuggestion": "In suggestions?",
-    "PROPERTY:position": "Position"
+    "PROPERTY:position": "Position",
+    "PROPERTY:coordSections": "Coordinating sections",
+
+    "coordSections:empty": "No coordinating sections were defined yet.",
+    "coordSections:add": "Add section",
+    "coordSections:section": "Section",
+    "coordSections:funcs": "Function",
+    "coordSections:mor": "Matrix of responsibility",
+    "coordSections:mor:none": "None",
+    "coordSections:mor:all": "All",
+    "coordSections:mor:mrp": "MRP"
   },
   "pl": true
 }

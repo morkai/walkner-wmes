@@ -7,6 +7,16 @@
   "PROPERTY:name": "Nazwa",
   "PROPERTY:description": "Opis",
   "PROPERTY:inNearMiss": "W ZPW?",
-  "PROPERTY:inSuggestion": "W sugestiach?",
-  "PROPERTY:position": "Pozycja"
+  "PROPERTY:inSuggestion": "W usprawnieniach?",
+  "PROPERTY:position": "Pozycja",
+  "PROPERTY:coordSections": "Działy koordynujące",
+
+  "coordSections:empty": "Nie zdefiniowano żadnych działów koordynujących.",
+  "coordSections:add": "Dodaj dział",
+  "coordSections:section": "Dział",
+  "coordSections:funcs": "Funkcje",
+  "coordSections:mor": "Matryca odpowiedzialności",
+  "coordSections:mor:none": "Ignoruj",
+  "coordSections:mor:all": "Wszyscy",
+  "coordSections:mor:mrp": "Ogranicz do MRP"
 }

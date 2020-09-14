@@ -33,15 +33,7 @@ define([
     {
       var obj = this.toJSON();
 
-      if (!obj.owners)
-      {
-        obj.owners = [];
-      }
-      else
-      {
-        obj.owners = obj.owners.map(function(o) { return renderUserInfo({userInfo: o}); });
-      }
-
+      obj.owners = (obj.owners || []).map(function(o) { return renderUserInfo({userInfo: o}); });
       obj.active = t('core', 'BOOL:' + obj.active);
 
       return obj;
@@ -52,6 +44,7 @@ define([
       var obj = this.serialize();
 
       obj.owners = obj.owners.join('; ');
+      obj.mrps = obj.mrps.join('; ');
 
       return obj;
     }

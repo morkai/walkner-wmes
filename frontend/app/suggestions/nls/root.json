@@ -70,6 +70,7 @@
     "PROPERTY:coordSections:user": "Coordinator",
     "PROPERTY:coordSections:time": "Decision time",
     "PROPERTY:coordSections:comment": "Comment",
+    "PROPERTY:coordSections:users": "Users",
 
     "coordSections:add:placeholder": "Select coordinating departments...",
     "coordSections:edit:placeholder": "Add coordinating department",

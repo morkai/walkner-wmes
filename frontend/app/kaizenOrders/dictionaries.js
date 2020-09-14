@@ -159,6 +159,21 @@ define([
     forProperty: function(prop)
     {
       return this[PROP_TO_DICT[prop]] || null;
+    },
+    bind: function(page)
+    {
+      var dictionaries = this;
+
+      page.on('beforeLoad', function(page, requests)
+      {
+        requests.push(dictionaries.load());
+      });
+
+      page.on('afterRender', dictionaries.load.bind(dictionaries));
+
+      page.once('remove', dictionaries.unload.bind(dictionaries));
+
+      return page;
     }
   };
 

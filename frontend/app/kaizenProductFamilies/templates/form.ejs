@@ -3,28 +3,44 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div class="form-group">
-        <label for="<%- id('id') %>" class="control-label is-required"><%- t('PROPERTY:_id') %></label>
-        <input id="<%- id('id') %>" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
-      </div>
-      <div class="form-group">
-        <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
-        <input id="<%- id('name') %>" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
-      </div>
+      <%- helpers.formGroup({
+        name: '_id',
+        label: 'PROPERTY:',
+        type: 'text',
+        maxLength: 20,
+        required: true,
+        pattern: '^[A-Za-z0-9-]+$'
+      }) %>
+      <%- helpers.formGroup({
+        name: 'name',
+        label: 'PROPERTY:',
+        type: 'text',
+        maxLength: 100,
+        required: true
+      }) %>
       <div class="checkbox">
         <label class="control-label">
           <input type="checkbox" name="active" value="true">
           <%- t('PROPERTY:active') %>
         </label>
       </div>
-      <div class="form-group">
-        <label for="<%- id('position') %>" class="control-label is-required"><%- t('PROPERTY:position') %></label>
-        <input id="<%- id('position') %>" class="form-control" type="number" name="position" min="0" required>
-      </div>
-      <div class="form-group">
-        <label for="<%- id('owners') %>" class="control-label"><%- t('PROPERTY:owners') %></label>
-        <input id="<%- id('owners') %>" type="text" autocomplete="new-password" name="owners">
-      </div>
+      <%- helpers.formGroup({
+        name: 'position',
+        label: 'PROPERTY:',
+        type: 'number',
+        min: 0,
+        required: true
+      }) %>
+      <%- helpers.formGroup({
+        name: 'owners',
+        label: 'PROPERTY:',
+        type: 'select2'
+      }) %>
+      <%- helpers.formGroup({
+        name: 'mrps',
+        label: 'PROPERTY:',
+        type: 'select2'
+      }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
