@@ -156,11 +156,6 @@ define([
           type: 'time',
           caption: view.t('rearm:column:lastAt')
         },
-        avgTaktTime: {
-          type: 'integer',
-          width: 8,
-          caption: view.t('rearm:column:avgTaktTime')
-        },
         idle: {
           type: 'integer',
           width: 8,
@@ -171,6 +166,21 @@ define([
           width: 8,
           caption: view.t('rearm:column:downtime')
         },
+        breaks: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:breaks')
+        },
+        avgTaktTime: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:avgTaktTime')
+        },
+        metric0: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:metric0')
+        },
         metric1: {
           type: 'integer',
           width: 8,
@@ -180,6 +190,11 @@ define([
           type: 'integer',
           width: 8,
           caption: view.t('rearm:column:metric2')
+        },
+        metric3: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:metric3')
         }
       };
       var data = [];
@@ -195,6 +210,7 @@ define([
         data: JSON.stringify({
           filename: view.t('rearm:export:fileName'),
           sheetName: view.t('rearm:export:sheetName'),
+          freezeRows: 1,
           columns: columns,
           data: data
         })

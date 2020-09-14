@@ -40,10 +40,7 @@ define([
       this.on('change:report', this.onReportChange);
 
       this.set('report', {
-        stationCount: 0,
-        products: [],
-        orders: [],
-        psos: []
+        lines: []
       });
     },
 
@@ -118,8 +115,11 @@ define([
             avgTaktTime: o[7],
             idle: o[8],
             downtime: o[9],
-            metric1: o[10],
-            metric2: o[11]
+            breaks: o[10],
+            metric0: o[11],
+            metric1: o[12],
+            metric2: o[13],
+            metric3: o[14]
           };
         });
       });
