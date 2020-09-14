@@ -2,11 +2,13 @@
 
 define([
   'underscore',
+  'app/time',
   'app/core/View',
   'app/reports/util/formatXAxis',
   'app/qiResults/templates/outgoingQuality/paretoTable'
 ], function(
   _,
+  time,
   View,
   formatXAxis,
   template
@@ -85,7 +87,7 @@ define([
         property: property,
         weeks: groups
           .slice(topCount * -1)
-          .map(function(g) { return formatXAxis(view, {value: g.key}); }),
+          .map(function(g) { return time.format(g.key, '[W]W'); }),
         rows: rows
       };
     }

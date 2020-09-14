@@ -11,7 +11,9 @@
   <tbody>
   <% rows.forEach(function(row) { %>
   <tr data-id="<%= row._id %>">
-    <th class="is-min text-right" title="<%= row.title %>"><%= row.label %></th>
+    <th class="is-min text-right" title="<%= row.title %>">
+      <%= row.label %>: <span class="small"><%= row.title %></span>
+    </th>
     <% row.data.forEach(function(d) { %>
     <td class="is-min is-number" style="width: 46px" title="<%- d.absolute %>/<%- d.total %>">
       <% if (d.relative) { %>

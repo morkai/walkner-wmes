@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/reports/util/formatXAxis',
@@ -10,6 +11,7 @@ define([
 ], function(
   _,
   $,
+  time,
   viewport,
   View,
   formatXAxis,
@@ -118,7 +120,7 @@ define([
         {
           return {
             key: group.key,
-            week: formatXAxis(view, {value: group.key}),
+            week: time.format(group.key, '[W]W'),
             oql: group.oql,
             target: group.oqlTarget
           };

@@ -13,6 +13,15 @@
   margin: 0 auto;
   width: auto;
 }
+.qi-oql-table-container th {
+  max-width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.qi-oql-table-container .small {
+  font-weight: normal;
+}
 .qi-oql-table-ppm td[data-key] {
   position: relative;
   cursor: pointer;
