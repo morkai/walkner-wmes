@@ -156,6 +156,21 @@ define([
           type: 'time',
           caption: view.t('rearm:column:lastAt')
         },
+        avgTaktTime: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:avgTaktTime')
+        },
+        quantityDone: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:quantityDone')
+        },
+        efficiency: {
+          type: 'integer',
+          width: 8,
+          caption: view.t('rearm:column:efficiency')
+        },
         idle: {
           type: 'integer',
           width: 8,
@@ -170,11 +185,6 @@ define([
           type: 'integer',
           width: 8,
           caption: view.t('rearm:column:breaks')
-        },
-        avgTaktTime: {
-          type: 'integer',
-          width: 8,
-          caption: view.t('rearm:column:avgTaktTime')
         },
         metric0: {
           type: 'integer',

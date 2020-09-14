@@ -4,14 +4,16 @@
     <th class="is-min"><%- t('rearm:column:orderNo') %></th>
     <th class="is-min"><%- t('rearm:column:mrp') %></th>
     <th class="is-min"><%- t('rearm:column:shift') %></th>
-    <th class="is-min"><%- t('rearm:column:startedAt') %></th>
-    <th class="is-min"><%- t('rearm:column:finishedAt') %></th>
-    <th class="is-min"><%- t('rearm:column:firstAt') %></th>
-    <th class="is-min"><%- t('rearm:column:lastAt') %></th>
-    <th class="is-min"><%- t('rearm:column:idle') %></th>
-    <th class="is-min"><%- t('rearm:column:downtime') %></th>
-    <th class="is-min"><%- t('rearm:column:breaks') %></th>
-    <th class="is-min"><%- t('rearm:column:avgTaktTime') %></th>
+    <th><%- t('rearm:column:startedAt') %></th>
+    <th><%- t('rearm:column:finishedAt') %></th>
+    <th><%- t('rearm:column:firstAt') %></th>
+    <th><%- t('rearm:column:lastAt') %></th>
+    <th><%- t('rearm:column:avgTaktTime') %></th>
+    <th><%- t('rearm:column:quantityDone') %></th>
+    <th><%- t('rearm:column:efficiency') %></th>
+    <th><%- t('rearm:column:idle') %></th>
+    <th><%- t('rearm:column:downtime') %></th>
+    <th><%- t('rearm:column:breaks') %></th>
     <th class="is-min" title="<%- t('rearm:title:metric0') %>"><%- t('rearm:column:metric0') %></th>
     <th class="is-min" title="<%- t('rearm:title:metric1') %>"><%- t('rearm:column:metric1') %></th>
     <th class="is-min" title="<%- t('rearm:title:metric2') %>"><%- t('rearm:column:metric2') %></th>
@@ -29,10 +31,16 @@
     <td class="is-min"><%- order.finishedAt ? time.format(order.finishedAt, 'HH:mm:ss') : '' %></td>
     <td class="is-min"><%- time.format(order.firstAt, 'HH:mm:ss') %></td>
     <td class="is-min"><%- time.format(order.lastAt, 'HH:mm:ss') %></td>
+    <td class="is-min"><%= order.avgTaktTime ? time.toString(order.avgTaktTime, true, false) : '' %></td>
+    <td class="is-min text-right"><%- order.quantityDone.toLocaleString() %></td>
+    <td class="is-min text-right">
+      <% if (order.efficiency) { %>
+        <%- order.efficiency %>%
+      <% } %>
+    </td>
     <td class="is-min"><%= order.idle ? time.toString(order.idle, true, false) : '' %></td>
     <td class="is-min"><%= order.downtime ? time.toString(order.downtime, true, false) : '' %></td>
     <td class="is-min"><%= order.breaks ? time.toString(order.breaks, true, false) : '' %></td>
-    <td class="is-min"><%= order.avgTaktTime ? time.toString(order.avgTaktTime, true, false) : '' %></td>
     <td class="is-min"><%= order.metric0 ? time.toString(order.metric0, true, false) : '' %></td>
     <td class="is-min"><%= order.metric1 ? time.toString(order.metric1, true, false) : '' %></td>
     <td class="is-min text-right">

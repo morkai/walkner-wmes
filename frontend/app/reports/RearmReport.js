@@ -102,6 +102,8 @@ define([
             shiftNo = shiftNos[shiftAt] = getShiftStartInfo(shiftAt).no;
           }
 
+          var c = 5;
+
           return {
             line: line._id,
             orderNo: o[0],
@@ -110,16 +112,18 @@ define([
             lastAt: o[3],
             shiftAt: shiftAt,
             shiftNo: shiftNo,
-            startedAt: o[5],
-            finishedAt: o[6],
-            avgTaktTime: o[7],
-            idle: o[8],
-            downtime: o[9],
-            breaks: o[10],
-            metric0: o[11],
-            metric1: o[12],
-            metric2: o[13],
-            metric3: o[14]
+            startedAt: o[c++],
+            finishedAt: o[c++],
+            avgTaktTime: o[c++],
+            quantityDone: o[c++],
+            efficiency: o[c++],
+            idle: o[c++],
+            downtime: o[c++],
+            breaks: o[c++],
+            metric0: o[c++],
+            metric1: o[c++],
+            metric2: o[c++],
+            metric3: o[c++]
           };
         });
       });

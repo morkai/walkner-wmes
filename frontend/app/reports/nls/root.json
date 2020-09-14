@@ -706,6 +706,8 @@
     "rearm:column:idle": "Idle",
     "rearm:column:downtime": "Downtime",
     "rearm:column:breaks": "Breaks",
+    "rearm:column:quantityDone": "Qty done",
+    "rearm:column:efficiency": "Eff%",
     "rearm:column:metric0": "R0",
     "rearm:column:metric1": "R1",
     "rearm:column:metric2": "R2",
