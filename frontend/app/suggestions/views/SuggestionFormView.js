@@ -641,12 +641,16 @@ define([
       }
       else
       {
+        var current = this.model.get('productFamily');
+
         $other.text(this.t('FORM:productFamily:other'));
         $kaizenEvent.addClass('hidden');
         $productFamily.removeClass('hidden').select2({
           allowClear: true,
           placeholder: ' ',
-          data: kaizenDictionaries.productFamilies.map(idAndLabel)
+          data: kaizenDictionaries.productFamilies
+            .filter(function(m) { return m.id === current || m.get('active'); })
+            .map(idAndLabel)
         });
       }
 
