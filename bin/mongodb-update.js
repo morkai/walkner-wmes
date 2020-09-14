@@ -552,3 +552,433 @@ db.kaizenproductfamilies.insertMany([
     ]
   }
 ]);
+
+db.kaizencategories.deleteMany({});
+db.kaizencategories.insertMany([
+  /* 1 */
+  {
+    "_id" : "na",
+    "name" : "n/a",
+    "position" : 6,
+    "inSuggestion" : false,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 2 */
+  {
+    "_id" : "ZZ",
+    "name" : "Zbędny zapasy",
+    "position" : 30,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 3 */
+  {
+    "_id" : "ZT",
+    "name" : "Zbędny transport",
+    "position" : 20,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 4 */
+  {
+    "_id" : "ZR",
+    "name" : "Zbędny ruch",
+    "position" : 40,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 5 */
+  {
+    "_id" : "ZP",
+    "name" : "Zbędne przetwarzanie",
+    "position" : 70,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 6 */
+  {
+    "_id" : "U",
+    "name" : "Umiejętności",
+    "position" : 80,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 7 */
+  {
+    "_id" : "SYS",
+    "name" : "Systematyka",
+    "position" : 100,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 8 */
+  {
+    "_id" : "STD",
+    "name" : "Standaryzacja",
+    "position" : 120,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 9 */
+  {
+    "_id" : "SS",
+    "name" : "Selekcja, sortowanie",
+    "position" : 90,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 10 */
+  {
+    "_id" : "SPRZ",
+    "name" : "Sprzątanie",
+    "position" : 110,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 11 */
+  {
+    "_id" : "SO",
+    "description" : "Zachowanie, którego skutkiem jest nieprawidłowa segregacja odpadów (np. w pojemnikach na tworzywo znajduje się odpad makulatury)",
+    "inNearMiss" : true,
+    "inSuggestion" : false,
+    "position" : 3,
+    "name" : "Segregacja odpadów",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 12 */
+  {
+    "_id" : "OTHER",
+    "name" : "inna",
+    "inSuggestion" : false,
+    "inNearMiss" : true,
+    "description" : "",
+    "__v" : 0,
+    "position" : 5,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 13 */
+  {
+    "_id" : "OPL",
+    "name" : "One Point Lesson",
+    "position" : 1,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "One Point Lesson – Lekcja Jednostronicowa. Dzielimy się wiedzą o zdarzeniu, usprawnieniu, działaniu procesu.",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 14 */
+  {
+    "_id" : "OCZ",
+    "name" : "Oczekiwanie",
+    "position" : 50,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 15 */
+  {
+    "_id" : "NZ",
+    "name" : "Ryzykowne zachowanie",
+    "inSuggestion" : false,
+    "inNearMiss" : true,
+    "description" : "Zachowanie, którego skutkiem może być wypadek/choroba (np.: nie stosowanie środków ochrony indywidualnej (np. okularów, rękawic), niestosowanie wymaganych narzędzi/sprzętu, niewłaściwe posługiwanie się nimi, nie przestrzeganie procedur, instrukcji, standardów (np 6S), wkładanie rąk w strefę zagrożenia, wejście w strefę niedozwoloną, wykonywanie czynności bez usunięcia zagrożenia (np. niewyłączenie maszyny, niewyłączenie napięcia), zbyt szybka jazda, pozostawienie przedmiotów pracy w niewłaściwym miejscu, nieergonomiczna pozycja przy pracy).",
+    "__v" : 0,
+    "position" : 4,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 16 */
+  {
+    "_id" : "NSI",
+    "name" : "Niewłaściwy stan infrastruktury",
+    "inSuggestion" : false,
+    "inNearMiss" : true,
+    "description" : "Zły stan infrastruktury, którego skutkiem może być wypadek/choroba (np.: niesprawne urządzenia, uszkodzone/zużyte wyposażenie stanowiska pracy, uszkodzona konstrukcja stanowiska, brak lub niewłaściwe urządzenia zabezpieczające (np. osłony), niebezpieczne przedmioty, wycieki oleju, uszkodzone regały, uszkodzone wózki, emisja pyłu (zapylenie) lub czynników chemicznych, silny hałas, drgania).",
+    "__v" : 0,
+    "position" : 2,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 17 */
+  {
+    "_id" : "NP",
+    "name" : "Nadprodukcja",
+    "position" : 60,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 18 */
+  {
+    "_id" : "NOP",
+    "name" : "Niewłaściwa organizacja pracy",
+    "inSuggestion" : false,
+    "inNearMiss" : true,
+    "description" : "Stan, w wyniku którego może dojść do wypadku/choroby (np.: ustawienie urządzeń, przedmiotów, wyposażenia utrudniające poruszanie się, brak lub niewłaściwe oznakowanie miejsc niebezpiecznych, praca na wysokości bez zabezpieczeń, ostre krawędzie, brak instrukcji bhp, brak szkolenia bhp, nieodpowiednie rozmieszczenie i składowanie przedmiotów, nadmierny ciężar).",
+    "__v" : 0,
+    "position" : 3,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 19 */
+  {
+    "_id" : "KON",
+    "name" : "Konstrukcja",
+    "position" : 150,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "designer"
+        ],
+        "section" : "MD",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 20 */
+  {
+    "_id" : "KI",
+    "description" : "",
+    "inNearMiss" : false,
+    "inSuggestion" : true,
+    "position" : 160,
+    "name" : "Kaizen Event",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 21 */
+  {
+    "_id" : "IBU",
+    "name" : "Incydent bez urazu",
+    "inSuggestion" : false,
+    "inNearMiss" : true,
+    "description" : "Zdarzenie nagłe wywołane przyczyną zewnętrzną mające związek z pracą (np.: upadek przedmiotu z wysokości w bezpośrednim sąsiedztwie osób, kolizja z udziałem pojazdów, potknięcie się o przedmioty leżące na drodze, poślizgnięcie się, zaczepienie o wystający przedmiot, uderzenie o lub przez przedmioty).",
+    "__v" : 0,
+    "position" : 5,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 22 */
+  {
+    "_id" : "DYS",
+    "name" : "Samodyscyplina",
+    "position" : 130,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 1,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [
+          "process-engineer"
+        ],
+        "section" : "LT",
+        "mor" : "mrp"
+      }
+    ]
+  },
+
+  /* 23 */
+  {
+    "_id" : "BHP",
+    "name" : "BHP+ergonomia",
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 6,
+    "position" : 10,
+    "active" : true,
+    "coordSections" : [
+      {
+        "funcs" : [ ],
+        "section" : "KBHP",
+        "mor" : "none"
+      }
+    ]
+  },
+
+  /* 24 */
+  {
+    "_id" : "AM",
+    "name" : "Autonomous Maintenance",
+    "position" : 140,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  },
+
+  /* 25 */
+  {
+    "_id" : "A3",
+    "name" : "A3",
+    "position" : 22,
+    "inSuggestion" : true,
+    "inNearMiss" : false,
+    "description" : "A3",
+    "__v" : 0,
+    "active" : true,
+    "coordSections" : [ ]
+  }
+]);
