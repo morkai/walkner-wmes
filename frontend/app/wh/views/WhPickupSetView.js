@@ -1246,6 +1246,11 @@ define([
 
     onOrderChanged: function(whOrder)
     {
+      if (!whOrder)
+      {
+        return;
+      }
+
       var view = this;
       var $item = view.$('.wh-set-item[data-id="' + whOrder.id + '"]');
 
