@@ -158,7 +158,8 @@ define([
       var obj = this.serialize(plan, setData.i, this.collection ? this.collection.getFilters(plan) : {
         startTime: {},
         whStatuses: [],
-        psStatuses: []
+        psStatuses: [],
+        distStatuses: []
       });
       var canManage = user.isAllowedTo('WH:MANAGE');
       var canManageCarts = user.isAllowedTo('WH:MANAGE:CARTS');
