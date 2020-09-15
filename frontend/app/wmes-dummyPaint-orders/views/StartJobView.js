@@ -115,8 +115,7 @@ define([
         });
       });
 
-      var selected = $codes
-        .val()
+      var selected = ($codes.val() || '')
         .split(',')
         .filter(function(code) { return code.length > 0 && !codesInProgress[code]; })
         .join(',');
