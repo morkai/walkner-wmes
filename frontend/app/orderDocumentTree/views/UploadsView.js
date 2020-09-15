@@ -176,7 +176,7 @@ define([
     {
       return {
         uploads: this.model.uploads.invoke('serializeDetails'),
-        renderUpload: this.renderPartialHtml.bind(renderUpload)
+        renderUpload: this.renderPartialHtml.bind(this, renderUpload)
       };
     },
 
