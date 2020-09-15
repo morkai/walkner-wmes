@@ -653,7 +653,7 @@ define([
           aor: downtime.getAorLabel(),
           duration: downtime.getDurationString(now, false)
         },
-        heff: this.heff ? prodLineState.get('heff') : null
+        heff: this.heff && prodLineState ? prodLineState.get('heff') : null
       });
     },
 
