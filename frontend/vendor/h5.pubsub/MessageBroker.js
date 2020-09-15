@@ -40,9 +40,8 @@ function MessageBroker()
 MessageBroker.prototype.destroy = function()
 {
   this.subscriptions.destroy();
-  this.subscriptions = null;
 
-  this.listeners = null;
+  this.listeners = {};
 };
 
 /**

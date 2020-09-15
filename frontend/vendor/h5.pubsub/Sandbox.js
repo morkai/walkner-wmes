@@ -40,9 +40,6 @@ Sandbox.prototype.destroy = function()
       subscriptions[id].cancel();
     });
   }
-
-  this.subscriptions = null;
-  this.broker = null;
 };
 
 /**
