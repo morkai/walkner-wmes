@@ -3,982 +3,623 @@
 
 'use strict';
 
-db.kaizenproductfamilies.updateMany({active: {$exists: false}}, {$set: {active: true}});
-db.kaizenproductfamilies.updateMany({mrps: {$exists: false}}, {$set: {mrps: []}});
+// Recount
+// /fix/clip/count-daily-mrp?from=2018-01-01
+// /fix/fteMasterEntries/recount-totals?date=2018-01-01
 
-db.kaizencategories.updateMany({coordSections: {$exists: false}}, {$set: {coordSections: []}});
+const toRemove = [
 
-db.kaizensections.find({'coordinators._id': {$exists: true}}).forEach(s =>
+];
+const toUpdate = [{
+  oldOrgUnits: {
+    division: 'LPb',
+    subdivision: new ObjectId('57cc144dd0381e1820757a49'),
+    mrpControllers: ['KS00'],
+    prodFlow: new ObjectId('559a63b732de99e04e217a3e'),
+    workCenter: 'WIRE_D',
+    prodLine: 'GAMMA333_B'
+  },
+  newOrgUnits: {
+    division: 'LPc',
+    subdivision: new ObjectId('529f268fcd8eea982400001a'),
+    mrpControllers: ['KS6'],
+    prodFlow: new ObjectId('559a63ac32de99e04e217a3a'),
+    workCenter: 'WIRE_C',
+    prodLine: 'GAMMA333_B'
+  },
+  fteMasterEntry: null,
+  names: {
+
+  }
+}, {
+  oldOrgUnits: {
+    division: 'LPb',
+    subdivision: new ObjectId('57cc144dd0381e1820757a49'),
+    mrpControllers: ['KS00'],
+    prodFlow: new ObjectId('559a63b732de99e04e217a3e'),
+    workCenter: 'WIRE_D',
+    prodLine: 'Kappa_315_B'
+  },
+  newOrgUnits: {
+    division: 'LPc',
+    subdivision: new ObjectId('529f268fcd8eea982400001a'),
+    mrpControllers: ['KS6'],
+    prodFlow: new ObjectId('559a63ac32de99e04e217a3a'),
+    workCenter: 'WIRE_C',
+    prodLine: 'Kappa_315_B'
+  },
+  fteMasterEntry: null,
+  names: {
+
+  }
+}];
+
+const lineToDivision = {};
+const fteCountPerLine = {};
+
+db.prodlines.find().forEach(pl =>
 {
-  s.coordinators.forEach(u => delete u._id);
+  const wc = db.workcenters.findOne({_id: pl.workCenter});
+  const pf = db.prodflows.findOne({_id: wc.prodFlow});
+  const mrp = db.mrpcontrollers.findOne({_id: pf.mrpController[0]});
+  const subdivision = db.subdivisions.findOne({_id: mrp.subdivision});
 
-  db.kaizensections.updateOne({_id: s._id}, {$set: {coordinators: s.coordinators}});
+  lineToDivision[pl._id] = subdivision.division;
 });
 
-db.kaizensections.find({'confirmers._id': {$exists: true}}).forEach(s =>
+toUpdate.forEach(update =>
 {
-  s.confirmers.forEach(u => delete u._id);
+  lineToDivision[update.newOrgUnits.prodLine] = update.newOrgUnits.division;
 
-  db.kaizensections.updateOne({_id: s._id}, {$set: {confirmers: s.confirmers}});
+  db.workcenters.updateOne({_id: update.newOrgUnits.workCenter}, {$set: {
+    prodFlow: update.newOrgUnits.prodFlow
+  }});
+
+  db.prodflows.updateOne({_id: update.newOrgUnits.prodFlow}, {$set: {
+    mrpController: update.newOrgUnits.mrpControllers
+  }});
 });
 
-db.suggestions.find({'coordSections.0': {$exists: true}}).forEach(s =>
+function fromTo(property, update, shift, conditions)
 {
-  s.coordSections.forEach(section =>
+  if (update.from)
   {
-    if (!section.users)
+    conditions[property] = {
+      $gte: new Date(update.from.getTime() + (shift ? 6 : 0) * 3600 * 1000)
+    };
+  }
+
+  if (update.to)
+  {
+    if (!conditions[property])
     {
-      section.users = [];
+      conditions[property] = {};
+    }
+
+    conditions[property].$lt = new Date(update.to.getTime() + (shift ? 6 : 0) * 3600 * 1000);
+  }
+
+  return conditions;
+}
+
+toUpdate.forEach(update =>
+{
+  var oldOrgUnits = update.oldOrgUnits;
+  var newOrgUnits = update.newOrgUnits;
+
+  print(`${oldOrgUnits.prodLine} -> ${newOrgUnits.prodLine}...`);
+
+  var oldProdLine = db.prodlines.findOne({_id: oldOrgUnits.prodLine});
+
+  if (!oldProdLine)
+  {
+    return;
+  }
+
+  var newProdLine = db.prodlines.findOne({_id: newOrgUnits.prodLine});
+
+  if (!newProdLine)
+  {
+    newProdLine = Object.assign({}, oldProdLine, {
+      _id: newOrgUnits.prodLine,
+      workCenter: newOrgUnits.workCenter
+    });
+
+    db.prodlines.insert(newProdLine);
+  }
+  else
+  {
+    db.prodlines.updateOne({_id: newOrgUnits.prodLine}, {$set: {workCenter: newOrgUnits.workCenter}});
+  }
+
+  var same = {};
+
+  Object.keys(newOrgUnits).forEach(k =>
+  {
+    same[k] = String(oldOrgUnits[k]) === String(newOrgUnits[k]);
+  });
+
+  var $set1 = Object.assign({}, newOrgUnits);
+  var $set2 = {};
+  var $set3 = {};
+  var orgUnitList = [];
+
+  Object.keys($set1).forEach(k =>
+  {
+    $set2[k] = $set1[k];
+    $set2[`data.${k}`] = $set1[k].valueOf();
+    $set3[k] = $set1[k];
+    $set3[`data.startedProdShift.${k}`] = $set1[k].valueOf();
+
+    if (k === 'mrpControllers')
+    {
+      $set1[k].forEach(mrp => orgUnitList.push({
+        type: 'mrpController',
+        id: mrp
+      }));
+    }
+    else
+    {
+      orgUnitList.push({
+        type: k,
+        id: $set1[k].valueOf()
+      });
     }
   });
 
-  db.suggestions.updateOne({_id: s._id}, {$set: {coordSections: s.coordSections}});
+  print(`\t...ProdShift`);
+  db.prodshifts.update(
+    fromTo('date', update, false, {prodLine: oldOrgUnits.prodLine}),
+    {$set: $set1},
+    {multi: true}
+  );
+
+  print(`\t...ProdShiftOrder`);
+  db.prodshiftorders.update(
+    fromTo('date', update, false, {prodLine: oldOrgUnits.prodLine}),
+    {$set: $set1},
+    {multi: true}
+  );
+
+  print(`\t...ProdDowntime`);
+  db.proddowntimes.update(
+    fromTo('date', update, false, {prodLine: oldOrgUnits.prodLine}),
+    {$set: $set1},
+    {multi: true}
+  );
+
+  print(`\t...ProdLogEntry`);
+  print(`\t\t...1`);
+  db.prodlogentries.update(
+    fromTo('createdAt', update, true, {prodLine: oldOrgUnits.prodLine, 'data.startedProdShift.prodLine': oldOrgUnits.prodLine}),
+    {$set: $set3},
+    {multi: true}
+  );
+  print(`\t\t...2`);
+  db.prodlogentries.update(
+    fromTo('createdAt', update, true, {prodLine: oldOrgUnits.prodLine, 'data.prodLine': oldOrgUnits.prodLine}),
+    {$set: $set2},
+    {multi: true}
+  );
+  print(`\t\t...3`);
+  db.prodlogentries.update(
+    fromTo('createdAt', update, true, {prodLine: oldOrgUnits.prodLine}),
+    {$set: $set1},
+    {multi: true}
+  );
+
+  if (!same.division || !same.prodLine)
+  {
+    print(`\t...PressWorksheets`);
+    db.pressworksheets.find(fromTo('date', update, false, {prodLines: oldOrgUnits.prodLine})).forEach(pw =>
+    {
+      var divisions = {};
+      var prodLines = {};
+
+      pw.orders.forEach(o =>
+      {
+        if (o.prodLine === oldOrgUnits.prodLine)
+        {
+          o.prodLine = newProdLine._id;
+          o.division = newOrgUnits.division;
+        }
+
+        divisions[o.division] = 1;
+        prodLines[o.prodLine] = 1;
+      });
+
+      pw.divisions = Object.keys(divisions);
+      pw.prodLines = Object.keys(prodLines);
+
+      db.pressworksheets.update({_id: pw._id}, pw);
+    });
+  }
+
+  print(`\t...IsaEvent`);
+  db.isaevents.update(
+    fromTo('time', update, true, {orgUnits: {type: 'prodLine', id: oldOrgUnits.prodLine}}),
+    {$set: {orgUnits: orgUnitList}},
+    {multi: true}
+  );
+
+  print(`\t...IsaRequest`);
+  db.isarequests.update(
+    fromTo('requestedAt', update, true, {orgUnits: {type: 'prodLine', id: oldOrgUnits.prodLine}}),
+    {$set: {orgUnits: orgUnitList}},
+    {multi: true}
+  );
+
+  if (!same.division || !same.prodLine)
+  {
+    print(`\t...QiResult`);
+    db.qiresults.update(
+      fromTo('inspectedAt', update, true, {line: oldOrgUnits.prodLine}),
+      {$set: {line: newProdLine._id, division: newOrgUnits.division}},
+      {multi: true}
+    );
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t...ProdSerialNumber`);
+    db.prodserialnumbers.update(
+      fromTo('scannedAt', update, true, {line: oldOrgUnits.prodLine}),
+      {$set: {prodLine: newProdLine._id}},
+      {multi: true}
+    );
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t...WhOrderStatus`);
+    db.whorderstatuses.find(fromTo('_id.date', update, true, {'_id.line': oldOrgUnits.prodLine})).forEach(whOrderStatus =>
+    {
+      db.whorderstatuses.remove({_id: whOrderStatus._id});
+
+      whOrderStatus._id.line = newProdLine._id;
+
+      db.whorderstatuses.insert(whOrderStatus);
+    });
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t...BehaviorObsCard`);
+    db.behaviorobscards.update(
+      fromTo('date', update, true, {line: oldOrgUnits.prodLine}),
+      {$set: {line: newProdLine._id}},
+      {multi: true}
+    );
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t...Plan`);
+    db.plansettings.find(fromTo('_id', update, true, {'lines._id': oldOrgUnits.prodLine})).forEach(planSettings =>
+    {
+      planSettings.lines.find(l => l._id === oldOrgUnits.prodLine)._id = newProdLine._id;
+
+      planSettings.mrps.forEach(planMrpSettings =>
+      {
+        planMrpSettings.lines = planMrpSettings.lines.map(line =>
+        {
+          line._id = line._id === oldOrgUnits.prodLine ? newProdLine._id : line._id;
+
+          return line;
+        });
+
+        planMrpSettings.groups.forEach(group =>
+        {
+          group.lines = group.lines.map(line => line === oldOrgUnits.prodLine ? newProdLine._id : line);
+        });
+      });
+
+      db.plansettings.update({_id: planSettings._id}, planSettings);
+
+      var plan = db.plans.findOne({_id: planSettings._id});
+
+      plan.lines.find(l => l._id === oldOrgUnits.prodLine)._id = newProdLine._id;
+
+      plan.orders.forEach(planOrder =>
+      {
+        planOrder.lines = planOrder.lines.map(line => line === oldOrgUnits.prodLine ? newProdLine._id : line);
+      });
+
+      db.plans.update({_id: plan._id}, plan);
+    });
+  }
+
+  if (update.fteMasterEntry)
+  {
+    print(`\t...FteMasterEntry`);
+
+    db.ftemasterentries
+      .find({subdivision: newOrgUnits.subdivision, 'tasks.id': oldOrgUnits.prodFlow})
+      .forEach(entry => fixFteMasterEntry(entry, update));
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t...OrderBomMatcher`);
+    db.orderbommatchers.find({'matchers.line': oldOrgUnits.prodLine}).forEach(obm =>
+    {
+      obm.matchers.line = obm.matchers.line.map(line =>
+      {
+        return line === oldOrgUnits.prodLine ? newOrgUnits.prodLine : line;
+      });
+
+      db.orderbommatchers.updateOne({_id: obm._id}, {$set: {matchers: obm.matchers}});
+    });
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t...KanbanSupplyArea`);
+    db.kanbansupplyareas.find({'lines': oldOrgUnits.prodLine}).forEach(sa =>
+    {
+      sa.lines = sa.lines.map(line =>
+      {
+        return line === oldOrgUnits.prodLine ? newOrgUnits.prodLine : line;
+      });
+
+      db.kanbansupplyareas.updateOne({_id: sa._id}, {$set: {lines: sa.lines}});
+    });
+  }
+
+  if (!same.division || !same.prodLine)
+  {
+    print(`\t...FapEntry`);
+    db.fapentries.find({'divisions': oldOrgUnits.division, 'lines': oldOrgUnits.prodLine}).forEach(fap =>
+    {
+      const divisions = {};
+
+      fap.lines = fap.lines.map(line =>
+      {
+        line = line === oldOrgUnits.prodLine ? newOrgUnits.prodLine : line;
+        divisions[lineToDivision[line]] = 1;
+
+        return line;
+      });
+
+      db.fapentries.updateOne({_id: fap._id}, {$set: {
+        lines: fap.lines,
+        divisions: Object.keys(divisions)
+      }});
+    });
+  }
+
+  print(`\t...Setting...`);
+  let setting;
+
+  if (!same.prodLine)
+  {
+    print(`\t\t...production.lineAutoDowntimes`);
+    setting = db.settings.findOne({_id: 'production.lineAutoDowntimes', 'value.lines': oldOrgUnits.prodLine});
+
+    if (setting)
+    {
+      setting.value.forEach(lineAutoDowntimes =>
+      {
+        lineAutoDowntimes.lines = lineAutoDowntimes.lines.map(line =>
+        {
+          return line === oldOrgUnits.prodLine ? newOrgUnits.prodLine : line;
+        });
+      });
+
+      db.settings.updateOne({_id: setting._id}, {$set: {value: setting.value}});
+    }
+  }
+
+  if (!same.prodLine)
+  {
+    print(`\t\t...production.taktTime.ignoredLines`);
+    setting = db.settings.findOne({_id: 'production.taktTime.ignoredLines'});
+
+    if (setting)
+    {
+      setting.value = setting.value.split(',').filter(v => v.length > 0).map(line =>
+      {
+        return line === oldOrgUnits.prodLine ? newOrgUnits.prodLine : line;
+      });
+
+      db.settings.updateOne({_id: setting._id}, {$set: {value: setting.value.join(',')}});
+    }
+  }
+
+  Object.keys(update.names || {}).forEach(orgUnitType =>
+  {
+    const name = update.names[orgUnitType];
+
+    switch (orgUnitType)
+    {
+      case 'division':
+        db.divisions.updateOne({_id: newOrgUnits.division}, {$set: {description: name}});
+        break;
+
+      case 'subdivision':
+        db.subdivisions.updateOne({_id: newOrgUnits.subdivision}, {$set: {name: name}});
+        break;
+
+      case 'mrpController':
+        db.mrpcontrollers.updateOne({_id: newOrgUnits.mrpControllers[0]}, {$set: {description: name}});
+        break;
+
+      case 'prodFlow':
+        db.prodflows.updateOne({_id: newOrgUnits.prodFlow}, {$set: {name: name}});
+        break;
+
+      case 'workCenter':
+        db.workcenters.updateOne({_id: newOrgUnits.workCenter}, {$set: {description: name}});
+        break;
+
+      case 'prodLine':
+        db.prodlines.updateOne({_id: newOrgUnits.prodLine}, {$set: {description: name}});
+        break;
+    }
+  });
 });
 
-db.kaizenproductfamilies.deleteMany({});
-db.kaizenproductfamilies.insertMany([
-  /* 1 */
-  {
-    "_id" : "WT460",
-    "name" : "WT460 - Pacific",
-    "owners" : [ ],
-    "position" : 13,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KF9"
-    ]
-  },
+toRemove.forEach(d =>
+{
+  db[d.collection].remove({_id: d._id});
+});
 
-  /* 2 */
-  {
-    "_id" : "US2",
-    "position" : 2,
-    "owners" : [ ],
-    "name" : "UniStreet Gen 2",
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KF3"
-    ]
-  },
+// MANUAL
 
-  /* 3 */
-  {
-    "_id" : "TG",
-    "name" : "Town Guide",
-    "owners" : [ ],
-    "position" : 5,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH3"
-    ]
-  },
+// END MANUAL
 
-  /* 4 */
-  {
-    "_id" : "TBS415",
-    "name" : "TBS415",
-    "owners" : [ ],
-    "position" : 8,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KE9"
-    ]
-  },
+function fixFteMasterEntry(entry, update)
+{
+  var oldTask = null;
+  var newTask = null;
 
-  /* 5 */
+  entry.tasks.forEach(task =>
   {
-    "_id" : "TBS411",
-    "name" : "TBS411",
-    "owners" : [ ],
-    "position" : 7,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KE9"
-    ]
-  },
+    if (task.id.valueOf() === update.oldOrgUnits.prodFlow.valueOf())
+    {
+      oldTask = task;
+    }
+    else if (task.id.valueOf() === update.newOrgUnits.prodFlow.valueOf())
+    {
+      newTask = task;
+    }
+  });
 
-  /* 6 */
+  if (update.fteMasterEntry.mode === 'merge')
   {
-    "_id" : "SSTAR",
-    "position" : 90,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KG2"
-    ],
-    "name" : "Speedstar (BGP321)",
-    "__v" : 0
-  },
-
-  /* 7 */
-  {
-    "_id" : "SNF111",
-    "name" : "SNF111 – Comfort Vision",
-    "owners" : [ ],
-    "position" : 19,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH5"
-    ]
-  },
-
-  /* 8 */
-  {
-    "_id" : "PS",
-    "name" : "PetrolStation",
-    "owners" : [ ],
-    "position" : 13,
-    "__v" : 0,
-    "active" : false,
-    "mrps" : [ ]
-  },
-
-  /* 9 */
-  {
-    "_id" : "OTHER",
-    "position" : 999999,
-    "owners" : [ ],
-    "name" : "Inna",
-    "__v" : 0,
-    "active" : true,
-    "mrps" : [ ]
-  },
-
-  /* 10 */
-  {
-    "_id" : "OR",
-    "name" : "Oprawy rastrowe (KE1, KE4)",
-    "owners" : [ ],
-    "position" : 12,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KE1",
-      "KE4"
-    ]
-  },
-
-  /* 11 */
-  {
-    "_id" : "MVP507",
-    "name" : "MVP507 – Opti Vision",
-    "owners" : [ ],
-    "position" : 18,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH1"
-    ]
-  },
-
-  /* 12 */
-  {
-    "_id" : "MVP506",
-    "name" : "MVP506 i BVP506 – Optiflood",
-    "owners" : [ ],
-    "position" : 15,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH5"
-    ]
-  },
-
-  /* 13 */
-  {
-    "_id" : "MVP504",
-    "name" : "MVP504 – Mini Optiflood",
-    "owners" : [ ],
-    "position" : 14,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH5"
-    ]
-  },
-
-  /* 14 */
-  {
-    "_id" : "MVF403",
-    "name" : "MVF403 – Arena Vision",
-    "owners" : [ ],
-    "position" : 16,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH1"
-    ]
-  },
-
-  /* 15 */
-  {
-    "_id" : "MVF024",
-    "name" : "MVF024 – Power Vision",
-    "owners" : [ ],
-    "position" : 17,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH1"
-    ]
-  },
-
-  /* 16 */
-  {
-    "_id" : "MLUMA",
-    "position" : 130,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KHA"
-    ],
-    "name" : "Mini Luma",
-    "__v" : 0
-  },
-
-  /* 17 */
-  {
-    "_id" : "ML",
-    "name" : "Micro Luma",
-    "owners" : [ ],
-    "position" : 4,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH9"
-    ]
-  },
-
-  /* 18 */
-  {
-    "_id" : "MET",
-    "name" : "Metronomis",
-    "owners" : [ ],
-    "position" : 6,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KH3"
-    ]
-  },
-
-  /* 19 */
-  {
-    "_id" : "MAXOSIT",
-    "position" : 140,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KGB"
-    ],
-    "name" : "Maxos Industry Trunking",
-    "__v" : 0
-  },
-
-  /* 20 */
-  {
-    "_id" : "MAXOSFT",
-    "position" : 160,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KHC"
-    ],
-    "name" : "Maxos Fusion Trunking",
-    "__v" : 0
-  },
-
-  /* 21 */
-  {
-    "_id" : "MAXOSFP",
-    "position" : 150,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KGC"
-    ],
-    "name" : "Maxos Fusion Panel",
-    "__v" : 0
-  },
-
-  /* 22 */
-  {
-    "_id" : "MAL",
-    "position" : 24,
-    "owners" : [ ],
-    "name" : "Malaga LED",
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KE4"
-    ]
-  },
-
-  /* 23 */
-  {
-    "_id" : "M300L3",
-    "position" : 100,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KE2"
-    ],
-    "name" : "Mini300 LED gen3",
-    "__v" : 0
-  },
-
-  /* 24 */
-  {
-    "_id" : "LUMA2",
-    "position" : 120,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KGE"
-    ],
-    "name" : "Luma gen2",
-    "__v" : 0
-  },
-
-  /* 25 */
-  {
-    "_id" : "LINECO",
-    "position" : 60,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KE3"
-    ],
-    "name" : "Lineco: TMS022, GMS022, ZMS022, BMS022",
-    "__v" : 0
-  },
-
-  /* 26 */
-  {
-    "_id" : "LIBRA",
-    "position" : 110,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KF7"
-    ],
-    "name" : "Libra LED/HID",
-    "__v" : 0
-  },
-
-  /* 27 */
-  {
-    "_id" : "LER",
-    "name" : "Ler - Uni, Lumi Street",
-    "owners" : [ ],
-    "position" : 3,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KF6"
-    ]
-  },
-
-  /* 28 */
-  {
-    "_id" : "IR3",
-    "name" : "Iridium 3",
-    "owners" : [ ],
-    "position" : 10,
-    "__v" : 3,
-    "active" : true,
-    "mrps" : [
-      "KH4"
-    ]
-  },
-
-  /* 29 */
-  {
-    "_id" : "IR2",
-    "name" : "Iridium 2",
-    "owners" : [ ],
-    "position" : 44,
-    "__v" : 4,
-    "active" : true,
-    "mrps" : [
-      "KG6"
-    ]
-  },
-
-  /* 30 */
-  {
-    "_id" : "IR1",
-    "name" : "Iridium 1",
-    "owners" : [ ],
-    "position" : 2,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KG5"
-    ]
-  },
-
-  /* 31 */
-  {
-    "_id" : "IM",
-    "name" : "Iridium/Modena",
-    "owners" : [ ],
-    "position" : 30,
-    "__v" : 3,
-    "active" : true,
-    "mrps" : [
-      "KG5"
-    ]
-  },
-
-  /* 32 */
-  {
-    "_id" : "GS",
-    "name" : "Gentle Space",
-    "owners" : [ ],
-    "position" : 11,
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KG8"
-    ]
-  },
-
-  /* 33 */
-  {
-    "_id" : "FS",
-    "position" : 70,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KE7"
-    ],
-    "name" : "FreeStreet, MAXOS LED",
-    "__v" : 0
-  },
-
-  /* 34 */
-  {
-    "_id" : "FBSS",
-    "position" : 140,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KF2"
-    ],
-    "name" : "Flexblend S&S",
-    "__v" : 0
-  },
-
-  /* 35 */
-  {
-    "_id" : "EPCGS",
-    "position" : 80,
-    "active" : true,
-    "owners" : [ ],
-    "mrps" : [
-      "KG1"
-    ],
-    "name" : "EPC300, EGS350",
-    "__v" : 0
-  },
-
-  /* 36 */
-  {
-    "_id" : "DIGI",
-    "position" : 50,
-    "owners" : [ ],
-    "name" : "DigiStreet",
-    "__v" : 2,
-    "active" : true,
-    "mrps" : [
-      "KG9"
-    ]
-  },
-
-  /* 37 */
-  {
-    "_id" : "CW",
-    "name" : "Clear Way",
-    "owners" : [ ],
-    "position" : 22,
-    "__v" : 0,
-    "active" : false,
-    "mrps" : [ ]
-  },
-
-  /* 38 */
-  {
-    "_id" : "CT",
-    "name" : "Coreline Trunking",
-    "owners" : [ ],
-    "position" : 20,
-    "__v" : 3,
-    "active" : true,
-    "mrps" : [
-      "KE6"
-    ]
-  },
-
-  /* 39 */
-  {
-    "_id" : "CO",
-    "name" : "Coreline Office",
-    "owners" : [ ],
-    "position" : 1,
-    "__v" : 2,
-    "active" : true,
-    "mrps" : [
-      "KE5"
-    ]
-  },
-
-  /* 40 */
-  {
-    "_id" : "CLW2",
-    "position" : 23,
-    "owners" : [ ],
-    "name" : "Clear Way Gen 2",
-    "__v" : 1,
-    "active" : true,
-    "mrps" : [
-      "KHJ"
-    ]
+    mergeFteMasterEntry(entry, update, oldTask, newTask);
   }
-]);
-
-db.kaizencategories.deleteMany({});
-db.kaizencategories.insertMany([
-  /* 1 */
+  else if (update.fteMasterEntry.mode === 'transfer')
   {
-    "_id" : "na",
-    "name" : "n/a",
-    "position" : 6,
-    "inSuggestion" : false,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 2 */
-  {
-    "_id" : "ZZ",
-    "name" : "Zbędny zapasy",
-    "position" : 30,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 3 */
-  {
-    "_id" : "ZT",
-    "name" : "Zbędny transport",
-    "position" : 20,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 4 */
-  {
-    "_id" : "ZR",
-    "name" : "Zbędny ruch",
-    "position" : 40,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 5 */
-  {
-    "_id" : "ZP",
-    "name" : "Zbędne przetwarzanie",
-    "position" : 70,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 6 */
-  {
-    "_id" : "U",
-    "name" : "Umiejętności",
-    "position" : 80,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 7 */
-  {
-    "_id" : "SYS",
-    "name" : "Systematyka",
-    "position" : 100,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 8 */
-  {
-    "_id" : "STD",
-    "name" : "Standaryzacja",
-    "position" : 120,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 9 */
-  {
-    "_id" : "SS",
-    "name" : "Selekcja, sortowanie",
-    "position" : 90,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 10 */
-  {
-    "_id" : "SPRZ",
-    "name" : "Sprzątanie",
-    "position" : 110,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 11 */
-  {
-    "_id" : "SO",
-    "description" : "Zachowanie, którego skutkiem jest nieprawidłowa segregacja odpadów (np. w pojemnikach na tworzywo znajduje się odpad makulatury)",
-    "inNearMiss" : true,
-    "inSuggestion" : false,
-    "position" : 3,
-    "name" : "Segregacja odpadów",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 12 */
-  {
-    "_id" : "OTHER",
-    "name" : "inna",
-    "inSuggestion" : false,
-    "inNearMiss" : true,
-    "description" : "",
-    "__v" : 0,
-    "position" : 5,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 13 */
-  {
-    "_id" : "OPL",
-    "name" : "One Point Lesson",
-    "position" : 1,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "One Point Lesson – Lekcja Jednostronicowa. Dzielimy się wiedzą o zdarzeniu, usprawnieniu, działaniu procesu.",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 14 */
-  {
-    "_id" : "OCZ",
-    "name" : "Oczekiwanie",
-    "position" : 50,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 15 */
-  {
-    "_id" : "NZ",
-    "name" : "Ryzykowne zachowanie",
-    "inSuggestion" : false,
-    "inNearMiss" : true,
-    "description" : "Zachowanie, którego skutkiem może być wypadek/choroba (np.: nie stosowanie środków ochrony indywidualnej (np. okularów, rękawic), niestosowanie wymaganych narzędzi/sprzętu, niewłaściwe posługiwanie się nimi, nie przestrzeganie procedur, instrukcji, standardów (np 6S), wkładanie rąk w strefę zagrożenia, wejście w strefę niedozwoloną, wykonywanie czynności bez usunięcia zagrożenia (np. niewyłączenie maszyny, niewyłączenie napięcia), zbyt szybka jazda, pozostawienie przedmiotów pracy w niewłaściwym miejscu, nieergonomiczna pozycja przy pracy).",
-    "__v" : 0,
-    "position" : 4,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 16 */
-  {
-    "_id" : "NSI",
-    "name" : "Niewłaściwy stan infrastruktury",
-    "inSuggestion" : false,
-    "inNearMiss" : true,
-    "description" : "Zły stan infrastruktury, którego skutkiem może być wypadek/choroba (np.: niesprawne urządzenia, uszkodzone/zużyte wyposażenie stanowiska pracy, uszkodzona konstrukcja stanowiska, brak lub niewłaściwe urządzenia zabezpieczające (np. osłony), niebezpieczne przedmioty, wycieki oleju, uszkodzone regały, uszkodzone wózki, emisja pyłu (zapylenie) lub czynników chemicznych, silny hałas, drgania).",
-    "__v" : 0,
-    "position" : 2,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 17 */
-  {
-    "_id" : "NP",
-    "name" : "Nadprodukcja",
-    "position" : 60,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 18 */
-  {
-    "_id" : "NOP",
-    "name" : "Niewłaściwa organizacja pracy",
-    "inSuggestion" : false,
-    "inNearMiss" : true,
-    "description" : "Stan, w wyniku którego może dojść do wypadku/choroby (np.: ustawienie urządzeń, przedmiotów, wyposażenia utrudniające poruszanie się, brak lub niewłaściwe oznakowanie miejsc niebezpiecznych, praca na wysokości bez zabezpieczeń, ostre krawędzie, brak instrukcji bhp, brak szkolenia bhp, nieodpowiednie rozmieszczenie i składowanie przedmiotów, nadmierny ciężar).",
-    "__v" : 0,
-    "position" : 3,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 19 */
-  {
-    "_id" : "KON",
-    "name" : "Konstrukcja",
-    "position" : 150,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "designer"
-        ],
-        "section" : "MD",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 20 */
-  {
-    "_id" : "KI",
-    "description" : "",
-    "inNearMiss" : false,
-    "inSuggestion" : true,
-    "position" : 160,
-    "name" : "Kaizen Event",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 21 */
-  {
-    "_id" : "IBU",
-    "name" : "Incydent bez urazu",
-    "inSuggestion" : false,
-    "inNearMiss" : true,
-    "description" : "Zdarzenie nagłe wywołane przyczyną zewnętrzną mające związek z pracą (np.: upadek przedmiotu z wysokości w bezpośrednim sąsiedztwie osób, kolizja z udziałem pojazdów, potknięcie się o przedmioty leżące na drodze, poślizgnięcie się, zaczepienie o wystający przedmiot, uderzenie o lub przez przedmioty).",
-    "__v" : 0,
-    "position" : 5,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 22 */
-  {
-    "_id" : "DYS",
-    "name" : "Samodyscyplina",
-    "position" : 130,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 1,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [
-          "process-engineer"
-        ],
-        "section" : "LT",
-        "mor" : "mrp"
-      }
-    ]
-  },
-
-  /* 23 */
-  {
-    "_id" : "BHP",
-    "name" : "BHP+ergonomia",
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 6,
-    "position" : 10,
-    "active" : true,
-    "coordSections" : [
-      {
-        "funcs" : [ ],
-        "section" : "KBHP",
-        "mor" : "none"
-      }
-    ]
-  },
-
-  /* 24 */
-  {
-    "_id" : "AM",
-    "name" : "Autonomous Maintenance",
-    "position" : 140,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
-  },
-
-  /* 25 */
-  {
-    "_id" : "A3",
-    "name" : "A3",
-    "position" : 22,
-    "inSuggestion" : true,
-    "inNearMiss" : false,
-    "description" : "A3",
-    "__v" : 0,
-    "active" : true,
-    "coordSections" : [ ]
+    transferFteMasterEntry(entry, update, oldTask, newTask);
   }
-]);
+}
+
+function mergeFteMasterEntry(entry, update, oldTask, newTask)
+{
+  if (newTask)
+  {
+    if (!oldTask)
+    {
+      return;
+    }
+
+    newTask.functions.forEach((f, fI) =>
+    {
+      f.companies.forEach((c, cI) =>
+      {
+        c.count = roundFte(c.count + oldTask.functions[fI].companies[cI].count);
+      });
+    });
+
+    entry.tasks = entry.tasks.filter(t => t !== oldTask);
+  }
+  else
+  {
+    oldTask.id = update.newOrgUnits.prodFlow;
+  }
+
+  db.ftemasterentries.update({_id: entry._id}, {$set: {tasks: entry.tasks}});
+}
+
+function transferFteMasterEntry(entry, update, oldTask, newTask)
+{
+  if (newTask && update.fteMasterEntry.ignoreNewTask)
+  {
+    return;
+  }
+
+  const line = update.newOrgUnits.prodLine;
+  const newLineActive = db.prodshiftorders.count({
+    prodLine: line,
+    startedAt: {
+      $gte: entry.date,
+      $lt: new Date(entry.date.getTime() + 8 * 3600 * 1000)
+    }
+  }) > 0;
+
+  if (!newLineActive)
+  {
+    return;
+  }
+
+  if (!newTask)
+  {
+    const newProdFlow = db.prodflows.findOne({_id: update.newOrgUnits.prodFlow});
+
+    newTask = {
+      type: 'prodFlow',
+      id: newProdFlow._id,
+      name: newProdFlow.name,
+      noPlan: false,
+      functions: [],
+      total: 0
+    };
+
+    entry.tasks.push(newTask);
+    entry.tasks.sort((a, b) =>
+    {
+      if (a.type === b.type)
+      {
+        return a.name.localeCompare(b.name, undefined, {numeric: true, ignorePunctuation: true});
+      }
+
+      return a.type === 'prodFlow' ? -1 : 1;
+    });
+  }
+
+  const totalLineCount = (db.prodshiftorders.distinct('prodLine', {
+    prodFlow: update.oldOrgUnits.prodFlow,
+    startedAt: {
+      $gte: entry.date,
+      $lt: new Date(entry.date.getTime() + 8 * 3600 * 1000)
+    }
+  }) || []).length + 1;
+
+  const copyStructure = newTask.functions.length === 0;
+
+  oldTask.functions.forEach((fn, fnI) =>
+  {
+    if (copyStructure)
+    {
+      newTask.functions.push({
+        id: fn.id,
+        companies: []
+      });
+    }
+
+    fn.companies.forEach((c, cI) =>
+    {
+      if (copyStructure)
+      {
+        newTask.functions[fnI].companies.push({
+          id: c.id,
+          name: c.name,
+          count: 0
+        });
+      }
+
+      const key = `${entry._id.valueOf()}.${oldTask.id.valueOf()}.${fnI}.${cI}`;
+
+      if (fteCountPerLine[key] == null)
+      {
+        fteCountPerLine[key] = c.count / totalLineCount;
+      }
+
+      const countPerLine = fteCountPerLine[key];
+
+      c.count = roundFte(c.count - countPerLine);
+
+      newTask.functions[fnI].companies[cI].count = roundFte(
+        newTask.functions[fnI].companies[cI].count + countPerLine
+      );
+    });
+  });
+
+  db.ftemasterentries.update({_id: entry._id}, {$set: {tasks: entry.tasks}});
+}
+
+function roundFte(fte)
+{
+  return Math.round(fte * 1000) / 1000;
+}
