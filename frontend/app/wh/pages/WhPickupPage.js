@@ -15,6 +15,7 @@ define([
   'app/planning/Plan',
   'app/planning/PlanSettings',
   'app/planning/PlanDisplayOptions',
+  'app/production/views/VkbView',
   'app/wh-lines/WhLineCollection',
   '../settings',
   '../WhOrderCollection',
@@ -45,6 +46,7 @@ define([
   Plan,
   PlanSettings,
   PlanDisplayOptions,
+  VkbView,
   WhLineCollection,
   whSettings,
   WhOrderCollection,
@@ -90,18 +92,28 @@ define([
 
     breadcrumbs: function()
     {
+      var datePicker = {
+        href: '#wh/pickup/' + this.plan.id,
+        label: this.plan.getLabel(),
+        template: function(breadcrumb)
+        {
+          return '<span class="paintShop-breadcrumb"><a class="fa fa-chevron-left" data-action="prev"></a>'
+            + '<a href="' + breadcrumb.href + '" data-action="showPicker">' + breadcrumb.label + '</a>'
+            + '<a class="fa fa-chevron-right" data-action="next"></a></span>';
+        }
+      };
+
+      if (embedded.isEnabled())
+      {
+        return [
+          this.t('BREADCRUMB:pickup'),
+          datePicker
+        ];
+      }
+
       return [
         this.t('BREADCRUMB:base'),
-        {
-          href: '#wh/pickup/' + this.plan.id,
-          label: this.plan.getLabel(),
-          template: function(breadcrumb)
-          {
-            return '<span class="paintShop-breadcrumb"><a class="fa fa-chevron-left" data-action="prev"></a>'
-              + '<a href="' + breadcrumb.href + '" data-action="showPicker">' + breadcrumb.label + '</a>'
-              + '<a class="fa fa-chevron-right" data-action="next"></a></span>';
-          }
-        },
+        datePicker,
         this.t('BREADCRUMB:pickup')
       ];
     },
@@ -318,6 +330,8 @@ define([
 
     defineViews: function()
     {
+      this.vkbView = embedded.isEnabled() ? new VkbView() : null;
+
       this.filterView = new WhPickupFilterView({
         plan: this.plan
       });
@@ -332,6 +346,11 @@ define([
       this.statusView = new WhPickupStatusView({
         model: this.pickupStatus
       });
+
+      if (embedded.isEnabled())
+      {
+        this.setView('#-vkb', this.vkbView);
+      }
 
       this.setView('#-filter', this.filterView);
       this.setView('#-list', this.listView);
@@ -741,7 +760,8 @@ define([
           line: line
         },
         whOrders: this.whOrders,
-        plan: this.plan
+        plan: this.plan,
+        vkb: this.vkbView
       });
 
       if (orders[0].get('redirLine'))

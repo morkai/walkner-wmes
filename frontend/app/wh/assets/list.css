@@ -2,7 +2,11 @@
   margin-top: 10px;
 }
 .planning-wh-list .planning-mrp-lineOrders-list {
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.planning-wh-list .planning-mrp-lineOrders-comment {
+  white-space: nowrap;
 }
 .planning-mrp-lineOrders-table .success {
   background: #dff0d8;
@@ -142,3 +146,4 @@ td.wh-list-icon {
   top: -1px;
   left: 15px;
 }
+

@@ -8,6 +8,8 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/embedded',
+  'app/core/util/scrollbarSize',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
   'app/planning/PlanSapOrder',
@@ -27,6 +29,8 @@ define([
   user,
   viewport,
   View,
+  embedded,
+  scrollbarSize,
   clipboard,
   contextMenu,
   PlanSapOrder,
@@ -247,6 +251,7 @@ define([
     },
 
     localTopics: {
+      'planning.contextMenu.shown': 'hidePopover',
       'planning.contextMenu.hidden': 'focus'
     },
 
@@ -265,29 +270,21 @@ define([
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
       view.listenTo(view.whOrders, 'change', view.onOrderChanged);
 
-      $(window).on('keydown.' + this.idPrefix, function(e)
+      view.once('afterRender', function()
       {
-        if (e.key === 'Escape')
-        {
-          if (view.$editor)
-          {
-            view.hideEditor();
-            view.focus();
-          }
-          else
-          {
-            viewport.closeDialog();
-          }
-
-          return false;
-        }
+        view.$el.parent().on('scroll.' + view.idPrefix, view.onScroll.bind(view));
       });
+
+      $(window)
+        .on('resize.' + view.idPrefix, view.onWindowResize.bind(view))
+        .on('keydown.' + view.idPrefix, view.onWindowKeyDown.bind(view));
     },
 
     destroy: function()
     {
-      $(window).off('keydown.' + this.idPrefix);
+      $(window).off('.' + this.idPrefix);
 
+      this.$el.parent().off('.' + this.idPrefix);
       this.$el.popover('destroy');
 
       this.hideEditor();
@@ -366,6 +363,11 @@ define([
       {
         this.render();
       }
+    },
+
+    hidePopover: function()
+    {
+      $('.wh-set-popover').remove();
     },
 
     updateSummary: function()
@@ -567,36 +569,43 @@ define([
         });
       }
 
-      if (menu.length)
+      if (!menu.length)
       {
-        var top = e.pageY;
-        var left = e.pageX;
-
-        if (!top)
-        {
-          var $icon = $action.find('.fa');
-
-          if (!$icon.length)
-          {
-            return;
-          }
-
-          var box = $icon[0].getBoundingClientRect();
-
-          top = Math.round(box.y + box.height / 2) + document.scrollingElement.scrollTop;
-          left = Math.round(box.x + box.width / 2);
-        }
-        else
-        {
-          top -= 17;
-          left -= 17;
-        }
-
-        contextMenu.show(view, top, left, {
-          className: 'wh-set-menu',
-          menu: menu
-        });
+        return;
       }
+
+      var top = e.pageY;
+      var left = e.pageX;
+
+      if (!top)
+      {
+        var $icon = $action.find('.fa');
+
+        if (!$icon.length)
+        {
+          return;
+        }
+
+        var box = $icon[0].getBoundingClientRect();
+
+        top = Math.round(box.y + box.height / 2) + document.scrollingElement.scrollTop;
+        left = Math.round(box.x + box.width / 2);
+      }
+      else
+      {
+        top -= 17;
+        left -= 17;
+      }
+
+      if (embedded.isEnabled())
+      {
+        menu.unshift(whOrder.get('order'));
+      }
+
+      contextMenu.show(view, top, left, {
+        className: 'wh-set-menu',
+        menu: menu
+      });
     },
 
     showFixUpdateMenu: function(whOrder, propFunc, prop, e)
@@ -655,6 +664,8 @@ define([
 
       if (menu.length)
       {
+        this.hideEditor();
+
         contextMenu.show(view, y - 17, x - 17, {
           className: 'wh-set-menu',
           menu: menu
@@ -713,10 +724,12 @@ define([
 
       $editor
         .data('whOrderId', $item[0].dataset.id)
+        .data('anchorEl', el)
         .attr('data-func', el.dataset.func)
         .css({
-          left: el.offsetLeft + 'px',
-          top: el.offsetTop + 'px'
+          top: '0',
+          left: '-1000px',
+          margin: 'unset'
         })
         .appendTo('.modal-content');
 
@@ -732,6 +745,83 @@ define([
       });
 
       view.$editor = $editor;
+
+      view.positionEditor();
+
+      if (view.vkb)
+      {
+        view.$editor
+          .on('focus', '[data-vkb]', view.showVkb.bind(view))
+          .on('blur', '[data-vkb]', view.scheduleHideVkb.bind(view));
+      }
+    },
+
+    positionEditor: function()
+    {
+      var $editor = this.$editor;
+
+      if (!$editor)
+      {
+        return;
+      }
+
+      var anchorEl = $editor.data('anchorEl').firstElementChild;
+      var position = this.$(anchorEl).position();
+      var box = anchorEl.getBoundingClientRect();
+      var containerBox = this.$el[0].parentNode.getBoundingClientRect();
+      var editorWidth = $editor.outerWidth();
+      var editorHeight = $editor.outerHeight();
+      var headerHeight = $('.modal-header').outerHeight();
+      var marginTop = containerBox.top - headerHeight;
+      var marginLeft = containerBox.left;
+      var top = position.top + headerHeight;
+      var left = position.left - editorWidth + box.width;
+
+      if (left + containerBox.left + editorWidth + scrollbarSize.width >= window.innerWidth)
+      {
+        left = containerBox.width - editorWidth;
+      }
+
+      if (left < 0)
+      {
+        left = 0;
+      }
+
+      if (top + editorHeight + marginTop * 2 >= window.innerHeight)
+      {
+        top = window.innerHeight - editorHeight - marginTop * 2;
+      }
+
+      if (this.vkb && this.vkb.isVisible())
+      {
+        var vkbBox = this.vkb.el.getBoundingClientRect();
+        var editorAbsoluteTop = top + marginTop;
+        var editorAbsoluteLeft = left + marginLeft;
+        var editorBox = {
+          top: editorAbsoluteTop,
+          bottom: editorAbsoluteTop + editorHeight,
+          left: editorAbsoluteLeft,
+          right: editorAbsoluteLeft + editorWidth
+        };
+
+        if (!(editorBox.right < vkbBox.left
+          || editorBox.left > vkbBox.right
+          || editorBox.bottom < vkbBox.top
+          || editorBox.top > vkbBox.bottom))
+        {
+          top -= editorAbsoluteTop + editorHeight - vkbBox.top + 10;
+        }
+      }
+
+      if (top < 0)
+      {
+        top = 0;
+      }
+
+      $editor.css({
+        top: top + 'px',
+        left: left + 'px'
+      });
     },
 
     hideEditor: function()
@@ -740,8 +830,11 @@ define([
       {
         this.onOrderChanged(this.whOrders.get(this.$editor.data('whOrderId')));
 
+        this.$editor.removeData('anchorEl');
         this.$editor.remove();
         this.$editor = null;
+
+        this.hideVkb();
       }
     },
 
@@ -749,12 +842,11 @@ define([
     {
       var view = this;
       var newData = JSON.parse(JSON.stringify(whOrder.attributes));
-
-      view.$action(whOrder.id, prop, func)
+      var $icon = view.$action(whOrder.id, prop, func)
         .removeClass('is-clickable')
         .find('.fa')
         .removeClass()
-        .addClass('fa fa-spinner fa-spin')
+        .addClass('fa fa-spinner')
         .blur();
 
       view.updateHandlers[prop].call(view, newData, newValue, func, options || {}, function(update)
@@ -765,6 +857,8 @@ define([
         {
           return view.onOrderChanged(whOrder);
         }
+
+        $icon.addClass('fa-spin');
 
         var data = update(JSON.parse(JSON.stringify(whOrder.attributes)), []);
         var req = view.promised(view.whOrders.act(prop, data));
@@ -1002,7 +1096,10 @@ define([
 
           if (cart === 'all')
           {
-            newCarts = newCarts.concat(newData.funcs[WhOrder.FUNC_TO_INDEX[func]].carts);
+            $editor.find('td > a[data-func="' + func + '"]').each(function()
+            {
+              newCarts.push(this.dataset.cart);
+            });
           }
           else
           {
@@ -1450,6 +1547,81 @@ define([
       }
 
       $candidates[candidateI].focus();
+    },
+
+    onScroll: function()
+    {
+      this.positionEditor();
+    },
+
+    onWindowResize: function()
+    {
+      this.positionEditor();
+    },
+
+    onWindowKeyDown: function(e)
+    {
+      if (e.key === 'Escape')
+      {
+        if (this.$editor)
+        {
+          this.hideEditor();
+          this.focus();
+        }
+        else
+        {
+          viewport.closeDialog();
+        }
+
+        return false;
+      }
+    },
+
+    scheduleHideVkb: function()
+    {
+      clearTimeout(this.timers.hideVkb);
+
+      this.timers.hideVkb = setTimeout(this.hideVkb.bind(this), 250);
+    },
+
+    hideVkb: function()
+    {
+      clearTimeout(this.timers.hideVkb);
+
+      if (this.vkb)
+      {
+        this.vkb.hide();
+        this.vkb.enableKeys();
+      }
+    },
+
+    showVkb: function(e)
+    {
+      if (!this.vkb)
+      {
+        return;
+      }
+
+      clearTimeout(this.timers.hideVkb);
+
+      this.vkb.show(e.currentTarget, {
+        adjustOverlap: false,
+        onKeyPress: this.onVkbKeyPress.bind(this)
+      });
+
+      this.positionEditor();
+    },
+
+    onVkbKeyPress: function(key)
+    {
+      if (key !== 'ENTER')
+      {
+        return true;
+      }
+
+      this.$editor.find('.btn').click();
+
+      return false;
     }
 
   });

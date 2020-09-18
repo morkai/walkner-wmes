@@ -1,7 +1,7 @@
 <form class="wh-set-editor wh-set-editor-problem" data-func="<%- func %>">
   <% if (func !== 'lp10') { %>
-  <input type="text" autocomplete="new-password" class="form-control" value="<%= problemArea %>" placeholder="<%- t('wh', 'set:problemEditor:problemArea') %>" required>
+  <input type="text" autocomplete="new-password" class="form-control" value="<%= problemArea %>" placeholder="<%- t('wh', 'set:problemEditor:problemArea') %>" required data-vkb="alpha numeric">
   <% } %>
   <button class="btn btn-danger"><i class="fa fa-shopping-cart"></i></button>
-  <textarea class="form-control" placeholder="<%= placeholder %>"><%= comment %></textarea>
+  <textarea class="form-control" placeholder="<%= placeholder %>" data-vkb="alpha numeric multiline"><%= comment %></textarea>
 </form>

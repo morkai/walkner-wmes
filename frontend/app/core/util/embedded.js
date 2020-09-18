@@ -44,7 +44,7 @@ define([
   {
     clearTimeout(switchTimer);
 
-    if (!Array.isArray(data.apps) || data.apps.length === 0)
+    if (!data || !Array.isArray(data.apps) || data.apps.length === 0)
     {
       return;
     }

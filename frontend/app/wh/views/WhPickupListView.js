@@ -346,6 +346,8 @@ define([
 
       $body.find('.wh-list-sticky').remove();
       $body.append(this.$stickyHeaders);
+
+      this.$el.on('scroll', this.scrollStickyHeaders.bind(this));
     },
 
     adjustStickyHeaders: function()
@@ -373,6 +375,25 @@ define([
       }
 
       this.$stickyHeaders[0].classList.toggle('hidden', window.scrollY <= this.el.offsetTop);
+    },
+
+    scrollStickyHeaders: function()
+    {
+      if (!this.$stickyHeaders)
+      {
+        return;
+      }
+
+      var left = 15;
+      var listEl = this.el;
+      var stickyEl = this.$stickyHeaders[0];
+
+      if (Math.abs(listEl.scrollWidth - listEl.clientWidth) > 1)
+      {
+        left -= listEl.scrollLeft;
+      }
+
+      stickyEl.style.left = left + 'px';
     },
 
     hideMenu: function()

@@ -1,9 +1,9 @@
 <form class="wh-set-editor wh-set-editor-carts <%- multiline ? 'wh-is-multiline' : '' %>">
   <div class="wh-set-editor-carts-input">
     <% if (multiline) { %>
-    <textarea class="form-control text-fixed" placeholder="<%- t('set:cartsEditor:carts') %>" required><%- carts %></textarea>
+    <textarea class="form-control text-fixed" placeholder="<%- t('set:cartsEditor:carts') %>" required data-vkb="numeric alpha multiline"><%- carts %></textarea>
     <% } else { %>
-    <input type="text" autocomplete="new-password" class="form-control text-fixed" value="<%- carts %>" placeholder="<%- t('set:cartsEditor:carts') %>" required>
+    <input type="text" autocomplete="new-password" class="form-control text-fixed" value="<%- carts %>" placeholder="<%- t('set:cartsEditor:carts') %>" required data-vkb="numeric alpha multiline">
     <% } %>
     <button class="btn btn-success"><i class="fa fa-shopping-cart"></i></button>
   </div>
@@ -13,11 +13,7 @@
       <% otherCarts.forEach(function(otherFunc) { %>
       <tr>
         <th><a href="javascript:void(0)" data-func="<%- otherFunc._id %>" data-cart="all"><%- t('prop:' + otherFunc._id) %></a>:</th>
-        <td>
-          <% otherFunc.carts.forEach(function(cart) { %>
-          <a href="javascript:void(0)" data-func="<%- otherFunc._id %>" data-cart="<%- cart %>"><%- cart %></a>
-          <% }) %>
-        </td>
+        <td><% otherFunc.carts.forEach(function(cart) { %><a href="javascript:void(0)" data-func="<%- otherFunc._id %>" data-cart="<%- cart %>"><%- cart %></a><% }) %></td>
       </tr>
       <% }) %>
     </tbody>

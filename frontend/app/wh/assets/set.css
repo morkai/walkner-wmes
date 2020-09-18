@@ -1,8 +1,3 @@
-@media (min-width: 768px) {
-  .wh-set-dialog .modal-dialog {
-    width: 1265px;
-  }
-}
 .wh-set {
   width: 100%;
   line-height: 1;
@@ -51,9 +46,10 @@
 .wh-set-item td:first-child {
   padding-left: 0;
 }
-.wh-set-item td:last-child {
+.wh-set tr th:last-child,
+.wh-set tr td:last-child {
   width: auto;
-  padding-right: 0;
+  padding: 0;
 }
 .wh-set-item.is-cancelled {
   text-decoration: line-through;
@@ -108,6 +104,7 @@
 .wh-set-item .wh-set-actions {
   padding-bottom: 14px;
   padding-left: 14px;
+  padding-right: 14px;
 }
 .wh-set-actions .btn {
   padding: 0;
@@ -145,14 +142,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  margin-top: 85px;
   background: #fff;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 .wh-set-editor-carts {
   display: flex;
   flex-direction: column;
-  margin-left: -263px;
 }
 .wh-set-editor-carts-input {
   display: flex;
@@ -164,14 +159,6 @@
 }
 .wh-set-editor-carts .form-control::-webkit-input-placeholder {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-.wh-set-editor-carts[data-func="platformer"],
-.wh-set-editor-carts[data-func="painter"],
-.wh-set-editor-problem[data-func="painter"] {
-  margin-left: -200px;
-}
-.wh-set-editor-carts.wh-is-multiline {
-  margin-left: -308px;
 }
 .wh-set-editor-carts.wh-is-multiline .form-control {
   width: 325px;
@@ -192,6 +179,8 @@
   padding-top: 7px;
   width: 1px;
   white-space: nowrap;
+  vertical-align: top;
+  text-align: right;
 }
 .wh-set-editor-carts-other td {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
@@ -210,6 +199,7 @@
 .wh-set-editor-carts-other td a {
   display: inline-block;
   margin-top: 7px;
+  margin-right: 7px;
   min-width: 42px;
   text-align: center;
   background: #337ab7;
@@ -221,7 +211,6 @@
 }
 .wh-set-editor-problem {
   display: flex;
-  margin-left: -258px;
   width: 323px;
   flex-wrap: wrap;
 }
@@ -244,7 +233,6 @@
   font-size: 28px;
 }
 .wh-set-editor-problem[data-func="lp10"] {
-  margin-left: -255px;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row-reverse;
@@ -265,7 +253,6 @@
 }
 .wh-set-editor-printLabels {
   display: flex;
-  margin-left: -41px;
 }
 .wh-set-editor-printLabels .form-control {
   width: 70px;
@@ -304,3 +291,129 @@ th[data-func] > .wh-set-summary {
   outline: 2px solid #0af;
   outline-offset: 3px;
 }
+
+.is-embedded .wh-set-item td {
+  height: 45px;
+}
+.is-embedded .wh-set-action .fa {
+  width: 63px;
+}
+.is-embedded .wh-set-action {
+  font-size: 63px;
+}
+.is-embedded .wh-set-actions .btn {
+  width: 63px;
+  height: 63px;
+}
+.is-embedded .wh-set-menu > li > a {
+  font-size: 42px;
+  line-height: 70px;
+}
+.is-embedded .wh-set-menu > li > a > .fa {
+  font-size: 42px;
+  line-height: 70px;
+  min-width: 42px;
+}
+.is-embedded .wh-set-editor-problem[data-func="lp10"] textarea.form-control {
+  height: 78px;
+  min-height: 78px;
+}
+.is-embedded .wh-set-editor-problem[data-func="lp10"] .btn {
+  width: 78px;
+}
+.is-embedded .wh-set-editor-problem {
+  width: 418px;
+}
+.is-embedded .wh-set-editor-problem input.form-control {
+  width: 340px;
+  height: 78px;
+  font-size: 35px;
+}
+.is-embedded .wh-set-editor-problem textarea.form-control {
+  width: 100%;
+  height: 78px;
+  min-height: 78px;
+  font-size: 14px;
+}
+.is-embedded .wh-set-editor-problem .btn {
+  width: 78px;
+  height: 78px;
+  font-size: 35px;
+}
+.is-embedded .wh-set-editor-printLabels .form-control {
+  width: 100px;
+  height: 63px;
+  font-size: 35px;
+}
+.is-embedded .wh-set-editor-printLabels .btn {
+  padding: 0;
+  width: 63px;
+  height: 63px;
+  font-size: 35px;
+}
+.is-embedded th[data-func] > .wh-set-summary {
+  width: 154px;
+}
+.is-embedded .wh-set-editor-carts .btn {
+  width: 78px;
+  height: 78px;
+  font-size: 35px;
+}
+.is-embedded .wh-set-editor-carts .form-control {
+  width: 385px;
+  height: 78px;
+  font-size: 35px;
+}
+.is-embedded .wh-set-editor-carts[data-func="packer"] .form-control {
+  width: 400px;
+  height: 214px;
+  min-height: 214px;
+}
+.is-embedded .wh-set-editor-carts[data-func="packer"] .btn-success {
+  height: auto;
+}
+.is-embedded .wh-set-editor-carts-other {
+  font-size: 42px;
+}
+.is-embedded .wh-set-editor-carts-other th {
+  width: 144px;
+}
+.is-embedded .wh-set-editor-carts-other td {
+  width: 319px;
+}
+.wh-set-dialog .modal-dialog {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .wh-set-dialog .modal-dialog {
+    padding-left: 17px;
+  }
+}
+@media (min-width: 1328px) {
+  .wh-set-dialog .modal-dialog {
+    padding-left: 0;
+    width: 1294px;
+  }
+}
+@media (max-width: 1599px) {
+  .is-embedded .wh-set-dialog .modal-dialog {
+    margin: 30px 10px;
+    padding-left: 0;
+    width: 100%;
+  }
+}
+@media (min-width: 1600px) {
+  .is-embedded .wh-set-dialog .modal-dialog {
+    padding-left: 17px;
+    width: 1535px;
+  }
+}
+@media (max-width: 1600px) {
+  .wh-set-dialog .modal-body {
+    overflow-x: auto;
+  }
+  .wh-set th:last-child {
+    padding-right: 14px;
+  }
+}
+

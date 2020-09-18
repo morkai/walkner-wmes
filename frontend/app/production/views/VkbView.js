@@ -42,7 +42,9 @@ define([
     {
       this.fieldEl = null;
 
+      this.adjustOverlap = false;
       this.onValueChange = null;
+      this.onKeyPress = null;
 
       this.extended = false;
 
@@ -100,8 +102,8 @@ define([
       var modalH = $modal.outerHeight();
       var vkbPos = $vkb.offset();
       var vkbW = $vkb.outerWidth();
-      var overlapV = modalPos.top + modalH + 30 > vkbPos.top;
-      var overlapH = modalPos.left + modalW + 30 > vkbPos.left;
+      var overlapV = this.adjustOverlap && modalPos.top + modalH + 30 > vkbPos.top;
+      var overlapH = this.adjustOverlap && modalPos.left + modalW + 30 > vkbPos.left;
 
       if (overlapV && this.mode.numeric && !this.mode.alpha)
       {
@@ -119,11 +121,27 @@ define([
       $modal.css(modalCss);
     },
 
-    show: function(fieldEl, onValueChange)
+    show: function(fieldEl, options)
     {
       var view = this;
 
-      if (view.fieldEl === fieldEl && view.onValueChange === onValueChange)
+      if (!options)
+      {
+        options = {};
+      }
+      else if (typeof options === 'function')
+      {
+        options = {onValueChange: options};
+      }
+
+      _.defaults(options, {
+        onValueChange: null,
+        onKeyPress: null
+      });
+
+      if (view.fieldEl === fieldEl
+        && view.onValueChange === options.onValueChange
+        && view.onKeyPress === options.onKeyPress)
       {
         return false;
       }
@@ -141,7 +159,9 @@ define([
       fieldEl.classList.add('is-vkb-focused');
 
       view.fieldEl = fieldEl;
-      view.onValueChange = onValueChange;
+      view.adjustOverlap = options.adjustOverlap !== false;
+      view.onValueChange = options.onValueChange;
+      view.onKeyPress = options.onKeyPress;
 
       view.updateExtended();
       view.reposition();
@@ -162,6 +182,7 @@ define([
 
       this.fieldEl = null;
       this.onValueChange = null;
+      this.onKeyPress = null;
     },
 
     isVisible: function()
@@ -171,20 +192,35 @@ define([
 
     enableKeys: function()
     {
+      console.log('enableKeys');
       this.$('.btn[data-key][disabled]').each(function()
       {
         this.disabled = false;
       });
     },
 
-    disableKeys: function(keys)
+    disableKeys: function(keys, skipUndefined)
     {
+      if (skipUndefined == null)
+      {
+        skipUndefined = false;
+      }
+
       this.$('.btn[data-key]').each(function()
       {
-        if (this.dataset.key.length === 1)
+        var disabled = keys[this.dataset.key];
+
+        if (skipUndefined && disabled === undefined)
         {
-          this.disabled = keys[this.dataset.key] !== true;
+          return;
         }
+
+        if (this.dataset.key.length !== 1)
+        {
+          return;
+        }
+
+        this.disabled = disabled !== true;
       });
     },
 
@@ -193,6 +229,11 @@ define([
       var fieldEl = this.fieldEl;
 
       if (!fieldEl)
+      {
+        return;
+      }
+
+      if (this.onKeyPress && this.onKeyPress(key, fieldEl) === false)
       {
         return;
       }

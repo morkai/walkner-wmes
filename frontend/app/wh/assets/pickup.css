@@ -19,6 +19,12 @@
   border-left: 1px solid #000;
   color: #999;
 }
+.wh-pickup-status-short {
+  display: none;
+}
+.wh-pickup-status-full {
+  display: block;
+}
 .wh-pickup-status-func:first-child {
   border-left: none;
 }
@@ -42,4 +48,20 @@
 }
 .wh-pickup-forceLine .btn-group-vertical > .btn-default:last-child {
   border-bottom: 0;
+}
+.is-embedded .planning-plan .embedded-actions {
+  opacity: 0.3;
+}
+.is-embedded .planning-plan .embedded-actions:hover,
+.is-embedded .planning-plan .embedded-actions.open {
+  opacity: 1;
+}
+
+@media (max-width: 1800px) {
+  .wh-pickup-status-short {
+    display: block;
+  }
+  .wh-pickup-status-full {
+    display: none;
+  }
 }
