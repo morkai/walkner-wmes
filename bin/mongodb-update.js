@@ -4,7 +4,7 @@
 'use strict';
 
 // Recount
-// /fix/clip/count-daily-mrp?from=2018-01-01
+// /fix/clip/count-daily-mrp?from=2019-04-16
 // /fix/fteMasterEntries/recount-totals?date=2018-01-01
 
 const toRemove = [

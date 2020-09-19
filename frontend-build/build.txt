@@ -4098,6 +4098,8 @@ app/planning/PlanningSettingCollection.js
 app/planning/settings.js
 app/planning/PlanSettings.js
 app/planning/PlanDisplayOptions.js
+app/production/templates/vkb.js
+app/production/views/VkbView.js
 app/wh-lines/WhLine.js
 app/wh-lines/WhLineCollection.js
 app/wh/WhSetting.js
@@ -4139,6 +4141,7 @@ app/wh/templates/pickup/row.js
 app/wh/templates/pickup/popover.js
 app/wh/templates/pickup/linePopover.js
 app/wh/views/WhPickupListView.js
+app/core/util/scrollbarSize.js
 app/wh/templates/pickup/set/set.js
 app/wh/templates/pickup/set/setItem.js
 app/wh/templates/pickup/set/setPickupPopover.js
