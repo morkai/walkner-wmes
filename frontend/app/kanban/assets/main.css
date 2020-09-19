@@ -192,7 +192,7 @@ tr:hover > .kanban-is-invalid,
   content: "\f0dd  \f0b0";
 }
 .kanban-td[data-column-id="_id"] {
-  width: 60px;
+  width: 70px;
 }
 .kanban-td[data-column-id="nc12"] {
   width: 105px;
@@ -307,6 +307,9 @@ tr:hover > .kanban-is-invalid,
 .kanban-td-color-label {
   margin-left: 4px;
   font-family: Arial, sans-serif;
+}
+.kanban-td-id-suffix {
+  color: #999;
 }
 .kanban-td[data-column-id="comment"] {
   width: 400px;

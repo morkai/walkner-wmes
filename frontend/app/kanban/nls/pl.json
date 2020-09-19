@@ -42,6 +42,7 @@
   "menu:nc12:orders": "Zlecenia produkcyjne",
   "menu:nc12:pfep": "Baza PFEP",
   "menu:nc12:pfep:notFound": "12NC nie istnieje w bazie PFEP.",
+  "menu:split": "Podziel CCN",
 
   "column:_id": "CCN",
   "column:nc12": "12NC",
@@ -183,5 +184,12 @@
   "color:pink": "Różowy",
   "color:brown": "Brązowy",
   "color:cyan": "Turkusowy",
-  "color:black": "Czarny"
+  "color:black": "Czarny",
+
+  "splitEntry:title": "Dzielenie CCN",
+  "splitEntry:submit": "Podziel CCN",
+  "splitEntry:cancel": "Anuluj",
+  "splitEntry:ccn": "CCN",
+  "splitEntry:parts": "Ilość części",
+  "splitEntry:message": "Wybrany CCN zostanie podzielony na podaną ilość części. Każda część otrzyma Kanban ID ze źródłowego CCN w ilości <code>ZAOKR.GÓRA(ilość_kanban_id / ilość_części)</code>. Dodatkowe CCN będą w nazwie miały przyrostek a, b, c, ..."
 }

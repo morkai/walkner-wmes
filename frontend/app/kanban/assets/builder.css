@@ -3,7 +3,7 @@
 }
 .kanban-builder {
   position: fixed;
-  width: 633px;
+  width: 643px;
   z-index: 3;
   border-bottom: 0;
   background: #f1f1f1;
@@ -92,7 +92,7 @@
   text-align: right;
 }
 .kanban-builder-ccn {
-  min-width: 60px;
+  min-width: 70px;
   text-align: center;
 }
 .kanban-builder-tbody .kanban-builder-ccn {

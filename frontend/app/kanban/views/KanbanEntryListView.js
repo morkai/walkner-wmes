@@ -14,6 +14,7 @@ define([
   './KanbanEntryListView.keyHandlers',
   './KanbanEntryListView.filters',
   './KanbanEntryListView.editors',
+  './SplitEntryDialogView',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
   'app/kanban/templates/entryListRow'
@@ -31,6 +32,7 @@ define([
   keyHandlers,
   filters,
   editors,
+  SplitEntryDialogView,
   template,
   columnsTemplate,
   rowTemplate
@@ -773,6 +775,17 @@ define([
         ]
       };
 
+      if (cell.column._id === '_id'
+        && !/[a-z]$/.test(cell.modelId)
+        && user.isAllowedTo('KANBAN:MANAGE', 'FN:process-engineer'))
+      {
+        options.menu.push({
+          icon: 'fa-chain-broken',
+          label: view.t('menu:split'),
+          handler: view.handleSplitEntry.bind(view, cell.modelId)
+        });
+      }
+
       if (!cell.model.get('discontinued'))
       {
         options.menu.unshift({
@@ -990,6 +1003,22 @@ define([
           text: view.t('msg:clipboard:' + type)
         });
       });
+    },
+
+    handleSplitEntry: function(entryId)
+    {
+      var entry = this.model.entries.get(entryId);
+
+      if (!entry)
+      {
+        return;
+      }
+
+      var dialogView = new SplitEntryDialogView({
+        model: entry
+      });
+
+      viewport.showDialog(dialogView, this.t('splitEntry:title'));
     },
 
     exportEntry: function(entry)

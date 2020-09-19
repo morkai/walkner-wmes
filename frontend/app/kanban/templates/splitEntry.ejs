@@ -1,0 +1,23 @@
+<form>
+  <div class="message message-inline message-info" style="margin-bottom: 15px">
+    <%- t('splitEntry:message') %>
+  </div>
+  <%- helpers.formGroup({
+    name: 'ccn',
+    label: 'splitEntry:',
+    type: 'static',
+    value: entry._id
+  }) %>
+  <%- helpers.formGroup({
+    name: 'parts',
+    label: 'splitEntry:',
+    type: 'number',
+    value: entry.split,
+    min: 1,
+    max: 35
+  }) %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('splitEntry:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('splitEntry:cancel') %></button>
+  </div>
+</form>

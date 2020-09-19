@@ -76,7 +76,19 @@ define([
   };
   var COLUMNS = {
     _id: {
-      width: 7
+      width: 7,
+      renderValue: function(value)
+      {
+        if (/[a-z]$/.test(value))
+        {
+          value = value.substring(0, value.length - 1)
+            + '<span class="kanban-td-id-suffix">'
+            + value.charAt(value.length - 1)
+            + '</span>';
+        }
+
+        return value;
+      }
     },
     nc12: {
       width: 13,

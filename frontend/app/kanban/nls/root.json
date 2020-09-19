@@ -43,6 +43,7 @@
     "menu:nc12:orders": "Production orders",
     "menu:nc12:pfep": "PFEP DB",
     "menu:nc12:pfep:notFound": "12NC not found in the PFEP DB.",
+    "menu:split": "Split CCN",
 
     "column:_id": "CCN",
     "column:nc12": "12NC",

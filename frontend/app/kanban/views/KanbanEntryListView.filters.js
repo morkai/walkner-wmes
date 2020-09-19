@@ -224,7 +224,7 @@ define([
         );
       });
     },
-    _id: 'numeric',
+    _id: 'text',
     kanbanQtyUser: 'numeric',
     componentQty: 'numeric',
     kanbanId: 'text',
