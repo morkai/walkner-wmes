@@ -24,4 +24,14 @@
       <% }) %>
     </table>
   </div>
+  <div class="wh-delivery-section-ft">
+    <div class="wh-delivery-stats">
+      <% ['sets', 'orders', 'qty', 'time'].forEach(function(stat) { %>
+      <div class="wh-delivery-stat" data-stat="<%- stat %>">
+        <div class="wh-delivery-stat-label"><%- t('delivery:stats:' + stat) %></div>
+        <div class="wh-delivery-stat-value">?</div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
 </div>

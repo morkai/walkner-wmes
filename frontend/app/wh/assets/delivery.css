@@ -42,6 +42,33 @@
   border: 1px solid #000;
   box-shadow: 0 6px 12px #666;
 }
+.wh-delivery-section-ft {
+  position: relative;
+  height: 69px;
+  color: #fff;
+  background: #000;
+  box-shadow: 0 6px 12px #666;
+}
+.wh-delivery-stats {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  height: 60px;
+  max-width: 590px;
+  font-size: 21px;
+  line-height: 1;
+}
+.wh-delivery-stat {
+  flex: 1 1 auto;
+  text-align: center;
+}
+.wh-delivery-stat-label {
+  text-transform: lowercase;
+  font-variant: small-caps;
+}
+.wh-delivery-stat-value {
+
+}
 .wh-delivery-items {
   width: 100%;
   margin-bottom: 50px;

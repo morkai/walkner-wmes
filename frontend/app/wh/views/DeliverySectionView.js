@@ -61,6 +61,8 @@ define([
 
     initialize: function()
     {
+      this.scheduleStatsUpdate = _.debounce(this.updateStats.bind(this), 100);
+
       this.listenTo(this.setCarts, 'reset', this.onReset);
       this.listenTo(this.setCarts, 'remove', this.onRemoved);
       this.listenTo(this.setCarts, 'add', this.onAdded);
@@ -93,6 +95,8 @@ define([
       {
         this.onPersonnelIdChanged();
       }
+
+      this.updateStats();
     },
 
     serializeItems: function()
@@ -262,6 +266,37 @@ define([
     {
       return this.renderPartialHtml(itemTemplate, {
         item: this.serializeItem(setCart)
+      });
+    },
+
+    updateStats: function()
+    {
+      var stats = {
+        sets: {},
+        orders: {},
+        qty: 0,
+        time: 0
+      };
+
+      this.setCarts.forEach(function(setCart)
+      {
+        stats.sets[setCart.get('date') + setCart.get('set')] = 1;
+
+        setCart.get('orders').forEach(function(order)
+        {
+          stats.orders[order.sapOrder] = 1;
+          stats.qty += order.qty;
+          stats.time += Date.parse(order.finishTime) - Date.parse(order.startTime);
+        });
+      });
+
+      stats.sets = Object.keys(stats.sets).length;
+      stats.orders = Object.keys(stats.orders).length;
+      stats.time = time.toString(stats.time / 1000, true, false);
+
+      this.$('.wh-delivery-stat-value').each(function()
+      {
+        this.textContent = stats[this.parentNode.dataset.stat];
       });
     },
 

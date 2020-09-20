@@ -677,23 +677,24 @@ define([
 
     resize: function()
     {
-      var $hd = $('.hd');
-      var $ft = $('.ft');
-      var $title = this.$('.wh-delivery-section-hd').first();
+      var $pageHd = $('.hd');
+      var $pageFt = $('.ft');
+      var $sectionHd = this.$('.wh-delivery-section-hd').first();
+      var $sectionFt = this.$('.wh-delivery-section-ft').first();
 
       var height = window.innerHeight - 30;
 
-      if ($hd.length && !$hd.hasClass('hidden'))
+      if ($pageHd.length && !$pageHd.hasClass('hidden'))
       {
-        height -= $hd.outerHeight();
+        height -= $pageHd.outerHeight();
       }
 
-      if ($ft.length && !$ft.hasClass('hidden'))
+      if ($pageFt.length && !$pageFt.hasClass('hidden'))
       {
-        height -= $ft.outerHeight() + 15;
+        height -= $pageFt.outerHeight() + 15;
       }
 
-      height -= $title.outerHeight(true);
+      height -= $sectionHd.outerHeight(true) + $sectionFt.outerHeight(true);
 
       this.$('.wh-delivery-section-bd').css('height', height + 'px');
     },

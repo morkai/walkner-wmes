@@ -272,6 +272,10 @@
   "delivery:forceLine:line": "Linia",
   "delivery:forceLine:card": "ID karty",
   "delivery:forceLine:submit": "Rozpocznij wysyłkę",
+  "delivery:stats:sets": "Sety",
+  "delivery:stats:orders": "Zlecenia",
+  "delivery:stats:qty": "Sztuki",
+  "delivery:stats:time": "Czas produkcji",
 
   "blockedPickup:title": "Kompletacja zablokowana"
 }

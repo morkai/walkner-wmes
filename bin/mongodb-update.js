@@ -34,3 +34,23 @@ db.kanbanentries.find({_id: {$type: 'number'}}).forEach(oldKanbanEntry =>
 });
 
 db.kanbanentries.createIndex({split: 1});
+
+db.oldwhsetcarts.find({}, {orders: 1}).forEach(setCart =>
+{
+  const orders = {};
+
+  setCart.orders.forEach(setCartOrder =>
+  {
+    orders[setCartOrder.whOrder] = setCartOrder;
+  });
+
+  const whOrders = db.oldwhorders.find({_id: {$in: Object.keys(orders)}}, {finishTime: 1, qty: 1}).toArray();
+
+  whOrders.forEach(whOrder =>
+  {
+    orders[whOrder._id].finishTime = whOrder.finishTime;
+    orders[whOrder._id].qty = whOrder.qty;
+  });
+
+  db.oldwhsetcarts.updateOne({_id: setCart._id}, {$set: {orders: setCart.orders}});
+});
