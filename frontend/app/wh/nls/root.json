@@ -250,6 +250,11 @@
     "pickup:forceLine:line": "Line",
     "pickup:forceLine:card": "Card ID",
     "pickup:forceLine:submit": "Start pickup",
+    "pickup:stats:sets": "Sets",
+    "pickup:stats:orders": "Orders",
+    "pickup:stats:qty": "PCE",
+    "pickup:stats:pending": "Pending",
+    "pickup:stats:started": "Started",
 
     "delivery:title:completed": "Completed {kind, select, components{FIFO} packaging{pack.} ps{PS} other{{kind}}}",
     "delivery:title:pending": "Pending",
@@ -271,7 +276,11 @@
     "delivery:forceLine:message": "Choose a line and scan yourself to force a delivery to the specified line.",
     "delivery:forceLine:line": "Line",
     "delivery:forceLine:card": "Card ID",
-    "delivery:forceLine:submit": "Start delivery"
+    "delivery:forceLine:submit": "Start delivery",
+    "delivery:stats:sets": "Sets",
+    "delivery:stats:orders": "Orders",
+    "delivery:stats:qty": "PCE",
+    "delivery:stats:time": "Prod. time"
   },
   "pl": true
 }

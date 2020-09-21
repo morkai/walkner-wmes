@@ -296,7 +296,9 @@ define([
 
       this.$('.wh-delivery-stat-value').each(function()
       {
-        this.textContent = stats[this.parentNode.dataset.stat];
+        var value = stats[this.parentNode.dataset.stat];
+
+        this.textContent = typeof value === 'number' ? value.toLocaleString() : value;
       });
     },
 

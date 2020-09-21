@@ -1,8 +1,30 @@
-<div class="wh-pickup-status">
+<div class="wh-pickup-status <%- expanded ? 'wh-pickup-status-expanded' : '' %>">
   <% _.forEach(funcs, function(ready, func) { %>
   <div class="wh-pickup-status-func <%- ready ? 'is-ready' : '' %>" data-func="<%- func %>">
     <div class="wh-pickup-status-short"><%- t('pickup:status:short:' + func) %></div>
     <div class="wh-pickup-status-full"><%- t('pickup:status:full:' + func) %></div>
+    <table class="wh-pickup-stats">
+      <tbody>
+      <tr>
+        <td></td>
+        <td><%- t('pickup:stats:sets') %></td>
+        <td><%- t('pickup:stats:orders') %></td>
+        <td><%- t('pickup:stats:qty') %></td>
+      </tr>
+      <tr>
+        <td><%- t('pickup:stats:pending') %></td>
+        <td data-stat="<%- func %>:pending:sets">?</td>
+        <td data-stat="<%- func %>:pending:orders">?</td>
+        <td data-stat="<%- func %>:pending:qty">?</td>
+      </tr>
+      <tr>
+        <td><%- t('pickup:stats:started') %></td>
+        <td data-stat="<%- func %>:started:sets">?</td>
+        <td data-stat="<%- func %>:started:orders">?</td>
+        <td data-stat="<%- func %>:started:qty">?</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
   <% }) %>
 </div>

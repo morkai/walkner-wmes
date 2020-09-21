@@ -250,6 +250,11 @@
   "pickup:forceLine:line": "Linia",
   "pickup:forceLine:card": "ID karty",
   "pickup:forceLine:submit": "Rozpocznij kompletację",
+  "pickup:stats:sets": "Sety",
+  "pickup:stats:orders": "Zlecenia",
+  "pickup:stats:qty": "Sztuki",
+  "pickup:stats:pending": "Oczekujące",
+  "pickup:stats:started": "Rozpoczęte",
 
   "delivery:title:completed": "Skompletowane {kind, select, components{FIFO} packaging{opak.} ps{mal.} other{{kind}}}",
   "delivery:title:pending": "Do realizacji",

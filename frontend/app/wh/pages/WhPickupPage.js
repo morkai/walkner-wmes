@@ -344,7 +344,10 @@ define([
       });
 
       this.statusView = new WhPickupStatusView({
-        model: this.pickupStatus
+        model: this.pickupStatus,
+        whSettings: this.whSettings,
+        whOrders: this.whOrders,
+        whLines: this.whLines
       });
 
       if (embedded.isEnabled())
@@ -572,7 +575,10 @@ define([
 
       clearTimeout(this.timers.handleKeyBuffer);
 
-      this.timers.handleKeyBuffer = setTimeout(this.handleKeyBuffer.bind(this), 200);
+      this.timers.handleKeyBuffer = setTimeout(
+        this.handleKeyBuffer.bind(this),
+        this.keyBuffer.length > 3 ? 200 : 500
+      );
     },
 
     handleKeyBuffer: function()
@@ -580,6 +586,16 @@ define([
       if (this.keyBuffer.length >= 6)
       {
         this.resolveAction(this.keyBuffer);
+      }
+      else if (this.keyBuffer.length <= 3)
+      {
+        var set = +this.keyBuffer;
+        var whOrder = this.whOrders.find(function(whOrder) { return whOrder.get('set') === set; });
+
+        if (whOrder)
+        {
+          this.focusSet(whOrder.id);
+        }
       }
 
       this.keyBuffer = '';
