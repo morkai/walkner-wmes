@@ -97,7 +97,7 @@
     "x:year": "YYYY",
     "x:quarter": "{quarter}'YY",
     "x:month": "MMM'YY",
-    "x:week": "W'YY",
+    "x:week": "[W]WW",
     "x:day": "D.M",
     "x:shift": "D.M[ {shift}]",
     "x:hour": "D.M HH:mm",

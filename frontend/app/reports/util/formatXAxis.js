@@ -41,7 +41,7 @@ function(
         quarter: t('core', 'QUARTER:' + moment.quarter())
       };
     }
-    else
+    else if (!interval)
     {
       interval = 'day';
     }
