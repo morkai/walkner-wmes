@@ -54,6 +54,7 @@
     "PROPERTY:createdAt": "Czas utworzenia",
     "PROPERTY:updatedAt": "Czas ostatniej zmiany",
     "PROPERTY:confirmedAt": "Czas potwierdzenia",
+    "PROPERTY:finishedAt": "Czas zakończenia",
     "PROPERTY:attachments": "Załączniki",
     "PROPERTY:attachments:description": "Opis",
     "PROPERTY:attachments:file": "Nazwa pliku",

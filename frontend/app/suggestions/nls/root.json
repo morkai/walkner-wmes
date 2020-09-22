@@ -54,6 +54,7 @@
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:updatedAt": "Updated at",
     "PROPERTY:confirmedAt": "Confirmed at",
+    "PROPERTY:finishedAt": "Finished at",
     "PROPERTY:attachments": "Attachments",
     "PROPERTY:attachments:description": "Description",
     "PROPERTY:attachments:file": "File name",

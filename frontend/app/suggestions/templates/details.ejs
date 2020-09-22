@@ -8,12 +8,16 @@
         <div class="col-md-4">
           <div class="props first">
             <div class="prop">
-              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- t('PROPERTY:subject') %></div>
-              <div class="prop-value"><%= model.subject %></div>
+              <div class="prop-name"><%- t('PROPERTY:rid') %></div>
+              <div class="prop-value"><%= model.rid %></div>
             </div>
             <div class="prop">
               <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('PROPERTY:status') %></div>
               <div class="prop-value"><%- model.status %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- t('PROPERTY:subject') %></div>
+              <div class="prop-value"><%= model.subject %></div>
             </div>
             <div class="prop">
               <div class="prop-name <%- model.changed.section ? 'is-changed' : '' %>"><%- t('PROPERTY:section') %></div>
@@ -50,6 +54,10 @@
             <div class="prop">
               <div class="prop-name"><%- t('PROPERTY:confirmedAt') %></div>
               <div class="prop-value"><%- model.confirmedAt || '-' %></div>
+            </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('PROPERTY:finishedAt') %></div>
+              <div class="prop-value"><%- model.finishedAt || '-' %></div>
             </div>
           </div>
         </div>
