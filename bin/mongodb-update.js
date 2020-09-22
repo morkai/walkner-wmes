@@ -3,54 +3,25 @@
 
 'use strict';
 
-db.kanbanentries.find({_id: {$type: 'number'}}).forEach(oldKanbanEntry =>
+db.oldwhlines.deleteMany({_id: {$in: [
+  'CT1/2',
+  'CT3/4',
+  'CT5/6'
+]}});
+
+db.oldwhorders.find({date: {$gte: new Date('2020-09-21T00:00:00Z')}}, {order: 1, psStatus: 1}).forEach(whOrder =>
 {
-  db.kanbanentries.deleteOne({_id: oldKanbanEntry._id});
+  var sapOrder = db.orders.findOne({_id: whOrder.order}, {psStatus: 1});
 
-  const newKanbanEntry = {
-    _id: oldKanbanEntry._id.toString(),
-    createdAt: oldKanbanEntry.createdAt,
-    updatedAt: oldKanbanEntry.updatedAt,
-    updater: oldKanbanEntry.updater,
-    kind: oldKanbanEntry.kind,
-    container: oldKanbanEntry.container,
-    nc12: oldKanbanEntry.nc12,
-    supplyArea: oldKanbanEntry.supplyArea,
-    workCenter: oldKanbanEntry.workCenter,
-    componentQty: oldKanbanEntry.componentQty,
-    kanbanId: oldKanbanEntry.kanbanId,
-    storageType: oldKanbanEntry.storageType,
-    workstations: oldKanbanEntry.workstations,
-    locations: oldKanbanEntry.locations,
-    discontinued: oldKanbanEntry.discontinued,
-    deleted: oldKanbanEntry.deleted,
-    split: 1,
-    comment: oldKanbanEntry.comment,
-    updates: oldKanbanEntry.updates,
-    changes: oldKanbanEntry.changes
-  };
-
-  db.kanbanentries.insertOne(newKanbanEntry);
-});
-
-db.kanbanentries.createIndex({split: 1});
-
-db.oldwhsetcarts.find({}, {orders: 1}).forEach(setCart =>
-{
-  const orders = {};
-
-  setCart.orders.forEach(setCartOrder =>
+  if (!sapOrder)
   {
-    orders[setCartOrder.whOrder] = setCartOrder;
-  });
+    return;
+  }
 
-  const whOrders = db.oldwhorders.find({_id: {$in: Object.keys(orders)}}, {finishTime: 1, qty: 1}).toArray();
-
-  whOrders.forEach(whOrder =>
+  if (sapOrder.psStatus === whOrder.psStatus)
   {
-    orders[whOrder._id].finishTime = whOrder.finishTime;
-    orders[whOrder._id].qty = whOrder.qty;
-  });
+    return;
+  }
 
-  db.oldwhsetcarts.updateOne({_id: setCart._id}, {$set: {orders: setCart.orders}});
+  db.oldwhorders.updateOne({_id: whOrder._id}, {$set: {psStatus: sapOrder.psStatus}});
 });
