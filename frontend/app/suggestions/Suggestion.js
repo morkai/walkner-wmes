@@ -20,7 +20,7 @@ define([
   'use strict';
 
   var DATE_PROPERTIES = ['date', 'kaizenStartDate', 'kaizenFinishDate'];
-  var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt'];
+  var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt', 'finishedAt'];
   var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer'];
   var OWNER_PROPERTIES = ['suggestionOwners', 'kaizenOwners'];
 
@@ -59,7 +59,7 @@ define([
     {
       var longDateTime = options && options.longDateTime;
       var dateFormat = longDateTime ? 'LL' : 'L';
-      var timeFormat = longDateTime ? 'LLLL' : 'L, LTS';
+      var timeFormat = longDateTime ? 'LLL' : 'L, LTS';
       var obj = this.toJSON();
 
       obj.status = t(options && options.nlsDomain || 'suggestions', 'status:' + obj.status);
@@ -81,7 +81,7 @@ define([
 
       USER_INFO_PROPERTIES.forEach(function(userInfoProperty)
       {
-        obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty]});
+        obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty], noIp: true});
       });
 
       OWNER_PROPERTIES.forEach(function(ownerProperty)
