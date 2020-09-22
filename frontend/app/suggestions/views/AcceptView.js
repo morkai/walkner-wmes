@@ -81,7 +81,14 @@ define([
         maximumSelectionSize: 2
       });
 
-      $kaizenOwners.select2('data', this.model.get('suggestionOwners').map(function(o)
+      var kaizenOwners = this.model.get('kaizenOwners');
+
+      if (!Array.isArray(kaizenOwners) || kaizenOwners.length === 0)
+      {
+        kaizenOwners = this.model.get('suggestionOwners');
+      }
+
+      $kaizenOwners.select2('data', kaizenOwners.map(function(o)
       {
         return {
           id: o.id,

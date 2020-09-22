@@ -180,8 +180,13 @@ define([
       },
 
       'change #-confirmer': 'checkOwnerValidity',
-      'change #-suggestionOwners': 'checkOwnerValidity',
+      'change #-suggestionOwners': function()
+      {
+        this.$id('suggestedKaizenOwners').select2('data', this.$id('suggestionOwners').select2('data'));
+        this.checkOwnerValidity();
+      },
       'change #-kaizenOwners': 'checkOwnerValidity',
+      'change #-suggestedKaizenOwners': 'checkOwnerValidity',
 
       'change #-coordSection': function(e)
       {
@@ -296,7 +301,11 @@ define([
       var $confirmer = view.$id('confirmer');
       var confirmer = $confirmer.select2('data');
 
-      [view.$id('suggestionOwners'), view.$id('kaizenOwners')].forEach(function($owners)
+      [
+        view.$id('suggestionOwners'),
+        view.$id('suggestedKaizenOwners'),
+        view.$id('kaizenOwners')
+      ].forEach(function($owners)
       {
         if (!$owners.length)
         {
@@ -430,6 +439,7 @@ define([
         }
       });
 
+      formData.suggestedKaizenOwners = formData.kaizenOwners;
       formData.categories = _.isEmpty(formData.categories) ? '' : formData.categories.join(',');
       formData.subscribers = '';
 
@@ -446,7 +456,9 @@ define([
         label: confirmer.text
       };
       formData.suggestionOwners = this.serializeOwners('suggestion');
-      formData.kaizenOwners = this.serializeOwners('kaizen');
+      formData.kaizenOwners = formData.status === 'new' || formData.status === 'accepted'
+        ? this.serializeOwners('suggestedKaizen')
+        : this.serializeOwners('kaizen');
       formData.subscribers = this.$id('subscribers').select2('data').map(function(subscriber)
       {
         return {
@@ -555,6 +567,7 @@ define([
 
       this.toggleStatuses();
       this.togglePanels();
+      this.toggleFields();
 
       this.$('input[autofocus]').focus();
     },
@@ -782,6 +795,12 @@ define([
         activeOnly: activeOnly
       }).select2('data', prepareOwners('suggestion'));
 
+      setUpUserSelect2(this.$id('suggestedKaizenOwners'), {
+        multiple: true,
+        noPersonnelId: true,
+        activeOnly: activeOnly
+      }).select2('data', prepareOwners('kaizen'));
+
       setUpUserSelect2(this.$id('kaizenOwners'), {
         multiple: true,
         noPersonnelId: true,
@@ -817,10 +836,7 @@ define([
       var $coordSection = this.$id('coordSections');
 
       var data = kaizenDictionaries.sections
-        .filter(function(s)
-        {
-          return s.get('coordinators').length > 0;
-        })
+        .filter(function(s) { return s.get('coordinators').length > 0; })
         .map(idAndLabel);
 
       $coordSection.select2({
@@ -927,42 +943,104 @@ define([
 
     toggleStatuses: function()
     {
-      if (this.options.editMode)
-      {
-        if (this.model.canManage() || this.model.isConfirmer())
-        {
-          return;
-        }
-
-        var enabled = {};
-        var status = this.model.get('status');
-        var $status = this.$id('status');
-
-        enabled[status] = true;
-
-        if (status === 'new' && (this.model.isCreator() || this.model.isSuggestionOwner()))
-        {
-          enabled.cancelled = true;
-        }
-
-        $status.find('input').each(function()
-        {
-          this.parentNode.classList.toggle('disabled', !this.checked && !enabled[this.value]);
-        });
-
-        this.$id('statusGroup').removeClass('hidden');
-      }
-      else
+      if (!this.options.editMode)
       {
         this.$id('statusGroup').addClass('hidden');
+
+        return;
       }
+
+      if (this.model.canManage() || this.model.isConfirmer())
+      {
+        return;
+      }
+
+      var enabled = {};
+      var status = this.model.get('status');
+      var $status = this.$id('status');
+
+      enabled[status] = true;
+
+      if ((status === 'new' && (this.model.isCreator() || this.model.isSuggestionOwner()))
+        || (status === 'inProgress' && this.model.isKaizenOwner()))
+      {
+        enabled.cancelled = true;
+      }
+
+      $status.find('input').each(function()
+      {
+        this.parentNode.classList.toggle('disabled', !this.checked && !enabled[this.value]);
+      });
+
+      this.$id('statusGroup').removeClass('hidden');
+    },
+
+    toggleFields: function()
+    {
+      var view = this;
+
+      if (view.model.get('status') !== 'inProgress'
+        || view.model.isConfirmer()
+        || view.model.canManage())
+      {
+        return;
+      }
+
+      view.$id('section').select2('readonly', true);
+      view.$id('confirmer').select2('readonly', true);
+
+      view.$id('productFamily-other').addClass('hidden');
+
+      view.$id('suggestionPanelBody').find('.form-group').each(function()
+      {
+        var fieldEl = view.$(this).find('> input, > textarea')[0];
+
+        if (fieldEl.tabIndex === -1)
+        {
+          view.$(fieldEl).select2('readonly', true);
+        }
+        else
+        {
+          fieldEl.readOnly = true;
+        }
+      });
+    },
+
+    isKaizenAvailable: function()
+    {
+      var status = buttonGroup.getValue(this.$id('status'));
+
+      return status !== 'new' && status !== 'accepted';
     },
 
     togglePanels: function()
     {
-      var status = buttonGroup.getValue(this.$id('status'));
+      var kaizenAvailable = this.isKaizenAvailable();
 
-      this.$id('panel-kaizen').toggleClass('hidden', status === 'new' || status === 'cancelled');
+      this.$id('panel-kaizen').toggleClass('hidden', !kaizenAvailable);
+
+      if (kaizenAvailable)
+      {
+        this.$id('suggestionOwners')
+          .closest('.form-group')
+          .removeClass('col-lg-6')
+          .addClass('col-lg-12');
+
+        this.$id('suggestedKaizenOwners')
+          .closest('.form-group')
+          .addClass('hidden');
+      }
+      else
+      {
+        this.$id('suggestionOwners')
+          .closest('.form-group')
+          .removeClass('col-lg-12')
+          .addClass('col-lg-6');
+
+        this.$id('suggestedKaizenOwners')
+          .closest('.form-group')
+          .removeClass('hidden');
+      }
     },
 
     toggleProductFamily: function(keepValue)

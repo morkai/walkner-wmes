@@ -57,9 +57,15 @@
       <div id="<%- id('panel-suggestion') %>" class="panel panel-warning suggestions-form-typePanel">
         <div class="panel-heading"><%- t('type:suggestion') %></div>
         <div id="<%- id('suggestionPanelBody') %>" class="panel-body has-lastElementRow">
-          <div class="form-group has-required-select2">
-            <label for="<%- id('suggestionOwners') %>" class="control-label is-required"><%- t('PROPERTY:suggestionOwners') %></label>
-            <input id="<%- id('suggestionOwners') %>" type="text" autocomplete="new-password" name="suggestionOwners" required>
+          <div class="row">
+            <div class="col-lg-6 form-group has-required-select2">
+              <label for="<%- id('suggestionOwners') %>" class="control-label is-required"><%- t('PROPERTY:suggestionOwners') %></label>
+              <input id="<%- id('suggestionOwners') %>" type="text" autocomplete="new-password" name="suggestionOwners" required>
+            </div>
+            <div class="col-lg-6 form-group has-required-select2">
+              <label for="<%- id('suggestedKaizenOwners') %>" class="control-label is-required"><%- t('PROPERTY:kaizenOwners') %></label>
+              <input id="<%- id('suggestedKaizenOwners') %>" type="text" autocomplete="new-password" name="suggestedKaizenOwners" required>
+            </div>
           </div>
           <div class="row">
             <div class="col-lg-2 form-group has-required-select2">

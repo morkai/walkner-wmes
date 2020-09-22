@@ -1,10 +1,10 @@
 <div class="col-md-<%- suggestionColumnSize %>">
   <div class="panel panel-warning">
-    <div class="panel-heading"><%- helpers.t('type:suggestion') %></div>
+    <div class="panel-heading"><%- t('type:suggestion') %></div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name <%- model.changed.suggestionOwners ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:suggestionOwners') %></div>
+          <div class="prop-name <%- model.changed.suggestionOwners ? 'is-changed' : '' %>"><%- t('PROPERTY:suggestionOwners') %></div>
           <div class="prop-value">
             <ul>
               <% model.suggestionOwners.forEach(function(owner) { %>
@@ -13,28 +13,40 @@
             </ul>
           </div>
         </div>
+        <% if (!showKaizenPanel) { %>
         <div class="prop">
-          <div class="prop-name <%- model.changed.date ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:date') %></div>
+          <div class="prop-name <%- model.changed.kaizenOwners ? 'is-changed' : '' %>"><%- t('PROPERTY:kaizenOwners') %></div>
+          <div class="prop-value">
+            <ul>
+              <% model.kaizenOwners.forEach(function(owner) { %>
+              <li><%- owner %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+        <% } %>
+        <div class="prop">
+          <div class="prop-name <%- model.changed.date ? 'is-changed' : '' %>"><%- t('PROPERTY:date') %></div>
           <div class="prop-value"><%- model.date || '-' %></div>
         </div>
         <div class="prop" data-dictionary="categories" data-property="category">
-          <div class="prop-name <%- model.changed.categories ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:categories') %> <i class="fa fa-info-circle"></i></div>
+          <div class="prop-name <%- model.changed.categories ? 'is-changed' : '' %>"><%- t('PROPERTY:categories') %> <i class="fa fa-info-circle"></i></div>
           <div class="prop-value"><%= model.categories %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.productFamily ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:productFamily') %></div>
+          <div class="prop-name <%- model.changed.productFamily ? 'is-changed' : '' %>"><%- t('PROPERTY:productFamily') %></div>
           <div class="prop-value"><%- model.productFamily || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.howItIs ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:howItIs') %></div>
+          <div class="prop-name <%- model.changed.howItIs ? 'is-changed' : '' %>"><%- t('PROPERTY:howItIs') %></div>
           <div class="prop-value text-lines"><%- model.howItIs || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.howItShouldBe ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:howItShouldBe') %></div>
+          <div class="prop-name <%- model.changed.howItShouldBe ? 'is-changed' : '' %>"><%- t('PROPERTY:howItShouldBe') %></div>
           <div class="prop-value text-lines"><%- model.howItShouldBe || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.suggestion ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:suggestion') %></div>
+          <div class="prop-name <%- model.changed.suggestion ? 'is-changed' : '' %>"><%- t('PROPERTY:suggestion') %></div>
           <div class="prop-value text-lines"><%- model.suggestion || '-' %></div>
         </div>
       </div>
