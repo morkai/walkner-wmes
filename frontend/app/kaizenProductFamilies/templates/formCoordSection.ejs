@@ -1,0 +1,17 @@
+<tr>
+  <td><input type="text" name="coordSections[<%- i %>].section" value="<%- coordSection.section %>" required></td>
+  <td><input type="text" name="coordSections[<%- i %>].funcs" value="<%- coordSection.funcs.join(',') %>"></td>
+  <td>
+    <% ['none', 'mrp', 'all'].forEach(function(mor) { %>
+      <label class="radio-inline">
+        <input type="radio" name="coordSections[<%- i %>].mor" value="<%- mor %>" <%- coordSection.mor === mor ? 'checked' : '' %>>
+        <%- t('coordSections:mor:' + mor) %>
+      </label>
+    <% }) %>
+  </td>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button" class="btn btn-default" data-action="removeCoordSection"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+</tr>

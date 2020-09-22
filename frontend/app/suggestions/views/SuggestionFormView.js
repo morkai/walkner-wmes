@@ -567,7 +567,7 @@ define([
 
       kaizenDictionaries.sections.forEach(function(s)
       {
-        if (s.get('active'))
+        if (s.get('active') && s.get('confirmers').length)
         {
           map[s.id] = idAndLabel(s);
         }

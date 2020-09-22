@@ -1,29 +1,59 @@
-<div class="panel panel-primary">
-  <div class="panel-heading"><%- panelTitle %></div>
-  <div class="panel-details">
-    <%- helpers.props(model, [
-      '_id',
-      'name',
-      'active',
-      'position',
-      {id: '!owners', value: function(owners)
-      {
-        if (!owners.length)
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        '_id',
+        'name',
+        'active',
+        'position',
+        {id: '!mrps', value: function(mrps)
         {
-          return '';
-        }
+          if (!mrps.length)
+          {
+            return '';
+          }
 
-        return '<ul>' + owners.map(function(owner) { return '<li>' + owner; }).join('') + '</ul>';
-      }},
-      {id: '!mrps', value: function(mrps)
-      {
-        if (!mrps.length)
-        {
-          return '';
-        }
-
-        return '<ul>' + mrps.map(function(mrp) { return '<li>' + mrp; }).join('') + '</ul>';
-      }}
-    ]) %>
+          return '<ul>' + mrps.map(function(mrp) { return '<li>' + mrp; }).join('') + '</ul>';
+        }}
+      ]) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PROPERTY:coordSections') %></div>
+    <% if (!model.coordSections.length) { %>
+    <div class="panel-body">
+      <p><%- t('coordSections:empty') %></p>
+    </div>
+    <% } else { %>
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('coordSections:section') %></th>
+        <th class="is-min"><%- t('coordSections:funcs') %></th>
+        <th><%- t('coordSections:mor') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.coordSections.forEach(function(coordSection) { %>
+      <tr>
+        <td class="is-min"><%= coordSection.section %></td>
+        <td class="is-min">
+          <% if (coordSection.funcs.length === 1) { %>
+          <%= coordSection.funcs[0] %>
+          <% } else if (coordSection.funcs.length) { %>
+          <ul>
+            <% coordSection.funcs.forEach(function(func) { %>
+            <li><%= func %></li>
+            <% }) %>
+          </ul>
+          <% } %>
+        </td>
+        <td><%- t('coordSections:mor:' + coordSection.mor) %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+    <% } %>
   </div>
 </div>

@@ -51,18 +51,19 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenProductFamilies/KaizenProductFamily',
         'app/kaizenProductFamilies/templates/details',
         nls
       ],
-      function(DetailsPage, KaizenProductFamily, detailsTemplate)
+      function(DetailsPage, dictionaries, KaizenProductFamily, detailsTemplate)
       {
-        return new DetailsPage({
+        return dictionaries.bind(new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           model: new KaizenProductFamily({_id: req.params.id}),
           detailsTemplate: detailsTemplate
-        });
+        }));
       }
     );
   });
@@ -72,18 +73,19 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenProductFamilies/KaizenProductFamily',
         'app/kaizenProductFamilies/views/KaizenProductFamilyFormView',
         nls
       ],
-      function(AddFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
+      function(AddFormPage, dictionaries, KaizenProductFamily, KaizenProductFamilyFormView)
       {
-        return new AddFormPage({
+        return dictionaries.bind(new AddFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenProductFamilyFormView,
           model: new KaizenProductFamily()
-        });
+        }));
       }
     );
   });
@@ -93,18 +95,19 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenProductFamilies/KaizenProductFamily',
         'app/kaizenProductFamilies/views/KaizenProductFamilyFormView',
         nls
       ],
-      function(EditFormPage, KaizenProductFamily, KaizenProductFamilyFormView)
+      function(EditFormPage, dictionaries, KaizenProductFamily, KaizenProductFamilyFormView)
       {
-        return new EditFormPage({
+        return dictionaries.bind(new EditFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenProductFamilyFormView,
           model: new KaizenProductFamily({_id: req.params.id})
-        });
+        }));
       }
     );
   });

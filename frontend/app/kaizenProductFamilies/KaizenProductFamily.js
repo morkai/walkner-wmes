@@ -3,11 +3,11 @@
 define([
   'app/i18n',
   'app/core/Model',
-  'app/core/templates/userInfo'
+  'app/data/prodFunctions'
 ], function(
   t,
   Model,
-  renderUserInfo
+  prodFunctions
 ) {
   'use strict';
 
@@ -31,20 +31,25 @@ define([
 
     serialize: function()
     {
+      var dictionaries = require('app/kaizenOrders/dictionaries');
       var obj = this.toJSON();
 
-      obj.owners = (obj.owners || []).map(function(o) { return renderUserInfo({userInfo: o}); });
       obj.active = t('core', 'BOOL:' + obj.active);
-
-      return obj;
-    },
-
-    serializeRow: function()
-    {
-      var obj = this.serialize();
-
-      obj.owners = obj.owners.join('; ');
       obj.mrps = obj.mrps.join('; ');
+
+      obj.coordSections = (obj.coordSections || []).map(function(coordSection)
+      {
+        return {
+          section: dictionaries.getLabel('section', coordSection.section),
+          funcs: coordSection.funcs.map(function(func)
+          {
+            var prodFunction = prodFunctions.get(func);
+
+            return prodFunction ? prodFunction.getLabel() : func;
+          }),
+          mor: coordSection.mor
+        };
+      });
 
       return obj;
     }
