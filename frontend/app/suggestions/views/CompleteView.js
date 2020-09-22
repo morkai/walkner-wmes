@@ -25,6 +25,8 @@ define([
 
     template: template,
 
+    dialogClassName: 'suggestions-complete-dialog',
+
     events: _.assign({
 
       'click #-accept': function()
@@ -89,6 +91,50 @@ define([
     handleSuccess: function()
     {
       viewport.closeDialog();
+    },
+
+    submitRequest: function($submitEl, formData)
+    {
+      var view = this;
+      var uploadFormData = new FormData();
+      var files = 0;
+
+      this.$('input[type="file"]').each(function()
+      {
+        if (this.files.length)
+        {
+          uploadFormData.append(this.dataset.name, this.files[0]);
+
+          ++files;
+        }
+      });
+
+      if (files === 0)
+      {
+        return FormView.prototype.submitRequest.call(view, $submitEl, formData);
+      }
+
+      var uploadReq = this.ajax({
+        type: 'POST',
+        url: '/suggestions;upload',
+        data: uploadFormData,
+        processData: false,
+        contentType: false
+      });
+
+      uploadReq.done(function(attachments)
+      {
+        formData.attachments = attachments;
+
+        FormView.prototype.submitRequest.call(view, $submitEl, formData);
+      });
+
+      uploadReq.fail(function()
+      {
+        view.showErrorMessage(view.t('FORM:ERROR:upload'));
+
+        $submitEl.attr('disabled', false);
+      });
     }
 
   });

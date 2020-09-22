@@ -112,3 +112,8 @@
     visibility: visible!important;
   }
 }
+@media (min-width: 900px) {
+  .suggestions-complete-dialog .modal-dialog {
+    width: 800px;
+  }
+}

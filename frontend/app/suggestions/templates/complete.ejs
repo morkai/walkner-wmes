@@ -8,6 +8,17 @@
     <label for="<%- id('kaizenEffect') %>" class="control-label is-required"><%- t('PROPERTY:kaizenEffect') %></label>
     <textarea id="<%- id('kaizenEffect') %>" name="kaizenEffect" class="form-control" rows="3" required></textarea>
   </div>
+  <div class="message message-inline message-warning" style="margin-bottom: 15px">
+    <p><%- t('FORM:MSG:attachmentEdit') %></p>
+  </div>
+  <div class="row">
+    <% ['scan', 'before', 'after'].forEach(function(attachment) { %>
+    <div class="col-md-4 form-group">
+      <label for="<%- id('attachments-' + attachment) %>" class="control-label"><%- t('attachments:' + attachment + ':new') %></label>
+      <input id="<%- id('attachments-' + attachment) %>" class="form-control" type="file" data-name="<%- attachment %>">
+    </div>
+    <% }) %>
+  </div>
   <div class="form-group">
     <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
     <textarea id="<%- id('comment') %>" name="comment" class="form-control" rows="3"></textarea>
