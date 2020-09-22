@@ -80,6 +80,7 @@ define([
       this.$id('line').select2({
         width: '175px',
         allowClear: true,
+        placeholder: ' ',
         data: orgUnits.getActiveByType('prodLine').map(idAndLabel)
       });
 
