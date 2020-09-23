@@ -493,6 +493,10 @@ app/planning/assets/changes.css
 ----------------
 app/planning/assets/changes.css
 
+app/planning/assets/execution.css
+----------------
+app/planning/assets/execution.css
+
 app/planning/assets/icons.css
 ----------------
 app/planning/assets/icons.css
@@ -510,6 +514,7 @@ app/planning/assets/./icons.css
 app/planning/assets/./plan.darker.css
 app/planning/assets/./wh.css
 app/planning/assets/./changes.css
+app/planning/assets/./execution.css
 app/planning/assets/main.css
 
 app/planning/assets/plan.css
