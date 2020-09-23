@@ -1,0 +1,38 @@
+<div>
+  <% mrps.forEach(function(mrp) { %>
+  <div class="planning-execution-mrp">
+    <h1><%= mrp._id %></h1>
+    <div class="planning-execution-lines">
+      <% mrp.lines.forEach(function(line) { %>
+      <h2><%= line._id %></h2>
+      <div class="planning-execution-orders">
+        <% line.orders.forEach(function(lineOrder) { %>
+        <div class="planning-execution-order planning-execution-order-plan">
+          <div class="planning-execution-no"><%= lineOrder.no %>.</div>
+          <div class="planning-execution-orderNo"><%= lineOrder.orderNo %></div>
+          <div class="planning-execution-quantity"><i class="fa fa-cubes"></i><span><%- lineOrder.quantityPlanned %></span></div>
+          <div class="planning-execution-date"><i class="fa fa-calendar"></i><span><%- lineOrder.startAtDate %></span></div>
+          <div class="planning-execution-time"><i class="fa fa-clock-o"></i><span><%- lineOrder.startAtTime %></span></div>
+          <% if (lineOrder.ok) { %>
+          <div class="planning-execution-ok"><i class="fa fa-check"></i></div>
+          <% } %>
+        </div>
+        <% lineOrder.shiftOrders.forEach(function(shiftOrder) { %>
+        <div class="planning-execution-order planning-execution-order-shift">
+          <div class="planning-execution-no"></div>
+          <div class="planning-execution-line <%- shiftOrder.classNames.line %>"><%= shiftOrder.line %></div>
+          <div class="planning-execution-quantity <%- shiftOrder.classNames.quantity %>"><i class="fa fa-cubes"></i><span><%- shiftOrder.quantityDone %></span></div>
+          <div class="planning-execution-date <%- shiftOrder.classNames.date %>"><i class="fa fa-calendar"></i><span><%- shiftOrder.startedAtDate %></span></div>
+          <div class="planning-execution-time <%- shiftOrder.classNames.time %>"><i class="fa fa-clock-o"></i><span><%- shiftOrder.startedAtTime %></span></div>
+          <% if (shiftOrder.ok) { %>
+          <div class="planning-execution-ok"><i class="fa fa-check"></i></div>
+          <% } %>
+        </div>
+        <% }) %>
+        <% }) %>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% }) %>
+</div>

@@ -509,5 +509,8 @@
   "copySettings:failure:fetchSettings": "Nie udało się pobrać ustawień dla planu {plan}.",
 
   "lockReason:mrp": "MRP {mrp} zablokowane bezpośrednio.",
-  "lockReason:line": "Linia {line} znajduje się w zablokowanym MRP: {mrps}"
+  "lockReason:line": "Linia {line} znajduje się w zablokowanym MRP: {mrps}",
+
+  "planExecution:title:all": "Realizacja sekwencji",
+  "planExecution:title:mrp": "Realizacja sekwencji dla {mrp}"
 }

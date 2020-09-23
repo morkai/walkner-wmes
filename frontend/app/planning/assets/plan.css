@@ -508,6 +508,14 @@
 .planning-mrp-stats-bd td[data-group="execution"] {
   font-size: 32px;
 }
+.planning-mrp .planning-mrp-stats-bd td[data-group="execution"] {
+  cursor: pointer;
+  color: #337ab7;
+}
+.planning-mrp .planning-mrp-stats-bd td[data-group="execution"]:hover {
+  color: #23527c;
+  text-decoration: underline;
+}
 .planning-mrp-stats-bd td[data-group^="execution"]:after {
   content: "%";
 }

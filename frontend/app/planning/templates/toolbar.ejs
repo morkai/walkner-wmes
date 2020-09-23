@@ -10,7 +10,7 @@
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" data-value="<%- stats[group][subgroup] %>" title="<%- t('planning', 'toolbar:stats:tooltip:' + subgroup) %>"><%- stats[group][subgroup].toLocaleString() %></td>
         <% }) %>
         <% if (i === 0) { %>
-        <td rowspan="3" data-group="execution" data-subgroup="percent" data-plan="<%- stats.execution.plan %>" data-done="<%- stats.execution.done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>"><%- stats.execution.percent.toLocaleString() %></td>
+          <td rowspan="3" data-group="execution" data-subgroup="percent" data-plan="<%- stats.execution.plan %>" data-done="<%- stats.execution.done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>"><%- stats.execution.percent.toLocaleString() %></td>
         <% } %>
         <td data-group="execution<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" data-plan="<%- stats.execution[i + 1].plan %>" data-done="<%- stats.execution[i + 1].done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>"><%- stats.execution[i + 1].percent.toLocaleString() %></td>
       </tr>

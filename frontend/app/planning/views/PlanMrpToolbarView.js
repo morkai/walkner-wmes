@@ -15,6 +15,7 @@ define([
   '../util/shift',
   '../PlanSapOrderCollection',
   './ToggleMrpLockDialogView',
+  './PlanExecutionView',
   'app/planning/templates/toolbar',
   'app/planning/templates/toolbarPrintLineList',
   'app/planning/templates/printPage',
@@ -34,6 +35,7 @@ define([
   shiftUtil,
   PlanSapOrderCollection,
   ToggleMrpLockDialogView,
+  PlanExecutionView,
   toolbarTemplate,
   toolbarPrintLineListTemplate,
   printPageTemplate,
@@ -152,6 +154,17 @@ define([
         });
 
         viewport.showDialog(dialogView, view.t('toggleLock:title:' + locked));
+      },
+      'click td[data-group="execution"]': function()
+      {
+        var dialogView = new PlanExecutionView({
+          plan: this.plan,
+          mrp: this.mrp
+        });
+
+        viewport.showDialog(dialogView, this.t('planExecution:title:mrp', {
+          mrp: this.mrp.id
+        }));
       }
 
     },
@@ -165,10 +178,9 @@ define([
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         lines: this.mrp.lines.map(function(line) { return line.id; }),
         stats: this.options.stats === false ? null : this.mrp.getStats(),
         canLock: this.plan.canLockMrps(),

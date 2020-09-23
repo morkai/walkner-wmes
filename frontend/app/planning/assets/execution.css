@@ -1,0 +1,50 @@
+.planning-execution-mrp h1 {
+  margin-bottom: 0;
+}
+.planning-execution-mrp:first-child h1 {
+  margin-top: 0;
+}
+.planning-execution-mrp:only-child h1 {
+  display: none;
+}
+.planning-execution-mrp:only-child .planning-execution-lines h2:first-child {
+  margin-top: 0;
+}
+.planning-execution-order {
+  display: flex;
+}
+.planning-execution-no {
+  width: 25px;
+}
+.planning-execution-orderNo {
+  width: 72px;
+}
+.planning-execution-line {
+  width: 72px;
+  overflow: hidden;
+}
+.planning-execution-quantity {
+  margin-left: 15px;
+  width: 50px;
+}
+.planning-execution-time {
+  margin-left: 15px;
+  width: 75px;
+}
+.planning-execution-date {
+  margin-left: 15px;
+  width: 95px;
+}
+.planning-execution-order-shift + .planning-execution-order-plan {
+  margin-top: 7px;
+}
+.planning-execution-ok {
+  margin-left: 10px;
+  color: #00af00;
+}
+.planning-execution-order .is-ok {
+  color: #00af00;
+}
+.planning-execution-order .is-nok {
+  color: #e00;
+}

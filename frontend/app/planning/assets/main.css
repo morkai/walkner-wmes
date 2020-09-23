@@ -5,6 +5,7 @@
 @import "./plan.darker.css";
 @import "./wh.css";
 @import "./changes.css";
+@import "./execution.css";
 
 .planning-mrpSelector-container {
   position: fixed;

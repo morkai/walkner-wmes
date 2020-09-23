@@ -510,7 +510,10 @@
     "copySettings:failure:fetchSettings": "Failed to fetch settings for {plan}.",
 
     "lockReason:mrp": "MRP {mrp} is locked directly.",
-    "lockReason:line": "Line {line} is assigned to a locked MRP: {mrps}"
+    "lockReason:line": "Line {line} is assigned to a locked MRP: {mrps}",
+
+    "planExecution:title:all": "Plan execution",
+    "planExecution:title:mrp": "Plan execution for {mrp}"
   },
   "pl": true
 }
