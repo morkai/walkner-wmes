@@ -86,27 +86,36 @@ define([
       throw new Error('Invalid shift!');
     },
 
-    getShiftStartTime: function(time)
+    getShiftStartTime: function(time, local)
     {
       var date = new Date(time);
-      var h = date.getUTCHours();
+      var setHours = 'setUTCHours';
+      var getHours = 'getUTCHours';
+
+      if (local)
+      {
+        setHours = 'setHours';
+        getHours = 'getHours';
+      }
+
+      var h = date[getHours]();
 
       if (h >= 6 && h < 14)
       {
-        date.setUTCHours(6, 0, 0, 0);
+        date[setHours](6, 0, 0, 0);
       }
       else if (h >= 14 && h < 22)
       {
-        date.setUTCHours(14, 0, 0, 0);
+        date[setHours](14, 0, 0, 0);
       }
       else if (h >= 22)
       {
-        date.setUTCHours(22, 0, 0, 0);
+        date[setHours](22, 0, 0, 0);
       }
       else
       {
-        date.setUTCHours(0, 0, 0, 0);
-        date.setUTCHours(-2);
+        date[setHours](0, 0, 0, 0);
+        date[setHours](-2);
       }
 
       return date.getTime();

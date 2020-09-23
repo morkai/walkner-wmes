@@ -1,33 +1,36 @@
 <form class="planning-freezeOrders">
   <div class="row">
     <div class="col-md-4 form-group">
-      <label class="control-label"><%- t('planning', 'lines:menu:freezeOrders:line') %></label>
+      <label class="control-label"><%- t('lines:menu:freezeOrders:line') %></label>
       <p class="form-control-static"><%= line %></p>
     </div>
     <div class="col-md-8">
       <div class="btn-group">
         <% [1, 2, 3].forEach(function(shift) { %>
         <button type="button" class="btn btn-default" data-shift="<%- shift %>">
-          <%- t('planning', 'lines:menu:freezeOrders:shift:' + shift) %>
+          <%- t('lines:menu:freezeOrders:shift:' + shift) %>
         </button>
         <% }) %>
+        <button type="button" class="btn btn-default" data-shift="0">
+          <i class="fa fa-eraser"></i>
+        </button>
       </div>
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-availableOrders" class="control-label"><%- t('planning', 'lines:menu:freezeOrders:availableOrders') %></label>
-    <input id="<%- idPrefix %>-availableOrders" type="text" autocomplete="new-password" value="">
+    <label for="<%- id('availableOrders') %>" class="control-label"><%- t('lines:menu:freezeOrders:availableOrders') %></label>
+    <input id="<%- id('availableOrders') %>" type="text" autocomplete="new-password" value="">
   </div>
   <table class="table table-condensed table-hover">
     <thead>
     <tr>
-      <th class="is-min"><%- t('planning', 'lines:menu:freezeOrders:no') %></th>
-      <th><%- t('planning', 'lines:menu:freezeOrders:order') %></th>
-      <th class="is-min"><%- t('planning', 'lines:menu:freezeOrders:quantity') %></th>
-      <th class="is-min actions"><%- t('planning', 'lines:menu:freezeOrders:actions') %></th>
+      <th class="is-min"><%- t('lines:menu:freezeOrders:no') %></th>
+      <th><%- t('lines:menu:freezeOrders:order') %></th>
+      <th class="is-min"><%- t('lines:menu:freezeOrders:quantity') %></th>
+      <th class="is-min actions"><%- t('lines:menu:freezeOrders:actions') %></th>
     </tr>
     </thead>
-    <tbody id="<%- idPrefix %>-frozenOrders">
+    <tbody id="<%- id('frozenOrders') %>">
     <tr>
       <td class="is-min text-right"></td>
       <td class="planning-freezeOrders-order">
@@ -46,9 +49,9 @@
     </tbody>
   </table>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
-      <span><%- t('planning', 'lines:menu:freezeOrders:submit') %></span>
+      <span><%- t('lines:menu:freezeOrders:submit') %></span>
     </button>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>

@@ -114,6 +114,8 @@ define([
 
       this.lines.forEach(function(line)
       {
+        var lineOrders = [];
+
         line.orders.forEach(function(lineOrder)
         {
           var planOrder = plan.orders.get(lineOrder.get('orderNo'));
@@ -123,18 +125,46 @@ define([
             return;
           }
 
-          var startAt = Date.parse(lineOrder.get('startAt'));
-          var shiftNo = shiftUtil.getShiftNo(startAt);
-          var quantityDone = plan.shiftOrders.getTotalQuantityDone(line.id, lineOrder);
-          var quantityTodo = lineOrder.get('quantity');
+          if (lineOrders.length === 0)
+          {
+            lineOrders.push([lineOrder]);
 
-          stats.manHours.plan += lineOrder.get('manHours');
-          stats.quantity.plan += quantityTodo;
-          stats.orders.plan += 1;
-          stats.execution.plan += quantityTodo;
-          stats.execution.done += quantityDone;
-          stats.execution[shiftNo].plan += quantityTodo;
-          stats.execution[shiftNo].done += quantityDone;
+            return;
+          }
+
+          var prev = lineOrders[lineOrders.length - 1];
+
+          if (prev[0].get('orderNo') === lineOrder.get('orderNo'))
+          {
+            prev.push(lineOrder);
+          }
+          else
+          {
+            lineOrders.push([lineOrder]);
+          }
+        });
+
+        lineOrders.forEach(function(groupedLineOrders)
+        {
+          groupedLineOrders.forEach(function(lineOrder)
+          {
+            var startAt = Date.parse(lineOrder.get('startAt'));
+            var shiftNo = shiftUtil.getShiftNo(startAt);
+            var quantityTodo = lineOrder.get('quantity');
+            var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder);
+            var executed = execution.plannedQuantitiesDone.some(function(quantityDone)
+            {
+              return quantityDone === quantityTodo;
+            });
+
+            stats.manHours.plan += lineOrder.get('manHours');
+            stats.quantity.plan += quantityTodo;
+            stats.orders.plan += 1;
+            stats.execution.plan += 1;
+            stats.execution.done += executed ? 1 : 0;
+            stats.execution[shiftNo].plan += 1;
+            stats.execution[shiftNo].done += execution.quantityDoneOnShift === quantityTodo ? 1 : 0;
+          });
         });
       });
 

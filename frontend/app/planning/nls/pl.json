@@ -222,7 +222,7 @@
   "orders:dropZone": "{group} na {time}",
   "orders:qty:incomplete": "({qty} {qty, plural, one{nierozplanowana} few{nierozplanowane} other{nierozplanowanych}})",
   "orders:late": "Opóźnione",
-  "orders:customQuantity": "Zmieniona ilość",
+  "orders:resized": "Zmieniona ilość",
   "orders:comment": "Ostatni komentarz",
   "orders:menu:header": "Zlecenie {order}",
   "orders:menu:sapOrder": "Otwórz szczegóły zlecenia SAP",

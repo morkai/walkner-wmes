@@ -25,6 +25,8 @@ define([
 
     template: template,
 
+    nlsDomain: 'planning',
+
     events: {
 
       'submit': function()
@@ -168,10 +170,9 @@ define([
       this.$frozenOrder = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         mrp: this.mrp.getLabel(),
         line: this.line.getLabel()
       };

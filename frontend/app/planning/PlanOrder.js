@@ -23,7 +23,8 @@ define([
     psStatus: 'fa-paint-brush',
     whStatus: 'fa-level-down',
     drillStatus: 'fa-circle-o',
-    eto: 'fa-wrench'
+    eto: 'fa-wrench',
+    resized: 'fa-sort-numeric-desc'
   };
 
   return Model.extend({

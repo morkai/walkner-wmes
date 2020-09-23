@@ -40,6 +40,7 @@ define([
       self.shiftEndTime = 0;
 
       self.cache = {
+        execution: {},
         byLine: {},
         byOrder: {}
       };
@@ -51,6 +52,7 @@ define([
       self.on('reset', function()
       {
         self.cache = {
+          execution: {},
           byLine: {},
           byOrder: {}
         };
@@ -59,6 +61,7 @@ define([
       });
 
       self.on('add', self.cacheOrder, self);
+      self.on('change:quantityDone', function() { this.cache.execution = {}; });
 
       self.forEach(self.cacheOrder, self);
     },
@@ -93,39 +96,94 @@ define([
       return shiftOrders;
     },
 
-    getTotalQuantityDone: function(line, lineOrder)
+    getLineOrderExecution: function(line, lineOrder)
     {
+      var key = line + lineOrder.id;
+
+      if (this.cache.execution[key])
+      {
+        return this.cache.execution[key];
+      }
+
       var orderNo = lineOrder.get('orderNo');
       var planOrder = this.plan.orders.get(orderNo);
+      var execution = this.cache.execution[key] = {
+        quantityDoneOnLine: 0,
+        quantityDoneOnDay: 0,
+        quantityDoneOnShift: 0,
+        plannedQuantityDone: 0,
+        plannedQuantitiesDone: []
+      };
 
       if (!planOrder)
       {
-        return 0;
+        return execution;
       }
 
-      var cache = this.cache.byLine;
-      var startAt = Date.parse(lineOrder.get('startAt'));
-      var shift = shiftUtil.getShiftNo(startAt);
-      var operationNo = planOrder.getOperationNo();
-      var planShiftOrders = cache[line] && cache[line][shift] && cache[line][shift][orderNo];
-      var totalQuantityDone = 0;
+      var lineShiftOrders = this.cache.byLine[line];
 
-      if (!planShiftOrders)
+      if (!lineShiftOrders)
       {
-        return totalQuantityDone;
+        return execution;
       }
 
-      planShiftOrders.forEach(function(pso)
-      {
-        var opNo = pso.get('operationNo');
+      var utcStartAt = Date.parse(lineOrder.get('startAt'));
+      var localStartAt = time.utc.getMoment(utcStartAt).local(true).valueOf();
+      var timeWindow = 240 * 60 * 1000;
+      var fromTime = localStartAt - timeWindow;
+      var toTime = localStartAt + timeWindow;
+      var requiredOperationNo = planOrder.getOperationNo();
+      var requiredShiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
+      var requiredShiftEndTime = requiredShiftStartTime + 24 * 3600 * 1000;
 
-        if (!operationNo || !opNo || operationNo === opNo)
+      lineShiftOrders.all.forEach(function(pso)
+      {
+        if (pso.get('orderId') !== orderNo)
         {
-          totalQuantityDone += pso.get('quantityDone') || 0;
+          return;
+        }
+
+        var quantityDone = pso.get('quantityDone');
+
+        if (!quantityDone)
+        {
+          return;
+        }
+
+        var actualOperationNo = pso.get('operationNo');
+
+        if (!requiredOperationNo || !actualOperationNo || actualOperationNo !== requiredOperationNo)
+        {
+          return;
+        }
+
+        execution.quantityDoneOnLine += quantityDone;
+
+        var startedAt = Date.parse(pso.get('startedAt'));
+
+        if (startedAt >= requiredShiftStartTime && startedAt <= requiredShiftEndTime)
+        {
+          execution.quantityDoneOnDay += quantityDone;
+        }
+
+        if (shiftUtil.getShiftStartTime(startedAt, true) === requiredShiftStartTime)
+        {
+          execution.quantityDoneOnShift += quantityDone;
+        }
+
+        if (startedAt >= fromTime && startedAt <= toTime)
+        {
+          execution.plannedQuantityDone += quantityDone;
+          execution.plannedQuantitiesDone.push(quantityDone);
         }
       });
 
-      return totalQuantityDone;
+      return execution;
+    },
+
+    getTotalQuantityDone: function(line, lineOrder)
+    {
+      return this.getLineOrderExecution(line, lineOrder).quantityDoneOnShift;
     },
 
     update: function(data)
@@ -166,32 +224,26 @@ define([
       }
     },
 
-    cacheOrder: function(planShiftOrder)
+    cacheOrder: function(pso)
     {
       var byLine = this.cache.byLine;
       var byOrder = this.cache.byOrder;
-      var line = planShiftOrder.get('prodLine');
-      var shift = planShiftOrder.get('shift');
-      var orderNo = planShiftOrder.get('orderId');
-      var startedAt = Date.parse(planShiftOrder.get('startedAt'));
-
-      if (startedAt < this.shiftStartTime)
-      {
-        return;
-      }
-      else if (startedAt > this.shiftEndTime)
-      {
-        return;
-      }
+      var line = pso.get('prodLine');
+      var shift = pso.get('shift');
+      var orderNo = pso.get('orderId');
 
       if (!byLine[line])
       {
-        byLine[line] = {};
+        byLine[line] = {
+          all: []
+        };
       }
 
       if (!byLine[line][shift])
       {
-        byLine[line][shift] = {};
+        byLine[line][shift] = {
+          all: []
+        };
       }
 
       if (!byLine[line][shift][orderNo])
@@ -199,14 +251,17 @@ define([
         byLine[line][shift][orderNo] = [];
       }
 
-      byLine[line][shift][orderNo].push(planShiftOrder);
-
       if (!byOrder[orderNo])
       {
         byOrder[orderNo] = [];
       }
 
-      byOrder[orderNo].push(planShiftOrder);
+      byLine[line].all.push(pso);
+      byLine[line][shift].all.push(pso);
+      byLine[line][shift][orderNo].push(pso);
+      byOrder[orderNo].push(pso);
+
+      this.cache.execution = {};
     }
 
   });

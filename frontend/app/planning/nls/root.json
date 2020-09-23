@@ -223,7 +223,7 @@
     "orders:dropZone": "{group} on {time}",
     "orders:qty:incomplete": "({qty} incomplete)",
     "orders:late": "Late",
-    "orders:customQuantity": "Changed quantity",
+    "orders:resized": "Changed quantity",
     "orders:comment": "Last comment",
     "orders:menu:header": "Order {order}",
     "orders:menu:sapOrder": "Open SAP order details",

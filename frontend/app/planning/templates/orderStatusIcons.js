@@ -63,6 +63,11 @@ define([
       statuses.push(formatIcon(planOrder.getIcon('pinned'), 'orders:pinned'));
     }
 
+    if (planOrder.get('quantityPlan'))
+    {
+      statuses.push(formatIcon(planOrder.getIcon('resized'), 'orders:resized'));
+    }
+
     if (plan.sapOrders.isEto(orderNo))
     {
       statuses.push(formatIcon(planOrder.getIcon('eto'), 'orders:eto'));
