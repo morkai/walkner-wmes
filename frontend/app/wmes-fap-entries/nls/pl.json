@@ -68,6 +68,7 @@
   "PROPERTY:finishedAt": "Czas zakończenia zgłoszenia",
   "PROPERTY:analysisStartedAt": "Czas rozpoczęcia analizy",
   "PROPERTY:analysisFinishedAt": "Czas zakończenia analizy",
+  "PROPERTY:orderStatus": "Aktualny status zlecenia",
 
   "levelIndicator:label": "Poziom eskalacji zgłoszenia",
   "levelIndicator:title": "Eskaluj zgłoszenie na poziom {level}",

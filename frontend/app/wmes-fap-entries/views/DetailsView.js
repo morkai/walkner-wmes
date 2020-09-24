@@ -271,6 +271,7 @@ define([
         case 'subdivisionType':
         case 'componentCode':
         case 'componentName':
+        case 'orderStatus':
           return this.updateProp.bind(this, prop);
       }
     },

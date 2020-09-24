@@ -10,6 +10,7 @@ define([
   '../core/Model',
   '../core/util/autolinker',
   '../data/colorFactory',
+  '../orderStatuses/util/renderOrderStatusLabel',
   './dictionaries',
   'app/core/templates/userInfo',
   'app/wmes-fap-entries/templates/levelIndicator'
@@ -23,6 +24,7 @@ define([
   Model,
   autolinker,
   colorFactory,
+  renderOrderStatusLabel,
   dictionaries,
   userInfoTemplate,
   levelIndicatorTemplate
@@ -169,6 +171,15 @@ define([
       }
 
       obj.observer = this.serializeObserver();
+
+      if (Array.isArray(obj.orderStatus) && obj.orderStatus.length)
+      {
+        obj.orderStatus = obj.orderStatus.map(renderOrderStatusLabel).join('');
+      }
+      else
+      {
+        obj.orderStatus = '-';
+      }
 
       return this.serialized = obj;
     },
@@ -940,6 +951,7 @@ define([
       analysisStartedAt: 1,
       analysisFinishedAt: 1,
       orderNo: 1,
+      orderStatus: 1,
       mrp: 1,
       nc12: 1,
       productName: 1,

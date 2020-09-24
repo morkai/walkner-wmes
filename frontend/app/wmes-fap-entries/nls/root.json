@@ -66,6 +66,7 @@
     "PROPERTY:finishedAt": "Finished at",
     "PROPERTY:analysisStartedAt": "Analysis started at",
     "PROPERTY:analysisFinishedAt": "Analysis finished at",
+    "PROPERTY:orderStatus": "Current order status",
 
     "levelIndicator:label": "Entry escalation level",
     "levelIndicator:title": "Escalte entry to level {level}",

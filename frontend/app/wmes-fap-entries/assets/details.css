@@ -125,6 +125,13 @@
   font-size: 28px;
   line-height: 35px;
 }
+.fap-prop[data-prop="orderStatus"] {
+  flex: 1 1 auto;
+}
+.fap-prop .orderStatus {
+  padding: 0 10px;
+  font-size: 28px;
+}
 .fap-is-multiline .fap-prop-value {
   text-align: justify;
 }

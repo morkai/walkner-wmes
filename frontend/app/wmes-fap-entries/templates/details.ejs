@@ -14,22 +14,22 @@
   </div>
   <div class="fap-props">
     <div class="fap-prop" data-prop="category">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:category') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:category') %></div>
       <div class="fap-prop-value"><%= model.category %></div>
     </div>
     <div class="fap-prop" data-prop="subCategory">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:subCategory') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:subCategory') %></div>
       <div class="fap-prop-value"><%= model.subCategory %></div>
     </div>
     <div class="fap-prop fap-is-textarea <%- model.multiline.problem ? 'fap-is-multiline' : '' %>" data-prop="problem">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:problem') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:problem') %></div>
       <div class="fap-prop-value"><%- model.problem %></div>
     </div>
   </div>
   <div class="fap-prop-separator"></div>
   <div class="fap-props">
     <div class="fap-prop" data-prop="orderNo">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:orderNo') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:orderNo') %></div>
       <div class="fap-prop-value text-mono">
         <% if (model.orderNo !== '-') { %>
         <a class="autolink" data-type="order" data-id="<%- model.orderNo %>"><%- model.orderNo %></a>
@@ -39,18 +39,18 @@
       </div>
     </div>
     <div class="fap-prop" data-prop="nc12">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:nc12') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:nc12') %></div>
       <div class="fap-prop-value text-mono"><%= model.nc12 %></div>
     </div>
     <div class="fap-prop" data-prop="productName">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:productName') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:productName') %></div>
       <div class="fap-prop-value text-mono"><%= model.productName %></div>
     </div>
   </div>
   <div class="fap-prop-separator"></div>
   <div class="fap-props">
     <div class="fap-prop" data-prop="qty">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:qty') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:qty') %></div>
       <div class="fap-prop-value">
         <span class="text-mono" data-prop="qtyDone"><%- model.qtyDone %></span>
         /
@@ -58,30 +58,37 @@
       </div>
     </div>
     <div class="fap-prop" data-prop="mrp">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:mrp') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:mrp') %></div>
       <div class="fap-prop-value text-mono"><%= model.mrp %></div>
     </div>
     <div class="fap-prop" data-prop="divisions">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:divisions') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:divisions') %></div>
       <div class="fap-prop-value"><%= model.divisions %></div>
     </div>
     <div class="fap-prop" data-prop="lines">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:lines') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:lines') %></div>
       <div class="fap-prop-value"><%= model.lines %></div>
     </div>
   </div>
   <div class="fap-prop-separator"></div>
   <div class="fap-props">
+    <div class="fap-prop" data-prop="orderStatus">
+      <div class="fap-prop-name"><%- t('PROPERTY:orderStatus') %></div>
+      <div class="fap-prop-value"><%- model.orderStatus %></div>
+    </div>
+  </div>
+  <div class="fap-prop-separator"></div>
+  <div class="fap-props">
     <div class="fap-prop" data-prop="subdivisionType">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:subdivisionType') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:subdivisionType') %></div>
       <div class="fap-prop-value"><%- model.subdivisionType %></div>
     </div>
     <div class="fap-prop" data-prop="componentCode">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:componentCode') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:componentCode') %></div>
       <div class="fap-prop-value text-mono"><%= model.componentCode %></div>
     </div>
     <div class="fap-prop" data-prop="componentName">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:componentName') %></div>
+      <div class="fap-prop-name"><%- t('PROPERTY:componentName') %></div>
       <div class="fap-prop-value text-mono"><%= model.componentName %></div>
     </div>
   </div>
@@ -93,7 +100,7 @@
   <div class="fap-props">
     <div class="fap-prop fap-is-textarea <%- model.multiline.solution ? 'fap-is-multiline' : '' %> <%- model.empty.solution ? '' : 'fap-is-success' %>" data-prop="solution" style="flex: 1 1 auto">
       <div class="fap-prop-name">
-        <%- helpers.t('PROPERTY:solution') %>
+        <%- t('PROPERTY:solution') %>
         <i class="fa fa-user" title="<%= model.solver %>"></i>
       </div>
       <div class="fap-prop-value"><%- model.solution %></div>
@@ -101,41 +108,41 @@
   </div>
   <div class="fap-prop-separator"></div>
   <div class="fap-analysis">
-    <div class="fap-analysis-header"><%- helpers.t('assessment:header') %></div>
+    <div class="fap-analysis-header"><%- t('assessment:header') %></div>
     <div class="fap-prop-separator"></div>
     <div class="fap-props fap-prop-assessment">
       <div class="fap-prop" data-prop="assessment">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:assessment') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:assessment') %></div>
         <div class="fap-prop-value"><%- model.assessment %></div>
       </div>
       <div class="fap-prop" data-prop="analysisNeed">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:analysisNeed') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:analysisNeed') %></div>
         <div class="fap-prop-value"><%- model.analysisNeed %></div>
       </div>
       <div class="fap-prop" data-prop="analysisDone">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:analysisDone') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:analysisDone') %></div>
         <div class="fap-prop-value"><%- model.analysisDone %></div>
       </div>
     </div>
     <div class="fap-prop-separator"></div>
     <div class="fap-props">
       <div class="fap-prop" data-prop="mainAnalyzer" style="flex: 1 1 auto">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:mainAnalyzer') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:mainAnalyzer') %></div>
         <div class="fap-prop-value"><%- model.mainAnalyzer %></div>
       </div>
       <div class="fap-prop" data-prop="analyzers" style="flex: 2 1 auto">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:analyzers') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:analyzers') %></div>
         <div class="fap-prop-value"><%- model.analyzers %></div>
       </div>
     </div>
     <div class="fap-prop-separator"></div>
     <div class="fap-props <%- model.level === 4 ? '' : 'hidden' %>">
       <div class="fap-prop" data-prop="why5" style="flex: 1 1 auto">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:why5') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:why5') %></div>
         <div class="fap-prop-value">
           <% for (var i = 0; i < 5; ++i) { %>
             <div class="fap-analysis-why" data-why-index="<%- i %>">
-              <div class="fap-analysis-why-label"><%- helpers.t('PROPERTY:why') %></div>
+              <div class="fap-analysis-why-label"><%- t('PROPERTY:why') %></div>
               <div class="fap-analysis-why-value"><%- model.why5[i] || '' %></div>
             </div>
           <% } %>
@@ -145,7 +152,7 @@
     <div class="fap-prop-separator <%- model.level === 4 ? '' : 'hidden' %>"></div>
     <div class="fap-props">
       <div class="fap-prop fap-is-textarea <%- model.multiline.solutionSteps ? 'fap-is-multiline' : '' %>" data-prop="solutionSteps" style="flex: 1 1 auto">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:solutionSteps') %></div>
+        <div class="fap-prop-name"><%- t('PROPERTY:solutionSteps') %></div>
         <div class="fap-prop-value"><%- model.solutionSteps %></div>
       </div>
     </div>
