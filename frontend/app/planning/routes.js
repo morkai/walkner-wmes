@@ -89,7 +89,8 @@ define([
           date: req.params.id,
           mrps: req.query.mrps === undefined ? null : req.query.mrps
             .split(/[^A-Z0-9]+/i)
-            .filter(function(mrp) { return mrp.length > 0; })
+            .filter(function(mrp) { return mrp.length > 0; }),
+          division: req.query.division || null
         });
       }
     );

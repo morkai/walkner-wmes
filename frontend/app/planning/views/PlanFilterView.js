@@ -9,6 +9,7 @@ define([
   'app/core/View',
   'app/core/util/pageActions',
   'app/data/clipboard',
+  'app/data/orgUnits',
   'app/mrpControllers/util/setUpMrpSelect2',
   './ExportStatsDialogView',
   './ExportTransportDialogView',
@@ -22,6 +23,7 @@ define([
   View,
   pageActions,
   clipboard,
+  orgUnits,
   setUpMrpSelect2,
   ExportStatsDialogView,
   ExportTransportDialogView,
@@ -37,7 +39,16 @@ define([
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
-      'change #-mrps': 'changeFilter',
+      'change #-mrps': function()
+      {
+        this.$('input[name="division"]:checked').prop('checked', false).parent().removeClass('active');
+        this.changeFilter();
+      },
+      'change input[name="division"]': function()
+      {
+        this.$id('mrps').select2('data', []);
+        this.changeFilter();
+      },
       'click #-lineOrdersList': function()
       {
         this.plan.displayOptions.toggleLineOrdersList();
@@ -63,6 +74,25 @@ define([
           new ExportTransportDialogView({model: this.plan}),
           this.t('transport:export:title')
         );
+      },
+
+      'mouseup #-division > .btn': function(e)
+      {
+        var view = this;
+        var labelEl = e.currentTarget;
+        var radioEl = labelEl.firstElementChild;
+
+        if (radioEl.checked)
+        {
+          setTimeout(function()
+          {
+            labelEl.classList.remove('active');
+            radioEl.checked = false;
+
+            view.$id('mrps').select2('data', []);
+            view.changeFilter();
+          }, 1);
+        }
       }
 
     },
@@ -91,6 +121,8 @@ define([
 
       return {
         date: plan.id,
+        divisions: Object.keys(displayOptions.get('activeMrps')).sort(),
+        division: displayOptions.get('division'),
         mrps: displayOptions.get('mrps'),
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
@@ -104,7 +136,7 @@ define([
     afterRender: function()
     {
       setUpMrpSelect2(this.$id('mrps'), {
-        width: '400px',
+        width: '350px',
         placeholder: this.t('filter:mrps:placeholder'),
         sortable: true,
         own: true,
@@ -276,23 +308,23 @@ define([
     {
       var dateEl = this.$id('date')[0];
       var date = dateEl.value;
-      var newFilter = {
-        mrps: this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; })
+      var mrps = this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; });
+      var displayOptions = {
+        division: this.$('input[name="division"]:checked').val() || null
       };
 
-      if (dateEl.checkValidity() && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date))
+      if (!_.isEqual(mrps, this.plan.displayOptions.get('mrps')))
       {
-        newFilter.date = date;
+        displayOptions.mrps = mrps;
       }
 
-      if (!_.isEqual(newFilter.mrps, this.plan.displayOptions.get('mrps')))
-      {
-        this.plan.displayOptions.set('mrps', newFilter.mrps);
-      }
+      this.plan.displayOptions.set(displayOptions);
 
-      if (newFilter.date && newFilter.date !== this.plan.id)
+      if (dateEl.checkValidity()
+        && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date)
+        && date !== this.plan.id)
       {
-        this.plan.set('_id', newFilter.date);
+        this.plan.set('_id', date);
       }
     },
 

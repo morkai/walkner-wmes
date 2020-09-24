@@ -32,6 +32,7 @@
     "PAGE_ACTION:toggleChanges:collapse": "Collapse",
 
     "filter:date": "Plan date",
+    "filter:division": "Division",
     "filter:mrps": "All MRP",
     "filter:mrps:1": "Selected MRP",
     "filter:mrps:0": "Ignored MRP",

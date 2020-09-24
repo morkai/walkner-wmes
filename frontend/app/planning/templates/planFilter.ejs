@@ -3,6 +3,16 @@
     <label for="<%- idPrefix %>-date" class="control-label"><%- t('filter:date') %></label>
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
   </div>
+  <% if (divisions.length) { %>
+  <div class="form-group">
+    <label class="control-label"><%- t('filter:division') %></label>
+    <div id="<%- id('division') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% divisions.forEach(function(id) { %>
+      <label class="btn btn-default <%- id === division ? 'active' : '' %>"><input type="radio" name="division" value="<%- id %>" <%- id === division ? 'checked' : '' %>> <%= id %></label>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('filter:mrps:1') %></label>
     <input id="<%- idPrefix %>-mrps" name="mrps" value="<%- mrps %>">
@@ -41,7 +51,7 @@
   <% if (showStats) { %>
   <div class="form-group" style="flex-grow: 1"></div>
   <div class="form-group" style="margin: 0">
-    <table class="planning-mrp-stats" style="margin: 0">
+    <table class="planning-mrp-stats" style="margin: 0 0 15px 15px">
       <tbody>
       <tr class="planning-mrp-stats-bd">
         <th></th>

@@ -31,6 +31,7 @@
   "PAGE_ACTION:toggleChanges:collapse": "Zwiń",
 
   "filter:date": "Data planu",
+  "filter:division": "Wydział",
   "filter:mrps": "MRP",
   "filter:mrps:1": "Wybrane MRP",
   "filter:mrps:0": "Ignorowane MRP",

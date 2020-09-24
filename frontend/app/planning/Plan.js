@@ -62,7 +62,9 @@ define([
         pceTimes: false
       });
 
-      this.urlQuery = 'minMaxDates=' + (options.minMaxDates ? 1 : 0) + '&pceTimes=' + (options.pceTimes ? 1 : 0);
+      this.urlQuery = 'minMaxDates=' + (options.minMaxDates ? 1 : 0)
+        + '&pceTimes=' + (options.pceTimes ? 1 : 0)
+        + '&activeMrps=' + (options.activeMrps ? 1 : 0);
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
 
@@ -134,9 +136,11 @@ define([
 
       attrs.active = shiftUtil.isActive(attrs._id || this.id);
 
-      if (res.minDate || res.maxDate)
+      var displayOptions = _.pick(res, ['minDate', 'maxDate', 'activeMrps']);
+
+      if (!_.isEmpty(displayOptions))
       {
-        this.displayOptions.set(_.pick(res, ['minDate', 'maxDate']));
+        this.displayOptions.set(displayOptions);
       }
 
       if (res.orders)

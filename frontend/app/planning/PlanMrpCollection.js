@@ -36,10 +36,16 @@ define([
     createModelsFromSettings: function()
     {
       var plan = this.plan;
+      var division = plan.displayOptions.get('division');
+      var activeMrps = plan.displayOptions.get('activeMrps');
       var mrpIds = [].concat(plan.displayOptions.get('mrps'));
       var exclude = false;
 
-      if (mrpIds[0] === '1')
+      if (division && activeMrps[division])
+      {
+        mrpIds = activeMrps[division];
+      }
+      else if (mrpIds[0] === '1')
       {
         mrpIds.shift();
       }

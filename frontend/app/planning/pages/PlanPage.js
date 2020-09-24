@@ -282,11 +282,13 @@ define([
 
       var plan = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
+          division: page.options.division,
           mrps: page.options.mrps
         }),
         settings: PlanSettings.fromDate(page.options.date),
         minMaxDates: true,
-        pceTimes: false
+        pceTimes: false,
+        activeMrps: true
       });
 
       plan.whLines = bindLoadingMessage(new WhLineCollection(), page);
@@ -318,23 +320,27 @@ define([
     {
       var page = this;
       var plan = page.plan;
+      var dispOpts = plan.displayOptions;
 
       page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
-      page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
-      page.listenTo(plan.displayOptions, 'change:wrapLists', page.onWrapListsChanged);
-      page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
-      page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
-
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
       page.listenTo(plan.settings, 'errored', function() { page.reload(true); });
-
-      page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
 
       page.listenTo(plan.orders, 'added', page.reloadOrders.bind(page, true));
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
+
+      page.once('afterRender', function()
+      {
+        page.listenTo(dispOpts, 'change:mrps change:division', _.debounce(page.onMrpsFilterChanged.bind(page), 1));
+        page.listenTo(dispOpts, 'change:wrapLists', page.onWrapListsChanged);
+        page.listenTo(dispOpts, 'change:useDarkerTheme', page.onDarkerThemeChanged);
+        page.listenTo(dispOpts, 'change:useLatestOrderData', page.updateUrl);
+
+        page.listenTo(plan.mrps, 'reset', _.debounce(page.renderMrps.bind(page), 1));
+      });
 
       $(document)
         .on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
@@ -438,7 +444,8 @@ define([
 
       this.broker.publish('router.navigate', {
         url: '/planning/plans/' + plan.id
-          + '?mrps=' + plan.displayOptions.get('mrps')
+          + '?division=' + (plan.displayOptions.get('division') || '')
+          + '&mrps=' + plan.displayOptions.get('mrps').join(',')
           + '&sapOrders=' + (plan.displayOptions.isLatestOrderDataUsed() ? 1 : 0),
         replace: true,
         trigger: false

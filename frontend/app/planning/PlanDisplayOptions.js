@@ -20,6 +20,7 @@ define([
       return {
         minDate: '2017-01-01',
         maxDate: time.utc.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
+        division: null,
         mrps: [],
         lines: [],
         whStatuses: [],
@@ -31,7 +32,8 @@ define([
         wrapLists: true,
         lineOrdersList: false,
         from: '06:00',
-        to: '06:00'
+        to: '06:00',
+        activeMrps: {}
       };
     },
 
@@ -130,6 +132,11 @@ define([
       var displayOptions = new this(null, options);
 
       displayOptions.readFromLocalStorage();
+
+      if (attrs.division)
+      {
+        displayOptions.set('division', attrs.division);
+      }
 
       ['mrps', 'lines', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
       {
