@@ -55,6 +55,7 @@ define([
       {
         columns.push.apply(columns, [
           {id: 'date', className: 'is-min', tdAttrs: prepareTdAttrs},
+          {id: 'finishedAt', className: 'is-min', tdAttrs: prepareTdAttrs},
           {id: 'categories', tdAttrs: prepareTdAttrs},
           {id: 'productFamily', tdAttrs: prepareTdAttrs},
           {id: 'section', tdAttrs: prepareTdAttrs},

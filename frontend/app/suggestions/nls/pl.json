@@ -27,6 +27,8 @@
     "PANEL:TITLE:changes": "Historia zmian zgłoszenia",
 
     "LIST:owners": "{first} <span class=text-nowrap>+{count, plural, one{1 inna} other{{count} inne}}</span>",
+    "LIST:COLUMN:date": "Data złożenia<br>wniosku",
+    "LIST:COLUMN:finishedAt": "Data<br>zakończenia",
 
     "PROPERTY:rid": "ID",
     "PROPERTY:subject": "Temat zgłoszenia",

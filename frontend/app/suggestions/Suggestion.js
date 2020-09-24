@@ -67,7 +67,7 @@ define([
       obj.categories = (obj.categories || [])
         .map(function(c) { return kaizenDictionaries.categories.getLabel(c); })
         .join('; ');
-      obj.productFamily = obj.kaizenEvent || kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '-';
+      obj.productFamily = obj.kaizenEvent || kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '';
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {
@@ -132,6 +132,8 @@ define([
             count: owners.length - 1
           });
       }
+
+      row.finishedAt = row.finishedAt ? time.format(this.get('finishedAt'), 'L') : '';
 
       return row;
     },
