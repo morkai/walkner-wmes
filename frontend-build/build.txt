@@ -2859,6 +2859,10 @@ app/wmes-fap-entries/dictionaries.js
 vendor/autolinker.js
 app/core/util/autolinker.js
 app/data/colorFactory.js
+app/orderStatuses/OrderStatus.js
+app/orderStatuses/OrderStatusCollection.js
+app/data/orderStatuses.js
+app/orderStatuses/util/renderOrderStatusLabel.js
 app/wmes-fap-entries/templates/levelIndicator.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/EntryCollection.js
@@ -2866,16 +2870,12 @@ app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js
 app/prodDowntimes/ProdDowntime.js
 app/prodDowntimes/ProdDowntimeCollection.js
-app/orderStatuses/OrderStatus.js
-app/orderStatuses/OrderStatusCollection.js
-app/data/orderStatuses.js
 app/orders/Operation.js
 app/orders/OperationCollection.js
 app/orders/Document.js
 app/orders/DocumentCollection.js
 app/orders/Component.js
 app/orders/ComponentCollection.js
-app/orderStatuses/util/renderOrderStatusLabel.js
 app/orders/Order.js
 app/orders/OrderCollection.js
 app/core/util/html2pdf.js
