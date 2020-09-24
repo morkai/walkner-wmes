@@ -262,7 +262,8 @@ define([
         carts: [],
         problemArea: '',
         comment: '',
-        qtyPerLine: []
+        qtyPerLine: [],
+        timePerLine: []
       };
 
       switch (columnId)
@@ -274,6 +275,18 @@ define([
               line: line._id,
               qty: line.qty,
               max: whOrder.get('qty')
+            };
+          });
+          break;
+
+        case 'startTime':
+        case 'finishTime':
+          templateData.timePerLine = whOrder.get('lines').map(function(line)
+          {
+            return {
+              line: line._id,
+              startTime: line.startTime ? time.utc.format(line.startTime, 'HH:mm:ss') : '?',
+              finishTime: line.finishTime ? time.utc.format(line.finishTime, 'HH:mm:ss') : '?'
             };
           });
           break;

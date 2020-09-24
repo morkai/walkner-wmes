@@ -5,29 +5,35 @@
     <th data-prop="product"><%- t('prop:product') %></th>
     <th class="text-center" data-prop="qty">
       <%- t('prop:qty') %>
-      <span id="<%- idPrefix %>-qty" class="wh-set-summary">0</span>
+      <span id="<%- id('qty') %>" class="wh-set-summary">0</span>
     </th>
     <th class="text-center" data-prop="time">
       <%- t('prop:time') %>
-      <span id="<%- idPrefix %>-time" class="wh-set-summary">00:00:00</span>
+      <span id="<%- id('time') %>" class="wh-set-summary">00:00:00</span>
     </th>
-    <% if (items[0].showPicklistDone) { %>
+    <% if (!hide || items[0].visible.picklistDone) { %>
     <th class="wh-set-separator"></th>
     <th class="text-center" data-prop="picklistDone"><%- t('prop:picklist') %></th>
     <% } %>
     <% items[0].funcs.forEach(function(func) { %>
+    <% if (!hide || items[0].visible.funcs[func._id]) { %>
     <th class="wh-set-separator"></th>
     <th class="text-center" data-prop="func" data-func="<%- func._id %>" colspan="<%- func._id === 'platformer' || func._id === 'painter' ? 1 : 2 %>">
       <%- t('prop:' + func._id) %>
-      <span id="<%- idPrefix %>-<%- func._id %>" class="wh-set-summary">?</span>
+      <span id="<%- id(func._id) %>" class="wh-set-summary">?</span>
     </th>
+    <% } %>
     <% }) %>
     <th class="wh-set-separator"></th>
     <th class="text-center"><%- t('core', 'LIST:COLUMN:actions') %></th>
-    <th></th>
+    <th class="<%- embedded ? 'cancel' : '' %>"></th>
   </tr>
   </thead>
   <% items.forEach(function(item) { %>
-  <%- renderItem({item: item}) %>
+  <%- renderItem({
+    item: item,
+    hide: hide,
+    embedded: embedded
+  }) %>
   <% }) %>
 </table>

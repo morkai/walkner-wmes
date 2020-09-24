@@ -125,10 +125,16 @@ define([
       var ignorePsStatus = this.whSettings.getValue('planning.ignorePsStatus') || [];
       var psPickupStatus = this.whSettings.getValue('planning.psPickupStatus') || [];
       var sets = {};
+      var lines = {};
 
       this.whOrders.forEach(function(whOrder)
       {
         var set = whOrder.get('set');
+
+        whOrder.get('lines').forEach(function(line)
+        {
+          lines[line._id] = true;
+        });
 
         if (!set)
         {
@@ -240,7 +246,7 @@ define([
 
       this.whLines.forEach(function(whLine)
       {
-        if (Date.parse(whLine.get('startedPlan')) < todayPlan)
+        if (!lines[whLine.id] || Date.parse(whLine.get('startedPlan')) < todayPlan)
         {
           return;
         }

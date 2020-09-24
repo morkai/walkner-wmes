@@ -167,8 +167,11 @@ define([
       var isUser = !!userFunc;
       var picklistDone = obj.picklistDone === 'success';
       var undelivered = !setData.delivered;
-      var funcs = [];
 
+      obj.visible = {
+        picklistDone: true,
+        funcs: {}
+      };
       obj.clickable = {
         picklistDone: undelivered
           && (canManage || (isUser && userFunc._id === obj.picklistFunc && !picklistDone))
@@ -179,9 +182,9 @@ define([
         var isAssigned = !!func.user;
         var isFunc = isUser && userFunc._id === func._id;
 
-        if (true || !isUser || isFunc) // TODO
+        if (canManage || !isUser || isFunc)
         {
-          funcs.push(func);
+          obj.visible.funcs[func._id] = true;
         }
 
         obj.clickable[func._id] = {
@@ -199,8 +202,8 @@ define([
         };
       });
 
-      obj.showPicklistDone = funcs.length !== 1 || (isUser && userFunc._id === obj.picklistFunc);
-      obj.funcs = funcs;
+      obj.visible.picklistDone = Object.keys(obj.visible.funcs).length !== 1
+        || (isUser && userFunc._id === obj.picklistFunc);
 
       var fmx = this.getFunc('fmx');
       var kitter = this.getFunc('kitter');

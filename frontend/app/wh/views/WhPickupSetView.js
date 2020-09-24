@@ -80,6 +80,11 @@ define([
 
     dialogClassName: 'wh-set-dialog modal-no-keyboard',
 
+    dialogBackdrop: function()
+    {
+      return embedded.isEnabled() ? 'static' : true;
+    },
+
     modelProperty: 'whOrders',
 
     events: {
@@ -172,19 +177,8 @@ define([
 
         this.showUpdateMenuByEvent(e);
       },
-      'mousedown .wh-set-action': function(e)
-      {
-        if (e.currentTarget.classList.contains('is-clickable'))
-        {
-          return;
-        }
-
-        var whOrder = this.whOrders.get(this.$(e.target).closest('.wh-set-item').attr('data-id'));
-        var func = e.currentTarget.dataset.func;
-        var prop = e.currentTarget.dataset.prop;
-
-        this.timers.showFixUpdateMenu = setTimeout(this.showFixUpdateMenu.bind(this, whOrder, func, prop, e), 500);
-      },
+      'touchstart .wh-set-action': 'scheduleFixUpdateMenu',
+      'mousedown .wh-set-action': 'scheduleFixUpdateMenu',
       'mouseup .wh-set-action': function()
       {
         clearTimeout(this.timers.showFixUpdateMenu);
@@ -250,6 +244,20 @@ define([
       }
     },
 
+    scheduleFixUpdateMenu: function(e)
+    {
+      if (e.currentTarget.classList.contains('is-clickable'))
+      {
+        return;
+      }
+
+      var whOrder = this.whOrders.get(this.$(e.target).closest('.wh-set-item').attr('data-id'));
+      var func = e.currentTarget.dataset.func;
+      var prop = e.currentTarget.dataset.prop;
+
+      this.timers.showFixUpdateMenu = setTimeout(this.showFixUpdateMenu.bind(this, whOrder, func, prop, e), 500);
+    },
+
     localTopics: {
       'planning.contextMenu.shown': 'hidePopover',
       'planning.contextMenu.hidden': 'focus'
@@ -273,6 +281,12 @@ define([
       view.once('afterRender', function()
       {
         view.$el.parent().on('scroll.' + view.idPrefix, view.onScroll.bind(view));
+
+        if (embedded.isEnabled())
+        {
+          view.$el.closest('.modal-content').find('.modal-header').addClass('cancel');
+          view.showCancelButton();
+        }
       });
 
       $(window)
@@ -284,9 +298,11 @@ define([
     {
       $(window).off('.' + this.idPrefix);
 
+      this.$el.closest('.modal-content').find('.modal-header').removeClass('cancel');
       this.$el.parent().off('.' + this.idPrefix);
       this.$el.popover('destroy');
 
+      this.hideCancelButton();
       this.hideEditor();
     },
 
@@ -294,6 +310,8 @@ define([
     {
       return {
         renderItem: this.renderPartialHtml.bind(this, setItemTemplate),
+        embedded: embedded.isEnabled(),
+        hide: this.shouldHide(),
         items: this.serializeItems()
       };
     },
@@ -576,6 +594,13 @@ define([
 
       var top = e.pageY;
       var left = e.pageX;
+      var touches = e.originalEvent.touches;
+
+      if (touches && touches.length)
+      {
+        top = touches[0].pageY;
+        left = touches[0].pageX;
+      }
 
       if (!top)
       {
@@ -1387,13 +1412,20 @@ define([
       };
 
       $item.replaceWith(view.renderPartialHtml(setItemTemplate, {
-        item: whOrder.serializeSet(setData, view.plan, view.model.user)
+        item: whOrder.serializeSet(setData, view.plan, view.model.user),
+        hide: view.shouldHide(),
+        embedded: embedded.isEnabled()
       }));
 
       if (view.focused.whOrderId === whOrder.id)
       {
         view.focus();
       }
+    },
+
+    shouldHide: function()
+    {
+      return window.innerWidth < 1600 && embedded.isEnabled();
     },
 
     onDialogShown: function()
@@ -1605,11 +1637,22 @@ define([
       clearTimeout(this.timers.hideVkb);
 
       this.vkb.show(e.currentTarget, {
+        onKeyPress: this.onVkbKeyPress.bind(this),
         adjustOverlap: false,
-        onKeyPress: this.onVkbKeyPress.bind(this)
+        positioner: embedded.isEnabled() && window.innerHeight > ($('.modal-dialog').outerHeight(true) + 350)
+          ? this.positionVkb.bind(this)
+          : null
       });
 
       this.positionEditor();
+    },
+
+    positionVkb: function(vkbCss)
+    {
+      vkbCss.bottom = 'unset';
+      vkbCss.top = Math.max($('.modal-dialog').outerHeight(true), 500) + 'px';
+
+      this.vkb.$el.css(vkbCss);
     },
 
     onVkbKeyPress: function(key)
@@ -1622,6 +1665,26 @@ define([
       this.$editor.find('.btn').click();
 
       return false;
+    },
+
+    showCancelButton: function()
+    {
+      this.$cancelButton = $('<button type="button" class="btn btn-danger wh-pickup-set-cancel">'
+        + '<i class="fa fa-times"></i></button>').appendTo(document.body);
+
+      this.$cancelButton.on('click', function()
+      {
+        viewport.closeDialog();
+      });
+    },
+
+    hideCancelButton: function()
+    {
+      if (this.$cancelButton)
+      {
+        this.$cancelButton.remove();
+        this.$cancelButton = null;
+      }
     }
 
   });

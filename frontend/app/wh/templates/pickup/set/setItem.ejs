@@ -4,13 +4,14 @@
     <td data-prop="nc12"><%- item.nc12 %></td>
     <td data-prop="qty"><%- item.qty %>/<%- item.qtyTodo %></td>
     <td data-prop="startTime"><%- item.startTime %></td>
-    <% if (item.showPicklistDone) { %>
+    <% if (!hide || item.visible.picklistDone) { %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <td class="wh-set-action <%- item.clickable.picklistDone ? 'is-clickable' : '' %>" data-prop="picklistDone" data-status="<%- item.picklistDone %>" rowspan="2">
       <i class="fa fa-play" <%- item.clickable.picklistDone ? 'tabindex="0"' : '' %>></i>
     </td>
     <% } %>
     <% item.funcs.forEach(function(func) { %>
+    <% if (!hide || item.visible.funcs[func._id]) { %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <% if (func._id !== 'platformer' && func._id !== 'painter') { %>
     <td class="wh-set-action <%- item.clickable[func._id].picklist ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="picklist" data-status="<%- func.picklist %>" rowspan="2">
@@ -20,12 +21,13 @@
     <td class="wh-set-action <%- item.clickable[func._id].pickup ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="pickup" data-status="<%- func.pickup %>" data-popover="pickup" rowspan="2">
       <i class="fa fa-shopping-cart" <%- item.clickable[func._id].pickup ? 'tabindex="0"' : '' %>></i>
     </td>
+    <% } %>
     <% }) %>
     <td class="wh-set-separator" rowspan="2"><hr></td>
     <td class="wh-set-actions" rowspan="2">
       <button class="btn btn-default" type="button" data-action="printLabels" <%- !item.clickable.printLabels ? 'disabled style="visibility: hidden"' : 'tabindex="0"' %>><i class="fa fa-print"></i></button>
     </td>
-    <td rowspan="2"></td>
+    <td rowspan="2" class="<%- embedded ? 'cancel' : '' %>"></td>
   </tr>
   <tr>
     <td data-prop="planStatusIcons"><%- item.planStatusIcons %></td>

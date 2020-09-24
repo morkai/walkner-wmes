@@ -23,4 +23,8 @@
   <dt><%= lineQty.line %></dt>
   <dd><%- lineQty.qty.toLocaleString() %>/<%- lineQty.max.toLocaleString() %></dd>
   <% }) %>
+  <% timePerLine.forEach(function(lineTime) {  %>
+  <dt><%= lineTime.line %></dt>
+  <dd><%- t('list:popover:timeRange', {start: lineTime.startTime, finish: lineTime.finishTime}) %></dd>
+  <% }) %>
 </dl>

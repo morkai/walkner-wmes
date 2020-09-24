@@ -331,6 +331,10 @@ define([
       this.$dialog.addClass(_.result(dialogView, 'dialogClassName'));
     }
 
+    var backdrop = _.result(dialogView, 'dialogBackdrop');
+
+    this.$dialog.data('bs.modal').options.backdrop = backdrop == null ? true : backdrop;
+
     dialogView.render();
 
     return this;

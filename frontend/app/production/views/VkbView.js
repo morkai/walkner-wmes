@@ -42,6 +42,7 @@ define([
     {
       this.fieldEl = null;
 
+      this.positioner = null;
       this.adjustOverlap = false;
       this.onValueChange = null;
       this.onKeyPress = null;
@@ -117,6 +118,13 @@ define([
         modalCss.marginLeft = Math.max(30, window.innerWidth - 30 - vkbW - 30 - modalW) + 'px';
       }
 
+      if (this.positioner)
+      {
+        this.positioner(vkbCss, modalCss);
+
+        return;
+      }
+
       $vkb.toggleClass('is-repositioned', overlapV).css(vkbCss);
       $modal.css(modalCss);
     },
@@ -136,7 +144,8 @@ define([
 
       _.defaults(options, {
         onValueChange: null,
-        onKeyPress: null
+        onKeyPress: null,
+        positioner: null
       });
 
       if (view.fieldEl === fieldEl
@@ -159,6 +168,7 @@ define([
       fieldEl.classList.add('is-vkb-focused');
 
       view.fieldEl = fieldEl;
+      view.positioner = options.positioner;
       view.adjustOverlap = options.adjustOverlap !== false;
       view.onValueChange = options.onValueChange;
       view.onKeyPress = options.onKeyPress;
@@ -181,6 +191,7 @@ define([
       }
 
       this.fieldEl = null;
+      this.positioner = null;
       this.onValueChange = null;
       this.onKeyPress = null;
     },
@@ -192,7 +203,6 @@ define([
 
     enableKeys: function()
     {
-      console.log('enableKeys');
       this.$('.btn[data-key][disabled]').each(function()
       {
         this.disabled = false;

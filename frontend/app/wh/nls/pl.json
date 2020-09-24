@@ -209,6 +209,9 @@
   "list:popover:psDistStatus": "Wysyłka malarnii",
   "list:popover:qty": "Ilość",
   "list:popover:line": "Linia",
+  "list:popover:startTime": "Planowany czas",
+  "list:popover:finishTime": "Planowany czas",
+  "list:popover:timeRange": "od {start} do {finish}",
 
   "problem:empty": "Nie ma żadnych problemów!",
   "problem:title": "Szczegóły problemu ze zleceniem {orderNo} dla linii {line}",

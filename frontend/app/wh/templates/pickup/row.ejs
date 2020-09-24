@@ -8,8 +8,8 @@
   <td data-column-id="name" class="is-min"><%= row.name %></td>
   <td data-column-id="qty" class="is-min text-right <%- row.lines.length > 1 ? 'wh-has-popover' : '' %>"><%- row.qty %>/<%- row.qtyTodo %></td>
   <td data-column-id="shift" class="is-min text-center" style="min-width: 35px"><%- t('core', 'SHIFT:' + row.shift) %></td>
-  <td data-column-id="startTime" class="is-min text-right"><%- row.startTime %></td>
-  <td data-column-id="finishTime" class="is-min text-right"><%- row.finishTime %></td>
+  <td data-column-id="startTime" class="is-min text-right <%- row.lines.length > 1 ? 'wh-has-popover' : '' %>"><%- row.startTime %></td>
+  <td data-column-id="finishTime" class="is-min text-right <%- row.lines.length > 1 ? 'wh-has-popover' : '' %>"><%- row.finishTime %></td>
   <td data-column-id="line" class="is-min wh-has-popover">
     <% if (row.redirLine) { %>
     <i class="fa fa-arrow-right"></i>

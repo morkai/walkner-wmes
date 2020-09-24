@@ -47,7 +47,7 @@
   padding-left: 0;
 }
 .wh-set tr th:last-child,
-.wh-set tr td:last-child {
+.wh-set tr td[rowspan]:last-child {
   width: auto;
   padding: 0;
 }
@@ -383,6 +383,15 @@ th[data-func] > .wh-set-summary {
 }
 .wh-set-dialog .modal-dialog {
   width: 100%;
+}
+.wh-pickup-set-cancel {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 1499;
+  width: 154px;
+  height: 154px;
+  font-size: 98px;
 }
 @media (min-width: 768px) {
   .wh-set-dialog .modal-dialog {
