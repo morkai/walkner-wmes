@@ -110,6 +110,7 @@ exports.modules = [
   'wmes-clients',
   'wmes-dummyPaint',
   'wmes-compRel',
+  'h5-currencyRates',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -704,4 +705,8 @@ exports['wmes-dummyPaint'] = {
 
 exports['wmes-compRel'] = {
 
+};
+
+exports['h5-currencyRates'] = {
+  currencies: {pln: ['eur']}
 };
