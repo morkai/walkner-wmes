@@ -2,7 +2,7 @@
   <div class="panel-heading"><%- t('PANEL:TITLE:bom' + (paint ? ':paint' : '')) %></div>
   <% if (_.isEmpty(bom)) { %>
   <div class="panel-body">
-    <%- t('BOM:NO_DATA') %>
+    <%- t('bom:noData') %>
   </div>
   <% } else { %>
   <div class="list <%- colored ? 'is-colored' : '' %>">
@@ -31,7 +31,7 @@
             <td class="is-min is-number"><a href="#orders/<%- component.orderNo %>"><%- component.orderNo %></a>
             <td class="is-min"><%= component.mrp %>
             <% } %>
-            <% if (component.releasedAt) { %>
+            <% if (component.compRel) { %>
             <td class="is-min text-center"><i class="fa fa-exchange"></i>
             <% } else { %>
             <td class="is-min is-number orders-bom-item"><%- component.item || '' %>
@@ -44,10 +44,15 @@
               <%- component.nc12 %>
               <% } %>
               <% } %>
-            <td class="is-min"><%= component.name  %>
+            <% if (component.compRel) { %>
             <% if (component.releasedAt) { %>
-            <td colspan="7">Dopuszczony <%- component.releasedAt %> przez <%- component.releasedBy %></td>
+            <td class="is-min"><%= component.name  %>
+            <td colspan="7"><%- t('bom:released', component) %></td>
             <% } else { %>
+            <td class="is-min" colspan="8"><%= component.name  %>
+            <% } %>
+            <% } else { %>
+            <td class="is-min"><%= component.name  %>
             <td class="is-min is-number" style="padding-right: 0; border-right: 0"><%- component.qty ? component.qty[0] : '' %>
             <td class="is-min is-number" style="text-align: left; padding-left: 0; border-left: 0; border-right: 0"><%- component.qty ? component.qty[1] : '' %></td>
             <td class="is-min" style="border-left: 0"><%- component.unit || '' %>
@@ -55,6 +60,9 @@
             <td class="is-min"><%= component.unloadingPoint || '' %>
             <td class="is-min"><%= component.supplyArea || '' %>
             <td>
+              <% if (!component.compRel && component.releasedAt) { %>
+              <%- t('bom:released', component) %>
+              <% } %>
             <% } %>
           </tr>
           <% }) %>

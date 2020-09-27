@@ -124,6 +124,9 @@
   "ETO:NO_DATA": "Brak ETO.",
   "NOTES:NO_DATA": "Brak uwag.",
 
+  "bom:noData": "Brak komponentów.",
+  "bom:released": "Dopuszczony {releasedAt} przez {releasedBy}.",
+
   "changes:NO_DATA": "Zlecenie nie było modyfikowane.",
   "changes:operations": "{count, plural, one{1 operacja} few{# operacje} other{# operacji}}",
   "changes:documents": "{count, plural, one{1 dokument} few{# dokumenty} other{# dokumentów}}",

@@ -1,4 +1,89 @@
 <div class="hidden">
+  <h1>v0.153.0</h1>
+  <h2><%- time.format('2020-09-27', 'LL') %></h2>
+  <h3>Dopuszczenia</h3>
+  <ul>
+    <li>Poprawiono błędy związane ze sprawdzaniem uprawnień.</li>
+    <li>Dodano możliwość dopuszczania zleceń po planowanej dacie rozpoczęcia zlecenia.</li>
+    <li>Dodano do listy komponentów w szczegółach zlecenia oraz w aplikacji do wyświetlania dokumentów podświetlanie
+      komponentów dopuszczonych, które znajdują się już w BOM zlecenia.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Zmieniono 'Sugestia' na 'Pomysł'.</li>
+    <li>Zmieniono pole 'Osoba zatwierdzająca' na 'Koordynator Kaizen'. Dodatkowo, jeżeli wybrany dział zgłaszający
+      ma zdefiniowaną listę koordynatorów, to użytkownik bez uprawnienia 'Usprawnienia: zarządzanie' nie może przypisać
+      dowolnego innego użytkownika jako koordynatora.</li>
+    <li>Zmieniono formularz edycji zgłoszenia tak, aby Osoba wykonująca nie mogła edytować Pomysłu, jeżeli zgłoszenie
+      ma status W realizacji.</li>
+    <li>Dodano Działy koordynujące do słownika Rodziny produktów. Użytkownicy do danego działu pobierani są z Matrycy
+      odpowiedzialności tak samo jak Działy koordynujące ze słownika Kategorie, ale z dodatkowym warunkiem, że sekcja
+      z Matrycy musi mieć przypisany przynajmniej jeden taki sam Dział WMES jak wybrany Dział koordynujący.</li>
+    <li>Dodano możliwość podania Osób wykonujących podczas dodawania zgłoszenia.</li>
+    <li>Dodano wyświetlanie Czasu zakończenia na ekranie szczegółów zgłoszenia. Czas zakończenia to moment zmiany
+      statusu na Zakończone.</li>
+    <li>Dodano możliwość załączania plików podczas wysyłania zgłoszenia do weryfikacji.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Dodano nowy status: W trakcie malowania (MSP). Status nadawany w momencie rozpoczęcia malowania zleceniom,
+      które mają farbę MSP oraz ilość pomalowaną równą 0. Pędzel w Planowaniu i Kompletacji ma kolor fioletowy.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wymuszenie wysyłki wózków przeznaczonych na grupę linii.</li>
+    <li>Poprawiono błąd uniemożliwiający dodanie wszystkich powiązanych wózków z innego zlecenia z seta podczas
+      kompletacji przez kliknięcie na nazwę funkcji w edytorze wózków.</li>
+    <li>Zmieniono przydzielanie do istniejących setów tak, aby pierwszeństwo miały sety utworzone przez wymuszenie
+      kompletacji.</li>
+    <li>Dodano eksportowanie zdarzeń.</li>
+    <li>Dodano wsparcie dla interfejsu dotykowego w trybie wbudowanym aplikacji do kompletacji.</li>
+    <li>Dodano wyświetlanie statystyk w każdej sekcji na ekranie Wysyłki.</li>
+    <li>Dodano wyświetlanie statystyk dla każdej funkcji na ekranie Kompletacji.</li>
+    <li>Dodano możliwość otwarcia szczegółow seta na ekranie Kompletacji przez wpisanie numeru seta za pomocą
+      klawiatury w ciągu 0,5s.</li>
+    <li>Dodano numer seta oraz kolejnego zlecenia w secie do etykiet kompletacji.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Zmieniono obliczanie wskaźnika realizacji sekwencji tak, aby porównywana była ilość zaplanowanych zleceń
+      do zleceń wykonanych na tej samej linii, w zaplanowanej ilości oraz w czterogodzinnym przedziale od planowanego
+      czasu rozpoczęcia zlecenia.</li>
+    <li>Dodano możliwość wyświetlenia szczegółów realizacji sekwencji MRP przez kliknięcie na procent realizacji
+      sekwencji.</li>
+    <li>Dodano do formuły obliczania czasu sztuki oraz roboczogodzin Współczynnik operacji Takt Time.</li>
+    <li>Dodano filtr Wydział.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Dodano przeliczanie statusu malarnii dla zleceń nadrzędnych po zmianie numeru zlecenia nadrzędnego w zleceniach
+      podrzędnych.</li>
+  </ul>
+  <h3>Baza komponentów</h3>
+  <ul>
+    <li>Dodano nowe stanowiska: PRE1, PRE2 oraz PRE3.</li>
+    <li>Dodano możliwość dzielenia CCN na części.</li>
+  </ul>
+  <h3>Raporty > Przezbrojenie</h3>
+  <ul>
+    <li>Dodano dwa nowe wskaźniki oraz kolumny Bezczynność, Przestoje, Przerwy, Ilość oraz Wydajność.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono format tygodni w raporcie Outgoing quality z daty początku tygodnia na numer tygodnia.</li>
+    <li>Zmieniono tabele Gdzie/Co tak, aby wyświetlany był opis obok kodu MRP/wady.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Dodano wyświetlanie aktualnego statusu zlecenia w szczegółach zgłoszenia.</li>
+  </ul>
+  <h3>Wydajność godzinowa</h3>
+  <ul>
+    <li>Dodano nowy tryb wyświetlania: Wydajność zmiany. Wydajność godzinowa wyświetlana jest przez 20s, a Wydajność
+      zmiany przez 40s.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.152.0</h1>
   <h2><%- time.format('2020-08-31', 'LL') %></h2>
   <h3>Magazyn</h3>

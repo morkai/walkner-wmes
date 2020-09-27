@@ -172,6 +172,7 @@ define([
           newComponents.forEach(function(compRel)
           {
             bom.push({
+              compRel: true,
               rowClassName: 'success',
               orderNo: component.orderNo,
               mrp: component.mrp,
@@ -196,14 +197,16 @@ define([
           {
             var compRel = old.compRel;
 
+            component.releasedAt = time.format(compRel.releasedAt, 'L HH:mm');
+            component.releasedBy = userInfoTemplate({userInfo: compRel.releasedBy, noIp: true});
+
             bom.push({
+              compRel: true,
               rowClassName: 'danger',
               orderNo: component.orderNo,
               mrp: component.mrp,
               nc12: old.oldComponent._id,
-              name: old.oldComponent.name,
-              releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
-              releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+              name: old.oldComponent.name
             });
           });
         }

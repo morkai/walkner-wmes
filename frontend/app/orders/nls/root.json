@@ -121,9 +121,11 @@
 
     "OPERATIONS:NO_DATA": "No operations.",
     "DOCUMENTS:NO_DATA": "No documents.",
-    "BOM:NO_DATA": "No components.",
     "ETO:NO_DATA": "No ETO.",
     "NOTES:NO_DATA": "No messages.",
+
+    "bom:noData": "No components.",
+    "bom:released": "Released {releasedAt} by {releasedBy}.",
 
     "changes:NO_DATA": "Order was not modified.",
     "changes:operations": "{count, plural, one{1 operation} other{# operations}}",
