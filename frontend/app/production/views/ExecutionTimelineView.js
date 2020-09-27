@@ -211,8 +211,8 @@ define([
         order: {
           orderNo: order.orderId,
           operationNo: order.operationNo,
-          quantityDone: order.quantityDone.toLocaleString(),
-          workerCount: order.workerCount.toLocaleString(),
+          quantityDone: (order.quantityDone || 0).toLocaleString(),
+          workerCount: (order.workerCount || 0).toLocaleString(),
           startedAt: time.format(order.startedAt, 'HH:mm:ss'),
           finishedAt: order.finishedAt ? time.format(order.finishedAt, 'HH:mm:ss') : '-'
         }
