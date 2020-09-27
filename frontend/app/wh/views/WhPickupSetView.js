@@ -785,7 +785,7 @@ define([
     {
       var $editor = this.$editor;
 
-      if (!$editor)
+      if (!$editor || !this.$el[0].parentNode)
       {
         return;
       }
