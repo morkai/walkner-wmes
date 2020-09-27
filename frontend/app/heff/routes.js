@@ -1,12 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../router',
-  '../viewport',
-  '../data/localStorage',
-  '../core/View',
-  '../core/Model',
-  './views/HeffView',
+  'app/router',
+  'app/viewport',
+  'app/data/localStorage',
+  'app/heff/HeffState',
+  'app/heff/pages/HeffPage',
   'i18n!app/nls/heff',
   'i18n!app/nls/production',
   'i18n!app/nls/prodShifts'
@@ -14,9 +13,8 @@ define([
   router,
   viewport,
   localStorage,
-  View,
-  Model,
-  HeffView
+  HeffState,
+  HeffPage
 ) {
   'use strict';
 
@@ -35,20 +33,13 @@ define([
     window.WMES_LINE_ID = line;
     window.WMES_STATION = station;
 
-    var model = new Model({
+    var heffState = new HeffState({
       prodLine: window.WMES_LINE_ID,
-      station: +window.WMES_STATION || 0,
-      date: null,
-      quantitiesDone: []
+      station: +window.WMES_STATION || 0
     });
 
-    model.nlsDomain = 'heff';
-
-    viewport.showPage(new View({
-      layoutName: 'blank',
-      view: new HeffView({
-        model: model
-      })
+    viewport.showPage(new HeffPage({
+      model: heffState
     }));
   });
 });

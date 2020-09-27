@@ -705,7 +705,7 @@ define([
     getEfficiency: function(pso)
     {
       var taktTimeCoeff = this.getTaktTimeCoeff(pso);
-      var efficiency = (pso.laborTime * taktTimeCoeff / 100 * pso.totalQuantity)
+      var efficiency = (pso.laborTime * taktTimeCoeff / 100 * (pso.totalQuantity || pso.quantityDone))
         / (pso.workDuration * pso.workerCount);
 
       return isNaN(efficiency) || !isFinite(efficiency) ? 0 : efficiency;

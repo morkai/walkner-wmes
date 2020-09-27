@@ -1,0 +1,44 @@
+<div class="heff-shift">
+  <div class="heff-row">
+    <div class="heff-metric">
+      <div id="<%- id('plannedTt') %>" class="heff-metric-value">?</div>
+      <div class="heff-metric-label"><%- t('shift:plannedTt') %></div>
+    </div>
+    <div class="heff-metric">
+      <div id="<%- id('actualTt') %>" class="heff-metric-value">?</div>
+      <div class="heff-metric-label"><%- t('shift:actualTt') %></div>
+    </div>
+    <div class="heff-metric hidden">
+      <div id="<%- id('lineEff') %>" class="heff-metric-value">?</div>
+      <div class="heff-metric-label"><%- t('shift:lineEff') %></div>
+    </div>
+    <div class="heff-metric hidden">
+      <div id="<%- id('orderEff') %>" class="heff-metric-value">?</div>
+      <div class="heff-metric-label"><%- t('shift:orderEff') %></div>
+    </div>
+    <div class="heff-icon">
+      <i id="<%- id('icon') %>" class="fa fa-smile-o"></i>
+    </div>
+  </div>
+  <div class="heff-execution">
+    <div class="heff-execution-labels">
+      <div class="heff-execution-label"><%- t('execution:todo') %></div>
+      <div class="heff-execution-label"><%- t('execution:done') %></div>
+    </div>
+    <div class="heff-execution-timelines">
+      <div id="<%- id('todo') %>" class="heff-execution-todo"></div>
+      <div id="<%- id('done') %>" class="heff-execution-done"></div>
+      <div id="<%- id('legend') %>" class="heff-execution-legend">
+        <div class="heff-execution-legend-h">1</div>
+        <div class="heff-execution-legend-h">2</div>
+        <div class="heff-execution-legend-h">3</div>
+        <div class="heff-execution-legend-h">4</div>
+        <div class="heff-execution-legend-h">5</div>
+        <div class="heff-execution-legend-h">6</div>
+        <div class="heff-execution-legend-h">7</div>
+        <div class="heff-execution-legend-h">8</div>
+        <div id="<%- id('time') %>" class="heff-execution-legend-time hidden" style="left: 50%">00:00:00<br></div>
+      </div>
+    </div>
+  </div>
+</div>

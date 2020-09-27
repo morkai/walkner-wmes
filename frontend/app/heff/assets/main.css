@@ -1,76 +1,103 @@
 @import url(../../production/assets/modal.css);
 @import url(../../production/assets/taktTime.css);
 @import url(../../production/assets/bomChecker.css);
+@import url(./timeline.css);
+
+body[data-app-id="heff"] {
+  background: #000;
+}
+body[data-app-id="heff"] .production-snMessage {
+  background: linear-gradient(to right, #000, #ffc000, #000);
+  border-color: #ffc000;
+}
+body[data-app-id="heff"] .production-snMessage.is-success {
+  background: linear-gradient(to right, #000, #66cc00, #000);
+  border-color: #00ff00;
+}
+body[data-app-id="heff"] .production-snMessage.is-error {
+  background: linear-gradient(to right, #000, #e00, #000);
+  border-color: #f00;
+}
 
 .heff {
-  margin: 30px;
+  background: #000;
+  margin: 0;
   line-height: 1;
 }
 .heff-hd {
+  display: flex;
+  padding: 30px;
   font-size: 32px;
   line-height: 1.2;
 }
+.heff-hd > div {
+  flex: 1 1 33.3%;
+  color: #fff;
+}
 .heff-date {
-  width: 38.333333%;
   text-align: left;
 }
 .heff-shift {
-  width: 23.333333%;
   text-align: center;
 }
 .heff-line {
-  width: 38.333333%;
   text-align: right;
 }
-.heff-title {
-  margin: 30px 0 0 0;
+.heff-title,
+.heff-metric-label {
   padding: 15px;
   text-align: center;
   font-size: 48px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background: linear-gradient(to right, #fff, #f6f6f6, #fff);
-  text-shadow: 1px 1px 3px #ddd;
+  background: linear-gradient(to right, #000, #3c3c41, #000);
+  text-shadow: 1px 1px 3px #000;
+  color: #00e696;
+  font-variant: small-caps;
+  text-transform: lowercase;
 }
-.heff-subtitle {
-  padding: 15px;
-  text-align: center;
+.heff-metric-label {
   font-size: 32px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background: linear-gradient(to right, #fff, #f6f6f6, #fff);
-  text-shadow: 1px 1px 3px #ddd;
 }
-.heff-qty {
+.heff-metric-value {
   font-size: 320px;
+  color: #fff;
 }
-.heff-bd {
+.heff-shift .heff-qty {
+  font-size: 252px;
+  line-height: 320px;
+}
+.heff-row {
   display: flex;
+  padding: 0 15px;
   text-align: center;
 }
-.heff-planned,
-.heff-actual {
-  flex: 1 1 auto;
-  margin-right: 60px;
+.heff-metric {
+  flex: 1 1 50%;
+  margin: 0 15px;
 }
-.heff-eff {
-  flex: 0 0 auto;
-  font-size: 413px;
-}
-.heff-eff > .fa-smile-o {
-  color: #00af00;
-}
-.heff-eff > .fa-frown-o {
-  color: #e00;
-}
-.heff-eff > .fa-meh-o {
-  color: #ffc000;
-}
-.heff-ft {
+.heff-hourly-remaining {
   margin-top: 15px;
   margin-bottom: 30px;
   text-align: center;
   font-size: 84px;
+  color: #fff;
+}
+.heff-hourly-chart {
+  margin: 0 30px;
+}
+.heff-icon {
+  flex: 0 0 auto;
+  margin: 0 15px;
+  width: 354px;
+  font-size: 413px;
+}
+.heff-icon > .fa-smile-o {
+  color: #00e696;
+}
+.heff-icon > .fa-frown-o {
+  color: #f00;
+}
+.heff-icon > .fa-meh-o {
+  color: #ffc000;
 }
 .heff-line select {
   font-size: 26px;

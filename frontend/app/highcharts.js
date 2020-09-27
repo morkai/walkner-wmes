@@ -169,7 +169,8 @@ define([
       useHTML: true,
       displayHeader: true,
       style: {
-        pointerEvents: 'auto'
+        pointerEvents: 'auto',
+        color: '#000'
       },
       formatter: function()
       {

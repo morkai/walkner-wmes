@@ -147,6 +147,7 @@ define([
       [
         'app/hourlyPlans/HourlyPlan',
         'app/hourlyPlans/pages/HourlyPlanEditFormPage',
+        'css!app/fte/assets/main.css',
         css,
         nls
       ],

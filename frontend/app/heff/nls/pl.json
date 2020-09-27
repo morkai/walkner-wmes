@@ -2,11 +2,22 @@
   "shift": "{shift}<br>zmiana",
   "line": "Linia:",
   "station": "{line}, st. {station}",
-  "title": "Wydajność godzinowa {from}-{to}",
-  "planned": "Ilość zaplanowana [szt]",
-  "actual": "Ilość zrobiona [szt]",
-  "remaining": "Do końca zmiany pozostało:",
-  "unit": "szt",
+
+  "hourly:title": "Wydajność godzinowa {from}-{to}",
+  "hourly:planned": "Ilość zaplanowana [szt]",
+  "hourly:actual": "Ilość wykonana [szt]",
+  "hourly:remaining": "Do końca zmiany pozostało:",
+  "hourly:unit": "szt",
+
+  "shift:title": "Wydajność zmiany",
+  "shift:plannedTt": "Planowany Takt Time",
+  "shift:actualTt": "Czas cyklu zlecenia",
+  "shift:lineEff": "Wydajność linii",
+  "shift:orderEff": "Wydajność zlecenia",
+
+  "execution:todo": "Planowane",
+  "execution:done": "Wykonane",
+  "execution:order:label": "{orderId}, {quantityDone} szt.",
 
   "unlockDialog:title": "Aktywacja Wydajności godzinowej",
   "unlockDialog:prodLine": "Linia produkcyjna",

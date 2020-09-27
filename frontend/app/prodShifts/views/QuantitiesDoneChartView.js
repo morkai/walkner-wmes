@@ -41,11 +41,9 @@ define([
       }
     },
 
-    createChart: function()
+    createChartOptions: function(chartData)
     {
-      var chartData = this.serializeChartData();
-
-      this.chart = new Highcharts.Chart({
+      return {
         chart: {
           renderTo: this.el,
           height: this.options.height || 350,
@@ -56,7 +54,7 @@ define([
           enabled: this.options.exporting !== false
         },
         title: this.options.showTitle === false ? null : {
-          text: t('prodShifts', 'charts:quantitiesDone:title'),
+          text: this.t('charts:quantitiesDone:title'),
           style: {
             fontSize: '18px',
             color: '#333'
@@ -84,20 +82,29 @@ define([
               enabled: true
             },
             tooltip: {
-              valueSuffix: t('prodShifts', 'charts:quantitiesDone:unit')
+              valueSuffix: this.t('charts:quantitiesDone:unit')
             }
           }
         },
         series: [{
-          name: t('prodShifts', 'charts:quantitiesDone:series:planned'),
+          name: this.t('charts:quantitiesDone:series:planned'),
           type: 'column',
-          data: chartData.planned
+          data: chartData.planned,
+          color: '#00aaff'
         }, {
-          name: t('prodShifts', 'charts:quantitiesDone:series:actual'),
+          name: this.t('charts:quantitiesDone:series:actual'),
           type: 'column',
-          data: chartData.actual
+          data: chartData.actual,
+          color: '#ffaa00'
         }]
-      });
+      };
+    },
+
+    createChart: function()
+    {
+      var chartData = this.serializeChartData();
+
+      this.chart = new Highcharts.Chart(this.createChartOptions(chartData));
 
       this.chart.reflow();
     },

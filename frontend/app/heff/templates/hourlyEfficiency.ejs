@@ -1,0 +1,21 @@
+<div class="heff-hourly">
+  <div class="heff-row">
+    <div class="heff-metric">
+      <div id="<%- id('planned') %>" class="heff-metric-value">0</div>
+      <div class="heff-metric-label"><%- t('hourly:planned') %></div>
+    </div>
+    <div class="heff-metric">
+      <div id="<%- id('actual') %>" class="heff-metric-value">0</div>
+      <div class="heff-metric-label"><%- t('hourly:actual') %></div>
+    </div>
+    <div class="heff-icon">
+      <i id="<%- id('icon') %>" class="fa fa-smile-o"></i>
+    </div>
+  </div>
+  <div class="heff-hourly-remaining">
+    <%- t('hourly:remaining') %>
+    <span id="<%- id('remaining') %>">0</span>
+    <%- t('hourly:unit') %>
+  </div>
+  <div id="<%- id('chart') %>" class="heff-hourly-chart"></div>
+</div>

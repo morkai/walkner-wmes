@@ -1,30 +1,13 @@
 <div class="heff">
-  <div class="row heff-hd">
-    <div id="<%- idPrefix %>-date" class="col-md-4 heff-date"></div>
-    <div id="<%- idPrefix %>-shift" class="col-md-4 heff-shift"></div>
-    <div class="col-md-4 heff-line">
-      <div><%- t('heff', 'line') %></div>
-      <div><span id="<%- idPrefix %>-line" style="cursor: pointer"></span></div>
+  <div class="heff-hd">
+    <div id="<%- id('date') %>" class="heff-date"></div>
+    <div id="<%- id('shift') %>" class="heff-shift"></div>
+    <div class="heff-line">
+      <div><%- t('line') %></div>
+      <div><span id="<%- id('line') %>" style="cursor: pointer"></span></div>
     </div>
   </div>
-  <div id="<%- idPrefix %>-title" class="heff-title"></div>
-  <div class="heff-bd">
-    <div class="heff-planned">
-      <div id="<%- idPrefix %>-planned" class="heff-qty">0</div>
-      <div class="heff-subtitle"><%- t('heff', 'planned') %></div>
-    </div>
-    <div class="heff-actual">
-      <div id="<%- idPrefix %>-actual" class="heff-qty">0</div>
-      <div class="heff-subtitle"><%- t('heff', 'actual') %></div>
-    </div>
-    <div class="heff-eff">
-      <i id="<%- idPrefix %>-eff" class="fa fa-smile-o"></i>
-    </div>
-  </div>
-  <div class="heff-ft">
-    <%- t('heff', 'remaining') %>
-    <span id="<%- idPrefix %>-remaining">0</span>
-    <%- t('heff', 'unit') %>
-  </div>
-  <div id="<%- idPrefix %>-chart" class="heff-chart"></div>
+  <div id="<%- id('title') %>" class="heff-title"></div>
+  <div id="<%- id('hourlyEfficiency') %>"></div>
+  <div id="<%- id('shiftEfficiency') %>" class="hidden"></div>
 </div>
