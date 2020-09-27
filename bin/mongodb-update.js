@@ -3,36 +3,44 @@
 
 'use strict';
 
-db.kaizenproductfamilies.updateMany({owners: {$exists: true}}, {$unset: {owners: 1}});
-db.kaizenproductfamilies.updateMany({coordSections: {$exists: false}}, {$set: {coordSections: []}});
-db.kaizenproductfamilies.insertOne({
-  "_id": "OM",
-  "position": 300,
-  "active": true,
-  "mrps": [],
-  "coordSections": [
-    {
-      "funcs": [
-        "process-engineer"
-      ],
-      "section": "OM",
-      "mor": "all"
-    }
-  ],
-  "name": "Obróbka mechaniczna (Tłocznia)",
-  "__v": 0
+const t = Date.now();
+const batchSize = 333;
+let c = 0;
+let pendingOrders = [];
+
+db.orderzlf1.find({}, {_id: 1}).forEach(zlfOrder =>
+{
+  c += 1;
+
+  pendingOrders.push(zlfOrder._id);
+
+  if (pendingOrders.length === batchSize)
+  {
+    update(pendingOrders);
+    pendingOrders = [];
+  }
 });
-db.kaizensections.insertOne({
-  "_id": "OM",
-  "active": true,
-  "position": 4,
-  "subdivisions": [
-    new ObjectId("529f2654cd8eea9824000012"),
-    new ObjectId("529f267acd8eea9824000016"),
-    new ObjectId("529f268fcd8eea982400001a")
-  ],
-  "confirmers": [],
-  "coordinators": [],
-  "name": "Obróbka mechaniczna (Tłocznia)",
-  "__v": 0
-});
+
+if (pendingOrders.length)
+{
+  update(pendingOrders);
+}
+
+print(`Done ${c} in ${(Date.now() - t) / 1000}s with batch size=${batchSize}`);
+
+function update($in)
+{
+  const ops = [];
+
+  db.orders.find({_id: {$in}}, {importTs: 1}).forEach(sapOrder =>
+  {
+    ops.push({
+      updateOne: {
+        filter: {_id: sapOrder._id},
+        update: {$set: {ts: sapOrder.importTs}}
+      }
+    });
+  });
+
+  db.orderzlf1.bulkWrite(ops);
+}
