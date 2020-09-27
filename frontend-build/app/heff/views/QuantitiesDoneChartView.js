@@ -1,0 +1,1 @@
+define(["app/prodShifts/views/QuantitiesDoneChartView"],function(e){"use strict";return e.extend({createChartOptions:function(){var t=e.prototype.createChartOptions.apply(this,arguments);return t.chart.height=285,t.chart.zoomType=!1,t.title=null,t.legend.enabled=!1,t.exporting.enabled=!1,t.noData.enabled=!1,t.yAxis.labels={enabled:!1},t.series[1].color="#00e696",t}})});
