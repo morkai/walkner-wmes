@@ -61,7 +61,7 @@ body[data-app-id="heff"] .production-snMessage.is-error {
   font-size: 320px;
   color: #fff;
 }
-.heff-shift .heff-qty {
+.heff-shift .heff-metric-value {
   font-size: 252px;
   line-height: 320px;
 }
