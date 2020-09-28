@@ -105,6 +105,20 @@
   right: 15px;
   font-size: 28px;
 }
+.suggestions-details-kom {
+  display: flex;
+  justify-content: center;
+  font-size: 56px;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 1px 1px 1px #333;
+  color: #ffd700;
+  margin-bottom: 15px;
+}
+.suggestions-details-kom > span {
+  margin: 0 15px;
+}
 @media print {
   .suggestions-details-tabs > .tab-content > .tab-pane {
     display: block!important;

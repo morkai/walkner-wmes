@@ -28,7 +28,7 @@ define([
 
   return ListView.extend({
 
-    className: 'suggestions-list is-clickable',
+    className: 'suggestions-list is-clickable is-colored',
 
     serializeColumns: function()
     {

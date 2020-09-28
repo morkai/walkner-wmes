@@ -41,7 +41,8 @@ define([
 
       'submit form': function()
       {
-        var $comment = this.$id('comment');
+        var view = this;
+        var $comment = view.$id('comment');
         var comment = $comment.val().trim();
 
         if (comment === '')
@@ -49,11 +50,11 @@ define([
           return false;
         }
 
-        var $submit = this.$id('submit').prop('disabled', true);
+        var $submit = view.$id('submit').prop('disabled', true);
 
-        var req = this.ajax({
+        var req = view.ajax({
           type: 'PUT',
-          url: '/suggestions/' + this.model.id,
+          url: '/suggestions/' + view.model.id,
           data: JSON.stringify({comment: comment})
         });
 
@@ -67,7 +68,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('suggestions', 'MSG:comment:failure')
+            text: view.t('MSG:comment:failure')
           });
         });
 
@@ -88,6 +89,12 @@ define([
       this.listenTo(this.model, 'seen', function()
       {
         this.$el.find('.is-unseen').removeClass('is-unseen');
+      });
+
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change:changes', this.updateHistory);
+        this.listenTo(this.model, 'change:observer', this.updateUnseen);
       });
     },
 
@@ -113,7 +120,7 @@ define([
         user: this.model.get('creator'),
         date: this.model.get('createdAt'),
         data: {},
-        comment: t('suggestions', 'history:added')
+        comment: this.t('history:added')
       }, 0));
 
       return items;
@@ -121,24 +128,25 @@ define([
 
     serializeItem: function(change, changeIndex)
     {
+      var view = this;
       var comment;
       var changes;
 
       if (change.data && change.data.observer)
       {
         changes = [];
-        comment = t('suggestions', 'history:observer:' + change.data.observer[0]);
+        comment = view.t('history:observer:' + change.data.observer[0]);
       }
       else
       {
         changes = _.map(change.data, function(values, property)
         {
           return {
-            label: t('suggestions', 'PROPERTY:' + property),
-            oldValue: this.serializeItemValue(property, values[0], true, changeIndex),
-            newValue: this.serializeItemValue(property, values[1], false, changeIndex)
+            label: view.t('PROPERTY:' + property),
+            oldValue: view.serializeItemValue(property, values[0], true, changeIndex),
+            newValue: view.serializeItemValue(property, values[1], false, changeIndex)
           };
-        }, this);
+        });
         comment = change.comment.trim();
       }
 
@@ -157,6 +165,11 @@ define([
 
     serializeItemValue: function(property, value, isOld, changeIndex)
     {
+      if (typeof value === 'boolean')
+      {
+        return this.t('core', 'BOOL:' + value);
+      }
+
       if (_.isEmpty(value))
       {
         return '-';
@@ -177,7 +190,7 @@ define([
           return value.map(function(owner) { return (owner.label || '').replace(/\s*\(.*?\)/, ''); }).join(', ');
 
         case 'status':
-          return t('suggestions', 'status:' + value);
+          return this.t('status:' + value);
 
         case 'section':
         case 'category':
@@ -205,7 +218,7 @@ define([
             return '<a href="/suggestions/' + this.model.id + '/attachments/' + attachment._id
               + '?download=1&change=' + (isOld ? -changeIndex : changeIndex) + '" title="'
               + _.escape(attachment.name) + '">'
-              + t('suggestions', 'attachments:' + attachment.description) + '</a>';
+              + this.t('attachments:' + attachment.description) + '</a>';
           }, this).join('; ');
 
         case 'subscribers':
@@ -223,18 +236,9 @@ define([
       }
     },
 
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'change:changes', this.updateHistory);
-      this.stopListening(this.model, 'change:observer', this.updateUnseen);
-    },
-
     afterRender: function()
     {
       this.lastChangeCount = this.model.get('changes').length;
-
-      this.listenTo(this.model, 'change:changes', this.updateHistory);
-      this.listenTo(this.model, 'change:observer', this.updateUnseen);
 
       this.$el.popover({
         container: 'body',

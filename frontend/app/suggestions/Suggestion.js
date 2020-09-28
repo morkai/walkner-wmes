@@ -116,9 +116,11 @@ define([
     {
       var row = this.serialize(options);
 
+      row.className = '';
+
       if (row.observer && row.observer.notify && _.isEmpty(row.observer.changes))
       {
-        row.className = 'is-changed';
+        row.className += ' is-changed';
       }
 
       var owners = row.owners;
@@ -134,6 +136,34 @@ define([
       }
 
       row.finishedAt = row.finishedAt ? time.format(this.get('finishedAt'), 'L') : '';
+
+      switch (this.get('status'))
+      {
+        case 'finished':
+          if (this.get('kom'))
+          {
+            row.className += ' warning';
+            row.status += ' <i class="fa fa-trophy"></i>';
+          }
+          else
+          {
+            row.className += ' success';
+          }
+          break;
+
+        case 'cancelled':
+          row.className += ' danger';
+          break;
+
+        case 'inProgress':
+          row.className += ' active';
+          break;
+
+        case 'accepted':
+        case 'verification':
+          row.className = ' info';
+          break;
+      }
 
       return row;
     },
@@ -206,6 +236,17 @@ define([
     canManage: function()
     {
       return user.isAllowedTo(this.privilegePrefix + ':MANAGE');
+    },
+
+    canKom: function()
+    {
+      if (this.get('status') !== 'finished')
+      {
+        return false;
+      }
+
+      return this.get('status') === 'finished'
+        && (this.canManage() || this.isCoordinator());
     },
 
     canCoordinate: function()

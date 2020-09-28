@@ -6,7 +6,7 @@
       <div id="<%- id('statusGroup') %>" class="form-group clearfix">
         <label for="<%- id('status') %>" class="control-label"><%- t('PROPERTY:status') %></label>
         <div id="<%- id('status') %>" class="btn-group suggestions-form-statusBtnGroup" data-toggle="buttons">
-          <% statuses.forEach(function(status) { %>
+          <% statuses.concat('kom').forEach(function(status) { %>
           <label class="btn btn-default">
             <input type="radio" name="status" value="<%- status %>"><%- t('status:' + status) %>
           </label>

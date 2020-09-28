@@ -64,6 +64,13 @@
       </div>
     </div>
   </div>
+  <% if (model.kom) { %>
+  <div class="suggestions-details-kom">
+    <i class="fa fa-trophy"></i>
+    <span><%- t('details:kom') %></span>
+    <i class="fa fa-trophy"></i>
+  </div>
+  <% } %>
   <div class="row suggestions-details-types">
     <% include detailsSuggestionPanel.ejs %>
     <% if (showKaizenPanel) { %>

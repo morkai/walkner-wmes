@@ -5,6 +5,7 @@
     "BREADCRUMB:reports:count": "Ilość zgłoszeń",
     "BREADCRUMB:reports:summary": "Zestawienie informacji",
     "BREADCRUMB:reports:engagement": "Zaangażowanie",
+    "BREADCRUMB:reports:reward": "Wynagrodzenie",
 
     "MSG:markAsSeen:failure": "Nie udało się oznaczyć zgłoszenia jako przeczytane.",
     "MSG:observe:failure": "Nie udało się rozpocząć obserwacji zgłoszenia.",
@@ -16,6 +17,7 @@
     "PAGE_ACTION:observe": "Obserwuj zgłoszenie",
     "PAGE_ACTION:unobserve": "Przestań obserwować",
     "PAGE_ACTION:print": "Wersja do druku",
+    "PAGE_ACTION:kom": "Kaizen Miesiąca",
     "PAGE_ACTION:coordinate": "Opiniuj",
     "PAGE_ACTION:accept": "Akceptuj",
     "PAGE_ACTION:complete": "Do weryfikacji",
@@ -50,6 +52,7 @@
     "PROPERTY:kaizenImprovements": "Wdrożone usprawnienia",
     "PROPERTY:kaizenEffect": "Efekt usprawnień",
     "PROPERTY:status": "Status",
+    "PROPERTY:kom": "Kaizen Miesiąca",
     "PROPERTY:creator": "Stworzone przez",
     "PROPERTY:updater": "Ostatnia zmiana przez",
     "PROPERTY:confirmer": "Koordynator Kaizen",
@@ -92,6 +95,7 @@
     "status:cancelled": "Anulowane",
     "status:finished": "Zakończone",
     "status:open": "Otwarte",
+    "status:kom": "Kaizen Miesiąca",
 
     "role:creator": "Zgłaszający",
     "role:confirmer": "Zatwierdzający",
@@ -152,6 +156,8 @@
     "history:observer:1": "zakończenie obserwacji zgłoszenia.",
     "history:submit": "Komentuj",
 
+    "details:kom": "Kaizen Miesiąca",
+
     "report:title:total": "Ilość zgłoszeń",
     "report:title:status": "Ilość zgłoszeń wg statusów",
     "report:title:section": "Ilość zgłoszeń wg działów",
@@ -208,6 +214,20 @@
     "engagement:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
     "engagement:export:action": "Eksportuj do pliku",
     "engagement:export:filename": "WMES_ZAANGAZOWANIE",
+
+    "reward:name": "Nazwisko i imię",
+    "reward:finished": "Zakończone",
+    "reward:kom": "Kaizen Miesiąca",
+    "reward:total": "Suma",
+    "reward:sections": "Dział zgłaszający",
+    "reward:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
+    "reward:filter:month": "Miesiąc",
+    "reward:export:action": "Eksportuj do pliku",
+    "reward:export:filename": "WMES_WYNAGRODZENIE_{date}",
+
+    "kom:title": "Kaizen Miesiąca #{rid}",
+    "kom:submit:true": "Usuń Kaizen Miesiąca",
+    "kom:submit:false": "Oznacz jako Kaizen Miesiąca",
 
     "coordinate:title": "Zatwierdzanie zgłoszenia {rid}",
     "coordinate:section": "Dział koordynujący",

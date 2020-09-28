@@ -5,6 +5,7 @@
     "BREADCRUMB:reports:count": "Number of entries",
     "BREADCRUMB:reports:summary": "Summary",
     "BREADCRUMB:reports:engagement": "Engagement",
+    "BREADCRUMB:reports:reward": "Reward",
 
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",
@@ -16,6 +17,7 @@
     "PAGE_ACTION:observe": "Subscribe",
     "PAGE_ACTION:unobserve": "Unsubscribe",
     "PAGE_ACTION:print": "Printable version",
+    "PAGE_ACTION:kom": "KotM",
     "PAGE_ACTION:coordinate": "Confirm",
     "PAGE_ACTION:accept": "Accept",
     "PAGE_ACTION:complete": "Complete",
@@ -48,6 +50,7 @@
     "PROPERTY:kaizenImprovements": "Improvements",
     "PROPERTY:kaizenEffect": "Effect",
     "PROPERTY:status": "Status",
+    "PROPERTY:kom": "Kaizen of the Month",
     "PROPERTY:creator": "Created by",
     "PROPERTY:updater": "Updated by",
     "PROPERTY:confirmer": "Confirmed by",
@@ -90,6 +93,7 @@
     "status:cancelled": "Cancelled",
     "status:finished": "Finished",
     "status:open": "Open",
+    "status:kom": "Kaizen of the Month",
 
     "role:creator": "Creator",
     "role:confirmer": "Confirmer",
@@ -206,6 +210,20 @@
     "engagement:empty": "No entries matching the current filters.",
     "engagement:export:action": "Export to file",
     "engagement:export:filename": "WMES_ENGAGEMENT",
+
+    "reward:name": "Name",
+    "reward:finished": "Finished",
+    "reward:kom": "KotM",
+    "reward:total": "Total",
+    "reward:sections": "Section",
+    "reward:empty": "No entries matching the current filters.",
+    "reward:filter:month": "Month",
+    "reward:export:action": "Export to file",
+    "reward:export:filename": "WMES_REWARD_{date}",
+
+    "kom:title": "Kaizen of the Month #{rid}",
+    "kom:submit:true": "Remove KotM status",
+    "kom:submit:false": "Mark as KotM",
 
     "coordinate:title": "Confirming entry {rid}",
     "coordinate:section": "Dział koordynujący",

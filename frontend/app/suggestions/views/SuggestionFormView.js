@@ -91,7 +91,7 @@ define([
       'change [name="status"]': function()
       {
         this.togglePanels();
-        this.toggleRequiredFlags();
+        this.toggleRequiredToFinishFlags();
         this.setUpCoordSectionSelect2();
       },
 
@@ -443,6 +443,11 @@ define([
       formData.categories = _.isEmpty(formData.categories) ? '' : formData.categories.join(',');
       formData.subscribers = '';
 
+      if (formData.kom)
+      {
+        formData.status = 'kom';
+      }
+
       return formData;
     },
 
@@ -516,6 +521,16 @@ define([
         });
       }
 
+      if (formData.status === 'kom')
+      {
+        formData.status = 'finished';
+        formData.kom = true;
+      }
+      else
+      {
+        formData.kom = false;
+      }
+
       delete formData.attachments;
 
       return formData;
@@ -566,6 +581,7 @@ define([
       }
 
       this.toggleStatuses();
+      this.toggleRequiredToFinishFlags();
       this.togglePanels();
       this.toggleFields();
 
@@ -939,6 +955,41 @@ define([
           $panel.find('#' + this.htmlFor).prop('required', required);
         });
       });
+    },
+
+    toggleRequiredToFinishFlags: function()
+    {
+      var selectedStatus = this.$('input[name="status"]:checked').val();
+      var required = selectedStatus === 'finished' || selectedStatus === 'kom';
+      var view = this;
+
+      this.$('.is-requiredToFinish').toggleClass('is-required', required).each(function()
+      {
+        if (this.dataset.required)
+        {
+          return view.handleRequiredToFinishFlags(this.dataset.required, required);
+        }
+
+        if (this.nextElementSibling.classList.contains('select2-container'))
+        {
+          this.parentNode.classList.toggle('has-required-select2', required);
+        }
+
+        if (!required)
+        {
+          view.$('#' + this.htmlFor).prop('required', false);
+        }
+      });
+
+      if (required)
+      {
+        this.toggleRequiredFlags();
+      }
+    },
+
+    handleRequiredToFinishFlags: function(prop)
+    {
+
     },
 
     toggleStatuses: function()

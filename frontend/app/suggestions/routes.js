@@ -78,6 +78,26 @@ define([
     );
   });
 
+  router.map('/suggestionRewardReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/kaizenOrders/dictionaries',
+        'app/suggestions/RewardReport',
+        'app/suggestions/pages/RewardReportPage',
+        css,
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(dictionaries, RewardReport, RewardReportPage)
+      {
+        return dictionaries.bind(new RewardReportPage({
+          model: RewardReport.fromQuery(req.query)
+        }));
+      }
+    );
+  });
+
   router.map('/suggestionHelp', function()
   {
     viewport.loadPage(['app/core/View', 'app/suggestions/templates/help', css, nls], function(View, helpTemplate)

@@ -1,0 +1,28 @@
+<div>
+  <% if (!users.length) { %>
+  <p class="well"><%- t('reward:empty') %></p>
+  <% } else { %>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('reward:name') %></th>
+      <th class="is-min"><%- t('reward:finished') %></th>
+      <th class="is-min"><%- t('reward:kom') %></th>
+      <th class="is-min"><%- t('reward:total') %></th>
+      <th><%- t('reward:sections') %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% users.forEach(function(user) { %>
+    <tr>
+      <td class="is-min"><%= user.name %></td>
+      <td class="is-min is-number"><%- user.finished ? user.finished.toLocaleString() : '' %></td>
+      <td class="is-min is-number"><%- user.kom ? user.kom.toLocaleString() : '' %></td>
+      <td class="is-min is-number"><%- user.total.toLocaleString() %></td>
+      <td><%- user.sections.join('; ') %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+  <% } %>
+</div>

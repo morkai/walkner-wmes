@@ -160,7 +160,7 @@ define([
 
     getFailureText: function()
     {
-      return this.options.failureText;
+      return this.options.failureText || this.t('core', 'MSG:SAVING_FAILURE');
     },
 
     showErrorMessage: function(text)

@@ -1,0 +1,13 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <div class="form-group">
+    <label  for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
+    <textarea id="<%- id('comment') %>" name="comment" class="form-control" rows="4"></textarea>
+  </div>
+  <div class="form-actions">
+    <button id="<%- id('submit') %>" class="btn <%- kom ? 'btn-danger' : 'btn-success' %>" type="submit">
+      <i class="fa <%- kom ? 'fa-thumbs-down' : 'fa-thumbs-up' %>"></i><span><%- t('kom:submit:' + kom) %></span>
+    </button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

@@ -10,6 +10,7 @@ define([
   'app/kaizenOrders/dictionaries',
   '../views/SuggestionDetailsView',
   '../views/SuggestionHistoryView',
+  '../views/KomView',
   '../views/CoordinateView',
   '../views/AcceptView',
   '../views/CompleteView',
@@ -25,6 +26,7 @@ define([
   kaizenDictionaries,
   SuggestionDetailsView,
   SuggestionHistoryView,
+  KomView,
   CoordinateView,
   AcceptView,
   CompleteView,
@@ -64,6 +66,16 @@ define([
 
       if (user.isLoggedIn())
       {
+        if (model.canKom())
+        {
+          actions.push({
+            id: 'kom',
+            icon: 'trophy',
+            label: this.t('PAGE_ACTION:kom'),
+            callback: this.kom.bind(this)
+          });
+        }
+
         if (model.canCoordinate())
         {
           actions.push({
@@ -269,6 +281,15 @@ define([
       {
         this.model.markAsSeen();
       }
+    },
+
+    kom: function()
+    {
+      var dialogView = new KomView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('kom:title', {rid: this.model.get('rid')}));
     },
 
     coordinate: function()

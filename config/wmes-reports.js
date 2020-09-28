@@ -25,6 +25,7 @@ module.exports = {
   'suggestions/count': require(`${MODULES}/suggestions/countReport`),
   'suggestions/summary': require(`${MODULES}/suggestions/summaryReport`),
   'suggestions/engagement': require(`${MODULES}/suggestions/engagementReport`),
+  'suggestions/reward': require(`${MODULES}/suggestions/rewardReport`),
   'opinionSurvey': require(`${MODULES}/opinionSurveys/report`),
   'behaviorObsCards/count': require(`${MODULES}/behaviorObsCards/countReport`),
   'minutesForSafetyCards/count': require(`${MODULES}/minutesForSafetyCards/countReport`),
