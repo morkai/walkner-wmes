@@ -1,0 +1,1 @@
+define(["app/core/View","app/suggestions/templates/rewardReport"],function(e,t){"use strict";return e.extend({template:t,initialize:function(){this.listenTo(this.model,"change:users",this.render)},getTemplateData:function(){return{users:this.model.get("users")}}})});
