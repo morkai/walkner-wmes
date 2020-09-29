@@ -5,9 +5,9 @@
   "version": "0.153.0",
   "updater": {
     "wmes": {
-      "backend": 612,
-      "frontend": 759,
-      "reports": 129,
+      "backend": 613,
+      "frontend": 760,
+      "reports": 130,
       "attachments": 3,
       "importer-sap": 65,
       "importer-results": 12,
@@ -15,8 +15,8 @@
       "mailer": 14,
       "operator": 98,
       "docs": 53,
-      "heff": 43,
-      "planning": 86,
+      "heff": 44,
+      "planning": 87,
       "ps-queue": 57,
       "ps-load": 15,
       "wh-pickup": 65,
