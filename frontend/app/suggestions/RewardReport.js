@@ -55,7 +55,10 @@ define([
     {
       report.users.forEach(function(user)
       {
-        user.total = user.finished + user.kom;
+        user.total = [
+          user.finished[0] + user.kom[0],
+          user.finished[1] + user.kom[1]
+        ];
         user.sections = user.sections.map(function(s) { return report.sections[s] || s; });
       });
 
@@ -67,16 +70,19 @@ define([
     serializeToCsv: function()
     {
       var rows = [
-        'name;finished;kotm;total;sections'
+        'name;finishedCount;finishedPart;kotmCount;kotmPart;totalCount;totalPart;sections'
       ];
 
       _.forEach(this.get('users'), function(user)
       {
         rows.push(
           '"' + user.name
-          + '";' + user.finished
-          + ';' + user.kom
-          + ';' + user.total
+          + '";' + user.finished[0]
+          + '";' + user.finished[1]
+          + ';' + user.kom[0]
+          + ';' + user.kom[1]
+          + ';' + user.total[0]
+          + ';' + user.total[1]
           + ';"' + user.sections.join(',') + '"'
         );
       });

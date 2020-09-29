@@ -214,6 +214,8 @@
     "reward:kom": "Kaizen Miesiąca",
     "reward:total": "Suma",
     "reward:sections": "Dział zgłaszający",
+    "reward:count": "Ilość",
+    "reward:part": "Udział",
     "reward:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
     "reward:filter:month": "Miesiąc",
     "reward:export:action": "Eksportuj do pliku",

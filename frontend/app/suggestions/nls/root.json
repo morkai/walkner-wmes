@@ -210,6 +210,8 @@
     "reward:kom": "KotM",
     "reward:total": "Total",
     "reward:sections": "Section",
+    "reward:count": "Count",
+    "reward:part": "Participation",
     "reward:empty": "No entries matching the current filters.",
     "reward:filter:month": "Month",
     "reward:export:action": "Export to file",
