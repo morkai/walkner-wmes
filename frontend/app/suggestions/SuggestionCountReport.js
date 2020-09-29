@@ -20,6 +20,14 @@ define([
   var COLOR_SUGGESTION = '#f0ad4e';
   var COLOR_KAIZEN = '#5cb85c';
   var COLOR_KAIZEN_EVENT = '#8e5ec7';
+  var SERIES_COLORS = {
+    new: '#1aadce',
+    accepted: '#aaff00',
+    inProgress: '#2f7ed8',
+    verification: '#ffaa00',
+    finished: '#5cb85c',
+    cancelled: '#e00'
+  };
   var TABLE_AND_CHART_METRICS = [
     'total',
     'status',
@@ -189,12 +197,13 @@ define([
       return values.map(function(value)
       {
         var id = value[0];
+        var color = SERIES_COLORS[id] || colorFactory.getColor(metric, id);
 
         return {
           id: id,
           abs: value[1],
           rel: value[1] / totalCount,
-          color: colorFactory.getColor(metric, id),
+          color: color,
           label: dictionary ? kaizenDictionaries.getLabel(dictionary, id) : undefined
         };
       });
