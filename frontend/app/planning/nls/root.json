@@ -62,6 +62,7 @@
     "filter:stats:late": "Late",
     "filter:stats:plan": "Plan",
     "filter:stats:remaining": "Remaining",
+    "filter:stats:executed": "Executed",
     "filter:stats:execution": "Sequence execution",
     "filter:startTime": "Start",
 

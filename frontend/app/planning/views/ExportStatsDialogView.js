@@ -169,6 +169,7 @@ define([
       addStatColumn('late');
       addStatColumn('plan');
       addStatColumn('remaining');
+      addStatColumn('executed');
       addExecutionColumn(1, 3, view.t('filter:stats:execution'));
       addExecutionColumn(2);
       addExecutionColumn(3);
@@ -190,6 +191,9 @@ define([
         remaining$manHours: view.t('stats:manHours'),
         remaining$quantity: view.t('stats:quantity'),
         remaining$orders: view.t('stats:orderCount'),
+        executed$manHours: view.t('stats:manHours'),
+        executed$quantity: view.t('stats:quantity'),
+        executed$orders: view.t('stats:orderCount'),
         execution$1: view.t('core', 'SHIFT:1'),
         execution$2: view.t('core', 'SHIFT:2'),
         execution$3: view.t('core', 'SHIFT:3'),
@@ -214,6 +218,9 @@ define([
           remaining$manHours: stats.manHours.remaining,
           remaining$quantity: stats.quantity.remaining,
           remaining$orders: stats.orders.remaining,
+          executed$manHours: stats.manHours.executed,
+          executed$quantity: stats.quantity.executed,
+          executed$orders: stats.orders.executed,
           execution$1: stats.execution[1].percent / 100,
           execution$2: stats.execution[2].percent / 100,
           execution$3: stats.execution[3].percent / 100,

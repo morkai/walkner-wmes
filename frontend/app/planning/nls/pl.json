@@ -61,6 +61,7 @@
   "filter:stats:late": "Opóźnione",
   "filter:stats:plan": "Rozplanowane",
   "filter:stats:remaining": "Do zrobienia",
+  "filter:stats:executed": "Wykonane",
   "filter:stats:execution": "Realizacja sekwencji",
   "filter:startTime": "Początek",
 
