@@ -218,12 +218,18 @@ define([
 
     createSeriesFromRows: function(metric, attrs, group)
     {
+      var nlsDomain = this.getNlsDomain();
       var series = attrs[metric].series;
 
       _.forEach(attrs[metric].rows, function(row)
       {
         if (!series[row.id])
         {
+          if (!row.label && metric === 'status')
+          {
+            row.label = t(nlsDomain, 'status:' + row.id);
+          }
+
           series[row.id] = {
             name: row.label,
             data: [],

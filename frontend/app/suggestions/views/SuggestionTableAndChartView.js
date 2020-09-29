@@ -155,7 +155,9 @@ define([
 
     serializeChartSeries: function()
     {
-      var series = this.model.get(this.options.metric).series;
+      var view = this;
+      var nlsPrefix = view.options.metric === 'status' ? 'status:' : 'report:series';
+      var series = view.model.get(view.options.metric).series;
 
       return Object.keys(series).map(function(seriesId)
       {
@@ -164,7 +166,7 @@ define([
         return _.defaults(serie, {
           id: seriesId,
           type: 'column',
-          name: serie.name || t.bound('suggestions', 'report:series:' + seriesId),
+          name: serie.name || view.t(nlsPrefix + seriesId),
           data: []
         });
       });
