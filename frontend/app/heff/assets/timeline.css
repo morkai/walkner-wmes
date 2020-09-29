@@ -64,6 +64,10 @@
 .heff-timeline-item-inner {
   pointer-events: none;
   padding: 4px;
+  visibility: hidden;
+}
+.heff-timeline-item:hover .heff-timeline-item-inner {
+  visibility: visible;
 }
 .heff-execution-legend {
   position: relative;
