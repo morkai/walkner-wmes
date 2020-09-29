@@ -653,7 +653,39 @@ define([
 
         if (operations.length)
         {
-          $operation.select2('val', operations[0].no).select2('focus');
+          var selectedOp = operations[0].no;
+          var focusOp = true;
+
+          if (view.isPaintShop())
+          {
+            var psOp = operations.find(function(op) { return op.workCenter === 'PAINT'; });
+
+            if (psOp)
+            {
+              selectedOp = psOp.no;
+            }
+
+            if (prodLines.get('PAINT_'))
+            {
+              $row.find('.pressWorksheets-form-prodLine').val('PAINT_').select2('val', 'PAINT_');
+              $row.find('.pressWorksheets-form-quantityDone').focus();
+
+              focusOp = false;
+            }
+            else
+            {
+              $row.find('.pressWorksheets-form-prodLine').select2('focus');
+
+              focusOp = false;
+            }
+          }
+
+          $operation.select2('val', selectedOp);
+
+          if (focusOp)
+          {
+            $operation.select2('focus');
+          }
         }
         else
         {
@@ -786,9 +818,14 @@ define([
         return;
       }
 
+      if ($prevRow.hasClass('pressWorksheets-form-notes'))
+      {
+        $prevRow = $prevRow.prev();
+      }
+// TODO
       $row.find('.pressWorksheets-form-prodLine').select2(
         'val',
-        $prevRow.find('.pressWorksheets-form-prodLine').select2('val')
+        $prevRow.find('.pressWorksheets-form-prodLine').val()
       );
 
       $row.find('.pressWorksheets-form-startedAt').val(
