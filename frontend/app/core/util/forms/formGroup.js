@@ -24,6 +24,11 @@ define([
       options.name = options.id;
     }
 
+    if (!options.type)
+    {
+      options.type = 'text';
+    }
+
     var id = view.idPrefix + '-' + (options.id || options.name.replace(/[\[\].]/g, '-'));
     var formGroupAttrs = Object.assign({
       className: html.className(

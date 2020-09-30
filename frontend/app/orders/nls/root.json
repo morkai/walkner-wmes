@@ -200,7 +200,21 @@
     "notes:edit:add": "Add note",
     "notes:edit:clear": "Clear all",
     "notes:target:docs": "Documentation",
-    "notes:target:ps": "Paint-shop"
+    "notes:target:ps": "Paint-shop",
+
+    "documents:add:tooltip": "Add document to order",
+    "documents:add:title": "Adding document to order",
+    "documents:add:submit": "Add document",
+    "documents:add:item": "Document no",
+    "documents:add:nc15": "Document code (15NC)",
+    "documents:add:name": "Document name",
+    "documents:add:exists": "The specified document already exists.",
+    "documents:add:notFound": "The specified code doesn't exist in the document catalog.",
+    "documents:remove:tooltip": "Remove document from order",
+    "documents:remove:title": "Removing document from order",
+    "documents:remove:yes": "Remove document",
+    "documents:remove:no": "Cancel",
+    "documents:remove:message": "Are you sure you want to remove the specified document from the order?"
   },
   "pl": true
 }

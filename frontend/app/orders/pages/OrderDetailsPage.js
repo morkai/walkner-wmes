@@ -18,6 +18,7 @@ define([
   'app/prodDowntimes/ProdDowntimeCollection',
   '../Order',
   '../OrderCollection',
+  '../DocumentCollection',
   '../ComponentCollection',
   '../util/openOrderPrint',
   '../views/OrderDetailsView',
@@ -50,6 +51,7 @@ define([
   ProdDowntimeCollection,
   Order,
   OrderCollection,
+  DocumentCollection,
   ComponentCollection,
   openOrderPrint,
   OrderDetailsView,
@@ -355,7 +357,7 @@ define([
           newValue = _.defaults(newQtyMax, order.get('qtyMax'));
         }
 
-        attrs[property] = newValue;
+        attrs[property] = property === 'documents' ? new DocumentCollection(newValue) : newValue;
       });
 
       if (change.source !== 'system')

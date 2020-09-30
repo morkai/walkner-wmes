@@ -1,14 +1,24 @@
-<div class="panel panel-default orders-documents <%- documents.length ? '' : 'hidden' %>">
-  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:documents') %></div>
+<div class="panel panel-default orders-documents <%- documents.length ? '' : 'hidden' %> is-with-actions">
+  <div class="panel-heading">
+    <div class="panel-heading-title"><%- t('PANEL:TITLE:documents') %></div>
+    <div class="panel-heading-actions">
+      <% if (canManage) { %>
+      <button id="<%- id('add') %>" class="btn btn-default" type="button" title="<%- t('documents:add:tooltip') %>"><i class="fa fa-plus"></i></button>
+      <% } %>
+    </div>
+  </div>
   <% if (documents.length) { %>
   <div class="list">
     <div class="table-responsive">
       <table class="table table-condensed table-hover table-bordered table-striped">
         <thead>
           <tr>
-            <th class="is-min"><%- helpers.t('PROPERTY:documents.item') %>
-            <th class="is-min"><%- helpers.t('PROPERTY:documents.nc15') %>
-            <th><%- helpers.t('PROPERTY:documents.name') %>
+            <th class="is-min"><%- t('PROPERTY:documents.item') %>
+            <th class="is-min"><%- t('PROPERTY:documents.nc15') %>
+            <th><%- t('PROPERTY:documents.name') %>
+            <% if (canManage) { %>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+            <% } %>
           </tr>
         </thead>
         <tbody>
@@ -22,6 +32,15 @@
               <%= document.nc15 %>
               <% } %>
             <td><%= document.name  %>
+            <% if (canManage) { %>
+            <td class="actions">
+              <div class="actions-group">
+                <% if (document.added) { %>
+                <button data-action="remove" class="btn btn-default" type="button" title="<%- t('documents:remove:tooltip') %>"><i class="fa fa-times"></i></button>
+                <% } %>
+              </div>
+            </td>
+            <% } %>
           </tr>
           <% }) %>
         </tbody>
@@ -30,7 +49,7 @@
   </div>
   <% } else { %>
   <div class="panel-body">
-    <%- helpers.t('DOCUMENTS:NO_DATA') %>
+    <%- t('DOCUMENTS:NO_DATA') %>
   </div>
   <% } %>
 </div>

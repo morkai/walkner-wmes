@@ -200,5 +200,19 @@
   "notes:edit:add": "Dodaj uwagę",
   "notes:edit:clear": "Usuń wszystkie",
   "notes:target:docs": "Dokumentacja",
-  "notes:target:ps": "Malarnia"
+  "notes:target:ps": "Malarnia",
+
+  "documents:add:tooltip": "Dodaj dokument do zlecenia",
+  "documents:add:title": "Dodawanie dokumentu do zlecenia",
+  "documents:add:submit": "Dodaj dokument",
+  "documents:add:item": "Nr dokumentu",
+  "documents:add:nc15": "Kod dokumentu (15NC)",
+  "documents:add:name": "Nazwa dokumentu",
+  "documents:add:exists": "Podany dokument już istnieje.",
+  "documents:add:notFound": "Podany kod nie istnieje w katalogu dokumentacji.",
+  "documents:remove:tooltip": "Usuń dokument ze zlecenia",
+  "documents:remove:title": "Usuwanie dokumentu ze zlecenia",
+  "documents:remove:yes": "Usuń dokument",
+  "documents:remove:no": "Anuluj",
+  "documents:remove:message": "Czy na pewno chcesz usunąć wybrany dokument ze zlecenia?"
 }

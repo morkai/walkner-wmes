@@ -1,0 +1,23 @@
+<form>
+  <%- helpers.formGroup({
+    name: 'item',
+    label: 'documents:add:',
+    required: true,
+    pattern: '^[0-9]{1,4}$'
+  }) %>
+  <%- helpers.formGroup({
+    name: 'nc15',
+    label: 'documents:add:',
+    required: true,
+    pattern: '^[0-9]{15}$'
+  }) %>
+  <%- helpers.formGroup({
+    name: 'name',
+    label: 'documents:add:',
+    required: true
+  }) %>
+  <div class="form-actions">
+    <button id="<%- id('submit') %>" class="btn btn-primary"><%- t('documents:add:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

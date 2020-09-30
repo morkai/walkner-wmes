@@ -2,14 +2,22 @@
 
 define([
   'app/user',
+  'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/data/loadedModules',
-  'app/orders/templates/documentList'
+  './AddDocumentFormView',
+  'app/orders/templates/documentList',
+  'app/orders/templates/removeDocumentDialog',
 ], function(
   user,
+  viewport,
   View,
+  DialogView,
   loadedModules,
-  template
+  AddDocumentFormView,
+  template,
+  removeDocumentDialogTemplate
 ) {
   'use strict';
 
@@ -54,6 +62,32 @@ define([
         view.openDocumentWindow(aEl);
 
         return false;
+      },
+      'click #-add': function()
+      {
+        var dialogView = new AddDocumentFormView({
+          model: this.model
+        });
+
+        viewport.showDialog(dialogView, this.t('documents:add:title'));
+      },
+      'click .btn[data-action="remove"]': function(e)
+      {
+        var nc15 = this.$(e.target).closest('tr')[0].dataset.nc15;
+        var dialogView = new DialogView({
+          template: removeDocumentDialogTemplate,
+          model: this.model
+        });
+
+        viewport.showDialog(dialogView, this.t('documents:remove:title'));
+
+        this.listenTo(dialogView, 'answered', function(answer)
+        {
+          if (answer === 'yes')
+          {
+            this.removeDocument(nc15);
+          }
+        });
       }
     },
 
@@ -72,7 +106,8 @@ define([
         documents: this.model.get('documents').toJSON(),
         canView: !window.IS_EMBEDDED
           && loadedModules.isLoaded('orderDocuments')
-          && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
+          && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW'),
+        canManage: user.isAllowedTo('ORDERS:MANAGE')
       };
     },
 
@@ -220,14 +255,37 @@ define([
       view.$('tr[data-nc15="' + bestNc15 + '"]').find('a').click();
     },
 
+    removeDocument: function(nc15)
+    {
+      viewport.msg.saving();
+
+      var documents = this.model.get('documents').toJSON().filter(function(doc) { return doc.nc15 !== nc15; });
+      var req = this.ajax({
+        method: 'POST',
+        url: this.model.url(),
+        data: JSON.stringify({documents: documents})
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.savingFailed();
+      });
+
+      req.done(function()
+      {
+        viewport.msg.saved();
+      });
+    },
+
     onChange: function()
     {
       var oldState = this.$el.hasClass('hidden');
       var newState = this.model.get('documents').length === 0;
 
+      this.render();
+
       if (oldState !== newState)
       {
-        this.render();
         this.model.trigger('panelToggle');
       }
     }
