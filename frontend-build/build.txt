@@ -1920,7 +1920,10 @@ app/orders/views/OrderDetailsView.js
 app/core/util/decimalSeparator.js
 app/orders/templates/operationList.js
 app/orders/views/OperationListView.js
+app/orders/templates/addDocumentForm.js
+app/orders/views/AddDocumentFormView.js
 app/orders/templates/documentList.js
+app/orders/templates/removeDocumentDialog.js
 app/orders/views/DocumentListView.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
@@ -2438,7 +2441,10 @@ app/orders/views/OrderDetailsView.js
 app/core/util/decimalSeparator.js
 app/orders/templates/operationList.js
 app/orders/views/OperationListView.js
+app/orders/templates/addDocumentForm.js
+app/orders/views/AddDocumentFormView.js
 app/orders/templates/documentList.js
+app/orders/templates/removeDocumentDialog.js
 app/orders/views/DocumentListView.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
@@ -2894,11 +2900,14 @@ app/core/views/ListView.js
 app/orders/views/OrderListView.js
 app/orders/templates/operationList.js
 app/orders/views/OperationListView.js
+app/core/views/FormView.js
+app/orders/templates/addDocumentForm.js
+app/orders/views/AddDocumentFormView.js
 app/orders/templates/documentList.js
+app/orders/templates/removeDocumentDialog.js
 app/orders/views/DocumentListView.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
-app/core/views/FormView.js
 app/core/util/idAndLabel.js
 app/orders/templates/commentForm.js
 app/orders/views/OrderCommentFormView.js
