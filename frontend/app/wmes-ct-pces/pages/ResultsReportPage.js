@@ -5,6 +5,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/pageActions',
   'app/core/util/bindLoadingMessage',
   'app/wmes-ct-state/settings',
   '../ResultsReport',
@@ -19,6 +20,7 @@ define([
   t,
   viewport,
   View,
+  pageActions,
   bindLoadingMessage,
   settings,
   ResultsReport,
@@ -44,6 +46,7 @@ define([
 
         viewport.showDialog(dialogView, this.t('upphQuarterlyConfig:title'));
       },
+      'click #-exportUpph': 'exportUpph',
       'click .ct-reports-results-mode': function(e)
       {
         this.model.set(e.currentTarget.dataset.prop, e.currentTarget.dataset.value);
@@ -133,6 +136,95 @@ define([
     {
       this.$('.active[data-prop]').removeClass('active');
       this.$('.ct-reports-results-mode[data-value="' + this.model.get('upph') + '"]').addClass('active');
+    },
+
+    exportUpph: function()
+    {
+      var view = this;
+
+      var $msg = viewport.msg.show({
+        type: 'warning',
+        text: view.t('core', 'MSG:EXPORTING'),
+        sticky: true
+      });
+
+      var upph = view.model.get('report').upph || {total: []};
+      var columns = {
+        mrp: {
+          type: 'string',
+          width: 5,
+          caption: view.t('resultsReport:avgOutput:export:mrp')
+        },
+        week: {
+          type: 'string',
+          width: 10,
+          caption: view.t('resultsReport:avgOutput:export:week')
+        },
+        std: {
+          type: 'decimal',
+          width: 12,
+          caption: view.t('resultsReport:avgOutput:export:standard')
+        },
+        norm: {
+          type: 'decimal',
+          width: 10,
+          caption: view.t('resultsReport:avgOutput:export:normalized')
+        }
+      };
+      var rows = [];
+
+      Object.keys(upph)
+        .sort(function(a, b)
+        {
+          return a === 'total'
+            ? -1
+            : b === 'total'
+              ? 1
+              : a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true});
+        })
+        .forEach(function(k)
+        {
+          var mrp = k === 'total' ? '' : k;
+
+          upph[k].forEach(function(week)
+          {
+            rows.push({
+              mrp: mrp,
+              week: week._id,
+              std: week.std,
+              norm: week.norm
+            });
+          });
+        });
+
+      var data = {
+        filename: view.t('resultsReport:avgOutput:export:filename'),
+        sheetName: view.t('resultsReport:avgOutput:export:sheetName'),
+        freezeRows: 1,
+        columns: columns,
+        data: rows
+      };
+
+      var req = view.ajax({
+        type: 'POST',
+        url: '/xlsxExporter',
+        data: JSON.stringify(data)
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.hide($msg, true);
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: view.t('core', 'MSG:EXPORTING_FAILURE')
+        });
+      });
+
+      req.done(function(id)
+      {
+        pageActions.exportXlsx('/xlsxExporter/' + id, $msg);
+      });
     }
 
   });

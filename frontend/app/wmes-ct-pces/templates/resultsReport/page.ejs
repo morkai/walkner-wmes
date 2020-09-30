@@ -1,15 +1,16 @@
 <div class="ct-report-results-page">
-  <div id="<%- idPrefix %>-filter" class="filter-container"></div>
+  <div id="<%- id('filter') %>" class="filter-container"></div>
   <h3><%- t('resultsReport:vs:title') %></h3>
-  <div id="<%- idPrefix %>-vs"></div>
+  <div id="<%- id('vs') %>"></div>
   <h3 style="display: flex">
     <%- t('resultsReport:avgOutput:title') %>
     <a href="javascript:void(0)" class="ct-reports-results-mode" data-prop="upph" data-value="standard"><%- t('resultsReport:avgOutput:standard') %></a>
     <a href="javascript:void(0)" class="ct-reports-results-mode" data-prop="upph" data-value="normalized"><%- t('resultsReport:avgOutput:normalized') %></a>
     <% if (canManage) { %>
-    <a id="<%- idPrefix %>-editUpphConfig" href="javascript:void(0)" style="margin-left: 10px"><i class="fa fa-edit" style="vertical-align: bottom"></i></a>
+    <a id="<%- id('editUpphConfig') %>" href="javascript:void(0)" style="margin-left: 10px" title="<%- t('resultsReport:avgOutput:editUpphConfig') %>"><i class="fa fa-edit" style="vertical-align: bottom"></i></a>
     <% } %>
+    <a id="<%- id('exportUpph') %>" href="javascript:void(0)" style="margin-left: 10px" title="<%- t('resultsReport:avgOutput:exportUpph') %>"><i class="fa fa-download" style="vertical-align: bottom"></i></a>
   </h3>
-  <div id="<%- idPrefix %>-avgOutput"></div>
-  <div id="<%- idPrefix %>-table"></div>
+  <div id="<%- id('avgOutput') %>"></div>
+  <div id="<%- id('table') %>"></div>
 </div>

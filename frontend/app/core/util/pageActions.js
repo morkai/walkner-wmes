@@ -95,13 +95,16 @@ define([
     return false;
   }
 
-  function exportXlsx(url)
+  function exportXlsx(url, $msg)
   {
-    var $msg = viewport.msg.show({
-      type: 'warning',
-      text: t('core', 'MSG:EXPORTING'),
-      sticky: true
-    });
+    if (!$msg)
+    {
+      $msg = viewport.msg.show({
+        type: 'warning',
+        text: t('core', 'MSG:EXPORTING'),
+        sticky: true
+      });
+    }
 
     var req = $.ajax({
       url: url

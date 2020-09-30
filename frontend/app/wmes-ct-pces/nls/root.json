@@ -114,6 +114,13 @@
     "resultsReport:avgOutput:standard": "standard",
     "resultsReport:avgOutput:normalized": "normalized",
     "resultsReport:avgOutput:editUpphConfig": "Edit quarterly normalization coefficients",
+    "resultsReport:avgOutput:exportUpph": "Export UPPH",
+    "resultsReport:avgOutput:export:filename": "WMES_AvgOutput_UPPH",
+    "resultsReport:avgOutput:export:sheetName": "UPPH",
+    "resultsReport:avgOutput:export:week": "Week",
+    "resultsReport:avgOutput:export:mrp": "MRP",
+    "resultsReport:avgOutput:export:standard": "Standard",
+    "resultsReport:avgOutput:export:normalized": "Normalized",
 
     "resultsReport:table:mrps": "Families",
     "resultsReport:table:lines": "Lines",

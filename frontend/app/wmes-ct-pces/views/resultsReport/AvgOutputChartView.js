@@ -128,10 +128,7 @@ define([
 
     getUpph: function()
     {
-      var mode = this.model.get('upph');
-      var prop = mode === 'normalized' ? 'upphNorm' : 'upph';
-
-      return this.model.get('report')[prop] || [];
+      return (this.model.get('report').upph || {total: []}).total;
     },
 
     serializeCategories: function()
@@ -141,9 +138,11 @@ define([
 
     serializeSeries: function()
     {
+      var prop = this.model.get('upph') === 'normalized' ? 'norm' : 'std';
+
       return [{
         name: this.t('resultsReport:avgOutput:series'),
-        data: this.getUpph().map(function(d) { return d.upph; }),
+        data: this.getUpph().map(function(d) { return d[prop]; }),
         valueDecimals: 1
       }];
     },
