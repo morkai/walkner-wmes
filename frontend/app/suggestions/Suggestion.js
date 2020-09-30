@@ -311,7 +311,7 @@ define([
 
     canEdit: function()
     {
-      if (this.canManage())
+      if (this.canManage() || this.isConfirmer())
       {
         return true;
       }
@@ -321,11 +321,6 @@ define([
       if (!user.isLoggedIn() || status === 'finished' || status === 'cancelled')
       {
         return false;
-      }
-
-      if (this.isConfirmer())
-      {
-        return true;
       }
 
       if (status === 'new' && (this.isCreator() || this.isSuggestionOwner()))
