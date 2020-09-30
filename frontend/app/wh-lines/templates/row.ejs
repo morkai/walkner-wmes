@@ -25,7 +25,7 @@
     <% } %>
   </td>
   <td class="is-min"><%- row.nextShiftAt %></td>
-  <td class="is-min <%- canManage ? 'wh-lines-clickable' : '' %>">
+  <td class="is-min <%- canManage ? 'wh-lines-clickable' : '' %> <%- row.planDone ? 'wh-lines-planDone' : '' %>">
     <% if(canManage) { %>
     <a href="javascript:void(0)" data-action="editStartedPlan" title="<%- t('editStartedPlan:tooltip') %>" style="text-align: right"><span style="margin-right: 7px"><%- row.startedPlan %></span><i class="fa fa-edit"></i></a>
     <% } else { %>

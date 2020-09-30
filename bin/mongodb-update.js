@@ -3,6 +3,26 @@
 
 'use strict';
 
-db.suggestions.updateMany({kom: {$exists: false}}, {$set: {kom: false}});
-db.suggestions.createIndex({kom: 1});
-db.suggestions.createIndex({finishedAt: -1});
+const localDate = new Date();
+const utcDate = new Date(Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate()));
+const weekAgo = new Date(utcDate.getTime() - 7 * 24 * 3600 * 1000);
+
+db.oldwhlines.updateMany({startedDate: {$exists: true}}, {$unset: {startedDate: 1}});
+db.oldwhlines.updateMany({planDone: {$exists: false}}, {$set: {planDone: false}});
+
+db.oldwhlines.find({}, {startedPlan: 1, planDone: 1}).forEach(line =>
+{
+  const startedPlan = line.startedPlan < utcDate ? utcDate : line.startedPlan;
+  const whOrder = db.oldwhorders.findOne({
+    status: 'pending',
+    'lines._id': line._id,
+    date: {
+      $gte: weekAgo,
+      $lte: startedPlan
+    }
+  }, {_id: 1});
+
+  db.oldwhlines.updateOne({_id: line._id}, {$set: {planDone: !whOrder}});
+});
+
+db.suggestions.createIndex({'confirmer.id': 1});
