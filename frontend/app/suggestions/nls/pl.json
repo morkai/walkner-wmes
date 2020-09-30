@@ -88,7 +88,7 @@
     "type:suggestion": "Pomysł",
     "type:kaizen": "Kaizen",
 
-    "status:new": "Nowe",
+    "status:new": "Opiniowanie",
     "status:accepted": "Akceptacja",
     "status:inProgress": "W realizacji",
     "status:verification": "Weryfikacja",

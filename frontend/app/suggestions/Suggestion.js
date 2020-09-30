@@ -196,6 +196,13 @@ define([
       return this.attributes.confirmer && this.attributes.confirmer.id === user.data._id;
     },
 
+    isPossibleConfirmer: function()
+    {
+      var section = kaizenDictionaries.sections.get(this.get('section'));
+
+      return !!section && section.get('confirmers').some(function(u) { return u.id === user.data._id; });
+    },
+
     isSuggestionOwner: function()
     {
       return _.some(this.get('suggestionOwners'), function(owner)
@@ -311,14 +318,19 @@ define([
 
     canEdit: function()
     {
-      if (this.canManage() || this.isConfirmer())
+      if (!user.isLoggedIn())
+      {
+        return false;
+      }
+
+      if (this.canManage() || this.isConfirmer() || this.isPossibleConfirmer())
       {
         return true;
       }
 
       var status = this.get('status');
 
-      if (!user.isLoggedIn() || status === 'finished' || status === 'cancelled')
+      if (status === 'finished' || status === 'cancelled')
       {
         return false;
       }
