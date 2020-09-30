@@ -23,6 +23,7 @@ define([
     {
       return {
         month: null,
+        confirmer: null,
         sections: [],
         users: []
       };
@@ -37,7 +38,7 @@ define([
 
       options.data = _.assign(
         options.data || {},
-        _.pick(this.attributes, ['month', 'sections'])
+        _.pick(this.attributes, ['month', 'confirmer', 'sections'])
       );
       options.data.sections = options.data.sections.join(',');
 
@@ -48,6 +49,7 @@ define([
     {
       return '/suggestionRewardReport'
         + '?month=' + this.get('month')
+        + '&confirmer=' + this.get('confirmer')
         + '&sections=' + this.get('sections');
     },
 
@@ -96,6 +98,7 @@ define([
     {
       return new this({
         month: query.month || time.getMoment().startOf('month').subtract(1, 'months').format('YYYY-MM'),
+        confirmer: query.confirmer || null,
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
       });
     }

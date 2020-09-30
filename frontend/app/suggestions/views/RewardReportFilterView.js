@@ -4,6 +4,7 @@ define([
   'js2form',
   'app/core/View',
   'app/core/util/idAndLabel',
+  'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/rewardReportFilter',
   'app/core/util/ExpandableSelect'
@@ -11,6 +12,7 @@ define([
   js2form,
   View,
   idAndLabel,
+  setUpUserSelect2,
   kaizenDictionaries,
   template
 ) {
@@ -38,6 +40,11 @@ define([
     {
       js2form(this.el, this.serializeFormData());
 
+      setUpUserSelect2(this.$id('confirmer'), {
+        view: this,
+        width: '285px'
+      });
+
       this.$id('sections').select2({
         width: '350px',
         allowClear: true,
@@ -56,6 +63,7 @@ define([
 
       return {
         month: model.get('month'),
+        confirmer: model.get('confirmer'),
         sections: model.get('sections').join(',')
       };
     },
@@ -64,6 +72,7 @@ define([
     {
       var query = {
         month: this.$id('month').val(),
+        confirmer: this.$id('confirmer').val() || null,
         sections: this.$id('sections').val().split(',').filter(function(v) { return !!v; })
       };
 
