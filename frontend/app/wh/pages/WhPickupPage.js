@@ -583,22 +583,24 @@ define([
 
     handleKeyBuffer: function()
     {
-      if (this.keyBuffer.length >= 6)
+      var page = this;
+
+      if (page.keyBuffer.length >= 6)
       {
-        this.resolveAction(this.keyBuffer);
+        page.resolveAction(page.keyBuffer);
       }
-      else if (this.keyBuffer.length <= 3)
+      else if (page.keyBuffer.length <= 3)
       {
-        var set = +this.keyBuffer;
-        var whOrder = this.whOrders.find(function(whOrder) { return whOrder.get('set') === set; });
+        var set = +page.keyBuffer;
+        var whOrder = page.whOrders.find(function(whOrder) { return whOrder.get('set') === set; });
 
         if (whOrder)
         {
-          this.focusSet(whOrder.id, true);
+          page.focusSet(whOrder.id, true);
         }
       }
 
-      this.keyBuffer = '';
+      page.keyBuffer = '';
     },
 
     resolveAction: function(personnelId, data)
@@ -724,23 +726,25 @@ define([
 
     continueSet: function(user, date, set, scroll)
     {
-      if (!time.utc.getMoment(this.whOrders.getDateFilter()).isSame(date))
-      {
-        this.setToContinue = Array.prototype.slice.call(arguments);
+      var page = this;
 
-        this.plan.set('_id', time.utc.format(date, 'YYYY-MM-DD'));
+      if (!time.utc.getMoment(page.whOrders.getDateFilter()).isSame(date))
+      {
+        page.setToContinue = Array.prototype.slice.call(arguments);
+
+        page.plan.set('_id', time.utc.format(date, 'YYYY-MM-DD'));
 
         return;
       }
 
-      if (this.setToContinue)
+      if (page.setToContinue)
       {
-        this.hideMessage(true);
+        page.hideMessage(true);
       }
 
-      this.setToContinue = null;
+      page.setToContinue = null;
 
-      var orders = this.whOrders.filter(function(o) { return o.get('set') === set; });
+      var orders = page.whOrders.filter(function(o) { return o.get('set') === set; });
 
       if (!orders.length)
       {
@@ -749,7 +753,10 @@ define([
 
       if (scroll !== false)
       {
-        this.focusOrder(orders[0].id, false);
+        var anyOrderId = orders[0].id;
+        var visibleOrder = orders.find(function(o) { return !page.listView.$row(o.id).hasClass('hidden'); });
+
+        page.focusOrder(visibleOrder ? visibleOrder.id : anyOrderId, false);
       }
 
       var currentDialog = viewport.currentDialog;
@@ -775,9 +782,9 @@ define([
           set: set,
           line: line
         },
-        whOrders: this.whOrders,
-        plan: this.plan,
-        vkb: this.vkbView
+        whOrders: page.whOrders,
+        plan: page.plan,
+        vkb: page.vkbView
       });
 
       if (orders[0].get('redirLine'))
@@ -795,7 +802,7 @@ define([
           + '</span></span>';
       }
 
-      var dialogTitle = this.t('set:title', {
+      var dialogTitle = page.t('set:title', {
         set: set,
         line: line
       });
@@ -804,7 +811,7 @@ define([
       {
         dialogTitle += ' <span class="wh-set-user">'
           + '<i class="fa fa-user"></i><span>' + _.escape(user.label) + '</span>'
-          + '<i class="fa fa-users"></i><span>' + this.t('func:' + user.func) + '</span>'
+          + '<i class="fa fa-users"></i><span>' + page.t('func:' + user.func) + '</span>'
           + '</span>';
       }
 
