@@ -22,13 +22,5 @@
   "list:status": "Status",
   "list:subject": "Temat",
   "list:noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW.",
-  "list:noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień.",
-
-  "status:new": "Nowe",
-  "status:accepted": "Zaakceptowane",
-  "status:todo": "Do realizacji",
-  "status:inProgress": "W realizacji",
-  "status:cancelled": "Anulowane",
-  "status:finished": "Zakończone",
-  "status:paused": "Wstrzymane"
+  "list:noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień."
 }

@@ -23,15 +23,7 @@
     "list:status": "Status",
     "list:subject": "Subject",
     "list:noData:nearMiss": "You're not participating in any open near miss entries.",
-    "list:noData:suggestion": "You're not participating in any open improvement entries.",
-
-    "status:new": "New",
-    "status:accepted": "Accepted",
-    "status:todo": "To do",
-    "status:inProgress": "In progress",
-    "status:cancelled": "Cancelled",
-    "status:finished": "Finished",
-    "status:paused": "Paused"
+    "list:noData:suggestion": "You're not participating in any open improvement entries."
   },
   "pl": true
 }

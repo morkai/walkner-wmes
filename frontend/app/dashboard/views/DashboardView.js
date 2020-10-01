@@ -181,7 +181,7 @@ define([
 
     serializeListRow: function(model)
     {
-      return model.serializeRow({nlsDomain: 'dashboard'});
+      return model.serializeRow();
     }
 
   });

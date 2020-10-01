@@ -7,7 +7,9 @@ define([
   'app/router',
   'app/viewport',
   './pages/DashboardPage',
-  'i18n!app/nls/dashboard'
+  'i18n!app/nls/dashboard',
+  'i18n!app/nls/kaizenOrders',
+  'i18n!app/nls/suggestions'
 ], function(
   _,
   broker,
