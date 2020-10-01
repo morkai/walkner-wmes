@@ -388,6 +388,7 @@ define([
               {name: 'in', args: ['status', ['started', 'finished', 'problem']]},
               {name: 'eq', args: ['lines._id', details.line]},
               {name: 'eq', args: ['distStatus', 'pending']},
+              {name: 'eq', args: ['setDistStarted', false]},
               {name: 'ne', args: ['set', null]}
             ]
           },

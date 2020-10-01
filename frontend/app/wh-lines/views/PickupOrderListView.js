@@ -27,7 +27,7 @@ define([
       {
         var line = this.options.line;
         var whOrders = this.collection;
-
+console.log('changed', message);
         message.changes.removed.forEach(function(id)
         {
           whOrders.remove(id);
@@ -53,6 +53,7 @@ define([
       },
       'old.wh.orders.updated': function(message)
       {
+console.log('updated', message);
         this.collection.update(message.updated || []);
       }
     },
@@ -89,6 +90,11 @@ define([
 
       view.collection.forEach(function(whOrder)
       {
+        if (whOrder.get('setDistStarted'))
+        {
+          return;
+        }
+
         var key = whOrder.get('date') + ':' + whOrder.get('set');
 
         if (!sets[key])
