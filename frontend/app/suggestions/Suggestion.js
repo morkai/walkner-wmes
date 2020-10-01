@@ -247,13 +247,8 @@ define([
 
     canKom: function()
     {
-      if (this.get('status') !== 'finished')
-      {
-        return false;
-      }
-
       return this.get('status') === 'finished'
-        && (this.canManage() || this.isCoordinator());
+        && (this.canManage() || this.isConfirmer());
     },
 
     canCoordinate: function()
