@@ -365,6 +365,8 @@ define([
       var page = this;
       var plan = page.plan;
 
+      page.scheduleUpdateUrl = _.debounce(page.updateUrl.bind(page), 1);
+
       page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
       page.listenTo(plan, 'change:loading', page.onLoadingChanged);
@@ -374,6 +376,7 @@ define([
       page.listenTo(plan.displayOptions, 'change:distStatuses', page.onDistStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
+      page.listenTo(plan.displayOptions, 'change:orders change:lines change:mrps', page.scheduleUpdateUrl);
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
@@ -484,13 +487,29 @@ define([
       }
       else
       {
+        var params = [];
+
+        ['from', 'to', 'whStatuses', 'psStatuses', 'distStatuses', 'orders', 'lines', 'mrps'].forEach(function(prop)
+        {
+          var value = plan.displayOptions.get(prop);
+
+          if (!value || !value.length)
+          {
+            return;
+          }
+
+          if (Array.isArray(value))
+          {
+            params.push(prop + '=' + value.map(encodeURIComponent).join(','));
+          }
+          else if (typeof value === 'string' && value !== '06:00')
+          {
+            params.push(prop + '=' + encodeURIComponent(value));
+          }
+        });
+
         this.broker.publish('router.navigate', {
-          url: '/wh/pickup/' + plan.id
-            + '?from=' + encodeURIComponent(plan.displayOptions.get('from'))
-            + '&to=' + encodeURIComponent(plan.displayOptions.get('to'))
-            + '&whStatuses=' + plan.displayOptions.get('whStatuses')
-            + '&psStatuses=' + plan.displayOptions.get('psStatuses')
-            + '&distStatuses=' + plan.displayOptions.get('distStatuses'),
+          url: '/wh/pickup/' + plan.id + (params.length ? '?' : '') + params.join('&'),
           replace: true,
           trigger: false
         });

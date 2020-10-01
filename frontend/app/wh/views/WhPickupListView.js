@@ -121,10 +121,15 @@ define([
       view.listenTo(view.whLines, 'change', view.onLineChanged);
       view.listenTo(view.whLines, 'change:redirLine', view.onRedirLineChanged);
 
-      view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
-      view.listenTo(plan.displayOptions, 'change:psStatuses', view.onPsStatusesFilterChanged);
-      view.listenTo(plan.displayOptions, 'change:distStatuses', view.onDistStatusesFilterChanged);
-      view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
+      view.listenTo(plan.displayOptions, 'change:whStatuses', view.toggleOrderRowVisibility);
+      view.listenTo(plan.displayOptions, 'change:psStatuses', view.toggleOrderRowVisibility);
+      view.listenTo(plan.displayOptions, 'change:distStatuses', view.toggleOrderRowVisibility);
+      view.listenTo(plan.displayOptions, 'change:from change:to', view.toggleOrderRowVisibility);
+      view.listenTo(
+        plan.displayOptions,
+        'change:orders change:lines change:mrps',
+        _.debounce(view.toggleOrderRowVisibility.bind(view), 1)
+      );
 
       $(window)
         .on('scroll.' + view.idPrefix, view.positionStickyHeaders.bind(view))
@@ -820,26 +825,6 @@ define([
       }
     },
 
-    onWhStatusesFilterChanged: function()
-    {
-      this.toggleOrderRowVisibility();
-    },
-
-    onPsStatusesFilterChanged: function()
-    {
-      this.toggleOrderRowVisibility();
-    },
-
-    onDistStatusesFilterChanged: function()
-    {
-      this.toggleOrderRowVisibility();
-    },
-
-    onStartTimeFilterChanged: function()
-    {
-      this.toggleOrderRowVisibility();
-    },
-
     toggleOrderRowVisibility: function()
     {
       var view = this;
@@ -874,6 +859,21 @@ define([
           hidden = filters.distStatuses.indexOf(whOrder.get('distStatus')) === -1;
         }
 
+        if (!hidden && filters.orders.length)
+        {
+          hidden = filters.orders.indexOf(whOrder.get('order')) === -1;
+        }
+
+        if (!hidden && filters.lines.length)
+        {
+          hidden = whOrder.get('lines').every(function(l) { return !filters.lines.includes(l._id); });
+        }
+
+        if (!hidden && filters.mrps.length)
+        {
+          hidden = filters.mrps.indexOf(whOrder.get('mrp')) === -1;
+        }
+
         this.classList.toggle('hidden', hidden);
       });
 
@@ -888,6 +888,9 @@ define([
       if (_.isEmpty(options.get('whStatuses'))
         && _.isEmpty(options.get('psStatuses'))
         && _.isEmpty(options.get('distStatuses'))
+        && _.isEmpty(options.get('orders'))
+        && _.isEmpty(options.get('lines'))
+        && _.isEmpty(options.get('mrps'))
         && options.get('from') === '06:00'
         && options.get('to') === '06:00')
       {

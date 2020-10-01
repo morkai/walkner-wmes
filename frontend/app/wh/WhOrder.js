@@ -141,9 +141,12 @@ define([
       obj.hidden = !filters
         || startTime < filters.startTime.from
         || startTime >= filters.startTime.to
-        || (filters.whStatuses.length > 0 && filters.whStatuses.indexOf(obj.status) === -1)
-        || (filters.psStatuses.length > 0 && filters.psStatuses.indexOf(obj.psStatus) === -1)
-        || (filters.distStatuses.length > 0 && filters.distStatuses.indexOf(obj.distStatus) === -1);
+        || (filters.whStatuses.length > 0 && !filters.whStatuses.includes(obj.status))
+        || (filters.psStatuses.length > 0 && !filters.psStatuses.includes(obj.psStatus))
+        || (filters.distStatuses.length > 0 && !filters.distStatuses.includes(obj.distStatus))
+        || (filters.orders.length > 0 && !filters.orders.includes(obj.order))
+        || (filters.lines.length > 0 && !obj.lines.some(function(l) { return filters.lines.includes(l._id); }))
+        || (filters.mrps.length > 0 && !filters.mrps.includes(obj.mrp));
 
       if (obj.hidden)
       {

@@ -77,11 +77,16 @@ define([
 
     getFilters: function(plan)
     {
+      var displayOptions = plan.displayOptions;
+
       return {
-        whStatuses: plan.displayOptions.get('whStatuses') || [],
-        psStatuses: plan.displayOptions.get('psStatuses') || [],
-        distStatuses: plan.displayOptions.get('distStatuses') || [],
-        startTime: plan.displayOptions.getStartTimeRange(plan.id)
+        whStatuses: displayOptions.get('whStatuses') || [],
+        psStatuses: displayOptions.get('psStatuses') || [],
+        distStatuses: displayOptions.get('distStatuses') || [],
+        orders: displayOptions.get('orders') || [],
+        lines: displayOptions.get('lines') || [],
+        mrps: displayOptions.get('mrps') || [],
+        startTime: displayOptions.getStartTimeRange(plan.id)
       };
     },
 

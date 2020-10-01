@@ -36,6 +36,9 @@
     "filter:distStatuses": "Delivery status",
     "filter:date": "Plan date",
     "filter:startTime": "Start",
+    "filter:orders": "Order",
+    "filter:lines": "Line",
+    "filter:mrps": "MRP",
     "filter:useDarkerTheme": "High contrast",
 
     "empty": "No plan for the specified filters.",

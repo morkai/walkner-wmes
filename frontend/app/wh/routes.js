@@ -62,7 +62,7 @@ define([
       options.focus = {type: 'set', order: req.query.set};
     }
 
-    ['whStatuses', 'psStatuses'].forEach(function(prop)
+    ['whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
     {
       options[prop] = req.query[prop] === undefined
         ? null

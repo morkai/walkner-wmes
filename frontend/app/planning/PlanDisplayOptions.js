@@ -23,6 +23,7 @@ define([
         division: null,
         mrps: [],
         lines: [],
+        orders: [],
         whStatuses: [],
         psStatuses: [],
         distStatuses: [],
@@ -138,7 +139,7 @@ define([
         displayOptions.set('division', attrs.division);
       }
 
-      ['mrps', 'lines', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
+      ['mrps', 'lines', 'orders', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
       {
         if (Array.isArray(attrs[prop]))
         {

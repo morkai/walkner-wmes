@@ -35,6 +35,9 @@
   "filter:distStatuses": "Status wysyłki",
   "filter:date": "Data planu",
   "filter:startTime": "Początek",
+  "filter:orders": "Zlecenie",
+  "filter:lines": "Linia",
+  "filter:mrps": "MRP",
   "filter:useDarkerTheme": "Wysoki kontrast",
 
   "empty": "Brak planu dla wybranych filtrów.",
