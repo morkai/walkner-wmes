@@ -316,21 +316,26 @@ define([
       html += $items.find('tfoot')[0].outerHTML;
 
       $items.html(html);
+
+      view.scheduleStatsUpdate();
     },
 
     onRemoved: function(setCart)
     {
       this.$item(setCart.id).remove();
+      this.scheduleStatsUpdate();
     },
 
     onAdded: function(setCart)
     {
       this.$id('items').append(this.renderItem(setCart));
+      this.scheduleStatsUpdate();
     },
 
     onChanged: function(setCart)
     {
       this.$item(setCart.id).replaceWith(this.renderItem(setCart));
+      this.scheduleStatsUpdate();
     },
 
     onPersonnelIdChanged: function()
