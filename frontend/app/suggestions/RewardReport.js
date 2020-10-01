@@ -79,12 +79,12 @@ define([
       {
         rows.push(
           '"' + user.name
-          + '";' + user.finished[0]
-          + '";' + user.finished[1]
-          + ';' + user.kom[0]
-          + ';' + user.kom[1]
-          + ';' + user.total[0]
-          + ';' + user.total[1]
+          + '";' + user.finished[0].toLocaleString()
+          + ';' + user.finished[1].toLocaleString()
+          + ';' + user.kom[0].toLocaleString()
+          + ';' + user.kom[1].toLocaleString()
+          + ';' + user.total[0].toLocaleString()
+          + ';' + user.total[1].toLocaleString()
           + ';"' + user.sections.join(',') + '"'
         );
       });
