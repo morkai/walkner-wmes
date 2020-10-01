@@ -1,1 +1,1 @@
-define(["underscore","app/broker","app/user","app/router","app/viewport","./pages/DashboardPage","i18n!app/nls/dashboard"],function(a,e,p,r,n,o){"use strict";r.map("/",function(){n.showPage(new o)})});
+define(["underscore","app/broker","app/user","app/router","app/viewport","./pages/DashboardPage","i18n!app/nls/dashboard","i18n!app/nls/kaizenOrders","i18n!app/nls/suggestions"],function(p,a,e,n,s,r){"use strict";n.map("/",function(){s.showPage(new r)})});

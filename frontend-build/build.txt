@@ -1822,6 +1822,12 @@ app/dashboard/pages/DashboardPage.js
 app/nls/dashboard.js
 app/nls/pl/dashboard.js
 i18n!app/nls/dashboard
+app/nls/kaizenOrders.js
+app/nls/pl/kaizenOrders.js
+i18n!app/nls/kaizenOrders
+app/nls/suggestions.js
+app/nls/pl/suggestions.js
+i18n!app/nls/suggestions
 app/dashboard/routes.js
 app/divisions/routes.js
 app/delayReasons/DelayReason.js
@@ -2343,6 +2349,12 @@ app/dashboard/pages/DashboardPage.js
 app/nls/dashboard.js
 app/nls/pl/dashboard.js
 i18n!app/nls/dashboard
+app/nls/kaizenOrders.js
+app/nls/pl/kaizenOrders.js
+i18n!app/nls/kaizenOrders
+app/nls/suggestions.js
+app/nls/pl/suggestions.js
+i18n!app/nls/suggestions
 app/dashboard/routes.js
 app/divisions/routes.js
 app/delayReasons/DelayReason.js
