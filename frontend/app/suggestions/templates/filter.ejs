@@ -31,7 +31,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-categories"><%- t('PROPERTY:category') %></label>
-    <select id="<%- idPrefix %>-categories" name="categories[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
+    <select id="<%- idPrefix %>-categories" name="categories[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15" style="max-width: 225px">
       <% categories.forEach(function(category) { %>
       <option value="<%- category._id %>"><%= category.name %></option>
       <% }) %>
@@ -39,7 +39,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-productFamily"><%- t('PROPERTY:productFamily') %></label>
-    <select id="<%- idPrefix %>-productFamily" name="productFamily[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
+    <select id="<%- idPrefix %>-productFamily" name="productFamily[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15" style="max-width: 225px">
       <% productFamilies.forEach(function(productFamily) { %>
       <option value="<%- productFamily._id %>"><%= productFamily.name %></option>
       <% }) %>
@@ -47,7 +47,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-section"><%- t('PROPERTY:section') %></label>
-    <select id="<%- idPrefix %>-section" name="section[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
+    <select id="<%- idPrefix %>-section" name="section[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15" style="max-width: 225px">
       <% sections.forEach(function(section) { %>
       <option value="<%- section._id %>"><%= section.name %></option>
       <% }) %>
