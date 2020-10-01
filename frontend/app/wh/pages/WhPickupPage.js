@@ -393,7 +393,7 @@ define([
         {
           var fn = focus.type === 'set' ? 'focusSet' : 'focusOrder';
 
-          page.timers.focus = setTimeout(page[fn].bind(page, page.options.focus.order, true), 1);
+          page.timers.focus = setTimeout(page[fn].bind(page, focus.order, true), 1);
         });
       }
 
@@ -594,7 +594,7 @@ define([
 
         if (whOrder)
         {
-          this.focusSet(whOrder.id);
+          this.focusSet(whOrder.id, true);
         }
       }
 
@@ -864,7 +864,7 @@ define([
       }
     },
 
-    focusSet: function(whOrderId)
+    focusSet: function(whOrderId, scroll)
     {
       var whOrder = this.whOrders.get(whOrderId);
 
@@ -883,7 +883,7 @@ define([
         func: func._id
       };
 
-      this.continueSet(user, whOrder.get('date'), whOrder.get('set'), false);
+      this.continueSet(user, whOrder.get('date'), whOrder.get('set'), scroll === true);
     },
 
     showMessage: function(type, time, message, messageData)
@@ -1134,7 +1134,7 @@ define([
 
     onSetClicked: function(whOrderId)
     {
-      this.focusSet(whOrderId);
+      this.focusSet(whOrderId, false);
     },
 
     showForceLineDialog: function()
@@ -1153,7 +1153,6 @@ define([
 
         page.broker.subscribe('viewport.dialog.hidden').setLimit(1).on('message', function()
         {
-          console.log('currentDialog', viewport.currentDialog);
           page.resolveAction(data.card, {forceLine: data.line});
         });
       });
