@@ -84,15 +84,10 @@ define([
 
     breadcrumbs: [],
 
-    remoteTopics: function()
-    {
-      var topics = {
-        'old.wh.lines.updated': 'onLinesUpdated',
-        'old.wh.setCarts.updated': 'onSetCartsUpdated',
-        'planning.stats.updated': 'onPlanStatsUpdated'
-      };
-
-      return topics;
+    remoteTopics: {
+      'old.wh.lines.updated': 'onLinesUpdated',
+      'old.wh.setCarts.updated': 'onSetCartsUpdated',
+      'planning.stats.updated': 'onPlanStatsUpdated'
     },
 
     localTopics: {
@@ -159,7 +154,7 @@ define([
       }), this);
 
       this.setCarts = bindLoadingMessage(new WhSetCartCollection(null, {
-        rqlQuery: 'limit(0)&status=in=(completed,delivering)&kind=' + this.options.kind,
+        rqlQuery: 'limit(0)&status=in=(completing,completed,delivering)&kind=' + this.options.kind,
         paginate: false
       }), this);
 
@@ -354,7 +349,7 @@ define([
           return;
         }
 
-        if (setCart.status === 'completed' || setCart.status === 'delivering')
+        if (setCart.status !== 'delivered')
         {
           page.setCarts.add(WhSetCart.parse(setCart));
         }
@@ -362,7 +357,7 @@ define([
 
       (message.updated || []).forEach(function(update)
       {
-        if (update.status && update.status !== 'completed' && update.status !== 'delivering')
+        if (update.status && update.status === 'delivered')
         {
           page.setCarts.remove(update._id);
 
@@ -480,8 +475,9 @@ define([
     onSetCartChanged: function(setCart)
     {
       var setCarts = this.setCarts;
+      var status = setCart.get('status');
 
-      if (setCart.get('status') === 'completed')
+      if (status === 'completing' || status === 'completed')
       {
         setCarts.delivering.remove(setCart.id);
 
@@ -507,6 +503,11 @@ define([
     isPendingSetCart: function(setCart, utcNow)
     {
       var page = this;
+
+      if (setCart.get('status') === 'completing')
+      {
+        return false;
+      }
 
       if (setCart.get('pending') && !setCart.get('deliveringAt'))
       {

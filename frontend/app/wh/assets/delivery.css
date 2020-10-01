@@ -78,6 +78,10 @@
   background: #FFF;
   color: #000;
 }
+.wh-delivery-item.wh-status-completing {
+  background: #ddd;
+  color: #000;
+}
 .wh-delivery-item.wh-status-delivering {
   background: #449d44;
   color: #FFF;

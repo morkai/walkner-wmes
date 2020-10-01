@@ -189,6 +189,23 @@ define([
       }
     },
 
+    $row: function(whOrder, sapOrder)
+    {
+      var selector = 'tr';
+
+      if (whOrder)
+      {
+        selector += '[data-id="' + whOrder + '"]';
+      }
+
+      if (sapOrder)
+      {
+        selector += '[data-order="' + sapOrder + '"]';
+      }
+
+      return this.$(selector);
+    },
+
     setUpPopover: function()
     {
       var view = this;
@@ -660,7 +677,7 @@ define([
     {
       if (this.plan.orders.get(sapOrder.id))
       {
-        this.$('tr[data-order="' + sapOrder.id + '"] > .planning-mrp-lineOrders-comment').html(
+        this.$row(null, sapOrder.id).find('.planning-mrp-lineOrders-comment').html(
           sapOrder.getCommentWithIcon()
         );
       }
@@ -680,7 +697,7 @@ define([
 
     onPsStatusChanged: function(sapOrder)
     {
-      var $order = this.$('tr[data-order="' + sapOrder.id + '"]');
+      var $order = this.$row(null, sapOrder.id);
 
       if ($order.length)
       {
@@ -705,7 +722,7 @@ define([
 
     onOrderChanged: function(whOrder)
     {
-      var $tr = this.$('tr[data-id="' + whOrder.id + '"]');
+      var $tr = this.$row(whOrder.id);
 
       if (!$tr.length)
       {
@@ -757,7 +774,7 @@ define([
           }
         }
 
-        var $tr = view.$('tr[data-id="' + whOrder.id + '"]');
+        var $tr = view.$row(whOrder.id);
         var $line = $tr.find('td[data-column-id="line"]');
         var popover = $line.data('bs.popover');
 
@@ -782,7 +799,7 @@ define([
           continue;
         }
 
-        var $tr = this.$('tr[data-id="' + whOrder.id + '"]');
+        var $tr = this.$row(whOrder.id);
 
         if (!$tr.length)
         {

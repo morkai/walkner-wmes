@@ -200,7 +200,14 @@ define([
 
     getStatusClassName: function(setCart)
     {
-      if (setCart.get('status') === 'delivering')
+      var status = setCart.get('status');
+
+      if (status === 'completing')
+      {
+        return 'wh-status-completing';
+      }
+
+      if (status === 'delivering')
       {
         return 'wh-status-delivering';
       }
