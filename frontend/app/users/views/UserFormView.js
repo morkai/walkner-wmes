@@ -11,13 +11,11 @@ define([
   'app/core/util/idAndLabel',
   'app/core/util/uuid',
   'app/orgUnits/views/OrgUnitDropdownsView',
+  'app/data/loadedModules',
   'app/data/aors',
   'app/data/companies',
-  'app/data/divisions',
-  'app/data/subdivisions',
   'app/data/prodFunctions',
   'app/data/privileges',
-  'app/data/loadedModules',
   'app/data/clipboard',
   'app/vendors/util/setUpVendorSelect2',
   'app/mrpControllers/util/setUpMrpSelect2',
@@ -35,13 +33,11 @@ define([
   idAndLabel,
   uuid,
   OrgUnitDropdownsView,
+  loadedModules,
   aors,
   companies,
-  divisions,
-  subdivisions,
   prodFunctions,
   privileges,
-  loadedModules,
   clipboard,
   setUpVendorSelect2,
   setUpMrpSelect2,
@@ -119,14 +115,17 @@ define([
         && user.data._id === this.model.id
         && !user.isAllowedTo('USERS:MANAGE');
 
-      this.orgUnitDropdownsView = new OrgUnitDropdownsView({
-        orgUnit: ORG_UNIT.SUBDIVISION,
-        allowClear: true
-      });
+      if (loadedModules.isLoaded('orgUnits'))
+      {
+        this.orgUnitDropdownsView = new OrgUnitDropdownsView({
+          orgUnit: ORG_UNIT.SUBDIVISION,
+          allowClear: true
+        });
 
-      this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
+        this.setView('.orgUnitDropdowns-container', this.orgUnitDropdownsView);
 
-      this.listenTo(this.orgUnitDropdownsView, 'afterRender', this.resizeColumns);
+        this.listenTo(this.orgUnitDropdownsView, 'afterRender', this.resizeColumns);
+      }
 
       $(window).on('resize.' + this.idPrefix, _.debounce(this.resizeColumns.bind(this), 16));
     },
@@ -153,14 +152,15 @@ define([
         this.setUpVendorSelect2();
         this.setUpPrivilegesControls();
 
-        this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', this.setUpOrgUnitDropdowns);
+        if (this.orgUnitDropdownsView)
+        {
+          this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', this.setUpOrgUnitDropdowns);
+        }
       }
 
       setUpMrpSelect2(this.$id('mrps'), {
         width: '100%'
       });
-
-      this.resizeColumns();
 
       if (!this.mobileList)
       {
@@ -168,6 +168,7 @@ define([
       }
 
       this.renderMobileList();
+      this.resizeColumns();
     },
 
     setUpOrgUnitDropdowns: function()
@@ -193,12 +194,13 @@ define([
 
     setUpPrivilegesControls: function()
     {
+      var view = this;
       var privilegeMap = {};
       var privilegeList = [];
 
       privileges.forEach(function(privilege)
       {
-        var tag = t('users', 'PRIVILEGE:' + privilege);
+        var tag = view.t('PRIVILEGE:' + privilege);
 
         privilegeMap[tag] = privilege;
         privilegeList.push({
@@ -207,7 +209,7 @@ define([
         });
       });
 
-      this.$id('privileges').select2({
+      view.$id('privileges').select2({
         width: '100%',
         allowClear: false,
         tags: privilegeList,
@@ -262,6 +264,7 @@ define([
       this.$id('prodFunction').select2({
         width: '100%',
         allowClear: true,
+        placeholder: ' ',
         data: prodFunctions.map(idAndLabel)
       });
     },
@@ -270,25 +273,15 @@ define([
     {
       this.$id('company').select2({
         width: '100%',
-        allowClear: true
+        allowClear: true,
+        placeholder: ' ',
+        data: companies.map(idAndLabel)
       });
     },
 
     setUpVendorSelect2: function()
     {
-      var $vendor = this.$id('vendor');
-
-      if (!loadedModules.isLoaded('vendors'))
-      {
-        $vendor.closest('.form-group').remove();
-
-        return;
-      }
-
-      setUpVendorSelect2($vendor, {
-        placeholder: t('users', 'NO_DATA:vendor')
-      });
-
+      var $vendor = setUpVendorSelect2(this.$id('vendor'));
       var vendor = this.model.get('vendor');
 
       if (vendor && vendor._id)
@@ -308,21 +301,19 @@ define([
       }
       else
       {
-        $password2[0].setCustomValidity(t('users', 'FORM:ERROR:passwordMismatch'));
+        $password2[0].setCustomValidity(this.t('FORM:ERROR:passwordMismatch'));
       }
 
       this.timers.validatePassword = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(FormView.prototype.serialize.call(this), {
-        aors: aors.toJSON(),
-        companies: companies.toJSON(),
-        privileges: privileges,
-        accountMode: this.accountMode,
-        notifications: User.NOTIFICATIONS
-      });
+      return {
+        loadedModules: loadedModules,
+        notifications: User.NOTIFICATIONS,
+        accountMode: this.accountMode
+      };
     },
 
     serializeToForm: function()
@@ -536,9 +527,9 @@ define([
       var json = jqXhr.responseJSON;
       var error = json && json.error && json.error.message;
 
-      if (t.has('users', 'FORM:ERROR:' + error))
+      if (this.t.has('FORM:ERROR:' + error))
       {
-        return this.showErrorMessage(t('users', 'FORM:ERROR:' + error));
+        return this.showErrorMessage(this.t('FORM:ERROR:' + error));
       }
 
       return FormView.prototype.handleFailure.apply(this, arguments);

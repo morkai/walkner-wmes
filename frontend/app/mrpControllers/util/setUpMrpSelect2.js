@@ -65,9 +65,14 @@ define([
 
   return function setUpMrpSelect2($input, options)
   {
-    if (!$input || !$input.length)
+    if (!$input)
     {
       throw new Error('Unspecified $input!');
+    }
+
+    if (!$input.length)
+    {
+      return $input;
     }
 
     if (!options)

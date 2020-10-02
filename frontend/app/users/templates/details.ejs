@@ -2,15 +2,24 @@
   <div class="row">
     <div class="col-lg-4">
       <div class="panel panel-primary">
-        <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:basic') %></div>
+        <div class="panel-heading"><%- t('PANEL:TITLE:details:basic') %></div>
         <div class="panel-details">
-          <%- helpers.props(model, ['active', 'login', 'personellId', 'card', 'cardUid', 'kdId', 'kdDivision', 'kdPosition']) %>
+          <%- helpers.props(model, [
+            'active',
+            'login',
+            'personellId',
+            'card',
+            'cardUid',
+            'kdId',
+            'kdDivision',
+            'kdPosition'
+          ]) %>
         </div>
       </div>
     </div>
     <div class="col-lg-4">
       <div class="panel panel-default">
-        <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:contact') %></div>
+        <div class="panel-heading"><%- t('PANEL:TITLE:details:contact') %></div>
         <div class="panel-details">
           <%- helpers.props(model, [
             'name',
@@ -24,11 +33,11 @@
 
               if (mobiles.length === 1)
               {
-                return helpers.t('DETAILS:mobile:item', mobiles[0]);
+                return t('DETAILS:mobile:item', mobiles[0]);
               }
 
               return '<ul>'
-                + mobiles.map(function(mobile) { return '<li>' + helpers.t('DETAILS:mobile:item', mobile); })
+                + mobiles.map(function(mobile) { return '<li>' + t('DETAILS:mobile:item', mobile); })
                 + '</ul>';
             }}
           ]) %>
@@ -37,17 +46,17 @@
     </div>
     <div class="col-lg-4">
       <div class="panel panel-default">
-        <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:extra') %></div>
+        <div class="panel-heading"><%- t('PANEL:TITLE:details:extra') %></div>
         <div class="panel-details">
           <%- helpers.props(model, [
-            'company',
-            'prodFunction',
-            '!orgUnit',
-            {id: '!aors', value: function(aors)
+            {id: 'company', visible: loadedModules.isLoaded('companies')},
+            {id: 'prodFunction', visible: loadedModules.isLoaded('prodFunctions')},
+            {id: '!orgUnit', visible: loadedModules.isLoaded('orgUnits')},
+            {id: '!aors', visible: loadedModules.isLoaded('aors'), value: function(aors)
             {
               if (_.isEmpty(aors))
               {
-                return helpers.t('NO_DATA:aors');
+                return t('NO_DATA:aors');
               }
 
               if (aors.length === 1)
@@ -59,7 +68,7 @@
                 + aors.map(function(aor) { return '<li>' + _.escape(aor); })
                 + '</ul>';
             }},
-            'mrps',
+            {id: 'mrps', visible: loadedModules.isLoaded('mrpControllers')},
             {id: 'vendor', visible: loadedModules.isLoaded('vendors')}
           ]) %>
         </div>
@@ -68,20 +77,20 @@
   </div>
   <% if (!_.isEmpty(model.notifications)) { %>
   <div class="panel panel-default users-details-privileges">
-    <div class="panel-heading"><%- helpers.t('PROPERTY:notifications') %></div>
+    <div class="panel-heading"><%- t('PROPERTY:notifications') %></div>
     <div class="panel-body">
       <% model.notifications.forEach(function(n) { %>
-      <span class="label label-default"><%- helpers.t('preferences:' + n) %></span>
+      <span class="label label-default"><%- t('preferences:' + n) %></span>
       <% }) %>
     </div>
   </div>
   <% } %>
   <% if (!_.isEmpty(model.privileges)) { %>
   <div class="panel panel-default users-details-privileges">
-    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:privileges') %></div>
+    <div class="panel-heading"><%- t('PANEL:TITLE:details:privileges') %></div>
     <div class="panel-body">
       <% model.privileges.forEach(function(privilege) { %>
-      <span class="label label-<%- /VIEW/.test(privilege) ? 'info' : 'warning' %>"><%- helpers.t('PRIVILEGE:' + privilege) %></span>
+      <span class="label label-<%- /VIEW/.test(privilege) ? 'info' : 'warning' %>"><%- t('PRIVILEGE:' + privilege) %></span>
       <% }) %>
     </div>
   </div>

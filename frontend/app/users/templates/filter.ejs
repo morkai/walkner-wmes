@@ -1,27 +1,29 @@
 <form class="well filter-form">
   <div class="form-group">
-    <label for="<%- idPrefix %>-personellId"><%- helpers.t('PROPERTY:personellId') %></label>
-    <input id="<%- idPrefix %>-personellId" class="form-control" name="personellId" type="text" autocomplete="new-password">
+    <label for="<%- id('personellId') %>"><%- t('PROPERTY:personellId') %></label>
+    <input id="<%- id('personellId') %>" class="form-control" name="personellId" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-login"><%- helpers.t('PROPERTY:login') %></label>
-    <input id="<%- idPrefix %>-login" class="form-control" name="login" type="text" autocomplete="new-password">
+    <label for="<%- id('login') %>"><%- t('PROPERTY:login') %></label>
+    <input id="<%- id('login') %>" class="form-control" name="login" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-searchName"><%- helpers.t('PROPERTY:lastName') %></label>
-    <input id="<%- idPrefix %>-searchName" class="form-control" name="searchName" type="text" autocomplete="new-password">
+    <label for="<%- id('searchName') %>"><%- t('PROPERTY:lastName') %></label>
+    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text" autocomplete="new-password">
   </div>
+  <% if (prodFunctions.length) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-prodFunction"><%- helpers.t('PROPERTY:prodFunction') %></label>
-    <select id="<%- idPrefix %>-prodFunction" class="form-control" name="prodFunction">
+    <label for="<%- id('prodFunction') %>"><%- t('PROPERTY:prodFunction') %></label>
+    <select id="<%- id('prodFunction') %>" class="form-control" name="prodFunction">
       <option></option>
       <% prodFunctions.forEach(function(prodFunction) { %>
       <option value="<%= prodFunction.id %>"><%= prodFunction.text %></option>
       <% }) %>
     </select>
   </div>
+  <% } %>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('filter:submit') %></span></button>
   </div>
 </form>

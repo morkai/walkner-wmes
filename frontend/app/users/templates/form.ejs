@@ -95,44 +95,48 @@
         </div>
         <% if (accountMode) { %>
         <div class="col-lg-3">
+          <% if (loadedModules.isLoaded('mrpControllers')) { %>
           <div class="form-group users-form-mrp">
             <label for="<%- id('mrps') %>" class="control-label"><%- t('PROPERTY:mrps') %></label>
             <input id="<%- id('mrps') %>" name="mrps">
           </div>
+          <% } %>
         </div>
         <% } else { %>
         <div class="col-lg-3">
+          <% if (loadedModules.isLoaded('companies')) { %>
           <div class="form-group">
             <label for="<%- id('company') %>" class="control-label"><%- t('PROPERTY:company') %></label>
-            <select id="<%- id('company') %>" name="company" data-placeholder="<%- t('NO_DATA:company') %>">
-              <option></option>
-              <% companies.forEach(function(company) { %>
-              <option value="<%- company._id %>"><%= company.name %></option>
-              <% }) %>
-            </select>
+            <input id="<%- id('company') %>" name="company">
           </div>
+          <% } %>
+          <% if (loadedModules.isLoaded('prodFunctions')) { %>
           <div class="form-group">
             <label for="<%- id('prodFunction') %>" class="control-label"><%- t('PROPERTY:prodFunction') %></label>
-            <input id="<%- id('prodFunction') %>" name="prodFunction" type="text" data-placeholder="<%- t('NO_DATA:prodFunction') %>">
+            <input id="<%- id('prodFunction') %>" name="prodFunction">
           </div>
+          <% } %>
+          <% if (loadedModules.isLoaded('orgUnits')) { %>
           <div class="orgUnitDropdowns-container"></div>
+          <% } %>
+          <% if (loadedModules.isLoaded('aors')) { %>
           <div class="form-group users-form-aor">
             <label for="<%- id('aors') %>" class="control-label"><%- t('PROPERTY:aors') %></label>
-            <select id="<%- id('aors') %>" name="aors[]" multiple data-placeholder="<%- t('NO_DATA:aors') %>">
-              <option></option>
-              <% aors.forEach(function(aor) { %>
-              <option value="<%- aor._id %>"><%= aor.name %>
-                <% }) %>
-            </select>
+            <input id="<%- id('aors') %>" name="aors[]">
           </div>
+          <% } %>
+          <% if (loadedModules.isLoaded('mrpControllers')) { %>
           <div class="form-group users-form-mrp">
             <label for="<%- id('mrps') %>" class="control-label"><%- t('PROPERTY:mrps') %></label>
             <input id="<%- id('mrps') %>" name="mrps">
           </div>
+          <% } %>
+          <% if (loadedModules.isLoaded('vendors')) { %>
           <div class="form-group">
             <label for="<%- id('vendor') %>" class="control-label"><%- t('PROPERTY:vendor') %></label>
-            <input id="<%- id('vendor') %>" type="text" name="vendor" maxlength="15">
+            <input id="<%- id('vendor') %>" name="vendor">
           </div>
+          <% } %>
         </div>
         <% } %>
       </div>

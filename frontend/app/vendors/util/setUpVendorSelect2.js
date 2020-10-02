@@ -26,11 +26,18 @@ define([
 
   return function setUpVendorSelect2($vendor, options)
   {
+    $vendor.prepareData = vendorToSelect2;
+
+    if (!$vendor.length)
+    {
+      return $vendor;
+    }
+
     $vendor.select2(_.assign({
       width: '100%',
       allowClear: true,
       minimumInputLength: 3,
-      placeholder: t('vendors', 'select2:placeholder'),
+      placeholder: ' ',
       ajax: {
         cache: true,
         quietMillis: 300,
@@ -54,8 +61,6 @@ define([
         }
       }
     }, options));
-
-    $vendor.prepareData = vendorToSelect2;
 
     return $vendor;
   };

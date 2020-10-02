@@ -1,8 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/data/loadedModules',
   'app/core/views/ListView'
 ], function(
+  loadedModules,
   ListView
 ) {
   'use strict';
@@ -21,9 +23,10 @@ define([
       {id: 'lastName', className: 'is-min'},
       {id: 'firstName', className: 'is-min'},
       {id: 'active', className: 'is-min'},
-      {id: 'company', className: 'is-min'},
-      {id: 'orgUnit', className: 'is-min'},
-      'prodFunction'
+      {id: 'company', className: 'is-min', visible: loadedModules.isLoaded('companies')},
+      {id: 'orgUnit', className: 'is-min', visible: loadedModules.isLoaded('orgUnits')},
+      {id: 'prodFunction', visible: loadedModules.isLoaded('prodFunctions')},
+      '-'
     ]
 
   });

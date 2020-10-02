@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'app/data/loadedModules',
   'app/data/prodFunctions',
   'app/core/util/idAndLabel',
   'app/core/views/FilterView',
@@ -9,6 +10,7 @@ define([
   'app/users/templates/filter'
 ], function(
   _,
+  loadedModules,
   prodFunctions,
   idAndLabel,
   FilterView,
@@ -20,12 +22,6 @@ define([
   return FilterView.extend({
 
     template: filterTemplate,
-
-    defaultFormData: {
-      personellId: '',
-      login: '',
-      searchName: ''
-    },
 
     termToForm: {
       'personellId': function(propertyName, term, formData)
@@ -43,11 +39,11 @@ define([
       'searchName': 'personellId'
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        prodFunctions: prodFunctions.map(idAndLabel)
-      });
+      return {
+        prodFunctions: loadedModules.isLoaded('prodFunctions') ? prodFunctions.map(idAndLabel) : []
+      };
     },
 
     serializeFormToQuery: function(selector)
@@ -55,7 +51,6 @@ define([
       var personellId = parseInt(this.$id('personellId').val().trim(), 10);
       var login = this.$id('login').val().trim();
       var searchName = setUpUserSelect2.transliterate(this.$id('searchName').val());
-      var prodFunction = this.$id('prodFunction').val();
 
       if (!isNaN(personellId))
       {
@@ -71,6 +66,8 @@ define([
       {
         selector.push({name: 'regex', args: ['searchName', '^' + searchName]});
       }
+
+      var prodFunction = this.$id('prodFunction').val() || '';
 
       if (prodFunction.length)
       {
