@@ -1,0 +1,39 @@
+{
+  "BREADCRUMB:browse": "ZPW",
+
+  "PROPERTY:_id": "ID",
+  "PROPERTY:createdAt": "Czas zgłoszenia",
+  "PROPERTY:creator": "Zgłaszający",
+  "PROPERTY:manager": "Kierownik",
+  "PROPERTY:coordinator": "Koordynator",
+  "PROPERTY:implementer": "Realizator",
+  "PROPERTY:workplace": "Zakład",
+  "PROPERTY:division": "Wydział",
+  "PROPERTY:building": "Budynek",
+  "PROPERTY:eventCategory": "Kategoria zdarzenia",
+  "PROPERTY:reasonCategory": "Kategoria przyczyny",
+  "PROPERTY:kind": "Rodzaj",
+  "PROPERTY:materialLoss": "Strata materiałowa",
+  "PROPERTY:priority": "Priorytet akcji",
+  "PROPERTY:problem": "Opis problemu",
+  "PROPERTY:solution": "Propozycja rozwiązania",
+  "PROPERTY:anonymous": "Zgłoszenie anonimowe",
+
+  "kind:osh": "BHP",
+  "kind:ep": "Ochrona środowiska",
+  "kind:infra": "Infrastruktura",
+
+  "priority:low": "Niski",
+  "priority:normal": "Normalny",
+  "priority:high": "Wysoki",
+  "priority:critical": "Krytyczny",
+
+  "filter:user:mine": "Moje",
+  "filter:user:others": "Uczestnik",
+
+  "details:general": "Podstawowe informacje",
+  "details:users": "Uczestnicy",
+  "details:extra": "Dodatkowe informacje",
+  "details:image": "Zdjęcie",
+  "details:history": "Historia zmian"
+}

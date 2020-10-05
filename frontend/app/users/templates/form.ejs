@@ -137,6 +137,16 @@
             <input id="<%- id('vendor') %>" name="vendor">
           </div>
           <% } %>
+          <% if (loadedModules.isLoaded('wmes-osh')) { %>
+          <div class="form-group">
+            <label for="<%- id('oshWorkplace') %>" class="control-label"><%- t('PROPERTY:oshWorkplace') %></label>
+            <input id="<%- id('oshWorkplace') %>" name="oshWorkplace">
+          </div>
+          <div class="form-group">
+            <label for="<%- id('oshDivision') %>" class="control-label"><%- t('PROPERTY:oshDivision') %></label>
+            <input id="<%- id('oshDivision') %>" name="oshDivision">
+          </div>
+          <% } %>
         </div>
         <% } %>
       </div>

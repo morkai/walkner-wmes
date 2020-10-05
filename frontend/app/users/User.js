@@ -1,24 +1,26 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/i18n',
   'app/core/Model',
+  'app/data/loadedModules',
   'app/data/aors',
   'app/data/companies',
   'app/data/prodFunctions',
   'app/data/orgUnits',
-  'app/data/loadedModules',
   'app/orgUnits/util/renderOrgUnitPath'
 ], function(
+  require,
   _,
   t,
   Model,
+  loadedModules,
   aors,
   companies,
   prodFunctions,
   orgUnits,
-  loadedModules,
   renderOrgUnitPath
 ) {
   'use strict';
@@ -153,6 +155,14 @@ define([
         {
           obj.vendor = obj.vendor._id;
         }
+      }
+
+      if (loadedModules.isLoaded('wmes-osh'))
+      {
+        var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+
+        obj.oshWorkplace = oshDictionaries.getLabel('workplace', obj.oshWorkplace, {long: true});
+        obj.oshDivision = oshDictionaries.getLabel('division', obj.oshDivision, {long: true});
       }
 
       return obj;

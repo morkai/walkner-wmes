@@ -66,6 +66,10 @@ input[type="month"] {
 .radio {
   margin-bottom: 0;
 }
+.checkbox:first-child,
+.radio:first-child {
+  margin-top: 0;
+}
 .radio-inline > label,
 .checkbox-inline > label {
   font-weight: normal;
@@ -219,6 +223,7 @@ label + .help-block {
 .form-row > .form-group:first-child {
   margin-left: 0;
 }
-.form-row + .checkbox {
+.form-row + .checkbox,
+.form-row + .radio {
   margin-top: 0;
 }

@@ -55,7 +55,7 @@ define([
 
       html += ' ' + k;
 
-      if (v != null)
+      if (v != null && v !== true)
       {
         if (k === 'class' && typeof v !== 'string')
         {

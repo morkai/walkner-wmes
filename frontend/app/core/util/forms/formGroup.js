@@ -140,6 +140,35 @@ define([
         inputAttrs.pattern = options.pattern || false;
         inputAttrs.maxlength = options.maxLength > 0 ? options.maxLength : false;
         break;
+
+      case 'select':
+        inputTag = 'select';
+        inputAttrs.type = false;
+        inputAttrs.multiple = options.multiple === true;
+        inputAttrs.size = options.size || 1;
+
+        if (options.expandable)
+        {
+          inputAttrs.multiple = true;
+
+          if (!/]$/.test(inputAttrs.name))
+          {
+            inputAttrs.name += '[]';
+          }
+
+          inputClassNames.push('is-expandable');
+        }
+
+        if (options.emptyOption)
+        {
+          inputInner = html.tag('option');
+        }
+
+        options.options.forEach(function(option)
+        {
+          inputInner += html.tag('option', Object.assign({}, option, {label: false}), option.label);
+        });
+        break;
     }
 
     inputAttrs.className = html.className(inputClassNames, options.inputClassName);

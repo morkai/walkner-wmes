@@ -47,6 +47,8 @@
     "PROPERTY:mrps": "My MRPs",
     "PROPERTY:notifications": "Notifications",
     "PROPERTY:apiKey": "API key",
+    "PROPERTY:oshWorkplace": "Workplace",
+    "PROPERTY:oshDivision": "Division",
 
     "active:true": "Yes",
     "active:false": "No",

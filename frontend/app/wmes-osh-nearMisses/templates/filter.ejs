@@ -1,0 +1,75 @@
+<form class="well filter-form" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix,
+    property: 'createdAt',
+    hidden: true
+  }) %>
+  <div class="form-group" style="min-width: 280px">
+    <div class="filter-radioLabels">
+      <% ['mine', 'others'].forEach(function(userType) { %>
+      <label>
+        <input name="userType" type="radio" value="<%- userType %>">
+        <%- t('filter:user:' + userType) %>
+      </label>
+      <% }) %>
+    </div>
+    <input id="<%- id('user') %>" name="user" type="text">
+  </div>
+  <%- helpers.formGroup({
+    name: 'workplace',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'workplace'}
+  }) %>
+  <%- helpers.formGroup({
+    name: 'division',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'division'}
+  }) %>
+  <%- helpers.formGroup({
+    name: 'building',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'building'}
+  }) %>
+  <%- helpers.formGroup({
+    name: 'kind',
+    type: 'select',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'kind'},
+    expandable: true,
+    options: dictionaries.nearMiss.kinds.map(value => ({value, label: t(`kind:${value}`)}))
+  }) %>
+  <%- helpers.formGroup({
+    name: 'eventCategory',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'eventCategory'}
+  }) %>
+  <%- helpers.formGroup({
+    name: 'reasonCategory',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'reasonCategory'}
+  }) %>
+  <%- helpers.formGroup({
+    name: 'priority',
+    type: 'select',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'priority'},
+    expandable: true,
+    options: dictionaries.nearMiss.priorities.map(value => ({value, label: t(`priority:${value}`)}))
+  }) %>
+  <%- renderLimit({hidden: true}) %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>

@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'jquery',
   'app/i18n',
@@ -23,6 +24,7 @@ define([
   'app/users/templates/formMobileList',
   'app/users/templates/form'
 ], function(
+  require,
   _,
   $,
   t,
@@ -102,7 +104,11 @@ define([
         }
       },
       'click #-copyPrivileges': 'copyPrivileges',
-      'click #-genApiKey': 'genApiKey'
+      'click #-genApiKey': 'genApiKey',
+      'change #-oshWorkplace': function()
+      {
+        this.setUpOshSelect2(this.$id('oshWorkplace').val() || null, null);
+      }
     },
 
     initialize: function()
@@ -147,6 +153,7 @@ define([
           allowClear: true
         });
 
+        this.setUpOshSelect2();
         this.setUpProdFunctionSelect2();
         this.setUpCompanySelect2();
         this.setUpVendorSelect2();
@@ -190,6 +197,42 @@ define([
       }
 
       this.orgUnitDropdownsView.selectValue(model, orgUnit);
+    },
+
+    setUpOshSelect2: function(workplace, division)
+    {
+      var $workplace = this.$id('oshWorkplace');
+      var $division = this.$id('oshDivision');
+
+      if (!$workplace.length)
+      {
+        return;
+      }
+
+      if (workplace === undefined)
+      {
+        workplace = this.model.get('oshWorkplace');
+        division = this.model.get('oshDivision');
+      }
+
+      $workplace.val(workplace || '');
+      $division.val(division || '');
+
+      var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+
+      $workplace.select2({
+        width: '100%',
+        allowClear: true,
+        placeholder: ' ',
+        data: oshDictionaries.workplaces.map(idAndLabel)
+      });
+
+      $division.select2({
+        width: '100%',
+        allowClear: true,
+        placeholder: ' ',
+        data: oshDictionaries.divisions.where({workplace: +workplace}).map(idAndLabel)
+      });
     },
 
     setUpPrivilegesControls: function()
@@ -345,7 +388,7 @@ define([
         }
       });
 
-      ['company', 'prodFunction', 'vendor'].forEach(function(prop)
+      ['company', 'prodFunction', 'vendor', 'oshWorkplace', 'oshDivision'].forEach(function(prop)
       {
         if (!formData[prop] || !formData[prop].length)
         {

@@ -1,0 +1,15 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'active',
+        'workplace',
+        'shortName',
+        'longName',
+        '!manager',
+        {id: '!coordinators', value: users => users.length ? `<ul><li>${users.join('<li>')}</ul>` : ''}
+      ]) %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+{
+  "navbar:workplaces": "Zakłady",
+  "navbar:divisions": "Wydziały",
+  "navbar:buildings": "Budynki",
+  "navbar:eventCategories": "Kategorie zdarzeń",
+  "navbar:reasonCategories": "Kategorie przyczyn",
+
+  "navbar:nearMisses": "ZPW",
+
+  "navbar:search:nearMisses": "ZPW"
+
+}

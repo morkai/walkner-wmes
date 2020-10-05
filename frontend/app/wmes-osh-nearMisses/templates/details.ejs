@@ -1,0 +1,72 @@
+<div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%- t('details:general') %></div>
+        <div class="panel-details">
+          <%- helpers.props(model, [
+            '_id',
+            'workplace',
+            'division',
+            'building',
+            'kind',
+            'eventCategory',
+            'reasonCategory'
+          ]) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:users') %></div>
+        <div class="panel-details">
+          <%- helpers.props(model, [
+            '!creator',
+            '!implementer',
+            '!coordinator',
+            '!manager'
+          ]) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:extra') %></div>
+        <div class="panel-details">
+          <%- helpers.props(model, [
+            'createdAt',
+            'priority'
+          ]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 30px">
+    <div class="col-md-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading"><%- t('PROPERTY:problem') %></div>
+        <div class="panel-body text-lines"><%= model.problem %></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-success">
+        <div class="panel-heading"><%- t('PROPERTY:solution') %></div>
+        <div class="panel-body text-lines"><%= model.solution || '?' %></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:image') %></div>
+        <div class="panel-body">
+          ??? TODO ???
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default" style="margin-top: 30px">
+    <div class="panel-heading"><%- t('details:history') %></div>
+    <div class="panel-body">
+      ??? TODO ???
+    </div>
+  </div>
+</div>

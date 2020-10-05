@@ -268,8 +268,29 @@ define([
 
     var userId = $input.val();
     var rootData = getRootData();
+    var userInfo = options.currentUserInfo;
 
-    if (userId === rootData.id)
+    if (userInfo)
+    {
+      if (Array.isArray(userInfo))
+      {
+        $input.select2('data', userInfo.map(function(u)
+        {
+          return {
+            id: u.id,
+            text: u.label
+          };
+        }));
+      }
+      else
+      {
+        $input.select2('data', {
+          id: userInfo.id,
+          text: userInfo.label
+        });
+      }
+    }
+    else if (userId === rootData.id)
     {
       $input.select2('data', rootData);
     }

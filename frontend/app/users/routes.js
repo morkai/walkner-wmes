@@ -89,11 +89,10 @@ define([
   router.map('/users;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/users/views/UserFormView'],
-      function(AddFormPage, UserFormView)
+      ['app/users/pages/UserAddFormPage'],
+      function(UserAddFormPage)
       {
-        return new AddFormPage({
-          FormView: UserFormView,
+        return new UserAddFormPage({
           model: new User()
         });
       }

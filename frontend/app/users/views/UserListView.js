@@ -25,6 +25,8 @@ define([
       {id: 'active', className: 'is-min'},
       {id: 'company', className: 'is-min', visible: loadedModules.isLoaded('companies')},
       {id: 'orgUnit', className: 'is-min', visible: loadedModules.isLoaded('orgUnits')},
+      {id: 'oshWorkplace', className: 'is-min', visible: loadedModules.isLoaded('wmes-osh')},
+      {id: 'oshDivision', className: 'is-min', visible: loadedModules.isLoaded('wmes-osh')},
       {id: 'prodFunction', visible: loadedModules.isLoaded('prodFunctions')},
       '-'
     ]

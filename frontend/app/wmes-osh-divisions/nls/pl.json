@@ -1,0 +1,10 @@
+{
+  "BREADCRUMB:browse": "Wydziały",
+
+  "PROPERTY:active": "Aktywny?",
+  "PROPERTY:workplace": "Zakład",
+  "PROPERTY:shortName": "Krótka nazwa",
+  "PROPERTY:longName": "Długa nazwa",
+  "PROPERTY:manager": "Kierownik",
+  "PROPERTY:coordinators": "Koordynatorzy"
+}

@@ -1,14 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/user',
   'app/core/pages/EditFormPage',
+  'app/data/loadedModules',
   '../views/UserFormView'
 ], function(
-  t,
   user,
   EditFormPage,
+  loadedModules,
   UserFormView
 ) {
   'use strict';
@@ -31,6 +31,16 @@ define([
         },
         this.t('core', 'BREADCRUMB:editForm')
       ];
+    },
+
+    initialize: function()
+    {
+      EditFormPage.prototype.initialize.apply(this, arguments);
+
+      if (loadedModules.isLoaded('wmes-osh'))
+      {
+        require('app/wmes-osh-common/dictionaries').bind(this);
+      }
     }
 
   });

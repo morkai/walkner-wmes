@@ -97,6 +97,10 @@ define([
         e.preventDefault();
 
         ActionFormView.showDeleteDialog({model: this.getModelFromEvent(e)});
+      },
+      'click .is-filter': function(e)
+      {
+        this.trigger('showFilter', e.currentTarget.dataset.columnId);
       }
     },
 
@@ -283,6 +287,11 @@ define([
         _.result(column, prefix + 'ClassName')
       );
 
+      if (column.min)
+      {
+        className.push('is-min');
+      }
+
       className = className.filter(function(cn) { return !!cn; }).join(' ');
 
       var htmlAttrs = [];
@@ -304,7 +313,7 @@ define([
 
       if (attrs.title)
       {
-        attrs.title = attrs.title.replace(/<\/?[a-z].*?>/g, '');
+        attrs.title = String(attrs.title).replace(/<\/?[a-z].*?>/g, '');
       }
 
       if (column.width)

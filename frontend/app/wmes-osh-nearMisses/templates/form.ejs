@@ -1,0 +1,108 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <% if (!editMode) { %>
+      <div class="checkbox" style="margin-bottom: 15px">
+        <label class="control-label">
+          <input id="<%- id('anonymous') %>" type="checkbox" name="anonymous" value="true">
+          <%- t('PROPERTY:anonymous') %>
+        </label>
+      </div>
+      <% } %>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'workplace',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'division',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'building',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-4'
+        }) %>
+      </div>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'coordinator',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'implementer',
+          type: 'select2',
+          label: 'PROPERTY:',
+          groupClassName: 'col-md-4'
+        }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:kind') %></label>
+        <br>
+        <% dictionaries.nearMiss.kinds.forEach(kind => { %>
+        <label class="radio-inline">
+          <input name="kind" type="radio" value="<%- kind %>">
+          <%- t(`kind:${kind}`) %>
+        </label>
+        <% }) %>
+      </div>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'eventCategory',
+          type: 'select2',
+          label: 'PROPERTY:',
+          groupClassName: 'col-md-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'reasonCategory',
+          type: 'select2',
+          label: 'PROPERTY:',
+          groupClassName: 'col-md-4'
+        }) %>
+      </div>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'problem',
+          type: 'textarea',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-6',
+          rows: 5
+        }) %>
+        <%- helpers.formGroup({
+          name: 'solution',
+          type: 'textarea',
+          label: 'PROPERTY:',
+          groupClassName: 'col-md-6',
+          rows: 5
+        }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:priority') %></label>
+        <br>
+        <% dictionaries.nearMiss.priorities.forEach(priority => { %>
+        <label class="radio-inline">
+          <input name="priority" type="radio" value="<%- priority %>">
+          <%- t(`priority:${priority}`) %>
+        </label>
+        <% }) %>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

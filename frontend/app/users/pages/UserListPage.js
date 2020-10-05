@@ -1,26 +1,30 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'jquery',
   'app/i18n',
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
+  'app/data/loadedModules',
   '../UserCollection',
-  '../views/UserListView',
   '../views/UserFilterView',
+  '../views/UserListView',
   'app/core/templates/listPage'
 ], function(
+  require,
   $,
   t,
   viewport,
   bindLoadingMessage,
   pageActions,
   View,
+  loadedModules,
   UserCollection,
-  UserListView,
   UserFilterView,
+  UserListView,
   listPageTemplate
 ) {
   'use strict';
@@ -53,7 +57,7 @@ define([
           privileges: 'USERS:MANAGE',
           callback: function()
           {
-            page.$syncAction = $('a', this);
+            page.$syncAction = $('button', this);
 
             page.syncUsers();
 
@@ -71,13 +75,18 @@ define([
 
     initialize: function()
     {
+      if (loadedModules.isLoaded('wmes-osh'))
+      {
+        require('app/wmes-osh-common/dictionaries').bind(this);
+      }
+
       this.$syncAction = null;
 
       this.defineModels();
       this.defineViews();
 
-      this.setView('.filter-container', this.filterView);
-      this.setView('.list-container', this.listView);
+      this.setView('#-filter', this.filterView);
+      this.setView('#-list', this.listView);
     },
 
     defineModels: function()
@@ -89,11 +98,11 @@ define([
 
     defineViews: function()
     {
-      this.listView = new UserListView({collection: this.collection});
-
       this.filterView = new UserFilterView({
         model: this.collection
       });
+
+      this.listView = new UserListView({collection: this.collection});
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },

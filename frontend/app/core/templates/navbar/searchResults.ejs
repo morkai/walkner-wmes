@@ -91,6 +91,11 @@
   <li class="navbar-search-result"><a href="#<%- type %>/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:' + type) %></a></li>
   <% } %>
   <% }) %>
+  <% if (loadedModules.isLoaded('wmes-osh')) { %>
+  <% ['nearMisses'].forEach(function(type) { %>
+  <li class="navbar-search-result"><a href="#osh/<%- type %>/<%- results.entryId %>"><%- t('wmes-osh-common', 'navbar:search:' + type) %></a></li>
+  <% }) %>
+  <% } %>
   <li class="divider"></li>
   <% } %>
 
