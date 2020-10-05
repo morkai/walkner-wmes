@@ -273,6 +273,10 @@ define([
         var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
         var quantityTodo = lineOrder.get('quantity');
         var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, lineOrder);
+        var shiftOrderCompleted = quantityDone >= quantityTodo;
+        var sapOrderCompleted = orderData.quantityDone >= orderData.quantityTodo;
+        var confirmed = orderData.statuses.indexOf('CNF') !== -1;
+        var delivered = orderData.statuses.indexOf('DLV') !== -1;
 
         shift.orders.push({
           _id: lineOrder.id,
@@ -280,10 +284,10 @@ define([
           quantity: lineOrder.get('quantity'),
           missing: planOrder ? '' : 'is-missing',
           incomplete: planOrder && planOrder.get('incomplete') > 0 ? 'is-incomplete' : '',
-          completed: quantityDone >= quantityTodo ? 'is-completed' : '',
+          completed: shiftOrderCompleted || sapOrderCompleted || confirmed || delivered ? 'is-completed' : '',
           started: quantityDone > 0 && quantityDone < quantityTodo ? 'is-started' : '',
-          confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
-          delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
+          confirmed: confirmed ? 'is-cnf' : '',
+          delivered: delivered ? 'is-dlv' : '',
           selected: shift.state && orderNo === prodState.orderNo ? 'is-selected' : '',
           external: mrp !== planMrp.id ? 'is-external' : '',
           finishAt: finishAt,
