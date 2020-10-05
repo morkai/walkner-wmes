@@ -39,6 +39,7 @@
     "filter:orders": "Order",
     "filter:lines": "Line",
     "filter:mrps": "MRP",
+    "filter:sets": "Set",
     "filter:useDarkerTheme": "High contrast",
 
     "empty": "No plan for the specified filters.",

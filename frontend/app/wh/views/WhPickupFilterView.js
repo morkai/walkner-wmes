@@ -35,6 +35,8 @@ define([
       'change #-to': 'changeFilter',
       'change #-orders': 'scheduleChangeFilter',
       'input #-orders': 'scheduleChangeFilter',
+      'change #-sets': 'scheduleChangeFilter',
+      'input #-sets': 'scheduleChangeFilter',
       'change #-lines': 'changeFilter',
       'change #-mrps': 'changeFilter',
       'change input[name="filter"]': function()
@@ -72,6 +74,7 @@ define([
       var orders = displayOptions.get('orders').join(' ');
       var lines = displayOptions.get('lines').join(',');
       var mrps = displayOptions.get('mrps').join(',');
+      var sets = displayOptions.get('sets').join(' ');
       var filter = 'orders';
 
       if (!orders.length)
@@ -83,6 +86,10 @@ define([
         else if (mrps.length)
         {
           filter = 'mrps';
+        }
+        else if (sets.length)
+        {
+          filter = 'sets';
         }
       }
 
@@ -96,7 +103,8 @@ define([
         filter: filter,
         orders: orders,
         lines: lines,
-        mrps: mrps
+        mrps: mrps,
+        sets: sets
       };
     },
 
@@ -115,16 +123,19 @@ define([
       var $orders = this.$id('orders');
       var $lines = this.$id('lines');
       var $mrps = this.$id('mrps');
+      var $sets = this.$id('sets');
 
       if (filter === 'orders')
       {
         $lines.prev().css('display', 'none');
         $mrps.prev().css('display', 'none');
+        $sets.addClass('hidden');
         $orders.removeClass('hidden').focus();
       }
       else if (filter === 'lines')
       {
         $orders.addClass('hidden');
+        $sets.addClass('hidden');
         $mrps.prev().css('display', 'none');
         $lines.prev().css('display', '');
         $lines.select2('focus');
@@ -132,9 +143,17 @@ define([
       else if (filter === 'mrps')
       {
         $orders.addClass('hidden');
+        $sets.addClass('hidden');
         $lines.prev().css('display', 'none');
         $mrps.prev().css('display', '');
         $mrps.select2('focus');
+      }
+      else if (filter === 'sets')
+      {
+        $lines.prev().css('display', 'none');
+        $mrps.prev().css('display', 'none');
+        $orders.addClass('hidden');
+        $sets.removeClass('hidden').focus();
       }
     },
 
@@ -160,10 +179,17 @@ define([
       this.$id('useDarkerTheme').toggleClass('active', this.plan.displayOptions.isDarkerThemeUsed());
     },
 
-    scheduleChangeFilter: function()
+    scheduleChangeFilter: function(e)
     {
+      var delay = 333;
+
+      if (e && e.target && e.target.name === 'sets')
+      {
+        delay = 500;
+      }
+
       clearTimeout(this.timers.changeFilter);
-      this.timers.changeFilter = setTimeout(this.changeFilter.bind(this), 333);
+      this.timers.changeFilter = setTimeout(this.changeFilter.bind(this), delay);
     },
 
     changeFilter: function()
@@ -183,7 +209,8 @@ define([
         to: view.$id('to').val() || '06:00',
         orders: [],
         lines: [],
-        mrps: []
+        mrps: [],
+        sets: []
       };
 
       if (!data.whStatuses || data.whStatuses.length === $whStatuses[0].options.length)
@@ -202,21 +229,40 @@ define([
       }
 
       var filter = view.$('input[name="filter"]:checked').val();
-      var orders = filter === 'orders';
+      var validRe = filter === 'orders' ? /^[0-9]{9}$/ : filter === 'sets' ? /^[0-9]{1,3}$/ : null;
+      var splitRe = filter === 'orders' || filter === 'sets' ? /[^0-9]+/ : ',';
 
-      data[filter] = view.$id(filter).val().split(orders ? /[^0-9]+/ : ',').filter(function(v)
-      {
-        if (!v)
+      data[filter] = view.$id(filter)
+        .val()
+        .split(splitRe)
+        .filter(function(v)
         {
-          return false;
-        }
+          if (!v)
+          {
+            return false;
+          }
 
-        return orders ? /^[0-9]{9}$/.test(v) : true;
-      });
+          return validRe ? validRe.test(v) : true;
+        });
+
+      if (data.sets.length)
+      {
+        data.sets = data.sets.map(function(v) { return +v; });
+      }
 
       var displayOptions = {};
 
-      ['whStatuses', 'psStatuses', 'distStatuses', 'from', 'to', 'orders', 'lines', 'mrps'].forEach(function(prop)
+      [
+        'whStatuses',
+        'psStatuses',
+        'distStatuses',
+        'from',
+        'to',
+        'orders',
+        'lines',
+        'mrps',
+        'sets'
+      ].forEach(function(prop)
       {
         if (!_.isEqual(data[prop], view.plan.displayOptions.get(prop)))
         {
@@ -235,7 +281,7 @@ define([
       var view = this;
       var loading = view.plan.get('loading');
 
-      ['whStatuses', 'psStatuses', 'distStatuses', 'from', 'to', 'orders'].forEach(function(prop)
+      ['whStatuses', 'psStatuses', 'distStatuses', 'from', 'to', 'orders', 'sets'].forEach(function(prop)
       {
         view.$id(prop).prop('disabled', loading);
       });

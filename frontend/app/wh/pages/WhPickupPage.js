@@ -300,7 +300,11 @@ define([
           psStatuses: page.options.psStatuses,
           distStatuses: page.options.distStatuses,
           from: page.options.from,
-          to: page.options.to
+          to: page.options.to,
+          orders: page.options.orders,
+          lines: page.options.lines,
+          mrps: page.options.mrps,
+          sets: page.options.sets
         }, {
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
@@ -376,7 +380,7 @@ define([
       page.listenTo(plan.displayOptions, 'change:distStatuses', page.onDistStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
-      page.listenTo(plan.displayOptions, 'change:orders change:lines change:mrps', page.scheduleUpdateUrl);
+      page.listenTo(plan.displayOptions, 'change:orders change:lines change:mrps change:sets', page.scheduleUpdateUrl);
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
@@ -489,7 +493,17 @@ define([
       {
         var params = [];
 
-        ['from', 'to', 'whStatuses', 'psStatuses', 'distStatuses', 'orders', 'lines', 'mrps'].forEach(function(prop)
+        [
+          'from',
+          'to',
+          'whStatuses',
+          'psStatuses',
+          'distStatuses',
+          'orders',
+          'lines',
+          'mrps',
+          'sets'
+        ].forEach(function(prop)
         {
           var value = plan.displayOptions.get(prop);
 

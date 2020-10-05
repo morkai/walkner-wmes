@@ -86,6 +86,7 @@ define([
         orders: displayOptions.get('orders') || [],
         lines: displayOptions.get('lines') || [],
         mrps: displayOptions.get('mrps') || [],
+        sets: displayOptions.get('sets') || [],
         startTime: displayOptions.getStartTimeRange(plan.id)
       };
     },

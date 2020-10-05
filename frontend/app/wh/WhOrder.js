@@ -145,6 +145,7 @@ define([
         || (filters.psStatuses.length > 0 && !filters.psStatuses.includes(obj.psStatus))
         || (filters.distStatuses.length > 0 && !filters.distStatuses.includes(obj.distStatus))
         || (filters.orders.length > 0 && !filters.orders.includes(obj.order))
+        || (filters.sets.length > 0 && !filters.sets.includes(obj.set))
         || (filters.lines.length > 0 && !obj.lines.some(function(l) { return filters.lines.includes(l._id); }))
         || (filters.mrps.length > 0 && !filters.mrps.includes(obj.mrp));
 

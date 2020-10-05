@@ -38,6 +38,7 @@
   "filter:orders": "Zlecenie",
   "filter:lines": "Linia",
   "filter:mrps": "MRP",
+  "filter:sets": "Set",
   "filter:useDarkerTheme": "Wysoki kontrast",
 
   "empty": "Brak planu dla wybranych filtrów.",

@@ -127,7 +127,7 @@ define([
       view.listenTo(plan.displayOptions, 'change:from change:to', view.toggleOrderRowVisibility);
       view.listenTo(
         plan.displayOptions,
-        'change:orders change:lines change:mrps',
+        'change:orders change:lines change:mrps change:sets',
         _.debounce(view.toggleOrderRowVisibility.bind(view), 1)
       );
 
@@ -874,6 +874,11 @@ define([
           hidden = filters.mrps.indexOf(whOrder.get('mrp')) === -1;
         }
 
+        if (!hidden && filters.sets.length)
+        {
+          hidden = filters.sets.indexOf(whOrder.get('set')) === -1;
+        }
+
         this.classList.toggle('hidden', hidden);
       });
 
@@ -891,6 +896,7 @@ define([
         && _.isEmpty(options.get('orders'))
         && _.isEmpty(options.get('lines'))
         && _.isEmpty(options.get('mrps'))
+        && _.isEmpty(options.get('sets'))
         && options.get('from') === '06:00'
         && options.get('to') === '06:00')
       {

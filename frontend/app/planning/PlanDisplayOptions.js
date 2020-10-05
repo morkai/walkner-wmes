@@ -24,6 +24,7 @@ define([
         mrps: [],
         lines: [],
         orders: [],
+        sets: [],
         whStatuses: [],
         psStatuses: [],
         distStatuses: [],
@@ -139,11 +140,18 @@ define([
         displayOptions.set('division', attrs.division);
       }
 
-      ['mrps', 'lines', 'orders', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
+      ['mrps', 'lines', 'orders', 'sets', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
       {
-        if (Array.isArray(attrs[prop]))
+        var value = attrs[prop];
+
+        if (Array.isArray(value))
         {
-          displayOptions.set(prop, attrs[prop]);
+          if (prop === 'sets')
+          {
+            value = value.map(function(v) { return +v; });
+          }
+
+          displayOptions.set(prop, value);
         }
       });
 

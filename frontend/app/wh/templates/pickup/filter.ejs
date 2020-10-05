@@ -43,7 +43,7 @@
   </div>
   <div class="form-group">
     <div class="filter-radioLabels">
-      <% ['orders', 'lines', 'mrps'].forEach(function(f) { %>
+      <% ['orders', 'lines', 'mrps', 'sets'].forEach(function(f) { %>
       <label>
         <input name="filter" type="radio" value="<%- f %>" <%- filter === f ? 'checked' : '' %>>
         <%- t('filter:' + f) %>
@@ -53,6 +53,7 @@
     <input id="<%- id('orders') %>" name="orders" type="text" class="form-control" value="<%- orders %>" style="width: 698px">
     <input id="<%- id('lines') %>" name="lines" type="text" value="<%= lines %>">
     <input id="<%- id('mrps') %>" name="mrps" type="text" value="<%= mrps %>">
+    <input id="<%- id('sets') %>" name="sets" type="text" class="form-control" value="<%- sets %>" style="width: 698px">
   </div>
   <div class="form-group filter-actions">
     <div class="btn-group">
