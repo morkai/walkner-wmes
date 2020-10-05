@@ -62,9 +62,9 @@ define([
 
     termToForm: {
       'createdAt': dateTimeRange.rqlToForm,
-      'orderNo': function(propertyName, term, formData)
+      'orders.orderNo': function(propertyName, term, formData)
       {
-        formData.order = term.args[1];
+        formData.orderNo = term.args[1];
       },
       'oldComponents._id': function(propertyName, term, formData)
       {
@@ -160,7 +160,7 @@ define([
 
       if (orderNo.length === 9)
       {
-        selector.push({name: 'eq', args: ['orders._id', orderNo]});
+        selector.push({name: 'eq', args: ['orders.orderNo', orderNo]});
       }
 
       if (oldComponent.length)
