@@ -145,6 +145,15 @@ define([
           mergeV: 1,
           caption: view.t('stats:date')
         },
+        division: {
+          type: 'string',
+          width: 10,
+          headerRotation: 0,
+          headerAlignmentH: 'Center',
+          headerAlignmentV: 'Center',
+          mergeV: 1,
+          caption: view.t('stats:division')
+        },
         mrp: {
           type: 'string',
           width: 5,
@@ -177,6 +186,7 @@ define([
 
       var rows = [{
         date: '',
+        division: '',
         mrp: '',
         line: '',
         todo$manHours: view.t('stats:manHours'),
@@ -204,6 +214,7 @@ define([
       {
         rows.push({
           date: stats.date,
+          division: _.isEmpty(stats.division) ? '' : stats.division.join(' '),
           mrp: stats.mrp,
           line: stats.line,
           todo$manHours: stats.manHours.todo,

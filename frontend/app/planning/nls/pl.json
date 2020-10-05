@@ -356,6 +356,7 @@
   "stats:export:fileName": "WMES_Plan_Wykonanie_{from}_{to}",
   "stats:export:sheetName": "Wyk. planu {from}-{to}",
   "stats:date": "Data",
+  "stats:division": "Wydział",
   "stats:mrp": "MRP",
   "stats:line": "Linia",
   "stats:orderCount": "Ilość zleceń",

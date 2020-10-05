@@ -357,6 +357,7 @@
     "stats:export:fileName": "WMES_Plan_Execution_{from}_{to}",
     "stats:export:sheetName": "Plan exec. {from}-{to}",
     "stats:date": "Date",
+    "stats:division": "Division",
     "stats:mrp": "MRP",
     "stats:line": "Line",
     "stats:orderCount": "Order count",
