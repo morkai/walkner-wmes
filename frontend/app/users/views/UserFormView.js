@@ -150,7 +150,10 @@ define([
       {
         this.$id('aors').select2({
           width: '100%',
-          allowClear: true
+          allowClear: true,
+          multiple: true,
+          placeholder: ' ',
+          data: aors.map(idAndLabel)
         });
 
         this.setUpOshSelect2();
