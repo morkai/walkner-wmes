@@ -386,18 +386,35 @@ define([
 
     serializeOrders: function()
     {
-      return (this.get('orders') || []).map(function(order)
-      {
-        return {
-          _id: order._id,
-          orderNo: order.orderNo,
-          releasedAt: order.releasedAt,
-          releasedAtText: time.format(order.releasedAt, 'L HH:mm'),
-          releasedBy: userInfoTemplate({userInfo: order.releasedBy, noIp: true}),
-          validFrom: time.format(order.validFrom, 'L'),
-          validTo: time.format(order.validTo, 'L')
-        };
-      });
+      return (this.get('orders') || [])
+        .map(function(order)
+        {
+          var releasedAt = Date.parse(order.releasedAt);
+
+          return {
+            _id: order._id,
+            orderNo: order.orderNo,
+            releasedAt: releasedAt,
+            releasedAtText: time.format(releasedAt, 'L HH:mm'),
+            releasedBy: userInfoTemplate({userInfo: order.releasedBy, noIp: true}),
+            validFrom: time.format(order.validFrom, 'L'),
+            validTo: time.format(order.validTo, 'L')
+          };
+        })
+        .sort(function(a, b)
+        {
+          if (a.orderNo === '000000000' && b.orderNo !== '000000000')
+          {
+            return -1;
+          }
+
+          if (a.orderNo !== '000000000' && b.orderNo === '000000000')
+          {
+            return 1;
+          }
+
+          return a.releasedAt - b.releasedAt;
+        });
     },
 
     change: function(prop, newValue, oldValue)

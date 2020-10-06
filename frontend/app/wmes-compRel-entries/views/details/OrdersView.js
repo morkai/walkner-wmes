@@ -7,6 +7,7 @@ define([
   'app/core/views/DialogView',
   'app/wmes-compRel-entries/Entry',
   './ReleaseOrderView',
+  './RemoveOrdersView',
   'app/wmes-compRel-entries/templates/details/orders',
   'app/wmes-compRel-entries/templates/details/removeOrder'
 ], function(
@@ -16,6 +17,7 @@ define([
   DialogView,
   Entry,
   ReleaseOrderView,
+  RemoveOrdersView,
   template,
   removeOrderTemplate
 ) {
@@ -32,9 +34,14 @@ define([
         this.showReleaseOrderDialog();
       },
 
-      'click .btn[data-action="remove"]': function(e)
+      'click .btn[data-action="removeOne"]': function(e)
       {
         this.showRemoveOrderDialog(e.currentTarget.dataset.id);
+      },
+
+      'click .btn[data-action="removeMany"]': function()
+      {
+        this.showRemoveOrdersDialog();
       }
 
     },
@@ -77,17 +84,27 @@ define([
       viewport.showDialog(dialogView, this.t('orders:title'));
     },
 
+    showRemoveOrdersDialog: function()
+    {
+      var dialogView = new RemoveOrdersView({
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, this.t('orders:removeMany:title'));
+    },
+
     showRemoveOrderDialog: function(id)
     {
       var order = this.model.get('orders').find(function(o) { return o._id === id; });
       var dialogView = new DialogView({
+        nlsDomain: this.model.getNlsDomain(),
         template: removeOrderTemplate,
         model: {
           orderNo: order.orderNo
         }
       });
 
-      viewport.showDialog(dialogView, this.t('orders:remove:title'));
+      viewport.showDialog(dialogView, this.t('orders:removeOne:title'));
 
       this.listenTo(dialogView, 'answered', function(answer)
       {
@@ -108,7 +125,9 @@ define([
         method: 'POST',
         url: '/compRel/entries/' + view.model.id + ';release-order',
         data: JSON.stringify({
-          remove: id
+          remove: {
+            _id: id
+          }
         })
       });
 
