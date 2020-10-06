@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Division"],function(e,i){"use strict";return e.extend({model:i})});

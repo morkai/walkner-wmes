@@ -1,0 +1,1 @@
+define(["app/core/pages/DetailsPage","app/wmes-osh-common/dictionaries","../views/DetailsView"],function(i,e,t){"use strict";return i.extend({DetailsView:t,initialize:function(){i.prototype.initialize.apply(this,arguments),e.bind(this)}})});

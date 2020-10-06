@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","app/wmes-osh-nearMisses/templates/details"],function(e,s){"use strict";return e.extend({template:s})});

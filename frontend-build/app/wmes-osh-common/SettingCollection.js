@@ -1,0 +1,1 @@
+define(["app/settings/SettingCollection","./Setting"],function(e,t){"use strict";return e.extend({model:t,idPrefix:"osh.",topicSuffix:"osh.**",prepareValue:function(e,t){},prepareFormValue:function(e,t){return t}})});

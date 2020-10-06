@@ -1,0 +1,1 @@
+define(["app/core/Collection","./EventCategory"],function(e,t){"use strict";return e.extend({model:t,sort:function(e,t){return e.get("longName").localeCompare(t.get("longName"))}})});

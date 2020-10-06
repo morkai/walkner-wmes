@@ -1,0 +1,1 @@
+define(["app/core/pages/EditFormPage","app/wmes-osh-common/dictionaries","../views/FormView"],function(i,e,t){"use strict";return i.extend({FormView:t,initialize:function(){i.prototype.initialize.apply(this,arguments),e.bind(this)}})});

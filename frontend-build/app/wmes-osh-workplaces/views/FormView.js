@@ -1,0 +1,1 @@
+define(["app/core/views/FormView","app/wmes-osh-workplaces/templates/form"],function(e,t){"use strict";return e.extend({template:t})});

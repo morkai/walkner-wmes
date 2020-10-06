@@ -1,0 +1,1 @@
+define(["app/core/Collection","./ReasonCategory"],function(e,o){"use strict";return e.extend({model:o,sort:function(e,o){return e.get("longName").localeCompare(o.get("longName"))}})});
