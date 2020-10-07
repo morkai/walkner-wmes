@@ -3539,6 +3539,8 @@ app/paintShop/templates/load/stats.js
 app/paintShop/views/PaintShopLoadStatsView.js
 app/paintShop/templates/load/recent.js
 app/paintShop/views/PaintShopLoadRecentView.js
+app/paintShop/templates/load/export.js
+app/paintShop/views/ExportLoadDialogView.js
 app/paintShop/templates/load/page.js
 app/nls/reports.js
 app/nls/pl/reports.js
