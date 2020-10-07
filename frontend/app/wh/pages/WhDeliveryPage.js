@@ -188,7 +188,7 @@ define([
         lines: this.lines,
         setCarts: this.setCarts.delivering,
         status: 'delivering',
-        actions: true
+        actions: !embedded.isEnabled()
       });
 
       this.setView('#-completed', this.completedView);
