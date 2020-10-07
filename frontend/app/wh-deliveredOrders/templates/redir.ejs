@@ -5,6 +5,10 @@
     <input id="<%- id('redirReason') %>" name="redirReason" type="text" required autocomplete="new-password">
   </div>
   <div class="form-group">
+    <label for="<%- id('comment') %>" class="control-label"><%- t('redir:comment') %></label>
+    <textarea id="<%- id('comment') %>" name="comment" class="form-control" rows="3"></textarea>
+  </div>
+  <div class="form-group">
     <label  for="<%- id('sapOrder') %>" class="control-label is-required"><%- t('redir:sapOrder') %></label>
     <input id="<%- id('sapOrder') %>" name="sapOrder" class="form-control" type="text" required pattern="^[0-9]{9}$" autocomplete="new-password">
   </div>

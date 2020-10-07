@@ -40,6 +40,7 @@
   "redir:title": "Przenoszenie dostarczonych zleceń",
   "redir:submit": "Przenieś",
   "redir:redirReason": "Powód przekierowania",
+  "redir:comment": "Komentarz",
   "redir:sapOrder": "Zlecenie",
   "redir:sourceLine": "Linia źródłowa",
   "redir:sourceQty": "Ilość źrodłowa",

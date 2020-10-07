@@ -35,6 +35,7 @@
     "data:sourceQty": "Source quantity",
     "data:targetQty": "Target quantity",
     "data:redirReason": "Redir reason",
+    "data:comment": "Comment",
 
     "kind:components": "FIFO",
     "kind:packaging": "Packaging",

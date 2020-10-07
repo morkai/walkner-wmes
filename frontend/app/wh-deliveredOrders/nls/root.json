@@ -41,6 +41,7 @@
     "redir:title": "Moving delivered orders",
     "redir:submit": "Move",
     "redir:redirReason": "Redir reason",
+    "redir:comment": "Comment",
     "redir:sapOrder": "Order",
     "redir:sourceLine": "Source line",
     "redir:sourceQty": "Source quantity",
