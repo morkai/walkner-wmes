@@ -50,7 +50,7 @@ define([
     localTopics: {
       'router.executing': function onRouterExecuting(message)
       {
-        this.activateNavItem(this.getModuleNameFromPath(message.req.path));
+        this.activateNavItem(message.req.path);
       },
       'socket.connected': function onSocketConnected()
       {
@@ -317,7 +317,11 @@ define([
      */
     this.lastSearchPhrase = '';
 
-    this.activateNavItem(this.getModuleNameFromPath(this.options.currentPath));
+    /**
+     * @private
+     * @type {?string}
+     */
+    this.initialPath = this.options.currentPath;
   };
 
   NavbarView.prototype.beforeRender = function()
@@ -332,7 +336,16 @@ define([
       view: this
     });
 
-    this.selectActiveNavItem();
+    if (this.initialPath)
+    {
+      this.activateNavItem(this.initialPath);
+      this.initialPath = null;
+    }
+    else
+    {
+      this.selectActiveNavItem();
+    }
+
     this.setConnectionStatus(this.socket.isConnected() ? 'online' : 'offline');
     this.hideNotAllowedEntries();
     this.hideEmptyEntries();
@@ -344,10 +357,30 @@ define([
   };
 
   /**
-   * @param {string} moduleName
+   * @param {string} path
    */
-  NavbarView.prototype.activateNavItem = function(moduleName)
+  NavbarView.prototype.activateNavItem = function(path)
   {
+    if (!this.navItems)
+    {
+      this.cacheNavItems();
+    }
+
+    var candidates = this.getNavItemKeysFromPath(path.substring(1));
+    var moduleName = '';
+
+    for (var i = candidates.length - 1; i >= 0; --i)
+    {
+      var candidate = candidates[i];
+
+      if (this.navItems[candidate])
+      {
+        moduleName = candidate;
+
+        break;
+      }
+    }
+
     if (moduleName === this.activeModuleName)
     {
       return;
@@ -491,17 +524,21 @@ define([
    */
   NavbarView.prototype.cacheNavItems = function()
   {
-    this.navItems = {};
+    var view = this;
 
-    this.$('.nav > li').each(this.cacheNavItem.bind(this));
+    view.navItems = {};
+
+    view.$('.nav > li').each(function()
+    {
+      view.cacheNavItem(this);
+    });
   };
 
   /**
    * @private
-   * @param {number} i
    * @param {Element} navItemEl
    */
-  NavbarView.prototype.cacheNavItem = function(i, navItemEl)
+  NavbarView.prototype.cacheNavItem = function(navItemEl)
   {
     var view = this;
     var $navItem = view.$(navItemEl);
@@ -513,27 +550,83 @@ define([
 
     var href = $navItem.find('a').first().attr('href');
 
-    if (href && href[0] === '#')
+    if (href && href.charAt(0) === '#')
     {
-      var moduleName = view.getModuleNameFromLi($navItem[0], true, true).split(' ')[0];
-
-      if (!view.navItems[moduleName])
+      view.getNavItemKeysFromLi($navItem[0]).forEach(function(key)
       {
-        view.navItems[moduleName] = $navItem;
-      }
+        if (!view.navItems[key])
+        {
+          view.navItems[key] = $navItem;
+        }
+      });
     }
     else if ($navItem.hasClass('dropdown'))
     {
       $navItem.find('.dropdown-menu > li').each(function()
       {
-        var moduleName = view.getModuleNameFromLi(this, true, true).split(' ')[0];
-
-        if (!view.navItems[moduleName])
+        view.getNavItemKeysFromLi(this).forEach(function(key)
         {
-          view.navItems[moduleName] = $navItem;
-        }
+          if (!view.navItems[key])
+          {
+            view.navItems[key] = $navItem;
+          }
+        });
       });
     }
+  };
+
+  /**
+   * @private
+   * @param {Element} liEl
+   * @returns {string[]}
+   */
+  NavbarView.prototype.getNavItemKeysFromLi = function(liEl)
+  {
+    var aEl = liEl.querySelector('a');
+
+    if (!aEl)
+    {
+      return [''];
+    }
+
+    var href = aEl.getAttribute('href');
+
+    if (!href || (href.charAt(0) !== '/' && href.charAt(0) !== '#'))
+    {
+      return [''];
+    }
+
+    var matches = href.substring(1).match(/^([a-zA-Z0-9\/-_]+)/);
+
+    if (!matches)
+    {
+      return [''];
+    }
+
+    return this.getNavItemKeysFromPath(matches[1]);
+  };
+
+  /**
+   * @private
+   * @param {string} path
+   * @returns {string[]}
+   */
+  NavbarView.prototype.getNavItemKeysFromPath = function(path)
+  {
+    var parts = path.split('/');
+    var keys = [];
+
+    parts.forEach(function(part, i)
+    {
+      if (keys[i - 1])
+      {
+        part = keys[i - i] + '/' + part;
+      }
+
+      keys.push(part);
+    });
+
+    return keys;
   };
 
   /**
