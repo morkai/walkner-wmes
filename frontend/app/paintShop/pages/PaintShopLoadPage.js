@@ -3,6 +3,7 @@
 define([
   'jquery',
   'app/i18n',
+  'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/embedded',
@@ -14,11 +15,13 @@ define([
   '../views/PaintShopLoadReportView',
   '../views/PaintShopLoadStatsView',
   '../views/PaintShopLoadRecentView',
+  '../views/ExportLoadDialogView',
   'app/paintShop/templates/load/page',
   'i18n!app/nls/reports'
 ], function(
   $,
   t,
+  viewport,
   View,
   bindLoadingMessage,
   embedded,
@@ -30,40 +33,55 @@ define([
   PaintShopLoadReportView,
   PaintShopLoadStatsView,
   PaintShopLoadRecentView,
+  ExportLoadDialogView,
   template
 ) {
   'use strict';
 
   var APP_ID = 'ps-load';
-  var IS_EMBEDDED = window.parent !== window;
 
   return View.extend({
 
     template: template,
 
-    layoutName: IS_EMBEDDED ? 'blank' : 'page',
+    layoutName: embedded.isEnabled() ? 'blank' : 'page',
 
     pageId: 'paintShopLoad',
+
+    modelProperty: 'report',
 
     breadcrumbs: function()
     {
       return [
         {
           href: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
-          label: t.bound('paintShop', 'BREADCRUMB:base')
+          label: this.t('BREADCRUMB:base')
         },
-        t.bound('paintShop', 'BREADCRUMB:load')
+        this.t('BREADCRUMB:load')
       ];
     },
 
-    actions: [
+    actions: function()
+    {
+      if (embedded.isEnabled())
       {
-        href: '#paintShop;settings?tab=load',
-        icon: 'cogs',
-        label: t.bound('paintShop', 'PAGE_ACTION:settings'),
-        privileges: 'PAINT_SHOP:MANAGE'
+        return [];
       }
-    ],
+
+      return [
+        {
+          icon: 'download',
+          label: this.t('exportLoad:pageAction'),
+          callback: this.showExportLoadDialog.bind(this)
+        },
+        {
+          href: '#paintShop;settings?tab=load',
+          icon: 'cogs',
+          label: this.t('PAGE_ACTION:settings'),
+          privileges: 'PAINT_SHOP:MANAGE'
+        }
+      ];
+    },
 
     localTopics: {
       'socket.connected': function()
@@ -110,7 +128,7 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(new PaintShopSettingCollection(null, {pubsub: this.pubsub}), this);
-      this.report = IS_EMBEDDED
+      this.report = embedded.isEnabled()
         ? null
         : bindLoadingMessage(new PaintShopLoadReport(this.options.query), this);
       this.stats = bindLoadingMessage(new PaintShopLoadStats(), this);
@@ -135,7 +153,7 @@ define([
       this.recentView = new PaintShopLoadRecentView({
         settings: this.settings,
         recent: this.recent,
-        embedded: IS_EMBEDDED
+        embedded: embedded.isEnabled()
       });
     },
 
@@ -145,7 +163,7 @@ define([
 
       page.once('afterRender', function()
       {
-        if (IS_EMBEDDED)
+        if (embedded.isEnabled())
         {
           window.parent.postMessage({type: 'ready', app: APP_ID}, '*');
         }
@@ -175,22 +193,21 @@ define([
       );
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        embedded: IS_EMBEDDED
+        embedded: embedded.isEnabled()
       };
     },
 
     beforeRender: function()
     {
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
         document.body.style.overflow = 'hidden';
       }
 
-      document.body.classList.toggle('paintShop-is-embedded', IS_EMBEDDED);
+      document.body.classList.toggle('paintShop-is-embedded', embedded.isEnabled());
       document.body.classList.add('paintShopLoad-page');
     },
 
@@ -214,6 +231,15 @@ define([
       clearTimeout(this.timers.hideEmbeddedActions);
 
       this.timers.hideEmbeddedActions = setTimeout(function() { $embeddedActions.fadeOut('fast'); }, 15000);
+    },
+
+    showExportLoadDialog: function()
+    {
+      var dialogView = new ExportLoadDialogView({
+        model: this.report
+      });
+
+      viewport.showDialog(dialogView, this.t('exportLoad:title'));
     },
 
     onDocumentClick: function()

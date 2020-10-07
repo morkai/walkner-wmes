@@ -175,5 +175,9 @@
   "printPage:mrp": "Przepływ:",
   "printPage:order": "Zlecenie:",
   "printPage:page": "Strona {n} z {total}",
-  "printPage:printed": "Wydrukowano w {time} przez {user} za pomocą systemu WMES."
+  "printPage:printed": "Wydrukowano w {time} przez {user} za pomocą systemu WMES.",
+
+  "exportLoad:pageAction": "Eksportuj",
+  "exportLoad:title": "Eksportowanie danych obciążenia",
+  "exportLoad:submit": "Eksportuj dane"
 }

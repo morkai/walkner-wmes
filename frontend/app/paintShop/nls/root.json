@@ -171,7 +171,11 @@
     "printPage:mrp": "MRP:",
     "printPage:order": "Order:",
     "printPage:page": "Page {n} of {total}",
-    "printPage:printed": "Printed on {time} by {user} with WMES."
+    "printPage:printed": "Printed on {time} by {user} with WMES.",
+
+    "exportLoad:pageAction": "Export",
+    "exportLoad:title": "Exporting load data",
+    "exportLoad:submit": "Export data"
   },
   "pl": true
 }
