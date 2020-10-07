@@ -289,6 +289,12 @@ define([
       }
 
       var $item = this.$('.heff-timeline-item[data-type="' + type + '"][data-id="' + lastI + '"]');
+
+      if (!$item.length)
+      {
+        return;
+      }
+
       var startedAt = Date.parse(lastItem.get('startedAt'));
       var duration = Date.now() - startedAt;
       var width = duration / SHIFT_DURATION * 100;

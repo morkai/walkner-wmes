@@ -635,6 +635,11 @@ define([
 
     showFixUpdateMenu: function(whOrder, propFunc, prop, e)
     {
+      if (!whOrder)
+      {
+        return;
+      }
+
       var userFunc = whOrder.getUserFunc(this.model.user);
 
       if (!userFunc)
@@ -791,6 +796,12 @@ define([
       }
 
       var anchorEl = $editor.data('anchorEl').firstElementChild;
+
+      if (!anchorEl)
+      {
+        return;
+      }
+
       var position = this.$(anchorEl).position();
       var box = anchorEl.getBoundingClientRect();
       var containerBox = this.$el[0].parentNode.getBoundingClientRect();
