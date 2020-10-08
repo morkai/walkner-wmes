@@ -546,5 +546,7 @@
   "TYPE:compRel.funcs.edited": "Dopuszczenia > Funkcje: edycja",
   "TEXT:compRel.funcs.edited": "Zmodyfikowano funkcję opiniującą: <a href='\\#compRel/funcs/{model->_id}'>{model->_id}</a>",
   "TYPE:compRel.funcs.deleted": "Dopuszczenia > Funkcje: usunięcie",
-  "TEXT:compRel.funcs.deleted": "Usunięto funkcję opiniującą: <em>{model->_id}</em>"
+  "TEXT:compRel.funcs.deleted": "Usunięto funkcję opiniującą: <em>{model->_id}</em>",
+  "TYPE:currencyRates.synced": "Kursy walut: import",
+  "TEXT:currencyRates.synced": "Zaimportowano kurs waluty {sourceCurrency} od {from} do {to}."
 }

@@ -539,7 +539,17 @@
     "TYPE:dummyPaint.families.edited": "Dummy paint > Families: edited",
     "TEXT:dummyPaint.families.edited": "Edited family: <a href='\\#dummyPaint/families/{model->_id}'>{model->_id}</a>",
     "TYPE:dummyPaint.families.deleted": "Dummy paint > Families: deleted",
-    "TEXT:dummyPaint.families.deleted": "Deleted family: <em>{model->_id}</em>"
+    "TEXT:dummyPaint.families.deleted": "Deleted family: <em>{model->_id}</em>",
+    "TYPE:compRel.entries.deleted": "Dopuszczenia > Wnioski: usunięcie",
+    "TEXT:compRel.entries.deleted": "Usunięto wniosek: <em>{model->rid}</em>",
+    "TYPE:compRel.funcs.added": "Comp. releases > Functions: added",
+    "TEXT:compRel.funcs.added": "Added opinion function: <a href='\\#compRel/funcs/{model->_id}'>{model->_id}</a>",
+    "TYPE:compRel.funcs.edited": "Comp. releases > Functions: edited",
+    "TEXT:compRel.funcs.edited": "Edited opinion function: <a href='\\#compRel/funcs/{model->_id}'>{model->_id}</a>",
+    "TYPE:compRel.funcs.deleted": "Comp. releases > Functions: deleted",
+    "TEXT:compRel.funcs.deleted": "Deleted opinion function: <em>{model->_id}</em>",
+    "TYPE:currencyRates.synced": "Currency rates: import",
+    "TEXT:currencyRates.synced": "Imported {sourceCurrency} currency rates from {from} to {to}."
   },
   "pl": true
 }
