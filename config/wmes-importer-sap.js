@@ -148,7 +148,7 @@ exports['orders/importer/bom'] = {
 };
 
 exports['orders/importer/zlf1'] = {
-  filterRe: /^ORDERS_ZLF1\.json$/,
+  filterRe: /^(ORDERS_ZLF1\.json|[0-9]{9}\.DAT)$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
