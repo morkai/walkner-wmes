@@ -14,6 +14,7 @@
     "PROPERTY:time": "Time",
     "PROPERTY:redirLine": "Redirection",
     "PROPERTY:working": "Working?",
+    "PROPERTY:planned": "Planned?",
     "PROPERTY:nextShiftAt": "Next shift",
     "PROPERTY:startedPlan": "Started plan",
     "PROPERTY:mrps": "Planned MRP",

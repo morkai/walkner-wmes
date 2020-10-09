@@ -13,6 +13,7 @@
   "PROPERTY:time": "Czas",
   "PROPERTY:redirLine": "Przekierowanie",
   "PROPERTY:working": "Pracuje?",
+  "PROPERTY:planned": "Plan?",
   "PROPERTY:nextShiftAt": "Następna zmiana",
   "PROPERTY:startedPlan": "Rozpoczęty plan",
   "PROPERTY:mrps": "Planowane MRP",

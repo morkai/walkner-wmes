@@ -24,6 +24,11 @@
     <i class="fa fa-check"></i>
     <% } %>
   </td>
+  <td class="is-min text-center">
+    <% if (row.planned) { %>
+    <i class="fa fa-check"></i>
+    <% } %>
+  </td>
   <td class="is-min"><%- row.nextShiftAt %></td>
   <td class="is-min <%- canManage ? 'wh-lines-clickable' : '' %> <%- row.planDone ? 'wh-lines-planDone' : '' %>">
     <% if(canManage) { %>

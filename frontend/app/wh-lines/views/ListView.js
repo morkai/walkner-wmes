@@ -43,7 +43,9 @@ define([
 
     remoteTopics: function()
     {
-      var topics = {};
+      var topics = {
+        shiftChanged: 'onShiftChanged'
+      };
 
       topics[this.collection.getTopicPrefix() + '.updated'] = 'onUpdated';
 
@@ -122,6 +124,8 @@ define([
     {
       ListView.prototype.initialize.apply(this, arguments);
 
+      this.needsReload = false;
+
       this.once('afterRender', function()
       {
         this.listenTo(this.collection, 'filtered', this.onFiltered);
@@ -144,11 +148,6 @@ define([
       ListView.prototype.afterRender.apply(this, arguments);
 
       this.toggleDetails();
-    },
-
-    onUpdated: function(message)
-    {
-      this.promised(this.collection.handleUpdate(message));
     },
 
     getTemplateData: function()
@@ -315,6 +314,31 @@ define([
     onChanged: function(line)
     {
       this.renderRow(line);
+    },
+
+    onUpdated: function(message)
+    {
+      var req = this.collection.handleUpdate(message);
+
+      if (req)
+      {
+        this.promised(req);
+      }
+
+      if (this.needsReload)
+      {
+        this.needsReload = false;
+
+        if (!req)
+        {
+          this.refreshCollection();
+        }
+      }
+    },
+
+    onShiftChanged: function()
+    {
+      this.needsReload = true;
     },
 
     toggleDetails: function()
