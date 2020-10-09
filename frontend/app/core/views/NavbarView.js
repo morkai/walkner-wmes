@@ -366,7 +366,7 @@ define([
       this.cacheNavItems();
     }
 
-    var candidates = this.getNavItemKeysFromPath(path.substring(1));
+    var candidates = this.getNavItemKeysFromPath(path.substring(1).match(/^([a-zA-Z0-9\/\-_]+)/)[1]);
     var moduleName = '';
 
     for (var i = candidates.length - 1; i >= 0; --i)
@@ -596,7 +596,7 @@ define([
       return [''];
     }
 
-    var matches = href.substring(1).match(/^([a-zA-Z0-9\/-_]+)/);
+    var matches = href.substring(1).match(/^([a-zA-Z0-9\/\-_]+)/);
 
     if (!matches)
     {
