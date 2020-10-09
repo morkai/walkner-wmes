@@ -256,6 +256,10 @@ code.multiline {
 .btn-info {
   text-shadow: 1px 1px 1px #333;
 }
+.btn-default:hover {
+  background: #ffffd6;
+  color: #333;
+}
 
 .dropdown-menu {
   overflow-y: auto;
@@ -267,8 +271,8 @@ code.multiline {
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-  color: #fff;
-  background-color: #428BCA;
+  color: #333;
+  background-color: #ffffd6;
 }
 
 @keyframes yellow-fade {

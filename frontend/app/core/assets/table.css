@@ -107,11 +107,14 @@ td.text-center {
 .table th {
   background-color: #fff;
 }
+.list .table-bordered th {
+  background-color: #f5f5f5;
+}
 .table th.is-filter {
   cursor: pointer;
 }
 .table th.is-filter:hover {
-  background: #e6e6e6;
+  background: #ffffd6;
 }
 th.is-min,
 td.is-min {
