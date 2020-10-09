@@ -1,0 +1,56 @@
+<div class="list is-colored wh-lines-list">
+  <div class="table-responsive">
+    <table class="table <%- tableClassName %>">
+      <thead>
+      <tr>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:date') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:time') %></th>
+        <th class="is-min wh-lines-group-start" rowspan="2" style="min-width: 110px"><%- t('PROPERTY:_id') %></th>
+        <th class="is-min wh-lines-group-start" colspan="3"><%- t('PROPERTY:pickup:started') %></th>
+        <th class="is-min wh-lines-group-start" colspan="3"><%- t('PROPERTY:pickup:finished') %></th>
+        <th class="is-min wh-lines-group-start" colspan="2"><%- t('PROPERTY:available') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:redirLine') %></th>
+        <th class="is-min" rowspan="2" style="line-height: 1.2"><%- t('LIST:COLUMN:nextShiftAt') %></th>
+        <th class="is-min" rowspan="2"><%- t('LIST:COLUMN:startedPlan') %></th>
+        <th rowspan="2"><%- t('PROPERTY:mrps') %></th>
+      </tr>
+      <tr>
+        <td class="is-min text-center"><%- t('PROPERTY:sets') %></td>
+        <td class="is-min text-center"><%- t('PROPERTY:qty') %></td>
+        <td class="is-min text-center wh-lines-group-start"><%- t('PROPERTY:time') %></td>
+        <td class="is-min text-center"><%- t('PROPERTY:sets') %></td>
+        <td class="is-min text-center"><%- t('PROPERTY:qty') %></td>
+        <td class="is-min text-center wh-lines-group-start"><%- t('PROPERTY:time') %></td>
+        <td class="is-min text-center"><%- t('PROPERTY:qty') %></td>
+        <td class="is-min text-center wh-lines-group-start"><%- t('PROPERTY:time') %></td>
+      </tr>
+      </thead>
+      <tbody>
+        <% rows.forEach(function(row) { %>
+        <tr class="list-item">
+          <td class="is-min"><%- row.date %></td>
+          <td class="is-min"><%- row.time %></td>
+          <td class="is-min text-fixed wh-lines-group-start"><%= row.line %></td>
+          <td class="is-min is-number <%- row.pickup.started.sets ? '' : 'wh-lines-empty' %>"><%- row.pickup.started.sets.toLocaleString() %></td>
+          <td class="is-min is-number <%- row.pickup.started.qty ? '' : 'wh-lines-empty' %>"><%- row.pickup.started.qty.toLocaleString() %></td>
+          <td class="is-min is-number <%- row.pickup.started.time ? '' : 'wh-lines-empty' %> wh-lines-group-start"><%- time.toString(row.pickup.started.time / 1000, true, false) %></td>
+          <td class="is-min is-number <%- row.pickup.finished.sets ? '' : 'wh-lines-empty' %>"><%- row.pickup.finished.sets.toLocaleString() %></td>
+          <td class="is-min is-number <%- row.pickup.finished.qty ? '' : 'wh-lines-empty' %>"><%- row.pickup.finished.qty.toLocaleString() %></td>
+          <td class="is-min is-number <%- row.pickup.finished.sets ? '' : 'wh-lines-empty' %> wh-lines-group-start"><%- time.toString(row.pickup.finished.time / 1000, true, false) %></td>
+          <td class="is-min is-number <%- row.available.qty ? '' : 'wh-lines-empty' %>"><%- row.available.qty.toLocaleString() %></td>
+          <td class="is-min is-number <%- row.available.time ? '' : 'wh-lines-empty' %> wh-lines-group-start"><%- time.toString(row.available.time / 1000, true, false) %></td>
+          <td class="is-min text-fixed" data-id="redirLine">
+            <% if (row.redirLine) { %>
+            <i class="fa fa-arrow-right"></i><span><%= row.redirLine %></span>
+            <% } %>
+          </td>
+          <td class="is-min"><%- row.nextShiftAt %></td>
+          <td class="is-min <%- row.planDone ? 'wh-lines-planDone' : '' %>"><%- row.startedPlan %></td>
+          <td class="text-fixed"><%= row.mrps.join(' ') %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination-container"></div>
+</div>

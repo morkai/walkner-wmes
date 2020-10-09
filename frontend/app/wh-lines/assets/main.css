@@ -20,7 +20,7 @@
   text-decoration: underline;
 }
 .wh-lines-list td[data-details].wh-lines-details-empty {
-  color: inherit;
+  color: #ddd;
   cursor: default;
 }
 .wh-lines-list td[data-details].wh-lines-details-empty:hover {
@@ -41,6 +41,9 @@
 .wh-lines-planDone,
 .wh-lines-planDone > a {
   color: #fa7a0a;
+}
+.wh-lines-empty {
+  color: #ddd;
 }
 @media (min-width: 1330px) {
   .wh-lines-list > .table-responsive {

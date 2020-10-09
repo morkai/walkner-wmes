@@ -2,6 +2,7 @@
   "root": {
     "BREADCRUMB:base": "WH (new)",
     "BREADCRUMB:browse": "Lines",
+    "BREADCRUMB:snapshots": "Snapshots",
 
     "PROPERTY:_id": "Line",
     "PROPERTY:pickup": "Pickup",
@@ -16,6 +17,7 @@
     "PROPERTY:nextShiftAt": "Next shift",
     "PROPERTY:startedPlan": "Started plan",
     "PROPERTY:mrps": "Planned MRP",
+    "PROPERTY:date": "Date",
 
     "LIST:COLUMN:nextShiftAt": "Next<br>planned<br>shift",
     "LIST:COLUMN:startedPlan": "Started<br>plan",
@@ -43,7 +45,9 @@
     "editStartedPlan:line": "Line",
     "editStartedPlan:oldValue": "Currently started plan",
     "editStartedPlan:newValue": "New started plan",
-    "editStartedPlan:submit": "Edit date"
+    "editStartedPlan:submit": "Edit date",
+
+    "snapshots:pageAction": "Line snapshots"
   },
   "pl": true
 }

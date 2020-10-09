@@ -1,6 +1,7 @@
 {
   "BREADCRUMB:base": "Magazyn (nowy)",
   "BREADCRUMB:browse": "Linie",
+  "BREADCRUMB:snapshots": "Historia stanu",
 
   "PROPERTY:_id": "Linia",
   "PROPERTY:pickup": "Kompletacja",
@@ -15,6 +16,7 @@
   "PROPERTY:nextShiftAt": "Następna zmiana",
   "PROPERTY:startedPlan": "Rozpoczęty plan",
   "PROPERTY:mrps": "Planowane MRP",
+  "PROPERTY:date": "Data",
 
   "LIST:COLUMN:nextShiftAt": "Następna<br>zaplanowana<br>zmiana",
   "LIST:COLUMN:startedPlan": "Rozpoczęty<br>plan",
@@ -47,5 +49,7 @@
 
   "filter:working:1": "Tak",
   "filter:working:0": "Nie",
-  "filter:mrps": "Wszystkie MRP"
+  "filter:mrps": "Wszystkie MRP",
+
+  "snapshots:pageAction": "Historia stanu linii"
 }
