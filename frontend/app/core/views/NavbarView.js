@@ -295,9 +295,9 @@ define([
 
     /**
      * @private
-     * @type {string}
+     * @type {?string}
      */
-    this.activeModuleName = '';
+    this.activeModuleName = null;
 
     /**
      * @private
@@ -336,7 +336,7 @@ define([
       view: this
     });
 
-    if (this.initialPath)
+    if (this.initialPath !== null)
     {
       this.activateNavItem(this.initialPath);
       this.initialPath = null;
@@ -366,7 +366,8 @@ define([
       this.cacheNavItems();
     }
 
-    var candidates = this.getNavItemKeysFromPath(path.substring(1).match(/^([a-zA-Z0-9\/\-_]+)/)[1]);
+    var matches = path.substring(1).match(/^([a-zA-Z0-9\/\-_]+)/);
+    var candidates = this.getNavItemKeysFromPath(matches ? matches[1] : '');
     var moduleName = '';
 
     for (var i = candidates.length - 1; i >= 0; --i)
@@ -488,7 +489,7 @@ define([
       return;
     }
 
-    if (this.navItems === null)
+    if (!this.navItems)
     {
       this.cacheNavItems();
     }

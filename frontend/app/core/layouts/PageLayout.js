@@ -75,6 +75,7 @@ define([
   {
     return _.assign(View.prototype.serialize.call(this), {
       hdHidden: !!this.options.hdHidden,
+      navbarClassName: this.options.navbarClassName || 'navbar-default',
       version: this.options.version,
       changelogUrl: this.options.changelogUrl
     });

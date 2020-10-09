@@ -18,6 +18,9 @@
 .navbar-account-dropdown {
   font-weight: bold;
 }
+.navbar-account-status {
+  vertical-align: top;
+}
 .navbar-status-offline {
   color: #DA4F49;
 }
