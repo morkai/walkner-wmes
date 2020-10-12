@@ -10,6 +10,17 @@
         </label>
       </div>
       <%- helpers.formGroup({
+        name: 'kinds',
+        type: 'select2',
+        label: 'PROPERTY:'
+      }) %>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="materialLoss" value="true">
+          <%- t('PROPERTY:materialLoss') %>
+        </label>
+      </div>
+      <%- helpers.formGroup({
         name: 'shortName',
         label: 'PROPERTY:',
         required: true

@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'app/i18n',
   'app/core/Model'
 ], function(
+  require,
   t,
   Model
 ) {
@@ -23,8 +25,13 @@ define([
 
     labelAttribute: 'shortName',
 
-    defaults: {
-      active: true
+    defaults: function()
+    {
+      return {
+        active: true,
+        materialLoss: false,
+        kinds: []
+      };
     },
 
     getLabel: function({long} = {})
@@ -34,11 +41,46 @@ define([
 
     serialize: function()
     {
-      var obj = this.toJSON();
+      const obj = this.toJSON();
 
-      obj.active = t('core', 'BOOL:' + obj.active);
+      obj.active = t('core', `BOOL:${obj.active}`);
+      obj.materialLoss = t('core', `BOOL:${obj.materialLoss}`);
 
       return obj;
+    },
+
+    serializeRow: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.kinds = dictionaries.kinds.getLabels(obj.kinds).join('; ');
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.kinds = dictionaries.kinds.getLabels(obj.kinds, {long: true});
+
+      return obj;
+    },
+
+    hasKind: function(id)
+    {
+      id = parseInt(id, 10);
+
+      if (!id)
+      {
+        return false;
+      }
+
+      const kinds = this.get('kinds');
+
+      return kinds.length === 0 || kinds.includes(id);
     }
 
   });

@@ -122,7 +122,7 @@
   "PRIVILEGE:REPORTS:7:VIEW": "Raporty: Przestoje w obszarach",
   "PRIVILEGE:REPORTS:8:VIEW": "Raporty: Lean",
   "PRIVILEGE:REPORTS:9:VIEW": "Raporty: Planowane obciążenie linii",
-  "PRIVILEGE:REPORTS:rearm:VIEW": "Raporty: Przezbrojenie",
+  "PRIVILEGE:REPORTS:REARM:VIEW": "Raporty: Przezbrojenie",
   "PRIVILEGE:XICONF:VIEW": "Xiconf: przeglądanie",
   "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
   "PRIVILEGE:XICONF:MANAGE:HID_LAMPS": "Xiconf: Oprawy HID: zarządzanie",
@@ -204,6 +204,9 @@
   "PRIVILEGE:COMP_REL:VIEW": "Dopuszczenia: przeglądanie",
   "PRIVILEGE:COMP_REL:MANAGE": "Dopuszczenia: zarządzanie",
   "PRIVILEGE:COMP_REL:ADD": "Dopuszczenia: dodawanie",
+  "PRIVILEGE:OSH:NEAR_MISSES:MANAGE": "BHP > ZPW: zarządzanie",
+  "PRIVILEGE:OSH:DICTIONARIES:VIEW": "BHP > Słowniki: przeglądanie",
+  "PRIVILEGE:OSH:DICTIONARIES:MANAGE": "BHP > Słowniki: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

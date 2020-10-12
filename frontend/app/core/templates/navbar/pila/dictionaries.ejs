@@ -6,12 +6,7 @@
   <ul class="dropdown-menu">
     <li data-privilege="USERS:VIEW" data-module><a href="#users"><%- t('NAVBAR:USERS') %></a>
     <li class="divider">
-    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/workplaces"><%- t('wmes-osh-common', 'navbar:workplaces') %></a>
-    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/divisions"><%- t('wmes-osh-common', 'navbar:divisions') %></a>
-    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/buildings"><%- t('wmes-osh-common', 'navbar:buildings') %></a>
-    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/eventCategories"><%- t('wmes-osh-common', 'navbar:eventCategories') %></a>
-    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/reasonCategories"><%- t('wmes-osh-common', 'navbar:reasonCategories') %></a>
-    <li class="divider">
-    <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#prodFunctions"><%- t('NAVBAR:PROD_FUNCTIONS') %></a>
-    <li data-privilege="DICTIONARIES:VIEW" data-module="printing"><a href="#printers"><%- t('NAVBAR:PRINTERS') %></a>
+    <% ['workplaces', 'divisions', 'buildings', 'locations', 'kinds', 'eventCategories', 'reasonCategories'].forEach(d => { %>
+    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/<%- d %>"><%- t('wmes-osh-common', `navbar:${d}`) %></a>
+    <% }) %>
   </ul>

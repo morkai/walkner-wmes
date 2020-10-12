@@ -25,18 +25,18 @@ define([
   EditFormPage,
   showDeleteFormPage,
   dictionaries,
-  Workplace,
-  WorkplaceCollection
+  Workplace
 ) {
   'use strict';
 
   var canView = user.auth('OSH:DICTIONARIES:VIEW');
   var canManage = user.auth('OSH:DICTIONARIES:MANAGE');
 
-  router.map('/osh/workplaces', canView, req =>
+  router.map('/osh/workplaces', canView, () =>
   {
     viewport.showPage(dictionaries.bind(new ListPage({
-      collection: new WorkplaceCollection(null, {rqlQuery: req.rql}),
+      load: null,
+      collection: dictionaries.workplaces,
       columns: [
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
@@ -53,9 +53,11 @@ define([
       ],
       (detailsTemplate) =>
       {
+        const model = dictionaries.workplaces.get(req.params.id);
+
         return dictionaries.bind(new DetailsPage({
           detailsTemplate: detailsTemplate,
-          model: new Workplace({_id: req.params.id})
+          model: model || new Workplace({_id: req.params.id})
         }));
       }
     );
@@ -85,9 +87,11 @@ define([
       ],
       (FormView) =>
       {
+        const model = dictionaries.workplaces.get(req.params.id);
+
         return dictionaries.bind(new EditFormPage({
           FormView,
-          model: new Workplace({_id: req.params.id})
+          model: model || new Workplace({_id: req.params.id})
         }));
       }
     );

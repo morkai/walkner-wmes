@@ -2,7 +2,7 @@
 
 define([
   'app/core/views/DetailsView',
-  'app/wmes-osh-nearMisses/templates/details'
+  'app/wmes-osh-nearMisses/templates/details/props'
 ], function(
   DetailsView,
   template
@@ -11,7 +11,15 @@ define([
 
   return DetailsView.extend({
 
-    template
+    template,
+
+    getTemplateData: function()
+    {
+      return {
+        details: this.model.serializeDetails(),
+        model: this.model.toJSON()
+      };
+    }
 
   });
 });

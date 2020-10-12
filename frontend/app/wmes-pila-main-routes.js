@@ -18,6 +18,8 @@ define([
   './wmes-osh-workplaces/routes',
   './wmes-osh-divisions/routes',
   './wmes-osh-buildings/routes',
+  './wmes-osh-locations/routes',
+  './wmes-osh-kinds/routes',
   './wmes-osh-eventCategories/routes',
   './wmes-osh-reasonCategories/routes',
   './wmes-osh-nearMisses/routes'

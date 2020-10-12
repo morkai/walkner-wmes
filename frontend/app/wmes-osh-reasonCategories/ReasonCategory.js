@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'app/i18n',
   'app/core/Model'
 ], function(
+  require,
   t,
   Model
 ) {
@@ -34,11 +36,45 @@ define([
 
     serialize: function()
     {
-      var obj = this.toJSON();
+      const obj = this.toJSON();
 
-      obj.active = t('core', 'BOOL:' + obj.active);
+      obj.active = t('core', `BOOL:${obj.active}`);
 
       return obj;
+    },
+
+    serializeRow: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.eventCategories = dictionaries.eventCategories.getLabels(obj.eventCategories).join('; ');
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.eventCategories = dictionaries.eventCategories.getLabels(obj.eventCategories, {long: true});
+
+      return obj;
+    },
+
+    hasEventCategory: function(id)
+    {
+      id = parseInt(id, 10);
+
+      if (!id)
+      {
+        return false;
+      }
+
+      const eventCategories = this.get('eventCategories');
+
+      return eventCategories.length === 0 || eventCategories.includes(id);
     }
 
   });

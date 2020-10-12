@@ -31,6 +31,7 @@ define([
       'workplace',
       'division',
       'building',
+      'location',
       'eventCategory',
       'reasonCategory',
       'kind',
@@ -75,6 +76,7 @@ define([
       },
       'division': 'workplace',
       'building': 'workplace',
+      'location': 'workplace',
       'eventCategory': 'workplace',
       'reasonCategory': 'workplace',
       'kind': (propertyName, term, formData) =>
@@ -82,7 +84,7 @@ define([
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
       'priority': 'kind',
-      'users': (propertyName, term, formData) =>
+      'participants.user.id': (propertyName, term, formData) =>
       {
         const userId = term.args[1];
 
@@ -94,7 +96,18 @@ define([
     getTemplateData: function()
     {
       return {
-        dictionaries
+        statuses: dictionaries.statuses.nearMiss.map(status => ({
+          value: status,
+          label: dictionaries.getLabel('status', status)
+        })),
+        kinds: dictionaries.kinds.map(kind => ({
+          value: kind.id,
+          label: kind.getLabel({long: true})
+        })),
+        priorities: dictionaries.priorities.map(priority => ({
+          value: priority,
+          label: dictionaries.getLabel('priority', priority)
+        }))
       };
     },
 
@@ -103,9 +116,11 @@ define([
       dateTimeRange.formToRql(this, selector);
 
       [
+        'status',
         'workplace',
         'division',
         'building',
+        'location',
         'eventCategory',
         'reasonCategory',
         'kind',
@@ -146,7 +161,7 @@ define([
 
       if (user)
       {
-        selector.push({name: 'eq', args: ['users', user]});
+        selector.push({name: 'eq', args: ['participants.user.id', user]});
       }
     },
 
@@ -164,6 +179,7 @@ define([
       this.setUpWorkplaceSelect2();
       this.setUpDivisionSelect2();
       this.setUpBuildingSelect2();
+      this.setUpLocationSelect2();
       this.setUpEventCategorySelect2();
       this.setUpReasonCategorySelect2();
     },
@@ -214,6 +230,23 @@ define([
         multiple: true,
         placeholder: ' ',
         data: dictionaries.buildings
+          .filter(i => i.get('active'))
+          .map(i => ({
+            id: i.id,
+            text: i.getLabel({long: true}),
+            model: i
+          })),
+        formatSelection: ({model}, $el, e) => e(model.getLabel())
+      });
+    },
+
+    setUpLocationSelect2: function()
+    {
+      this.$id('location').select2({
+        width: '250px',
+        multiple: true,
+        placeholder: ' ',
+        data: dictionaries.locations
           .filter(i => i.get('active'))
           .map(i => ({
             id: i.id,

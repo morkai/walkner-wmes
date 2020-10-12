@@ -25,21 +25,22 @@ define([
   EditFormPage,
   showDeleteFormPage,
   dictionaries,
-  ReasonCategory,
-  ReasonCategoryCollection
+  ReasonCategory
 ) {
   'use strict';
 
   var canView = user.auth('OSH:DICTIONARIES:VIEW');
   var canManage = user.auth('OSH:DICTIONARIES:MANAGE');
 
-  router.map('/osh/reasonCategories', canView, req =>
+  router.map('/osh/reasonCategories', canView, () =>
   {
     viewport.showPage(dictionaries.bind(new ListPage({
-      collection: new ReasonCategoryCollection(null, {rqlQuery: req.rql}),
+      load: null,
+      collection: dictionaries.reasonCategories,
       columns: [
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
+        {id: 'eventCategories', className: 'is-overflow w300'},
         {id: 'active', className: 'is-min'}
       ]
     })));
@@ -53,9 +54,11 @@ define([
       ],
       (detailsTemplate) =>
       {
+        const model = dictionaries.reasonCategories.get(req.params.id);
+
         return dictionaries.bind(new DetailsPage({
           detailsTemplate,
-          model: new ReasonCategory({_id: req.params.id})
+          model: model || new ReasonCategory({_id: req.params.id})
         }));
       }
     );
@@ -85,9 +88,11 @@ define([
       ],
       (FormView) =>
       {
+        const model = dictionaries.reasonCategories.get(req.params.id);
+
         return dictionaries.bind(new EditFormPage({
           FormView,
-          model: new ReasonCategory({_id: req.params.id})
+          model: model || new ReasonCategory({_id: req.params.id})
         }));
       }
     );

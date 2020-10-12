@@ -1,108 +1,185 @@
-<form method="post" action="<%- formAction %>" autocomplete="off">
+<form class="osh-nearMisses-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <% if (!editMode) { %>
-      <div class="checkbox" style="margin-bottom: 15px">
-        <label class="control-label">
-          <input id="<%- id('anonymous') %>" type="checkbox" name="anonymous" value="true">
-          <%- t('PROPERTY:anonymous') %>
-        </label>
-      </div>
+        <div class="checkbox" style="margin-bottom: 15px">
+          <label class="control-label">
+            <input id="<%- id('anonymous') %>" type="checkbox" name="anonymous" value="true">
+            <%- t('PROPERTY:anonymous') %>
+          </label>
+        </div>
       <% } %>
+      <%- helpers.formGroup({
+        name: 'subject',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 150
+      }) %>
       <div class="row">
         <%- helpers.formGroup({
           name: 'workplace',
           type: 'select2',
           label: 'PROPERTY:',
           required: true,
-          groupClassName: 'col-md-4'
+          groupClassName: 'col-lg-4'
         }) %>
         <%- helpers.formGroup({
           name: 'division',
           type: 'select2',
           label: 'PROPERTY:',
           required: true,
-          groupClassName: 'col-md-4'
+          groupClassName: 'col-lg-4'
         }) %>
         <%- helpers.formGroup({
           name: 'building',
           type: 'select2',
           label: 'PROPERTY:',
           required: true,
-          groupClassName: 'col-md-4'
+          groupClassName: 'col-lg-4'
         }) %>
       </div>
-      <div class="row">
-        <%- helpers.formGroup({
-          name: 'coordinator',
-          type: 'select2',
-          label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-md-4'
-        }) %>
-        <%- helpers.formGroup({
-          name: 'implementer',
-          type: 'select2',
-          label: 'PROPERTY:',
-          groupClassName: 'col-md-4'
-        }) %>
+      <div class="panel panel-danger">
+        <div class="panel-heading">Zdarzenie Potencjalnie Wypadkowe</div>
+        <div class="panel-body has-lastElementRow">
+          <% if (!editMode) { %>
+            <div class="form-group">
+              <label class="control-label"><%- t('PROPERTY:kind') %></label>
+              <br>
+              <% kinds.forEach(option => { %>
+              <label class="radio-inline" title="<%= option.title %>">
+                <input name="kind" type="radio" value="<%- option.value %>">
+                <%= option.label %>
+              </label>
+              <% }) %>
+            </div>
+          <% } %>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'location',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <div class="form-group col-lg-8">
+              <label for="<%- id('eventDate') %>" class="control-label is-required"><%- t('PROPERTY:eventDate') %></label>
+              <div class=" form-group-datetime">
+                <input id="<%- id('eventDate') %>" class="form-control" name="eventDate" type="date" required min="<%- window.PRODUCTION_DATA_START_DATE || '2020-01-01' %>" max="<%- today %>">
+                <input id="<%- id('eventTime') %>" class="form-control no-controls" name="eventTime" type="number" min="0" max="23" placeholder="<%- t('FORM:eventTime:placeholder') %>" title="<%- t('FORM:eventTime:title') %>">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'eventCategory',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'reasonCategory',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'problem',
+              type: 'textarea',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4',
+              rows: 6
+            }) %>
+            <%- helpers.formGroup({
+              name: 'reason',
+              type: 'textarea',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4',
+              rows: 6
+            }) %>
+            <%- helpers.formGroup({
+              name: 'solution',
+              type: 'textarea',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4',
+              rows: 6
+            }) %>
+          </div>
+          <div id="<%- id('implementRow') %>" class="row">
+            <% if (editMode) { %>
+              <%- helpers.formGroup({
+                name: 'implementer',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: model.status === 'inProgress' || model.status === 'finished',
+                groupClassName: 'col-lg-4'
+              }) %>
+            <% } else { %>
+              <div class="form-group col-lg-4">
+                <label class="control-label"><%- t('PROPERTY:implementer') %></label>
+                <br>
+                <label class="checkbox-inline">
+                  <input id="<%- id('selfImplement') %>" name="selfImplement" type="checkbox" value="true">
+                  <%- t('FORM:selfImplement') %>
+                </label>
+              </div>
+            <% } %>
+            <%- helpers.formGroup({
+              name: 'plannedAt',
+              type: 'date',
+              label: 'FORM:',
+              required: model.status === 'inProgress' || model.status === 'finished',
+              groupClassName: 'col-lg-4'
+            }) %>
+            <div class="col-lg-4 form-group">
+              <label class="control-label"><%- t('PROPERTY:priority') %></label>
+              <br>
+              <% priorities.forEach(option => { %>
+                <label class="radio-inline">
+                  <input name="priority" type="radio" value="<%- option.value %>">
+                  <%- option.label %>
+                </label>
+              <% }) %>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="control-label"><%- t('PROPERTY:kind') %></label>
-        <br>
-        <% dictionaries.nearMiss.kinds.forEach(kind => { %>
-        <label class="radio-inline">
-          <input name="kind" type="radio" value="<%- kind %>">
-          <%- t(`kind:${kind}`) %>
-        </label>
-        <% }) %>
-      </div>
-      <div class="row">
+      <% if (editMode) { %>
         <%- helpers.formGroup({
-          name: 'eventCategory',
-          type: 'select2',
+          name: 'attachments',
+          type: 'file',
           label: 'PROPERTY:',
-          groupClassName: 'col-md-4'
+          accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
+          multiple: true
         }) %>
         <%- helpers.formGroup({
-          name: 'reasonCategory',
-          type: 'select2',
-          label: 'PROPERTY:',
-          groupClassName: 'col-md-4'
-        }) %>
-      </div>
-      <div class="row">
-        <%- helpers.formGroup({
-          name: 'problem',
+          name: 'comment',
           type: 'textarea',
           label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-md-6',
-          rows: 5
+          rows: 3
         }) %>
+      <% } else { %>
         <%- helpers.formGroup({
-          name: 'solution',
-          type: 'textarea',
-          label: 'PROPERTY:',
-          groupClassName: 'col-md-6',
-          rows: 5
+          name: 'attachments',
+          type: 'file',
+          label: 'PROPERTY:photos',
+          accept: '.png,.jpeg,.jpg,.tiff,.webp',
+          multiple: true
         }) %>
-      </div>
-      <div class="form-group">
-        <label class="control-label"><%- t('PROPERTY:priority') %></label>
-        <br>
-        <% dictionaries.nearMiss.priorities.forEach(priority => { %>
-        <label class="radio-inline">
-          <input name="priority" type="radio" value="<%- priority %>">
-          <%- t(`priority:${priority}`) %>
-        </label>
-        <% }) %>
-      </div>
+      <% } %>
     </div>
-    <div class="panel-footer">
-      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    <div class="form-actions">
+      <button id="<%- id('save') %>" type="submit" class="btn btn-primary"><i class="fa <%- editMode ? 'fa-save' : 'fa-plus' %>"></i><span><%- formActionText %></span></button>
+      <% if (editMode) { %>
+        <% if (can.todo) { %><button id="<%- id('todo') %>" type="button" class="btn btn-success"><i class="fa fa-check"></i><span><%- t('FORM:ACTION:todo') %></span></button><% } %>
+        <% if (can.pause) { %><button id="<%- id('pause') %>" type="button" class="btn btn-warning"><i class="fa fa-hourglass-o"></i><span><%- t('FORM:ACTION:pause') %></span></button><% } %>
+        <% if (can.cancel) { %><button id="<%- id('cancel') %>" type="button" class="btn btn-danger"><i class="fa fa-ban"></i><span><%- t('FORM:ACTION:cancel') %></span></button><% } %>
+      <% } %>
     </div>
   </div>
 </form>

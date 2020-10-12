@@ -56,6 +56,9 @@ input[type="month"] {
   background-color: #f5f5f5;
   border-top: 1px solid #e5e5e5;
 }
+.panel-body + .form-actions {
+  margin-top: 0;
+}
 .form-actions:last-child {
   margin-bottom: 0;
 }
@@ -96,6 +99,10 @@ input[type="month"] {
 .form-group-datetime > input[type="time"],
 .form-group-datetime > input[type="text"] {
   width: 120px;
+}
+.form-group-datetime > input[type="number"] {
+  width: 35px;
+  text-align: center;
 }
 .form-group-datetime > label {
   margin: 0 4px;
@@ -202,14 +209,17 @@ input.no-controls[type="number"] {
 .btn.active.focus {
   outline: thin dotted;
 }
+.select2-with-description .select2-results {
+  max-height: 300px;
+}
 .select2-result-with-description > h3 {
   font-size: 1em;
-  font-weight: bold;
-  margin: 0 0 2px 0;
+  font-weight: normal;
+  margin: 0;
 }
 .select2-result-with-description > p {
   font-size: .8em;
-  margin: 0;
+  margin: 2px 0 0 10px;
 }
 label + .help-block {
   margin-top: 0;

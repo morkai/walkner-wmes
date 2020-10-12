@@ -5,9 +5,12 @@ define([
   'app/broker',
   'app/pubsub',
   'app/user',
+  'app/i18n',
   'app/wmes-osh-workplaces/WorkplaceCollection',
   'app/wmes-osh-divisions/DivisionCollection',
   'app/wmes-osh-buildings/BuildingCollection',
+  'app/wmes-osh-locations/LocationCollection',
+  'app/wmes-osh-kinds/KindCollection',
   'app/wmes-osh-eventCategories/EventCategoryCollection',
   'app/wmes-osh-reasonCategories/ReasonCategoryCollection',
   './SettingCollection'
@@ -16,9 +19,12 @@ define([
   broker,
   pubsub,
   user,
+  t,
   WorkplaceCollection,
   DivisionCollection,
   BuildingCollection,
+  LocationCollection,
+  KindCollection,
   EventCategoryCollection,
   ReasonCategoryCollection,
   SettingCollection
@@ -30,6 +36,8 @@ define([
     workplace: 'workplaces',
     division: 'divisions',
     building: 'buildings',
+    location: 'locations',
+    kind: 'kinds',
     eventCategory: 'eventCategories',
     reasonCategory: 'reasonCategories'
   };
@@ -38,14 +46,17 @@ define([
   var releaseTimer = null;
   var pubsubSandbox = null;
   var dictionaries = {
-    nearMiss: {
-      kinds: [],
-      priorities: []
+    statuses: {
+      nearMiss: []
     },
+    priorities: [],
+    kindTypes: [],
     settings: new SettingCollection(),
     workplaces: new WorkplaceCollection(),
     divisions: new DivisionCollection(),
     buildings: new BuildingCollection(),
+    locations: new LocationCollection(),
+    kinds: new KindCollection(),
     eventCategories: new EventCategoryCollection(),
     reasonCategories: new ReasonCategoryCollection(),
     loaded: false,
@@ -104,6 +115,16 @@ define([
     },
     getLabel: function(dictionary, id, options)
     {
+      if (dictionary === 'priority')
+      {
+        return t('wmes-osh-common', `priority:${id}`);
+      }
+
+      if (dictionary === 'status')
+      {
+        return t('wmes-osh-common', `status:${id}`);
+      }
+
       if (typeof dictionary === 'string')
       {
         dictionary = this.forProperty(dictionary) || dictionaries[dictionary];
@@ -122,6 +143,27 @@ define([
       }
 
       return model.getLabel(options);
+    },
+    getDescription: function(dictionary, id)
+    {
+      if (typeof dictionary === 'string')
+      {
+        dictionary = this.forProperty(dictionary) || dictionaries[dictionary];
+      }
+
+      if (!dictionary || Array.isArray(dictionary))
+      {
+        return '';
+      }
+
+      var model = dictionary.get(id);
+
+      if (!model)
+      {
+        return '';
+      }
+
+      return model.get('description') || '';
     },
     forProperty: function(prop)
     {
@@ -146,6 +188,17 @@ define([
 
   function resetDictionaries(data)
   {
+    if (data)
+    {
+      ['statuses', 'priorities', 'kindTypes'].forEach(prop =>
+      {
+        if (data[prop])
+        {
+          dictionaries[prop] = data[prop];
+        }
+      });
+    }
+
     Object.keys(PROP_TO_DICT).forEach(prop =>
     {
       var dict = PROP_TO_DICT[prop];
@@ -161,17 +214,6 @@ define([
     });
 
     dictionaries.settings.reset(data ? data.settings : []);
-
-    if (data)
-    {
-      ['nearMiss'].forEach(prop =>
-      {
-        if (data[prop])
-        {
-          dictionaries[prop] = data[prop];
-        }
-      });
-    }
   }
 
   function unload()

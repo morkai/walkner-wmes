@@ -12,7 +12,6 @@ define([
   'app/core/util/showDeleteFormPage',
   'app/wmes-osh-common/dictionaries',
   './Building',
-  './BuildingCollection',
   'i18n!app/nls/wmes-osh-buildings'
 ], function(
   _,
@@ -25,21 +24,22 @@ define([
   EditFormPage,
   showDeleteFormPage,
   dictionaries,
-  Building,
-  BuildingCollection
+  Building
 ) {
   'use strict';
 
   var canView = user.auth('OSH:DICTIONARIES:VIEW');
   var canManage = user.auth('OSH:DICTIONARIES:MANAGE');
 
-  router.map('/osh/buildings', canView, req =>
+  router.map('/osh/buildings', canView, () =>
   {
     viewport.showPage(dictionaries.bind(new ListPage({
-      collection: new BuildingCollection(null, {rqlQuery: req.rql}),
+      load: null,
+      collection: dictionaries.buildings,
       columns: [
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
+        {id: 'divisions', className: 'is-overflow w300'},
         {id: 'active', className: 'is-min'}
       ]
     })));
@@ -53,9 +53,11 @@ define([
       ],
       function(detailsTemplate)
       {
+        const model = dictionaries.buildings.get(req.params.id);
+
         return dictionaries.bind(new DetailsPage({
           detailsTemplate,
-          model: new Building({_id: req.params.id})
+          model: model || new Building({_id: req.params.id})
         }));
       }
     );
@@ -85,9 +87,11 @@ define([
       ],
       function(FormView)
       {
+        const model = dictionaries.buildings.get(req.params.id);
+
         return dictionaries.bind(new EditFormPage({
           FormView,
-          model: new Building({_id: req.params.id})
+          model: model || new Building({_id: req.params.id})
         }));
       }
     );

@@ -54,15 +54,45 @@ define([
 
     serialize: function()
     {
-      const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
-      obj.workplace = dictionaries.getLabel('workplace', obj.workplace);
       obj.manager = userInfoTemplate({userInfo: obj.manager});
       obj.coordinators = obj.coordinators.map(userInfo => userInfoTemplate({userInfo}));
 
       return obj;
+    },
+
+    serializeRow: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.workplace = dictionaries.workplaces.getLabel(obj.workplace);
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {long: true});
+
+      return obj;
+    },
+
+    hasWorkplace: function(id)
+    {
+      id = parseInt(id, 10);
+
+      if (!id)
+      {
+        return false;
+      }
+
+      return this.get('workplace') === id;
     }
 
   });

@@ -10,6 +10,11 @@
         </label>
       </div>
       <%- helpers.formGroup({
+        name: 'divisions',
+        type: 'select2',
+        label: 'PROPERTY:'
+      }) %>
+      <%- helpers.formGroup({
         name: 'shortName',
         label: 'PROPERTY:',
         required: true
@@ -18,11 +23,6 @@
         name: 'longName',
         label: 'PROPERTY:',
         required: true
-      }) %>
-      <%- helpers.formGroup({
-        name: 'divisions',
-        type: 'select2',
-        label: 'PROPERTY:'
       }) %>
     </div>
     <div class="panel-footer">

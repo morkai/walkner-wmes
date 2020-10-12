@@ -26,6 +26,7 @@ define([
     flac: 'fa-file-audio-o',
     json: 'fa-file-code-o',
     jpg: 'fa-file-image-o',
+    jpeg: 'fa-file-image-o',
     gif: 'fa-file-image-o',
     png: 'fa-file-image-o',
     webp: 'fa-file-image-o',
@@ -44,6 +45,11 @@ define([
     },
     getByMime: function(mime)
     {
+      if (!mimeToExt[mime] && /^image\//.test(mime))
+      {
+        return this.getByExt(mime.substring(6));
+      }
+
       return this.getByExt(mimeToExt[mime]);
     }
   };

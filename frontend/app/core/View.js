@@ -10,6 +10,7 @@ define([
   'app/pubsub',
   'app/i18n',
   './util',
+  './util/html',
   './util/forms/formGroup'
 ],
 function(
@@ -22,6 +23,7 @@ function(
   pubsub,
   t,
   util,
+  html,
   formGroup
 ) {
   'use strict';
@@ -378,7 +380,7 @@ function(
       data = options.data;
     }
 
-    var html = '<div class="props ' + (options.first ? 'first' : '') + '">';
+    var propsHtml = '<div class="props ' + (options.first ? 'first' : '') + '">';
     var defaultNlsDomain = view.getDefaultNlsDomain();
 
     [].concat(_.isArray(options) ? options : options.props).forEach(function(prop)
@@ -390,8 +392,6 @@ function(
 
       var escape = prop.escape === false ? false : (prop.id.charAt(0) !== '!');
       var id = escape ? prop.id : prop.id.substring(1);
-      var className = prop.className || '';
-      var valueClassName = prop.valueClassName || '';
       var nlsDomain = prop.nlsDomain || options.nlsDomain || defaultNlsDomain;
       var label = prop.label || t(nlsDomain, 'PROPERTY:' + id);
       var value = _.isFunction(prop.value)
@@ -408,18 +408,99 @@ function(
         return;
       }
 
+      var propAttrs = Object.assign({
+        className: {},
+        'data-prop': id
+      }, prop.attrs);
+
+      if (typeof propAttrs.className === 'string')
+      {
+        propAttrs.className = propAttrs.className.split(' ');
+      }
+
+      if (Array.isArray(propAttrs.className))
+      {
+        var propClassName = {};
+
+        propAttrs.className.forEach(function(className)
+        {
+          propClassName[className] = true;
+        });
+
+        propAttrs.className = propClassName;
+      }
+
+      if (prop.className)
+      {
+        propAttrs.className[prop.className] = true;
+      }
+
+      propAttrs.className.prop = true;
+
+      var nameAttrs = Object.assign({className: {}}, prop.nameAttrs);
+
+      if (typeof nameAttrs.className === 'string')
+      {
+        nameAttrs.className = nameAttrs.className.split(' ');
+      }
+
+      if (Array.isArray(nameAttrs.className))
+      {
+        var nameClassName = {};
+
+        nameAttrs.className.forEach(function(className)
+        {
+          nameClassName[className] = true;
+        });
+
+        nameAttrs.className = nameClassName;
+      }
+
+      if (prop.nameClassName)
+      {
+        nameAttrs.className[prop.nameClassName] = true;
+      }
+
+      nameAttrs.className['prop-name'] = true;
+
+      var valueAttrs = Object.assign({className: {}}, prop.valueAttrs);
+
+      if (typeof valueAttrs.className === 'string')
+      {
+        valueAttrs.className = valueAttrs.className.split(' ');
+      }
+
+      if (Array.isArray(valueAttrs.className))
+      {
+        var valueClassName = {};
+
+        valueAttrs.className.forEach(function(className)
+        {
+          valueClassName[className] = true;
+        });
+
+        valueAttrs.className = valueClassName;
+      }
+
+      if (prop.valueClassName)
+      {
+        valueAttrs.className[prop.valueClassName] = true;
+      }
+
+      valueAttrs.className['prop-value'] = true;
+
       if (escape)
       {
         value = _.escape(value);
       }
 
-      html += '<div class="prop ' + className + '" data-prop="' + id + '">'
-        + '<div class="prop-name">' + label + '</div>'
-        + '<div class="prop-value ' + valueClassName + '">' + value + '</div>'
-        + '</div>';
+      var nameTag = html.tag('div', nameAttrs, label);
+      var valueTag = html.tag('div', valueAttrs, value);
+
+      propsHtml += html.tag('div', propAttrs, nameTag + valueTag);
     });
 
-    return html + '</div>';
+    return propsHtml + '</div>';
   };
 
   return View;

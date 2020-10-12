@@ -9,6 +9,8 @@ define([
 
   return ListView.extend({
 
+    className: 'is-clickable is-colored',
+
     serializeColumns: function()
     {
       return [
@@ -19,22 +21,17 @@ define([
           tdClassName: 'is-number'
         },
         {
+          id: 'status',
+          min: 1,
+          thClassName: 'is-filter'
+        },
+        {
           id: 'createdAt',
           min: 1,
           thClassName: 'is-filter'
         },
         {
           id: 'creator',
-          min: 1,
-          thClassName: 'is-filter'
-        },
-        {
-          id: 'implementer',
-          min: 1,
-          thClassName: 'is-filter'
-        },
-        {
-          id: 'coordinator',
           min: 1,
           thClassName: 'is-filter'
         },
@@ -54,23 +51,37 @@ define([
           thClassName: 'is-filter'
         },
         {
+          id: 'location',
+          className: 'is-overflow w150',
+          thClassName: 'is-filter'
+        },
+        {
+          id: 'eventDate',
+          min: 1
+        },
+        {
           id: 'kind',
           min: 1,
           thClassName: 'is-filter'
         },
         {
           id: 'eventCategory',
-          className: 'is-overflow w200',
+          className: 'is-overflow w175',
           thClassName: 'is-filter'
         },
         {
           id: 'reasonCategory',
-          className: 'is-overflow w200',
+          className: 'is-overflow w175',
           thClassName: 'is-filter'
         },
         {
-          id: 'problem',
-          className: 'is-overflow w250'
+          id: 'subject',
+          className: 'is-overflow w200'
+        },
+        {
+          id: 'implementer',
+          min: 1,
+          thClassName: 'is-filter'
         },
         '-'
       ];

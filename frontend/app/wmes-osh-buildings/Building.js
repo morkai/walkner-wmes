@@ -40,13 +40,45 @@ define([
 
     serialize: function()
     {
-      var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.toJSON();
 
-      obj.active = t('core', 'BOOL:' + obj.active);
+      obj.active = t('core', `BOOL:${obj.active}`);
+
+      return obj;
+    },
+
+    serializeRow: function()
+    {
+      var dictionaries = require('app/wmes-osh-common/dictionaries');
+      var obj = this.serialize();
+
+      obj.divisions = obj.divisions.map(id => dictionaries.getLabel('division', id, {path: true, long: false}));
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      var dictionaries = require('app/wmes-osh-common/dictionaries');
+      var obj = this.serialize();
+
       obj.divisions = obj.divisions.map(id => dictionaries.getLabel('division', id, {path: true, long: true}));
 
       return obj;
+    },
+
+    hasDivision: function(id)
+    {
+      id = parseInt(id, 10);
+
+      if (!id)
+      {
+        return false;
+      }
+
+      const divisions = this.get('divisions');
+
+      return divisions.length === 0 || divisions.includes(id);
     }
 
   });

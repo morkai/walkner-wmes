@@ -1,0 +1,49 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:type') %></label>
+        <% types.forEach(type => { %>
+        <div class="radio">
+          <label>
+            <input type="radio" name="type" value="<%- type %>">
+            <%- t('wmes-osh-common', `kind:${type}`) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <%- helpers.formGroup({
+        name: 'shortName',
+        label: 'PROPERTY:',
+        required: true
+      }) %>
+      <%- helpers.formGroup({
+        name: 'longName',
+        label: 'PROPERTY:',
+        required: true
+      }) %>
+      <%- helpers.formGroup({
+        name: 'description',
+        type: 'textarea',
+        label: 'PROPERTY:',
+        rows: 5
+      }) %>
+      <%- helpers.formGroup({
+        name: 'coordinators',
+        type: 'select2',
+        label: 'PROPERTY:'
+      }) %>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

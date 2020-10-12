@@ -107,11 +107,16 @@ define([
     return this.nlsDomain || this.model.prototype.nlsDomain;
   };
 
-  Collection.prototype.getLabel = function(id)
+  Collection.prototype.getLabel = function(id, options)
   {
     var model = this.get(id);
 
-    return model ? model.getLabel() : null;
+    return model ? model.getLabel(options) : id;
+  };
+
+  Collection.prototype.getLabels = function(ids, options)
+  {
+    return ids.map(function(id) { return this.getLabel(id, options); }, this);
   };
 
   Collection.prototype.createRqlQuery = function(rqlQuery)

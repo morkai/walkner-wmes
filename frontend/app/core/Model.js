@@ -120,6 +120,11 @@ define([
       });
 
       model.currentReadRequest = req;
+    },
+
+    isSynced: function()
+    {
+      return this.currentReadRequest === null || (!!this.collection && !!this.collection.get(this));
     }
 
   });

@@ -141,6 +141,12 @@ define([
         inputAttrs.maxlength = options.maxLength > 0 ? options.maxLength : false;
         break;
 
+      case 'file':
+        inputAttrs.type = options.type;
+        inputAttrs.multiple = options.multiple === true;
+        inputAttrs.accept = options.accept || false;
+        break;
+
       case 'select':
         inputTag = 'select';
         inputAttrs.type = false;

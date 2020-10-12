@@ -121,7 +121,7 @@
     "PRIVILEGE:REPORTS:7:VIEW": "Reports: Downtimes in AORs",
     "PRIVILEGE:REPORTS:8:VIEW": "Reports: Lean",
     "PRIVILEGE:REPORTS:9:VIEW": "Reports: Planned line utilization",
-    "PRIVILEGE:REPORTS:rearm:VIEW": "Reports: Retooling",
+    "PRIVILEGE:REPORTS:REARM:VIEW": "Reports: Retooling",
     "PRIVILEGE:XICONF:VIEW": "Xiconf: view",
     "PRIVILEGE:XICONF:MANAGE": "Xiconf: manage",
     "PRIVILEGE:XICONF:MANAGE:HID_LAMPS": "Xiconf: HID lamps: manage",
@@ -203,6 +203,9 @@
     "PRIVILEGE:COMP_REL:VIEW": "Comp. releases: view",
     "PRIVILEGE:COMP_REL:MANAGE": "Comp. releases: manage",
     "PRIVILEGE:COMP_REL:ADD": "Comp. releases: add",
+    "PRIVILEGE:OSH:NEAR_MISSES:MANAGE": "OSH > Near miss: manage",
+    "PRIVILEGE:OSH:DICTIONARIES:VIEW": "OSH > Dictionaries: view",
+    "PRIVILEGE:OSH:DICTIONARIES:MANAGE": "OSH > Dictionaries: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

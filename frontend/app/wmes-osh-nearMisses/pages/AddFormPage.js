@@ -15,6 +15,8 @@ define([
 
     FormView,
 
+    pageClassName: 'page-max-flex',
+
     initialize: function()
     {
       AddFormPage.prototype.initialize.apply(this, arguments);

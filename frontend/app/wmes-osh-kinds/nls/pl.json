@@ -1,0 +1,10 @@
+{
+  "BREADCRUMB:browse": "Rodzaje",
+
+  "PROPERTY:active": "Aktywny?",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:shortName": "Krótka nazwa",
+  "PROPERTY:longName": "Długa nazwa",
+  "PROPERTY:description": "Opis",
+  "PROPERTY:coordinators": "Koordynatorzy"
+}

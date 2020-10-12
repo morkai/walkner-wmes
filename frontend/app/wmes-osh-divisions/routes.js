@@ -25,18 +25,18 @@ define([
   EditFormPage,
   showDeleteFormPage,
   dictionaries,
-  Division,
-  DivisionCollection
+  Division
 ) {
   'use strict';
 
   var canView = user.auth('OSH:DICTIONARIES:VIEW');
   var canManage = user.auth('OSH:DICTIONARIES:MANAGE');
 
-  router.map('/osh/divisions', canView, req =>
+  router.map('/osh/divisions', canView, () =>
   {
     viewport.showPage(dictionaries.bind(new ListPage({
-      collection: new DivisionCollection(null, {rqlQuery: req.rql}),
+      load: null,
+      collection: dictionaries.divisions,
       columns: [
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
@@ -55,9 +55,11 @@ define([
       ],
       (detailsTemplate) =>
       {
+        const model = dictionaries.divisions.get(req.params.id);
+
         return dictionaries.bind(new DetailsPage({
           detailsTemplate,
-          model: new Division({_id: req.params.id})
+          model: model || new Division({_id: req.params.id})
         }));
       }
     );
@@ -87,9 +89,11 @@ define([
       ],
       (FormView) =>
       {
+        const model = dictionaries.divisions.get(req.params.id);
+
         return dictionaries.bind(new EditFormPage({
           FormView,
-          model: new Division({_id: req.params.id})
+          model: model || new Division({_id: req.params.id})
         }));
       }
     );

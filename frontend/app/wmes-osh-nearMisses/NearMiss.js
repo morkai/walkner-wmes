@@ -17,6 +17,14 @@ define([
 ) {
   'use strict';
 
+  const STATUS_TO_CLASS = {
+    new: 'default',
+    inProgress: 'info',
+    finished: 'success',
+    paused: 'warning',
+    cancelled: 'danger'
+  };
+
   const short = {long: false};
   const long = {long: true};
 
@@ -36,17 +44,19 @@ define([
 
     defaults: {},
 
+    getModelType: function()
+    {
+      return 'nearMisses';
+    },
+
     serialize: function()
     {
       const obj = this.toJSON();
 
-      obj.kind = t(this.nlsDomain, `kind:${obj.kind}`);
-      obj.priority = t(this.nlsDomain, `priority:${obj.priority}`);
-
-      ['creator', 'manager', 'coordinator', 'implementer'].forEach(prop =>
-      {
-        obj[prop] = userInfoTemplate({userInfo: obj[prop], noIp: true});
-      });
+      obj.status = t(this.nlsDomain, `status:${obj.status}`);
+      obj.priority = t('wmes-osh-common', `priority:${obj.priority}`);
+      obj.materialLoss = t('core', `BOOL:${obj.materialLoss}`);
+      obj.duration = this.getDuration();
 
       return obj;
     },
@@ -55,23 +65,28 @@ define([
     {
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
-      const eventCategory = dictionaries.eventCategories.get(obj.eventCategory);
-      const reasonCategory = dictionaries.reasonCategories.get(obj.reasonCategory);
 
-      obj.createdAt = time.format(obj.createdAt, 'L, LT');
-      obj.workplace = dictionaries.getLabel('workplace', obj.workplace, short);
-      obj.division = dictionaries.getLabel('division', obj.division, short);
-      obj.building = dictionaries.getLabel('building', obj.building, short);
+      obj.className = STATUS_TO_CLASS[this.get('status')];
 
-      if (eventCategory)
+      ['createdAt', 'startedAt', 'finishedAt'].forEach(prop =>
       {
-        obj.eventCategory = eventCategory.getLabel(short);
-      }
+        obj[prop] = obj[prop] ? time.format(obj[prop], 'L') : '';
+      });
 
-      if (reasonCategory)
+      obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'L') : '';
+      obj.eventDate = time.utc.format(obj.eventDate, 'L, H');
+
+      ['workplace', 'division', 'building', 'location', 'kind', 'eventCategory', 'reasonCategory'].forEach(prop =>
       {
-        obj.reasonCategory = reasonCategory.getLabel(short);
-      }
+        obj[prop] = dictionaries.getLabel(prop, obj[prop], short);
+      });
+
+      ['creator', 'manager', 'implementer', 'coordinators'].forEach(prop =>
+      {
+        obj[prop] = !Array.isArray(obj[prop])
+          ? userInfoTemplate(obj[prop], {noIp: true, clickable: false})
+          : obj[prop].map(userInfo => userInfoTemplate(userInfo, {noIp: true, clickable: false}));
+      });
 
       return obj;
     },
@@ -80,23 +95,34 @@ define([
     {
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
-      const eventCategory = dictionaries.eventCategories.get(obj.eventCategory);
-      const reasonCategory = dictionaries.reasonCategories.get(obj.reasonCategory);
 
-      obj.createdAt = time.format(obj.createdAt, 'LL, LT');
-      obj.workplace = dictionaries.getLabel('workplace', obj.workplace, long);
-      obj.division = dictionaries.getLabel('division', obj.division, long);
-      obj.building = dictionaries.getLabel('building', obj.building, long);
-
-      if (eventCategory)
+      ['createdAt', 'startedAt', 'finishedAt'].forEach(prop =>
       {
-        obj.eventCategory = eventCategory.getLabel(long);
-      }
+        obj[prop] = obj[prop] ? time.format(obj[prop], 'LL, LT') : '';
+      });
 
-      if (reasonCategory)
+      obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'LL') : '';
+      obj.eventDate = time.utc.format(obj.eventDate, 'LL, [godz.] H');
+
+      ['workplace', 'division', 'building', 'location'].forEach(prop =>
       {
-        obj.reasonCategory = reasonCategory.getLabel(long);
-      }
+        obj[prop] = dictionaries.getLabel(prop, obj[prop], long);
+      });
+
+      obj.descriptions = {};
+
+      ['kind', 'eventCategory', 'reasonCategory'].forEach(prop =>
+      {
+        obj.descriptions[prop] = dictionaries.getDescription(prop, obj[prop]);
+        obj[prop] = dictionaries.getLabel(prop, obj[prop], long);
+      });
+
+      ['creator', 'manager', 'implementer', 'coordinators'].forEach(prop =>
+      {
+        obj[prop] = !Array.isArray(obj[prop])
+          ? userInfoTemplate(obj[prop], {noIp: true})
+          : obj[prop].map(userInfo => userInfoTemplate(userInfo, {noIp: true}));
+      });
 
       return obj;
     },
@@ -105,8 +131,7 @@ define([
     {
       return this.isCreator()
         || this.isImplementer()
-        || this.isCoordinator()
-        || this.isManager();
+        || this.isCoordinator();
     },
 
     isCreator: function()
@@ -121,12 +146,27 @@ define([
 
     isCoordinator: function()
     {
-      return (this.get('coordinator') || {}).id === user.data._id;
+      return (this.get('coordinators') || []).some(u => u.id === user.data._id);
     },
 
-    isManager: function()
+    getDuration: function()
     {
-      return (this.get('manager') || {}).id === user.data._id;
+      const startedAt = Date.parse(this.get('startedAt'));
+
+      if (!startedAt || this.get('status') === 'cancelled')
+      {
+        return '';
+      }
+
+      const finishedAt = Date.parse(this.get('finishedAt')) || Date.now();
+      const hours = Math.ceil((finishedAt - startedAt) / 1000 / 3600);
+
+      return hours.toLocaleString();
+    },
+
+    getAttachmentUrl: function(attachment)
+    {
+      return `/osh/nearMisses/${this.id}/attachments/${attachment._id}`;
     }
 
   }, {
@@ -140,7 +180,136 @@ define([
 
       edit: function(model)
       {
-        return (this.can || this).manage() || (!!model && model.isParticipant());
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        switch (model.get('status'))
+        {
+          case 'new':
+            return model.isCreator() || model.isCoordinator();
+
+          case 'inProgress':
+            return model.isImplementer() || model.isCoordinator();
+
+          case 'paused':
+            return model.isCoordinator();
+
+          default:
+            return false;
+        }
+      },
+
+      delete: function(model)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.get('status') === 'new' && (model.isCreator() || model.isCoordinator()))
+        {
+          return true;
+        }
+
+        return false;
+      },
+
+      todo: function(model)
+      {
+        const status = model.get('status');
+
+        if (status === 'inProgress' || status === 'finished')
+        {
+          return false;
+        }
+
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        return model.isCoordinator();
+      },
+
+      pause: function(model)
+      {
+        const status = model.get('status');
+
+        if (status !== 'new' && status !== 'inProgress')
+        {
+          return false;
+        }
+
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        return model.isCoordinator();
+      },
+
+      cancel: function(model)
+      {
+        const status = model.get('status');
+
+        if (status === 'finished' || status === 'cancelled')
+        {
+          return false;
+        }
+
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (status === 'new')
+        {
+          return model.isCreator() || model.isCoordinator();
+        }
+
+        if (status === 'inProgress')
+        {
+          return model.isCoordinator();
+        }
+
+        return false;
+      },
+
+      editAttachment: function(model)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.get('status') === 'finished')
+        {
+          return false;
+        }
+
+        return model.isParticipant();
+      },
+
+      deleteAttachment: function(model, attachment)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.get('status') === 'finished')
+        {
+          return false;
+        }
+
+        if (model.isCoordinator())
+        {
+          return true;
+        }
+
+        return attachment.user.id === user.data._id;
       }
 
     }

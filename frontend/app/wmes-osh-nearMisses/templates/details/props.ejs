@@ -1,0 +1,106 @@
+<div class="osh-nearMisses-details-props">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%- t('details:general') %></div>
+        <div class="panel-details">
+          <%- helpers.props(details, [
+            'subject',
+            'workplace',
+            'division',
+            'building',
+            'location',
+            'eventDate',
+            {id: '!kind', value: v =>
+              `<span title="${_.escape(details.descriptions.kind)}">${_.escape(v)} `
+              + (details.descriptions.kind ? '<i class="fa fa-question-circle"></i>' : '')
+              + '</span>'
+            },
+            {id: 'materialLoss', visible: model.materialLoss},
+            {id: '!eventCategory', value: v =>
+              `<span title="${_.escape(details.descriptions.eventCategory)}">${_.escape(v)} `
+              + (details.descriptions.eventCategory ? '<i class="fa fa-question-circle"></i>' : '')
+              + '</span>'
+            },
+            {id: '!reasonCategory', value: v =>
+              `<span title="${_.escape(details.descriptions.reasonCategory)}">${_.escape(v)} `
+              + (details.descriptions.reasonCategory ? '<i class="fa fa-question-circle"></i>' : '')
+              + '</span>'
+            }
+          ]) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:users') %></div>
+        <div class="panel-details">
+          <%- helpers.props(details, [
+            '!creator',
+            '!implementer',
+            {id: '!coordinators', value: users =>
+            {
+              if (!users.length)
+              {
+                return '';
+              }
+
+              if (users.length === 1 || users.length > 11)
+              {
+                return users.join(', ');
+              }
+
+              return `<ul><li>${users.join('<li>')}</ul>`;
+            }}
+          ]) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:extra') %></div>
+        <div class="panel-details">
+          <%- helpers.props(details, [
+            {id: '!status', value: status =>
+            {
+              let html = status;
+
+              if (model.statusComment)
+              {
+                html += `<br><span class="small text-lines"><i class="fa fa-comment-o"></i> ${_.escape(model.statusComment)}</span>`;
+              }
+
+              return html;
+            }},
+            'priority',
+            'createdAt',
+            'startedAt',
+            'plannedAt',
+            'finishedAt',
+            'duration'
+          ]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading"><%- t('PROPERTY:problem') %></div>
+        <div class="panel-body text-lines"><%= details.problem %></div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><%- t('PROPERTY:reason') %></div>
+        <div class="panel-body text-lines"><%= details.reason || '?' %></div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-success">
+        <div class="panel-heading"><%- t('PROPERTY:solution') %></div>
+        <div class="panel-body text-lines"><%= details.solution || '?' %></div>
+      </div>
+    </div>
+  </div>
+</div>

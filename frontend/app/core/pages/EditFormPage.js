@@ -42,7 +42,14 @@ define([
 
     load: function(when)
     {
-      return when(this.model.fetch(this.options.fetchOptions));
+      var model = this.model;
+
+      if (model.isSynced && model.isSynced())
+      {
+        return when();
+      }
+
+      return when(model.fetch(this.options.fetchOptions));
     },
 
     defineModels: function()

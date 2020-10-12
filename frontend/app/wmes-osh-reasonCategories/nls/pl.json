@@ -2,6 +2,7 @@
   "BREADCRUMB:browse": "Kategorie przyczyn",
 
   "PROPERTY:active": "Aktywna?",
+  "PROPERTY:eventCategories": "Kategorie zdarzeń",
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
   "PROPERTY:description": "Opis"

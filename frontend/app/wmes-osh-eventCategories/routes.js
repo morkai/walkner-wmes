@@ -25,21 +25,23 @@ define([
   EditFormPage,
   showDeleteFormPage,
   dictionaries,
-  EventCategory,
-  EventCategoryCollection
+  EventCategory
 ) {
   'use strict';
 
   var canView = user.auth('OSH:DICTIONARIES:VIEW');
   var canManage = user.auth('OSH:DICTIONARIES:MANAGE');
 
-  router.map('/osh/eventCategories', canView, req =>
+  router.map('/osh/eventCategories', canView, () =>
   {
     viewport.showPage(dictionaries.bind(new ListPage({
-      collection: new EventCategoryCollection(null, {rqlQuery: req.rql}),
+      load: null,
+      collection: dictionaries.eventCategories,
       columns: [
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
+        {id: 'kinds', className: 'is-min'},
+        {id: 'materialLoss', className: 'is-min'},
         {id: 'active', className: 'is-min'}
       ]
     })));
@@ -53,9 +55,11 @@ define([
       ],
       (detailsTemplate) =>
       {
+        const model = dictionaries.eventCategories.get(req.params.id);
+
         return dictionaries.bind(new DetailsPage({
           detailsTemplate,
-          model: new EventCategory({_id: req.params.id})
+          model: model || new EventCategory({_id: req.params.id})
         }));
       }
     );
@@ -85,9 +89,11 @@ define([
       ],
       (FormView) =>
       {
+        const model = dictionaries.eventCategories.get(req.params.id);
+
         return dictionaries.bind(new EditFormPage({
           FormView,
-          model: new EventCategory({_id: req.params.id})
+          model: model || new EventCategory({_id: req.params.id})
         }));
       }
     );

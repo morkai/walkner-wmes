@@ -1,4 +1,11 @@
 <form class="well filter-form" autocomplete="off">
+  <%- helpers.formGroup({
+    name: 'status',
+    type: 'select',
+    label: 'PROPERTY:',
+    expandable: true,
+    options: statuses
+  }) %>
   <%- forms.dateTimeRange({
     idPrefix,
     property: 'createdAt',
@@ -37,13 +44,20 @@
     groupAttrs: {'data-filter': 'building'}
   }) %>
   <%- helpers.formGroup({
+    name: 'location',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'location'}
+  }) %>
+  <%- helpers.formGroup({
     name: 'kind',
     type: 'select',
     label: 'PROPERTY:',
     groupClassName: 'hidden',
     groupAttrs: {'data-filter': 'kind'},
     expandable: true,
-    options: dictionaries.nearMiss.kinds.map(value => ({value, label: t(`kind:${value}`)}))
+    options: kinds
   }) %>
   <%- helpers.formGroup({
     name: 'eventCategory',
@@ -66,7 +80,7 @@
     groupClassName: 'hidden',
     groupAttrs: {'data-filter': 'priority'},
     expandable: true,
-    options: dictionaries.nearMiss.priorities.map(value => ({value, label: t(`priority:${value}`)}))
+    options: priorities
   }) %>
   <%- renderLimit({hidden: true}) %>
   <div class="form-group filter-actions">

@@ -159,7 +159,7 @@ define([
 
     $popover.on('click.userInfoPopover', function(e)
     {
-      if (e.currentTarget.dataset.clickable === '0')
+      if (e.currentTarget.dataset.clickable === '0' && !e.ctrlKey)
       {
         return;
       }

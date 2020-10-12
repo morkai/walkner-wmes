@@ -89,6 +89,18 @@ define([
       return this.serializeForm(form2js(this.el));
     },
 
+    getSubmitButtons: function()
+    {
+      var $actions = this.$('.form-actions');
+
+      if (!$actions.length)
+      {
+        $actions = this.$('.panel-footer');
+      }
+
+      return $actions.find('.btn:not(.cancel)');
+    },
+
     submitForm: function()
     {
       this.hideErrorMessage();
@@ -107,7 +119,7 @@ define([
         return false;
       }
 
-      var $submitEl = this.$('.form-actions .btn:not(.cancel)').attr('disabled', true);
+      var $submitEl = this.getSubmitButtons().prop('disabled', true);
 
       this.submitRequest($submitEl, formData);
 
@@ -120,7 +132,7 @@ define([
 
       req.done(this.handleSuccess.bind(this));
       req.fail(this.handleFailure.bind(this));
-      req.always(function() { $submitEl.attr('disabled', false); });
+      req.always(function() { $submitEl.prop('disabled', false); });
     },
 
     request: function(formData)

@@ -2,11 +2,26 @@
   "navbar:workplaces": "Zakłady",
   "navbar:divisions": "Wydziały",
   "navbar:buildings": "Budynki",
+  "navbar:locations": "Miejsca zdarzeń",
+  "navbar:kinds": "Rodzaje",
   "navbar:eventCategories": "Kategorie zdarzeń",
   "navbar:reasonCategories": "Kategorie przyczyn",
-
   "navbar:nearMisses": "ZPW",
+  "navbar:search:nearMisses": "ZPW",
 
-  "navbar:search:nearMisses": "ZPW"
+  "priority:0": "Niski",
+  "priority:1": "Normalny",
+  "priority:2": "Wysoki",
+  "priority:3": "Krytyczny",
 
+  "kind:osh": "BHP",
+  "kind:env": "Ochrona środowiska",
+  "kind:inf": "Infrastruktura",
+  "kind:other": "Inny",
+
+  "status:new": "Nowe",
+  "status:inProgress": "W realizacji",
+  "status:finished": "Zakończone",
+  "status:paused": "Wstrzymane",
+  "status:cancelled": "Anulowane"
 }
