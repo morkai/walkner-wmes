@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Location"],function(e,o){"use strict";return e.extend({model:o,comparator:(e,o)=>e.get("shortName").localeCompare(o.get("shortName"),void 0,{ignorePunctuation:!0,numeric:!0})})});

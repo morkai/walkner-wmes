@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","app/wmes-osh-nearMisses/templates/details/props"],function(e,t){"use strict";return e.extend({template:t,getTemplateData:function(){return{details:this.model.serializeDetails(),model:this.model.toJSON()}}})});

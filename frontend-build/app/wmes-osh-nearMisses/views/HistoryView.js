@@ -1,0 +1,1 @@
+define(["app/core/View","app/wmes-osh-nearMisses/templates/history/panel"],function(e,t){"use strict";return e.extend({template:t,initialize:function(){this.once("afterRender",()=>{this.listenTo(this.model,"change:changes",this.render)})},getTemplateData:function(){return{changes:this.model.get("changes")}}})});

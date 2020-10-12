@@ -988,8 +988,28 @@ app/wmes-osh-common/assets/main.css
 ----------------
 app/wmes-osh-common/assets/main.css
 
+app/wmes-osh-nearMisses/assets/attachments.css
+----------------
+app/wmes-osh-nearMisses/assets/attachments.css
+
+app/wmes-osh-nearMisses/assets/details.css
+----------------
+app/wmes-osh-nearMisses/assets/details.css
+
+app/wmes-osh-nearMisses/assets/form.css
+----------------
+app/wmes-osh-nearMisses/assets/form.css
+
+app/wmes-osh-nearMisses/assets/history.css
+----------------
+app/wmes-osh-nearMisses/assets/history.css
+
 app/wmes-osh-nearMisses/assets/main.css
 ----------------
+app/wmes-osh-nearMisses/assets/./form.css
+app/wmes-osh-nearMisses/assets/./details.css
+app/wmes-osh-nearMisses/assets/./attachments.css
+app/wmes-osh-nearMisses/assets/./history.css
 app/wmes-osh-nearMisses/assets/main.css
 
 app/wmes-snf-programs/assets/main.css
@@ -1135,6 +1155,10 @@ assets/select2.css
 ----------------
 assets/select2.css
 
+assets/signify.css
+----------------
+assets/signify.css
+
 assets/wmes-docs-viewer.css
 ----------------
 assets/../vendor/bootstrap/css/bootstrap.css
@@ -1225,6 +1249,7 @@ assets/../app/updater/assets/main.css
 assets/../app/mor/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
 assets/./wmes-loading.css
+assets/./signify.css
 assets/wmes-main.css
 
 assets/wmes-operator.css
@@ -1256,6 +1281,7 @@ assets/../app/updater/assets/main.css
 assets/../app/wmes-osh-common/assets/main.css
 assets/../app/wmes-osh-nearMisses/assets/main.css
 assets/./wmes-loading.css
+assets/./signify.css
 assets/wmes-pila-main.css
 
 assets/wmes-pila.css
@@ -2420,6 +2446,10 @@ app/wmes-osh-divisions/Division.js
 app/wmes-osh-divisions/DivisionCollection.js
 app/wmes-osh-buildings/Building.js
 app/wmes-osh-buildings/BuildingCollection.js
+app/wmes-osh-locations/Location.js
+app/wmes-osh-locations/LocationCollection.js
+app/wmes-osh-kinds/Kind.js
+app/wmes-osh-kinds/KindCollection.js
 app/wmes-osh-eventCategories/EventCategory.js
 app/wmes-osh-eventCategories/EventCategoryCollection.js
 app/wmes-osh-reasonCategories/ReasonCategory.js
@@ -2439,6 +2469,14 @@ app/nls/wmes-osh-buildings.js
 app/nls/pl/wmes-osh-buildings.js
 i18n!app/nls/wmes-osh-buildings
 app/wmes-osh-buildings/routes.js
+app/nls/wmes-osh-locations.js
+app/nls/pl/wmes-osh-locations.js
+i18n!app/nls/wmes-osh-locations
+app/wmes-osh-locations/routes.js
+app/nls/wmes-osh-kinds.js
+app/nls/pl/wmes-osh-kinds.js
+i18n!app/nls/wmes-osh-kinds
+app/wmes-osh-kinds/routes.js
 app/nls/wmes-osh-eventCategories.js
 app/nls/pl/wmes-osh-eventCategories.js
 i18n!app/nls/wmes-osh-eventCategories
@@ -2458,14 +2496,32 @@ app/core/util/ExpandableSelect.js
 app/wmes-osh-nearMisses/views/FilterView.js
 app/wmes-osh-nearMisses/views/ListView.js
 app/wmes-osh-nearMisses/pages/ListPage.js
-app/wmes-osh-nearMisses/templates/details.js
-app/wmes-osh-nearMisses/views/DetailsView.js
+app/wmes-osh-nearMisses/templates/details/props.js
+app/wmes-osh-nearMisses/views/PropsView.js
+app/core/util/fileIcons.js
+app/orders/templates/commentPopover.js
+vendor/require-css/normalize.js
+vendor/require-css/css.js
+css!app/orders/assets/commentPopover
+app/orders/util/commentPopover.js
+app/planning/templates/contextMenu.js
+app/nls/planning.js
+app/nls/pl/planning.js
+i18n!app/nls/planning
+app/planning/util/contextMenu.js
+app/wmes-osh-nearMisses/NearMiss.js
+app/wmes-osh-nearMisses/templates/attachments/panel.js
+app/wmes-osh-nearMisses/templates/attachments/preview.js
+app/wmes-osh-nearMisses/templates/attachments/delete.js
+app/wmes-osh-nearMisses/views/AttachmentsView.js
+app/wmes-osh-nearMisses/templates/history/panel.js
+app/wmes-osh-nearMisses/views/HistoryView.js
+app/wmes-osh-nearMisses/templates/details/page.js
 app/wmes-osh-nearMisses/pages/DetailsPage.js
 app/wmes-osh-nearMisses/templates/form.js
 app/wmes-osh-nearMisses/views/FormView.js
 app/wmes-osh-nearMisses/pages/AddFormPage.js
 app/wmes-osh-nearMisses/pages/EditFormPage.js
-app/wmes-osh-nearMisses/NearMiss.js
 app/wmes-osh-nearMisses/NearMissCollection.js
 app/nls/wmes-osh-nearMisses.js
 app/nls/pl/wmes-osh-nearMisses.js

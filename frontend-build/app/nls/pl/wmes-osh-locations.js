@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:browse":function(n){return"Miejsca zdarzeń"},"PROPERTY:active":function(n){return"Aktywne?"},"PROPERTY:shortName":function(n){return"Krótka nazwa"},"PROPERTY:longName":function(n){return"Długa nazwa"},"PROPERTY:buildings":function(n){return"Budynki"}}});
