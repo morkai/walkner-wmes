@@ -124,11 +124,14 @@
   margin-top: 0;
 }
 .navbar-small .navbar-search {
-  margin-top: 16px;
+  margin-top: 0;
 }
 .navbar-small .navbar-search .navbar-search-phrase {
   font-size: 14px;
   width: 155px;
+}
+.navbar-small .has-feedback .form-control-feedback {
+  font-size: 14px;
 }
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
