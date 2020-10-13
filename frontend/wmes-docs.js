@@ -10,7 +10,7 @@
 
   function requireApp()
   {
-    if (window.parent !== window)
+    if (window.IS_LINUX && window.parent !== window)
     {
       require(['app/data/localStorage'], function(localStorage)
       {
@@ -68,8 +68,12 @@
     PageLayout)
   {
     var startBroker = broker.sandbox();
+    var useSocket = window.location.hash < 1;
 
-    socket.connect();
+    if (useSocket)
+    {
+      socket.connect();
+    }
 
     moment.locale(window.appLocale);
 
@@ -93,7 +97,6 @@
       return new BlankLayout();
     });
 
-
     viewport.registerLayout('page', function createPageLayout()
     {
       return new PageLayout({
@@ -110,7 +113,7 @@
       document.title = newTitle.reverse().join(' < ');
     });
 
-    if (navigator.onLine)
+    if (useSocket && navigator.onLine)
     {
       startBroker.subscribe('socket.connected', function()
       {

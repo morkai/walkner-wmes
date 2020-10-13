@@ -11,7 +11,7 @@ define([
   'app/core/pages/DetailsPage',
   'app/data/loadedModules',
   'app/data/localStorage',
-  'app/delayReasons/storage',
+  'app/data/delayReasons',
   'app/printers/views/PrinterPickerView',
   'app/wmes-fap-entries/dictionaries',
   'app/wmes-fap-entries/EntryCollection',
@@ -44,7 +44,7 @@ define([
   DetailsPage,
   loadedModules,
   localStorage,
-  delayReasonsStorage,
+  delayReasons,
   PrinterPickerView,
   fapDictionaries,
   FapEntryCollection,
@@ -160,7 +160,6 @@ define([
 
     destroy: function()
     {
-      delayReasonsStorage.release();
       fapDictionaries.unload();
       $(window).off('.' + this.idPrefix);
 
@@ -181,7 +180,7 @@ define([
         }), this);
       }
 
-      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
+      this.delayReasons = delayReasons;
 
       if (loadedModules.isLoaded('wmes-fap') && user.isAllowedTo('USER'))
       {
@@ -310,15 +309,12 @@ define([
         this.fapEntries ? this.fapEntries.fetch({reset: true}) : null,
         this.downtimes ? this.downtimes.fetch({reset: true}) : null,
         this.childOrders.fetch({reset: true}),
-        this.paintOrders ? this.paintOrders.fetch({reset: true}) : null,
-        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
+        this.paintOrders ? this.paintOrders.fetch({reset: true}) : null
       );
     },
 
     afterRender: function()
     {
-      delayReasonsStorage.acquire();
-
       if (this.fapEntries)
       {
         fapDictionaries.load();

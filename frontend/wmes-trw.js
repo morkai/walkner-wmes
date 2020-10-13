@@ -10,7 +10,7 @@
 
   function requireApp()
   {
-    if (window.parent !== window)
+    if (window.IS_LINUX && window.parent !== window)
     {
       require(['app/data/localStorage'], function(localStorage)
       {

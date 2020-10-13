@@ -150,7 +150,11 @@ const frontendDictionaryModules = {
   aors: 'AORS',
   orderStatuses: 'ORDER_STATUSES',
   downtimeReasons: 'DOWNTIME_REASONS',
-  isaPalletKinds: 'ISA_PALLET_KINDS'
+  isaPalletKinds: 'ISA_PALLET_KINDS',
+  delayReasons: 'DELAY_REASONS'
+};
+const docsDictionaryModules = {
+  delayReasons: 'DELAY_REASONS'
 };
 const whDictionaryModules = {
   downtimeReasons: 'DOWNTIME_REASONS',
@@ -198,7 +202,7 @@ exports.updater = {
       mainCssFile: '/assets/wmes-docs.css',
       template: manifestTemplates.main,
       frontendAppData: {},
-      dictionaryModules: {}
+      dictionaryModules: docsDictionaryModules
     },
     {
       frontendVersionKey: 'operator',
