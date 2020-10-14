@@ -1952,6 +1952,7 @@ app/core/util/onModelDeleted.js
 app/core/views/DetailsView.js
 app/core/pages/createPageBreadcrumbs.js
 app/core/pages/DetailsPage.js
+app/data/delayReasons.js
 app/wmes-fap-categories/Category.js
 app/wmes-fap-categories/CategoryCollection.js
 app/wmes-fap-subCategories/SubCategory.js
@@ -2716,10 +2717,9 @@ app/core/util/onModelDeleted.js
 app/core/views/DetailsView.js
 app/core/pages/createPageBreadcrumbs.js
 app/core/pages/DetailsPage.js
-app/data/createOnDemandStorage.js
 app/delayReasons/DelayReason.js
 app/delayReasons/DelayReasonCollection.js
-app/delayReasons/storage.js
+app/data/delayReasons.js
 app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
 app/data/orgUnits.js

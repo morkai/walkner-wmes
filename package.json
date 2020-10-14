@@ -5,8 +5,8 @@
   "version": "0.153.0",
   "updater": {
     "wmes": {
-      "backend": 618,
-      "frontend": 767,
+      "backend": 619,
+      "frontend": 768,
       "reports": 132,
       "attachments": 3,
       "importer-sap": 67,
@@ -14,9 +14,9 @@
       "watchdog": 14,
       "mailer": 14,
       "operator": 98,
-      "docs": 53,
+      "docs": 54,
       "heff": 44,
-      "planning": 88,
+      "planning": 89,
       "ps-queue": 57,
       "ps-load": 16,
       "wh-pickup": 67,
@@ -124,6 +124,7 @@
   },
   "devDependencies": {
     "chalk": "^3.0.0",
+    "csso": "^4.0.3",
     "grunt": "^1.0.4",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-concat": "^1.0.1",
