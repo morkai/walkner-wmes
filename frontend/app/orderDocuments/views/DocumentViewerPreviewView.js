@@ -261,6 +261,16 @@ define([
         query += '&pdf=1';
       }
 
+      if (window.WMES_LINE_ID)
+      {
+        query += '&line=' + encodeURIComponent(window.WMES_LINE_ID);
+      }
+
+      if (window.WMES_STATION)
+      {
+        query += '&station=' + window.WMES_STATION;
+      }
+
       return query;
     },
 
