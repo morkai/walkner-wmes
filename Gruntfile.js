@@ -15,7 +15,7 @@ module.exports = grunt =>
   const modules = [
     {name: 'pos-main', include},
     {name: 'wmes-main', include},
-    {name: 'wmes-pila', include},
+    {name: 'wmes-pila-main', include},
     {name: 'wmes-docs', include},
     {name: 'wmes-operator', include},
     {name: 'wmes-heff', include},
@@ -130,7 +130,7 @@ module.exports = grunt =>
           dir: './frontend-build',
           optimize: 'none',
           optimizeCss: 'standard',
-          buildCSS: false,
+          buildCSS: true,
           modules,
           packages: requirejsConfig.packages,
           paths: requirejsConfig.buildPaths,
