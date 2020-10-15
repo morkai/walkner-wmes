@@ -93,6 +93,7 @@ define([
         this.togglePanels();
         this.toggleRequiredToFinishFlags();
         this.setUpCoordSectionSelect2();
+        this.checkOwnerValidity();
       },
 
       'change [name="section"]': function()
@@ -300,12 +301,23 @@ define([
       var view = this;
       var $confirmer = view.$id('confirmer');
       var confirmer = $confirmer.select2('data');
+      var totalOwners = {};
+      var maxPerType = 2;
+      var maxOverall = 3;
+      var $owners = [
+        view.$id('suggestionOwners')
+      ];
 
-      [
-        view.$id('suggestionOwners'),
-        view.$id('suggestedKaizenOwners'),
-        view.$id('kaizenOwners')
-      ].forEach(function($owners)
+      if (view.$id('panel-kaizen').hasClass('hidden'))
+      {
+        $owners.push(view.$id('suggestedKaizenOwners'));
+      }
+      else
+      {
+        $owners.push(view.$id('kaizenOwners'));
+      }
+
+      $owners.forEach(function($owners)
       {
         if (!$owners.length)
         {
@@ -322,14 +334,29 @@ define([
           data.prop = $owners[0].name;
         }
 
-        if (!error && owners.length > 2)
+        if (!error && owners.length > maxPerType)
         {
           error = 'FORM:ERROR:tooManyOwners';
-          data.max = 2;
+          data.max = maxPerType;
+        }
+
+        if (!error)
+        {
+          owners.forEach(function(owner)
+          {
+            totalOwners[owner.id] = 1;
+          });
         }
 
         $owners[0].setCustomValidity(error ? view.t(error, data) : '');
       });
+
+      if (Object.keys(totalOwners).length > 3)
+      {
+        view.$id('suggestionOwners')[0].setCustomValidity(view.t('FORM:ERROR:tooManyTotalOwners', {
+          max: maxOverall
+        }));
+      }
     },
 
     checkSectionValidity: function()
@@ -808,19 +835,22 @@ define([
       setUpUserSelect2(this.$id('suggestionOwners'), {
         multiple: true,
         noPersonnelId: true,
-        activeOnly: activeOnly
+        activeOnly: activeOnly,
+        maximumSelectionSize: 2
       }).select2('data', prepareOwners('suggestion'));
 
       setUpUserSelect2(this.$id('suggestedKaizenOwners'), {
         multiple: true,
         noPersonnelId: true,
-        activeOnly: activeOnly
+        activeOnly: activeOnly,
+        maximumSelectionSize: 2
       }).select2('data', prepareOwners('kaizen'));
 
       setUpUserSelect2(this.$id('kaizenOwners'), {
         multiple: true,
         noPersonnelId: true,
-        activeOnly: activeOnly
+        activeOnly: activeOnly,
+        maximumSelectionSize: 2
       }).select2('data', prepareOwners('kaizen'));
 
       function prepareOwners(type)
@@ -987,7 +1017,7 @@ define([
       }
     },
 
-    handleRequiredToFinishFlags: function(prop)
+    handleRequiredToFinishFlags: function(prop) // eslint-disable-line no-unused-vars
     {
 
     },

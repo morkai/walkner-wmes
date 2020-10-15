@@ -138,6 +138,7 @@ define([
 
     checkKaizenOwnersValidity: function()
     {
+      var max = 3;
       var $kaizenOwners = this.$id('kaizenOwners');
       var error = '';
 
@@ -146,6 +147,27 @@ define([
         if ($kaizenOwners.val() === '')
         {
           error = this.t('accept:kaizenOwners:required');
+        }
+        else
+        {
+          var owners = {};
+
+          this.model.get('suggestionOwners').forEach(function(owner)
+          {
+            owners[owner.id] = 1;
+          });
+
+          $kaizenOwners.select2('data').forEach(function(owner)
+          {
+            owners[owner.id] = 1;
+          });
+
+          var count = Object.keys(owners).length;
+
+          if (count > max)
+          {
+            error = this.t('FORM:ERROR:tooManyTotalOwners', {max: max});
+          }
         }
       }
 

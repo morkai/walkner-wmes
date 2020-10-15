@@ -129,6 +129,7 @@
     "FORM:ERROR:ownerConfirmer": "Owner cannot also be the Confirmer.",
     "FORM:ERROR:sectionCoord": "Department cannot also be a coordinating department.",
     "FORM:ERROR:tooManyOwners": "Only {max} {max, plural, one{Owner} other{Owners}} can be specified.",
+    "FORM:ERROR:tooManyTotalOwners": "Only {max} {max, plural, one{Owner} other{different Owners}} can be specified in total.",
     "FORM:MSG:attachmentEdit": "Choose new files only if you want to override the current files.",
     "FORM:help:subject": "Enter a short text...",
     "FORM:help:section": "Select your section...",
