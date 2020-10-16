@@ -91,7 +91,8 @@ define([
 
       this.once('afterRender', () =>
       {
-        this.listenTo(this.model, 'change:attachments', this.render);
+        this.listenTo(this.model, 'change:attachments', _.debounce(this.render, 1));
+        this.listenTo(this.model, 'seen', this.onSeen);
       });
 
       $(window).on(`keydown.${this.idPrefix}`, this.onWindowKeyDown.bind(this));
@@ -110,10 +111,13 @@ define([
 
     getTemplateData: function()
     {
+      const observer = this.model.getObserver();
+
       return {
         modelType: this.model.getModelType(),
         modelId: this.model.id,
-        attachments: this.serializeAttachments()
+        attachments: this.serializeAttachments(),
+        unseen: observer.changes.all || !!observer.changes.attachments
       };
     },
 
@@ -315,6 +319,11 @@ define([
       {
         this.nextPreview();
       }
+    },
+
+    onSeen: function()
+    {
+      this.$('.osh-unseen').removeClass('osh-unseen');
     }
 
   });

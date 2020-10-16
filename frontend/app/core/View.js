@@ -408,86 +408,83 @@ function(
         return;
       }
 
-      var propAttrs = Object.assign({
-        className: {},
-        'data-prop': id
-      }, prop.attrs);
+      var propAttrs = Object.assign(
+        {'data-prop': id},
+        prop.attrs,
+        {className: {prop: true}}
+      );
 
-      if (typeof propAttrs.className === 'string')
+      [prop.className, prop.attrs && prop.attrs.className].forEach(function(rawClassName)
       {
-        propAttrs.className = propAttrs.className.split(' ');
-      }
-
-      if (Array.isArray(propAttrs.className))
-      {
-        var propClassName = {};
-
-        propAttrs.className.forEach(function(className)
+        if (typeof rawClassName === 'string' && rawClassName.length)
         {
-          propClassName[className] = true;
-        });
+          rawClassName = rawClassName.split(' ');
+        }
 
-        propAttrs.className = propClassName;
-      }
-
-      if (prop.className)
-      {
-        propAttrs.className[prop.className] = true;
-      }
-
-      propAttrs.className.prop = true;
-
-      var nameAttrs = Object.assign({className: {}}, prop.nameAttrs);
-
-      if (typeof nameAttrs.className === 'string')
-      {
-        nameAttrs.className = nameAttrs.className.split(' ');
-      }
-
-      if (Array.isArray(nameAttrs.className))
-      {
-        var nameClassName = {};
-
-        nameAttrs.className.forEach(function(className)
+        if (Array.isArray(rawClassName))
         {
-          nameClassName[className] = true;
-        });
-
-        nameAttrs.className = nameClassName;
-      }
-
-      if (prop.nameClassName)
-      {
-        nameAttrs.className[prop.nameClassName] = true;
-      }
-
-      nameAttrs.className['prop-name'] = true;
-
-      var valueAttrs = Object.assign({className: {}}, prop.valueAttrs);
-
-      if (typeof valueAttrs.className === 'string')
-      {
-        valueAttrs.className = valueAttrs.className.split(' ');
-      }
-
-      if (Array.isArray(valueAttrs.className))
-      {
-        var valueClassName = {};
-
-        valueAttrs.className.forEach(function(className)
+          rawClassName.forEach(function(className)
+          {
+            propAttrs.className[className] = true;
+          });
+        }
+        else if (rawClassName && typeof rawClassName === 'object')
         {
-          valueClassName[className] = true;
-        });
+          Object.assign(propAttrs.className, rawClassName);
+        }
+      });
 
-        valueAttrs.className = valueClassName;
-      }
+      var nameAttrs = Object.assign(
+        {},
+        prop.nameAttrs,
+        {className: {'prop-name': true}}
+      );
 
-      if (prop.valueClassName)
+      [prop.nameClassName, prop.nameAttrs && prop.nameAttrs.className].forEach(function(rawClassName)
       {
-        valueAttrs.className[prop.valueClassName] = true;
-      }
+        if (typeof rawClassName === 'string' && rawClassName.length)
+        {
+          rawClassName = rawClassName.split(' ');
+        }
 
-      valueAttrs.className['prop-value'] = true;
+        if (Array.isArray(rawClassName))
+        {
+          rawClassName.forEach(function(className)
+          {
+            nameAttrs.className[className] = true;
+          });
+        }
+        else if (rawClassName && typeof rawClassName === 'object')
+        {
+          Object.assign(nameAttrs.className, rawClassName);
+        }
+      });
+
+      var valueAttrs = Object.assign(
+        {},
+        prop.valueAttrs,
+        {className: {'prop-value': true}}
+      );
+
+      [prop.valueClassName, prop.valueAttrs && prop.valueAttrs.className].forEach(function(rawClassName)
+      {
+        if (typeof rawClassName === 'string' && rawClassName.length)
+        {
+          rawClassName = rawClassName.split(' ');
+        }
+
+        if (Array.isArray(rawClassName))
+        {
+          rawClassName.forEach(function(className)
+          {
+            valueAttrs.className[className] = true;
+          });
+        }
+        else if (rawClassName && typeof rawClassName === 'object')
+        {
+          Object.assign(valueAttrs.className, rawClassName);
+        }
+      });
 
       if (escape)
       {

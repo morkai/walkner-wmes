@@ -18,7 +18,7 @@ define([
   $,
   broker,
   pubsub,
-  user,
+  currentUser,
   t,
   WorkplaceCollection,
   DivisionCollection,
@@ -31,8 +31,8 @@ define([
 ) {
   'use strict';
 
-  var TOPIC_PREFIX = 'osh.';
-  var PROP_TO_DICT = {
+  const TOPIC_PREFIX = 'osh';
+  const PROP_TO_DICT = {
     workplace: 'workplaces',
     division: 'divisions',
     building: 'buildings',
@@ -42,10 +42,12 @@ define([
     reasonCategory: 'reasonCategories'
   };
 
-  var req = null;
-  var releaseTimer = null;
-  var pubsubSandbox = null;
-  var dictionaries = {
+  let req = null;
+  let releaseTimer = null;
+  let pubsubSandbox = null;
+  let seenSub = null;
+
+  const dictionaries = {
     statuses: {
       nearMiss: []
     },
@@ -97,10 +99,12 @@ define([
 
       Object.keys(PROP_TO_DICT).forEach(prop =>
       {
-        pubsubSandbox.subscribe(`${TOPIC_PREFIX}${PROP_TO_DICT[prop]}.**`, handleDictionaryMessage);
+        pubsubSandbox.subscribe(`${TOPIC_PREFIX}.${PROP_TO_DICT[prop]}.**`, handleDictionaryMessage);
       });
 
       dictionaries.settings.setUpPubsub(pubsubSandbox);
+
+      setUpSeenSub();
 
       return req;
     },
@@ -132,14 +136,14 @@ define([
 
       if (!dictionary || Array.isArray(dictionary))
       {
-        return id;
+        return String(id);
       }
 
       var model = dictionary.get(id);
 
       if (!model)
       {
-        return id;
+        return String(id);
       }
 
       return model.getLabel(options);
@@ -186,6 +190,25 @@ define([
     }
   };
 
+  broker.subscribe('user.reloaded', () => setUpSeenSub());
+
+  function setUpSeenSub()
+  {
+    if (seenSub)
+    {
+      seenSub.cancel();
+      seenSub = null;
+    }
+
+    if (pubsubSandbox && currentUser.isLoggedIn())
+    {
+      seenSub = pubsubSandbox.subscribe(
+        `${TOPIC_PREFIX}.*.seen.${currentUser.data._id}`,
+        (message, topic) => broker.publish(topic, message)
+      );
+    }
+  }
+
   function resetDictionaries(data)
   {
     if (data)
@@ -224,6 +247,7 @@ define([
     {
       pubsubSandbox.destroy();
       pubsubSandbox = null;
+      seenSub = null;
     }
 
     dictionaries.loaded = false;
@@ -233,8 +257,8 @@ define([
 
   function handleDictionaryMessage(message, topic)
   {
-    var topicParts = topic.split('.');
-    var collection = dictionaries[topicParts[1]];
+    const topicParts = topic.split('.');
+    const collection = dictionaries[topicParts[1]];
 
     if (!collection)
     {
@@ -249,7 +273,7 @@ define([
 
       case 'edited':
       {
-        var editedModel = collection.get(message.model._id);
+        const editedModel = collection.get(message.model._id);
 
         if (editedModel)
         {

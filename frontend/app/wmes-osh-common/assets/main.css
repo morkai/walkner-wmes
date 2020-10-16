@@ -1,0 +1,7 @@
+.osh-unseen {
+  color: #E00!important;
+}
+.osh-unseen.list-item {
+  color: inherit!important;
+  font-weight: bold;
+}

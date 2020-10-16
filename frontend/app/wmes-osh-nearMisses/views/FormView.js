@@ -323,13 +323,7 @@ define([
       this.setUpReasonCategorySelect2();
       this.togglePriority();
       this.toggleImplement();
-
-      const $kinds = this.$('input[name="kind"]');
-
-      if ($kinds.length && !$kinds.filter(':checked').length)
-      {
-        $kinds.first().click();
-      }
+      this.toggleKind();
     },
 
     isAnonymous: function()
@@ -886,6 +880,18 @@ define([
       });
 
       $input.select2('enable', data.length !== 0);
+    },
+
+    toggleKind: function()
+    {
+      const $kinds = this.$('input[name="kind"]');
+
+      if ($kinds.length && !$kinds.filter(':checked').length)
+      {
+        $kinds.first().click();
+      }
+
+      $kinds.prop('disabled', !NearMiss.can.editKind(this.model, this.options.editMode));
     },
 
     togglePriority: function()

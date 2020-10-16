@@ -13,12 +13,27 @@ define([
 
     template,
 
+    remoteTopics: {},
+
     getTemplateData: function()
     {
       return {
         details: this.model.serializeDetails(),
+        unseen: this.unseen.bind(this, this.model.getObserver()),
         model: this.model.toJSON()
       };
+    },
+
+    unseen: function(observer, prop, asClassName)
+    {
+      const unseen = observer.notify && (observer.changes.all || !!observer.changes[prop]);
+
+      if (asClassName)
+      {
+        return unseen ? 'osh-unseen' : '';
+      }
+
+      return unseen;
     }
 
   });

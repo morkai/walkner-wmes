@@ -1,0 +1,34 @@
+<div class="osh-history-item <%- item.comment !== '' ? 'has-comment' : '' %>">
+  <span class="osh-history-user <%- item.unseen ? 'osh-unseen' : '' %>"><%- item.user %></span>,
+  <time class="osh-history-time <%- item.unseen ? 'osh-unseen' : '' %>" datetime="<%- item.time.iso %>" title="<%- item.time.long %>"><%- item.time.daysAgo > 3 ? item.time.long : item.time.human %></time>:
+  <% if (item.changes.length) { %>
+    <table class="table table-condensed osh-history-changes">
+      <tbody>
+        <% item.changes.forEach(function(change) { %>
+          <% if (change.values) { %>
+            <% change.values.forEach((value, i) => { %>
+              <tr>
+                <td class="is-min"><%- i === 0 ? `${change.label}:` : '' %></td>
+                <td class="is-min"><span class="<%- value.oldValue.more ? 'has-more' : '' %>" data-content="<%= value.oldValue.more %>"><%- value.oldValue %></span></td>
+                <td class="is-min"><i class="fa fa-arrow-right"></i></td>
+                <td><span class="<%- value.newValue.more ? 'has-more' : '' %>" data-content="<%= value.newValue.more %>"><%- value.newValue %></span></td>
+                <td></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td class="is-min"><%- change.label %>:</td>
+              <td class="is-min"><span class="<%- change.oldValue.more ? 'has-more' : '' %>" data-content="<%= change.oldValue.more %>"><%- change.oldValue %></span></td>
+              <td class="is-min"><i class="fa fa-arrow-right"></i></td>
+              <td><span class="<%- change.newValue.more ? 'has-more' : '' %>" data-content="<%= change.newValue.more %>"><%- change.newValue %></span></td>
+              <td></td>
+            </tr>
+          <% } %>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+  <% if (item.comment !== '') { %>
+    <p class="osh-history-comment"><%= item.comment %></p>
+  <% } %>
+</div>

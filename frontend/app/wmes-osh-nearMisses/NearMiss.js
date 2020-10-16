@@ -11,7 +11,7 @@ define([
   require,
   t,
   time,
-  user,
+  currentUser,
   Model,
   userInfoTemplate
 ) {
@@ -43,6 +43,15 @@ define([
     labelAttribute: '_id',
 
     defaults: {},
+
+    initialize: function()
+    {
+      Model.prototype.initialize.apply(this, arguments);
+
+      this.observer = null;
+
+      this.on('change:participants', () => this.observer = null);
+    },
 
     getModelType: function()
     {
@@ -88,6 +97,15 @@ define([
           : obj[prop].map(userInfo => userInfoTemplate(userInfo, {noIp: true, clickable: false}));
       });
 
+      const participant = this.getUserParticipant();
+
+      obj.unseen = participant && participant.notify;
+
+      if (obj.unseen)
+      {
+        obj.className += ' osh-unseen';
+      }
+
       return obj;
     },
 
@@ -102,7 +120,7 @@ define([
       });
 
       obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'LL') : '';
-      obj.eventDate = time.utc.format(obj.eventDate, 'LL, [godz.] H');
+      obj.eventDate = time.utc.format(obj.eventDate, t(this.nlsDomain, 'details:eventDate:format'));
 
       ['workplace', 'division', 'building', 'location'].forEach(prop =>
       {
@@ -127,26 +145,73 @@ define([
       return obj;
     },
 
+    getUserParticipant: function()
+    {
+      return this.getParticipant(currentUser.data._id);
+    },
+
+    getParticipant: function(userId)
+    {
+      return (this.get('participants') || []).find(p => p.user.id === userId);
+    },
+
+    getObserver: function()
+    {
+      if (this.observer)
+      {
+        return this.observer;
+      }
+
+      const participant = this.getUserParticipant();
+
+      if (participant)
+      {
+        this.observer = Object.assign({}, participant, {
+          lastSeenAt: new Date(participant.lastSeenAt),
+          changes: Object.assign({}, participant.changes)
+        });
+
+        if (participant.notify)
+        {
+          this.observer.changes.any = true;
+          this.observer.changes.all = !Object.keys(participant.changes).length;
+        }
+      }
+      else
+      {
+        this.observer = {
+          user: currentUser.getInfo(),
+          roles: ['viewer'],
+          lastSeenAt: new Date(),
+          notify: false,
+          changes: {
+            any: false,
+            all: false
+          }
+        };
+      }
+
+      return this.observer;
+    },
+
     isParticipant: function()
     {
-      return this.isCreator()
-        || this.isImplementer()
-        || this.isCoordinator();
+      return !!this.getUserParticipant();
     },
 
     isCreator: function()
     {
-      return this.get('creator').id === user.data._id;
+      return this.get('creator').id === currentUser.data._id;
     },
 
     isImplementer: function()
     {
-      return (this.get('implementer') || {}).id === user.data._id;
+      return (this.get('implementer') || {}).id === currentUser.data._id;
     },
 
     isCoordinator: function()
     {
-      return (this.get('coordinators') || []).some(u => u.id === user.data._id);
+      return (this.get('coordinators') || []).some(u => u.id === currentUser.data._id);
     },
 
     getDuration: function()
@@ -174,15 +239,156 @@ define([
     getAttachmentUrl: function(attachment)
     {
       return `/osh/nearMisses/${this.id}/attachments/${attachment._id}/${attachment.file}`;
+    },
+
+    handleSeen: function()
+    {
+      const observer = this.getObserver();
+      const participant = this.getUserParticipant();
+      const participants = this.attributes.participants;
+
+      observer.lastSeenAt = new Date();
+      observer.notify = false;
+      observer.changes = {};
+
+      if (participant)
+      {
+        participant.lastSeenAt = observer.lastSeenAt.toISOString();
+        participant.notify = false;
+        participant.changes = {};
+      }
+
+      this.attributes.participants = null;
+
+      this.set('participants', participants);
+      this.trigger('seen');
+    },
+
+    handleUpdate: function(change, notify)
+    {
+      const Model = this.constructor;
+      const newData = {};
+      const changedProps = Object.keys(change.data);
+
+      if (change.comment.length || changedProps.length)
+      {
+        newData.changes = this.get('changes').concat(change);
+      }
+
+      changedProps.forEach(prop =>
+      {
+        const changeHandler = Model.changeHandlers[prop];
+        const oldValue = change.data[prop][0];
+        const newValue = change.data[prop][1];
+
+        if (changeHandler)
+        {
+          const handlerOptions = {
+            prop,
+            newData,
+            newValue,
+            oldValue,
+            change,
+            Model,
+            model: this
+          };
+
+          if (typeof changeHandler === 'string')
+          {
+            Model.changeHandlers[changeHandler](handlerOptions);
+          }
+          else
+          {
+            changeHandler(handlerOptions);
+          }
+        }
+        else
+        {
+          newData[prop] = newValue;
+        }
+      });
+
+      const participants = this.attributes.participants;
+      const userParticipant = this.getUserParticipant();
+      let seen = false;
+
+      if (userParticipant)
+      {
+        if (userParticipant.user.id === change.user.id)
+        {
+          seen = true;
+          userParticipant.lastSeenAt = change.date;
+          userParticipant.notify = false;
+          userParticipant.changes = {
+            any: false,
+            all: false
+          };
+        }
+        else
+        {
+          userParticipant.notify = true;
+          userParticipant.changes = notify[userParticipant.user.id] || {};
+          userParticipant.changes.all = !Object.keys(userParticipant.changes).length;
+          userParticipant.changes.any = true;
+        }
+
+        this.attributes.participants = null;
+        newData.participants = participants;
+      }
+
+      this.set(newData);
+
+      if (seen)
+      {
+        this.trigger('seen');
+      }
     }
 
   }, {
+
+    changeHandlers: {
+
+      list: ({model, prop, newData, newValue}) =>
+      {
+        const {added, edited, deleted} = newValue || {};
+        const items = new Map();
+
+        (model.get(prop) || []).forEach(item => items.set(item._id || item.id, item));
+
+        (added || []).forEach(item => items.set(item._id || item.id, item));
+
+        (deleted || []).forEach(item => items.delete(item._id || item.id));
+
+        (edited || []).forEach(newItem =>
+        {
+          const id = newItem._id || newItem.id;
+          const oldItem = items.get(id);
+
+          if (oldItem)
+          {
+            items.set(id, Object.assign({}, oldItem, newItem));
+          }
+          else
+          {
+            items.set(id, newItem);
+          }
+        });
+
+        model.attributes[prop] = null;
+        newData[prop] = Array.from(items.values());
+      },
+
+      attachments: 'list',
+
+      coordinators: 'list'
+
+    },
 
     can: {
 
       manage: function()
       {
-        return user.isAllowedTo('OSH:NEAR_MISSES:MANAGE');
+        return currentUser.isAllowedTo('OSH:NEAR_MISSES:MANAGE');
       },
 
       edit: function(model)
@@ -200,6 +406,27 @@ define([
           case 'inProgress':
             return model.isImplementer() || model.isCoordinator();
 
+          case 'paused':
+            return model.isCoordinator();
+
+          default:
+            return false;
+        }
+      },
+
+      editKind: function(model, editMode)
+      {
+        if (!editMode || (this.can || this).manage())
+        {
+          return true;
+        }
+
+        switch (model.get('status'))
+        {
+          case 'new':
+            return model.isCreator() || model.isCoordinator();
+
+          case 'inProgress':
           case 'paused':
             return model.isCoordinator();
 
@@ -316,7 +543,12 @@ define([
           return true;
         }
 
-        return attachment.user.id === user.data._id;
+        return attachment.user.id === currentUser.data._id;
+      },
+
+      comment: function()
+      {
+        return currentUser.isLoggedIn();
       }
 
     }
