@@ -23,5 +23,10 @@
   "status:inProgress": "W realizacji",
   "status:finished": "Zakończone",
   "status:paused": "Wstrzymane",
-  "status:cancelled": "Anulowane"
+  "status:cancelled": "Anulowane",
+
+  "duration:days": "{days} {days, plural, one{dzień} other{dni}}",
+  "duration:hours": "{hours} godz.",
+
+  "anonymous:label": "Anonim"
 }

@@ -161,12 +161,19 @@ define([
       const finishedAt = Date.parse(this.get('finishedAt')) || Date.now();
       const hours = Math.ceil((finishedAt - startedAt) / 1000 / 3600);
 
-      return hours.toLocaleString();
+      if (hours > 48)
+      {
+        const days = Math[hours % 24 > 16 ? 'ceil' : 'floor'](hours / 24);
+
+        return t('wmes-osh-common', 'duration:days', {days});
+      }
+
+      return t('wmes-osh-common', 'duration:hours', {hours});
     },
 
     getAttachmentUrl: function(attachment)
     {
-      return `/osh/nearMisses/${this.id}/attachments/${attachment._id}`;
+      return `/osh/nearMisses/${this.id}/attachments/${attachment._id}/${attachment.file}`;
     }
 
   }, {
@@ -208,7 +215,7 @@ define([
           return true;
         }
 
-        if (model.get('status') === 'new' && (model.isCreator() || model.isCoordinator()))
+        if (model.get('status') === 'new' && model.isCoordinator())
         {
           return true;
         }

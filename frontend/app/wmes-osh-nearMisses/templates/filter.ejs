@@ -4,7 +4,8 @@
     type: 'select',
     label: 'PROPERTY:',
     expandable: true,
-    options: statuses
+    options: statuses,
+    groupAttrs: {'data-filter': 'status'}
   }) %>
   <%- forms.dateTimeRange({
     idPrefix,

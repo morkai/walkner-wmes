@@ -19,21 +19,21 @@
       }) %>
       <div class="row">
         <%- helpers.formGroup({
-          name: 'workplace',
+          name: 'creator',
+          type: 'static',
+          label: 'FORM:',
+          groupClassName: 'col-lg-4',
+          value: user.getLabel()
+        }) %>
+        <%- helpers.formGroup({
+          name: 'userWorkplace',
           type: 'select2',
           label: 'PROPERTY:',
           required: true,
           groupClassName: 'col-lg-4'
         }) %>
         <%- helpers.formGroup({
-          name: 'division',
-          type: 'select2',
-          label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-lg-4'
-        }) %>
-        <%- helpers.formGroup({
-          name: 'building',
+          name: 'userDivision',
           type: 'select2',
           label: 'PROPERTY:',
           required: true,
@@ -43,18 +43,39 @@
       <div class="panel panel-danger">
         <div class="panel-heading">Zdarzenie Potencjalnie Wypadkowe</div>
         <div class="panel-body has-lastElementRow">
-          <% if (!editMode) { %>
-            <div class="form-group">
-              <label class="control-label"><%- t('PROPERTY:kind') %></label>
-              <br>
-              <% kinds.forEach(option => { %>
-              <label class="radio-inline" title="<%= option.title %>">
-                <input name="kind" type="radio" value="<%- option.value %>">
-                <%= option.label %>
-              </label>
-              <% }) %>
-            </div>
-          <% } %>
+          <div class="form-group">
+            <label class="control-label"><%- t('PROPERTY:kind') %></label>
+            <br>
+            <% kinds.forEach(option => { %>
+            <label class="radio-inline" title="<%= option.title %>">
+              <input name="kind" type="radio" value="<%- option.value %>">
+              <%= option.label %>
+            </label>
+            <% }) %>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'workplace',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'division',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'building',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
           <div class="row">
             <%- helpers.formGroup({
               name: 'location',

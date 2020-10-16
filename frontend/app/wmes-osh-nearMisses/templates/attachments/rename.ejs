@@ -1,0 +1,14 @@
+<form>
+  <div class="form-group">
+    <label class="control-label"><%- t('attachments:rename:oldName') %></label>
+    <p class="form-control-static"><%= attachment.name %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('newName') %>" class="control-label"><%- t('attachments:rename:newName') %></label>
+    <input id="<%- id('newName') %>" name="newName" class="form-control" required maxlength="200">
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('attachments:rename:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

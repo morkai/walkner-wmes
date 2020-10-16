@@ -39,8 +39,12 @@
 }
 .osh-attachment-name {
   padding: 7px;
+  width: 384px;
   text-align: center;
   border-top: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .osh-attachment:hover .osh-attachment-name {
   background-color: #ffffd6;

@@ -33,16 +33,22 @@ define([
 
       'change #-anonymous': function()
       {
-        this.setUpWorkplaceSelect2();
-        this.setUpDivisionSelect2();
-        this.setUpBuildingSelect2();
-        this.setUpLocationSelect2();
+        this.setUpUserWorkplaceSelect2();
+        this.setUpUserDivisionSelect2();
         this.toggleImplement();
+        this.toggleCreator();
       },
 
       'change #-selfImplement': function()
       {
         this.toggleImplement();
+      },
+
+      'change #-userWorkplace': function()
+      {
+        this.$id('userDivision').val('');
+
+        this.setUpUserDivisionSelect2();
       },
 
       'change #-workplace': function()
@@ -228,6 +234,11 @@ define([
         formData.plannedAt = time.utc.format(formData.plannedAt, 'YYYY-MM-DD');
       }
 
+      if (!(formData.priority >= 0))
+      {
+        formData.priority = 1;
+      }
+
       return formData;
     },
 
@@ -301,6 +312,8 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
+      this.setUpUserWorkplaceSelect2();
+      this.setUpUserDivisionSelect2();
       this.setUpWorkplaceSelect2();
       this.setUpDivisionSelect2();
       this.setUpBuildingSelect2();
@@ -324,9 +337,54 @@ define([
       return this.$id('anonymous').prop('checked');
     },
 
-    setUpWorkplaceSelect2: function()
+    setUpUserWorkplaceSelect2: function()
     {
-      const $input = this.$id('workplace');
+      const $input = this.$id('userWorkplace');
+
+      if (this.options.editMode)
+      {
+        const current = dictionaries.workplaces.get(this.model.get('userWorkplace'));
+
+        $input.val(current ? current.id : '').select2({
+          width: '100%',
+          placeholder: ' ',
+          data: !current ? [] : [{
+            id: current.id,
+            text: current.getLabel({long: true}),
+            model: current
+          }]
+        });
+
+        $input.select2('enable', false);
+
+        return;
+      }
+
+      if (this.isAnonymous())
+      {
+        $input.val('').select2({
+          width: '100%',
+          placeholder: ' ',
+          data: []
+        });
+
+        $input
+          .select2('enable', false)
+          .prop('required', false)
+          .closest('.form-group')
+          .removeClass('has-required-select2')
+          .find('.control-label')
+          .removeClass('is-required');
+
+        return;
+      }
+
+      $input
+        .prop('required', true)
+        .closest('.form-group')
+        .addClass('has-required-select2')
+        .find('.control-label')
+        .addClass('is-required');
 
       let current = dictionaries.workplaces.get(+$input.val());
 
@@ -374,7 +432,7 @@ define([
         return;
       }
 
-      if (!this.isAnonymous() && userWorkplace)
+      if (userWorkplace)
       {
         $input.select2('enable', false).select2('data', {
           id: userWorkplace.id,
@@ -388,11 +446,49 @@ define([
       $input.select2('enable', true);
     },
 
-    setUpDivisionSelect2: function()
+    setUpUserDivisionSelect2: function()
     {
-      const $input = this.$id('division');
+      const $input = this.$id('userDivision');
 
-      const currentWorkplaceId = +this.$id('workplace').val();
+      if (this.options.editMode)
+      {
+        const current = dictionaries.divisions.get(this.model.get('userDivision'));
+
+        $input.val(current ? current.id : '').select2({
+          width: '100%',
+          placeholder: ' ',
+          data: !current ? [] : [{
+            id: current.id,
+            text: current.getLabel({long: true}),
+            model: current
+          }]
+        });
+
+        $input.select2('enable', false);
+
+        return;
+      }
+
+      if (this.isAnonymous())
+      {
+        $input.val('').select2({
+          width: '100%',
+          placeholder: ' ',
+          data: []
+        });
+
+        $input
+          .select2('enable', false)
+          .prop('required', false)
+          .closest('.form-group')
+          .removeClass('has-required-select2')
+          .find('.control-label')
+          .removeClass('is-required');
+
+        return;
+      }
+
+      const currentWorkplaceId = +this.$id('userWorkplace').val();
       let currentDivision = dictionaries.divisions.get(+$input.val());
 
       if (currentDivision)
@@ -433,7 +529,7 @@ define([
 
       if (!currentWorkplaceId && data.length === 0)
       {
-        placeholder = this.t('FORM:placeholder:noWorkplace');
+        placeholder = this.t('FORM:placeholder:noUserWorkplace');
         enabled = false;
       }
 
@@ -452,7 +548,7 @@ define([
         return;
       }
 
-      if (!this.isAnonymous() && userDivision)
+      if (userDivision)
       {
         $input.select2('enable', false).select2('data', {
           id: userDivision.id,
@@ -475,15 +571,114 @@ define([
       }
     },
 
+    setUpWorkplaceSelect2: function()
+    {
+      const $input = this.$id('workplace');
+
+      let currentWorkplace = dictionaries.workplaces.get(+$input.val());
+
+      if (currentWorkplace)
+      {
+        currentWorkplace = {
+          id: currentWorkplace.id,
+          text: currentWorkplace.getLabel({long: true}),
+          model: currentWorkplace
+        };
+      }
+
+      const map = {};
+
+      dictionaries.workplaces.forEach(model =>
+      {
+        if (!model.get('active'))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (currentWorkplace && !map[currentWorkplace.id])
+      {
+        map[currentWorkplace.id] = currentWorkplace;
+      }
+
+      $input.select2({
+        width: '100%',
+        data: Object.values(map).sort((a, b) => a.text.localeCompare(b.text))
+      });
+    },
+
+    setUpDivisionSelect2: function()
+    {
+      const $input = this.$id('division');
+
+      const currentWorkplaceId = +this.$id('workplace').val();
+      let currentDivision = dictionaries.divisions.get(+$input.val());
+
+      if (currentDivision)
+      {
+        currentDivision = {
+          id: currentDivision.id,
+          text: currentDivision.getLabel({long: true}),
+          model: currentDivision
+        };
+      }
+
+      const map = {};
+
+      dictionaries.divisions.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasWorkplace(currentWorkplaceId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (currentDivision && !map[currentDivision.id])
+      {
+        map[currentDivision.id] = currentDivision;
+      }
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentWorkplaceId ? ' ' : this.t('FORM:placeholder:noWorkplace'),
+        data
+      });
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+      else if (!map[$input.val()])
+      {
+        $input.val('').select2('data', null);
+      }
+
+      $input.select2('enable', !!currentWorkplaceId);
+    },
+
     setUpBuildingSelect2: function()
     {
       const $input = this.$id('building');
-      const currentDivision = +this.$id('division').val();
+      const currentDivisionId = +this.$id('division').val();
       const map = {};
 
       dictionaries.buildings.forEach(model =>
       {
-        if (!model.get('active') || !model.hasDivision(currentDivision))
+        if (!model.get('active') || !model.hasDivision(currentDivisionId))
         {
           return;
         }
@@ -496,38 +691,30 @@ define([
       });
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
-      let placeholder = ' ';
-      let enabled = !this.options.editMode;
-
-      if (!currentDivision && data.length === 0)
-      {
-        placeholder = this.t('FORM:placeholder:noDivision');
-        enabled = false;
-      }
 
       $input.select2({
         width: '100%',
-        placeholder,
+        placeholder: currentDivisionId ? ' ' : this.t('FORM:placeholder:noDivision'),
         data
       });
-
-      $input.select2('enable', enabled);
 
       if (data.length === 1)
       {
         $input.select2('data', data[0]);
       }
+
+      $input.select2('enable', !!currentDivisionId);
     },
 
     setUpLocationSelect2: function()
     {
       const $input = this.$id('location');
-      const currentBuilding = +this.$id('building').val();
+      const currentBuildingId = +this.$id('building').val();
       const map = {};
 
       dictionaries.locations.forEach(model =>
       {
-        if (!model.get('active') || !model.hasBuilding(currentBuilding))
+        if (!model.get('active') || !model.hasBuilding(currentBuildingId))
         {
           return;
         }
@@ -540,27 +727,19 @@ define([
       });
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
-      let placeholder = ' ';
-      let enabled = true;
-
-      if (!currentBuilding && data.length === 0)
-      {
-        placeholder = this.t('FORM:placeholder:noBuilding');
-        enabled = false;
-      }
 
       $input.select2({
         width: '100%',
-        placeholder,
+        placeholder: currentBuildingId ? ' ' : this.t('FORM:placeholder:noBuilding'),
         data
       });
-
-      $input.select2('enable', enabled);
 
       if (data.length === 1)
       {
         $input.select2('data', data[0]);
       }
+
+      $input.select2('enable', !!currentBuildingId);
     },
 
     setUpImplementerSelect2: function()
@@ -714,26 +893,18 @@ define([
       const $priorities = this.$('input[name="priority"]');
       const kind = dictionaries.kinds.get(+this.$('input[name="kind"]:checked').val() || this.model.get('kind'));
       const type = kind ? kind.get('type') : null;
-      const priority = this.model.get('priority');
-      const status = this.model.get('status') || 'new';
-      let enabled = this.model.isCoordinator() || NearMiss.can.manage();
-      let value = 1;
+      const enabled = this.options.editMode && (this.model.isCoordinator() || NearMiss.can.manage());
+      let value = +$priorities.filter(':checked').val();
 
-      if (this.options.editMode && enabled)
+      if (!this.options.editMode)
       {
-        value = priority;
-      }
-      else if (type === 'osh')
-      {
-        value = 3;
-      }
-      else if (type === 'inf')
-      {
-        enabled = enabled || status === 'new';
-
-        if (typeof priority === 'number')
+        if (type === 'osh')
         {
-          value = priority;
+          value = 3;
+        }
+        else
+        {
+          value = 1;
         }
       }
 
@@ -745,6 +916,13 @@ define([
       $priorities
         .closest('.form-group')
         .toggleClass('hidden', !enabled);
+    },
+
+    toggleCreator: function()
+    {
+      this.$id('creator').text(
+        this.$id('anonymous').prop('checked') ? this.t('wmes-osh-common', 'anonymous:label') : currentUser.getLabel()
+      );
     },
 
     toggleImplement: function()

@@ -8,6 +8,7 @@ define([
   'app/core/util/fileIcons',
   'app/planning/util/contextMenu',
   '../NearMiss',
+  './RenameAttachmentView',
   'app/wmes-osh-nearMisses/templates/attachments/panel',
   'app/wmes-osh-nearMisses/templates/attachments/preview',
   'app/wmes-osh-nearMisses/templates/attachments/delete'
@@ -19,6 +20,7 @@ define([
   fileIcons,
   contextMenu,
   NearMiss,
+  RenameAttachmentView,
   template,
   previewTemplate,
   deleteTemplate
@@ -31,11 +33,13 @@ define([
 
     events: {
 
-      'click .osh-attachment-img': function(e)
+      'click .osh-attachment': function(e)
       {
-        if (e.button === 0 && !e.ctrlKey)
+        const $attachment = this.$(e.currentTarget);
+
+        if (e.button === 0 && !e.ctrlKey && $attachment.find('.osh-attachment-img').length)
         {
-          this.showPreview(this.$(e.target).closest('.osh-attachment')[0].dataset.id);
+          this.showPreview($attachment[0].dataset.id);
 
           return false;
         }
@@ -62,9 +66,8 @@ define([
         {
           menu.push({
             icon: 'fa-edit',
-            label: this.t('attachments:edit'),
-            handler: this.handleEditAttachment.bind(this, attachment),
-            disabled: true
+            label: this.t('attachments:rename'),
+            handler: this.handleRenameAttachment.bind(this, attachment)
           });
         }
 
@@ -147,9 +150,14 @@ define([
       window.open(this.model.getAttachmentUrl(attachment), '_blank');
     },
 
-    handleEditAttachment: function(attachment)
+    handleRenameAttachment: function(attachment)
     {
-      console.log('handleEditAttachment', attachment);
+      const dialogView = new RenameAttachmentView({
+        model: this.model,
+        attachment
+      });
+
+      viewport.showDialog(dialogView, this.t('attachments:rename:title'));
     },
 
     handleDeleteAttachment: function(attachment)
