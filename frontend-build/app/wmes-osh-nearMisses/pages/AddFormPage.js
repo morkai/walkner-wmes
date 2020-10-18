@@ -1,1 +1,0 @@
-define(["app/core/pages/AddFormPage","app/wmes-osh-common/dictionaries","../views/FormView"],function(e,i,a){"use strict";return e.extend({FormView:a,pageClassName:"page-max-flex",initialize:function(){e.prototype.initialize.apply(this,arguments),i.bind(this)}})});

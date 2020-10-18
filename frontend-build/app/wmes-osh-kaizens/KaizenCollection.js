@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Kaizen"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"exclude(changes)&sort(-createdAt)&limit(-1337)"})});

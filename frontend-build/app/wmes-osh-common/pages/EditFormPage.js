@@ -1,0 +1,1 @@
+define(["app/core/pages/EditFormPage","app/wmes-osh-common/dictionaries"],function(i,e){"use strict";return i.extend({pageClassName:"page-max-flex",initialize:function(){i.prototype.initialize.apply(this,arguments),e.bind(this)}})});
