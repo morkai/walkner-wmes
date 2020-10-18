@@ -304,6 +304,11 @@ define([
 
     resetResolution: function()
     {
+      if (!this.options.editMode)
+      {
+        return;
+      }
+
       this.$id('resolutionId')[0].setCustomValidity('');
       this.hideResolutionPopover();
 
