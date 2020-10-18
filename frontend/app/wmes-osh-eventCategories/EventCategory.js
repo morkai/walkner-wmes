@@ -2,10 +2,12 @@
 
 define([
   'require',
+  'underscore',
   'app/i18n',
   'app/core/Model'
 ], function(
   require,
+  _,
   t,
   Model
 ) {
@@ -34,9 +36,16 @@ define([
       };
     },
 
-    getLabel: function({long} = {})
+    getLabel: function({long, link} = {})
     {
-      return this.get(long ? 'longName' : 'shortName');
+      let label = this.get(long ? 'longName' : 'shortName');
+
+      if (link)
+      {
+        label = `<a href="${this.genClientUrl()}">${_.escape(label)}</a>`;
+      }
+
+      return label;
     },
 
     serialize: function()
@@ -64,7 +73,7 @@ define([
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
 
-      obj.kinds = dictionaries.kinds.getLabels(obj.kinds, {long: true});
+      obj.kinds = dictionaries.kinds.getLabels(obj.kinds, {long: true, link: true});
 
       return obj;
     },

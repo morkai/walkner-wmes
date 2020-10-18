@@ -20,9 +20,11 @@ define([
   './wmes-osh-buildings/routes',
   './wmes-osh-locations/routes',
   './wmes-osh-kinds/routes',
+  './wmes-osh-activityKinds/routes',
   './wmes-osh-eventCategories/routes',
   './wmes-osh-reasonCategories/routes',
-  './wmes-osh-nearMisses/routes'
+  './wmes-osh-nearMisses/routes',
+  './wmes-osh-kaizens/routes'
 ], function()
 {
   'use strict';

@@ -193,6 +193,14 @@ code.multiline {
   background-color: #d9534f;
   border-color: #d9534f;
 }
+.panel-secondary {
+  border-color: #af00af;
+}
+.panel-secondary > .panel-heading {
+  color: #fff;
+  background-color: #af00af;
+  border-color: #af00af;
+}
 .panel-info > .panel-heading {
   text-shadow: none;
 }
@@ -241,6 +249,51 @@ code.multiline {
   min-width: 100px;
 }
 
+.btn-secondary {
+  color: #ffffff;
+  background-color: #af00af;
+  border-color: #aa009c;
+}
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary.focus,
+.btn-secondary:active,
+.btn-secondary.active,
+.open > .dropdown-toggle.btn-secondary {
+  color: #ffffff;
+  background-color: #a40088;
+  border-color: #9c006c;
+}
+.btn-secondary:active,
+.btn-secondary.active,
+.open > .dropdown-toggle.btn-secondary {
+  background-image: none;
+}
+.btn-secondary.disabled,
+.btn-secondary[disabled],
+fieldset[disabled] .btn-secondary,
+.btn-secondary.disabled:hover,
+.btn-secondary[disabled]:hover,
+fieldset[disabled] .btn-secondary:hover,
+.btn-secondary.disabled:focus,
+.btn-secondary[disabled]:focus,
+fieldset[disabled] .btn-secondary:focus,
+.btn-secondary.disabled.focus,
+.btn-secondary[disabled].focus,
+fieldset[disabled] .btn-secondary.focus,
+.btn-secondary.disabled:active,
+.btn-secondary[disabled]:active,
+fieldset[disabled] .btn-secondary:active,
+.btn-secondary.disabled.active,
+.btn-secondary[disabled].active,
+fieldset[disabled] .btn-secondary.active {
+  background-color: #af00af;
+  border-color: #aa009c;
+}
+.btn-secondary .badge {
+  color: #af00af;
+  background-color: #ffffff;
+}
 .btn:active,
 .btn.active {
   box-shadow: inset 0 3px 9px rgba(0, 0, 0, 0.25);
@@ -253,7 +306,8 @@ code.multiline {
 .btn-warning,
 .btn-danger,
 .btn-success,
-.btn-info {
+.btn-info,
+.btn-secondary {
   text-shadow: 1px 1px 1px #333;
 }
 .btn-default:hover {

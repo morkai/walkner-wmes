@@ -11,6 +11,7 @@ define([
   'app/wmes-osh-buildings/BuildingCollection',
   'app/wmes-osh-locations/LocationCollection',
   'app/wmes-osh-kinds/KindCollection',
+  'app/wmes-osh-activityKinds/ActivityKindCollection',
   'app/wmes-osh-eventCategories/EventCategoryCollection',
   'app/wmes-osh-reasonCategories/ReasonCategoryCollection',
   './SettingCollection'
@@ -25,6 +26,7 @@ define([
   BuildingCollection,
   LocationCollection,
   KindCollection,
+  ActivityKindCollection,
   EventCategoryCollection,
   ReasonCategoryCollection,
   SettingCollection
@@ -38,6 +40,7 @@ define([
     building: 'buildings',
     location: 'locations',
     kind: 'kinds',
+    activityKind: 'activityKinds',
     eventCategory: 'eventCategories',
     reasonCategory: 'reasonCategories'
   };
@@ -49,7 +52,8 @@ define([
 
   const dictionaries = {
     statuses: {
-      nearMiss: []
+      nearMiss: [],
+      kaizen: []
     },
     priorities: [],
     kindTypes: [],
@@ -59,6 +63,7 @@ define([
     buildings: new BuildingCollection(),
     locations: new LocationCollection(),
     kinds: new KindCollection(),
+    activityKinds: new ActivityKindCollection(),
     eventCategories: new EventCategoryCollection(),
     reasonCategories: new ReasonCategoryCollection(),
     loaded: false,

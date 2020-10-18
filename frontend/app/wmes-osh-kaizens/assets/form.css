@@ -1,0 +1,9 @@
+.osh-kaizens-form .panel-success {
+  margin-left: -15px;
+  margin-right: -15px;
+  border-left: none;
+  border-right: none;
+}
+.osh-kaizens-form .panel-success > .panel-body {
+  background-color: #dff0d8;
+}

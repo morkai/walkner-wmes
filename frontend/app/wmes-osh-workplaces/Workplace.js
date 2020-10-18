@@ -2,10 +2,12 @@
 
 define([
   'require',
+  'underscore',
   'app/i18n',
   'app/core/Model'
 ], function(
   require,
+  _,
   t,
   Model
 ) {
@@ -29,9 +31,16 @@ define([
       active: true
     },
 
-    getLabel: function({long} = {})
+    getLabel: function({long, link} = {})
     {
-      return this.get(long ? 'longName' : 'shortName');
+      const label = this.get(long ? 'longName' : 'shortName');
+
+      if (link)
+      {
+        return `<a href="${this.genClientUrl()}">${_.escape(label)}</a>`;
+      }
+
+      return label;
     },
 
     serialize: function()

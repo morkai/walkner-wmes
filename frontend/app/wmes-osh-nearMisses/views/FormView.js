@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/user',
   'app/time',
   'app/viewport',
@@ -9,10 +10,14 @@ define([
   'app/core/util/formatResultWithDescription',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-kaizens/Kaizen',
+  'app/wmes-osh-kaizens/views/FormView',
   '../NearMiss',
-  'app/wmes-osh-nearMisses/templates/form'
+  'app/wmes-osh-nearMisses/templates/form',
+  'app/wmes-osh-nearMisses/templates/resolutionPopover'
 ], function(
   _,
+  $,
   currentUser,
   time,
   viewport,
@@ -20,8 +25,11 @@ define([
   formatResultWithDescription,
   setUpUserSelect2,
   dictionaries,
+  Kaizen,
+  KaizenFormView,
   NearMiss,
-  template
+  template,
+  resolutionPopoverTemplate
 ) {
   'use strict';
 
@@ -105,14 +113,17 @@ define([
         );
       },
 
-      'click #-todo': function()
+      'click #-inProgress': function()
       {
         this.newStatus = 'inProgress';
 
         const $implementer = this.$id('implementer');
         const $plannedAt = this.$id('plannedAt');
+        const $resolutionTypes = this.$('input[name="resolution.type"]');
 
-        if (!$implementer.select2('data') || !$plannedAt.val())
+        if (!$implementer.select2('data')
+          || !$plannedAt.val()
+          || $resolutionTypes.filter(':checked').val() === 'unspecified')
         {
           const oldRequiredImplementer = $implementer.prop('required');
           const oldRequiredPlannedAt = $plannedAt.prop('required');
@@ -127,6 +138,8 @@ define([
             }
 
             $plannedAt.prop('required', oldRequiredPlannedAt);
+
+            $resolutionTypes.first()[0].setCustomValidity('');
           });
 
           $implementer.prop('required', true)
@@ -136,6 +149,9 @@ define([
 
           $plannedAt.prop('required', true)
             .one('blur', cleanup);
+
+          $resolutionTypes.first()[0].setCustomValidity('Rodzaj działań korygujących jest wymagany.');
+          $resolutionTypes.one('blur', cleanup);
         }
 
         this.$id('save').click();
@@ -143,7 +159,7 @@ define([
         setTimeout(() => this.newStatus = null);
       },
 
-      'click #-pause': function()
+      'click #-paused': function()
       {
         this.newStatus = 'paused';
 
@@ -165,7 +181,7 @@ define([
         setTimeout(() => this.newStatus = null, 1);
       },
 
-      'click #-cancel': function()
+      'click #-cancelled': function()
       {
         this.newStatus = 'cancelled';
 
@@ -185,9 +201,124 @@ define([
         this.$id('save').click();
 
         setTimeout(() => this.newStatus = null, 1);
+      },
+
+      'change input[name="resolution.type"]': function()
+      {
+        this.setUpResolution();
+      },
+
+      'mousedown #-showResolution': function(e)
+      {
+        if (e.button === 1)
+        {
+          e.preventDefault();
+        }
+      },
+
+      'mouseup #-showResolution': function(e)
+      {
+        if (e.button !== 1)
+        {
+          return;
+        }
+
+        const type = this.getResolutionType();
+        const id = parseInt(this.$id('resolutionId').val(), 10);
+
+        if (!(id > 0))
+        {
+          return;
+        }
+
+        window.open(`/#osh/${type}s/${id}`, '_blank');
+      },
+
+      'click #-showResolution': function(e)
+      {
+        const type = this.getResolutionType();
+        const id = parseInt(this.$id('resolutionId').val(), 10);
+
+        if (!(id > 0))
+        {
+          this.$id('resolutionId').val('').focus();
+
+          return;
+        }
+
+        if (e.ctrlKey)
+        {
+          window.open(`/#osh/${type}s/${id}`, '_blank');
+
+          return;
+        }
+
+        this.showResolutionPopover(type, id);
+      },
+
+      'input #-resolutionId': function()
+      {
+        this.resetResolution();
+      },
+
+      'change #-resolutionId': function()
+      {
+        this.loadResolution();
+      },
+
+      'click #-addResolution': function()
+      {
+        this.showAddResolutionDialog();
       }
 
     }, FormView.prototype.events),
+
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.resolution = {
+        added: {},
+        type: 'unspecified',
+        id: 0,
+        data: null,
+        req: null
+      };
+
+      $(document)
+        .on(`click.${this.idPrefix}`, this.onDocumentClick.bind(this))
+        .on(`keydown.${this.idPrefix}`, this.onDocumentKeyDown.bind(this));
+    },
+
+    destroy: function()
+    {
+      FormView.prototype.destroy.apply(this, arguments);
+
+      this.resetResolution();
+    },
+
+    getResolutionType: function()
+    {
+      return this.$('input[name="resolution.type"]:checked').val() || 'unspecified';
+    },
+
+    resetResolution: function()
+    {
+      this.$id('resolutionId')[0].setCustomValidity('');
+      this.hideResolutionPopover();
+
+      const req = this.resolution.req;
+
+      this.resolution.type = 'unspecified';
+      this.resolution.id = 0;
+      this.resolution.data = null;
+      this.resolution.req = null;
+
+      if (req)
+      {
+        req.abort();
+      }
+    },
 
     getTemplateData: function()
     {
@@ -202,12 +333,32 @@ define([
           value: priority,
           label: dictionaries.getLabel('priority', priority)
         })),
+        resolutionTypes: this.getResolutionTypes(),
         can: {
-          todo: NearMiss.can.todo(this.model),
-          pause: NearMiss.can.pause(this.model),
-          cancel: NearMiss.can.cancel(this.model)
+          inProgress: NearMiss.can.inProgress(this.model),
+          paused: NearMiss.can.paused(this.model),
+          cancelled: NearMiss.can.cancelled(this.model),
+          editResolutionType: NearMiss.can.editResolutionType(this.model),
+          editResolutionId: NearMiss.can.editResolutionId(this.model)
         }
       };
+    },
+
+    getResolutionTypes: function()
+    {
+      if (!this.options.editMode)
+      {
+        return [];
+      }
+
+      const resolutionTypes = ['action', 'kaizen'];
+
+      if (this.model.get('status') === 'new')
+      {
+        resolutionTypes.unshift('unspecified');
+      }
+
+      return resolutionTypes;
     },
 
     serializeToForm: function()
@@ -239,6 +390,28 @@ define([
         formData.priority = 1;
       }
 
+      if (!formData.resolution)
+      {
+        formData.resolution = {
+          _id: 0,
+          type: 'unspecified'
+        };
+      }
+      else
+      {
+        formData.resolution = _.clone(formData.resolution);
+      }
+
+      if (!formData.resolution._id)
+      {
+        formData.resolution._id = '';
+      }
+
+      delete formData.coordinators;
+      delete formData.attachments;
+      delete formData.participants;
+      delete formData.changes;
+
       return formData;
     },
 
@@ -249,14 +422,12 @@ define([
         formData.status = this.newStatus;
       }
 
+      formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
+      formData.userDivision = this.$id('userDivision').select2('data').id;
       formData.workplace = this.$id('workplace').select2('data').id;
       formData.division = this.$id('division').select2('data').id;
       formData.building = this.$id('building').select2('data').id;
       formData.location = this.$id('location').select2('data').id;
-
-      const division = dictionaries.divisions.get(formData.division);
-
-      formData.manager = division.get('manager') || null;
 
       formData.eventDate = time.utc.getMoment(
         `${formData.eventDate} ${(formData.eventTime || '00').padStart(2, '0')}:00:00`,
@@ -298,6 +469,20 @@ define([
         formData.priority = +formData.priority;
       }
 
+      const resolution = this.model.get('resolution');
+
+      if (NearMiss.can.editResolutionType(this.model))
+      {
+        resolution.type = this.getResolutionType();
+      }
+
+      if (NearMiss.can.editResolutionId(this.model))
+      {
+        resolution._id = parseInt(this.$id('resolutionId').val(), 10) || 0;
+      }
+
+      formData.resolution = resolution;
+
       return formData;
     },
 
@@ -321,6 +506,8 @@ define([
       this.setUpImplementerSelect2();
       this.setUpEventCategorySelect2();
       this.setUpReasonCategorySelect2();
+      this.setUpResolution();
+      this.setUpEventDate();
       this.togglePriority();
       this.toggleImplement();
       this.toggleKind();
@@ -758,9 +945,7 @@ define([
     setUpEventCategorySelect2: function()
     {
       const $input = this.$id('eventCategory');
-      const kind = this.options.editMode
-        ? this.model.get('kind')
-        : this.$('input[name="kind"]:checked').val();
+      const kind = this.$('input[name="kind"]:checked').val();
       const map = {};
 
       dictionaries.eventCategories.forEach(model =>
@@ -882,6 +1067,58 @@ define([
       $input.select2('enable', data.length !== 0);
     },
 
+    setUpResolution: function()
+    {
+      if (!this.options.editMode)
+      {
+        return;
+      }
+
+      this.hideResolutionPopover();
+
+      const resolution = this.model.get('resolution');
+      const resolutionType = this.getResolutionType();
+      const $group = this.$id('resolutionGroup');
+
+      let id = '';
+      let enabled = NearMiss.can.editResolutionId(this.model);
+
+      if (enabled && resolutionType === 'unspecified')
+      {
+        enabled = false;
+      }
+
+      $group.find('.control-label').text(this.t(`FORM:resolution:${resolutionType}`));
+      $group.find('input, button').prop('disabled', !enabled);
+
+      if (enabled && this.resolution.added[resolutionType])
+      {
+        id = this.resolution.added[resolutionType].toString();
+      }
+      else if (resolutionType === resolution.type && resolution._id)
+      {
+        id = resolution._id.toString();
+      }
+
+      this.$id('resolutionId').val(id)[0].setCustomValidity('');
+    },
+
+    setUpEventDate: function()
+    {
+      clearTimeout(this.timers.maxEventDate);
+
+      const delay = time.getMoment().add(1, 'days').startOf('day').valueOf() - Date.now() + 1000;
+
+      this.timers.maxEventDate = setTimeout(
+        () =>
+        {
+          this.$id('eventDate').prop('max', time.format(Date.now(), 'YYYY-MM-DD'));
+          this.setUpEventDate();
+        },
+        Math.min(delay, 60000)
+      );
+    },
+
     toggleKind: function()
     {
       const $kinds = this.$('input[name="kind"]');
@@ -968,6 +1205,14 @@ define([
       }
     },
 
+    getSaveOptions: function()
+    {
+      return {
+        wait: true,
+        patch: true
+      };
+    },
+
     request: function()
     {
       viewport.msg.saving();
@@ -1033,10 +1278,200 @@ define([
       {
         viewport.msg.saved();
 
-        view.showErrorMessage(view.t('FORM:ERROR:upload'));
+        view.showErrorMessage(view.t('wmes-osh-common', 'FORM:ERROR:upload'));
 
         $submitEl.attr('disabled', false);
       });
+    },
+
+    toggleActions: function(enabled)
+    {
+      this.$('.form-actions .btn').prop('disabled', !enabled);
+    },
+
+    showResolutionPopover: function(type, id)
+    {
+      if (type !== this.resolution.type || id !== this.resolution.id)
+      {
+        return this.loadResolution(type, id, true);
+      }
+
+      if (!this.resolution.id)
+      {
+        this.$id('resolutionId').focus();
+
+        return;
+      }
+
+      if (!this.resolution.data)
+      {
+        this.$id('save').click();
+
+        return;
+      }
+
+      if (this.$id('showResolution').data('bs.popover'))
+      {
+        return;
+      }
+
+      this.$id('showResolution').popover({
+        container: this.$id('resolutionGroup'),
+        trigger: 'click',
+        placement: 'top',
+        html: true,
+        title: function() { return ''; },
+        content: this.renderPartialHtml(resolutionPopoverTemplate, this.resolution)
+      }).popover('show');
+    },
+
+    hideResolutionPopover: function()
+    {
+      this.$id('showResolution').popover('destroy');
+    },
+
+    loadResolution: function(type, id, show)
+    {
+      if (!type)
+      {
+        type = this.getResolutionType();
+      }
+
+      if (!id)
+      {
+        id = parseInt(this.$id('resolutionId').val(), 10) || 0;
+      }
+
+      this.resetResolution();
+
+      if (!id)
+      {
+        this.$id('resolutionId').val('');
+
+        return;
+      }
+
+      const $btn = this.$id('showResolution').prop('disabled', true);
+
+      this.toggleActions(false);
+
+      const req = this.resolution.req = this.ajax({
+        url: `/osh/${type}s/${id}?select(subject,status)`
+      });
+
+      req.fail(() =>
+      {
+        if (req.status !== 404)
+        {
+          this.$id('resolutionId')[0].setCustomValidity(this.t('FORM:resolution:failure'));
+
+          return viewport.msg.loadingFailed();
+        }
+
+        viewport.msg.loaded();
+
+        this.resolution.type = type;
+        this.resolution.id = id;
+
+        this.$id('resolutionId')[0].setCustomValidity(this.t('FORM:resolution:notFound'));
+      });
+
+      req.done(data =>
+      {
+        this.$id('resolutionId')[0].setCustomValidity('');
+
+        this.resolution.type = type;
+        this.resolution.id = id;
+        this.resolution.data = data;
+
+        if (show)
+        {
+          this.showResolutionPopover(type, id);
+        }
+      });
+
+      req.always(() =>
+      {
+        if (this.resolution.req === req)
+        {
+          this.resolution.req = null;
+
+          $btn.prop('disabled', false);
+
+          this.toggleActions(true);
+        }
+      });
+    },
+
+    showAddResolutionDialog: function()
+    {
+      if (!this.el.checkValidity())
+      {
+        return this.$id('save').click();
+      }
+
+      const formData = this.getFormData();
+      const type = this.getResolutionType();
+
+      let dialogView = null;
+
+      if (type === 'kaizen')
+      {
+        dialogView = new KaizenFormView({
+          relation: this.model,
+          model: new Kaizen({
+            subject: formData.subject,
+            kind: formData.kind,
+            workplace: formData.workplace,
+            division: formData.division,
+            building: formData.building,
+            location: formData.location,
+            problem: formData.problem,
+            reason: formData.reason,
+            suggestion: formData.suggestion,
+            plannedAt: formData.plannedAt
+          })
+        });
+      }
+      else
+      {
+        return;
+      }
+
+      viewport.showDialog(dialogView, this.t(`FORM:resolution:title:${type}`));
+
+      dialogView.handleSuccess = () =>
+      {
+        this.resolution.added[type] = dialogView.model.id;
+        this.resolution.type = type;
+        this.resolution.id = dialogView.model.id;
+        this.resolution.data = dialogView.model.toJSON();
+
+        this.$id('resolutionId').val(this.resolution.id.toString());
+
+        viewport.closeDialog();
+      };
+    },
+
+    onDocumentClick: function(e)
+    {
+      if (!this.$(e.target).closest(`#${this.idPrefix}-resolutionGroup`).length)
+      {
+        this.hideResolutionPopover();
+      }
+    },
+
+    onDocumentKeyDown: function(e)
+    {
+      if (e.key === 'Escape')
+      {
+        if (this.$id('showResolution').data('bs.popover'))
+        {
+          this.hideResolutionPopover();
+
+          return false;
+        }
+      }
     }
 
   });

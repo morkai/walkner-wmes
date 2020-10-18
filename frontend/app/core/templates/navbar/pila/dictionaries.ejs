@@ -6,7 +6,7 @@
   <ul class="dropdown-menu">
     <li data-privilege="USERS:VIEW" data-module><a href="#users"><%- t('NAVBAR:USERS') %></a>
     <li class="divider">
-    <% ['workplaces', 'divisions', 'buildings', 'locations', 'kinds', 'eventCategories', 'reasonCategories'].forEach(d => { %>
+    <% ['workplaces', 'divisions', 'buildings', 'locations', 'kinds', 'activityKinds', 'eventCategories', 'reasonCategories'].forEach(d => { %>
     <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/<%- d %>"><%- t('wmes-osh-common', `navbar:${d}`) %></a>
     <% }) %>
   </ul>

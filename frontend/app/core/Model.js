@@ -1,8 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'backbone'
 ], function(
+  _,
   Backbone
 ) {
   'use strict';
@@ -23,14 +25,54 @@ define([
 
     labelAttribute: null,
 
+    genUrl: function(action, base)
+    {
+      var urlRoot = _.result(this, 'urlRoot');
+
+      if (!urlRoot)
+      {
+        throw new Error("'urlRoot' was not specified!");
+      }
+
+      var url = urlRoot;
+
+      if (action === 'base')
+      {
+        return url;
+      }
+
+      if (base !== true)
+      {
+        url += '/';
+
+        if (this.isNew())
+        {
+          url += encodeURIComponent(this.cid);
+        }
+        else
+        {
+          url += encodeURIComponent(this.id);
+        }
+      }
+
+      if (typeof action === 'string')
+      {
+        url += ';' + action;
+      }
+
+      return url;
+    },
+
     genClientUrl: function(action)
     {
-      if (this.clientUrlRoot === null)
+      var clientUrlRoot = _.result(this, 'clientUrlRoot');
+
+      if (!clientUrlRoot)
       {
         throw new Error('`clientUrlRoot` was not specified');
       }
 
-      var url = this.clientUrlRoot;
+      var url = clientUrlRoot;
 
       if (action === 'base')
       {

@@ -486,6 +486,11 @@ function(
         }
       });
 
+      if (typeof value !== 'string')
+      {
+        value = value == null ? '' : String(value);
+      }
+
       if (escape)
       {
         value = _.escape(value);

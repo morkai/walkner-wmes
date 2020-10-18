@@ -2,11 +2,13 @@
 
 define([
   'require',
+  'underscore',
   'app/i18n',
   'app/core/Model',
   'app/core/templates/userInfo'
 ], function(
   require,
+  _,
   t,
   Model,
   userInfoTemplate
@@ -35,16 +37,19 @@ define([
       };
     },
 
-    getLabel: function({long, path} = {})
+    getLabel: function({long, path, link} = {})
     {
       let label = this.get(long ? 'longName' : 'shortName');
+
+      if (link)
+      {
+        label = `<a href="${this.genClientUrl()}">${_.escape(label)}</a>`;
+      }
 
       if (path)
       {
         const dictionaries = require('app/wmes-osh-common/dictionaries');
-        const workplaceId = this.get('workplace');
-        const workplaceModel = dictionaries.workplaces.get(workplaceId);
-        const workplaceLabel = workplaceModel ? workplaceModel.getLabel() : workplaceId;
+        const workplaceLabel = dictionaries.getLabel('workplace', this.get('workplace'), {long, link});
 
         label = `${workplaceLabel} \\ ${label}`;
       }
@@ -78,7 +83,7 @@ define([
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
 
-      obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {long: true});
+      obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {long: true, link: true});
 
       return obj;
     },

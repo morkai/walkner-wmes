@@ -4,6 +4,27 @@
 .table:only-child {
   margin-bottom: 0;
 }
+.table > thead > tr > td.secondary,
+.table > tbody > tr > td.secondary,
+.table > tfoot > tr > td.secondary,
+.table > thead > tr > th.secondary,
+.table > tbody > tr > th.secondary,
+.table > tfoot > tr > th.secondary,
+.table > thead > tr.secondary > td,
+.table > tbody > tr.secondary > td,
+.table > tfoot > tr.secondary > td,
+.table > thead > tr.secondary > th,
+.table > tbody > tr.secondary > th,
+.table > tfoot > tr.secondary > th {
+  background-color: #f9daf9;
+}
+.table-hover > tbody > tr > td.secondary:hover,
+.table-hover > tbody > tr > th.secondary:hover,
+.table-hover > tbody > tr.secondary:hover > td,
+.table-hover > tbody > tr:hover > .secondary,
+.table-hover > tbody > tr.secondary:hover > th {
+  background-color: #e4d0f5;
+}
 .table-responsive {
   margin-bottom: 15px;
   border-left: 1px solid #ddd;

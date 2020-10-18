@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/i18n',
   'app/user',
+  'app/planning/util/contextMenu',
   '../View',
   './ActionFormView',
   './PaginationView',
@@ -14,6 +15,7 @@ define([
   $,
   t,
   user,
+  contextMenu,
   View,
   ActionFormView,
   PaginationView,
@@ -101,6 +103,12 @@ define([
       'click .is-filter': function(e)
       {
         this.trigger('showFilter', e.currentTarget.dataset.columnId);
+      },
+      'contextmenu .list-item[data-id]': function(e)
+      {
+        e.preventDefault();
+
+        this.showContextMenu(e.currentTarget.dataset.id, e.pageY, e.pageX);
       }
     },
 
@@ -523,6 +531,58 @@ define([
         || targetEl.classList.contains('actions')
         || window.getSelection().toString() !== ''
         || (tagName !== 'TD' && this.$(targetEl).closest('a, input, button').length);
+    },
+
+    showContextMenu: function(id, top, left)
+    {
+      var view = this;
+      var model = this.collection.get(id);
+
+      if (!model)
+      {
+        return;
+      }
+
+      try
+      {
+        var row = view.serializeRow(model);
+        var actions = view.serializeActions()(row);
+        var menu = actions
+          .filter(function(action)
+          {
+            return !!action
+              && !action.disabled
+              && (!action.className || action.className.indexOf('disabled') === -1);
+          })
+          .map(function(action)
+          {
+            return {
+              icon: 'fa-' + action.icon,
+              label: action.label,
+              handler: function()
+              {
+                setTimeout(function()
+                {
+                  var $action = view.$row(id).find('.action-' + action.id);
+
+                  if ($action.length)
+                  {
+                    $action[0].click();
+                  }
+                }, 1);
+              }
+            };
+          });
+
+        if (menu.length)
+        {
+          contextMenu.show(view, top, left, menu);
+        }
+      }
+      catch (err)
+      {
+        console.error(err);
+      }
     }
 
   });

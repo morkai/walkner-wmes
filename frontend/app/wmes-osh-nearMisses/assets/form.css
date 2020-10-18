@@ -7,13 +7,9 @@
 .osh-nearMisses-form .panel-danger > .panel-body {
   background-color: #FBF1F1;
 }
-.osh-nearMisses-form .form-actions {
-  display: flex;
+.osh-nearMisses-form-resolutionId .input-group {
+  width: 154px;
 }
-.osh-nearMisses-form .form-actions .btn {
-  margin-right: 15px;
-  min-width: 125px;
-}
-.osh-nearMisses-form .form-actions .btn:last-child {
-  margin-right: 0;
+.osh-nearMisses-form-resolutionId .btn {
+  min-width: 37px;
 }

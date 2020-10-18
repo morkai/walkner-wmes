@@ -7,13 +7,18 @@ define([
   'app/user',
   'app/core/util/showDeleteFormPage',
   'app/wmes-osh-common/dictionaries',
-  'app/wmes-osh-nearMisses/pages/ListPage',
-  'app/wmes-osh-nearMisses/pages/DetailsPage',
-  'app/wmes-osh-nearMisses/pages/AddFormPage',
-  'app/wmes-osh-nearMisses/pages/EditFormPage',
+  'app/wmes-osh-common/pages/ListPage',
+  'app/wmes-osh-common/pages/DetailsPage',
+  'app/wmes-osh-common/pages/AddFormPage',
+  'app/wmes-osh-common/pages/EditFormPage',
   './NearMiss',
   './NearMissCollection',
-  'i18n!app/nls/wmes-osh-nearMisses'
+  './views/FilterView',
+  './views/ListView',
+  './views/FormView',
+  'app/wmes-osh-nearMisses/templates/props',
+  'i18n!app/nls/wmes-osh-nearMisses',
+  'i18n!app/nls/wmes-osh-kaizens'
 ], function(
   _,
   router,
@@ -26,7 +31,11 @@ define([
   AddFormPage,
   EditFormPage,
   NearMiss,
-  NearMissCollection
+  NearMissCollection,
+  FilterView,
+  ListView,
+  FormView,
+  propsTemplate
 ) {
   'use strict';
 
@@ -38,6 +47,8 @@ define([
   router.map('/osh/nearMisses', canView, req =>
   {
     viewport.showPage(new ListPage({
+      FilterView,
+      ListView,
       collection: new NearMissCollection(null, {rqlQuery: req.rql})
     }));
   });
@@ -45,6 +56,7 @@ define([
   router.map('/osh/nearMisses/:id', canView, req =>
   {
     viewport.showPage(new DetailsPage({
+      propsTemplate,
       model: new NearMiss({_id: +req.params.id})
     }));
   });
@@ -52,6 +64,7 @@ define([
   router.map('/osh/nearMisses;add', canAdd, () =>
   {
     viewport.showPage(new AddFormPage({
+      FormView,
       model: new NearMiss()
     }));
   });
@@ -59,6 +72,7 @@ define([
   router.map('/osh/nearMisses/:id;edit', canEdit, (req) =>
   {
     viewport.showPage(new EditFormPage({
+      FormView,
       model: new NearMiss({_id: +req.params.id})
     }));
   });

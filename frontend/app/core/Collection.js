@@ -75,14 +75,35 @@ define([
     return Backbone.Collection.prototype.sync.call(this, type, model, options);
   };
 
-  Collection.prototype.genClientUrl = function(action)
+  Collection.prototype.genUrl = function(action)
   {
-    if (this.model.prototype.clientUrlRoot === null)
+    var urlRoot = _.result(this.model.prototype, 'urlRoot');
+
+    if (!urlRoot)
     {
-      throw new Error("Model's `clientUrlRoot` was not specified");
+      throw new Error("'urlRoot' was not specified");
     }
 
-    var url = this.model.prototype.clientUrlRoot;
+    var url = urlRoot;
+
+    if (typeof action === 'string')
+    {
+      url += ';' + action;
+    }
+
+    return url;
+  };
+
+  Collection.prototype.genClientUrl = function(action)
+  {
+    var clientUrlRoot = _.result(this.model.prototype, 'clientUrlRoot');
+
+    if (!clientUrlRoot)
+    {
+      throw new Error("'clientUrlRoot' was not specified");
+    }
+
+    var url = clientUrlRoot;
 
     if (typeof action === 'string')
     {

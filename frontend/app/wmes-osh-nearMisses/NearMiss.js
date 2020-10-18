@@ -17,6 +17,10 @@ define([
 ) {
   'use strict';
 
+  const NLS_DOMAIN = 'wmes-osh-nearMisses';
+
+  t = t.forDomain(NLS_DOMAIN);
+
   const STATUS_TO_CLASS = {
     new: 'default',
     inProgress: 'info',
@@ -25,8 +29,12 @@ define([
     cancelled: 'danger'
   };
 
-  const short = {long: false};
-  const long = {long: true};
+  const SHORT = {long: false};
+  const LONG = {long: true};
+  const TIME_PROPS = ['createdAt', 'startedAt', 'finishedAt'];
+  const USER_PROPS = ['creator', 'implementer', 'coordinators'];
+  const DICT_PROPS = ['workplace', 'division', 'building', 'location', 'kind', 'eventCategory', 'reasonCategory'];
+  const DESC_PROPS = ['kind', 'eventCategory', 'reasonCategory'];
 
   return Model.extend({
 
@@ -36,13 +44,11 @@ define([
 
     topicPrefix: 'osh.nearMisses',
 
-    privilegePrefix: 'OSH:DICTIONARIES',
+    privilegePrefix: 'OSH:NEAR_MISSES',
 
-    nlsDomain: 'wmes-osh-nearMisses',
+    nlsDomain: NLS_DOMAIN,
 
     labelAttribute: '_id',
-
-    defaults: {},
 
     initialize: function()
     {
@@ -60,10 +66,11 @@ define([
 
     serialize: function()
     {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.toJSON();
 
-      obj.status = t(this.nlsDomain, `status:${obj.status}`);
-      obj.priority = t('wmes-osh-common', `priority:${obj.priority}`);
+      obj.status = dictionaries.getLabel('status', obj.status);
+      obj.priority = dictionaries.getLabel('priority', obj.priority);
       obj.materialLoss = t('core', `BOOL:${obj.materialLoss}`);
       obj.duration = this.getDuration();
 
@@ -76,21 +83,29 @@ define([
       const obj = this.serialize();
 
       obj.className = STATUS_TO_CLASS[this.get('status')];
+      obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'L') : '';
+      obj.eventDate = time.utc.format(obj.eventDate, 'L, H');
 
-      ['createdAt', 'startedAt', 'finishedAt'].forEach(prop =>
+      if (obj.resolution._id)
+      {
+        obj.resolution = t(`resolution:link:${obj.resolution.type}`, {id: obj.resolution._id});
+      }
+      else
+      {
+        obj.resolution = t(`resolution:desc:${obj.resolution.type}`);
+      }
+
+      TIME_PROPS.forEach(prop =>
       {
         obj[prop] = obj[prop] ? time.format(obj[prop], 'L') : '';
       });
 
-      obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'L') : '';
-      obj.eventDate = time.utc.format(obj.eventDate, 'L, H');
-
-      ['workplace', 'division', 'building', 'location', 'kind', 'eventCategory', 'reasonCategory'].forEach(prop =>
+      DICT_PROPS.forEach(prop =>
       {
-        obj[prop] = dictionaries.getLabel(prop, obj[prop], short);
+        obj[prop] = dictionaries.getLabel(prop, obj[prop], SHORT);
       });
 
-      ['creator', 'manager', 'implementer', 'coordinators'].forEach(prop =>
+      USER_PROPS.forEach(prop =>
       {
         obj[prop] = !Array.isArray(obj[prop])
           ? userInfoTemplate(obj[prop], {noIp: true, clickable: false})
@@ -114,28 +129,38 @@ define([
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
 
-      ['createdAt', 'startedAt', 'finishedAt'].forEach(prop =>
+      obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'LL') : '';
+      obj.eventDate = time.utc.format(obj.eventDate, t(this.nlsDomain, 'details:eventDate:format'));
+
+      if (obj.resolution._id)
+      {
+        obj.resolution = t(`resolution:desc:${obj.resolution.type}`)
+          + ', '
+          + t(`resolution:link:${obj.resolution.type}`, {id: obj.resolution._id});
+      }
+      else
+      {
+        obj.resolution = t(`resolution:desc:${obj.resolution.type}`);
+      }
+
+      TIME_PROPS.forEach(prop =>
       {
         obj[prop] = obj[prop] ? time.format(obj[prop], 'LL, LT') : '';
       });
 
-      obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'LL') : '';
-      obj.eventDate = time.utc.format(obj.eventDate, t(this.nlsDomain, 'details:eventDate:format'));
-
-      ['workplace', 'division', 'building', 'location'].forEach(prop =>
+      DICT_PROPS.forEach(prop =>
       {
-        obj[prop] = dictionaries.getLabel(prop, obj[prop], long);
+        obj[prop] = dictionaries.getLabel(prop, obj[prop], LONG);
       });
 
       obj.descriptions = {};
 
-      ['kind', 'eventCategory', 'reasonCategory'].forEach(prop =>
+      DESC_PROPS.forEach(prop =>
       {
         obj.descriptions[prop] = dictionaries.getDescription(prop, obj[prop]);
-        obj[prop] = dictionaries.getLabel(prop, obj[prop], long);
       });
 
-      ['creator', 'manager', 'implementer', 'coordinators'].forEach(prop =>
+      USER_PROPS.forEach(prop =>
       {
         obj[prop] = !Array.isArray(obj[prop])
           ? userInfoTemplate(obj[prop], {noIp: true})
@@ -238,7 +263,7 @@ define([
 
     getAttachmentUrl: function(attachment)
     {
-      return `/osh/nearMisses/${this.id}/attachments/${attachment._id}/${attachment.file}`;
+      return `${this.urlRoot}/${this.id}/attachments/${attachment._id}/${attachment.file}`;
     },
 
     handleSeen: function()
@@ -450,11 +475,11 @@ define([
         return false;
       },
 
-      todo: function(model)
+      inProgress: function(model)
       {
         const status = model.get('status');
 
-        if (status === 'inProgress' || status === 'finished')
+        if (status !== 'new' && status !== 'paused')
         {
           return false;
         }
@@ -467,7 +492,7 @@ define([
         return model.isCoordinator();
       },
 
-      pause: function(model)
+      paused: function(model)
       {
         const status = model.get('status');
 
@@ -484,7 +509,7 @@ define([
         return model.isCoordinator();
       },
 
-      cancel: function(model)
+      cancelled: function(model)
       {
         const status = model.get('status');
 
@@ -549,6 +574,36 @@ define([
       comment: function()
       {
         return currentUser.isLoggedIn();
+      },
+
+      editResolutionType: function(model)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        return model.isCoordinator();
+      },
+
+      editResolutionId: function(model)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.isCoordinator())
+        {
+          return true;
+        }
+
+        if (model.get('status') === 'inProgress' && model.isImplementer())
+        {
+          return true;
+        }
+
+        return false;
       }
 
     }

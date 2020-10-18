@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/core/Model',
   'app/core/templates/userInfo'
 ], function(
+  _,
   t,
   Model,
   userInfoTemplate
@@ -33,9 +35,16 @@ define([
       };
     },
 
-    getLabel: function({long} = {})
+    getLabel: function({long, link} = {})
     {
-      return this.get(long ? 'longName' : 'shortName');
+      let label = this.get(long ? 'longName' : 'shortName');
+
+      if (link)
+      {
+        label = `<a href="${this.genClientUrl()}">${_.escape(label)}</a>`;
+      }
+
+      return label;
     },
 
     serialize: function()

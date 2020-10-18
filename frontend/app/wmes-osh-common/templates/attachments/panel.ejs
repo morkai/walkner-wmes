@@ -1,0 +1,25 @@
+<div class="panel panel-default osh-attachments-panel">
+  <div class="panel-heading <%- unseen ? 'osh-unseen' : '' %>">
+    <%- t('attachments:panelTitle') %>
+  </div>
+  <div class="panel-body">
+    <% if (!attachments.length) { %>
+      <p><em><%- t('attachments:empty') %></em></p>
+    <% } else { %>
+      <div class="osh-attachments">
+        <% attachments.forEach(attachment => { %>
+        <div class="osh-attachment" data-id="<%- attachment._id %>" title="<%= attachment.name %>">
+          <% if (attachment.image) { %>
+          <a class="osh-attachment-img" href="<%- attachment.url %>" style="background-image: url('<%- attachment.url %>?min=1')"></a>
+          <% } else { %>
+          <a class="osh-attachment-icon" href="<%- attachment.url %>" target="_blank">
+            <i class="fa <%- attachment.icon %>"></i>
+          </a>
+          <% } %>
+          <div class="osh-attachment-name"><%= attachment.name %></div>
+        </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-<form class="osh-nearMisses-form" method="post" action="<%- formAction %>" autocomplete="off">
+<form class="osh-entries-form osh-nearMisses-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
@@ -41,7 +41,7 @@
         }) %>
       </div>
       <div class="panel panel-danger">
-        <div class="panel-heading">Zdarzenie Potencjalnie Wypadkowe</div>
+        <div class="panel-heading"><%- t('FORM:subtitle') %></div>
         <div class="panel-body has-lastElementRow">
           <div class="form-group">
             <label class="control-label"><%- t('PROPERTY:kind') %></label>
@@ -114,24 +114,24 @@
               label: 'PROPERTY:',
               required: true,
               groupClassName: 'col-lg-4',
-              rows: 6
+              rows: 5
             }) %>
             <%- helpers.formGroup({
               name: 'reason',
               type: 'textarea',
               label: 'PROPERTY:',
               groupClassName: 'col-lg-4',
-              rows: 6
+              rows: 5
             }) %>
             <%- helpers.formGroup({
-              name: 'solution',
+              name: 'suggestion',
               type: 'textarea',
               label: 'PROPERTY:',
               groupClassName: 'col-lg-4',
-              rows: 6
+              rows: 5
             }) %>
           </div>
-          <div id="<%- id('implementRow') %>" class="row">
+          <div class="row">
             <% if (editMode) { %>
               <%- helpers.formGroup({
                 name: 'implementer',
@@ -168,6 +168,31 @@
               <% }) %>
             </div>
           </div>
+          <% if (resolutionTypes.length) { %>
+            <div class="row">
+              <div class="col-lg-4 form-group">
+                <label class="control-label <%- model.status === 'new' ? '' : 'is-required' %>"><%- t('PROPERTY:resolution') %></label>
+                <% resolutionTypes.forEach(type => { %>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="resolution.type" value="<%- type %>" <%- model.status === 'new' ? '' : 'required' %> <%- can.editResolutionType ? '' : 'disabled' %>>
+                      <%- t(`resolution:desc:${type}`) %>
+                    </label>
+                  </div>
+                <% }) %>
+              </div>
+              <div id="<%- id('resolutionGroup') %>" class="col-lg-4 form-group osh-nearMisses-form-resolutionId">
+                <label for="<%- id('resolutionId') %>" class="control-label"><%- t(`FORM:resolution:unspecified`) %></label>
+                <div class="input-group">
+                  <input id="<%- id('resolutionId') %>" name="resolution._id" class="form-control" type="text" pattern="^[0-9]{1,7}$" maxlength="7">
+                  <span class="input-group-btn">
+                    <button id="<%- id('showResolution') %>" type="button" class="btn btn-default" title="<%- t('FORM:resolution:show') %>"><i class="fa fa-info"></i></button>
+                    <button id="<%- id('addResolution') %>" type="button" class="btn btn-default" title="<%- t('FORM:resolution:add') %>"><i class="fa fa-plus"></i></button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% } %>
         </div>
       </div>
       <% if (editMode) { %>
@@ -197,9 +222,9 @@
     <div class="form-actions">
       <button id="<%- id('save') %>" type="submit" class="btn btn-primary"><i class="fa <%- editMode ? 'fa-save' : 'fa-plus' %>"></i><span><%- formActionText %></span></button>
       <% if (editMode) { %>
-        <% if (can.todo) { %><button id="<%- id('todo') %>" type="button" class="btn btn-success"><i class="fa fa-check"></i><span><%- t('FORM:ACTION:todo') %></span></button><% } %>
-        <% if (can.pause) { %><button id="<%- id('pause') %>" type="button" class="btn btn-warning"><i class="fa fa-hourglass-o"></i><span><%- t('FORM:ACTION:pause') %></span></button><% } %>
-        <% if (can.cancel) { %><button id="<%- id('cancel') %>" type="button" class="btn btn-danger"><i class="fa fa-ban"></i><span><%- t('FORM:ACTION:cancel') %></span></button><% } %>
+        <% if (can.inProgress) { %><button id="<%- id('inProgress') %>" type="button" class="btn btn-info"><i class="fa fa-check"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:inProgress') %></span></button><% } %>
+        <% if (can.paused) { %><button id="<%- id('paused') %>" type="button" class="btn btn-warning"><i class="fa fa-hourglass-o"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:paused') %></span></button><% } %>
+        <% if (can.cancelled) { %><button id="<%- id('cancelled') %>" type="button" class="btn btn-danger"><i class="fa fa-ban"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:cancelled') %></span></button><% } %>
       <% } %>
     </div>
   </div>
