@@ -58,7 +58,7 @@ define([
 
     getModelType: function()
     {
-      return 'kaizens';
+      return 'kaizen';
     },
 
     serialize: function()

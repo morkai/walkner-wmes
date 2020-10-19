@@ -205,7 +205,8 @@ define([
           finished: Kaizen.can.finished(this.model),
           paused: Kaizen.can.paused(this.model),
           cancelled: Kaizen.can.cancelled(this.model)
-        }
+        },
+        relation: !!this.relation
       };
     },
 
@@ -230,12 +231,23 @@ define([
 
       formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
       formData.userDivision = this.$id('userDivision').select2('data').id;
-      formData.workplace = this.$id('workplace').select2('data').id;
-      formData.division = this.$id('division').select2('data').id;
-      formData.building = this.$id('building').select2('data').id;
-      formData.location = this.$id('location').select2('data').id;
       formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
-      formData.plannedAt = time.utc.getMoment(formData.plannedAt, 'YYYY-MM-DD').toISOString();
+
+      if (this.relation)
+      {
+        formData.relation = {
+          _id: this.relation.id,
+          type: this.relation.getModelType()
+        };
+      }
+      else
+      {
+        formData.workplace = this.$id('workplace').select2('data').id;
+        formData.division = this.$id('division').select2('data').id;
+        formData.building = this.$id('building').select2('data').id;
+        formData.location = this.$id('location').select2('data').id;
+        formData.plannedAt = time.utc.getMoment(formData.plannedAt, 'YYYY-MM-DD').toISOString();
+      }
 
       return formData;
     },

@@ -488,6 +488,11 @@ define([
 
       formData.resolution = resolution;
 
+      if (formData.kind)
+      {
+        formData.kind = parseInt(formData.kind, 10);
+      }
+
       return formData;
     },
 
@@ -1424,6 +1429,7 @@ define([
       {
         dialogView = new KaizenFormView({
           relation: this.model,
+          newStatus: 'inProgress',
           model: new Kaizen({
             subject: formData.subject,
             kind: formData.kind,

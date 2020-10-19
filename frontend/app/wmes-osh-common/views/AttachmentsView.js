@@ -116,8 +116,6 @@ define([
       const observer = this.model.getObserver();
 
       return {
-        modelType: this.model.getModelType(),
-        modelId: this.model.id,
         attachments: this.serializeAttachments(),
         unseen: observer.changes.all || !!observer.changes.attachments
       };

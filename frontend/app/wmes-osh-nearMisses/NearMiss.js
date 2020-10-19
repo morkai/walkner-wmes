@@ -61,7 +61,7 @@ define([
 
     getModelType: function()
     {
-      return 'nearMisses';
+      return 'nearMiss';
     },
 
     serialize: function()
