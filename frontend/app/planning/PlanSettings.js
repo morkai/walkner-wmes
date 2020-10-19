@@ -3,6 +3,7 @@
 define([
   'underscore',
   '../time',
+  '../user',
   '../core/Model',
   '../core/Collection',
   './Plan',
@@ -10,6 +11,7 @@ define([
 ], function(
   _,
   time,
+  user,
   Model,
   Collection,
   Plan,
@@ -243,7 +245,8 @@ define([
 
     isEditable: function()
     {
-      return time.getMoment(this.id).hours(6).diff(Date.now()) > 300000;
+      return (time.getMoment(this.id).hours(6).diff(Date.now()) > 300000)
+        || (window.ENV === 'development' && user.isAllowedTo('SUPER'));
     },
 
     applyChanges: function(changes)
