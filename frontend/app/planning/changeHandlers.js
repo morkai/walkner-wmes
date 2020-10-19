@@ -388,7 +388,19 @@ define([
           return;
         }
 
-        planLine.set(_.omit(changedLine, 'orders'));
+        var changes = changedLine;
+
+        if (changedLine.changes)
+        {
+          changes = {};
+
+          Object.keys(changedLine.changes).forEach(function(prop)
+          {
+            changes[prop] = changedLine.changes[prop][1];
+          });
+        }
+
+        planLine.set(_.omit(changes, 'orders'));
 
         if (changedLine.orders)
         {
