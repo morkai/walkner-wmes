@@ -219,6 +219,7 @@ define([
       });
 
       $('.embedded-actions').remove();
+      $('.modal.fade').removeClass('fade');
 
       (options && options.container || view.$el).append($embeddedActions);
 

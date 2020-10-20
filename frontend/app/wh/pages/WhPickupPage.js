@@ -672,7 +672,10 @@ define([
 
       page.acting = true;
 
-      page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
+      page.showMessage('info', 0, 'resolvingAction', {
+        personnelId: personnelId,
+        hideOnClick: false
+      });
 
       var req = page.promised(
         page.whOrders.act(
@@ -715,7 +718,7 @@ define([
 
       req.done(function(res)
       {
-        page.hideMessage();
+        page.hideMessage(false, true);
         page.handleActionResult(res);
       });
 
@@ -772,7 +775,7 @@ define([
 
       if (page.setToContinue)
       {
-        page.hideMessage(true);
+        page.hideMessage(true, true);
       }
 
       page.setToContinue = null;
@@ -894,7 +897,7 @@ define([
 
       var y = el.getBoundingClientRect().top - this.listView.$('thead').outerHeight();
 
-      if (smooth)
+      if (smooth && !embedded.isEnabled())
       {
         $('html, body').stop(true, false).animate({scrollTop: y});
       }
@@ -933,19 +936,23 @@ define([
         clearTimeout(this.timers.hideMessage);
       }
 
+      var isEmbedded = embedded.isEnabled();
       var $overlay = this.$id('messageOverlay');
       var $message = this.$id('message');
       var visible = $overlay[0].style.display === 'block';
       var html = message;
 
+      messageData = Object.assign({}, {embedded: isEmbedded}, messageData);
+
       if (messageTemplates[message])
       {
-        html = this.renderPartialHtml(messageTemplates[message], messageData || {});
+        html = this.renderPartialHtml(messageTemplates[message], messageData);
       }
 
       $message.stop(true, true);
       $overlay.css('display', 'block');
       $message
+        .data('hideOnClick', messageData.hideOnClick !== false)
         .html(html)
         .removeClass('message-error message-warning message-success message-info')
         .addClass('message-' + type);
@@ -965,12 +972,15 @@ define([
         });
 
         $message.css({
-          display: 'none',
+          display: isEmbedded ? 'block' : 'none',
           marginTop: ($message.outerHeight() / 2 * -1) + 'px',
           marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
         });
 
-        $message.fadeIn();
+        if (!isEmbedded)
+        {
+          $message.fadeIn();
+        }
       }
 
       if (time > 0)
@@ -979,7 +989,7 @@ define([
       }
     },
 
-    hideMessage: function(now)
+    hideMessage: function(now, force)
     {
       var page = this;
 
@@ -994,7 +1004,12 @@ define([
 
       var $message = page.$id('message');
 
-      if (now === true)
+      if (!force && $message.data('hideOnClick') === false)
+      {
+        return;
+      }
+
+      if (now === true || embedded.isEnabled())
       {
         hide();
       }

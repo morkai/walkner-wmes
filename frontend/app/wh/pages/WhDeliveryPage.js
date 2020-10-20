@@ -752,7 +752,10 @@ define([
 
       page.acting = true;
 
-      page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
+      page.showMessage('info', 0, 'resolvingAction', {
+        personnelId: personnelId,
+        hideOnClick: false
+      });
 
       var req = page.promised(
         WhOrderCollection.act(
@@ -773,7 +776,7 @@ define([
 
       req.done(function(res)
       {
-        page.hideMessage();
+        page.hideMessage(false, true);
         page.handleActionResult(res);
       });
 
@@ -916,14 +919,17 @@ define([
         clearTimeout(this.timers.hideMessage);
       }
 
+      var isEmbedded = embedded.isEnabled();
       var $overlay = this.$id('messageOverlay');
       var $message = this.$id('message');
       var visible = $overlay[0].style.display === 'block';
       var html = message;
 
+      messageData = Object.assign({}, {embedded: isEmbedded}, messageData);
+
       if (messageTemplates[message])
       {
-        html = this.renderPartialHtml(messageTemplates[message], messageData || {});
+        html = this.renderPartialHtml(messageTemplates[message], messageData);
       }
 
       $message.stop(true, true);
@@ -948,12 +954,15 @@ define([
         });
 
         $message.css({
-          display: 'none',
+          display: isEmbedded ? 'block' : 'none',
           marginTop: ($message.outerHeight() / 2 * -1) + 'px',
           marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
         });
 
-        $message.fadeIn();
+        if (!isEmbedded)
+        {
+          $message.fadeIn();
+        }
       }
 
       if (time > 0)
@@ -962,7 +971,7 @@ define([
       }
     },
 
-    hideMessage: function()
+    hideMessage: function(now, force)
     {
       var page = this;
 
@@ -977,7 +986,21 @@ define([
 
       var $message = page.$id('message');
 
-      $message.fadeOut(function()
+      if (!force && $message.data('hideOnClick') === false)
+      {
+        return;
+      }
+
+      if (now === true || embedded.isEnabled())
+      {
+        hide();
+      }
+      else
+      {
+        $message.fadeOut(hide);
+      }
+
+      function hide()
       {
         $overlay.css('display', 'none');
         $message.css('display', 'none');
@@ -986,7 +1009,7 @@ define([
         {
           page.timers.hideMessage = null;
         }
-      });
+      }
     },
 
     scheduleLineReload: function()
