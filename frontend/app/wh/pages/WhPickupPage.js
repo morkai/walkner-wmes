@@ -306,7 +306,7 @@ define([
           mrps: page.options.mrps,
           sets: page.options.sets
         }, {
-          storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
+          storageKey: 'PLANNING:DISPLAY_OPTIONS:WH2'
         }),
         settings: PlanSettings.fromDate(page.options.date),
         minMaxDates: true,
