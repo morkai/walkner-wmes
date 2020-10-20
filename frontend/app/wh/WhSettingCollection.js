@@ -35,6 +35,7 @@ define([
     'maxFifoCartsPerDelivery',
     'maxPackCartsPerDelivery',
     'availableTimeThreshold',
+    'pickupPriorityThreshold',
     'unassignSetDelay'
   ].join('|'));
 

@@ -171,6 +171,8 @@
     "settings:wh.planning.maxDeliveryStartTime:help": "Maximum minutes from now to the planned order start time to mark a cart as pending delivery, if its line is currently not working.",
     "settings:wh.planning.availableTimeThreshold": "Available time threshold [min]",
     "settings:wh.planning.availableTimeThreshold:help": "When picking a line during creation of a new set, the sum of picked up time and delivered time will be changed to 0, if it's less than the specified number of minutes.",
+    "settings:wh.planning.pickupPriorityThreshold": "Priority pickup threshold [min]",
+    "settings:wh.planning.pickupPriorityThreshold:help": "If the sum of completing and completed time of a line after creation of a new set is less that the specified number of minutes, then that line has a priority during new set creation until a set is assigned to that line.",
     "settings:wh.planning.deliveryFuncs": "Delivery functions",
     "settings:wh.planning.unassignSetDelay": "Auto set unassignment delay [min]",
     "settings:wh.planning.unassignSetDelay:help": "After the specified number of minutes has elapsed since the start of a new production shift, functions having unfinished sets that were created on previous shifts are automatically unassigned.",

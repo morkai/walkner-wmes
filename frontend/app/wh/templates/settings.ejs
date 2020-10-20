@@ -132,6 +132,12 @@
         type: 'number', min: 0, max: 1440
       }) %>
       <%- helpers.formGroup({
+        name: 'wh.planning.pickupPriorityThreshold',
+        label: 'settings:',
+        helpBlock: true,
+        type: 'number', min: 0, max: 9999
+      }) %>
+      <%- helpers.formGroup({
         name: 'wh.planning.minPickupDowntime',
         label: 'settings:',
         helpBlock: true,

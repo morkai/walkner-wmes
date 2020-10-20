@@ -172,6 +172,8 @@
   "settings:wh.planning.maxDeliveryStartTime:help": "Maksymalna ilość minut od teraz do zaplanowanego czasu rozpoczęcia zlecenia, aby wózek został przeznaczony do realizacji, jeżeli linia w danym momencie nie pracuje.",
   "settings:wh.planning.availableTimeThreshold": "Próg dostępnego czasu [min]",
   "settings:wh.planning.availableTimeThreshold:help": "Przy wyborze linii do nowego seta, suma czasu skompletowanego oraz czasu dostępnego zostanie zamieniona na 0, jeżeli jest mniejsza niż podana ilość minut.",
+  "settings:wh.planning.pickupPriorityThreshold": "Próg priorytetowej kompletacji [min]",
+  "settings:wh.planning.pickupPriorityThreshold:help": "Jeżeli po stworzeniu nowego seta suma czasu kompletowanego i skompletowanego na danej linii jest mniejsza niż podana ilość minut, to linia ta ma priorytet podczas twrzoenia nowych setów do momentu przydzielenia kolejnego seta do tej linii.",
   "settings:wh.planning.deliveryFuncs": "Funkcje wysyłki",
   "settings:wh.planning.unassignSetDelay": "Opóźnienie automatycznego odpięcia od seta [min]",
   "settings:wh.planning.unassignSetDelay:help": "Po upłynięciu podanej ilości minut od rozpoczęcia nowej zmiany produkcyjnej, funkcje mające niezakończone sety stworzone na poprzednich zmianach są automatycznie odpinane.",
