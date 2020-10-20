@@ -16,7 +16,7 @@
       "operator": 98,
       "docs": 54,
       "heff": 44,
-      "planning": 89,
+      "planning": 90,
       "ps-queue": 57,
       "ps-load": 16,
       "wh-pickup": 67,
@@ -38,8 +38,8 @@
       "importer": 2
     },
     "pila": {
-      "backend": 3,
-      "frontend": 3,
+      "backend": 5,
+      "frontend": 6,
       "reports": 2
     }
   },
