@@ -1213,6 +1213,60 @@ define([
       });
 
       viewport.showDialog(dialogView, page.t('pickup:forceLine:title'));
+    },
+
+    resetAllSets: function(cancel)
+    {
+      if (!currentUser.isAllowedTo('SUPER') || window.ENV !== 'development')
+      {
+        return;
+      }
+
+      const sets = new Set();
+      const ids = new Set();
+
+      this.whOrders.forEach(o =>
+      {
+        if (o.get('set'))
+        {
+          sets.add(o.get('set'));
+        }
+        else if (o.get('status') === 'cancelled' || o.get('status') === 'problem')
+        {
+          ids.add(o.id);
+        }
+      });
+
+      sets.forEach(set =>
+      {
+        this.whOrders.act('resetOrders', {
+          set,
+          date: this.plan.id,
+          cancel: cancel === true
+        });
+      });
+
+      ids.forEach(id =>
+      {
+        this.whOrders.act('resetOrders', {
+          orders: [id],
+          date: this.plan.id,
+          cancel: cancel === true
+        });
+      });
+    },
+
+    generate: function()
+    {
+      if (!currentUser.isAllowedTo('SUPER') || window.ENV !== 'development')
+      {
+        return;
+      }
+
+      this.ajax({
+        method: 'POST',
+        url: '/old/wh;generate?date=' + this.plan.id
+      });
     }
 
   });
