@@ -1,22 +1,35 @@
 .osh-attachments-panel {
   margin-bottom: 30px;
 }
+.osh-attachments-empty {
+  display: none;
+}
 .osh-attachments-panel .panel-body {
-  overflow-x: scroll;
+  overflow-x: auto;
   padding: 0;
+  text-align: center;
+}
+.osh-attachments-panel[data-attachment-count="0"] .panel-body {
+  text-align: left;
 }
 .osh-attachments-panel .panel-body > p {
   padding: 15px;
 }
 .osh-attachments {
-  padding: 0 15px 15px 0;
-  display: inline-block;
-  white-space: nowrap;
+  margin: 0 auto;
+  padding: 0;
+  display: inline-flex;
+}
+.osh-attachments-bordered .osh-attachments {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
 }
 .osh-attachment {
-  display: inline-block;
-  margin: 15px 0 0 11px;
-  border: 1px solid #ddd;
+  margin: 0;
+  border-right: 1px solid #ddd;
+}
+.osh-attachment:last-child {
+  border-right: none;
 }
 .osh-attachment:hover {
  cursor: pointer;
@@ -125,4 +138,18 @@
 }
 .osh-attachment-preview-close:hover {
   color: #ffffa6;
+}
+@media (max-width: 1920px) {
+  .col-lg-4 .osh-attachments-panel[data-attachment-count="1"] .osh-attachments {
+    display: block;
+  }
+  .col-lg-4 .osh-attachments-panel[data-attachment-count="1"] .osh-attachment-img {
+    width: 100%;
+  }
+  .col-lg-4 .osh-attachments-panel[data-attachment-count="1"] .osh-attachment-name {
+    width: 100%;
+    white-space: normal;
+    overflow: unset;
+    text-overflow: unset;
+  }
 }

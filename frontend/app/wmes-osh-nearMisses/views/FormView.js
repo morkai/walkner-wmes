@@ -64,26 +64,39 @@ define([
         this.$id('division').val('');
         this.$id('building').val('');
         this.$id('location').val('');
+        this.$id('station').val('');
 
         this.setUpDivisionSelect2();
         this.setUpBuildingSelect2();
         this.setUpLocationSelect2();
+        this.setUpStationSelect2();
       },
 
       'change #-division': function()
       {
         this.$id('building').val('');
         this.$id('location').val('');
+        this.$id('station').val('');
 
         this.setUpBuildingSelect2();
         this.setUpLocationSelect2();
+        this.setUpStationSelect2();
       },
 
       'change #-building': function()
       {
         this.$id('location').val('');
+        this.$id('station').val('');
 
         this.setUpLocationSelect2();
+        this.setUpStationSelect2();
+      },
+
+      'change #-location': function()
+      {
+        this.$id('station').val('');
+
+        this.setUpStationSelect2();
       },
 
       'change input[name="kind"]': function()
@@ -433,6 +446,7 @@ define([
       formData.division = this.$id('division').select2('data').id;
       formData.building = this.$id('building').select2('data').id;
       formData.location = this.$id('location').select2('data').id;
+      formData.station = parseInt(this.$id('station').val(), 10) || null;
 
       formData.eventDate = time.utc.getMoment(
         `${formData.eventDate} ${(formData.eventTime || '00').padStart(2, '0')}:00:00`,
@@ -474,7 +488,10 @@ define([
         formData.priority = +formData.priority;
       }
 
-      const resolution = this.model.get('resolution');
+      const resolution = this.model.get('resolution') || {
+        _id: 0,
+        type: 'unspecified'
+      };
 
       if (NearMiss.can.editResolutionType(this.model))
       {
@@ -513,6 +530,7 @@ define([
       this.setUpDivisionSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
+      this.setUpStationSelect2();
       this.setUpImplementerSelect2();
       this.setUpEventCategorySelect2();
       this.setUpReasonCategorySelect2();
@@ -931,6 +949,43 @@ define([
       }
 
       $input.select2('enable', !!currentBuildingId);
+    },
+
+    setUpStationSelect2: function()
+    {
+      const $input = this.$id('station');
+      const currentLocationId = +this.$id('location').val();
+      const map = {};
+
+      dictionaries.stations.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasLocation(currentLocationId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentLocationId ? ' ' : this.t('FORM:placeholder:noLocation'),
+        allowClear: true,
+        data
+      });
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+
+      $input.select2('enable', data.length > 0 && !!currentLocationId);
     },
 
     setUpImplementerSelect2: function()
@@ -1432,11 +1487,13 @@ define([
           newStatus: 'inProgress',
           model: new Kaizen({
             subject: formData.subject,
-            kind: formData.kind,
+            kind: formData.kind || +this.$('input[name="kind"]:checked').val(),
             workplace: formData.workplace,
             division: formData.division,
             building: formData.building,
             location: formData.location,
+            station: formData.station,
+            eventCategory: formData.eventCategory,
             problem: formData.problem,
             reason: formData.reason,
             suggestion: formData.suggestion,

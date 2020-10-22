@@ -104,6 +104,19 @@ define([
       return options;
     },
 
+    getAttachmentsViewClass: function()
+    {
+      return this.AttachmentsView || AttachmentsView;
+    },
+
+    getAttachmentsViewOptions: function()
+    {
+      return {
+        model: this.model,
+        hideEmpty: true
+      };
+    },
+
     defineModels: function()
     {
       this.model = bindLoadingMessage(this.model, this);
@@ -113,9 +126,7 @@ define([
     {
       this.propsView = new (this.getPropsViewClass())(this.getPropsViewOptions());
 
-      this.attachmentsView = new AttachmentsView({
-        model: this.model
-      });
+      this.attachmentsView = new (this.getAttachmentsViewClass())(this.getAttachmentsViewOptions());
 
       this.historyView = new HistoryView({
         model: this.model

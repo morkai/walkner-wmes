@@ -45,35 +45,55 @@ define([
         this.$id('division').val('');
         this.$id('building').val('');
         this.$id('location').val('');
+        this.$id('station').val('');
 
         this.setUpDivisionSelect2();
         this.setUpBuildingSelect2();
         this.setUpLocationSelect2();
+        this.setUpStationSelect2();
       },
 
       'change #-division': function()
       {
         this.$id('building').val('');
         this.$id('location').val('');
+        this.$id('station').val('');
 
         this.setUpBuildingSelect2();
         this.setUpLocationSelect2();
+        this.setUpStationSelect2();
       },
 
       'change #-building': function()
       {
         this.$id('location').val('');
+        this.$id('station').val('');
 
         this.setUpLocationSelect2();
+        this.setUpStationSelect2();
       },
 
-      'change #-attachments': function()
+      'change #-location': function()
       {
-        const $attachments = this.$id('attachments');
-        const max = this.options.editMode ? 5 : 2;
+        this.$id('station').val('');
 
-        $attachments[0].setCustomValidity(
-          $attachments[0].files.length > max ? this.t('wmes-osh-common', 'FORM:ERROR:tooManyFiles', {max}) : ''
+        this.setUpStationSelect2();
+      },
+
+      'change input[name="kind"]': function()
+      {
+        this.$id('eventCategory').val('');
+
+        this.setUpEventCategorySelect2();
+      },
+
+      'change input[type="file"][data-max]': function(e)
+      {
+        const inputEl = e.currentTarget;
+        const max = +inputEl.dataset.max;
+
+        inputEl.setCustomValidity(
+          inputEl.files.length > max ? this.t('wmes-osh-common', 'FORM:ERROR:tooManyFiles', {max}) : ''
         );
       },
 
@@ -246,6 +266,7 @@ define([
         formData.division = this.$id('division').select2('data').id;
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
+        formData.station = parseInt(this.$id('station').val(), 10) || null;
         formData.plannedAt = time.utc.getMoment(formData.plannedAt, 'YYYY-MM-DD').toISOString();
       }
 
@@ -269,6 +290,8 @@ define([
       this.setUpDivisionSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
+      this.setUpStationSelect2();
+      this.setUpEventCategorySelect2();
       this.setUpImplementersSelect2();
       this.toggleKind();
     },
@@ -640,6 +663,104 @@ define([
       $input.select2('enable', !!currentBuildingId);
     },
 
+    setUpStationSelect2: function()
+    {
+      const $input = this.$id('station');
+      const currentLocationId = +this.$id('location').val();
+      const map = {};
+
+      dictionaries.stations.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasLocation(currentLocationId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentLocationId ? ' ' : this.t('FORM:placeholder:noLocation'),
+        allowClear: true,
+        data
+      });
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+
+      $input.select2('enable', data.length > 0 && !!currentLocationId);
+    },
+
+    setUpEventCategorySelect2: function()
+    {
+      const $input = this.$id('eventCategory');
+      const kind = this.$('input[name="kind"]:checked').val();
+      const map = {};
+
+      dictionaries.eventCategories.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasKind(kind))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          description: model.get('description'),
+          model
+        };
+      });
+
+      const currentId = this.model.get('eventCategory');
+      const currentModel = dictionaries.eventCategories.get(currentId);
+
+      if (currentId && !map[currentId])
+      {
+        if (!currentModel)
+        {
+          map[currentId] = {
+            id: currentId,
+            text: `?${currentId}?`
+          };
+        }
+        else if (currentModel.hasKind(kind))
+        {
+          map[currentId] = {
+            id: currentId,
+            text: currentModel.getLabel({long: true}),
+            description: currentModel.get('description'),
+            model: currentModel
+          };
+        }
+      }
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        allowClear: false,
+        placeholder: ' ',
+        data,
+        dropdownCssClass: 'select2-with-description',
+        formatResult: formatResultWithDescription.bind(null, 'text', 'description')
+      });
+
+      if (data.length === 1)
+      {
+        $input.val(data[0].id).select2('data', data[0]);
+      }
+    },
+
     setUpImplementersSelect2: function()
     {
       const $input = this.$id('implementers');
@@ -704,9 +825,11 @@ define([
 
       view.$('input[type="file"]').each(function()
       {
+        const name = this.name.replace('attachments.', '');
+
         for (let i = 0; i < this.files.length; ++i)
         {
-          uploadFormData.append('file', this.files[i]);
+          uploadFormData.append(name, this.files[i]);
 
           files += 1;
         }

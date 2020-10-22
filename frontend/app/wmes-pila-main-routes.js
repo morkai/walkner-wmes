@@ -19,6 +19,7 @@ define([
   './wmes-osh-divisions/routes',
   './wmes-osh-buildings/routes',
   './wmes-osh-locations/routes',
+  './wmes-osh-stations/routes',
   './wmes-osh-kinds/routes',
   './wmes-osh-activityKinds/routes',
   './wmes-osh-eventCategories/routes',

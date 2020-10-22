@@ -130,6 +130,11 @@ define([
 
   Collection.prototype.getLabel = function(id, options)
   {
+    if (id == null)
+    {
+      return '';
+    }
+
     var model = this.get(id);
 
     return model ? model.getLabel(options) : id;

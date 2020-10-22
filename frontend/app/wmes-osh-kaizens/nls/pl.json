@@ -1,7 +1,7 @@
 {
   "BREADCRUMB:browse": "Kaizen",
 
-  "PROPERTY:_id": "ID",
+  "PROPERTY:rid": "ID",
   "PROPERTY:status": "Status",
   "PROPERTY:createdAt": "Czas zgłoszenia",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
@@ -16,18 +16,23 @@
   "PROPERTY:userDivision": "Wydział zgłaszający",
   "PROPERTY:workplace": "Zakład usprawnienia",
   "PROPERTY:division": "Wydział usprawnienia",
-  "PROPERTY:building": "Budynek usprawnienia",
-  "PROPERTY:location": "Miejsce usprawnienia",
+  "PROPERTY:building": "Budynek",
+  "PROPERTY:location": "Miejsce",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:locationPath": "Lokalizacja",
   "PROPERTY:kind": "Rodzaj",
+  "PROPERTY:eventCategory": "Kategoria zdarzenia",
   "PROPERTY:subject": "Temat",
   "PROPERTY:problem": "Opis problemu",
   "PROPERTY:reason": "Przyczyna wystąpienia",
   "PROPERTY:suggestion": "Propozycja rozwiązania",
   "PROPERTY:solution": "Wdrożone usprawnienia",
+  "PROPERTY:kom": "Kaizen miesiąca",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:attachments": "Załączniki",
+  "PROPERTY:attachments.before": "Zdjęcia przed",
+  "PROPERTY:attachments.after": "Zdjęcia po",
   "PROPERTY:relations": "Powiązania",
-  "PROPERTY:photos": "Zdjęcia",
 
   "filter:user:mine": "Moje",
   "filter:user:others": "Uczestnik",
@@ -35,6 +40,7 @@
   "details:general": "Podstawowe informacje",
   "details:users": "Uczestnicy",
   "details:extra": "Dodatkowe informacje",
+  "details:noReason": "Nie wskazano przyczyny wystąpienia.",
   "details:noSolution": "Nie wdrożono jeszcze żadnych usprawnień.",
 
   "FORM:subtitle": "Kaizen",
@@ -42,6 +48,11 @@
   "FORM:placeholder:noWorkplace": "Wybierz zakład...",
   "FORM:placeholder:noDivision": "Wybierz wydział...",
   "FORM:placeholder:noBuilding": "Wybierz budynek...",
+  "FORM:placeholder:noLocation": "Wybierz miejsce...",
   "FORM:creator": "Osoba zgłaszająca",
-  "FORM:plannedAt": "Planowany termin zakończenia"
+  "FORM:plannedAt": "Planowany termin zakończenia",
+  "FORM:attachments:before:add": "Zdjęcia przed",
+  "FORM:attachments:before:edit": "Nowe zdjęcia przed",
+  "FORM:attachments:after": "Nowe zdjęcia po",
+  "FORM:attachments:other": "Inne załączniki"
 }

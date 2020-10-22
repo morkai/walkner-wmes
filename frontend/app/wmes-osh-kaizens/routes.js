@@ -8,15 +8,14 @@ define([
   'app/core/util/showDeleteFormPage',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/pages/ListPage',
-  'app/wmes-osh-common/pages/DetailsPage',
   'app/wmes-osh-common/pages/AddFormPage',
   'app/wmes-osh-common/pages/EditFormPage',
   './Kaizen',
   './KaizenCollection',
+  './pages/DetailsPage',
   './views/FilterView',
   './views/ListView',
   './views/FormView',
-  'app/wmes-osh-kaizens/templates/props',
   'i18n!app/nls/wmes-osh-kaizens'
 ], function(
   _,
@@ -26,15 +25,14 @@ define([
   showDeleteFormPage,
   dictionaries,
   ListPage,
-  DetailsPage,
   AddFormPage,
   EditFormPage,
   Kaizen,
   KaizenCollection,
+  DetailsPage,
   FilterView,
   ListView,
-  FormView,
-  propsTemplate
+  FormView
 ) {
   'use strict';
 
@@ -55,7 +53,6 @@ define([
   router.map('/osh/kaizens/:id', canView, req =>
   {
     viewport.showPage(new DetailsPage({
-      propsTemplate,
       model: new Kaizen({_id: +req.params.id})
     }));
   });

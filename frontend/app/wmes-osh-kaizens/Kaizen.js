@@ -30,8 +30,11 @@ define([
   const LONG = {long: true};
   const TIME_PROPS = ['createdAt', 'startedAt', 'implementedAt', 'finishedAt'];
   const USER_PROPS = ['creator', 'implementers', 'coordinators'];
-  const DICT_PROPS = ['workplace', 'division', 'building', 'location', 'kind'];
-  const DESC_PROPS = ['kind'];
+  const DICT_PROPS = [
+    'workplace', 'division', 'building', 'location', 'station',
+    'kind', 'eventCategory'
+  ];
+  const DESC_PROPS = ['kind', 'eventCategory'];
 
   return Model.extend({
 
@@ -45,7 +48,9 @@ define([
 
     nlsDomain: 'wmes-osh-kaizens',
 
-    labelAttribute: '_id',
+    labelAttribute: 'rid',
+
+    attachmentKinds: ['before', 'after', 'other'],
 
     initialize: function()
     {
@@ -109,6 +114,18 @@ define([
       if (obj.unseen)
       {
         obj.className += ' osh-unseen';
+      }
+
+      if (obj.kom)
+      {
+        obj.status += ` <i class="fa fa-trophy" title="${t(this.nlsDomain, 'PROPERTY:kom')}"></i>`;
+      }
+
+      obj.locationPath = `${obj.workplace} \\ ${obj.division} \\ ${obj.building} \\ ${obj.location}`;
+
+      if (obj.station)
+      {
+        obj.locationPath += ` \\ ${obj.station}`;
       }
 
       return obj;
@@ -241,7 +258,7 @@ define([
 
     getAttachmentUrl: function(attachment)
     {
-      return `${this.urlRoot}/${this.id}/attachments/${attachment._id}/${attachment.file}`;
+      return `${this.urlRoot}/${this.id}/attachments/${attachment._id}/${attachment.file}?`;
     },
 
     handleSeen: function()
@@ -348,6 +365,8 @@ define([
     }
 
   }, {
+
+    RID_PREFIX: 'K',
 
     changeHandlers: {
 

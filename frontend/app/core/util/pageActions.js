@@ -56,7 +56,9 @@ define([
       return false;
     }
 
-    var phrase = phraseEl.value;
+    var phrase = options.prepareId
+      ? options.prepareId(phraseEl.value)
+      : phraseEl.value;
 
     phraseEl.readOnly = true;
 
@@ -66,14 +68,29 @@ define([
       url: _.result(collection, 'url') + ';rid',
       data: {rid: phrase}
     } : {
-      method: 'HEAD',
-      url: _.result(collection, 'url') + '/' + phrase
+      method: 'GET',
+      url: _.result(collection, 'url') + '/' + phrase + '?select(rid)'
     });
 
-    req.done(function(modelId)
+    req.done(function(res)
     {
+      var id = phrase;
+
+      if (options.mode === 'rid')
+      {
+        id = res;
+      }
+      else if (res._id)
+      {
+        id = res._id;
+      }
+      else if (res.rid)
+      {
+        id = res.rid;
+      }
+
       page.broker.publish('router.navigate', {
-        url: collection.genClientUrl() + '/' + (modelId || phrase),
+        url: collection.genClientUrl() + '/' + id,
         trigger: true
       });
     });
@@ -299,7 +316,8 @@ define([
         mode: 'rid',
         pattern: '^ *[0-9]+ *$',
         autoFocus: !window.IS_MOBILE,
-        width: 150
+        width: 150,
+        browse: false
       }, options);
 
       return {

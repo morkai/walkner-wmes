@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/time',
   'app/viewport',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/templates/list/markAsSeenAction'
 ], function(
+  time,
   viewport,
   FilteredListPage,
   pageActions,
@@ -22,7 +24,17 @@ define([
     actions: function(layout)
     {
       return [
-        pageActions.jump(this, this.collection, {mode: 'id'}),
+        pageActions.jump(this, this.collection, {
+          mode: 'id',
+          pattern: `^\s*${this.collection.model.RID_PREFIX}?-?([0-9]{4}-)?[0-9]{1,6}$\s*`,
+          prepareId: input =>
+          {
+            const matches = input.trim().match(/([0-9]{4}-)?([0-9]{1,6})$/);
+            const year = (matches[1] || time.format(Date.now(), 'YYYY')).replace(/[^0-9]/, '');
+
+            return `${this.collection.model.RID_PREFIX}-${year}-${matches[2].padStart(6, '0')}`;
+          }
+        }),
         {
           template: () => this.renderPartialHtml(markAsSeenActionTemplate),
           afterRender: $li =>

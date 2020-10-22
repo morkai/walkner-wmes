@@ -10,6 +10,7 @@ define([
   'app/wmes-osh-divisions/DivisionCollection',
   'app/wmes-osh-buildings/BuildingCollection',
   'app/wmes-osh-locations/LocationCollection',
+  'app/wmes-osh-stations/StationCollection',
   'app/wmes-osh-kinds/KindCollection',
   'app/wmes-osh-activityKinds/ActivityKindCollection',
   'app/wmes-osh-eventCategories/EventCategoryCollection',
@@ -25,6 +26,7 @@ define([
   DivisionCollection,
   BuildingCollection,
   LocationCollection,
+  StationCollection,
   KindCollection,
   ActivityKindCollection,
   EventCategoryCollection,
@@ -39,6 +41,7 @@ define([
     division: 'divisions',
     building: 'buildings',
     location: 'locations',
+    station: 'stations',
     kind: 'kinds',
     activityKind: 'activityKinds',
     eventCategory: 'eventCategories',
@@ -62,6 +65,7 @@ define([
     divisions: new DivisionCollection(),
     buildings: new BuildingCollection(),
     locations: new LocationCollection(),
+    stations: new StationCollection(),
     kinds: new KindCollection(),
     activityKinds: new ActivityKindCollection(),
     eventCategories: new EventCategoryCollection(),
@@ -124,6 +128,11 @@ define([
     },
     getLabel: function(dictionary, id, options)
     {
+      if (!id)
+      {
+        return '';
+      }
+
       if (dictionary === 'priority')
       {
         return t('wmes-osh-common', `priority:${id}`);

@@ -223,7 +223,7 @@ define([
       return this.t(key, data);
     },
 
-    serializeItemValue: function(property, value)
+    serializeItemValue: function(property, value, isOld, changeI)
     {
       if (value == null || value === '' || (Array.isArray(value) && value.length === 0))
       {
@@ -274,6 +274,7 @@ define([
         case 'division':
         case 'building':
         case 'location':
+        case 'station':
         case 'eventCategory':
         case 'reasonCategory':
         {
@@ -301,16 +302,22 @@ define([
 
         case 'attachments':
         {
-          const a = `<a href="${this.model.getAttachmentUrl(value)}" target="_blank">`;
+          const a = `<a href="${this.model.getAttachmentUrl(value)}&change=${changeI}" target="_blank">`;
+          let kind = '';
+
+          if (value.kind && this.t.has(`history:attachmentKind:${value.kind}`))
+          {
+            kind = ' (' + this.t(`history:attachmentKind:${value.kind}`) + ')';
+          }
 
           if (value.name.length <= 43)
           {
-            return `${a}${_.escape(value.name)}</a>`;
+            return `${a}${_.escape(value.name)}</a>${kind}`;
           }
 
           return {
             more: value.name,
-            toString: () => `${a}${_.escape(value.name).substr(0, 40)}...</a>`
+            toString: () => `${a}${_.escape(value.name).substr(0, 40)}...</a>${kind}`
           };
         }
 
@@ -334,23 +341,23 @@ define([
       }
     },
 
-    serializeItemValues: function(property, {added, edited, deleted})
+    serializeItemValues: function(property, {added, edited, deleted}, changeIndex)
     {
       const values = [];
 
       (deleted || []).forEach(value => values.push({
-        oldValue: this.serializeItemValue(property, value),
+        oldValue: this.serializeItemValue(property, value, true, changeIndex),
         newValue: '-'
       }));
 
       (added || []).forEach(value => values.push({
         oldValue: '-',
-        newValue: this.serializeItemValue(property, value)
+        newValue: this.serializeItemValue(property, value, false, changeIndex)
       }));
 
       (edited || []).forEach(value => values.push({
-        oldValue: this.serializeItemValue(property, Object.assign({}, value, value.old)),
-        newValue: this.serializeItemValue(property, value)
+        oldValue: this.serializeItemValue(property, Object.assign({}, value, value.old), true, changeIndex),
+        newValue: this.serializeItemValue(property, value, false, changeIndex)
       }));
 
       return values;

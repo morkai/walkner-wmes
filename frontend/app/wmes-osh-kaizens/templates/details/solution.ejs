@@ -1,0 +1,4 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><%- t('PROPERTY:solution') %></div>
+  <div class="panel-body text-lines <%- unseen ? 'osh-unseen' : '' %>"><%- _.escape(solution) || `<em>${t('details:noSolution')}</em>` %></div>
+</div>

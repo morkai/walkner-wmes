@@ -33,7 +33,10 @@ define([
   const LONG = {long: true};
   const TIME_PROPS = ['createdAt', 'startedAt', 'finishedAt'];
   const USER_PROPS = ['creator', 'implementer', 'coordinators'];
-  const DICT_PROPS = ['workplace', 'division', 'building', 'location', 'kind', 'eventCategory', 'reasonCategory'];
+  const DICT_PROPS = [
+    'workplace', 'division', 'building', 'location', 'station',
+    'kind', 'eventCategory', 'reasonCategory'
+  ];
   const DESC_PROPS = ['kind', 'eventCategory', 'reasonCategory'];
 
   return Model.extend({
@@ -48,7 +51,7 @@ define([
 
     nlsDomain: NLS_DOMAIN,
 
-    labelAttribute: '_id',
+    labelAttribute: 'rid',
 
     initialize: function()
     {
@@ -86,15 +89,6 @@ define([
       obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'L') : '';
       obj.eventDate = time.utc.format(obj.eventDate, 'L, H');
 
-      if (obj.resolution._id)
-      {
-        obj.resolution = t(`resolution:link:${obj.resolution.type}`, {id: obj.resolution._id});
-      }
-      else
-      {
-        obj.resolution = t(`resolution:desc:${obj.resolution.type}`);
-      }
-
       TIME_PROPS.forEach(prop =>
       {
         obj[prop] = obj[prop] ? time.format(obj[prop], 'L') : '';
@@ -112,6 +106,15 @@ define([
           : obj[prop].map(userInfo => userInfoTemplate(userInfo, {noIp: true, clickable: false}));
       });
 
+      if (obj.resolution._id)
+      {
+        obj.resolution = t(`resolution:link:${obj.resolution.type}`, {id: obj.resolution._id});
+      }
+      else
+      {
+        obj.resolution = t(`resolution:desc:${obj.resolution.type}`);
+      }
+
       const participant = this.getUserParticipant();
 
       obj.unseen = participant && participant.notify;
@@ -119,6 +122,13 @@ define([
       if (obj.unseen)
       {
         obj.className += ' osh-unseen';
+      }
+
+      obj.locationPath = `${obj.workplace} \\ ${obj.division} \\ ${obj.building} \\ ${obj.location}`;
+
+      if (obj.station)
+      {
+        obj.locationPath += ` \\ ${obj.station}`;
       }
 
       return obj;
@@ -263,7 +273,7 @@ define([
 
     getAttachmentUrl: function(attachment)
     {
-      return `${this.urlRoot}/${this.id}/attachments/${attachment._id}/${attachment.file}`;
+      return `${this.urlRoot}/${this.id}/attachments/${attachment._id}/${attachment.file}?`;
     },
 
     handleSeen: function()
@@ -370,6 +380,8 @@ define([
     }
 
   }, {
+
+    RID_PREFIX: 'Z',
 
     changeHandlers: {
 

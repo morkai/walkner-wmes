@@ -47,7 +47,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.active = t('core', 'BOOL:' + obj.active);
+      obj.active = t('core', `BOOL:${obj.active}`);
 
       return obj;
     },

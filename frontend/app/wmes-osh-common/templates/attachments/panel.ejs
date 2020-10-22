@@ -1,6 +1,6 @@
-<div class="panel panel-default osh-attachments-panel">
+<div class="panel panel-default osh-attachments-panel <%- hideEmpty && !attachments.length ? 'osh-attachments-empty' : '' %>" data-attachment-count="<%- attachments.length %>">
   <div class="panel-heading <%- unseen ? 'osh-unseen' : '' %>">
-    <%- t('attachments:panelTitle') %>
+    <%- panelTitle %>
   </div>
   <div class="panel-body">
     <% if (!attachments.length) { %>

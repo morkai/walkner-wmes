@@ -3,7 +3,7 @@
 define([
   'app/viewport',
   'app/core/views/FormView',
-  'app/wmes-osh-common/templates/attachments/rename'
+  'app/wmes-osh-common/templates/attachments/edit'
 ], function(
   viewport,
   FormView,
@@ -20,14 +20,16 @@ define([
     getTemplateData: function()
     {
       return {
-        attachment: this.attachment
+        attachment: this.attachment,
+        kinds: this.model.attachmentKinds || []
       };
     },
 
     serializeToForm: function()
     {
       return {
-        newName: this.attachment.name
+        name: this.attachment.name,
+        kind: this.attachment.kind || 'other'
       };
     },
 
@@ -35,14 +37,14 @@ define([
     {
       const matches = this.attachment.name.toLowerCase().match(/\.([A-Za-z0-9]{1,10})$/);
 
-      if (matches && !formData.newName.trim().toLowerCase().endsWith(matches[1]))
+      if (matches && !formData.name.trim().toLowerCase().endsWith(matches[1]))
       {
-        if (!formData.newName.endsWith('.'))
+        if (!formData.name.endsWith('.'))
         {
-          formData.newName += '.';
+          formData.name += '.';
         }
 
-        formData.newName += matches[1];
+        formData.name += matches[1];
       }
 
       return formData;
@@ -50,7 +52,7 @@ define([
 
     onDialogShown: function()
     {
-      this.$id('newName').focus();
+      this.$id('name').focus();
     },
 
     request: function(formData)
@@ -64,7 +66,8 @@ define([
           attachments: {
             edited: [{
               _id: this.attachment._id,
-              name: formData.newName
+              name: formData.name,
+              kind: formData.kind
             }]
           }
         })

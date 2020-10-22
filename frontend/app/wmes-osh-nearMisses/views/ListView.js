@@ -15,7 +15,7 @@ define([
     {
       return [
         {
-          id: '_id',
+          id: 'rid',
           min: 1,
           thClassName: 'is-filter',
           tdClassName: 'is-number'
@@ -36,24 +36,8 @@ define([
           thClassName: 'is-filter'
         },
         {
-          id: 'workplace',
-          className: 'is-overflow w150',
-          thClassName: 'is-filter'
-        },
-        {
-          id: 'division',
-          className: 'is-overflow w150',
-          thClassName: 'is-filter'
-        },
-        {
-          id: 'building',
-          className: 'is-overflow w150',
-          thClassName: 'is-filter'
-        },
-        {
-          id: 'location',
-          className: 'is-overflow w150',
-          thClassName: 'is-filter'
+          id: 'locationPath',
+          className: 'is-overflow w300'
         },
         {
           id: 'eventDate',

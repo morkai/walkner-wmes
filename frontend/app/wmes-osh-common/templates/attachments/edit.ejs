@@ -1,0 +1,23 @@
+<form>
+  <div class="form-group">
+    <label for="<%- id('name') %>" class="control-label is-required"><%- t('attachments:edit:name') %></label>
+    <input id="<%- id('name') %>" name="name" class="form-control" required maxlength="200">
+  </div>
+  <% if (kinds.length) { %>
+    <div class="form-group">
+      <label class="control-label is-required"><%- t('attachments:edit:kind') %></label>
+      <% kinds.forEach(kind => { %>
+        <div class="radio">
+          <label>
+            <input type="radio" name="kind" value="<%- kind %>">
+            <%- t(`attachments:kind:${kind}`) %>
+          </label>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('attachments:edit:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

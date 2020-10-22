@@ -8,7 +8,7 @@ define([
   'app/core/views/DialogView',
   'app/core/util/fileIcons',
   'app/planning/util/contextMenu',
-  './RenameAttachmentView',
+  './EditAttachmentView',
   'app/wmes-osh-common/templates/attachments/panel',
   'app/wmes-osh-common/templates/attachments/preview',
   'app/wmes-osh-common/templates/attachments/delete'
@@ -20,7 +20,7 @@ define([
   DialogView,
   fileIcons,
   contextMenu,
-  RenameAttachmentView,
+  EditAttachmentView,
   template,
   previewTemplate,
   deleteTemplate
@@ -68,8 +68,8 @@ define([
         {
           menu.push({
             icon: 'fa-edit',
-            label: this.t('attachments:rename'),
-            handler: this.handleRenameAttachment.bind(this, attachment)
+            label: this.t('attachments:edit'),
+            handler: this.handleEditAttachment.bind(this, attachment)
           });
         }
 
@@ -97,7 +97,9 @@ define([
         this.listenTo(this.model, 'seen', this.onSeen);
       });
 
-      $(window).on(`keydown.${this.idPrefix}`, this.onWindowKeyDown.bind(this));
+      $(window)
+        .on(`keydown.${this.idPrefix}`, this.onWindowKeyDown.bind(this))
+        .on(`resize.${this.idPrefix}`, _.debounce(this.onWidowResize.bind(this), 33));
     },
 
     destroy: function()
@@ -116,37 +118,72 @@ define([
       const observer = this.model.getObserver();
 
       return {
+        panelTitle: this.getPanelTitle(),
         attachments: this.serializeAttachments(),
-        unseen: observer.changes.all || !!observer.changes.attachments
+        unseen: observer.notify && (observer.changes.all || !!observer.changes.attachments),
+        hideEmpty: !!this.options.hideEmpty
       };
+    },
+
+    getPanelTitle: function()
+    {
+      return this.t(`attachments:panelTitle:${this.options.kind || 'default'}`);
     },
 
     serializeAttachments: function()
     {
-      return this.model.get('attachments').map(attachment =>
-      {
-        return {
-          _id: attachment._id,
-          time: Date.parse(attachment.date),
-          name: attachment.name,
-          icon: fileIcons.getByMime(attachment.type),
-          image: attachment.type.startsWith('image/'),
-          url: this.model.getAttachmentUrl(attachment)
-        };
-      }).sort((a, b) =>
-      {
-        if (a.image && !b.image)
+      return this.model
+        .get('attachments')
+        .filter(this.filterAttachment, this)
+        .map(attachment =>
         {
-          return -1;
-        }
-
-        if (!a.image && b.image)
+          return {
+            _id: attachment._id,
+            time: Date.parse(attachment.date),
+            name: attachment.name,
+            icon: fileIcons.getByMime(attachment.type),
+            image: attachment.type.startsWith('image/'),
+            url: this.model.getAttachmentUrl(attachment)
+          };
+        }).sort((a, b) =>
         {
-          return 1;
-        }
+          if (a.image && !b.image)
+          {
+            return -1;
+          }
 
-        return a.time - b.time;
-      });
+          if (!a.image && b.image)
+          {
+            return 1;
+          }
+
+          return a.time - b.time;
+        });
+    },
+
+    filterAttachment: function(attachment)
+    {
+      return !this.options.kind || (attachment.kind || 'other') === this.options.kind;
+    },
+
+    afterRender: function()
+    {
+      this.toggleBorders();
+    },
+
+    toggleBorders: function()
+    {
+      const $attachments = this.$('.osh-attachments');
+
+      if (!$attachments.length)
+      {
+        return;
+      }
+
+      const containerWidth = $attachments.parent().outerWidth()
+        - (this.$el.hasClass('osh-attachments-bordered') ? 30 : 0);
+
+      this.$el.toggleClass('osh-attachments-bordered', $attachments.outerWidth() < containerWidth);
     },
 
     handleOpenAttachment: function(attachment)
@@ -154,21 +191,21 @@ define([
       window.open(this.model.getAttachmentUrl(attachment), '_blank');
     },
 
-    handleRenameAttachment: function(attachment)
+    handleEditAttachment: function(attachment)
     {
-      const dialogView = new RenameAttachmentView({
+      const dialogView = new EditAttachmentView({
         model: this.model,
         attachment
       });
 
-      viewport.showDialog(dialogView, this.t('attachments:rename:title'));
+      viewport.showDialog(dialogView, this.t('attachments:edit:title'));
     },
 
     handleDeleteAttachment: function(attachment)
     {
       const dialogView = new DialogView({
         template: deleteTemplate,
-        nlsDomain: this.model.getNlsDomain(),
+        nlsDomain: this.nlsDomain,
         model: attachment
       });
 
@@ -256,7 +293,9 @@ define([
         return;
       }
 
-      const images = this.model.get('attachments').filter(a => a.type.startsWith('image/'));
+      const images = this.model.get('attachments').filter(
+        a => a.type.startsWith('image/') && this.filterAttachment(a)
+      );
 
       if (!images.length)
       {
@@ -286,7 +325,9 @@ define([
         return;
       }
 
-      const images = this.model.get('attachments').filter(a => a.type.startsWith('image/'));
+      const images = this.model.get('attachments').filter(
+        a => a.type.startsWith('image/') && this.filterAttachment(a)
+      );
 
       if (!images.length)
       {
@@ -321,6 +362,11 @@ define([
       {
         this.nextPreview();
       }
+    },
+
+    onWidowResize: function()
+    {
+      this.toggleBorders();
     },
 
     onSeen: function()

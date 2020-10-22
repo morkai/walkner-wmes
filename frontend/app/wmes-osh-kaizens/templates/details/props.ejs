@@ -1,4 +1,11 @@
 <div class="osh-entries-details-props">
+  <% if (model.kom) { %>
+  <div class="osh-kaizens-details-kom <%- unseen('kom', 1) %>">
+    <i class="fa fa-trophy"></i>
+    <span><%- t('PROPERTY:kom') %></span>
+    <i class="fa fa-trophy"></i>
+  </div>
+  <% } %>
   <div class="row">
     <div class="col-lg-4">
       <div class="panel panel-primary">
@@ -10,9 +17,15 @@
             {id: 'division', nameClassName: unseen('division', 1)},
             {id: 'building', nameClassName: unseen('building', 1)},
             {id: 'location', nameClassName: unseen('location', 1)},
+            {id: 'station', nameClassName: unseen('station', 1)},
             {id: '!kind', nameClassName: unseen('kind', 1), value: v =>
                 `<span title="${_.escape(details.descriptions.kind)}">${_.escape(v)} `
                 + (details.descriptions.kind ? '<i class="fa fa-question-circle"></i>' : '')
+                + '</span>'
+            },
+            {id: '!eventCategory', nameClassName: unseen('eventCategory', 1), value: v =>
+                `<span title="${_.escape(details.descriptions.eventCategory)}">${_.escape(v)} `
+                + (details.descriptions.eventCategory ? '<i class="fa fa-question-circle"></i>' : '')
                 + '</span>'
             }
           ]) %>
@@ -94,7 +107,7 @@
     <div class="col-lg-4">
       <div class="panel panel-warning">
         <div class="panel-heading"><%- t('PROPERTY:reason') %></div>
-        <div class="panel-body text-lines <%- unseen('reason', 1) %>"><%- _.escape(details.reason) %></div>
+        <div class="panel-body text-lines <%- unseen('reason', 1) %>"><%- _.escape(details.reason) || `<em>${t('details:noReason')}</em>` %></div>
       </div>
     </div>
     <div class="col-lg-4">
@@ -103,9 +116,5 @@
         <div class="panel-body text-lines <%- unseen('suggestion', 1) %>"><%- _.escape(details.suggestion) %></div>
       </div>
     </div>
-  </div>
-  <div class="panel panel-success">
-    <div class="panel-heading"><%- t('PROPERTY:solution') %></div>
-    <div class="panel-body text-lines <%- unseen('solution', 1) %>"><%- _.escape(details.solution) || `<em>${t('details:noSolution')}</em>` %></div>
   </div>
 </div>

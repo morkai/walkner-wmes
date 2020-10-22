@@ -77,6 +77,21 @@
                 required: true,
                 groupClassName: 'col-lg-4'
               }) %>
+              <%- helpers.formGroup({
+                name: 'station',
+                type: 'select2',
+                label: 'PROPERTY:',
+                groupClassName: 'col-lg-4'
+              }) %>
+            </div>
+            <div class="row">
+              <%- helpers.formGroup({
+                name: 'eventCategory',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: true,
+                groupClassName: 'col-lg-4'
+              }) %>
             </div>
           <% } %>
           <div class="row">
@@ -93,7 +108,6 @@
               type: 'textarea',
               label: 'PROPERTY:',
               groupClassName: 'col-lg-4',
-              required: true,
               rows: 5
             }) %>
             <%- helpers.formGroup({
@@ -131,16 +145,50 @@
               }) %>
             <% } %>
           </div>
+          <% if (model.status === 'verification' || model.status === 'finished') { %>
+            <div class="row">
+              <div class="col-lg-4 form-group">
+                <div class="checkbox">
+                  <label class="control-label">
+                    <input type="checkbox" name="kom" value="true">
+                    <%- t('PROPERTY:kom') %>
+                  </label>
+                </div>
+              </div>
+            </div>
+          <% } %>
         </div>
       </div>
       <% if (editMode) { %>
-        <%- helpers.formGroup({
-          name: 'attachments',
-          type: 'file',
-          label: 'PROPERTY:',
-          accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
-          multiple: true
-        }) %>
+        <div class="row">
+          <%- helpers.formGroup({
+            name: 'attachments.before',
+            type: 'file',
+            label: 'FORM:attachments:before:edit',
+            accept: '.png,.jpeg,.jpg,.tiff,.webp',
+            multiple: true,
+            groupClassName: 'col-lg-4',
+            inputAttrs: {'data-max': 2}
+          }) %>
+          <%- helpers.formGroup({
+            name: 'attachments.after',
+            type: 'file',
+            label: 'FORM:attachments:after',
+            accept: '.png,.jpeg,.jpg,.tiff,.webp',
+            multiple: true,
+            groupClassName: 'col-lg-4',
+            inputAttrs: {'data-max': 2}
+          }) %>
+          <%- helpers.formGroup({
+            name: 'attachments.other',
+            type: 'file',
+            label: 'FORM:attachments:other',
+            accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
+            multiple: true,
+            groupClassName: 'col-lg-4',
+            inputAttrs: {'data-max': 4}
+          }) %>
+        </div>
         <%- helpers.formGroup({
           name: 'comment',
           type: 'textarea',
@@ -149,11 +197,12 @@
         }) %>
       <% } else { %>
         <%- helpers.formGroup({
-          name: 'attachments',
+          name: 'attachments.before',
           type: 'file',
-          label: 'PROPERTY:photos',
+          label: 'FORM:attachments:before:add',
           accept: '.png,.jpeg,.jpg,.tiff,.webp',
-          multiple: true
+          multiple: true,
+          inputAttrs: {'data-max': 2}
         }) %>
       <% } %>
     </div>

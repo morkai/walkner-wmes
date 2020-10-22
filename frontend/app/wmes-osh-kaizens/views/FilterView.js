@@ -33,6 +33,7 @@ define([
       'building',
       'location',
       'kind',
+      'eventCategory',
       'limit'
     ],
     filterMap: {
@@ -74,23 +75,34 @@ define([
       'division': 'workplace',
       'building': 'workplace',
       'location': 'workplace',
+      'eventCategory': 'workplace',
       'kind': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
+      'status': 'kind',
       'participants.user.id': (propertyName, term, formData) =>
       {
         const userId = term.args[1];
 
         formData.userType = userId === currentUser.data._id ? 'mine' : 'others';
         formData.user = userId;
+      },
+      'kom': (propertyName, term, formData) =>
+      {
+        if (!formData.status)
+        {
+          formData.status = [];
+        }
+
+        formData.status.push('kom');
       }
     },
 
     getTemplateData: function()
     {
       return {
-        statuses: dictionaries.statuses.kaizen.map(status => ({
+        statuses: dictionaries.statuses.kaizen.concat('kom').map(status => ({
           value: status,
           label: dictionaries.getLabel('status', status)
         })),
@@ -105,8 +117,41 @@ define([
     {
       dateTimeRange.formToRql(this, selector);
 
+      const status = this.$id('status').val();
+
+      if (status && status.length)
+      {
+        const statuses = [];
+        let kom = false;
+
+        status.forEach(s =>
+        {
+          if (s === 'kom')
+          {
+            kom = true;
+          }
+          else
+          {
+            statuses.push(s);
+          }
+        });
+
+        if (statuses.length === 1)
+        {
+          selector.push({name: 'eq', args: ['status', statuses[0]]});
+        }
+        else if (statuses.length > 1)
+        {
+          selector.push({name: 'in', args: ['status', statuses]});
+        }
+
+        if (kom)
+        {
+          selector.push({name: 'eq', args: ['kom', kom]});
+        }
+      }
+
       [
-        'status',
         'workplace',
         'division',
         'building',
@@ -167,6 +212,7 @@ define([
       this.setUpDivisionSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
+      this.setUpEventCategorySelect2();
     },
 
     setUpWorkplaceSelect2: function()
@@ -232,6 +278,23 @@ define([
         multiple: true,
         placeholder: ' ',
         data: dictionaries.locations
+          .filter(i => i.get('active'))
+          .map(i => ({
+            id: i.id,
+            text: i.getLabel({long: true}),
+            model: i
+          })),
+        formatSelection: ({model}, $el, e) => e(model.getLabel())
+      });
+    },
+
+    setUpEventCategorySelect2: function()
+    {
+      this.$id('eventCategory').select2({
+        width: '250px',
+        multiple: true,
+        placeholder: ' ',
+        data: dictionaries.eventCategories
           .filter(i => i.get('active'))
           .map(i => ({
             id: i.id,
