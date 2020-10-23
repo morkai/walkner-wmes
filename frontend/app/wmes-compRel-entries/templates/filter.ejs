@@ -48,13 +48,10 @@
   <%- helpers.formGroup({
     name: 'orderNo',
     label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'orderNo'},
     inputClassName: 'text-mono',
     inputStyle: {
-      'width': '90px'
-    },
-    pattern: '^[0-9]{9}$'
+      'width': '99px'
+    }
   }) %>
   <div class="form-group hidden" data-filter="mrps">
     <label for="<%- id('mrps') %>"><%- t('PROPERTY:mrps') %></label>

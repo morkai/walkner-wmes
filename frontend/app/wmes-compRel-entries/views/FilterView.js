@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/time',
   'app/user',
   'app/core/views/FilterView',
@@ -16,6 +17,7 @@ define([
   'app/core/util/ExpandableSelect'
 ], function(
   _,
+  $,
   time,
   currentUser,
   FilterView,
@@ -37,7 +39,6 @@ define([
       'mrps',
       'oldComponent',
       'newComponent',
-      'orderNo',
       'limit'
     ],
     filterMap: {
@@ -49,7 +50,31 @@ define([
     events: _.assign({
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
-      'change input[name="userType"]': 'toggleUserSelect2'
+      'change input[name="userType"]': 'toggleUserSelect2',
+
+      'focus #-orderNo': function(e)
+      {
+        var $input = this.$(e.currentTarget);
+        var $group = $input.closest('.form-group');
+        var $textarea = $('<textarea class="form-control text-mono" rows="4"></textarea>')
+          .css({
+            position: 'absolute',
+            marginTop: '-34px',
+            width: '410px',
+            zIndex: '3'
+          })
+          .val($input.val())
+          .appendTo($group)
+          .focus();
+
+        $textarea.on('blur', function()
+        {
+          $input.val($textarea.val().split('\n').join(' ')).prop('disabled', false);
+          $textarea.remove();
+        });
+
+        $input[0].disabled = true;
+      }
 
     }, FilterView.prototype.events),
 
@@ -64,7 +89,7 @@ define([
       'createdAt': dateTimeRange.rqlToForm,
       'orders.orderNo': function(propertyName, term, formData)
       {
-        formData.orderNo = term.args[1];
+        formData.orderNo = term.name === 'in' ? term.args[1].join(' ') : term.args[1];
       },
       'oldComponents._id': function(propertyName, term, formData)
       {
@@ -119,7 +144,7 @@ define([
       var userType = this.$('input[name="userType"]:checked').val();
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var user = this.$id('user').val();
-      var orderNo = this.$id('orderNo').val().trim();
+      var orderNo = _.uniq(this.$id('orderNo').val().trim().split(/[^0-9]+/).filter(v => /^[0-9]{9}$/.test(v)));
       var oldComponent = this.$id('oldComponent').val().trim();
       var newComponent = this.$id('newComponent').val().trim();
       var mrps = this.$id('mrps').val();
@@ -158,9 +183,9 @@ define([
         selector.push({name: 'in', args: ['mrps', mrps.split(',')]});
       }
 
-      if (orderNo.length === 9)
+      if (orderNo.length)
       {
-        selector.push({name: 'eq', args: ['orders.orderNo', orderNo]});
+        selector.push({name: 'in', args: ['orders.orderNo', orderNo]});
       }
 
       if (oldComponent.length)
