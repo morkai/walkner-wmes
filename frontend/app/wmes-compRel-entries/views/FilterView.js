@@ -251,6 +251,7 @@ define([
       if (filter === 'creator')
       {
         this.$('input[value="creator"]').parent().click();
+        this.$id('user').select2('focus');
 
         return;
       }
