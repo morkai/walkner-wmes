@@ -19,10 +19,10 @@
   white-space: nowrap;
 }
 .fap-list-problem {
-  max-width: 350px;
+  max-width: 300px;
 }
 .fap-list-lines {
-  max-width: 225px;
+  max-width: 200px;
 }
 .fap-entries-list .fap-is-unseen {
   font-weight: bold;
