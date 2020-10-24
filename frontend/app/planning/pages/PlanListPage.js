@@ -157,7 +157,6 @@ define([
 
       $showPicker.data('bs.popover').tip().on('click', 'a[data-action]', function(e)
       {
-        console.log(this);
         var action = e.currentTarget.dataset.action;
 
         switch (action)

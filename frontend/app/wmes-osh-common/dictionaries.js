@@ -48,7 +48,7 @@ define([
     activityKind: 'activityKinds',
     eventCategory: 'eventCategories',
     reasonCategory: 'reasonCategories',
-    rootCauseCategory: 'rootCauseCategories',
+    rootCauseCategory: 'rootCauseCategories'
   };
 
   let req = null;

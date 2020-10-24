@@ -265,8 +265,6 @@ define([
         .closest('.form-group')
         .find('.control-label')
         .toggleClass('is-required', reqFields.componentCode);
-
-console.log('toggleRequiredFields', {reqFields, subdivisionType, category, subCategory});
     },
 
     renderUploads: function()

@@ -27,7 +27,7 @@ define([
       {
         var line = this.options.line;
         var whOrders = this.collection;
-console.log('changed', message);
+
         message.changes.removed.forEach(function(id)
         {
           whOrders.remove(id);
@@ -53,7 +53,6 @@ console.log('changed', message);
       },
       'old.wh.orders.updated': function(message)
       {
-console.log('updated', message);
         this.collection.update(message.updated || []);
       }
     },

@@ -476,9 +476,6 @@ define([
         case 'recoverFolder':
           this.handleRecoverFolder(data.folderId);
           break;
-
-        default:
-          console.log(e.currentTarget.dataset);
       }
     },
 

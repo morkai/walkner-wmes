@@ -266,8 +266,6 @@ define([
 
       attrs.skipEmpty = parts[4] === '1';
 
-      console.log(parts, attrs);
-
       return new Report1DisplayOptions(attrs, options);
     }
 

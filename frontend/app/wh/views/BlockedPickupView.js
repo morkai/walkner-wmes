@@ -203,11 +203,6 @@ define([
       };
     },
 
-    afterRender: function()
-    {
-      console.log(this.model);
-    },
-
     sortLines: function(lines)
     {
       lines.sort(function(a, b)

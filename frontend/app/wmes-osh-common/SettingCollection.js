@@ -17,7 +17,7 @@ define([
 
     topicSuffix: 'osh.**',
 
-    prepareValue: function(id, newValue)
+    prepareValue: function(id, newValue) // eslint-disable-line no-unused-vars
     {
 
     },

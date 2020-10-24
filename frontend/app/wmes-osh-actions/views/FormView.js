@@ -410,13 +410,6 @@ define([
       return formData;
     },
 
-    checkValidity: function(formData)
-    {
-      console.log(formData);
-
-      return true;
-    },
-
     afterRender: function()
     {
       FormView.prototype.afterRender.apply(this, arguments);

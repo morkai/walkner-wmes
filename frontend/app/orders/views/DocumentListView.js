@@ -8,7 +8,7 @@ define([
   'app/data/loadedModules',
   './AddDocumentFormView',
   'app/orders/templates/documentList',
-  'app/orders/templates/removeDocumentDialog',
+  'app/orders/templates/removeDocumentDialog'
 ], function(
   user,
   viewport,

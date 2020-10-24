@@ -680,9 +680,9 @@ define([
       */
     },
 
-    showConnectorEditDialog: function(params)
+    showConnectorEditDialog: function(params) // eslint-disable-line no-unused-vars
     {
-      console.log(params);
+
     },
 
     onConnectionCreated: function(info, e)
