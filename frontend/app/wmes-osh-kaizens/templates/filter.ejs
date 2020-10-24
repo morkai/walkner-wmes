@@ -52,6 +52,13 @@
     groupAttrs: {'data-filter': 'location'}
   }) %>
   <%- helpers.formGroup({
+    name: 'station',
+    type: 'select2',
+    label: 'PROPERTY:',
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'station'}
+  }) %>
+  <%- helpers.formGroup({
     name: 'kind',
     type: 'select',
     label: 'PROPERTY:',

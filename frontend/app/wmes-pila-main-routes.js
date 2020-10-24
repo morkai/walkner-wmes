@@ -24,8 +24,10 @@ define([
   './wmes-osh-activityKinds/routes',
   './wmes-osh-eventCategories/routes',
   './wmes-osh-reasonCategories/routes',
+  './wmes-osh-rootCauseCategories/routes',
   './wmes-osh-nearMisses/routes',
-  './wmes-osh-kaizens/routes'
+  './wmes-osh-kaizens/routes',
+  './wmes-osh-actions/routes'
 ], function()
 {
   'use strict';

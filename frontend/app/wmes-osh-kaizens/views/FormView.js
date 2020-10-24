@@ -239,6 +239,11 @@ define([
         formData.plannedAt = time.utc.format(formData.plannedAt, 'YYYY-MM-DD');
       }
 
+      delete formData.coordinators;
+      delete formData.attachments;
+      delete formData.users;
+      delete formData.changes;
+
       return formData;
     },
 
@@ -257,6 +262,7 @@ define([
       {
         formData.relation = {
           _id: this.relation.id,
+          rid: this.relation.get('rid'),
           type: this.relation.getModelType()
         };
       }
@@ -267,7 +273,19 @@ define([
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
         formData.station = parseInt(this.$id('station').val(), 10) || null;
-        formData.plannedAt = time.utc.getMoment(formData.plannedAt, 'YYYY-MM-DD').toISOString();
+      }
+
+      const $plannedAt = this.$id('plannedAt');
+
+      if ($plannedAt.length && !$plannedAt.prop('disabled'))
+      {
+        formData.plannedAt = formData.plannedAt
+          ? time.utc.getMoment(formData.plannedAt, 'YYYY-MM-DD').toISOString()
+          : null;
+      }
+      else
+      {
+        delete formData.plannedAt;
       }
 
       return formData;
@@ -532,6 +550,11 @@ define([
         width: '100%',
         data: Object.values(map).sort((a, b) => a.text.localeCompare(b.text))
       });
+
+      $input.select2(
+        'enable',
+        !this.options.editMode || Kaizen.can.manage() || this.model.isCoordinator()
+      );
     },
 
     setUpDivisionSelect2: function()
@@ -588,7 +611,11 @@ define([
         $input.val('').select2('data', null);
       }
 
-      $input.select2('enable', !!currentWorkplaceId);
+      $input.select2(
+        'enable',
+        !!currentWorkplaceId
+          && (!this.options.editMode || Kaizen.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpBuildingSelect2: function()
@@ -624,7 +651,11 @@ define([
         $input.select2('data', data[0]);
       }
 
-      $input.select2('enable', !!currentDivisionId);
+      $input.select2(
+        'enable',
+        !!currentDivisionId
+          && (!this.options.editMode || Kaizen.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpLocationSelect2: function()
@@ -660,7 +691,11 @@ define([
         $input.select2('data', data[0]);
       }
 
-      $input.select2('enable', !!currentBuildingId);
+      $input.select2(
+        'enable',
+        !!currentBuildingId
+          && (!this.options.editMode || Kaizen.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpStationSelect2: function()
@@ -697,7 +732,12 @@ define([
         $input.select2('data', data[0]);
       }
 
-      $input.select2('enable', data.length > 0 && !!currentLocationId);
+      $input.select2(
+        'enable',
+        data.length > 0
+          && !!currentLocationId
+          && (!this.options.editMode || Kaizen.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpEventCategorySelect2: function()
@@ -763,6 +803,7 @@ define([
 
     setUpImplementersSelect2: function()
     {
+      const privileged = this.model.isCoordinator() || Kaizen.can.manage();
       const $input = this.$id('implementers');
 
       setUpUserSelect2($input, {
@@ -777,7 +818,7 @@ define([
       const data = [{
         id: creator.id,
         text: creator.label,
-        locked: true
+        locked: !privileged
       }];
 
       if (helper)
@@ -788,7 +829,16 @@ define([
         });
       }
 
-      $input.select2('data', data);
+      $input
+        .select2('data', data)
+        .select2('enable', privileged);
+
+      const $plannedAt = this.$id('plannedAt');
+
+      if ($plannedAt.length)
+      {
+        $plannedAt.prop('disabled', !!$plannedAt.val() && !privileged);
+      }
     },
 
     toggleKind: function()
@@ -801,6 +851,14 @@ define([
       }
 
       $kinds.prop('disabled', !Kaizen.can.editKind(this.model, this.options.editMode));
+    },
+
+    getSaveOptions: function()
+    {
+      return {
+        wait: true,
+        patch: true
+      };
     },
 
     request: function()

@@ -38,17 +38,17 @@
   "PROPERTY:resolution": "Działania korygujące",
 
   "filter:user:mine": "Moje",
-  "filter:user:others": "Uczestnik",
+  "filter:user:others": "Użytkownik",
 
   "resolution:desc:unspecified": "brak działań",
   "resolution:desc:action": "powrót do standardu",
   "resolution:desc:kaizen": "usprawnienie",
   "resolution:link:unspecified": "",
-  "resolution:link:action": "<a href='#osh/actions/{id}' data-action='resolution:open'>akcja #{id}</a>",
-  "resolution:link:kaizen": "<a href='#osh/kaizens/{id}' data-action='resolution:open'>kaizen #{id}</a>",
+  "resolution:link:action": "<a href='#osh/actions/{_id}' data-action='resolution:open'>{rid}</a>",
+  "resolution:link:kaizen": "<a href='#osh/kaizens/{_id}' data-action='resolution:open'>{rid}</a>",
 
   "details:general": "Podstawowe informacje",
-  "details:users": "Uczestnicy",
+  "details:users": "Użytkownicy",
   "details:extra": "Dodatkowe informacje",
   "details:eventDate:format": "LL, [godz.] H",
   "details:noReason": "Nie wskazano przyczyny wystąpienia zdarzenia.",
@@ -73,5 +73,7 @@
   "FORM:resolution:add": "Dodaj nowe zgłoszenie",
   "FORM:resolution:notFound": "Zgłoszenie nie istnieje.",
   "FORM:resolution:failure": "Sprawdzanie zgłoszenia nie powiodło się.",
-  "FORM:resolution:title:kaizen": "Dodawanie nowego kaizena"
+  "FORM:resolution:title:kaizen": "Dodawanie nowego kaizena",
+  "FORM:resolution:title:action": "Dodawanie nowej akcji",
+  "FORM:resolution:required": "Rodzaj działań korygujących jest wymagany."
 }

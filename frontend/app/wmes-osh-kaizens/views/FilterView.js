@@ -32,6 +32,7 @@ define([
       'division',
       'building',
       'location',
+      'station',
       'kind',
       'eventCategory',
       'limit'
@@ -75,13 +76,14 @@ define([
       'division': 'workplace',
       'building': 'workplace',
       'location': 'workplace',
+      'station': 'station',
       'eventCategory': 'workplace',
       'kind': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
       'status': 'kind',
-      'participants.user.id': (propertyName, term, formData) =>
+      'users.user.id': (propertyName, term, formData) =>
       {
         const userId = term.args[1];
 
@@ -156,7 +158,9 @@ define([
         'division',
         'building',
         'location',
-        'kind'
+        'station',
+        'kind',
+        'activityKind'
       ].forEach(prop =>
       {
         const $prop = this.$id(prop);
@@ -193,7 +197,7 @@ define([
 
       if (user)
       {
-        selector.push({name: 'eq', args: ['participants.user.id', user]});
+        selector.push({name: 'eq', args: ['users.user.id', user]});
       }
     },
 
@@ -212,6 +216,7 @@ define([
       this.setUpDivisionSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
+      this.setUpStationSelect2();
       this.setUpEventCategorySelect2();
     },
 
@@ -285,6 +290,43 @@ define([
             model: i
           })),
         formatSelection: ({model}, $el, e) => e(model.getLabel())
+      });
+    },
+
+    setUpStationSelect2: function()
+    {
+      const data = [];
+
+      dictionaries.locations.forEach(location =>
+      {
+        if (!location.get('active'))
+        {
+          return;
+        }
+
+        const stations = dictionaries.stations.getByLocation(location.id).filter(s => s.get('active'));
+
+        if (!stations.length)
+        {
+          return;
+        }
+
+        data.push({
+          text: location.getLabel({long: true}),
+          children: stations.map(station => ({
+            id: station.id,
+            text: station.getLabel({long: true}),
+            model: station
+          }))
+        });
+      });
+
+      this.$id('station').select2({
+        width: '250px',
+        multiple: true,
+        placeholder: ' ',
+        data,
+        formatSelection: ({model}, $el, e) => e(model.getLabel({path: true}))
       });
     },
 

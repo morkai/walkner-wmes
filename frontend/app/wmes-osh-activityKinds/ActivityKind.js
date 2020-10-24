@@ -53,7 +53,9 @@ define([
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
-      obj.materialLoss = t('core', `BOOL:${obj.materialLoss}`);
+      obj.rootCauses = t('core', `BOOL:${obj.rootCauses}`);
+      obj.implementers = t('core', `BOOL:${obj.implementers}`);
+      obj.participants = t('core', `BOOL:${obj.participants}`);
 
       return obj;
     },

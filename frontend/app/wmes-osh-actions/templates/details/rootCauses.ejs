@@ -1,0 +1,15 @@
+<div class="panel panel-warning osh-details-rootCauses-panel <%- rootCauses.length ? '' : 'hidden' %>">
+  <div class="panel-heading"><%- t('PROPERTY:rootCauses') %></div>
+  <div class="panel-body <%- unseen ? 'osh-unseen' : '' %>">
+    <% rootCauses.forEach(rootCause => { %>
+    <div class="osh-details-rootCause">
+      <h3><%= rootCause.category %></h3>
+      <ol>
+        <% rootCause.why.forEach(why => { %>
+          <li class="text-lines"><%= why %></li>
+        <% }) %>
+      </ol>
+    </div>
+    <% }) %>
+  </div>
+</div>

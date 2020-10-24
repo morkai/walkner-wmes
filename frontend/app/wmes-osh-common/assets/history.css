@@ -63,6 +63,16 @@
 .osh-history-popover > .popover-content {
   white-space: pre-line;
 }
+.osh-history-popover ol {
+  margin: 0;
+  padding: 0 0 0 15px;
+}
+.osh-history-popover li {
+  margin-top: 7px;
+}
+.osh-history-popover li:first-child {
+  margin-top: 0;
+}
 .osh-history-item.osh-unseen > .osh-history-user,
 .osh-history-item.osh-unseen > .osh-history-time {
   color: #e00;

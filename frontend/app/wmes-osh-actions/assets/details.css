@@ -1,0 +1,30 @@
+.osh-details-rootCauses-panel {
+  margin-bottom: 30px;
+}
+.osh-details-rootCauses-panel .panel-body {
+  padding: 0;
+  display: flex;
+  overflow-x: auto;
+}
+.osh-details-rootCause {
+  flex: 1 1 0;
+  min-width: 380px;
+  padding: 15px;
+  border-left: 1px dotted #f0ad4e;
+}
+.osh-details-rootCause:first-child {
+  border-left: none;
+}
+.osh-details-rootCause h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+.osh-details-rootCause ol {
+  margin: 0;
+  padding: 0 0 0 15px;
+}
+.osh-details-rootCause li {
+  margin-top: 7px;
+  text-align: justify;
+}

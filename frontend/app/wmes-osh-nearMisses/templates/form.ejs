@@ -120,21 +120,21 @@
               label: 'PROPERTY:',
               required: true,
               groupClassName: 'col-lg-4',
-              rows: 5
+              rows: 4
             }) %>
             <%- helpers.formGroup({
               name: 'reason',
               type: 'textarea',
               label: 'PROPERTY:',
               groupClassName: 'col-lg-4',
-              rows: 5
+              rows: 4
             }) %>
             <%- helpers.formGroup({
               name: 'suggestion',
               type: 'textarea',
               label: 'PROPERTY:',
               groupClassName: 'col-lg-4',
-              rows: 5
+              rows: 4
             }) %>
           </div>
           <div class="row">
@@ -190,7 +190,7 @@
               <div id="<%- id('resolutionGroup') %>" class="col-lg-4 form-group osh-nearMisses-form-resolutionId">
                 <label for="<%- id('resolutionId') %>" class="control-label"><%- t(`FORM:resolution:unspecified`) %></label>
                 <div class="input-group">
-                  <input id="<%- id('resolutionId') %>" name="resolution._id" class="form-control" type="text" pattern="^[0-9]{1,7}$" maxlength="7">
+                  <input id="<%- id('resolutionId') %>" name="resolution.rid" class="form-control text-mono" type="text" pattern="^([akAK]-)?([0-9]{4}-)?[0-9]{1,6}$" maxlength="13">
                   <span class="input-group-btn">
                     <button id="<%- id('showResolution') %>" type="button" class="btn btn-default" title="<%- t('FORM:resolution:show') %>"><i class="fa fa-info"></i></button>
                     <button id="<%- id('addResolution') %>" type="button" class="btn btn-default" title="<%- t('FORM:resolution:add') %>"><i class="fa fa-plus"></i></button>

@@ -1,0 +1,233 @@
+<form class="osh-entries-form osh-actions-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'subject',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 150
+      }) %>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'creator',
+          type: 'static',
+          label: 'FORM:',
+          groupClassName: 'col-lg-4',
+          value: user.getLabel()
+        }) %>
+        <%- helpers.formGroup({
+          name: 'userWorkplace',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'userDivision',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+      </div>
+      <div class="panel panel-success">
+        <div class="panel-heading"><%- t('FORM:subtitle') %></div>
+        <div class="panel-body has-lastElementRow">
+          <% if (!relation) { %>
+            <div class="form-group">
+              <label class="control-label"><%- t('PROPERTY:kind') %></label>
+              <br>
+              <% kinds.forEach(option => { %>
+              <label class="radio-inline" title="<%= option.title %>">
+                <input name="kind" type="radio" value="<%- option.value %>">
+                <%= option.label %>
+              </label>
+              <% }) %>
+            </div>
+            <div class="row">
+              <%- helpers.formGroup({
+                name: 'workplace',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: true,
+                groupClassName: 'col-lg-4'
+              }) %>
+              <%- helpers.formGroup({
+                name: 'division',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: true,
+                groupClassName: 'col-lg-4'
+              }) %>
+              <%- helpers.formGroup({
+                name: 'building',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: true,
+                groupClassName: 'col-lg-4'
+              }) %>
+            </div>
+            <div class="row">
+              <%- helpers.formGroup({
+                name: 'location',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: true,
+                groupClassName: 'col-lg-4'
+              }) %>
+              <%- helpers.formGroup({
+                name: 'station',
+                type: 'select2',
+                label: 'PROPERTY:',
+                groupClassName: 'col-lg-4'
+              }) %>
+            </div>
+          <% } %>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'activityKind',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'problem',
+              type: 'textarea',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4',
+              rows: 4
+            }) %>
+            <%- helpers.formGroup({
+              name: 'reason',
+              type: 'textarea',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4',
+              rows: 4
+            }) %>
+            <%- helpers.formGroup({
+              name: 'suggestion',
+              type: 'textarea',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4',
+              rows: 4
+            }) %>
+          </div>
+          <div id="<%- id('rootCausesGroup') %>" class="osh-actions-form-rootCauses-group hidden">
+            <label class="control-label is-required"><%- t('PROPERTY:rootCauses') %></label>
+            <div id="<%- id('rootCauses') %>" class="osh-actions-form-rootCauses">
+              <% rootCauses.forEach((rootCause, rootCauseI) => { %>
+              <div class="osh-actions-form-rootCause">
+                <input type="hidden" name="rootCauses[<%- rootCauseI %>].category">
+                <label class="control-label">
+                  <%= rootCause.label %>
+                  <% if (rootCause.description) { %>
+                  <i class="fa fa-question-circle"></i>
+                  <% } %>
+                </label>
+                <% rootCause.why.forEach((why, whyI) => { %>
+                <div class="osh-actions-form-rootCause-why">
+                  <label for="<%- id(`why-${rootCauseI}-${whyI}`) %>"><%- whyI + 1 %> Why?</label>
+                  <textarea id="<%- id(`why-${rootCauseI}-${whyI}`) %>" name="rootCauses[<%- rootCauseI %>].why[<%- whyI %>]" class="form-control" rows="2"></textarea>
+                </div>
+                <% }) %>
+              </div>
+              <% }) %>
+            </div>
+          </div>
+          <%- helpers.formGroup({
+            name: 'solution',
+            type: 'textarea',
+            label: 'PROPERTY:',
+            rows: 4
+          }) %>
+          <div class="row hidden">
+            <%- helpers.formGroup({
+              name: 'implementers',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-8',
+              labelClassName: 'is-required'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'plannedAt',
+              type: 'date',
+              label: 'FORM:',
+              groupClassName: 'col-lg-4',
+              labelClassName: 'is-required'
+            }) %>
+          </div>
+          <div class="row hidden">
+            <%- helpers.formGroup({
+              name: 'participants',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-12',
+              labelClassName: 'is-required'
+            }) %>
+          </div>
+        </div>
+      </div>
+      <%- helpers.formGroup({
+        name: 'attachments.other',
+        type: 'file',
+        label: 'PROPERTY:attachments',
+        accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
+        multiple: true,
+        inputAttrs: {'data-max': 4}
+      }) %>
+      <% if (editMode) { %>
+        <%- helpers.formGroup({
+          name: 'comment',
+          type: 'textarea',
+          label: 'PROPERTY:',
+          rows: 3
+        }) %>
+      <% } %>
+    </div>
+    <div class="form-actions">
+      <button id="<%- id('save') %>" type="submit" class="btn btn-primary" title="<%- editMode ? t('wmes-osh-common', 'FORM:ACTION:title:edit') : '' %>">
+        <% if (editMode) { %>
+          <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
+        <% } else { %>
+          <i class="fa fa-plus"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:add') %></span>
+        <% } %>
+      </button>
+      <% if (editMode) { %>
+        <% if (can.inProgress) { %>
+          <button id="<%- id('inProgress') %>" type="button" class="btn btn-info" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:inProgress')}) %>">
+            <% if (model.status === 'verification') { %>
+              <i class="fa fa-thumbs-down"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:correction') %></span>
+            <% } else { %>
+              <i class="fa fa-check"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:inProgress') %></span>
+            <% } %>
+          </button>
+        <% } %>
+        <% if (can.verification) { %>
+          <button id="<%- id('verification') %>" type="button" class="btn btn-secondary" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:verification')}) %>">
+            <i class="fa fa-gavel"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:verification') %></span>
+          </button>
+        <% } %>
+        <% if (can.finished) { %>
+          <button id="<%- id('finished') %>" type="button" class="btn btn-success" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:finished')}) %>">
+            <i class="fa fa-thumbs-up"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:finished') %></span>
+          </button>
+        <% } %>
+        <% if (can.paused) { %>
+          <button id="<%- id('paused') %>" type="button" class="btn btn-warning" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:paused')}) %>">
+            <i class="fa fa-hourglass-o"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:paused') %></span>
+          </button>
+        <% } %>
+        <% if (can.cancelled) { %>
+          <button id="<%- id('cancelled') %>" type="button" class="btn btn-danger" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:cancelled')}) %>">
+            <i class="fa fa-ban"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:cancelled') %></span>
+          </button>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+</form>

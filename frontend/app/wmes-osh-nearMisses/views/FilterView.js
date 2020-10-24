@@ -78,6 +78,7 @@ define([
       'division': 'workplace',
       'building': 'workplace',
       'location': 'workplace',
+      'station': 'workplace',
       'eventCategory': 'workplace',
       'reasonCategory': 'workplace',
       'kind': (propertyName, term, formData) =>
@@ -85,7 +86,7 @@ define([
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
       'priority': 'kind',
-      'participants.user.id': (propertyName, term, formData) =>
+      'users.user.id': (propertyName, term, formData) =>
       {
         const userId = term.args[1];
 
@@ -163,7 +164,7 @@ define([
 
       if (user)
       {
-        selector.push({name: 'eq', args: ['participants.user.id', user]});
+        selector.push({name: 'eq', args: ['users.user.id', user]});
       }
     },
 

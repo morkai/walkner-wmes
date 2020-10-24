@@ -3,13 +3,26 @@
 
 'use strict';
 
-db.oshnearmisses.find().sort({createdAt: 1}).toArray().forEach(updateRid.bind(null, 'oshnearmisses', 'Z'));
-db.oshkaizens.find().sort({createdAt: 1}).toArray().forEach(updateRid.bind(null, 'oshkaizens', 'K'));
+db.oshactivitykinds.updateMany({rootCauses: {$exists: false}}, {$set: {rootCauses: false}});
+db.oshactivitykinds.updateMany({implementers: {$exists: false}}, {$set: {implementers: false}});
+db.oshactivitykinds.updateMany({participants: {$exists: false}}, {$set: {participants: false}});
 
-function updateRid(c, p, entry, i)
+db.oshnearmisses.find().sort({createdAt: 1}).toArray().forEach(updateEntry.bind(null, 'oshnearmisses', 'Z'));
+db.oshkaizens.find().sort({createdAt: 1}).toArray().forEach(updateEntry.bind(null, 'oshkaizens', 'K'));
+
+function updateEntry(c, p, entry, i)
 {
-  db[c].updateOne({_id: entry._id}, {$set: {
+  const $unset = {xxx: 1};
+  const $set = {
     ridInc: i + 1,
     rid: `${p}-2020-${(i + 1).toString().padStart(6, '0')}`
-  }});
+  };
+
+  if (entry.participants)
+  {
+    $set.users = entry.participants;
+    $unset.participants = 1;
+  }
+
+  db[c].updateOne({_id: entry._id}, {$unset, $set});
 }

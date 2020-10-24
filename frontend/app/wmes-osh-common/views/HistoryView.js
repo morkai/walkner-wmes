@@ -9,6 +9,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/templates/userInfo',
+  'app/core/util/html',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/templates/history/panel',
   'app/wmes-osh-common/templates/history/item'
@@ -21,6 +22,7 @@ define([
   viewport,
   View,
   userInfoTemplate,
+  html,
   dictionaries,
   template,
   itemTemplate
@@ -186,6 +188,11 @@ define([
 
         const label = this.translate(`PROPERTY:${property}`);
 
+        if (this.diff[property])
+        {
+          values = this.diff[property](values[0], values[1]);
+        }
+
         if (values[0] === null && values[1] && (values[1].added || values[1].edited || values[1].deleted))
         {
           return {
@@ -330,10 +337,31 @@ define([
         {
           if (value._id)
           {
-            return this.translate(`resolution:link:${value.type}`, {id: value._id});
+            return this.translate(`resolution:link:${value.type}`, value);
           }
 
           return this.translate(`resolution:desc:${value.type}`);
+        }
+
+        case 'rootCauses':
+        {
+          const label = dictionaries.getLabel('rootCauseCategories', value.category).toLocaleLowerCase();
+
+          if (!value.why.length)
+          {
+            return `${label} (0)`;
+          }
+
+          return html.tag('a', {
+            href: 'javascript:void(0)', // eslint-disable-line no-script-url
+            className: 'has-more',
+            data: {
+              change: changeI,
+              value: isOld ? 0 : 1,
+              property,
+              category: value.category
+            }
+          }, `${label} (${value.why.length})`);
         }
 
         default:
@@ -363,29 +391,78 @@ define([
       return values;
     },
 
+    serializeRootCausesPopover: function(changeI, valueI, categoryId)
+    {
+      const change = this.model.get('changes')[changeI];
+
+      if (!change || !change.data.rootCauses)
+      {
+        return;
+      }
+
+      const rootCauses = change.data.rootCauses[valueI];
+
+      if (!rootCauses || !rootCauses.length)
+      {
+        return;
+      }
+
+      const rootCause = rootCauses.find(rootCause => rootCause.category === categoryId);
+
+      if (!rootCause)
+      {
+        return;
+      }
+
+      return '<ol><li>'
+        + rootCause.why.filter(why => !!why).map(why => _.escape(why)).join('<li>')
+        + '</ol>';
+    },
+
     afterRender: function()
     {
-      this.lastChangeCount = this.model.get('changes').length;
+      const view = this;
 
-      this.$el.popover({
+      view.lastChangeCount = view.model.get('changes').length;
+
+      view.$el.popover({
         container: 'body',
         selector: '.has-more',
         placement: 'top',
         trigger: 'hover',
         className: 'osh-history-popover',
+        html: true,
         title: function()
         {
+          if (this.dataset.property === 'rootCauses')
+          {
+            return dictionaries.getLabel('rootCauseCategories', +this.dataset.category, {long: true});
+          }
+
           return $(this).closest('tr').children().first().text();
+        },
+        content: function()
+        {
+          if (this.dataset.property === 'rootCauses')
+          {
+            return view.serializeRootCausesPopover(
+              +this.dataset.change,
+              +this.dataset.value,
+              +this.dataset.category
+            );
+          }
+
+          return _.escape(this.title);
         }
       });
 
-      if (!this.timers.updateTimes)
+      if (!view.timers.updateTimes)
       {
-        this.timers.updateTimes = setInterval(this.updateTimes.bind(this), 30000);
+        view.timers.updateTimes = setInterval(view.updateTimes.bind(view), 30000);
       }
 
-      this.resize();
-      this.scrollToBottom();
+      view.resize();
+      view.scrollToBottom();
     },
 
     updateHistory: function()
@@ -462,6 +539,70 @@ define([
     onSeen: function()
     {
       this.$('.osh-unseen').removeClass('osh-unseen');
+    },
+
+    diff: {
+
+      rootCauses: (oldRootCauses, newRootCauses) =>
+      {
+        const oldMap = new Map();
+        const newMap = new Map();
+
+        (oldRootCauses || []).forEach(rootCause =>
+        {
+          oldMap.set(rootCause.category, rootCause.why.filter(why => !!why));
+        });
+
+        (newRootCauses || []).forEach(rootCause =>
+        {
+          newMap.set(rootCause.category, rootCause.why.filter(why => !!why));
+        });
+
+        const added = [];
+        const edited = [];
+        const deleted = [];
+
+        oldMap.forEach((oldWhy, category) =>
+        {
+          const newWhy = newMap.get(category);
+
+          delete newMap.delete(category);
+
+          if (!newWhy)
+          {
+            deleted.push({category, why: oldWhy});
+
+            return;
+          }
+
+          if (JSON.stringify(oldWhy) !== JSON.stringify(newWhy))
+          {
+            edited.push({
+              category,
+              why: newWhy,
+              old: {
+                category,
+                why: oldWhy
+              }
+            });
+          }
+        });
+
+        newMap.forEach((why, category) =>
+        {
+          added.push({
+            category,
+            why
+          });
+        });
+
+        return [null, {
+          added,
+          edited,
+          deleted
+        }];
+      }
+
     }
 
   });

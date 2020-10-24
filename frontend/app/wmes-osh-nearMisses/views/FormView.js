@@ -12,6 +12,8 @@ define([
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-kaizens/views/FormView',
+  'app/wmes-osh-actions/Action',
+  'app/wmes-osh-actions/views/FormView',
   '../NearMiss',
   'app/wmes-osh-nearMisses/templates/form',
   'app/wmes-osh-nearMisses/templates/resolutionPopover'
@@ -27,6 +29,8 @@ define([
   dictionaries,
   Kaizen,
   KaizenFormView,
+  Action,
+  ActionFormView,
   NearMiss,
   template,
   resolutionPopoverTemplate
@@ -163,7 +167,7 @@ define([
           $plannedAt.prop('required', true)
             .one('blur', cleanup);
 
-          $resolutionTypes.first()[0].setCustomValidity('Rodzaj działań korygujących jest wymagany.');
+          $resolutionTypes.first()[0].setCustomValidity(this.t('FORM:resolution:required'));
           $resolutionTypes.one('blur', cleanup);
         }
 
@@ -236,37 +240,31 @@ define([
           return;
         }
 
-        const type = this.getResolutionType();
-        const id = parseInt(this.$id('resolutionId').val(), 10);
-
-        if (!(id > 0))
+        if (this.resolution._id)
         {
-          return;
+          window.open(`/#osh/${this.resolution.type}s/${this.resolution._id}`, '_blank');
+        }
+        else if (this.resolution.rid)
+        {
+          this.$id('save').click();
         }
 
-        window.open(`/#osh/${type}s/${id}`, '_blank');
+        return false;
       },
 
       'click #-showResolution': function(e)
       {
-        const type = this.getResolutionType();
-        const id = parseInt(this.$id('resolutionId').val(), 10);
-
-        if (!(id > 0))
+        if (e.ctrlKey && this.resolution._id)
         {
-          this.$id('resolutionId').val('').focus();
+          window.open(`/#osh/${this.resolution.type}s/${this.resolution._id}`, '_blank');
 
           return;
         }
 
-        if (e.ctrlKey)
-        {
-          window.open(`/#osh/${type}s/${id}`, '_blank');
-
-          return;
-        }
-
-        this.showResolutionPopover(type, id);
+        this.showResolutionPopover(
+          this.getResolutionType(),
+          this.$id('resolutionId').val().trim()
+        );
       },
 
       'input #-resolutionId': function()
@@ -294,6 +292,7 @@ define([
         added: {},
         type: 'unspecified',
         id: 0,
+        rid: '',
         data: null,
         req: null
       };
@@ -329,6 +328,7 @@ define([
 
       this.resolution.type = 'unspecified';
       this.resolution.id = 0;
+      this.resolution.rid = '';
       this.resolution.data = null;
       this.resolution.req = null;
 
@@ -412,6 +412,7 @@ define([
       {
         formData.resolution = {
           _id: 0,
+          rid: '',
           type: 'unspecified'
         };
       }
@@ -420,14 +421,14 @@ define([
         formData.resolution = _.clone(formData.resolution);
       }
 
-      if (!formData.resolution._id)
+      if (!formData.resolution.rid)
       {
-        formData.resolution._id = '';
+        formData.resolution.rid = '';
       }
 
       delete formData.coordinators;
       delete formData.attachments;
-      delete formData.participants;
+      delete formData.users;
       delete formData.changes;
 
       return formData;
@@ -490,6 +491,7 @@ define([
 
       const resolution = this.model.get('resolution') || {
         _id: 0,
+        rid: '',
         type: 'unspecified'
       };
 
@@ -498,9 +500,10 @@ define([
         resolution.type = this.getResolutionType();
       }
 
-      if (NearMiss.can.editResolutionId(this.model))
+      if (NearMiss.can.editResolutionId(this.model) && this.resolution._id)
       {
-        resolution._id = parseInt(this.$id('resolutionId').val(), 10) || 0;
+        resolution._id = this.resolution._id;
+        resolution.rid = this.resolution.rid;
       }
 
       formData.resolution = resolution;
@@ -820,6 +823,11 @@ define([
         width: '100%',
         data: Object.values(map).sort((a, b) => a.text.localeCompare(b.text))
       });
+
+      $input.select2(
+        'enable',
+        !this.options.editMode || NearMiss.can.manage() || this.model.isCoordinator()
+      );
     },
 
     setUpDivisionSelect2: function()
@@ -876,7 +884,11 @@ define([
         $input.val('').select2('data', null);
       }
 
-      $input.select2('enable', !!currentWorkplaceId);
+      $input.select2(
+        'enable',
+        !!currentWorkplaceId
+          && (!this.options.editMode || NearMiss.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpBuildingSelect2: function()
@@ -912,7 +924,11 @@ define([
         $input.select2('data', data[0]);
       }
 
-      $input.select2('enable', !!currentDivisionId);
+      $input.select2(
+        'enable',
+        !!currentDivisionId
+          && (!this.options.editMode || NearMiss.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpLocationSelect2: function()
@@ -948,7 +964,11 @@ define([
         $input.select2('data', data[0]);
       }
 
-      $input.select2('enable', !!currentBuildingId);
+      $input.select2(
+        'enable',
+        !!currentBuildingId
+          && (!this.options.editMode || NearMiss.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpStationSelect2: function()
@@ -985,7 +1005,12 @@ define([
         $input.select2('data', data[0]);
       }
 
-      $input.select2('enable', data.length > 0 && !!currentLocationId);
+      $input.select2(
+        'enable',
+        data.length > 0
+          && !!currentLocationId
+          && (!this.options.editMode || NearMiss.can.manage() || this.model.isCoordinator())
+      );
     },
 
     setUpImplementerSelect2: function()
@@ -1160,9 +1185,9 @@ define([
       {
         id = this.resolution.added[resolutionType].toString();
       }
-      else if (resolutionType === resolution.type && resolution._id)
+      else if (resolutionType === resolution.type && resolution.rid)
       {
-        id = resolution._id.toString();
+        id = resolution.rid;
       }
 
       this.$id('resolutionId').val(id)[0].setCustomValidity('');
@@ -1252,7 +1277,6 @@ define([
       }
 
       const canManage = NearMiss.can.manage();
-      const isImplementer = this.model.isImplementer();
       const isCoordinator = this.model.isCoordinator();
 
       if ($implementer.length)
@@ -1262,7 +1286,7 @@ define([
 
       if (this.options.editMode)
       {
-        $plannedAt.prop('disabled', !canManage && !isImplementer && !isCoordinator);
+        $plannedAt.prop('disabled', !canManage && !isCoordinator);
       }
       else
       {
@@ -1354,14 +1378,14 @@ define([
       this.$('.form-actions .btn').prop('disabled', !enabled);
     },
 
-    showResolutionPopover: function(type, id)
+    showResolutionPopover: function(type, rid)
     {
-      if (type !== this.resolution.type || id !== this.resolution.id)
+      if (type !== this.resolution.type || rid !== this.resolution.rid)
       {
-        return this.loadResolution(type, id, true);
+        return this.loadResolution(type, rid, true);
       }
 
-      if (!this.resolution.id)
+      if (!this.resolution.rid)
       {
         this.$id('resolutionId').focus();
 
@@ -1380,7 +1404,7 @@ define([
         return;
       }
 
-      this.$id('showResolution').popover({
+      const $btn = this.$id('showResolution').popover({
         container: this.$id('resolutionGroup'),
         trigger: 'click',
         placement: 'top',
@@ -1388,6 +1412,8 @@ define([
         title: function() { return ''; },
         content: this.renderPartialHtml(resolutionPopoverTemplate, this.resolution)
       }).popover('show');
+
+      $btn.prop('title', $btn[0].dataset.originalTitle);
     },
 
     hideResolutionPopover: function()
@@ -1395,21 +1421,34 @@ define([
       this.$id('showResolution').popover('destroy');
     },
 
-    loadResolution: function(type, id, show)
+    loadResolution: function(type, rid, show)
     {
       if (!type)
       {
         type = this.getResolutionType();
       }
 
-      if (!id)
+      if (!rid)
       {
-        id = parseInt(this.$id('resolutionId').val(), 10) || 0;
+        rid = this.$id('resolutionId').val();
+      }
+
+      const matches = rid.trim().match(/([akAK]-)?([0-9]{4}-)?([0-9]{1,6})/);
+
+      rid = '';
+
+      if (matches)
+      {
+        rid += (matches[1] || type).charAt(0).toUpperCase();
+        rid += '-' + (matches[2] || time.format(Date.now(), 'YYYY')).substring(0, 4);
+        rid += '-' + matches[3].padStart(6, '0');
+
+        this.$id('resolutionId').val(rid);
       }
 
       this.resetResolution();
 
-      if (!id)
+      if (!rid)
       {
         this.$id('resolutionId').val('');
 
@@ -1421,7 +1460,7 @@ define([
       this.toggleActions(false);
 
       const req = this.resolution.req = this.ajax({
-        url: `/osh/${type}s/${id}?select(subject,status)`
+        url: `/osh/${type}s/${rid}?select(subject,status)`
       });
 
       req.fail(() =>
@@ -1436,7 +1475,7 @@ define([
         viewport.msg.loaded();
 
         this.resolution.type = type;
-        this.resolution.id = id;
+        this.resolution.rid = rid;
 
         this.$id('resolutionId')[0].setCustomValidity(this.t('FORM:resolution:notFound'));
       });
@@ -1446,12 +1485,13 @@ define([
         this.$id('resolutionId')[0].setCustomValidity('');
 
         this.resolution.type = type;
-        this.resolution.id = id;
+        this.resolution._id = data._id;
+        this.resolution.rid = rid;
         this.resolution.data = data;
 
         if (show)
         {
-          this.showResolutionPopover(type, id);
+          this.showResolutionPopover(type, rid);
         }
       });
 
@@ -1475,7 +1515,7 @@ define([
         return this.$id('save').click();
       }
 
-      const formData = this.getFormData();
+      const formData = Object.assign(this.model.toJSON(), this.getFormData());
       const type = this.getResolutionType();
 
       let dialogView = null;
@@ -1487,7 +1527,7 @@ define([
           newStatus: 'inProgress',
           model: new Kaizen({
             subject: formData.subject,
-            kind: formData.kind || +this.$('input[name="kind"]:checked').val(),
+            kind: formData.kind,
             workplace: formData.workplace,
             division: formData.division,
             building: formData.building,
@@ -1497,7 +1537,29 @@ define([
             problem: formData.problem,
             reason: formData.reason,
             suggestion: formData.suggestion,
-            plannedAt: formData.plannedAt
+            plannedAt: formData.plannedAt,
+            implementers: formData.implementer ? [formData.implementer] : []
+          })
+        });
+      }
+      else if (type === 'action')
+      {
+        dialogView = new ActionFormView({
+          relation: this.model,
+          newStatus: 'inProgress',
+          model: new Action({
+            subject: formData.subject,
+            kind: formData.kind,
+            workplace: formData.workplace,
+            division: formData.division,
+            building: formData.building,
+            location: formData.location,
+            station: formData.station,
+            problem: formData.problem,
+            reason: formData.reason,
+            suggestion: formData.suggestion,
+            plannedAt: formData.plannedAt,
+            implementers: formData.implementer ? [formData.implementer] : []
           })
         });
       }
@@ -1510,12 +1572,13 @@ define([
 
       dialogView.handleSuccess = () =>
       {
-        this.resolution.added[type] = dialogView.model.id;
+        this.resolution.added[type] = dialogView.model.get('rid');
         this.resolution.type = type;
-        this.resolution.id = dialogView.model.id;
+        this.resolution._id = dialogView.model.id;
+        this.resolution.rid = dialogView.model.get('rid');
         this.resolution.data = dialogView.model.toJSON();
 
-        this.$id('resolutionId').val(this.resolution.id.toString());
+        this.$id('resolutionId').val(this.resolution.rid);
 
         viewport.closeDialog();
       };

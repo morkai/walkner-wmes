@@ -15,6 +15,7 @@ define([
   'app/wmes-osh-activityKinds/ActivityKindCollection',
   'app/wmes-osh-eventCategories/EventCategoryCollection',
   'app/wmes-osh-reasonCategories/ReasonCategoryCollection',
+  'app/wmes-osh-rootCauseCategories/RootCauseCategoryCollection',
   './SettingCollection'
 ], function(
   $,
@@ -31,6 +32,7 @@ define([
   ActivityKindCollection,
   EventCategoryCollection,
   ReasonCategoryCollection,
+  RootCauseCategoryCollection,
   SettingCollection
 ) {
   'use strict';
@@ -45,13 +47,15 @@ define([
     kind: 'kinds',
     activityKind: 'activityKinds',
     eventCategory: 'eventCategories',
-    reasonCategory: 'reasonCategories'
+    reasonCategory: 'reasonCategories',
+    rootCauseCategory: 'rootCauseCategories',
   };
 
   let req = null;
   let releaseTimer = null;
   let pubsubSandbox = null;
   let seenSub = null;
+  let coordinator = null;
 
   const dictionaries = {
     statuses: {
@@ -70,6 +74,7 @@ define([
     activityKinds: new ActivityKindCollection(),
     eventCategories: new EventCategoryCollection(),
     reasonCategories: new ReasonCategoryCollection(),
+    rootCauseCategories: new RootCauseCategoryCollection(),
     loaded: false,
     load: function()
     {
@@ -128,14 +133,14 @@ define([
     },
     getLabel: function(dictionary, id, options)
     {
-      if (!id)
-      {
-        return '';
-      }
-
       if (dictionary === 'priority')
       {
         return t('wmes-osh-common', `priority:${id}`);
+      }
+
+      if (!id)
+      {
+        return '';
       }
 
       if (dictionary === 'status')
@@ -201,10 +206,23 @@ define([
       page.once('remove', dictionaries.unload.bind(dictionaries));
 
       return page;
+    },
+    isCoordinator: function()
+    {
+      if (coordinator === null)
+      {
+        coordinator = dictionaries.kinds.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id))
+          || dictionaries.divisions.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id));
+      }
+
+      return coordinator;
     }
   };
 
   broker.subscribe('user.reloaded', () => setUpSeenSub());
+
+  dictionaries.kinds.on('reset change:coordinators', () => coordinator = null);
+  dictionaries.divisions.on('reset change:coordinators', () => coordinator = null);
 
   function setUpSeenSub()
   {
@@ -304,5 +322,5 @@ define([
     broker.publish(topic, message);
   }
 
-  return dictionaries;
+  return window.oshDictionaries = dictionaries;
 });

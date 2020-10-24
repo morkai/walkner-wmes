@@ -5,5 +5,8 @@
   "PROPERTY:kinds": "Rodzaje zgłoszeń",
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
-  "PROPERTY:description": "Opis"
+  "PROPERTY:description": "Opis",
+  "PROPERTY:rootCauses": "Przyczyny źródłowe",
+  "PROPERTY:implementers": "Realizacja",
+  "PROPERTY:participants": "Uczestnicy"
 }

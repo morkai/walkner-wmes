@@ -30,6 +30,14 @@
         label: 'PROPERTY:',
         rows: 5
       }) %>
+      <% ['rootCauses', 'implementers', 'participants'].forEach(feature => { %>
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" name="<%- feature %>" value="true">
+            <%- t(`PROPERTY:${feature}`) %>
+          </label>
+        </div>
+      <% }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

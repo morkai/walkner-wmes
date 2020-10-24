@@ -42,7 +42,7 @@ define([
             $li.find('a[data-filter]').on('click', this.markAsSeen.bind(this));
           }
         },
-        pageActions.add(this.collection, false),
+        pageActions.add(this.collection),
         pageActions.export(layout, this, this.collection, false)
       ];
     },

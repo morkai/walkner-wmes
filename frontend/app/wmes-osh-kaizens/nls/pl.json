@@ -35,10 +35,10 @@
   "PROPERTY:relations": "Powiązania",
 
   "filter:user:mine": "Moje",
-  "filter:user:others": "Uczestnik",
+  "filter:user:others": "Użytkownik",
 
   "details:general": "Podstawowe informacje",
-  "details:users": "Uczestnicy",
+  "details:users": "Użytkownicy",
   "details:extra": "Dodatkowe informacje",
   "details:noReason": "Nie wskazano przyczyny wystąpienia.",
   "details:noSolution": "Nie wdrożono jeszcze żadnych usprawnień.",
@@ -52,7 +52,7 @@
   "FORM:creator": "Osoba zgłaszająca",
   "FORM:plannedAt": "Planowany termin zakończenia",
   "FORM:attachments:before:add": "Zdjęcia przed",
-  "FORM:attachments:before:edit": "Nowe zdjęcia przed",
-  "FORM:attachments:after": "Nowe zdjęcia po",
+  "FORM:attachments:before:edit": "Nowe zdjęcia stanu przed",
+  "FORM:attachments:after": "Nowe zdjęcia stanu po",
   "FORM:attachments:other": "Inne załączniki"
 }

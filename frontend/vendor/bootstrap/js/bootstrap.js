@@ -526,6 +526,7 @@ if (typeof jQuery === 'undefined') {
   }
 
   Modal.prototype.adjustBackdrop = function () {
+    if (!this.$backdrop) return;
     this.$backdrop
       .css('height', 0)
       .css('height', this.$element[0].scrollHeight)

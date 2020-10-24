@@ -52,6 +52,15 @@ define([
 
         v = styles;
       }
+      else if (k === 'data' && !!v && typeof v === 'object')
+      {
+        Object.keys(v).forEach(key =>
+        {
+          html += ' data-' + key + '="' + v[key] + '"';
+        });
+
+        return;
+      }
 
       html += ' ' + k;
 
