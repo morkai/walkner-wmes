@@ -1,0 +1,1 @@
+define(["app/core/Collection","./RootCauseCategory"],function(e,o){"use strict";return e.extend({model:o,sort:(e,o)=>e.get("position")-o.get("position")})});
