@@ -1,0 +1,15 @@
+<div class="page-actions-export btn-group">
+  <button type="button" class="btn btn-<%- type %> dropdown-toggle" data-toggle="dropdown" <%- disabled ? 'disabled' : '' %>>
+    <i class="fa fa-download"></i><span><%- label %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+    <li class="dropdown-header">Dopuszczenia</li>
+    <% _.forEach(formats, function(format) { %>
+      <li><a data-export-type="<%- format.type %>" href="<%= format.href %>"><%- t('core', 'PAGE_ACTION:export:' + format.type) %></a></li>
+    <% }) %>
+    <li class="dropdown-header">Zlecenia</li>
+    <% _.forEach(formats, function(format) { %>
+      <li><a data-export-type="<%- format.type %>" href="<%= format.href %>&mode=orders"><%- t('core', 'PAGE_ACTION:export:' + format.type) %></a></li>
+    <% }) %>
+  </ul>
+</div>

@@ -106,12 +106,6 @@ define([
       }
 
       actions.push(
-        {
-          icon: 'calendar',
-          label: page.t('PAGE_ACTION:history'),
-          href: page.model.genClientUrl('history'),
-          disabled: true // TODO
-        },
         pageActions.edit(page.model),
         pageActions.delete(page.model)
       );

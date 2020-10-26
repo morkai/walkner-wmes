@@ -107,6 +107,7 @@
 
   "orders:empty": "Nie przypisano jeszcze żadnych zleceń.",
   "orders:all": "Wszystkie",
+  "orders:export": "Eksportuj zlecenia",
   "orders:add": "Dopuść zlecenia",
   "orders:title": "Dopuszczanie zleceń",
   "orders:mode": "Typ dopuszczenia",

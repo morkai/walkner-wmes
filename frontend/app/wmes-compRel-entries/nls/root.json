@@ -108,6 +108,7 @@
 
     "orders:empty": "No orders were assigned yet.",
     "orders:all": "All",
+    "orders:export": "Export orders",
     "orders:add": "Release orders",
     "orders:title": "Releasing orders",
     "orders:validFrom": "Valid from",

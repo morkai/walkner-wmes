@@ -4,12 +4,14 @@ define([
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   '../views/FilterView',
-  '../views/ListView'
+  '../views/ListView',
+  'app/wmes-compRel-entries/templates/exportAction'
 ], function(
   FilteredListPage,
   pageActions,
   FilterView,
-  ListView
+  ListView,
+  exportActionTemplate
 ) {
   'use strict';
 
@@ -18,12 +20,19 @@ define([
     FilterView: FilterView,
     ListView: ListView,
 
-    actions: function()
+    actions: function(layout)
     {
       var page = this;
 
       return [
         pageActions.jump(page, page.collection),
+        pageActions.export({
+          layout: layout,
+          page: page,
+          collection: page.collection,
+          privilege: false,
+          template: exportActionTemplate
+        }),
         pageActions.add(page.collection),
         {
           label: page.t('PAGE_ACTION:funcs'),

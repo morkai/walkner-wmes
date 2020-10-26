@@ -232,7 +232,7 @@ define([
           });
         }
 
-        return exportActionTemplate({
+        return (options.template || exportActionTemplate)({
           type: totalCount >= (options.maxCount / 2)
             ? 'danger'
             : totalCount >= (options.maxCount / 4) ? 'warning' : 'default',
@@ -290,22 +290,26 @@ define([
 
       function afterRenderXlsx($container)
       {
-        var $xlsx = $container.find('a[data-export-type="xlsx"]');
+        var $items = $container.find('a[data-export-type="xlsx"]');
 
-        if (!$xlsx.length)
+        if (!$items.length)
         {
           return;
         }
 
-        var href = $xlsx.prop('href');
-
-        $xlsx.prop('href', 'javascript:void(0)'); // eslint-disable-line no-script-url
-
-        $xlsx.on('click', function(e)
+        $items.each(function()
         {
-          e.preventDefault();
+          var $item = $(this);
+          var href = $item.prop('href');
 
-          exportXlsx(href);
+          $item.prop('href', 'javascript:void(0)'); // eslint-disable-line no-script-url
+
+          $item.on('click', function(e)
+          {
+            e.preventDefault();
+
+            exportXlsx(href);
+          });
         });
       }
     },

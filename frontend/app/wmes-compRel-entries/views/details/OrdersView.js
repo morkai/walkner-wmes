@@ -5,6 +5,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/views/DialogView',
+  'app/core/util/pageActions',
   'app/wmes-compRel-entries/Entry',
   './ReleaseOrderView',
   './RemoveOrdersView',
@@ -15,6 +16,7 @@ define([
   viewport,
   View,
   DialogView,
+  pageActions,
   Entry,
   ReleaseOrderView,
   RemoveOrdersView,
@@ -42,6 +44,15 @@ define([
       'click .btn[data-action="removeMany"]': function()
       {
         this.showRemoveOrdersDialog();
+      },
+
+      'click .btn[data-action="export"]': function(e)
+      {
+        e.currentTarget.disabled = true;
+
+        pageActions.exportXlsx('/compRel/entries;export.xlsx?_id=' + this.model.id + '&mode=orders');
+
+        this.timers.enableExport = setTimeout(function() { e.currentTarget.disabled = false; }, 3000);
       }
 
     },
