@@ -340,7 +340,10 @@ define([
 
       var dt = e.originalEvent.clipboardData;
 
-      if (dt && dt.files && dt.files.length)
+      if (dt
+        && dt.files
+        && dt.files.length
+        && dt.items.length === dt.files.length)
       {
         this.upload(dt.files, true);
       }
