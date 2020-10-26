@@ -112,6 +112,13 @@ define([
 
       obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'LL') : '';
 
+      obj.descriptions = {};
+
+      Entry.DESC_PROPS.forEach(prop =>
+      {
+        obj.descriptions[prop] = dictionaries.getDescription(prop, obj[prop]);
+      });
+
       Entry.TIME_PROPS.forEach(prop =>
       {
         obj[prop] = obj[prop] ? time.format(obj[prop], 'LL, LT') : '';
@@ -120,13 +127,6 @@ define([
       Entry.DICT_PROPS.forEach(prop =>
       {
         obj[prop] = dictionaries.getLabel(prop, obj[prop], LONG);
-      });
-
-      obj.descriptions = {};
-
-      Entry.DESC_PROPS.forEach(prop =>
-      {
-        obj.descriptions[prop] = dictionaries.getDescription(prop, obj[prop]);
       });
 
       Entry.USER_PROPS.forEach(prop =>

@@ -39,10 +39,9 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('USER');
-  var canAdd = canView;
-  var canEdit = canView;
-  var canManage = user.auth('OSH:NEAR_MISSES:MANAGE');
+  const canView = user.auth('USER');
+  const canAdd = canView;
+  const canEdit = canView;
 
   router.map('/osh/nearMisses', canView, req =>
   {
@@ -77,7 +76,7 @@ define([
     }));
   });
 
-  router.map('/osh/nearMisses/:id;delete', canManage, _.partial(showDeleteFormPage, NearMiss, _, _, {
+  router.map('/osh/nearMisses/:id;delete', canEdit, _.partial(showDeleteFormPage, NearMiss, _, _, {
 
   }));
 });

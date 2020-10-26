@@ -1,0 +1,16 @@
+{
+  "BREADCRUMB:browse": "Rodzaje kart obserwacji",
+
+  "PROPERTY:active": "Aktywny?",
+  "PROPERTY:shortName": "Krótka nazwa",
+  "PROPERTY:longName": "Długa nazwa",
+  "PROPERTY:description": "Opis",
+  "PROPERTY:behaviors": "Zachowania",
+  "PROPERTY:workConditions": "Warunki pracy",
+  "PROPERTY:category": "Kategoria",
+
+  "FORM:categories:up": "Przesuń wyżej",
+  "FORM:categories:down": "Przesuń niżej",
+  "FORM:categories:remove": "Usuń kategorię",
+  "FORM:categories:add": "Dodaj kategorię..."
+}

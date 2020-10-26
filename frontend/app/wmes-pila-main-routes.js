@@ -15,6 +15,7 @@ define([
   './opinionSurveyQuestions/routes',
   './opinionSurveyScanTemplates/routes',
   './opinionSurveyOmrResults/routes',
+  './wmes-osh-companies/routes',
   './wmes-osh-workplaces/routes',
   './wmes-osh-divisions/routes',
   './wmes-osh-buildings/routes',
@@ -22,12 +23,15 @@ define([
   './wmes-osh-stations/routes',
   './wmes-osh-kinds/routes',
   './wmes-osh-activityKinds/routes',
+  './wmes-osh-observationKinds/routes',
+  './wmes-osh-observationCategories/routes',
   './wmes-osh-eventCategories/routes',
   './wmes-osh-reasonCategories/routes',
   './wmes-osh-rootCauseCategories/routes',
   './wmes-osh-nearMisses/routes',
   './wmes-osh-kaizens/routes',
-  './wmes-osh-actions/routes'
+  './wmes-osh-actions/routes',
+  './wmes-osh-observations/routes'
 ], function()
 {
   'use strict';

@@ -1,0 +1,9 @@
+{
+  "BREADCRUMB:browse": "Firmy",
+
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:external": "Zewnętrzna?",
+  "PROPERTY:employer": "Pracodawca?",
+  "PROPERTY:shortName": "Krótka nazwa",
+  "PROPERTY:longName": "Długa nazwa"
+}

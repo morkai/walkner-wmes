@@ -369,11 +369,7 @@ define([
 
     showFilter: function(filter)
     {
-      if (filter === '_id')
-      {
-        $('.page-actions-jump').find('.form-control').focus();
-      }
-      else if (filter === 'creator' || filter === 'implementer' || filter === 'coordinator')
+      if (filter === 'creator' || filter === 'implementers' || filter === 'coordinators')
       {
         this.$id('user').select2('focus');
       }

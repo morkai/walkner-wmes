@@ -36,10 +36,9 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('USER');
-  var canAdd = canView;
-  var canEdit = canView;
-  var canManage = user.auth('OSH:KAIZENS:MANAGE');
+  const canView = user.auth('USER');
+  const canAdd = canView;
+  const canEdit = canView;
 
   router.map('/osh/kaizens', canView, req =>
   {
@@ -73,7 +72,7 @@ define([
     }));
   });
 
-  router.map('/osh/kaizens/:id;delete', canManage, _.partial(showDeleteFormPage, Kaizen, _, _, {
+  router.map('/osh/kaizens/:id;delete', canEdit, _.partial(showDeleteFormPage, Kaizen, _, _, {
 
   }));
 });

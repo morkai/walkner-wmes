@@ -67,13 +67,6 @@
     expandable: true,
     options: kinds
   }) %>
-  <%- helpers.formGroup({
-    name: 'activityKind',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'activityKind'}
-  }) %>
   <%- renderLimit({hidden: true}) %>
   <div class="form-group filter-actions">
     <%- renderButton() %>

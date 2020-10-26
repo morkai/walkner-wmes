@@ -39,7 +39,7 @@ define([
       columns: [
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
-        {id: 'divisions', className: 'is-overflow w300'},
+        {id: 'divisions'},
         {id: 'active', className: 'is-min'}
       ]
     })));

@@ -61,7 +61,7 @@ define([
       var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.serialize();
 
-      obj.divisions = obj.divisions.map(id => dictionaries.getLabel('division', id, {path: true, long: false}));
+      obj.divisions = dictionaries.divisions.getLabels(obj.divisions, {path: true, long: false});
 
       return obj;
     },
@@ -71,11 +71,7 @@ define([
       var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.serialize();
 
-      obj.divisions = obj.divisions.map(id => dictionaries.getLabel('division', id, {
-        path: true,
-        long: true,
-        link: true
-      }));
+      obj.divisions = dictionaries.divisions.getLabels(obj.divisions, {path: true, long: true, link: true});
 
       return obj;
     },

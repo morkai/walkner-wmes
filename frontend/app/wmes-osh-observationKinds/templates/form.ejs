@@ -1,0 +1,57 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
+      </div>
+      <%- helpers.formGroup({
+        name: 'shortName',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 50
+      }) %>
+      <%- helpers.formGroup({
+        name: 'longName',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 200
+      }) %>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:behaviors') %></label>
+        <table class="table table-condensed table-bordered table-hover" style="margin-bottom: 5px">
+          <thead>
+          <tr>
+            <td class="is-min text-center">#</td>
+            <th><%- t('PROPERTY:category') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('behaviors') %>"></tbody>
+        </table>
+        <input id="<%- id('addCategory-behaviors') %>" type="text">
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:workConditions') %></label>
+        <table class="table table-condensed table-bordered table-hover" style="margin-bottom: 5px">
+          <thead>
+          <tr>
+            <td class="is-min text-center">#</td>
+            <th><%- t('PROPERTY:category') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('workConditions') %>"></tbody>
+        </table>
+        <input id="<%- id('addCategory-workConditions') %>" type="text">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

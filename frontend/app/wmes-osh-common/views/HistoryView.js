@@ -186,7 +186,7 @@ define([
           return null;
         }
 
-        const label = this.translate(`PROPERTY:${property}`);
+        const label = this.translateProperty(property);
 
         if (this.diff[property])
         {
@@ -230,6 +230,23 @@ define([
       return this.t(key, data);
     },
 
+    translateProperty: function(property)
+    {
+      const modelDomain = this.model.getNlsDomain();
+
+      if (this.t.has(modelDomain, `history:${property}`))
+      {
+        return this.t(modelDomain, `history:${property}`);
+      }
+
+      if (this.t.has(`history:${property}`))
+      {
+        return this.t(`history:${property}`);
+      }
+
+      return this.translate(`PROPERTY:${property}`);
+    },
+
     serializeItemValue: function(property, value, isOld, changeI)
     {
       if (value == null || value === '' || (Array.isArray(value) && value.length === 0))
@@ -262,13 +279,15 @@ define([
         case 'plannedAt':
           return time.utc.format(value, 'LL');
 
+        case 'date':
         case 'eventDate':
-          return time.utc.format(value, this.translate('details:eventDate:format'));
+          return time.utc.format(value, this.translate(`details:${property}:format`));
 
         case 'problem':
         case 'reason':
         case 'suggestion':
         case 'solution':
+        case 'companyName':
           return value.length <= 43 ? value : {
             more: value,
             toString: () => `${value.substr(0, 40)}...`
@@ -284,6 +303,7 @@ define([
         case 'station':
         case 'eventCategory':
         case 'reasonCategory':
+        case 'company':
         {
           const long = _.escape(dictionaries.getLabel(property, value, {long: true}));
           const short = _.escape(dictionaries.getLabel(property, value, {long: false}));
@@ -363,6 +383,10 @@ define([
             }
           }, `${label} (${value.why.length})`);
         }
+
+        case 'behaviors':
+        case 'workConditions':
+          return this.translate('history:observations', {count: value.length});
 
         default:
           return value || '';

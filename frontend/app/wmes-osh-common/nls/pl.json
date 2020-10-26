@@ -1,11 +1,14 @@
 {
+  "navbar:companies": "Firmy",
   "navbar:workplaces": "Zakłady",
   "navbar:divisions": "Wydziały",
   "navbar:buildings": "Budynki",
-  "navbar:locations": "Miejsca",
+  "navbar:locations": "Obszary",
   "navbar:stations": "Stanowiska",
   "navbar:kinds": "Rodzaje zgłoszeń",
   "navbar:activityKinds": "Rodzaje aktywności",
+  "navbar:observationKinds": "Rodzaje kart obserwacji",
+  "navbar:observationCategories": "Kategorie obserwacji",
   "navbar:eventCategories": "Kategorie zdarzeń",
   "navbar:reasonCategories": "Kategorie przyczyn zdarzeń",
   "navbar:rootCauseCategories": "Kategorie przyczyn źródłowych",
@@ -29,6 +32,7 @@
   "kind:other": "Inny",
 
   "status:new": "Nowe",
+  "status:open": "Otwarte",
   "status:inProgress": "Realizacja",
   "status:verification": "Weryfikacja",
   "status:finished": "Zakończone",

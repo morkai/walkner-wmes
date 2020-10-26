@@ -1,0 +1,32 @@
+<tr>
+  <td class="osh-observations-form-category">
+    <span title="<%= observation.description %>">
+      <%= observation.text %>
+      <% if (observation.description) { %>
+      <i class="fa fa-question-circle"></i>
+      <% } %>
+    </span>
+    <div class="osh-observations-form-actions">
+      <% if (duplicate) { %>
+        <button data-action="remove" class="btn btn-default" type="button" title="<%- t('FORM:categories:remove') %>">
+          <i class="fa fa-times"></i>
+        </button>
+      <% } else { %>
+        <button data-action="duplicate" data-property="<%- property %>" class="btn btn-default" type="button" title="<%- t('FORM:categories:duplicate') %>">
+          <i class="fa fa-copy"></i>
+        </button>
+      <% } %>
+    </div>
+    <input type="hidden" name="<%- property %>[<%- i %>]._id" value="<%- observation._id %>">
+    <input type="hidden" name="<%- property %>[<%- i %>].category" value="<%- observation.category %>">
+    <input type="hidden" name="<%- property %>[<%- i %>].text" value="<%- observation.text %>">
+  </td>
+  <% if (property === 'behaviors') { %>
+  <td class="is-min osh-observations-form-radio osh-observations-form-safe"><input type="radio" name="<%- property %>[<%- i %>].safe" value="true" <%- observation.safe === true ? 'checked' : '' %>></td>
+  <% } %>
+  <td class="is-min osh-observations-form-radio osh-observations-form-safe"><input type="radio" name="<%- property %>[<%- i %>].safe" value="false" <%- observation.safe === false ? 'checked' : '' %>></td>
+  <td class="osh-observations-form-textarea"><textarea name="<%- property %>[<%- i %>].what" class="form-control" rows="1"><%= observation.what %></textarea></td>
+  <td class="osh-observations-form-textarea"><textarea name="<%- property %>[<%- i %>].why" class="form-control" rows="1"><%= observation.why %></textarea></td>
+  <td class="is-min osh-observations-form-radio osh-observations-form-easy"><input type="radio" name="<%- property %>[<%- i %>].easy" value="true" <%- observation.easy === true ? 'checked' : '' %>></td>
+  <td class="is-min osh-observations-form-radio osh-observations-form-easy"><input type="radio" name="<%- property %>[<%- i %>].easy" value="false" <%- observation.easy === false ? 'checked' : '' %>></td>
+</tr>

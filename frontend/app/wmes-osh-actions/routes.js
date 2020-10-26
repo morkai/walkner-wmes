@@ -36,10 +36,9 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('USER');
-  var canAdd = canView;
-  var canEdit = canView;
-  var canManage = user.auth('OSH:ACTIONS:MANAGE');
+  const canView = user.auth('USER');
+  const canAdd = canView;
+  const canEdit = canView;
 
   router.map('/osh/actions', canView, req =>
   {
@@ -73,7 +72,7 @@ define([
     }));
   });
 
-  router.map('/osh/actions/:id;delete', canManage, _.partial(showDeleteFormPage, Action, _, _, {
+  router.map('/osh/actions/:id;delete', canEdit, _.partial(showDeleteFormPage, Action, _, _, {
 
   }));
 });

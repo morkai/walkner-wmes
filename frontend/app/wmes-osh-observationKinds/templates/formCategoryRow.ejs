@@ -1,0 +1,14 @@
+<tr>
+  <td class="text-right"><%- no %>.</td>
+  <td>
+    <%- category.label %>
+    <input type="hidden" name="<%- property %>[<%- i %>]" value="<%- category._id %>">
+  </td>
+  <td class="actions">
+    <div class="actions-group">
+      <button data-action="up" class="btn btn-default" type="button" title="<%- t('FORM:categories:up') %>"><i class="fa fa-arrow-up"></i></button>
+      <button data-action="down" class="btn btn-default" type="button" title="<%- t('FORM:categories:down') %>"><i class="fa fa-arrow-down"></i></button>
+      <button data-action="remove" class="btn btn-default" type="button" title="<%- t('FORM:categories:remove') %>"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+</tr>

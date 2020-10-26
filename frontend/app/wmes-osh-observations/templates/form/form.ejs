@@ -1,0 +1,183 @@
+<form class="osh-entries-form osh-observations-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <% if (!editMode) { %>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:observationKind') %></label>
+          <br>
+          <% kinds.forEach(option => { %>
+            <label class="radio-inline" title="<%= option.title %>">
+              <input name="observationKind" type="radio" value="<%- option.value %>">
+              <%= option.label %>
+            </label>
+          <% }) %>
+        </div>
+      <% } %>
+      <%- helpers.formGroup({
+        name: 'subject',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 150
+      }) %>
+      <hr>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'creator',
+          type: 'static',
+          label: 'PROPERTY:',
+          groupClassName: 'col-lg-4',
+          value: user.getLabel()
+        }) %>
+        <%- helpers.formGroup({
+          name: 'userWorkplace',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'userDivision',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 form-group">
+          <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
+          <div class=" form-group-datetime">
+            <input id="<%- id('date') %>" class="form-control" name="date" type="date" required min="<%- window.PRODUCTION_DATA_START_DATE || '2020-01-01' %>" max="<%- today %>">
+            <input id="<%- id('time') %>" class="form-control no-controls" name="time" type="number" min="0" max="23" placeholder="<%- t('FORM:time:placeholder') %>" title="<%- t('FORM:time:title') %>">
+          </div>
+        </div>
+        <%- helpers.formGroup({
+          name: 'company',
+          type: 'select2',
+          label: 'FORM:company:label',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'companyName',
+          label: 'FORM:company:name',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+      </div>
+      <hr>
+      <h4><%- t('PROPERTY:locationPath') %></h4>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'workplace',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'division',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'building',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+      </div>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'location',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'station',
+          type: 'select2',
+          label: 'PROPERTY:',
+          groupClassName: 'col-lg-4'
+        }) %>
+      </div>
+      <hr>
+      <h4><%- t('PROPERTY:behaviors') %></h4>
+      <div class="is-colored">
+        <div class="table-responsive">
+          <table class="table table-bordered table-condensed table-hover">
+            <thead>
+            <tr>
+              <th><%- t('PROPERTY:behaviors.category') %></th>
+              <th class="is-min osh-observations-form-safe"><%- t('PROPERTY:behaviors.safe') %></th>
+              <th class="is-min osh-observations-form-safe"><%- t('PROPERTY:behaviors.risky') %></th>
+              <th class="osh-observations-form-textarea"><%- t('PROPERTY:behaviors.what') %></th>
+              <th class="osh-observations-form-textarea"><%- t('PROPERTY:behaviors.why') %></th>
+              <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:behaviors.easy') %></th>
+              <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:behaviors.hard') %></th>
+            </tr>
+            </thead>
+            <tbody id="<%- id('behaviors') %>"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="<%- id('easyConfirmed') %>" class="checkbox osh-observations-form-easyConfirmed">
+        <label>
+          <input type="checkbox" name="easyConfirmed" value="true">
+          <%- t('easyConfirmed') %>
+        </label>
+      </div>
+      <hr>
+      <h4><%- t('PROPERTY:workConditions') %></h4>
+      <div class="is-colored">
+        <div class="table-responsive">
+          <table class="table table-bordered table-condensed table-hover">
+            <thead>
+            <tr>
+              <th><%- t('PROPERTY:workConditions.category') %></th>
+              <th class="is-min osh-observations-form-safe"><%- t('PROPERTY:workConditions.risky') %></th>
+              <th class="osh-observations-form-textarea"><%- t('PROPERTY:workConditions.what') %></th>
+              <th class="osh-observations-form-textarea"><%- t('PROPERTY:workConditions.why') %></th>
+              <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:workConditions.easy') %></th>
+              <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:workConditions.hard') %></th>
+            </tr>
+            </thead>
+            <tbody id="<%- id('workConditions') %>"></tbody>
+          </table>
+        </div>
+      </div>
+      <hr>
+      <%- helpers.formGroup({
+        name: 'attachments.other',
+        type: 'file',
+        label: 'PROPERTY:attachments',
+        accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
+        multiple: true,
+        inputAttrs: {'data-max': 4}
+      }) %>
+      <% if (editMode) { %>
+        <%- helpers.formGroup({
+          name: 'comment',
+          type: 'textarea',
+          label: 'PROPERTY:',
+          rows: 3
+        }) %>
+      <% } %>
+    </div>
+    <div class="form-actions">
+      <button id="<%- id('save') %>" type="submit" class="btn btn-primary">
+        <% if (editMode) { %>
+          <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
+        <% } else { %>
+          <i class="fa fa-plus"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:add') %></span>
+        <% } %>
+      </button>
+    </div>
+  </div>
+</form>

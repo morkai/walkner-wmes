@@ -1,0 +1,71 @@
+<div class="osh-entries-details-props">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%- t('details:general') %></div>
+        <div class="panel-details">
+          <%- helpers.props(details, [
+            {id: 'subject', nameClassName: unseen('subject', 1)},
+            {id: 'workplace', nameClassName: unseen('workplace', 1)},
+            {id: 'division', nameClassName: unseen('division', 1)},
+            {id: 'building', nameClassName: unseen('building', 1)},
+            {id: 'location', nameClassName: unseen('location', 1)},
+            {id: 'station', nameClassName: unseen('station', 1)},
+            {id: '!observationKind', nameClassName: unseen('observationKind', 1), value: v =>
+              `<span title="${_.escape(details.descriptions.observationKind)}">${_.escape(v)} `
+              + (details.descriptions.observationKind ? '<i class="fa fa-question-circle"></i>' : '')
+              + '</span>'
+            },
+            {id: 'date', nameClassName: unseen('date', 1)},
+            {id: 'company', nameClassName: unseen('companyName', 1)}
+          ]) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:users') %></div>
+        <div class="panel-details">
+          <%- helpers.props(details, [
+            {id: '!creator', nameClassName: unseen('creator', 1)},
+            {id: '!coordinators', nameClassName: unseen('coordinators', 1), value: users =>
+            {
+              if (!users.length)
+              {
+                return '';
+              }
+
+              if (users.length === 1 || users.length > 3)
+              {
+                return '<div class="osh-entries-details-users">' + users.join(', ') + '</div>';
+              }
+
+              return `<ul><li>${users.join('<li>')}</ul>`;
+            }}
+          ]) %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('details:extra') %></div>
+        <div class="panel-details">
+          <%- helpers.props(details, [
+            {id: '!status', nameClassName: unseen('status', 1), value: status =>
+            {
+              let html = status;
+
+              if (model.statusComment)
+              {
+                html += `<br><span class="small text-lines"><i class="fa fa-comment-o"></i> ${_.escape(model.statusComment)}</span>`;
+              }
+
+              return html;
+            }},
+            {id: 'createdAt', nameClassName: unseen('createdAt', 1)}
+          ]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

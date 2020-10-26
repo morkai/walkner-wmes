@@ -61,7 +61,7 @@ define([
       var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.serialize();
 
-      obj.buildings = dictionaries.buildings.getLabels(obj.buildings);
+      obj.buildings = dictionaries.buildings.getLabels(obj.buildings).join('; ');
 
       return obj;
     },

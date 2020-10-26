@@ -1,0 +1,29 @@
+<div class="panel panel-default osh-details-observations-panel is-colored <%- observations.length ? '' : 'hidden' %>">
+  <div class="panel-heading"><%- t(`PROPERTY:${property}`) %></div>
+  <table class="table table-bordered table-condensed <%- unseen ? 'osh-unseen' : '' %>">
+    <thead>
+    <tr>
+      <th><%- t(`PROPERTY:${property}.category`) %></th>
+      <% if (property === 'behaviors') { %>
+        <th class="is-min text-center"><%- t(`details:observations:safeRisky`) %></th>
+      <% } %>
+      <th><%- t(`PROPERTY:${property}.what`) %></th>
+      <th><%- t(`PROPERTY:${property}.why`) %></th>
+      <th class="is-min text-center"><%- t(`details:observations:easyHard`) %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% observations.forEach(o => { %>
+    <tr class="<%- o.safe ? 'success' : o.easy ? 'warning' : 'danger' %>">
+      <td><%= o.text %></td>
+      <% if (property === 'behaviors') { %>
+        <td class="is-min text-center"><%- t(`safe:${o.safe}`) %></td>
+      <% } %>
+      <td class="text-lines"><%= o.what %></td>
+      <td class="text-lines"><%= o.why %></td>
+      <td class="is-min text-center"><%- t(`easy:${o.easy}`) %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

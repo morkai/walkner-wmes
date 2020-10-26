@@ -31,6 +31,11 @@ define([
           thClassName: 'is-filter'
         },
         {
+          id: 'creator',
+          min: 1,
+          thClassName: 'is-filter'
+        },
+        {
           id: 'locationPath',
           className: 'is-overflow w300'
         },
@@ -47,6 +52,11 @@ define([
         {
           id: 'subject',
           className: 'is-overflow w250'
+        },
+        {
+          id: 'implementers',
+          min: 1,
+          thClassName: 'is-filter'
         },
         '-'
       ];

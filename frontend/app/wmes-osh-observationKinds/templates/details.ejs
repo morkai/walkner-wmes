@@ -1,0 +1,29 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'active',
+        'shortName',
+        'longName'
+      ]) %>
+    </div>
+  </div>
+  <% ['behaviors', 'workConditions'].forEach(prop => { %>
+  <div class="panel panel-default <%- model[prop].length ? '' : 'hidden' %>">
+    <div class="panel-heading"><%- t(`PROPERTY:${prop}`) %></div>
+    <div class="panel-body">
+      <ol style="padding: 0 0 0 15px">
+        <% model[prop].forEach((category, i) => { %>
+          <li style="margin-top: <%- i === 0 ? '0' : '7px' %>">
+            <strong><%= category.label %></strong>
+            <% if (category.description) { %>
+              <p class="text-lines"><%= category.description %></p>
+            <% } %>
+          </li>
+        <% }) %>
+      </ol>
+    </div>
+  </div>
+  <% }) %>
+</div>
