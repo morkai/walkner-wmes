@@ -98,12 +98,17 @@ define([
     {
       var obj = this.serialize();
 
-      obj.newComponent = obj.newCode + ': ' + _.escape(obj.newName);
+      obj.newComponent = obj.newComponents[0]._id + ': ' + _.escape(obj.newComponents[0].name);
       obj.oldComponent = obj.oldComponents[0]._id + ': ' + _.escape(obj.oldComponents[0].name);
 
       if (obj.oldComponents.length > 1)
       {
         obj.oldComponent += ' +' + (obj.oldComponents.length - 1);
+      }
+
+      if (obj.newComponents.length > 1)
+      {
+        obj.newComponent += ' +' + (obj.newComponents.length - 1);
       }
 
       obj.mrps = obj.mrps.map(function(id)
@@ -121,6 +126,7 @@ define([
     {
       var obj = this.serialize();
       var oldComponents = obj.oldComponents;
+      var newComponents = obj.newComponents;
       var mrps = obj.mrps;
 
       if (mrps.length === 1)
@@ -169,7 +175,21 @@ define([
         obj.oldComponent += '</ul>';
       }
 
-      obj.newComponent = obj.newCode + ': ' + _.escape(obj.newName);
+      if (newComponents.length === 1)
+      {
+        obj.newComponent = newComponents[0]._id + ': ' + _.escape(newComponents[0].name);
+      }
+      else
+      {
+        obj.newComponent = '<ul>';
+
+        newComponents.forEach(function(c)
+        {
+          obj.newComponent += '<li>' + c._id + ': ' + _.escape(c.name);
+        });
+
+        obj.newComponent += '</ul>';
+      }
 
       return obj;
     },

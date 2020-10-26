@@ -111,7 +111,7 @@ define([
 
       this.once('afterRender', function()
       {
-        this.listenTo(this.model, 'change:bom change:compRels', this.onChange);
+        this.listenTo(this.model, 'change:bom change:compRels', this.render);
       });
     },
 
@@ -124,10 +124,13 @@ define([
 
       (this.model.get('compRels') || []).forEach(function(compRel)
       {
-        if (!newToOld[compRel.newCode])
+        compRel.newComponents.forEach(function(newComponent)
         {
-          newToOld[compRel.newCode] = [];
-        }
+          if (!newToOld[newComponent._id])
+          {
+            newToOld[newComponent._id] = [];
+          }
+        });
 
         compRel.oldComponents.forEach(function(oldComponent)
         {
@@ -137,9 +140,13 @@ define([
           }
 
           oldToNew[oldComponent._id].push(compRel);
-          newToOld[compRel.newCode].push({
-            compRel: compRel,
-            oldComponent: oldComponent
+
+          compRel.newComponents.forEach(function(newComponent)
+          {
+            newToOld[newComponent._id].push({
+              compRel: compRel,
+              oldComponent: oldComponent
+            });
           });
         });
       });
@@ -171,15 +178,18 @@ define([
 
           newComponents.forEach(function(compRel)
           {
-            bom.push({
-              compRel: true,
-              rowClassName: 'success',
-              orderNo: component.orderNo,
-              mrp: component.mrp,
-              nc12: compRel.newCode,
-              name: compRel.newName,
-              releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
-              releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+            compRel.newComponents.forEach(function(newComponent)
+            {
+              bom.push({
+                compRel: true,
+                rowClassName: 'success',
+                orderNo: component.orderNo,
+                mrp: component.mrp,
+                nc12: newComponent._id,
+                name: newComponent.name,
+                releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
+                releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
+              });
             });
           });
 
@@ -224,18 +234,6 @@ define([
     afterRender: function()
     {
       this.updateItems();
-    },
-
-    onChange: function()
-    {
-      var oldState = this.$el.hasClass('hidden');
-      var newState = this.model.get('bom').length === 0;
-
-      if (oldState !== newState)
-      {
-        this.render();
-        this.model.trigger('panelToggle');
-      }
     },
 
     markDocument: function(nc15, win)

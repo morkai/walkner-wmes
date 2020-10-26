@@ -95,7 +95,7 @@ define([
       {
         formData.oldComponent = term.args[1];
       },
-      'newCode': function(propertyName, term, formData)
+      'newComponents._id': function(propertyName, term, formData)
       {
         formData.newComponent = term.args[1];
       },
@@ -195,7 +195,7 @@ define([
 
       if (newComponent.length)
       {
-        selector.push({name: 'eq', args: ['newCode', newComponent]});
+        selector.push({name: 'eq', args: ['newComponents._id', newComponent]});
       }
     },
 

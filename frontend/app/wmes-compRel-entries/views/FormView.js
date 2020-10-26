@@ -45,9 +45,9 @@ define([
 
     events: _.assign({
 
-      'change #-oldComponents': 'checkOldComponentValidity',
+      'change #-oldComponents': function() { this.checkComponentValidity('old'); },
+      'change #-newComponents': function() { this.checkComponentValidity('new'); },
       'input input[name$="._id"]': 'resolveComponent',
-      'input #-newCode': 'resolveComponent',
       'click #-addFunc': function()
       {
         var funcId = this.$id('availableFuncs').val();
@@ -69,22 +69,34 @@ define([
       {
         this.removeFunc(this.$(e.target).closest('.compRel-form-func')[0].dataset.id);
       },
-      'click #-addComponent': function()
+      'click #-addOldComponent': function()
       {
-        this.addComponent({
+        this.addComponent('old', {
           _id: '',
           name: ''
         });
 
         this.$id('oldComponents').children().last().find('input').first().focus();
-        this.checkOldComponentValidity();
+        this.checkComponentValidity('old');
+      },
+      'click #-addNewComponent': function()
+      {
+        this.addComponent('new', {
+          _id: '',
+          name: ''
+        });
+
+        this.$id('newComponents').children().last().find('input').first().focus();
+        this.checkComponentValidity('new');
       },
       'click [data-action="removeComponent"]': function(e)
       {
-        if (this.$id('oldComponents').children().length > 1)
+        var $tbody = this.$(e.target).closest('tbody');
+
+        if ($tbody.children().length > 1)
         {
           this.$(e.target).closest('tr').remove();
-          this.checkOldComponentValidity();
+          this.checkComponentValidity($tbody[0].dataset.type);
         }
       },
       'change #-mrps': function()
@@ -124,10 +136,13 @@ define([
 
       (view.model.get('oldComponents') || []).forEach(function(comp)
       {
-        view.addComponent(comp);
+        view.addComponent('old', comp);
       });
 
-      view.addComponent({_id: '', name: ''});
+      (view.model.get('newComponents') || []).forEach(function(comp)
+      {
+        view.addComponent('new', comp);
+      });
 
       (view.model.get('funcs') || []).forEach(function(func)
       {
@@ -252,9 +267,7 @@ define([
     {
       var view = this;
       var codeEl = e.currentTarget;
-      var nameEl = codeEl.name === 'newCode'
-        ? view.$(codeEl).closest('.form-group').next().find('input')[0]
-        : view.$(codeEl).closest('tr').find('input[name$=".name"]')[0];
+      var nameEl = view.$(codeEl).closest('tr').find('input[name$=".name"]')[0];
 
       nameEl.value = '';
 
@@ -290,10 +303,10 @@ define([
       });
     },
 
-    checkOldComponentValidity: function()
+    checkComponentValidity: function(type)
     {
       var anyRequired = false;
-      var $rows = this.$id('oldComponents').children();
+      var $rows = this.$id(type + 'Components').children();
 
       $rows.each(function()
       {
@@ -316,14 +329,15 @@ define([
       }
     },
 
-    addComponent: function(component)
+    addComponent: function(type, component)
     {
       var $comp = this.renderPartial(componentTemplate, {
         i: ++this.compI,
+        type: type,
         component: component
       });
 
-      this.$id('oldComponents').append($comp);
+      this.$id(type + 'Components').append($comp);
     },
 
     addFunc: function(funcId, loadUsers)

@@ -3,26 +3,25 @@
 
 'use strict';
 
-db.oshactivitykinds.updateMany({rootCauses: {$exists: false}}, {$set: {rootCauses: false}});
-db.oshactivitykinds.updateMany({implementers: {$exists: false}}, {$set: {implementers: false}});
-db.oshactivitykinds.updateMany({participants: {$exists: false}}, {$set: {participants: false}});
+db.comprelentries.dropIndex({oldCode: 1});
+db.comprelentries.dropIndex({newCode: 1});
+db.comprelentries.createIndex({'oldComponents._id': 1});
+db.comprelentries.createIndex({'newComponents._id': 1});
 
-db.oshnearmisses.find().sort({createdAt: 1}).toArray().forEach(updateEntry.bind(null, 'oshnearmisses', 'Z'));
-db.oshkaizens.find().sort({createdAt: 1}).toArray().forEach(updateEntry.bind(null, 'oshkaizens', 'K'));
-
-function updateEntry(c, p, entry, i)
+db.comprelentries.find({newComponents: {$exists: false}}).forEach(compRel =>
 {
-  const $unset = {xxx: 1};
-  const $set = {
-    ridInc: i + 1,
-    rid: `${p}-2020-${(i + 1).toString().padStart(6, '0')}`
-  };
+  const newComponents = [{
+    _id: compRel.newCode,
+    name: compRel.newName
+  }];
 
-  if (entry.participants)
-  {
-    $set.users = entry.participants;
-    $unset.participants = 1;
-  }
-
-  db[c].updateOne({_id: entry._id}, {$unset, $set});
-}
+  db.comprelentries.updateOne({_id: compRel._id}, {
+    $unset: {
+      newCode: 1,
+      newName: 1
+    },
+    $set: {
+      newComponents
+    }
+  });
+});

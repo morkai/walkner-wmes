@@ -12,26 +12,20 @@
       <div class="form-group">
         <label class="control-label is-required"><%- t('PROPERTY:oldComponent') %></label>
         <table class="table table-bordered table-condensed" style="margin-bottom: 7px">
-          <tbody id="<%- id('oldComponents') %>"></tbody>
+          <tbody id="<%- id('oldComponents') %>" data-type="old"></tbody>
         </table>
-        <button id="<%- id('addComponent') %>" type="button" class="btn btn-default">
+        <button id="<%- id('addOldComponent') %>" type="button" class="btn btn-default">
           <i class="fa fa-plus"></i><span><%- t('FORM:components:add') %></span>
         </button>
       </div>
-      <div class="row">
-        <%- helpers.formGroup({
-          name: 'newCode',
-          label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-md-3',
-          pattern: '^[0-9]{12}$'
-        }) %>
-        <%- helpers.formGroup({
-          name: 'newName',
-          label: 'PROPERTY:',
-          required: true,
-          groupClassName: 'col-md-9'
-        }) %>
+      <div class="form-group">
+        <label class="control-label is-required"><%- t('PROPERTY:newComponent') %></label>
+        <table class="table table-bordered table-condensed" style="margin-bottom: 7px">
+          <tbody id="<%- id('newComponents') %>" data-type="new"></tbody>
+        </table>
+        <button id="<%- id('addNewComponent') %>" type="button" class="btn btn-default">
+          <i class="fa fa-plus"></i><span><%- t('FORM:components:add') %></span>
+        </button>
       </div>
       <%- helpers.formGroup({
         name: 'reason',
