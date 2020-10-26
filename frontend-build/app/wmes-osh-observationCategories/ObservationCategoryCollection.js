@@ -1,0 +1,1 @@
+define(["app/core/Collection","./ObservationCategory"],function(e,t){"use strict";return e.extend({model:t})});

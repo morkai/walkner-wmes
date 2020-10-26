@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Company"],function(e,n){"use strict";return e.extend({model:n})});
