@@ -40,6 +40,7 @@
     "PROPERTY:category": "Category",
     "PROPERTY:categories": "Categories",
     "PROPERTY:productFamily": "Product family",
+    "PROPERTY:kaizenEvent": "Product family (KE)",
     "PROPERTY:section": "Department",
     "PROPERTY:owners": "Owners",
     "PROPERTY:suggestionOwners": "Owners",
