@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/i18n',
   'app/user',
   'app/wmes-osh-common/Entry'
 ], function(
+  t,
   currentUser,
   Entry
 ) {
@@ -24,6 +26,18 @@ define([
     getModelType: function()
     {
       return 'kaizen';
+    },
+
+    serializeRow: function()
+    {
+      const obj = Entry.prototype.serializeRow.apply(this, arguments);
+
+      if (obj.kom)
+      {
+        obj.status += ` <i class="fa fa-trophy" title="${t(this.nlsDomain, 'PROPERTY:kom')}"></i>`;
+      }
+
+      return obj;
     }
 
   }, {

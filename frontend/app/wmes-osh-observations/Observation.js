@@ -92,7 +92,7 @@ define([
         return true;
       }
 
-      return model.get('status') === 'open' && model.isCreator();
+      return model.get('status') === 'inProgress' && model.isCreator();
     }
 
   });

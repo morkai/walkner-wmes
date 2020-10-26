@@ -113,7 +113,7 @@ define([
       'change input[type="radio"]': function(e)
       {
         this.toggleCategory(this.$(e.target).closest('tr'));
-        this.toggleEasyConfirmed();
+        this.toggleEasyConfirmed(true);
       },
 
       'click .btn[data-action="duplicate"]': function(e)
@@ -143,8 +143,11 @@ define([
 
       'click .btn[data-action="remove"]': function(e)
       {
-        this.$(e.target).closest('tr').remove();
-        this.toggleEasyConfirmed();
+        const $tr = this.$(e.target).closest('tr');
+        const reset = !!$tr.find('input[name*="easy"][value="true"]:checked').length;
+
+        $tr.remove();
+        this.toggleEasyConfirmed(reset);
       }
 
     }, FormView.prototype.events),
@@ -818,7 +821,7 @@ define([
 
       this.setUpObservations('behaviors', kind);
       this.setUpObservations('workConditions', kind);
-      this.toggleEasyConfirmed();
+      this.toggleEasyConfirmed(false);
     },
 
     setUpObservations: function(property, kind)
@@ -954,11 +957,20 @@ define([
       }
     },
 
-    toggleEasyConfirmed: function()
+    toggleEasyConfirmed: function(reset)
     {
       const $easy = this.$id('behaviors').find('input[name*="easy"][value="true"]:checked');
+      const $easyConfirmed = this.$('input[name="easyConfirmed"]');
 
-      this.$('input[name="easyConfirmed"]').prop('required', $easy.length > 0);
+      if (reset)
+      {
+        $easyConfirmed.prop('checked', false);
+      }
+
+      $easyConfirmed
+        .prop('required', $easy.length > 0)
+        .closest('div')
+        .toggleClass('hidden', $easy.length === 0);
     },
 
     getSaveOptions: function()

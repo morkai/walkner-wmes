@@ -61,7 +61,7 @@ define([
       var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.serialize();
 
-      obj.divisions = dictionaries.divisions.getLabels(obj.divisions, {path: true, long: false});
+      obj.divisions = dictionaries.divisions.getLabels(obj.divisions, {path: true}).join('; ');
 
       return obj;
     },
