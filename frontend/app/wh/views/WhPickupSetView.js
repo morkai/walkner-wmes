@@ -803,6 +803,12 @@ define([
       }
 
       var position = this.$(anchorEl).position();
+
+      if (!position)
+      {
+        return;
+      }
+
       var box = anchorEl.getBoundingClientRect();
       var containerBox = this.$el[0].parentNode.getBoundingClientRect();
       var editorWidth = $editor.outerWidth();

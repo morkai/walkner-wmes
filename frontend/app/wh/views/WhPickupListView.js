@@ -637,17 +637,13 @@ define([
           title: view.t('planning', 'lineOrders:menu:copy:success')
         });
 
-        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
+        $btn.tooltip('show');
+        $btn.data('bs.tooltip').tip().addClass('result success').css({
           left: x + 'px',
           top: y + 'px'
         });
 
-        if (view.timers.hideTooltip)
-        {
-          clearTimeout(view.timers.hideTooltip);
-        }
-
-        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
+        setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
       });
     },
 

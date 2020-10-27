@@ -748,7 +748,7 @@ define([
 
       $order.find('[data-property]').each(function()
       {
-        var text = orderInfo[this.dataset.property];
+        var text = orderInfo[this.dataset.property] || '';
 
         this.style.display = text ? '' : 'none';
         this.textContent = text.replace(/\$__.*?__/g, '');
