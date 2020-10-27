@@ -107,8 +107,15 @@ define([
 
   broker.subscribe('viewport.page.shown', function(page)
   {
-    showBrowserUpdateDialog(page);
-    showAddressUpdateDialog(page);
+    if (window.WMES_UPDATER_BROWSER !== false)
+    {
+      showBrowserUpdateDialog(page);
+    }
+
+    if (window.WMES_UPDATER_ADDRESS !== false)
+    {
+      showAddressUpdateDialog(page);
+    }
   });
 
   function showBrowserUpdateDialog(page)
