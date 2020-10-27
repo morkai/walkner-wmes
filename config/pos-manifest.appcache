@@ -2,18 +2,17 @@ CACHE MANIFEST
 # {version}
 
 CACHE:
-vendor/require/require.js
-vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0
-vendor/moment/lang/pl.js
-vendor/select2-lang/pl.js
-vendor/socket.io.js
-vendor/qz-print/qz-print_jnlp.jnlp
-vendor/qz-print/qz-print.jar
-favicon.ico
-config.js
-pos-main.js
-main.js
-assets/pos-main.css
+/favicon.ico
+/vendor/require/require.js
+/vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0
+/vendor/select2/select2.png
+/vendor/select2/select2-spinner.gif
+/vendor/qz-print/qz-print_jnlp.jnlp
+/vendor/qz-print/qz-print.jar
+/config.js
+{mainJsFile}
+/main.js
+{mainCssFile}
 
 NETWORK:
 *

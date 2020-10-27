@@ -1,6 +1,7 @@
 'use strict';
 
-const DATA_PATH = `${__dirname}/../data`;
+const ROOT_PATH = `${__dirname}/..`;
+const DATA_PATH = `${ROOT_PATH}/data`;
 
 const fs = require('fs-extra');
 const mongodb = require('./pos-mongodb');
@@ -107,8 +108,8 @@ exports.mongoose = {
 };
 
 exports.express = {
-  staticPath: `${__dirname}/../frontend`,
-  staticBuildPath: `${__dirname}/../frontend-build`,
+  staticPath: `${ROOT_PATH}/frontend`,
+  staticBuildPath: `${ROOT_PATH}/frontend-build`,
   sessionCookieKey: 'wmes-pos.sid',
   sessionCookie: {
     httpOnly: true,
@@ -132,7 +133,7 @@ exports.express = {
   },
   textBody: {limit: '1mb'},
   routes: [
-    require('../backend/routes/core')
+    require(`${ROOT_PATH}/backend/routes/core`)
   ]
 };
 
@@ -162,7 +163,7 @@ const manifestTemplates = {
 
 exports.updater = {
   manifestPath: `${__dirname}/pos-manifest.appcache`,
-  packageJsonPath: `${__dirname}/../package.json`,
+  packageJsonPath: `${ROOT_PATH}/package.json`,
   restartDelay: 10000,
   pull: {
     exe: 'git.exe',
@@ -177,7 +178,10 @@ exports.updater = {
       mainJsFile: exports.mainJsFile,
       mainCssFile: exports.mainCssFile,
       template: manifestTemplates.main,
-      frontendAppData: {},
+      frontendAppData: {
+        WMES_UPDATER_BROWSER: false,
+        WMES_UPDATER_ADDRESS: false
+      },
       dictionaryModules: {}
     }
   ]
