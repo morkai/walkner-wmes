@@ -78,6 +78,7 @@
   "type:problemSolved": "Rozwiązanie problemu",
   "type:deliveryStarted": "Rozpoczęcie dostawy",
   "type:deliveryFinished": "Zakończenie dostawy",
+  "type:deliveredQtyEdited": "Edycja dostarczonej ilości",
   "type:deliveredOrderEdited": "Edycja dostarczonego zlecenia",
   "type:deliveredOrderRedired": "Przeniesienie dostarczonego zlecenia",
   "type:startedPlanEdited": "Edycja rozpoczęcia planu linii",

@@ -161,7 +161,7 @@ define([
         html.push(prop('duration', time.toString(data.duration / 1000)));
       }
 
-      if (type === 'deliveredOrderEdited')
+      if (type === 'deliveredOrderEdited' || type === 'deliveredQtyEdited')
       {
         var oldData = data.oldDeliveredOrder;
         var newData = data.newDeliveredOrder;
@@ -226,6 +226,7 @@ define([
       'deliveryStarted',
       'deliveryFinished',
       'deliveredOrderEdited',
+      'deliveredQtyEdited',
       'deliveredOrderRedired',
       'startedPlanEdited',
       'lineRedirStarted',

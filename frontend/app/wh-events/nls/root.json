@@ -79,6 +79,7 @@
     "type:problemSolved": "Problem solved",
     "type:deliveryStarted": "Delivery started",
     "type:deliveryFinished": "Delivery finished",
+    "type:deliveredQtyEdited": "Delivered PCE edited",
     "type:deliveredOrderEdited": "Delivered order edited",
     "type:deliveredOrderRedired": "Delivered order moved",
     "type:startedPlanEdited": "Line started plan edited",
