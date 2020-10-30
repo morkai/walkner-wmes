@@ -293,7 +293,7 @@ define([
         }
       }
 
-      orders.remove(changes.removed, {silent: silent});
+      orders.remove(changes.removed.map(function(o) { return o._id; }), {silent: silent});
 
       changes.added.forEach(function(added)
       {

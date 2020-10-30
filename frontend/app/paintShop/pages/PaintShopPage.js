@@ -690,7 +690,7 @@ define([
 
     renderTotals: function()
     {
-      this.$id('totals').html(totalsTemplate({
+      this.$id('totals').html(this.renderPartialHtml(totalsTemplate, {
         totals: this.serializeTotals()
       }));
     },
