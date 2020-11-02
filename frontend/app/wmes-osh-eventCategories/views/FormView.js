@@ -29,6 +29,16 @@ define([
           text: kind.getLabel({long: true})
         }))
       });
+
+      this.$id('activityKind').select2({
+        width: '100%',
+        allowClear: true,
+        placeholder: ' ',
+        data: dictionaries.activityKinds.map(kind => ({
+          id: kind.id,
+          text: kind.getLabel({long: true})
+        }))
+      });
     },
 
     serializeToForm: function()
@@ -47,6 +57,11 @@ define([
       if (!formData.description)
       {
         formData.description = '';
+      }
+
+      if (!formData.activityKind)
+      {
+        formData.activityKind = 0;
       }
 
       return formData;

@@ -51,7 +51,7 @@ define([
         },
         {
           id: 'subject',
-          className: 'is-overflow w200'
+          className: 'is-overflow w300'
         },
         {
           id: 'implementers',

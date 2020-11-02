@@ -32,7 +32,6 @@
   "kind:other": "Inny",
 
   "status:new": "Nowe",
-  "status:open": "Otwarte",
   "status:inProgress": "Realizacja",
   "status:verification": "Weryfikacja",
   "status:finished": "Zakończone",
@@ -40,8 +39,9 @@
   "status:cancelled": "Anulowane",
   "status:kom": "Kaizen miesiąca",
 
-  "duration:days": "{days} {days, plural, one{dzień} other{dni}}",
-  "duration:hours": "{hours} godz.",
+  "duration:days": "{duration} {duration, plural, one{dzień} other{dni}}",
+  "duration:hours": "{duration} {duration, plural, one{godzina} few{godziny} other{godzin}}",
+  "duration:minutes": "{duration} {duration, plural, one{minuta} few{minuty} other{minut}}",
 
   "anonymous:label": "Anonim",
 
@@ -76,6 +76,7 @@
   "relation:nearMiss": "<a href='#osh/nearMisses/{_id}'>{rid}</a>",
   "relation:action": "<a href='#osh/actions/{_id}'>{rid}</a>",
   "relation:kaizen": "<a href='#osh/kaizens/{_id}'>{rid}</a>",
+  "relation:observation": "<a href='#osh/observations/{_id}'>{rid}</a>",
 
   "markAsSeen:listAction": "Oznacz jako przeczytane",
   "markAsSeen:pageAction:list": "Oznacz jako przeczytane",

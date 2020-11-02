@@ -1,29 +1,37 @@
-<div class="panel panel-default osh-details-observations-panel is-colored <%- observations.length ? '' : 'hidden' %>">
+<div class="panel panel-default osh-details-observations-panel osh-details-observations-<%- property %> is-colored <%- observations.length ? '' : 'hidden' %>">
   <div class="panel-heading"><%- t(`PROPERTY:${property}`) %></div>
-  <table class="table table-bordered table-condensed <%- unseen ? 'osh-unseen' : '' %>">
+  <div class="table-responsive">
+  <table class="table table-bordered table-condensed table-hover <%- unseen ? 'osh-unseen' : '' %>">
     <thead>
     <tr>
-      <th><%- t(`PROPERTY:${property}.category`) %></th>
+      <th class="osh-observations-details-category"><%- t(`PROPERTY:${property}.category`) %></th>
       <% if (property === 'behaviors') { %>
-        <th class="is-min text-center"><%- t(`details:observations:safeRisky`) %></th>
+        <th class="text-center osh-observations-details-safeRisky"><%- t(`details:observations:safeRisky`) %></th>
       <% } %>
-      <th><%- t(`PROPERTY:${property}.what`) %></th>
-      <th><%- t(`PROPERTY:${property}.why`) %></th>
-      <th class="is-min text-center"><%- t(`details:observations:easyHard`) %></th>
+      <th class="text-center osh-observations-details-easyHard"><%- t(`details:observations:easyHard`) %></th>
+      <th class="osh-observations-details-whatWhy"><%- t(`PROPERTY:${property}.what`) %></th>
+      <th class="osh-observations-details-whatWhy"><%- t(`PROPERTY:${property}.why`) %></th>
+      <th class="osh-observations-details-resolution"><%- t(`PROPERTY:${property}.resolution`) %></th>
     </tr>
     </thead>
     <tbody>
     <% observations.forEach(o => { %>
     <tr class="<%- o.safe ? 'success' : o.easy ? 'warning' : 'danger' %>">
-      <td><%= o.text %></td>
+      <td class="osh-observations-details-category"><%= o.text %></td>
       <% if (property === 'behaviors') { %>
-        <td class="is-min text-center"><%- t(`safe:${o.safe}`) %></td>
+        <td class="text-center"><%- t(`safe:${o.safe}`) %></td>
       <% } %>
-      <td class="text-lines"><%= o.what %></td>
-      <td class="text-lines"><%= o.why %></td>
-      <td class="is-min text-center"><%- t(`easy:${o.easy}`) %></td>
+      <td class="text-center"><%- t(`easy:${o.easy}`) %></td>
+      <td class="text-lines osh-observations-details-whatWhy"><%= o.what %></td>
+      <td class="text-lines osh-observations-details-whatWhy"><%= o.why %></td>
+      <td class="text-mono osh-observations-details-resolution">
+        <% if (o.resolution._id) { %>
+        <a href="<%- o.resolution.url %>"><%= o.resolution.rid %></a>
+        <% } %>
+      </td>
     </tr>
     <% }) %>
     </tbody>
   </table>
+  </div>
 </div>

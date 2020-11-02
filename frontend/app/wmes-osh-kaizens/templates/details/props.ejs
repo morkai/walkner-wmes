@@ -97,24 +97,4 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="panel panel-danger">
-        <div class="panel-heading"><%- t('PROPERTY:problem') %></div>
-        <div class="panel-body text-lines <%- unseen('problem', 1) %>"><%= details.problem %></div>
-      </div>
-    </div>
-    <div class="col-lg-4">
-      <div class="panel panel-warning">
-        <div class="panel-heading"><%- t('PROPERTY:reason') %></div>
-        <div class="panel-body text-lines <%- unseen('reason', 1) %>"><%- _.escape(details.reason) || `<em>${t('details:noReason')}</em>` %></div>
-      </div>
-    </div>
-    <div class="col-lg-4">
-      <div class="panel panel-secondary">
-        <div class="panel-heading"><%- t('PROPERTY:suggestion') %></div>
-        <div class="panel-body text-lines <%- unseen('suggestion', 1) %>"><%- _.escape(details.suggestion) %></div>
-      </div>
-    </div>
-  </div>
 </div>

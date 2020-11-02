@@ -381,10 +381,13 @@ define([
             rootCause.why.push('');
           }
         });
+
+        formData.reason = '';
+        formData.suggestion = '';
       }
       else
       {
-        formData.rootCauses = [];
+        formData.rootCauses = null;
       }
 
       if (features.implementers)
@@ -394,17 +397,17 @@ define([
       }
       else
       {
-        formData.implementers = [];
+        formData.implementers = null;
         formData.plannedAt = null;
       }
 
-      if (formData.participants)
+      if (features.participants)
       {
         formData.participants = setUpUserSelect2.getUserInfo(this.$id('participants'));
       }
       else
       {
-        formData.participants = [];
+        formData.participants = null;
       }
 
       return formData;
@@ -860,17 +863,37 @@ define([
       const $input = this.$id('activityKind');
       const kind = +this.$('input[name="kind"]:checked').val() || this.model.get('kind');
       const map = {};
+      const anyType = this.options.editMode || dictionaries.isCoordinator() || Action.can.manage();
+      const forcedActivityKind = dictionaries.activityKinds.get(this.options.forcedActivityKind);
 
       dictionaries.activityKinds.forEach(model =>
       {
-        if (!model.get('active') || !model.hasKind(kind))
+        if (forcedActivityKind)
         {
-          return;
+          if (forcedActivityKind !== model)
+          {
+            return;
+          }
         }
-
-        if (this.relation && !model.get('implementers'))
+        else
         {
-          return;
+          if (!model.get('active') || !model.hasKind(kind))
+          {
+            return;
+          }
+
+          if (this.relation)
+          {
+            if (!model.get('implementers'))
+            {
+              return;
+            }
+
+            if (!anyType && this.relation.getModelType() === 'nearMiss' && !model.get('nearMiss'))
+            {
+              return;
+            }
+          }
         }
 
         map[model.id] = {
@@ -951,7 +974,7 @@ define([
 
       $input
         .select2('data', data)
-        .select2('enable', this.options.editMode && privileged);
+        .select2('enable', !this.options.editMode || privileged);
 
       const $plannedAt = this.$id('plannedAt');
 
@@ -1036,6 +1059,9 @@ define([
 
       this.$id('rootCausesGroup')
         .toggleClass('hidden', !features.rootCauses);
+      this.$id('reason')
+        .closest('.form-group')
+        .toggleClass('hidden', features.rootCauses);
 
       this.checkWhyValidity();
 
@@ -1047,6 +1073,9 @@ define([
         .toggleClass('has-required-select2', features.implementers)
         .closest('.row')
         .toggleClass('hidden', !features.implementers);
+      this.$id('suggestion')
+        .closest('.form-group')
+        .toggleClass('hidden', features.implementers);
 
       this.$id('participants')
         .prop('required', features.participants)

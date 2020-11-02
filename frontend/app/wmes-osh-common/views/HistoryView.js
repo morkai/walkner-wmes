@@ -12,7 +12,8 @@ define([
   'app/core/util/html',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/templates/history/panel',
-  'app/wmes-osh-common/templates/history/item'
+  'app/wmes-osh-common/templates/history/item',
+  'app/wmes-osh-common/templates/history/observationPopover'
 ], function(
   _,
   $,
@@ -25,7 +26,8 @@ define([
   html,
   dictionaries,
   template,
-  itemTemplate
+  itemTemplate,
+  observationPopoverTemplate
 ) {
   'use strict';
 
@@ -365,15 +367,14 @@ define([
 
         case 'rootCauses':
         {
-          const label = dictionaries.getLabel('rootCauseCategories', value.category).toLocaleLowerCase();
+          const label = dictionaries.getLabel('rootCauseCategory', value.category).toLocaleLowerCase();
 
           if (!value.why.length)
           {
             return `${label} (0)`;
           }
 
-          return html.tag('a', {
-            href: 'javascript:void(0)', // eslint-disable-line no-script-url
+          return html.tag('span', {
             className: 'has-more',
             data: {
               change: changeI,
@@ -386,7 +387,24 @@ define([
 
         case 'behaviors':
         case 'workConditions':
-          return this.translate('history:observations', {count: value.length});
+        {
+          if (isOld)
+          {
+            return null;
+          }
+
+          const label = dictionaries.getLabel('observationCategories', value.category);
+
+          return html.tag('span', {
+            className: 'has-more',
+            data: {
+              change: changeI,
+              old: isOld ? 1 : 0,
+              property,
+              observation: value._id
+            }
+          }, label.length <= 43 ? label : `${label.substring(0, 40)}...`);
+        }
 
         default:
           return value || '';
@@ -397,20 +415,43 @@ define([
     {
       const values = [];
 
-      (deleted || []).forEach(value => values.push({
-        oldValue: this.serializeItemValue(property, value, true, changeIndex),
-        newValue: '-'
-      }));
+      if (property === 'behaviors' || property === 'workConditions')
+      {
+        (deleted || []).forEach(value => values.push({
+          icon: 'fa-times',
+          oldValue: null,
+          newValue: this.serializeItemValue(property, value, false, changeIndex)
+        }));
 
-      (added || []).forEach(value => values.push({
-        oldValue: '-',
-        newValue: this.serializeItemValue(property, value, false, changeIndex)
-      }));
+        (added || []).forEach(value => values.push({
+          icon: 'fa-plus',
+          oldValue: null,
+          newValue: this.serializeItemValue(property, value, false, changeIndex)
+        }));
 
-      (edited || []).forEach(value => values.push({
-        oldValue: this.serializeItemValue(property, Object.assign({}, value, value.old), true, changeIndex),
-        newValue: this.serializeItemValue(property, value, false, changeIndex)
-      }));
+        (edited || []).forEach(value => values.push({
+          icon: 'fa-pencil',
+          oldValue: null,
+          newValue: this.serializeItemValue(property, value, false, changeIndex)
+        }));
+      }
+      else
+      {
+        (deleted || []).forEach(value => values.push({
+          oldValue: this.serializeItemValue(property, value, true, changeIndex),
+          newValue: '-'
+        }));
+
+        (added || []).forEach(value => values.push({
+          oldValue: '-',
+          newValue: this.serializeItemValue(property, value, false, changeIndex)
+        }));
+
+        (edited || []).forEach(value => values.push({
+          oldValue: this.serializeItemValue(property, Object.assign({}, value, value.old), true, changeIndex),
+          newValue: this.serializeItemValue(property, value, false, changeIndex)
+        }));
+      }
 
       return values;
     },
@@ -443,6 +484,33 @@ define([
         + '</ol>';
     },
 
+    serializeObservationPopover: function(property, changeI, isOld, observationId)
+    {
+      const change = this.model.get('changes')[changeI];
+
+      if (!change || !change.data[property])
+      {
+        return;
+      }
+
+      const {added, edited, deleted} = change.data[property][1];
+
+      const o = deleted.find(o => o._id === observationId)
+        || added.find(o => o._id === observationId)
+        || edited.find(o => o._id === observationId);
+
+      if (!o)
+      {
+        return;
+      }
+
+      return this.renderPartialHtml(observationPopoverTemplate, {
+        p: this.translateProperty.bind(this),
+        property,
+        o
+      });
+    },
+
     afterRender: function()
     {
       const view = this;
@@ -458,25 +526,45 @@ define([
         html: true,
         title: function()
         {
-          if (this.dataset.property === 'rootCauses')
+          switch (this.dataset.property)
           {
-            return dictionaries.getLabel('rootCauseCategories', +this.dataset.category, {long: true});
-          }
+            case 'rootCauses':
+              return dictionaries.getLabel('rootCauseCategories', +this.dataset.category, {long: true});
 
-          return $(this).closest('tr').children().first().text();
+            case 'behaviors':
+            case 'workConditions':
+              return '';
+
+            default:
+              return $(this).closest('tr').children().first().text();
+          }
         },
         content: function()
         {
-          if (this.dataset.property === 'rootCauses')
-          {
-            return view.serializeRootCausesPopover(
-              +this.dataset.change,
-              +this.dataset.value,
-              +this.dataset.category
-            );
-          }
+          const dataset = this.dataset;
+          const property = dataset.property;
 
-          return _.escape(this.title);
+          switch (this.dataset.property)
+          {
+            case 'rootCauses':
+              return view.serializeRootCausesPopover(
+                +dataset.change,
+                +dataset.value,
+                +dataset.category
+              );
+
+            case 'behaviors':
+            case 'workConditions':
+              return view.serializeObservationPopover(
+                property,
+                +dataset.change,
+                dataset.old === '1',
+                dataset.observation
+              );
+
+            default:
+              return `<p>${_.escape(this.title)}</p>`;
+          }
         }
       });
 

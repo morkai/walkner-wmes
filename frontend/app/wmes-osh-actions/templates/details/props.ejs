@@ -122,12 +122,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-<%- _.isEmpty(model.rootCauses) ? 4 : 12 %>">
       <div class="panel panel-danger">
         <div class="panel-heading"><%- t('PROPERTY:problem') %></div>
         <div class="panel-body text-lines <%- unseen('problem', 1) %>"><%- _.escape(details.problem) || `<em>${t('details:noProblem')}</em>` %></div>
       </div>
     </div>
+    <% if (_.isEmpty(model.rootCauses)) { %>
     <div class="col-lg-4">
       <div class="panel panel-warning">
         <div class="panel-heading"><%- t('PROPERTY:reason') %></div>
@@ -140,5 +141,6 @@
         <div class="panel-body text-lines <%- unseen('suggestion', 1) %>"><%- _.escape(details.suggestion) || `<em>${t('details:noSuggestion')}</em>` %></div>
       </div>
     </div>
+    <% } %>
   </div>
 </div>

@@ -21,7 +21,7 @@ define([
     {
       return {
         attachment: this.attachment,
-        kinds: this.model.attachmentKinds || []
+        kinds: this.model.getAttachmentKinds()
       };
     },
 

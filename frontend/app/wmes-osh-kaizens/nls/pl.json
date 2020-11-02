@@ -40,10 +40,11 @@
   "details:general": "Podstawowe informacje",
   "details:users": "Użytkownicy",
   "details:extra": "Dodatkowe informacje",
-  "details:noReason": "Nie wskazano przyczyny wystąpienia.",
-  "details:noSolution": "Nie wdrożono jeszcze żadnych usprawnień.",
+  "details:empty:reason": "Nie wskazano przyczyny wystąpienia.",
+  "details:empty:solution": "Nie wdrożono jeszcze żadnych usprawnień.",
 
   "FORM:subtitle": "Kaizen",
+  "FORM:ACTION:add": "Dodaj nowego kaizena",
   "FORM:placeholder:noUserWorkplace": "Wybierz zakład zgłaszający...",
   "FORM:placeholder:noWorkplace": "Wybierz zakład...",
   "FORM:placeholder:noDivision": "Wybierz wydział...",

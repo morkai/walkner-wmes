@@ -140,13 +140,13 @@
   color: #ffffa6;
 }
 @media (max-width: 1920px) {
-  .col-lg-4 .osh-attachments-panel[data-attachment-count="1"] .osh-attachments {
+  .col-lg-6 .osh-attachments-panel[data-attachment-count="1"] .osh-attachments {
     display: block;
   }
-  .col-lg-4 .osh-attachments-panel[data-attachment-count="1"] .osh-attachment-img {
+  .col-lg-6 .osh-attachments-panel[data-attachment-count="1"] .osh-attachment-img {
     width: 100%;
   }
-  .col-lg-4 .osh-attachments-panel[data-attachment-count="1"] .osh-attachment-name {
+  .col-lg-6 .osh-attachments-panel[data-attachment-count="1"] .osh-attachment-name {
     width: 100%;
     white-space: normal;
     overflow: unset;

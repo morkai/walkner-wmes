@@ -6,5 +6,8 @@
   "PROPERTY:materialLoss": "Strata materialna?",
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
-  "PROPERTY:description": "Opis"
+  "PROPERTY:description": "Opis",
+  "PROPERTY:activityKind": "Rodzaj aktywności",
+
+  "FORM:help:activityKind": "Wybranie danej kategorii zdarzeń w ZPW wymusi dany Rodzaj aktywności w akcji dodanej jako Działania korygujące."
 }

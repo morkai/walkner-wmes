@@ -158,6 +158,9 @@ code.multiline {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
+.panel {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 .panel-heading {
   font-family: Verdana, sans-serif;
   text-shadow: 1px 1px 1px #000;

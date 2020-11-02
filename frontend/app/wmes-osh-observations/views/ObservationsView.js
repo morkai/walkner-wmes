@@ -41,7 +41,21 @@ define([
 
     serializeObservations: function()
     {
-      return this.model.get(this.property);
+      return this.model.get(this.property).map(function(o)
+      {
+        if (o.resolution._id)
+        {
+          const Entry = dictionaries.TYPE_TO_MODEL[o.resolution.type];
+          const entry = new Entry({
+            _id: o.resolution._id,
+            rid: o.resolution.rid
+          });
+
+          o.resolution.url = entry.genClientUrl();
+        }
+
+        return o;
+      });
     },
 
     onSeen: function()

@@ -94,6 +94,15 @@
               groupClassName: 'col-lg-4'
             }) %>
           </div>
+          <div class="row hidden">
+            <%- helpers.formGroup({
+              name: 'participants',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-12',
+              labelClassName: 'is-required'
+            }) %>
+          </div>
           <div class="row">
             <%- helpers.formGroup({
               name: 'problem',
@@ -161,15 +170,6 @@
               labelClassName: 'is-required'
             }) %>
           </div>
-          <div class="row hidden">
-            <%- helpers.formGroup({
-              name: 'participants',
-              type: 'select2',
-              label: 'PROPERTY:',
-              groupClassName: 'col-lg-12',
-              labelClassName: 'is-required'
-            }) %>
-          </div>
         </div>
       </div>
       <%- helpers.formGroup({
@@ -194,7 +194,7 @@
         <% if (editMode) { %>
           <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
         <% } else { %>
-          <i class="fa fa-plus"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:add') %></span>
+          <i class="fa fa-plus"></i><span><%- t('FORM:ACTION:add') %></span>
         <% } %>
       </button>
       <% if (editMode) { %>

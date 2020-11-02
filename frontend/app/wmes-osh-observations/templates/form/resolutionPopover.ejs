@@ -1,0 +1,8 @@
+<dl>
+  <dt><%- t('PROPERTY:rid') %></dt>
+  <dd><a href="<%- url %>" target="_blank" style="display: block"><%- relation.rid %></a></dd>
+  <dt><%- t('PROPERTY:subject') %></dt>
+  <dd><%= data.subject %></dd>
+  <dt><%- t('PROPERTY:status') %></dt>
+  <dd><%- t('wmes-osh-common', `status:${data.status}`) %></dd>
+</dl>

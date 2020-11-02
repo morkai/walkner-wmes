@@ -1,0 +1,42 @@
+<dl>
+  <dt><%- p(`${property}.safe`) %></dt>
+  <dd>
+    <% if (o.old && o.old.safe !== o.safe) { %>
+      <%- t('core', `BOOL:${o.old.safe}`) %>
+      <i class="fa fa-arrow-right"></i>
+    <% } %>
+    <%- t('core', `BOOL:${o.safe}`) %>
+  </dd>
+  <dt><%- p(`${property}.easy`) %></dt>
+  <dd>
+    <% if (o.old && o.old.easy !== o.easy) { %>
+      <%- t('core', `BOOL:${o.old.easy}`) %>
+      <i class="fa fa-arrow-right"></i>
+    <% } %>
+    <%- t('core', `BOOL:${o.easy}`) %>
+  </dd>
+  <dt><%- p(`${property}.what`) %></dt>
+  <dd>
+    <% if (o.old && o.old.what !== o.what) { %>
+      <p><%= o.old.what || '' %></p>
+      <i class="fa fa-arrow-down"></i>
+    <% } %>
+    <p><%= o.what || '-' %></p>
+  </dd>
+  <dt><%- p(`${property}.why`) %></dt>
+  <dd>
+    <% if (o.old && o.old.why !== o.why) { %>
+      <p><%= o.old.why || '-' %></p>
+      <i class="fa fa-arrow-down"></i>
+    <% } %>
+    <p><%= o.why || '-' %></p>
+  </dd>
+  <dt><%- p(`${property}.resolution`) %></dt>
+  <dd>
+    <% if (o.old && !_.isEqual(o.old.resolution, o.resolution)) { %>
+      <%- o.old.resolution.rid || '-' %>
+      <i class="fa fa-arrow-right"></i>
+    <% } %>
+    <%- o.resolution.rid || '-' %>
+  </dd>
+</dl>

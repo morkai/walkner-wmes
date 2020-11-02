@@ -1,0 +1,4 @@
+<div class="panel panel-<%- panelType %> osh-details-panel">
+  <div class="panel-heading"><%- t(`PROPERTY:${propertyName}`) %></div>
+  <div class="panel-body text-lines <%- unseen ? 'osh-unseen' : '' %>"><%- _.escape(propertyValue) || `<em>${t(`details:empty:${propertyName}`)}</em>` %></div>
+</div>

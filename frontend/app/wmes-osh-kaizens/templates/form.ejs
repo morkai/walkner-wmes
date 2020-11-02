@@ -35,7 +35,7 @@
       <div class="panel panel-success">
         <div class="panel-heading"><%- t('FORM:subtitle') %></div>
         <div class="panel-body has-lastElementRow">
-          <% if (!relation) { %>
+          <% if (!relation || !model.kind) { %>
             <div class="form-group">
               <label class="control-label"><%- t('PROPERTY:kind') %></label>
               <br>
@@ -46,6 +46,8 @@
               </label>
               <% }) %>
             </div>
+          <% } %>
+          <% if (!relation) { %>
             <div class="row">
               <%- helpers.formGroup({
                 name: 'workplace',
@@ -84,6 +86,8 @@
                 groupClassName: 'col-lg-4'
               }) %>
             </div>
+          <% } %>
+          <% if (!relation || !model.eventCategory) { %>
             <div class="row">
               <%- helpers.formGroup({
                 name: 'eventCategory',
@@ -135,7 +139,7 @@
               required: true,
               groupClassName: 'col-lg-4'
             }) %>
-            <% if (!relation) { %>
+            <% if (!relation || relation.getModelType() !== 'nearMiss') { %>
               <%- helpers.formGroup({
                 name: 'plannedAt',
                 type: 'date',
@@ -211,7 +215,7 @@
         <% if (editMode) { %>
           <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
         <% } else { %>
-          <i class="fa fa-plus"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:add') %></span>
+          <i class="fa fa-plus"></i><span><%- t('FORM:ACTION:add') %></span>
         <% } %>
       </button>
       <% if (editMode) { %>

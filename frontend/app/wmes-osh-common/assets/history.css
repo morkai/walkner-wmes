@@ -33,6 +33,9 @@
   border-top: 0;
   padding: 5px 5px 0 0;
 }
+.osh-history-changes > tbody > tr > td.osh-history-oldValue:empty {
+  padding-right: 0;
+}
 .osh-history-changes > tbody > tr > td:first-child {
   text-align: right;
 }
@@ -60,8 +63,10 @@
 .osh-history-popover {
   max-width: 450px;
 }
-.osh-history-popover > .popover-content {
+.osh-history-popover p,
+.osh-history-popover li {
   white-space: pre-line;
+  margin-bottom: 0;
 }
 .osh-history-popover ol {
   margin: 0;
@@ -72,6 +77,10 @@
 }
 .osh-history-popover li:first-child {
   margin-top: 0;
+}
+.osh-history-popover .fa-arrow-right,
+.osh-history-popover .fa-arrow-down {
+  color: #e00;
 }
 .osh-history-item.osh-unseen > .osh-history-user,
 .osh-history-item.osh-unseen > .osh-history-time {

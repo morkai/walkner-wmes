@@ -31,7 +31,6 @@ define([
     {
       return {
         active: true,
-        materialLoss: false,
         kinds: []
       };
     },
@@ -53,9 +52,11 @@ define([
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
+      obj.nearMiss = t('core', `BOOL:${obj.nearMiss}`);
       obj.rootCauses = t('core', `BOOL:${obj.rootCauses}`);
-      obj.implementers = t('core', `BOOL:${obj.implementers}`);
       obj.participants = t('core', `BOOL:${obj.participants}`);
+      obj.implementers = t('core', `BOOL:${obj.implementers}`);
+      obj.resolutions = t('core', `BOOL:${obj.resolutions}`);
 
       return obj;
     },

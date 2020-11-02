@@ -2,6 +2,7 @@
 
 define([
   'require',
+  'underscore',
   'app/i18n',
   'app/time',
   'app/user',
@@ -9,6 +10,7 @@ define([
   'app/core/templates/userInfo'
 ], function(
   require,
+  _,
   t,
   time,
   currentUser,
@@ -36,6 +38,11 @@ define([
     getModelType: function()
     {
       throw new Error('Not implemented.');
+    },
+
+    getAttachmentKinds: function()
+    {
+      return [];
     },
 
     serialize: function()
@@ -224,24 +231,29 @@ define([
 
     getDuration: function()
     {
-      const startedAt = Date.parse(this.get('startedAt'));
-
-      if (!startedAt || this.get('status') === 'cancelled')
-      {
-        return '';
-      }
-
+      const createdAt = Date.parse(this.get('createdAt'));
       const finishedAt = Date.parse(this.get('finishedAt')) || Date.now();
-      const hours = Math.ceil((finishedAt - startedAt) / 1000 / 3600);
+      const seconds = (finishedAt - createdAt) / 1000;
+      const minutes = seconds / 60;
+      const hours = minutes / 60;
 
       if (hours > 48)
       {
-        const days = Math[hours % 24 > 16 ? 'ceil' : 'floor'](hours / 24);
-
-        return t('wmes-osh-common', 'duration:days', {days});
+        return t('wmes-osh-common', 'duration:days', {
+          duration: Math[hours % 24 > 16 ? 'ceil' : 'floor'](hours / 24)
+        });
       }
 
-      return t('wmes-osh-common', 'duration:hours', {hours});
+      if (hours > 1)
+      {
+        return t('wmes-osh-common', 'duration:hours', {
+          duration: Math[minutes % 60 > 30 ? 'ceil' : 'floor'](minutes / 60)
+        });
+      }
+
+      return t('wmes-osh-common', 'duration:minutes', {
+        duration: Math.ceil(minutes)
+      });
     },
 
     getAttachmentUrl: function(attachment)
@@ -381,6 +393,11 @@ define([
           const id = newItem._id || newItem.id;
           const oldItem = items.get(id);
 
+          if (newItem.old)
+          {
+            newItem = _.omit(newItem, ['old']);
+          }
+
           if (oldItem)
           {
             items.set(id, Object.assign({}, oldItem, newItem));
@@ -433,13 +450,22 @@ define([
           case 'paused':
             return model.isCoordinator();
 
+          case 'finished':
+            return model.isCoordinator()
+              && (Date.now() - Date.parse(model.get('finishedAt'))) < (7 * 24 * 3600 * 1000);
+
           default:
             return false;
         }
       },
 
-      editKind: function(model)
+      editKind: function(model, editMode)
       {
+        if (!editMode)
+        {
+          return true;
+        }
+
         if ((this.can || this).manage())
         {
           return true;

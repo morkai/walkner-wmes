@@ -64,6 +64,7 @@ define([
       const obj = this.serialize();
 
       obj.kinds = dictionaries.kinds.getLabels(obj.kinds).join('; ');
+      obj.activityKind = dictionaries.activityKinds.getLabel(obj.activityKind);
 
       return obj;
     },
@@ -74,6 +75,7 @@ define([
       const obj = this.serialize();
 
       obj.kinds = dictionaries.kinds.getLabels(obj.kinds, {long: true, link: true});
+      obj.activityKind = dictionaries.activityKinds.getLabel(obj.activityKind, {long: true, link: true});
 
       return obj;
     },

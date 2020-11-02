@@ -53,6 +53,7 @@
             </label>
             <% }) %>
           </div>
+          <% if (!relation) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'workplace',
@@ -91,6 +92,7 @@
               groupClassName: 'col-lg-4'
             }) %>
           </div>
+          <% } %>
           <div class="form-group">
             <label for="<%- id('eventDate') %>" class="control-label is-required"><%- t('PROPERTY:eventDate') %></label>
             <div class=" form-group-datetime">
@@ -226,7 +228,13 @@
       <% } %>
     </div>
     <div class="form-actions">
-      <button id="<%- id('save') %>" type="submit" class="btn btn-primary"><i class="fa <%- editMode ? 'fa-save' : 'fa-plus' %>"></i><span><%- formActionText %></span></button>
+      <button id="<%- id('save') %>" type="submit" class="btn btn-primary" title="<%- editMode ? t('wmes-osh-common', 'FORM:ACTION:title:edit') : '' %>">
+        <% if (editMode) { %>
+          <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
+        <% } else { %>
+          <i class="fa fa-plus"></i><span><%- t('FORM:ACTION:add') %></span>
+        <% } %>
+      </button>
       <% if (editMode) { %>
         <% if (can.inProgress) { %><button id="<%- id('inProgress') %>" type="button" class="btn btn-info"><i class="fa fa-check"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:inProgress') %></span></button><% } %>
         <% if (can.paused) { %><button id="<%- id('paused') %>" type="button" class="btn btn-warning"><i class="fa fa-hourglass-o"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:paused') %></span></button><% } %>

@@ -57,3 +57,15 @@
 .osh-observations-form-easyConfirmed label {
   font-weight: bold;
 }
+.osh-observations-form-resolution {
+  width: 1px;
+}
+.osh-observations-form-resolution .input-group {
+  width: 190px;
+}
+.osh-observations-form-resolution .btn {
+  min-width: 37px;
+}
+.osh-observations-form-resolution .form-control::-webkit-input-placeholder {
+  font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
+}

@@ -19,6 +19,10 @@ define([
   'app/wmes-osh-eventCategories/EventCategoryCollection',
   'app/wmes-osh-reasonCategories/ReasonCategoryCollection',
   'app/wmes-osh-rootCauseCategories/RootCauseCategoryCollection',
+  'app/wmes-osh-nearMisses/NearMiss',
+  'app/wmes-osh-kaizens/Kaizen',
+  'app/wmes-osh-actions/Action',
+  'app/wmes-osh-observations/Observation',
   './SettingCollection'
 ], function(
   $,
@@ -39,6 +43,10 @@ define([
   EventCategoryCollection,
   ReasonCategoryCollection,
   RootCauseCategoryCollection,
+  NearMiss,
+  Kaizen,
+  Action,
+  Observation,
   SettingCollection
 ) {
   'use strict';
@@ -59,6 +67,24 @@ define([
     reasonCategory: 'reasonCategories',
     rootCauseCategory: 'rootCauseCategories'
   };
+  const TYPE_TO_PREFIX = {
+    nearMiss: 'Z',
+    kaizen: 'K',
+    action: 'A',
+    observation: 'O'
+  };
+  const TYPE_TO_MODULE = {
+    nearMiss: 'nearMisses',
+    kaizen: 'kaizens',
+    action: 'actions',
+    observation: 'observations'
+  };
+  const TYPE_TO_MODEL = {
+    nearMiss: NearMiss,
+    kaizen: Kaizen,
+    action: Action,
+    observation: Observation
+  };
 
   let req = null;
   let releaseTimer = null;
@@ -67,9 +93,14 @@ define([
   let coordinator = null;
 
   const dictionaries = {
+    TYPE_TO_PREFIX,
+    TYPE_TO_MODULE,
+    TYPE_TO_MODEL,
     statuses: {
       nearMiss: [],
-      kaizen: []
+      kaizen: [],
+      actions: [],
+      observations: []
     },
     priorities: [],
     kindTypes: [],
@@ -223,7 +254,8 @@ define([
     {
       if (coordinator === null)
       {
-        coordinator = dictionaries.kinds.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id))
+        coordinator = currentUser.isAllowedTo('OSH:COORDINATOR')
+          || dictionaries.kinds.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id))
           || dictionaries.divisions.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id));
       }
 

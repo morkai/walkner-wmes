@@ -6,7 +6,15 @@
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
   "PROPERTY:description": "Opis",
+  "PROPERTY:nearMiss": "ZPW",
   "PROPERTY:rootCauses": "Przyczyny źródłowe",
+  "PROPERTY:participants": "Uczestnicy",
   "PROPERTY:implementers": "Realizacja",
-  "PROPERTY:participants": "Uczestnicy"
+  "PROPERTY:resolutions": "Rozwiązanie",
+
+  "FORM:help:nearMiss": "Określa czy dany rodzaj aktywności może zostać wybrany przez zwykłego użytkownika podczas tworzenia akcji z poziomu ZPW.",
+  "FORM:help:rootCauses": "Określa czy Analiza przyczyn źródłowych ma być dostępna.",
+  "FORM:help:participants": "Określa czy pole Uczestnicy ma być dostępne.",
+  "FORM:help:implementers": "Określa czy akcja ma mieć cały przepływ realizacji. Pola Uczestnicy oraz Planowany termin realizacji są dostępne.",
+  "FORM:help:resolutions": "Określa czy akcja może mieć przypisane inne akcje lub kaizeny."
 }

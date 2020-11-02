@@ -38,6 +38,12 @@
         label: 'PROPERTY:',
         rows: 5
       }) %>
+      <%- helpers.formGroup({
+        name: 'activityKind',
+        type: 'select2',
+        label: 'PROPERTY:',
+        helpBlock: 'FORM:help:activityKind'
+      }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

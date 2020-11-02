@@ -36,6 +36,7 @@
   "PROPERTY:attachments": "Załączniki",
   "PROPERTY:photos": "Zdjęcia",
   "PROPERTY:resolution": "Działania korygujące",
+  "PROPERTY:relations": "Powiązania",
 
   "filter:user:mine": "Moje",
   "filter:user:others": "Użytkownik",
@@ -55,6 +56,7 @@
   "details:noSuggestion": "Nie zaproponowano rozwiązania.",
 
   "FORM:subtitle": "Zdarzenie Potencjalnie Wypadkowe",
+  "FORM:ACTION:add": "Dodaj nowe ZPW",
   "FORM:placeholder:noUserWorkplace": "Wybierz zakład zgłaszający...",
   "FORM:placeholder:noWorkplace": "Wybierz zakład...",
   "FORM:placeholder:noDivision": "Wybierz wydział...",

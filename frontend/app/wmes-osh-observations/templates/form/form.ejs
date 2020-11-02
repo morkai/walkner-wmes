@@ -121,9 +121,10 @@
               <th class="osh-observations-form-textarea"><%- t('PROPERTY:behaviors.why') %></th>
               <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:behaviors.easy') %></th>
               <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:behaviors.hard') %></th>
+              <th class="osh-observations-form-resolution"><%- t('PROPERTY:behaviors.resolution') %></th>
             </tr>
             </thead>
-            <tbody id="<%- id('behaviors') %>"></tbody>
+            <tbody id="<%- id('behaviors') %>" class="osh-observations-categories" data-observations-prop="behaviors"></tbody>
           </table>
         </div>
       </div>
@@ -146,9 +147,10 @@
               <th class="osh-observations-form-textarea"><%- t('PROPERTY:workConditions.why') %></th>
               <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:workConditions.easy') %></th>
               <th class="is-min osh-observations-form-easy"><%- t('PROPERTY:workConditions.hard') %></th>
+              <th class="osh-observations-form-resolution"><%- t('PROPERTY:workConditions.resolution') %></th>
             </tr>
             </thead>
-            <tbody id="<%- id('workConditions') %>"></tbody>
+            <tbody id="<%- id('workConditions') %>" class="osh-observations-categories" data-observations-prop="workConditions"></tbody>
           </table>
         </div>
       </div>
@@ -175,7 +177,7 @@
         <% if (editMode) { %>
           <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
         <% } else { %>
-          <i class="fa fa-plus"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:add') %></span>
+          <i class="fa fa-plus"></i><span><%- t('FORM:ACTION:add') %></span>
         <% } %>
       </button>
     </div>

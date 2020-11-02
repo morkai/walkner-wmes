@@ -3,7 +3,7 @@
 define([
   'underscore',
   'app/core/View',
-  'app/wmes-osh-kaizens/templates/details/solution'
+  'app/wmes-osh-common/templates/details/panel'
 ], function(
   _,
   View,
@@ -21,7 +21,7 @@ define([
 
       this.once('afterRender', () =>
       {
-        this.listenTo(this.model, 'change:solution', _.debounce(this.render, 1));
+        this.listenTo(this.model, `change:${this.options.property}`, _.debounce(this.render, 1));
         this.listenTo(this.model, 'seen', this.onSeen);
       });
     },
@@ -31,8 +31,10 @@ define([
       const observer = this.model.getObserver();
 
       return {
-        solution: this.model.get('solution'),
-        unseen: observer.notify && (observer.changes.all || observer.changes.solution)
+        panelType: this.options.panelType || 'default',
+        propertyName: this.options.property,
+        propertyValue: this.model.get(this.options.property),
+        unseen: observer.notify && (observer.changes.all || observer.changes[this.options.property])
       };
     },
 

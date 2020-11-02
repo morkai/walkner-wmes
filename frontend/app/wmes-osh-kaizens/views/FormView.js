@@ -226,7 +226,7 @@ define([
           paused: Kaizen.can.paused(this.model),
           cancelled: Kaizen.can.cancelled(this.model)
         },
-        relation: !!this.relation
+        relation: this.options.relation
       };
     },
 
@@ -258,12 +258,14 @@ define([
       formData.userDivision = this.$id('userDivision').select2('data').id;
       formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
 
-      if (this.relation)
+      const relation = this.options.relation;
+
+      if (relation)
       {
         formData.relation = {
-          _id: this.relation.id,
-          rid: this.relation.get('rid'),
-          type: this.relation.getModelType()
+          _id: relation.id,
+          rid: relation.get('rid'),
+          type: relation.getModelType()
         };
       }
       else
@@ -824,7 +826,7 @@ define([
 
       $input
         .select2('data', data)
-        .select2('enable', privileged);
+        .select2('enable', !this.options.editMode || privileged);
 
       const $plannedAt = this.$id('plannedAt');
 

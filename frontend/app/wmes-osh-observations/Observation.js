@@ -62,7 +62,7 @@ define([
   }, {
 
     RID_PREFIX: 'O',
-    TIME_PROPS: ['createdAt'],
+    TIME_PROPS: ['createdAt', 'finishedAt'],
     USER_PROPS: ['creator', 'coordinators'],
     DICT_PROPS: [
       'company',
@@ -80,6 +80,11 @@ define([
       return currentUser.isAllowedTo('OSH:OBSERVATIONS:MANAGE');
     },
 
+    add: function()
+    {
+      return (this.can || this).manage() || currentUser.isAllowedTo('OSH:OBSERVER', 'OSH:COORDINATOR');
+    },
+
     edit: function(model)
     {
       if ((this.can || this).manage())
@@ -92,7 +97,33 @@ define([
         return true;
       }
 
-      return model.get('status') === 'inProgress' && model.isCreator();
+      if (model.isCreator())
+      {
+        return model.get('status') === 'inProgress'
+          || (Date.now() - Date.parse(model.get('createdAt'))) < 3600000;
+      }
+
+      return false;
+    },
+
+    assign: function()
+    {
+      return currentUser.isLoggedIn();
+    },
+
+    assignFinished: function(model)
+    {
+      if ((this.can || this).manage())
+      {
+        return true;
+      }
+
+      if (model.isCoordinator())
+      {
+        return true;
+      }
+
+      return false;
     }
 
   });

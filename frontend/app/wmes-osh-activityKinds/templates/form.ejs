@@ -30,13 +30,14 @@
         label: 'PROPERTY:',
         rows: 5
       }) %>
-      <% ['rootCauses', 'implementers', 'participants'].forEach(feature => { %>
+      <% ['nearMiss', 'rootCauses', 'participants', 'implementers', 'resolutions'].forEach(feature => { %>
         <div class="checkbox">
           <label class="control-label">
             <input type="checkbox" name="<%- feature %>" value="true">
             <%- t(`PROPERTY:${feature}`) %>
           </label>
         </div>
+        <p class="help-block"><%- t(`FORM:help:${feature}`) %></p>
       <% }) %>
     </div>
     <div class="panel-footer">

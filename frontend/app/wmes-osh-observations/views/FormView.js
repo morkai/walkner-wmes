@@ -9,9 +9,14 @@ define([
   'app/core/views/FormView',
   'app/core/util/uuid',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-nearMisses/NearMiss',
+  'app/wmes-osh-nearMisses/views/FormView',
+  'app/wmes-osh-kaizens/Kaizen',
+  'app/wmes-osh-kaizens/views/FormView',
   '../Observation',
   'app/wmes-osh-observations/templates/form/form',
-  'app/wmes-osh-observations/templates/form/observationRow'
+  'app/wmes-osh-observations/templates/form/observationRow',
+  'app/wmes-osh-observations/templates/form/resolutionPopover'
 ], function(
   _,
   $,
@@ -21,9 +26,14 @@ define([
   FormView,
   uuid,
   dictionaries,
+  NearMiss,
+  NearMissFormView,
+  Kaizen,
+  KaizenFormView,
   Observation,
   template,
-  observationRowTemplate
+  observationRowTemplate,
+  resolutionPopoverTemplate
 ) {
   'use strict';
 
@@ -110,10 +120,11 @@ define([
         $radio.prop('checked', !$radio.prop('checked')).trigger('change');
       },
 
-      'change input[type="radio"]': function(e)
+      'change .osh-observations-categories input[type="radio"]': function(e)
       {
-        this.toggleCategory(this.$(e.target).closest('tr'));
+        this.toggleObservation(this.$(e.target).closest('tr'));
         this.toggleEasyConfirmed(true);
+        this.checkDuplicateRid();
       },
 
       'click .btn[data-action="duplicate"]': function(e)
@@ -132,13 +143,18 @@ define([
             safe: null,
             easy: null,
             what: '',
-            why: ''
+            why: '',
+            resolution: {
+              _id: 0,
+              rid: '',
+              type: 'unspecified'
+            }
           }
         });
 
         $newRow.insertAfter($srcRow);
 
-        this.toggleCategory($newRow);
+        this.toggleObservation($newRow);
       },
 
       'click .btn[data-action="remove"]': function(e)
@@ -148,6 +164,26 @@ define([
 
         $tr.remove();
         this.toggleEasyConfirmed(reset);
+      },
+
+      'click .btn[data-action="addResolution"]': function(e)
+      {
+        this.showAddResolutionDialog(this.$(e.target).closest('tr'));
+      },
+
+      'click .btn[data-action="showResolution"]': function(e)
+      {
+        this.showResolutionPopover(this.$(e.target).closest('tr'));
+      },
+
+      'input input[name$="resolution.rid"]': function(e)
+      {
+        this.resetResolution(this.$(e.target).closest('tr'));
+      },
+
+      'change input[name$="resolution.rid"]': function(e)
+      {
+        this.loadResolution(this.$(e.target).closest('tr'), false);
       }
 
     }, FormView.prototype.events),
@@ -157,6 +193,23 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.observationI = 0;
+      this.addedResolutions = {};
+      this.loadedResolutions = {};
+      this.resolutionReq = null;
+      this.$resolutionPopover = null;
+
+      $(document)
+        .on(`click.${this.idPrefix}`, this.onDocumentClick.bind(this))
+        .on(`keydown.${this.idPrefix}`, this.onDocumentKeyDown.bind(this));
+    },
+
+    destroy: function()
+    {
+      FormView.prototype.destroy.apply(this, arguments);
+
+      $(document).off(`.${this.idPrefix}`);
+
+      this.hideResolutionPopover();
     },
 
     getTemplateData: function()
@@ -273,12 +326,15 @@ define([
         o.easy = o.safe ? null : o.easy;
         o.what = (o.what || '').trim();
         o.why = (o.why || '').trim();
-        o.resolution = {
-          _id: 0,
-          rid: '',
-          type: 'unspecified'
-        };
+        o.resolution._id = parseInt(o.resolution._id, 10) || 0;
+        o.resolution.rid = o.resolution.rid || '';
         o.implementer = null;
+
+        if (o.resolution._id === 0)
+        {
+          o.resolution.rid = '';
+          o.resolution.type = 'unspecified';
+        }
 
         return true;
       });
@@ -295,12 +351,15 @@ define([
         o.easy = o.easy === true;
         o.what = (o.what || '').trim();
         o.why = (o.why || '').trim();
-        o.resolution = {
-          _id: 0,
-          rid: '',
-          type: 'unspecified'
-        };
+        o.resolution._id = parseInt(o.resolution._id, 10) || 0;
+        o.resolution.rid = o.resolution.rid || '';
         o.implementer = null;
+
+        if (o.resolution._id === 0)
+        {
+          o.resolution.rid = '';
+          o.resolution.type = 'unspecified';
+        }
 
         return true;
       });
@@ -336,6 +395,24 @@ define([
       {
         this.toggleKind();
       }
+
+if (!this.options.editMode)
+{
+  this.$id('subject').val(`Auto test ${new Date().toISOString()}`);
+  this.$id('company').select2('data', this.$id('company').data('select2').opts.data[0]).trigger('change');
+  this.$id('workplace').select2('data', this.$id('workplace').data('select2').opts.data[0]).trigger('change');
+  this.$id('division').select2('data', this.$id('division').data('select2').opts.data[0]).trigger('change');
+  this.$id('building').select2('data', this.$id('building').data('select2').opts.data[0]).trigger('change');
+  this.$id('location').select2('data', this.$id('location').data('select2').opts.data[0]).trigger('change');
+  this.$id('behaviors').children().first().find('[name$="safe"]').last().click();
+  this.$id('behaviors').children().first().find('[name$="what"]').val('Auto what');
+  this.$id('behaviors').children().first().find('[name$="why"]').val('Auto why');
+  this.$id('behaviors').children().first().find('[name$="easy"]').last().click();
+  this.$id('workConditions').children().first().find('[name$="safe"]').last().click();
+  this.$id('workConditions').children().first().find('[name$="what"]').val('Auto what');
+  this.$id('workConditions').children().first().find('[name$="why"]').val('Auto why');
+  this.$id('workConditions').children().first().find('[name$="easy"]').first().click();
+}
     },
 
     setUpUserWorkplaceSelect2: function()
@@ -826,7 +903,7 @@ define([
 
     setUpObservations: function(property, kind)
     {
-      const behaviorCategories = new Map();
+      const categories = new Map();
 
       if (kind)
       {
@@ -839,17 +916,17 @@ define([
             return;
           }
 
-          behaviorCategories.set(id, category);
+          categories.set(id, category);
         });
       }
 
-      const behaviorObservations = [];
+      const observations = [];
 
       (this.model.get(property) || []).forEach(observation =>
       {
-        behaviorCategories.delete(observation.category);
+        categories.delete(observation.category);
 
-        behaviorObservations.push({
+        observations.push({
           _id: observation._id,
           category: observation.category,
           text: observation.text,
@@ -857,13 +934,14 @@ define([
           safe: observation.safe,
           easy: observation.easy,
           what: observation.what,
-          why: observation.why
+          why: observation.why,
+          resolution: observation.resolution
         });
       });
 
-      behaviorCategories.forEach(category =>
+      categories.forEach(category =>
       {
-        behaviorObservations.push({
+        observations.push({
           _id: uuid(),
           category: category.id,
           text: category.get('longName'),
@@ -871,12 +949,17 @@ define([
           safe: null,
           easy: null,
           what: '',
-          why: ''
+          why: '',
+          resolution: {
+            _id: 0,
+            rid: '',
+            type: 'unspecified'
+          }
         });
       });
 
       this.$id(property).html(
-        behaviorObservations.map(observation => this.renderPartialHtml(observationRowTemplate, {
+        observations.map(observation => this.renderPartialHtml(observationRowTemplate, {
           i: this.observationI++,
           duplicate: false,
           property,
@@ -886,7 +969,7 @@ define([
 
       this.$id(property).children().each((i, tr) =>
       {
-        this.toggleCategory($(tr));
+        this.toggleObservation($(tr));
       });
     },
 
@@ -900,15 +983,15 @@ define([
       }
     },
 
-    toggleCategory: function($tr)
+    toggleObservation: function($tr)
     {
       $tr.removeClass('success warning danger');
 
       const $what = $tr.find('textarea[name*="what"]');
       const $why = $tr.find('textarea[name*="why"]');
-      const safe = $tr.find('input[name*="safe"]:checked').val();
-      const easy = $tr.find('input[name*="easy"]:checked').val();
-      const risky = safe === 'false';
+      const safe = bool($tr.find('input[name*="safe"]:checked').val());
+      let easy = bool($tr.find('input[name*="easy"]:checked').val());
+      const risky = safe === false;
 
       $what.prop('disabled', !risky);
       $why.prop('disabled', !risky);
@@ -926,7 +1009,7 @@ define([
           .prop('required', false);
       }
 
-      if (safe === 'true')
+      if (safe)
       {
         $tr.addClass('success');
       }
@@ -941,20 +1024,85 @@ define([
           .find('textarea')
           .prop('required', true);
 
-        if (easy === 'true')
+        if (easy)
         {
           $tr.addClass('warning');
         }
-        else if (easy === 'false')
+        else if (easy === false)
         {
           $tr.addClass('danger');
         }
         else
         {
+          easy = true;
           $tr.find('input[name*="easy"][value="true"]').prop('checked', true);
           $tr.addClass('warning');
         }
       }
+
+      this.toggleResolution($tr, risky, easy);
+
+      function bool(v)
+      {
+        return v === 'true' ? true : v === 'false' ? false : null;
+      }
+    },
+
+    toggleResolution: function($tr, risky, easy)
+    {
+      const $resolution = $tr.find('.osh-observations-form-resolution');
+      const $fields = $resolution.find('.form-control, .btn');
+      const $id = $resolution.find('input[name$="resolution._id"]');
+      const $rid = $resolution.find('input[name$="resolution.rid"]');
+      const $type = $resolution.find('input[name$="resolution.type"]');
+      const behavior = $fields[0].name.startsWith('behavior');
+      const enabled = behavior ? (risky && !easy) : risky;
+      const newRelationType = enabled
+        ? (behavior ? 'nearMiss' : easy ? 'kaizen' : 'nearMiss')
+        : 'unspecified';
+      const oldRelationType = $type.val();
+      let relation = {
+        _id: +$id.val(),
+        rid: $rid.val(),
+        type: newRelationType
+      };
+
+      if (newRelationType !== oldRelationType)
+      {
+        const observationId = $tr.find('input[name$="_id"]').first().val();
+        const addedResolutions = this.addedResolutions[observationId] || {};
+        const addedResolution = addedResolutions[newRelationType];
+
+        if (addedResolution)
+        {
+          relation = addedResolution.getRelation();
+        }
+        else
+        {
+          const observationsProperty = behavior ? 'behaviors' : 'workConditions';
+          const observation = !enabled
+            ? null
+            : (this.model.get(observationsProperty) || []).find(o => o._id === observationId);
+
+          if (observation && observation.resolution._id)
+          {
+            Object.assign(relation, observation.resolution);
+          }
+          else
+          {
+            relation = {
+              _id: 0,
+              rid: '',
+              type: newRelationType
+            };
+          }
+        }
+      }
+
+      $fields.prop('disabled', !enabled);
+      $id.val(relation._id);
+      $rid.val(relation.rid).prop('placeholder', this.t(`FORM:resolution:placeholder:${relation.type}`));
+      $type.val(relation.type);
     },
 
     toggleEasyConfirmed: function(reset)
@@ -1047,6 +1195,402 @@ define([
 
         $submitEl.attr('disabled', false);
       });
+    },
+
+    showAddResolutionDialog: function($observation)
+    {
+      if (!this.el.checkValidity())
+      {
+        return this.$id('save').click();
+      }
+
+      const resolutionInfo = this.getResolutionInfo($observation);
+      const formData = Object.assign(this.model.toJSON(), this.getFormData());
+      const observationId = $observation.find('input[name$="_id"]').first().val();
+      const observationsProp = $observation.closest('tbody')[0].dataset.observationsProp;
+      const observation = formData[observationsProp].find(o => o._id === observationId);
+
+      if (!observation)
+      {
+        return;
+      }
+
+      const subject = dictionaries.getLabel('observationCategory', observation.category, {long: true});
+      const type = resolutionInfo.relation.type;
+      let dialogView = null;
+
+      if (type === 'kaizen')
+      {
+        dialogView = new KaizenFormView({
+          relation: this.model,
+          model: new Kaizen({
+            subject,
+            workplace: formData.workplace,
+            division: formData.division,
+            building: formData.building,
+            location: formData.location,
+            station: formData.station,
+            problem: observation.what,
+            reason: observation.why
+          })
+        });
+      }
+      else if (type === 'nearMiss')
+      {
+        dialogView = new NearMissFormView({
+          relation: this.model,
+          model: new NearMiss({
+            subject,
+            workplace: formData.workplace,
+            division: formData.division,
+            building: formData.building,
+            location: formData.location,
+            station: formData.station,
+            problem: observation.what,
+            reason: observation.why,
+            eventDate: formData.date
+          })
+        });
+      }
+      else
+      {
+        return;
+      }
+
+      viewport.showDialog(dialogView, this.t(`FORM:resolution:title:${type}`));
+
+      dialogView.handleSuccess = () =>
+      {
+        const rid = dialogView.model.get('rid');
+
+        this.loadedResolutions[rid] = dialogView.model;
+
+        if (!this.addedResolutions[observationId])
+        {
+          this.addedResolutions[observationId] = {};
+        }
+
+        this.addedResolutions[observationId][type] = dialogView.model;
+
+        resolutionInfo.$id.val(dialogView.model.id);
+        resolutionInfo.$rid.val(rid);
+
+        viewport.closeDialog();
+      };
+    },
+
+    showResolutionPopover: function($observation)
+    {
+      const resolutionInfo = this.getResolutionInfo($observation);
+
+      if (!resolutionInfo.relation.rid)
+      {
+        resolutionInfo.$rid.focus();
+
+        return;
+      }
+
+      if (!resolutionInfo.$rid[0].checkValidity())
+      {
+        resolutionInfo.$rid[0].reportValidity();
+
+        return;
+      }
+
+      if (!resolutionInfo.model)
+      {
+        return this.loadResolution($observation, true);
+      }
+
+      const $btn = $observation.find('.btn[data-action="showResolution"]');
+
+      if ($btn.data('bs.popover'))
+      {
+        return;
+      }
+
+      $btn.popover({
+        container: $btn.closest('td'),
+        trigger: 'click',
+        placement: 'top',
+        html: true,
+        title: function() { return ''; },
+        content: this.renderPartialHtml(resolutionPopoverTemplate, {
+          relation: resolutionInfo.relation,
+          data: resolutionInfo.model.toJSON(),
+          url: resolutionInfo.model.genClientUrl()
+        })
+      });
+
+      $btn.popover('show');
+
+      this.$resolutionPopover = $btn;
+    },
+
+    hideResolutionPopover: function()
+    {
+      if (this.$resolutionPopover)
+      {
+        this.$resolutionPopover.popover('destroy');
+        this.$resolutionPopover = null;
+      }
+    },
+
+    resetResolution: function($observation)
+    {
+      const resolutionInfo = this.getResolutionInfo($observation);
+
+      if (resolutionInfo.$id.val() !== '0')
+      {
+        this.checkDuplicateRid();
+      }
+
+      resolutionInfo.$id.val('0');
+      resolutionInfo.$rid[0].setCustomValidity('');
+
+      this.hideResolutionPopover();
+    },
+
+    loadResolution: function($observation, showPopover)
+    {
+      const resolutionInfo = this.getResolutionInfo($observation);
+      const rid = this.prepareRid(resolutionInfo.$rid.val(), resolutionInfo.relation.type);
+
+      this.resetResolution($observation);
+
+      resolutionInfo.$rid.val(rid);
+
+      if (!rid)
+      {
+        return;
+      }
+
+      const duplicateRidEls = this.checkDuplicateRid(rid);
+
+      if (duplicateRidEls.length > 1)
+      {
+        _.last(duplicateRidEls).reportValidity();
+
+        return;
+      }
+
+      if (this.isDuplicateRid(resolutionInfo.$rid[0]))
+      {
+        resolutionInfo.$rid[0].setCustomValidity(this.t('FORM:resolution:error:duplicate'));
+        resolutionInfo.$rid[0].reportValidity();
+
+        return;
+      }
+
+      if (this.loadedResolutions[rid])
+      {
+        resolutionInfo.$id.val(this.loadedResolutions[rid].id);
+
+        return;
+      }
+
+      viewport.msg.loading();
+
+      resolutionInfo.$rid.prop('disabled', true);
+      resolutionInfo.$rid[0].setCustomValidity(this.t('FORM:resolution:error:loading'));
+      resolutionInfo.$buttons.prop('disabled', true);
+      resolutionInfo.$actions.prop('disabled', true);
+
+      const req = this.resolutionReq = this.ajax({
+        url: `/osh/${dictionaries.TYPE_TO_MODULE[resolutionInfo.relation.type]}?rid=${rid}&exclude(changes)&limit(1)`
+      });
+
+      req.fail(() =>
+      {
+        viewport.msg.loadingFailed();
+
+        resolutionInfo.$rid[0].setCustomValidity(this.t('FORM:resolution:error:failure'));
+      });
+
+      req.done(res =>
+      {
+        viewport.msg.loaded();
+
+        if (!res.collection || !res.collection.length)
+        {
+          resolutionInfo.$rid[0].setCustomValidity(this.t('FORM:resolution:error:notFound'));
+
+          return;
+        }
+
+        const data = res.collection[0];
+
+        if (data.status === 'finished' && !Observation.can.assignFinished(this.model))
+        {
+          resolutionInfo.$rid[0].setCustomValidity(this.t('FORM:resolution:error:finished'));
+
+          return;
+        }
+
+        const Entry = dictionaries.TYPE_TO_MODEL[resolutionInfo.relation.type];
+        const entry = new Entry(data);
+
+        this.loadedResolutions[rid] = entry;
+
+        resolutionInfo.$id.val(entry.id);
+        resolutionInfo.$rid[0].setCustomValidity('');
+
+        if (showPopover)
+        {
+          this.showResolutionPopover($observation);
+        }
+      });
+
+      req.always(() =>
+      {
+        if (req === this.resolutionReq)
+        {
+          resolutionInfo.$actions.prop('disabled', false);
+
+          this.resolutionReq = null;
+        }
+
+        resolutionInfo.$rid.prop('disabled', false);
+        resolutionInfo.$buttons.prop('disabled', false);
+
+        if (!resolutionInfo.$rid[0].checkValidity())
+        {
+          resolutionInfo.$rid[0].reportValidity();
+        }
+      });
+    },
+
+    checkDuplicateRid: function(ridToCheck)
+    {
+      const grouped = new Map();
+
+      this.$('input[name$="resolution.rid"]').each((i, ridEl) =>
+      {
+        const rid = ridEl.value;
+
+        if (rid.length)
+        {
+          if (!grouped.has(rid))
+          {
+            grouped.set(rid, []);
+          }
+
+          grouped.get(rid).push(ridEl);
+        }
+      });
+
+      const duplicateError = this.t('FORM:resolution:error:duplicate');
+
+      grouped.forEach(ridEls =>
+      {
+        ridEls.forEach(ridEl =>
+        {
+          if (ridEl.validationMessage === duplicateError)
+          {
+            ridEl.setCustomValidity('');
+          }
+        });
+
+        if (ridEls.length === 1)
+        {
+          return;
+        }
+
+        const lastRidEl = _.last(ridEls);
+
+        if (lastRidEl.checkValidity())
+        {
+          lastRidEl.setCustomValidity(duplicateError);
+        }
+      });
+
+      return grouped.get(ridToCheck) || [];
+    },
+
+    isDuplicateRid: function(checkedRidEl)
+    {
+      let duplicate = false;
+
+      this.$('input[name$="resolution.rid"]').each((i, candidateRidEl) =>
+      {
+        if (duplicate || candidateRidEl === checkedRidEl)
+        {
+          return;
+        }
+
+        duplicate = candidateRidEl.value === checkedRidEl.value;
+      });
+
+      return duplicate;
+    },
+
+    prepareRid: function(rid, type)
+    {
+      const matches = rid.trim().match(/([zkZK]-)?([0-9]{4}-)?([0-9]{1,6})/);
+
+      rid = '';
+
+      if (matches)
+      {
+        rid += (matches[1] || dictionaries.TYPE_TO_PREFIX[type]).charAt(0).toUpperCase();
+        rid += '-' + (matches[2] || time.format(Date.now(), 'YYYY')).substring(0, 4);
+        rid += '-' + matches[3].padStart(6, '0');
+      }
+
+      return rid;
+    },
+
+    getResolutionInfo: function($observation)
+    {
+      const $resolution = $observation.find('.osh-observations-form-resolution');
+      const $id = $resolution.find('input[name$="_id"]');
+      const $rid = $resolution.find('input[name$="rid"]');
+      const $type = $resolution.find('input[name$="type"]');
+      const rid = $rid.val();
+
+      return {
+        $observation,
+        $resolution,
+        $id,
+        $rid,
+        $type,
+        $buttons: $resolution.find('.btn'),
+        $actions: this.$('.form-actions').find('.btn'),
+        model: this.loadedResolutions[rid] || null,
+        relation: {
+          _id: +$id.val(),
+          rid,
+          type: $type.val()
+        }
+      };
+    },
+
+    onDocumentClick: function(e)
+    {
+      if (!this.$resolutionPopover)
+      {
+        return;
+      }
+
+      const $resolutionTd = this.$(e.target).closest('.osh-observations-form-resolution');
+
+      if ($resolutionTd.length
+        && $resolutionTd[0] === this.$resolutionPopover.closest('.osh-observations-form-resolution')[0])
+      {
+        return;
+      }
+
+      this.hideResolutionPopover();
+    },
+
+    onDocumentKeyDown: function(e)
+    {
+      if (e.key === 'Escape' && this.$resolutionPopover)
+      {
+        this.hideResolutionPopover();
+
+        return false;
+      }
     }
 
   });

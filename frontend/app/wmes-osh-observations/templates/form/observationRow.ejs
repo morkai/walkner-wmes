@@ -29,4 +29,15 @@
   <td class="osh-observations-form-textarea"><textarea name="<%- property %>[<%- i %>].why" class="form-control" rows="1"><%= observation.why %></textarea></td>
   <td class="is-min osh-observations-form-radio osh-observations-form-easy"><input type="radio" name="<%- property %>[<%- i %>].easy" value="true" <%- observation.easy === true ? 'checked' : '' %>></td>
   <td class="is-min osh-observations-form-radio osh-observations-form-easy"><input type="radio" name="<%- property %>[<%- i %>].easy" value="false" <%- observation.easy === false ? 'checked' : '' %>></td>
+  <td class="osh-observations-form-resolution">
+    <div class="input-group">
+      <input name="<%- property %>[<%- i %>].resolution._id" type="hidden" value="<%- observation.resolution._id %>">
+      <input name="<%- property %>[<%- i %>].resolution.type" type="hidden" value="<%- observation.resolution.type %>">
+      <input name="<%- property %>[<%- i %>].resolution.rid" class="form-control text-mono" type="text" value="<%- observation.resolution.rid %>" pattern="^([zkZK]-)?([0-9]{4}-)?[0-9]{1,6}$" maxlength="13" disabled="">
+      <span class="input-group-btn">
+        <button data-action="showResolution" type="button" class="btn btn-default" title="<%- t('FORM:resolution:show') %>" disabled><i class="fa fa-info"></i></button>
+        <button data-action="addResolution" type="button" class="btn btn-default" title="<%- t('FORM:resolution:add') %>" disabled><i class="fa fa-plus"></i></button>
+      </span>
+    </div>
+  </td>
 </tr>

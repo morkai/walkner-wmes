@@ -41,6 +41,8 @@ define([
 
     template,
 
+    dialogClassName: 'osh-entries-form-dialog',
+
     events: Object.assign({
 
       'change #-anonymous': function()
@@ -118,6 +120,7 @@ define([
         this.$id('reasonCategory').val('');
 
         this.setUpReasonCategorySelect2();
+        this.toggleActionResolution();
       },
 
       'change #-attachments': function()
@@ -291,11 +294,16 @@ define([
       this.resolution = {
         added: {},
         type: 'unspecified',
-        id: 0,
+        _id: 0,
         rid: '',
         data: null,
         req: null
       };
+
+      this.listenToOnce(this.model, 'change:resolution', () =>
+      {
+        Object.assign(this.resolution, this.model.get('resolution'));
+      });
 
       $(document)
         .on(`click.${this.idPrefix}`, this.onDocumentClick.bind(this))
@@ -306,36 +314,14 @@ define([
     {
       FormView.prototype.destroy.apply(this, arguments);
 
+      $(document).off(`.${this.idPrefix}`);
+
       this.resetResolution();
     },
 
     getResolutionType: function()
     {
       return this.$('input[name="resolution.type"]:checked').val() || 'unspecified';
-    },
-
-    resetResolution: function()
-    {
-      if (!this.options.editMode)
-      {
-        return;
-      }
-
-      this.$id('resolutionId')[0].setCustomValidity('');
-      this.hideResolutionPopover();
-
-      const req = this.resolution.req;
-
-      this.resolution.type = 'unspecified';
-      this.resolution.id = 0;
-      this.resolution.rid = '';
-      this.resolution.data = null;
-      this.resolution.req = null;
-
-      if (req)
-      {
-        req.abort();
-      }
     },
 
     getTemplateData: function()
@@ -358,7 +344,8 @@ define([
           cancelled: NearMiss.can.cancelled(this.model),
           editResolutionType: NearMiss.can.editResolutionType(this.model),
           editResolutionId: NearMiss.can.editResolutionId(this.model)
-        }
+        },
+        relation: this.options.relation
       };
     },
 
@@ -383,7 +370,7 @@ define([
     {
       const formData = this.model.toJSON();
 
-      if (this.options.editMode)
+      if (formData.eventDate)
       {
         const eventDate = time.utc.getMoment(formData.eventDate);
 
@@ -443,11 +430,25 @@ define([
 
       formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
       formData.userDivision = this.$id('userDivision').select2('data').id;
-      formData.workplace = this.$id('workplace').select2('data').id;
-      formData.division = this.$id('division').select2('data').id;
-      formData.building = this.$id('building').select2('data').id;
-      formData.location = this.$id('location').select2('data').id;
-      formData.station = parseInt(this.$id('station').val(), 10) || null;
+
+      const relation = this.options.relation;
+
+      if (relation)
+      {
+        formData.relation = {
+          _id: relation.id,
+          rid: relation.get('rid'),
+          type: relation.getModelType()
+        };
+      }
+      else
+      {
+        formData.workplace = this.$id('workplace').select2('data').id;
+        formData.division = this.$id('division').select2('data').id;
+        formData.building = this.$id('building').select2('data').id;
+        formData.location = this.$id('location').select2('data').id;
+        formData.station = parseInt(this.$id('station').val(), 10) || null;
+      }
 
       formData.eventDate = time.utc.getMoment(
         `${formData.eventDate} ${(formData.eventTime || '00').padStart(2, '0')}:00:00`,
@@ -500,7 +501,7 @@ define([
         resolution.type = this.getResolutionType();
       }
 
-      if (NearMiss.can.editResolutionId(this.model) && this.resolution._id)
+      if (NearMiss.can.editResolutionId(this.model))
       {
         resolution._id = this.resolution._id;
         resolution.rid = this.resolution.rid;
@@ -535,6 +536,11 @@ define([
       this.togglePriority();
       this.toggleImplement();
       this.toggleKind();
+    },
+
+    onDialogShown: function()
+    {
+      this.$id('subject').select();
     },
 
     isAnonymous: function()
@@ -1184,6 +1190,33 @@ define([
       }
 
       this.$id('resolutionId').val(id)[0].setCustomValidity('');
+
+      this.toggleActionResolution();
+    },
+
+    toggleActionResolution: function()
+    {
+      const $type = this.$('input[name="resolution.type"][value="action"]');
+
+      if (!$type.length)
+      {
+        return;
+      }
+
+      const eventCategory = dictionaries.eventCategories.get(+this.$id('eventCategory').val());
+      let label = this.t('resolution:desc:action');
+
+      if (eventCategory && eventCategory.get('activityKind'))
+      {
+        const activityKind = dictionaries.activityKinds.get(eventCategory.get('activityKind'));
+
+        if (activityKind)
+        {
+          label = activityKind.getLabel({long: true});
+        }
+      }
+
+      $type[0].nextSibling.textContent = label;
     },
 
     setUpEventDate: function()
@@ -1414,6 +1447,30 @@ define([
       this.$id('showResolution').popover('destroy');
     },
 
+    resetResolution: function()
+    {
+      if (!this.options.editMode)
+      {
+        return;
+      }
+
+      this.$id('resolutionId')[0].setCustomValidity('');
+      this.hideResolutionPopover();
+
+      const req = this.resolution.req;
+
+      this.resolution.type = 'unspecified';
+      this.resolution._id = 0;
+      this.resolution.rid = '';
+      this.resolution.data = null;
+      this.resolution.req = null;
+
+      if (req)
+      {
+        req.abort();
+      }
+    },
+
     loadResolution: function(type, rid, show)
     {
       if (!type)
@@ -1453,7 +1510,7 @@ define([
       this.toggleActions(false);
 
       const req = this.resolution.req = this.ajax({
-        url: `/osh/${type}s/${rid}?select(subject,status)`
+        url: `/osh/${dictionaries.TYPE_TO_MODULE[type]}/${rid}?select(subject,status)`
       });
 
       req.fail(() =>
@@ -1475,6 +1532,8 @@ define([
 
       req.done(data =>
       {
+        viewport.msg.loaded();
+
         this.$id('resolutionId')[0].setCustomValidity('');
 
         this.resolution.type = type;
@@ -1540,6 +1599,7 @@ define([
         dialogView = new ActionFormView({
           relation: this.model,
           newStatus: 'inProgress',
+          forcedActivityKind: dictionaries.eventCategories.get(formData.eventCategory).get('activityKind'),
           model: new Action({
             subject: formData.subject,
             kind: formData.kind,

@@ -3,13 +3,13 @@
 define([
   'app/wmes-osh-common/pages/DetailsPage',
   'app/wmes-osh-common/views/AttachmentsView',
-  '../views/SolutionView',
+  'app/wmes-osh-common/views/PanelView',
   'app/wmes-osh-kaizens/templates/details/page',
   'app/wmes-osh-kaizens/templates/details/props'
 ], function(
   DetailsPage,
   AttachmentsView,
-  SolutionView,
+  PanelView,
   template,
   propsTemplate
 ) {
@@ -24,23 +24,39 @@ define([
     {
       DetailsPage.prototype.defineViews.apply(this, arguments);
 
-      this.solutionView = new SolutionView({
-        model: this.model
-      });
+      this.setView('#-problem', new PanelView({
+        model: this.model,
+        property: 'problem',
+        panelType: 'danger'
+      }));
 
-      this.beforeView = new AttachmentsView({
+      this.setView('#-reason', new PanelView({
+        model: this.model,
+        property: 'reason',
+        panelType: 'warning'
+      }));
+
+      this.setView('#-before', new AttachmentsView({
         model: this.model,
         kind: 'before'
-      });
+      }));
 
-      this.afterView = new AttachmentsView({
+      this.setView('#-suggestion', new PanelView({
+        model: this.model,
+        property: 'suggestion',
+        panelType: 'secondary'
+      }));
+
+      this.setView('#-solution', new PanelView({
+        model: this.model,
+        property: 'solution',
+        panelType: 'success'
+      }));
+
+      this.setView('#-after', new AttachmentsView({
         model: this.model,
         kind: 'after'
-      });
-
-      this.setView('#-solution', this.solutionView);
-      this.setView('#-before', this.beforeView);
-      this.setView('#-after', this.afterView);
+      }));
     },
 
     getAttachmentsViewOptions: function()

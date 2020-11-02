@@ -28,6 +28,11 @@ define([
       return 'kaizen';
     },
 
+    getAttachmentKinds: function()
+    {
+      return ['before', 'after', 'other'];
+    },
+
     serializeRow: function()
     {
       const obj = Entry.prototype.serializeRow.apply(this, arguments);
