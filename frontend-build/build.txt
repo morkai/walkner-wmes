@@ -2529,6 +2529,11 @@ app/wmes-osh-reasonCategories/ReasonCategory.js
 app/wmes-osh-reasonCategories/ReasonCategoryCollection.js
 app/wmes-osh-rootCauseCategories/RootCauseCategory.js
 app/wmes-osh-rootCauseCategories/RootCauseCategoryCollection.js
+app/wmes-osh-common/Entry.js
+app/wmes-osh-nearMisses/NearMiss.js
+app/wmes-osh-kaizens/Kaizen.js
+app/wmes-osh-actions/Action.js
+app/wmes-osh-observations/Observation.js
 app/wmes-osh-common/Setting.js
 app/wmes-osh-common/SettingCollection.js
 app/wmes-osh-common/dictionaries.js
@@ -2598,13 +2603,12 @@ app/wmes-osh-common/templates/attachments/delete.js
 app/wmes-osh-common/views/AttachmentsView.js
 app/wmes-osh-common/templates/history/panel.js
 app/wmes-osh-common/templates/history/item.js
+app/wmes-osh-common/templates/history/observationPopover.js
 app/wmes-osh-common/views/HistoryView.js
 app/wmes-osh-common/templates/details/page.js
 app/wmes-osh-common/pages/DetailsPage.js
 app/wmes-osh-common/pages/AddFormPage.js
 app/wmes-osh-common/pages/EditFormPage.js
-app/wmes-osh-common/Entry.js
-app/wmes-osh-nearMisses/NearMiss.js
 app/wmes-osh-nearMisses/NearMissCollection.js
 app/core/util/buttonGroup.js
 app/core/templates/filterLimit.js
@@ -2615,10 +2619,8 @@ app/core/util/ExpandableSelect.js
 app/wmes-osh-nearMisses/views/FilterView.js
 app/wmes-osh-common/views/ListView.js
 app/wmes-osh-nearMisses/views/ListView.js
-app/wmes-osh-kaizens/Kaizen.js
 app/wmes-osh-kaizens/templates/form.js
 app/wmes-osh-kaizens/views/FormView.js
-app/wmes-osh-actions/Action.js
 app/wmes-osh-actions/templates/form.js
 app/wmes-osh-actions/views/FormView.js
 app/wmes-osh-nearMisses/templates/form.js
@@ -2633,8 +2635,8 @@ app/nls/pl/wmes-osh-kaizens.js
 i18n!app/nls/wmes-osh-kaizens
 app/wmes-osh-nearMisses/routes.js
 app/wmes-osh-kaizens/KaizenCollection.js
-app/wmes-osh-kaizens/templates/details/solution.js
-app/wmes-osh-kaizens/views/SolutionView.js
+app/wmes-osh-common/templates/details/panel.js
+app/wmes-osh-common/views/PanelView.js
 app/wmes-osh-kaizens/templates/details/page.js
 app/wmes-osh-kaizens/templates/details/props.js
 app/wmes-osh-kaizens/pages/DetailsPage.js
@@ -2657,7 +2659,6 @@ app/nls/wmes-osh-actions.js
 app/nls/pl/wmes-osh-actions.js
 i18n!app/nls/wmes-osh-actions
 app/wmes-osh-actions/routes.js
-app/wmes-osh-observations/Observation.js
 app/wmes-osh-observations/ObservationCollection.js
 app/wmes-osh-observations/templates/details/observations.js
 app/wmes-osh-observations/views/ObservationsView.js
@@ -2669,6 +2670,7 @@ app/wmes-osh-observations/views/FilterView.js
 app/wmes-osh-observations/views/ListView.js
 app/wmes-osh-observations/templates/form/form.js
 app/wmes-osh-observations/templates/form/observationRow.js
+app/wmes-osh-observations/templates/form/resolutionPopover.js
 app/wmes-osh-observations/views/FormView.js
 app/nls/wmes-osh-observations.js
 app/nls/pl/wmes-osh-observations.js

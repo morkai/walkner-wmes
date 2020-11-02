@@ -5,7 +5,7 @@
   "version": "0.154.0",
   "updater": {
     "wmes": {
-      "backend": 623,
+      "backend": 624,
       "frontend": 773,
       "reports": 132,
       "attachments": 3,
@@ -38,8 +38,8 @@
       "importer": 2
     },
     "pila": {
-      "backend": 7,
-      "frontend": 7,
+      "backend": 8,
+      "frontend": 8,
       "reports": 2
     }
   },
