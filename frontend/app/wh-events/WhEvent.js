@@ -200,6 +200,11 @@ define([
         html.push(prop('redirReason', _.escape(data.redirReason.label)));
       }
 
+      if (data.forceLine)
+      {
+        html.push(prop('forceLine', _.escape(data.forceLine)));
+      }
+
       if (data.comment)
       {
         html.push(prop('comment', _.escape(data.comment)));

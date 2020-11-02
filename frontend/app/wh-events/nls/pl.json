@@ -34,6 +34,7 @@
   "data:sourceQty": "Ilość źródłowa",
   "data:targetQty": "Ilość docelowa",
   "data:redirReason": "Powód przekierowania",
+  "data:forceLine": "Wymuszona linia",
   "data:comment": "Komentarz",
 
   "kind:components": "FIFO",
