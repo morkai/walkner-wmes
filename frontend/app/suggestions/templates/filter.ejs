@@ -1,7 +1,10 @@
 <form class="well filter-form suggestions-filter">
   <%- forms.dateTimeRange({
     idPrefix: idPrefix,
-    labels: {text: t('PROPERTY:date'), ranges: true}
+    labels: [
+      {text: t('filter:date'), input: {type: 'radio', name: 'dateType', value: 'date'}, ranges: true},
+      {text: t('filter:finishedAt'), input: {type: 'radio', name: 'dateType', value: 'finishedAt'}, ranges: true}
+    ]
   }) %>
   <div class="form-group">
     <div class="filter-radioLabels">

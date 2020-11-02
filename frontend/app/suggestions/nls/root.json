@@ -145,6 +145,8 @@
     "FORM:confirmer:search": "Search a superior, to whom this entry should be directed for a confirmation...",
     "FORM:confirmer:select": "Select a superior, to whom this entry should be directed for a confirmation...",
 
+    "filter:date": "Entry date",
+    "filter:finishedAt": "Finished at",
     "filter:user:mine": "Mine",
     "filter:user:unseen": "Unread",
     "filter:user:owner": "Owner",

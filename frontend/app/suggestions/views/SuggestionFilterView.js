@@ -52,12 +52,19 @@ define([
         categories: [],
         productFamily: [],
         userType: 'others',
-        user: null
+        user: null,
+        dateType: 'date'
       };
     },
 
     termToForm: {
-      'date': dateTimeRange.rqlToForm,
+      'date': function(property, term, formData)
+      {
+        formData.dateType = property;
+
+        dateTimeRange.rqlToForm.call(this, property, term, formData);
+      },
+      'finishedAt': 'date',
       'owners.id': function(propertyName, term, formData)
       {
         formData.userType = 'owner';
@@ -102,12 +109,24 @@ define([
       });
     },
 
-    serializeFormToQuery: function(selector)
+    serializeFormToQuery: function(selector, rqlQuery)
     {
+      var dateType = this.$('input[name="dateType"]:checked').val();
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
 
+      rqlQuery.sort = {};
+      rqlQuery.sort[dateType] = -1;
+
       dateTimeRange.formToRql(this, selector);
+
+      selector.forEach(function(term)
+      {
+        if (term.args[0] === 'date')
+        {
+          term.args[0] = dateType;
+        }
+      });
 
       if (userType === 'mine' || userType === 'unseen')
       {

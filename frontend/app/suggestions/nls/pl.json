@@ -147,6 +147,8 @@
     "FORM:confirmer:search": "Wyszukaj po nazwisku przełożonego, do którego ma zostać skierowane zgłoszenie...",
     "FORM:confirmer:select": "Wybierz przełożonego, do którego ma zostać skierowane zgłoszenie...",
 
+    "filter:date": "Data wniosku",
+    "filter:finishedAt": "Data zakończenia",
     "filter:user:mine": "Moje",
     "filter:user:unseen": "Nieprzeczytane",
     "filter:user:owner": "Zgłaszający",
