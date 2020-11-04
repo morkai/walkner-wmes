@@ -17,13 +17,13 @@ define([
 
   return View.extend({
 
-    swapDelay: 40000,
+    swapDelay: 20000,
 
     template: template,
 
     initialize: function()
     {
-      this.currentMetrics = 'eff';
+      this.currentMetrics = 'tt';
 
       this.todoView = new ShiftTimelineView({
         mode: 'todo',
@@ -59,7 +59,7 @@ define([
 
     deactivate: function()
     {
-      this.currentMetrics = 'eff';
+      this.currentMetrics = 'tt';
 
       clearTimeout(this.timers.swapMetrics);
     },
@@ -231,7 +231,7 @@ define([
         this.$id('actualTt').parent().removeClass('hidden');
       }
 
-      this.timers.swapMetrics = setTimeout(this.swapMetrics.bind(this), 5000);
+      // this.timers.swapMetrics = setTimeout(this.swapMetrics.bind(this), 5000);
     }
 
   });
