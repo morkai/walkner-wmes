@@ -2660,7 +2660,10 @@ app/nls/pl/wmes-osh-actions.js
 i18n!app/nls/wmes-osh-actions
 app/wmes-osh-actions/routes.js
 app/wmes-osh-observations/ObservationCollection.js
+app/wmes-osh-observations/Resolution.js
+app/wmes-osh-observations/ResolutionCollection.js
 app/wmes-osh-observations/templates/details/observations.js
+app/wmes-osh-observations/templates/details/resolutionPopover.js
 app/wmes-osh-observations/views/ObservationsView.js
 app/wmes-osh-observations/templates/details/page.js
 app/wmes-osh-observations/templates/details/props.js

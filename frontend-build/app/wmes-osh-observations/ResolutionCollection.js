@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Resolution"],function(i,o){"use strict";return i.extend({model:o,paginate:!1,initialize:function(i,o){this.observation=o.observation},url:function(){return`/osh/observations/${this.observation.id}/resolutions`}})});
