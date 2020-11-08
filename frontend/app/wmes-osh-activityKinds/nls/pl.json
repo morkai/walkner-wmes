@@ -6,15 +6,17 @@
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
   "PROPERTY:description": "Opis",
-  "PROPERTY:nearMiss": "ZPW",
-  "PROPERTY:rootCauses": "Przyczyny źródłowe",
+  "PROPERTY:allowedTypes": "Dozwolony ze zgłoszeń",
   "PROPERTY:participants": "Uczestnicy",
-  "PROPERTY:implementers": "Realizacja",
-  "PROPERTY:resolutions": "Rozwiązanie",
+  "PROPERTY:resolution": "Rozwiązanie",
 
-  "FORM:help:nearMiss": "Określa czy dany rodzaj aktywności może zostać wybrany przez zwykłego użytkownika podczas tworzenia akcji z poziomu ZPW.",
-  "FORM:help:rootCauses": "Określa czy Analiza przyczyn źródłowych ma być dostępna.",
+  "resolution:none": "Brak działań",
+  "resolution:implementers": "Realizacja",
+  "resolution:rootCauses": "Przyczyny źródłowe",
+
+  "FORM:help:allowedTypes": "Określa czy dany rodzaj aktywności może zostać wybrany przez zwykłego użytkownika podczas tworzenia akcji z poziomu wybranych typów zgłoszeń.",
   "FORM:help:participants": "Określa czy pole Uczestnicy ma być dostępne.",
-  "FORM:help:implementers": "Określa czy akcja ma mieć cały przepływ realizacji. Pola Uczestnicy oraz Planowany termin realizacji są dostępne.",
-  "FORM:help:resolutions": "Określa czy akcja może mieć przypisane inne akcje lub kaizeny."
+  "FORM:help:resolution:none": "Nowe zgłoszenie Akcji zostanie zapisane od razu ze statusem Zakończone.",
+  "FORM:help:resolution:implementers": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Nowe. Akcja zostanie zakończona po zaakceptowaniu, realizacji oraz weryfikacji. Pola Uczestnicy oraz Planowany termin realizacji są dostępne.",
+  "FORM:help:resolution:rootCauses": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Realizacja. Akcja zostanie zakończona jak wszystkie przypisane do niej zgłoszenia zostaną zakończone. Pola Analiza przyczyn źrodłowych są dostępne."
 }

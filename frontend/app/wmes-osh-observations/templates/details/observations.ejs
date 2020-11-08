@@ -1,4 +1,4 @@
-<div class="panel panel-default osh-details-observations-panel osh-details-observations-<%- property %> is-colored <%- observations.length ? '' : 'hidden' %>">
+<div class="panel panel-default osh-details-panel osh-details-observations-<%- property %> is-colored <%- observations.length ? '' : 'hidden' %>">
   <div class="panel-heading"><%- t(`PROPERTY:${property}`) %></div>
   <div class="table-responsive">
   <table class="table table-bordered table-condensed table-hover <%- unseen ? 'osh-unseen' : '' %>">
@@ -16,7 +16,7 @@
     </thead>
     <tbody>
     <% observations.forEach(o => { %>
-    <tr class="<%- o.safe ? 'success' : o.easy ? 'warning' : 'danger' %>">
+    <tr data-id="<%- o._id %>" class="<%- o.safe ? 'success' : o.easy ? 'warning' : 'danger' %>">
       <td class="osh-observations-details-category"><%= o.text %></td>
       <% if (property === 'behaviors') { %>
         <td class="text-center"><%- t(`safe:${o.safe}`) %></td>
@@ -24,9 +24,16 @@
       <td class="text-center"><%- t(`easy:${o.easy}`) %></td>
       <td class="text-lines osh-observations-details-whatWhy"><%= o.what %></td>
       <td class="text-lines osh-observations-details-whatWhy"><%= o.why %></td>
-      <td class="text-mono osh-observations-details-resolution">
+      <td class="osh-observations-details-resolution" <% if (o.resolution.rid) { %>data-rid="<%- o.resolution.rid %>"<% } %>>
         <% if (o.resolution._id) { %>
-        <a href="<%- o.resolution.url %>"><%= o.resolution.rid %></a>
+          <a href="<%- o.resolution.url %>" class="text-mono"><%= o.resolution.rid %></a>
+          <% if (o.resolution.icon) { %>
+            <i class="fa <%- o.resolution.icon %>"></i>
+          <% } %>
+        <% } else if (o.resolution.resolvable) { %>
+        <a href="javascript:void(0)" data-action="addResolution" style="display: block">
+          <i class="fa fa-plus"></i><span><%- t('resolution:add') %></span>
+        </a>
         <% } %>
       </td>
     </tr>

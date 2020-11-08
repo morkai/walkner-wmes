@@ -88,5 +88,11 @@
   "easyConfirmed": "„Łatwe” do zmiany zachowania omówiono z osobą obserwowaną i uzyskano potwierdzenie pracy w sposób bezpieczny.",
 
   "history:observations": "{count} {count, plural, one{obserwacja} few{obserwacje} other{obserwacji}}",
-  "history:workConditions": "Warunki w miejscu pracy"
+  "history:workConditions": "Warunki w miejscu pracy",
+
+  "resolution:add": "Dodaj",
+  "resolution:subject": "Temat",
+  "resolution:status": "Status",
+  "resolution:createdAt": "Czas zgłoszenia",
+  "resolution:creator": "Osoba zgłaszająca"
 }

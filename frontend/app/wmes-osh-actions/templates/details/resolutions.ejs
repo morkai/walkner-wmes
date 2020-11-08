@@ -1,0 +1,27 @@
+<div class="panel panel-success is-colored osh-details-panel osh-details-actions-resolutions <%- resolutions.length ? '' : 'hidden' %>">
+  <div class="panel-heading"><%- t('PROPERTY:resolutions') %></div>
+  <div class="table-responsive">
+  <table class="table table-bordered table-condensed table-hover <%- unseen ? 'osh-unseen' : '' %>">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('resolutions:rid') %></th>
+      <th class="is-min"><%- t('resolutions:status') %></th>
+      <th><%- t('resolutions:subject') %></th>
+      <th class="is-min"><%- t('resolutions:implementers') %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% resolutions.forEach(r => { %>
+    <tr class="<%- r.className %>">
+      <td class="is-min text-fixed">
+        <a href="<%- r.url %>"><%- r.rid %></a>
+      </td>
+      <td class="is-min"><%- r.status %></td>
+      <td><%= r.subject %></td>
+      <td class="is-min"><%- r.implementers %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+  </div>
+</div>

@@ -264,7 +264,7 @@ define([
     getRelation: function()
     {
       return {
-        _id: this.id,
+        _id: this.get('_id'),
         rid: this.get('rid'),
         type: this.getModelType()
       };
@@ -375,6 +375,8 @@ define([
 
   }, {
 
+    STATUS_TO_CLASS,
+
     changeHandlers: {
 
       list: ({model, prop, newData, newValue}) =>
@@ -415,7 +417,10 @@ define([
       attachments: 'list',
       implementers: 'list',
       coordinators: 'list',
-      participants: 'list'
+      participants: 'list',
+      behaviors: 'list',
+      workConditions: 'list',
+      resolutions: 'list'
 
     },
 
@@ -501,6 +506,11 @@ define([
 
       inProgress: function(model)
       {
+        if (Array.isArray(model.get('resolutions')))
+        {
+          return false;
+        }
+
         const status = model.get('status');
 
         if (status !== 'new' && status !== 'verification' && status !== 'paused')
@@ -518,6 +528,11 @@ define([
 
       verification: function(model)
       {
+        if (Array.isArray(model.get('resolutions')))
+        {
+          return false;
+        }
+
         const status = model.get('status');
 
         if (status !== 'inProgress')
@@ -535,6 +550,11 @@ define([
 
       finished: function(model)
       {
+        if (Array.isArray(model.get('resolutions')))
+        {
+          return false;
+        }
+
         const status = model.get('status');
 
         if (status !== 'verification')

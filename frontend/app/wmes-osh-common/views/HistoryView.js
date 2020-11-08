@@ -351,6 +351,7 @@ define([
         }
 
         case 'relations':
+        case 'resolutions':
         {
           return this.translate(`relation:${value.type}`, value);
         }

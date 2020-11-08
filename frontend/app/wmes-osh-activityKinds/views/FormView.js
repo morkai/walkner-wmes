@@ -15,6 +15,13 @@ define([
 
     template,
 
+    events: Object.assign({
+
+      'change input[name="rootCauses"]': 'toggleResolution',
+      'change input[name="implementers"]': 'toggleResolution'
+
+    }, FormView.prototype.events),
+
     afterRender: function()
     {
       FormView.prototype.afterRender.apply(this, arguments);
@@ -29,6 +36,8 @@ define([
           text: kind.getLabel({long: true})
         }))
       });
+
+      this.toggleResolution();
     },
 
     serializeToForm: function()
@@ -49,7 +58,27 @@ define([
         formData.description = '';
       }
 
+      formData.implementers = !!formData.implementers;
+
+      if (!formData.allowedTypes)
+      {
+        formData.allowedTypes = [];
+      }
+
       return formData;
+    },
+
+    toggleResolution: function()
+    {
+      const rootCauses = this.$('input[name="rootCauses"]').prop('checked');
+      const $implementers = this.$('input[name="implementers"]');
+
+      $implementers.prop('disabled', rootCauses);
+
+      if (rootCauses)
+      {
+        $implementers.prop('checked', false);
+      }
     }
 
   });

@@ -23,7 +23,7 @@ define([
 
     topicPrefix: 'osh.observations',
 
-    privilegePrefix: 'OSH:ACTIONS',
+    privilegePrefix: 'OSH:OBSERVATIONS',
 
     nlsDomain: 'wmes-osh-observations',
 
@@ -69,7 +69,22 @@ define([
       'observationKind',
       'workplace', 'division', 'building', 'location', 'station'
     ],
-    DESC_PROPS: ['observationKind']
+    DESC_PROPS: ['observationKind'],
+
+    isResolvableObservation: function(type, observation)
+    {
+      if (type.startsWith('b'))
+      {
+        return observation.safe === false && observation.easy === false;
+      }
+
+      if (type.startsWith('w'))
+      {
+        return observation.safe === false;
+      }
+
+      return false;
+    }
 
   });
 

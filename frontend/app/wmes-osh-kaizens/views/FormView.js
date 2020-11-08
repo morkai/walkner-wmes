@@ -738,7 +738,7 @@ define([
     setUpEventCategorySelect2: function()
     {
       const $input = this.$id('eventCategory');
-      const kind = this.$('input[name="kind"]:checked').val();
+      const kind = +this.$('input[name="kind"]:checked').val() || this.model.get('kind');
       const map = {};
 
       dictionaries.eventCategories.forEach(model =>

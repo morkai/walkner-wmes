@@ -1,7 +1,5 @@
-.osh-details-observations-panel {
-  margin-bottom: 30px;
-}
-.osh-details-observations-panel td {
+.osh-details-observations-behaviors td,
+.osh-details-observations-workConditions td {
   vertical-align: top;
 }
 .osh-observations-details-category {
@@ -25,7 +23,8 @@
   min-width: 400px;
 }
 .osh-observations-details-resolution {
-  width: 112px;
-  min-width: 112px;
+  width: 131px;
+  min-width: 131px;
   white-space: nowrap;
+  text-align: left;
 }

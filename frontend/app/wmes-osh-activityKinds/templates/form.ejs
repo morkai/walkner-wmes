@@ -30,15 +30,37 @@
         label: 'PROPERTY:',
         rows: 5
       }) %>
-      <% ['nearMiss', 'rootCauses', 'participants', 'implementers', 'resolutions'].forEach(feature => { %>
-        <div class="checkbox">
-          <label class="control-label">
-            <input type="checkbox" name="<%- feature %>" value="true">
-            <%- t(`PROPERTY:${feature}`) %>
-          </label>
-        </div>
-        <p class="help-block"><%- t(`FORM:help:${feature}`) %></p>
-      <% }) %>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:allowedTypes') %></label>
+        <p class="help-block" style="margin-bottom: -5px"><%- t(`FORM:help:allowedTypes`) %></p>
+        <% ['nearMiss', 'action'].forEach(type => { %>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="allowedTypes[]" value="<%- type %>">
+              <%- t('wmes-osh-common', `type:${type}`) %>
+            </label>
+          </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:resolution') %></label>
+        <% ['none', 'implementers', 'rootCauses'].forEach(resolution => { %>
+          <div class="radio">
+            <label>
+              <input type="radio" name="resolution" value="<%- resolution %>">
+              <%- t(`resolution:${resolution}`) %>
+            </label>
+          </div>
+          <p class="help-block"><%- t(`FORM:help:resolution:${resolution}`) %></p>
+        <% }) %>
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="participants" value="true">
+          <%- t(`PROPERTY:participants`) %>
+        </label>
+      </div>
+      <p class="help-block"><%- t(`FORM:help:participants`) %></p>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

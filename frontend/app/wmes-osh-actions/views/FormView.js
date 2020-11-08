@@ -9,8 +9,12 @@ define([
   'app/core/util/formatResultWithDescription',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/Resolution',
+  'app/wmes-osh-kaizens/Kaizen',
+  'app/wmes-osh-kaizens/views/FormView',
   '../Action',
-  'app/wmes-osh-actions/templates/form'
+  'app/wmes-osh-actions/templates/form/form',
+  'app/wmes-osh-actions/templates/form/resolutionRow'
 ], function(
   _,
   currentUser,
@@ -20,8 +24,12 @@ define([
   formatResultWithDescription,
   setUpUserSelect2,
   dictionaries,
+  Resolution,
+  Kaizen,
+  KaizenFormView,
   Action,
-  template
+  template,
+  resolutionRowTemplate
 ) {
   'use strict';
 
@@ -217,9 +225,61 @@ define([
         this.$id('save').click();
 
         setTimeout(() => this.newStatus = null, 1);
+      },
+
+      'keydown #-resolutionRid': function(e)
+      {
+        e.currentTarget.setCustomValidity('');
+
+        if (e.key === 'Enter')
+        {
+          e.preventDefault();
+        }
+      },
+
+      'keyup #-resolutionRid': function(e)
+      {
+        if (e.key === 'Enter')
+        {
+          this.linkResolution();
+        }
+      },
+
+      'click #-linkResolution': function()
+      {
+        this.linkResolution();
+      },
+
+      'click .btn[data-action="removeResolution"]': function(e)
+      {
+        this.resolutions.remove(this.$(e.target).closest('tr')[0].dataset.id);
+      },
+
+      'click #-addKaizenResolution': function()
+      {
+        this.showAddResolutionDialog('kaizen');
+      },
+
+      'click #-addActionResolution': function()
+      {
+        this.showAddResolutionDialog('action');
       }
 
     }, FormView.prototype.events),
+
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.resolutionsI = 0;
+      this.newStatus = this.options.newStatus || 'new';
+
+      this.once('afterRender', () =>
+      {
+        this.listenTo(this.resolutions, 'add', this.addResolution);
+        this.listenTo(this.resolutions, 'remove', this.removeResolution);
+      });
+    },
 
     getTemplateData: function()
     {
@@ -339,15 +399,6 @@ define([
     {
       const features = this.getActivityFeatures();
 
-      if (this.newStatus)
-      {
-        formData.status = this.newStatus;
-      }
-      else if (!features.implementers)
-      {
-        formData.status = 'finished';
-      }
-
       formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
       formData.userDivision = this.$id('userDivision').select2('data').id;
       formData.activityKind = this.$id('activityKind').select2('data').id;
@@ -367,6 +418,7 @@ define([
 
       if (features.rootCauses)
       {
+        formData.status = 'inProgress';
         formData.rootCauses.forEach(rootCause =>
         {
           rootCause.category = +rootCause.category;
@@ -382,16 +434,29 @@ define([
           }
         });
 
+        if (!formData.resolutions)
+        {
+          formData.resolutions = [];
+        }
+
+        formData.resolutions.forEach(resolution =>
+        {
+          resolution._id = +resolution._id;
+        });
+
         formData.reason = '';
         formData.suggestion = '';
+        formData.solution = '';
       }
       else
       {
         formData.rootCauses = null;
+        formData.resolutions = null;
       }
 
       if (features.implementers)
       {
+        formData.status = this.newStatus;
         formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
         formData.plannedAt = time.utc.getMoment(this.$id('plannedAt').val(), 'YYYY-MM-DD').toISOString();
       }
@@ -408,6 +473,11 @@ define([
       else
       {
         formData.participants = null;
+      }
+
+      if (!formData.status)
+      {
+        formData.status = 'finished';
       }
 
       return formData;
@@ -430,6 +500,26 @@ define([
       this.setUpRootCauseCategoryPopover();
       this.toggleKind();
       this.toggleActivityKind();
+
+      if (this.options.editMode)
+      {
+        this.resolutions.forEach(resolution => this.addResolution(resolution, this.resolutions, {}));
+      }
+
+if (!this.options.editMode)
+{
+  this.$id('subject').val(`Auto test ${new Date().toISOString()}`);
+  this.$id('userWorkplace').select2('data', this.$id('userWorkplace').data('select2').opts.data[0]).trigger('change');
+  this.$id('userDivision').select2('data', this.$id('userDivision').data('select2').opts.data[0]).trigger('change');
+  if (this.$id('workplace').length) {
+    this.$id('workplace').select2('data', this.$id('workplace').data('select2').opts.data[0]).trigger('change');
+    this.$id('division').select2('data', this.$id('division').data('select2').opts.data[0]).trigger('change');
+    this.$id('building').select2('data', this.$id('building').data('select2').opts.data[0]).trigger('change');
+    this.$id('location').select2('data', this.$id('location').data('select2').opts.data[0]).trigger('change');
+  }
+  this.$id('activityKind').select2('data', this.$id('activityKind').data('select2').opts.data[4]).trigger('change');
+  this.$('[name="rootCauses[0].why[0]"]').val('Test');
+}
     },
 
     setUpUserWorkplaceSelect2: function()
@@ -863,7 +953,10 @@ define([
       const $input = this.$id('activityKind');
       const kind = +this.$('input[name="kind"]:checked').val() || this.model.get('kind');
       const map = {};
-      const anyType = this.options.editMode || dictionaries.isCoordinator() || Action.can.manage();
+      const anyType = this.options.editMode
+        || Action.can.manage()
+        || dictionaries.isCoordinator();
+      const relationType = this.relation ? this.relation.getModelType() : null;
       const forcedActivityKind = dictionaries.activityKinds.get(this.options.forcedActivityKind);
 
       dictionaries.activityKinds.forEach(model =>
@@ -884,12 +977,12 @@ define([
 
           if (this.relation)
           {
-            if (!model.get('implementers'))
+            if (model.get('resolution') !== 'implementers')
             {
               return;
             }
 
-            if (!anyType && this.relation.getModelType() === 'nearMiss' && !model.get('nearMiss'))
+            if (!anyType && model.get('allowedTypes').includes(relationType))
             {
               return;
             }
@@ -1036,46 +1129,35 @@ define([
     getActivityFeatures: function()
     {
       const activityKind = dictionaries.activityKinds.get(+this.$id('activityKind').val());
+      const features = {
+        participants: false,
+        resolution: 'none',
+        rootCauses: false,
+        implementers: false
+      };
 
       if (activityKind)
       {
-        return activityKind.pick([
-          'rootCauses',
-          'implementers',
-          'participants'
-        ]);
+        Object.assign(features, activityKind.pick([
+          'participants',
+          'resolution'
+        ]));
       }
 
-      return {
-        rootCauses: false,
-        implementers: false,
-        participants: false
-      };
+      features.rootCauses = features.resolution === 'rootCauses';
+      features.implementers = features.resolution === 'implementers';
+      features.resolution = features.resolution !== 'none';
+
+      return features;
     },
 
     toggleActivityKind: function()
     {
       const features = this.getActivityFeatures();
 
-      this.$id('rootCausesGroup')
-        .toggleClass('hidden', !features.rootCauses);
-      this.$id('reason')
-        .closest('.form-group')
-        .toggleClass('hidden', features.rootCauses);
-
-      this.checkWhyValidity();
-
-      this.$id('plannedAt')
-        .prop('required', features.implementers);
-      this.$id('implementers')
-        .prop('required', features.implementers)
-        .closest('.form-group')
-        .toggleClass('has-required-select2', features.implementers)
-        .closest('.row')
-        .toggleClass('hidden', !features.implementers);
-      this.$id('suggestion')
-        .closest('.form-group')
-        .toggleClass('hidden', features.implementers);
+      this.toggleRootCausesFeature(features);
+      this.toggleImplementersFeature(features);
+      this.toggleRootCausesFeature(features);
 
       this.$id('participants')
         .prop('required', features.participants)
@@ -1088,6 +1170,56 @@ define([
       {
         viewport.$dialog.modal('adjustBackdrop');
       }
+    },
+
+    toggleRootCausesFeature: function(features)
+    {
+      this.$id('problem')
+        .closest('.form-group')
+        .removeClass('col-lg-4 col-lg-12')
+        .addClass(`col-lg-${features.rootCauses ? 12 : 4}`);
+
+      this.$id('rootCausesGroup')
+        .toggleClass('hidden', !features.rootCauses);
+
+      this.$id('reason')
+        .closest('.form-group')
+        .toggleClass('hidden', features.rootCauses);
+
+      this.$id('suggestion')
+        .closest('.form-group')
+        .toggleClass('hidden', features.rootCauses);
+
+      this.$id('solution')
+        .closest('.form-group')
+        .toggleClass('hidden', features.rootCauses);
+
+      this.$id('resolutionsGroup')
+        .toggleClass('hidden', !features.rootCauses);
+
+      this.$id('addResolution')
+        .prop('disabled', viewport.currentDialog === this);
+
+      this.checkWhyValidity();
+    },
+
+    toggleImplementersFeature: function(features)
+    {
+      this.$id('plannedAt')
+        .prop('required', features.implementers);
+
+      this.$id('implementers')
+        .prop('required', features.implementers)
+        .closest('.form-group')
+        .toggleClass('has-required-select2', features.implementers)
+        .closest('.row')
+        .toggleClass('hidden', !features.implementers);
+
+      this.$id('problem')
+        .prop('required', features.implementers)
+        .closest('.form-group')
+        .find('.control-label')
+        .toggleClass('is-required', features.implementers);
     },
 
     checkWhyValidity: function()
@@ -1198,6 +1330,188 @@ define([
     onDialogShown: function()
     {
       this.$id('subject').focus();
+    },
+
+    linkResolution: function()
+    {
+      const $rid = this.$id('resolutionRid');
+
+      $rid[0].setCustomValidity('');
+
+      if (!$rid[0].checkValidity())
+      {
+        $rid[0].reportValidity();
+
+        return;
+      }
+
+      if (!$rid.val().length)
+      {
+        $rid.focus();
+
+        return;
+      }
+
+      const parts = $rid.val().toUpperCase().split('-');
+      const prefix = parts[0];
+      const relationType = dictionaries.PREFIX_TO_TYPE[prefix];
+      const rid = `${prefix}-${parts[1]}-${parts[2].padStart(6, '0')}`;
+
+      if (rid === this.model.get('rid'))
+      {
+        $rid.val('').focus();
+
+        return;
+      }
+
+      $rid.val(rid);
+
+      const $existingRow = this.$id('resolutions').find(`tr[data-id="${rid}"]`);
+
+      if ($existingRow.length)
+      {
+        $rid.val('');
+        $existingRow.removeClass('highlight');
+        $existingRow.addClass('highlight');
+
+        clearTimeout(this.timers[`highlight:${rid}`]);
+        this.timers[`highlight:${rid}`] = setTimeout(() => $existingRow.removeClass('highlight'), 1000);
+
+        return;
+      }
+
+      viewport.msg.loading();
+
+      const $actions = this.$id('resolutionsActions')
+        .find('input, button')
+        .prop('disabled', true);
+
+      const req = this.ajax({
+        url: `/osh/${dictionaries.TYPE_TO_MODULE[relationType]}?rid=${rid}&exclude(changes)&limit(1)`
+      });
+
+      req.fail(() =>
+      {
+        viewport.msg.loadingFailed();
+
+        $rid[0].setCustomValidity(this.t('resolutions:error:failure'));
+      });
+
+      req.done(res =>
+      {
+        viewport.msg.loaded();
+
+        if (!res.collection || !res.collection.length)
+        {
+          $rid[0].setCustomValidity(this.t('resolutions:error:notFound'));
+
+          return;
+        }
+
+        const data = res.collection[0];
+
+        if (data.status === 'finished' && !(this.model.get('resolutions') || []).some(r => r.rid === data.rid))
+        {
+          $rid[0].setCustomValidity(this.t('resolutions:error:finished'));
+
+          return;
+        }
+
+        $rid.val('');
+
+        this.resolutions.add(data, {highlight: true});
+      });
+
+      req.always(() =>
+      {
+        $actions.prop('disabled', false);
+
+        this.$id('addResolution')
+          .prop('disabled', viewport.currentDialog === this);
+
+        if (!$rid[0].checkValidity())
+        {
+          $rid[0].reportValidity();
+        }
+      });
+    },
+
+    addResolution: function(resolution, resolutions, {highlight})
+    {
+      const $row = this.renderPartial(resolutionRowTemplate, {
+        i: this.resolutionsI++,
+        entry: resolution.serializeRow(),
+        resolution: resolution.getRelation()
+      });
+
+      this.$id('resolutions').append($row);
+
+      if (highlight)
+      {
+        $row.addClass('highlight');
+
+        this.timers[`highlight:${resolution.id}`] = setTimeout(() => $row.removeClass('highlight'), 1000);
+      }
+    },
+
+    removeResolution: function(resolution)
+    {
+      this.$id('resolutions').find(`tr[data-id="${resolution.id}"]`).remove();
+    },
+
+    showAddResolutionDialog: function(type)
+    {
+      if (!this.el.checkValidity())
+      {
+        return this.$id('save').click();
+      }
+
+      const formData = Object.assign(this.model.toJSON(), this.getFormData());
+      let dialogView = null;
+
+      if (type === 'kaizen')
+      {
+        dialogView = new KaizenFormView({
+          relation: this.model,
+          model: new Kaizen({
+            kind: formData.kind,
+            workplace: formData.workplace,
+            division: formData.division,
+            building: formData.building,
+            location: formData.location,
+            station: formData.station
+          })
+        });
+      }
+      else if (type === 'action')
+      {
+        const ActionFormView = this.constructor;
+
+        dialogView = new ActionFormView({
+          relation: this.model,
+          model: new Action({
+            kind: formData.kind,
+            workplace: formData.workplace,
+            division: formData.division,
+            building: formData.building,
+            location: formData.location,
+            station: formData.station
+          })
+        });
+      }
+      else
+      {
+        return;
+      }
+
+      viewport.showDialog(dialogView, this.t(`resolutions:title:${type}`));
+
+      dialogView.handleSuccess = () =>
+      {
+        this.resolutions.add(dialogView.model.toJSON(), {highlight: true});
+
+        viewport.closeDialog();
+      };
     }
 
   });

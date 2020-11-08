@@ -8,14 +8,13 @@ define([
   'app/core/util/showDeleteFormPage',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/pages/ListPage',
-  'app/wmes-osh-common/pages/AddFormPage',
-  'app/wmes-osh-common/pages/EditFormPage',
   './Action',
   './ActionCollection',
   './pages/DetailsPage',
+  './pages/AddFormPage',
+  './pages/EditFormPage',
   './views/FilterView',
   './views/ListView',
-  './views/FormView',
   'i18n!app/nls/wmes-osh-actions'
 ], function(
   _,
@@ -25,14 +24,13 @@ define([
   showDeleteFormPage,
   dictionaries,
   ListPage,
-  AddFormPage,
-  EditFormPage,
   Action,
   ActionCollection,
   DetailsPage,
+  AddFormPage,
+  EditFormPage,
   FilterView,
-  ListView,
-  FormView
+  ListView
 ) {
   'use strict';
 
@@ -59,7 +57,6 @@ define([
   router.map('/osh/actions;add', canAdd, () =>
   {
     viewport.showPage(new AddFormPage({
-      FormView,
       model: new Action()
     }));
   });
@@ -67,7 +64,6 @@ define([
   router.map('/osh/actions/:id;edit', canEdit, (req) =>
   {
     viewport.showPage(new EditFormPage({
-      FormView,
       model: new Action({_id: +req.params.id})
     }));
   });

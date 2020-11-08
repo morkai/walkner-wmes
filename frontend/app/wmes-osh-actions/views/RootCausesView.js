@@ -23,7 +23,7 @@ define([
 
       this.once('afterRender', () =>
       {
-        this.listenTo(this.model, 'change:rootCauses', _.debounce(this.render, 1));
+        this.listenTo(this.model, 'change:rootCauses', this.render);
         this.listenTo(this.model, 'seen', this.onSeen);
       });
     },
@@ -40,7 +40,7 @@ define([
 
     serializeRootCauses: function()
     {
-      return this.model.get('rootCauses')
+      return (this.model.get('rootCauses') || [])
         .map(rootCause =>
         {
           const category = dictionaries.getLabel('rootCauseCategories', rootCause.category, {long: true});

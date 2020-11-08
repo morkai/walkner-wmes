@@ -73,6 +73,12 @@ define([
     action: 'A',
     observation: 'O'
   };
+  const PREFIX_TO_TYPE = {
+    Z: 'nearMiss',
+    K: 'kaizen',
+    A: 'action',
+    O: 'observation'
+  };
   const TYPE_TO_MODULE = {
     nearMiss: 'nearMisses',
     kaizen: 'kaizens',
@@ -94,6 +100,7 @@ define([
 
   const dictionaries = {
     TYPE_TO_PREFIX,
+    PREFIX_TO_TYPE,
     TYPE_TO_MODULE,
     TYPE_TO_MODEL,
     statuses: {

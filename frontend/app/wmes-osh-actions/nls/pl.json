@@ -32,6 +32,7 @@
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:attachments": "Załączniki",
   "PROPERTY:relations": "Powiązania",
+  "PROPERTY:resolutions": "Wdrożone rozwiązania",
 
   "filter:user:mine": "Moje",
   "filter:user:others": "Użytkownik",
@@ -52,5 +53,20 @@
   "FORM:placeholder:noBuilding": "Wybierz budynek...",
   "FORM:placeholder:noLocation": "Wybierz obszar...",
   "FORM:creator": "Osoba zgłaszająca",
-  "FORM:plannedAt": "Planowany termin zakończenia"
+  "FORM:plannedAt": "Planowany termin zakończenia",
+
+  "resolutions:title:kaizen": "Dodawanie nowego kaizena",
+  "resolutions:title:action": "Dodawanie nowej akcji",
+  "resolutions:rid": "ID",
+  "resolutions:status": "Status",
+  "resolutions:subject": "Temat",
+  "resolutions:implementers": "Realizator",
+  "resolutions:add": "Dodaj nowe zgłoszenie...",
+  "resolutions:add:kaizen": "Dodaj nowy kaizen",
+  "resolutions:add:action": "Dodaj nową akcję",
+  "resolutions:link": "Przypisz istniejące zgłoszenie",
+  "resolutions:unlink": "Odłącz zgłoszenie",
+  "resolutions:error:failure": "Sprawdzanie zgłoszenia nie powiodło się.",
+  "resolutions:error:notFound": "Zgłoszenie nie istnieje.",
+  "resolutions:error:finished": "Zgłoszenie jest już zakończone."
 }

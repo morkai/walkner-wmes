@@ -31,6 +31,7 @@ define([
       const observer = this.model.getObserver();
 
       return {
+        hidden: !!this.model.get('resolutions'),
         solution: this.model.get('solution'),
         unseen: observer.notify && (observer.changes.all || observer.changes.solution)
       };

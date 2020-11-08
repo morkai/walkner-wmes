@@ -1,12 +1,16 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
+  'jquery',
   'app/wmes-osh-common/pages/DetailsPage',
   'app/wmes-osh-common/views/AttachmentsView',
   'app/wmes-osh-common/views/PanelView',
   'app/wmes-osh-kaizens/templates/details/page',
   'app/wmes-osh-kaizens/templates/details/props'
 ], function(
+  _,
+  $,
   DetailsPage,
   AttachmentsView,
   PanelView,
@@ -19,6 +23,18 @@ define([
 
     template,
     propsTemplate,
+
+    initialize: function()
+    {
+      DetailsPage.prototype.initialize.apply(this, arguments);
+
+      this.once('afterRender', () =>
+      {
+        const resizePanels = _.debounce(this.resizePanels.bind(this), 33);
+
+        $(window).on(`resize.${this.idPrefix}`, resizePanels);
+      });
+    },
 
     defineViews: function()
     {
@@ -63,6 +79,36 @@ define([
     {
       return Object.assign(DetailsPage.prototype.getAttachmentsViewOptions.apply(this, arguments), {
         kind: 'other'
+      });
+    },
+
+    afterRender: function()
+    {
+      this.resizePanels();
+    },
+
+    resizePanels: function()
+    {
+      const $problem = this.$id('problem').find('.panel-body');
+      const $reason = this.$id('reason').find('.panel-body');
+      const $suggestion = this.$id('suggestion').find('.panel-body');
+      const $solution = this.$id('solution').find('.panel-body');
+
+      [$problem, $reason, $suggestion, $solution].forEach($panel =>
+      {
+        $panel.css('height', '');
+      });
+
+      if (window.innerWidth < 1200)
+      {
+        return;
+      }
+
+      [[$problem, $suggestion], [$reason, $solution]].forEach(group =>
+      {
+        const maxHeight = Math.max.apply(Math, group.map($panel => $panel.outerHeight()));
+
+        group.forEach($panel => $panel.css('height', `${maxHeight}px`));
       });
     }
 

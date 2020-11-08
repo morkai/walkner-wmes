@@ -21,6 +21,11 @@
   "navbar:search:actions": "akcja",
   "navbar:search:observations": "obserwacja",
 
+  "type:nearMiss": "ZPW",
+  "type:kaizen": "Kaizen",
+  "type:action": "Akcja",
+  "type:observation": "Obserwacja",
+
   "priority:0": "Niski",
   "priority:1": "Normalny",
   "priority:2": "Wysoki",

@@ -37,3 +37,12 @@
 .osh-actions-form-rootCause-popover h5 {
   font-weight: bold;
 }
+.osh-actions-form-resolutions-group {
+  margin-bottom: 15px;
+}
+.osh-actions-form-resolutions-group td {
+  background-color: #fff;
+}
+.osh-actions-form-resolutions-actions {
+  width: 190px;
+}

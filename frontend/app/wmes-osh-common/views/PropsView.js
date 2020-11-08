@@ -11,6 +11,13 @@ define([
 
     remoteTopics: {},
 
+    initialize: function()
+    {
+      DetailsView.prototype.initialize.apply(this, arguments);
+
+      this.timers.updateDuration = setInterval(this.updateDuration.bind(this), 60000);
+    },
+
     getTemplateData: function()
     {
       return {
@@ -32,6 +39,11 @@ define([
       }
 
       return unseen;
+    },
+
+    updateDuration: function()
+    {
+      this.$('.prop[data-prop="duration"] .prop-value').text(this.model.getDuration());
     }
 
   });

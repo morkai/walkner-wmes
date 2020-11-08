@@ -31,7 +31,8 @@ define([
     {
       return {
         active: true,
-        kinds: []
+        kinds: [],
+        resolution: 'none'
       };
     },
 
@@ -52,11 +53,9 @@ define([
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
-      obj.nearMiss = t('core', `BOOL:${obj.nearMiss}`);
-      obj.rootCauses = t('core', `BOOL:${obj.rootCauses}`);
+      obj.allowedTypes = obj.allowedTypes.map(type => t('wmes-osh-common', `type:${type}`)).join(', ');
+      obj.resolution = t(this.nlsDomain, `resolution:${obj.resolution}`);
       obj.participants = t('core', `BOOL:${obj.participants}`);
-      obj.implementers = t('core', `BOOL:${obj.implementers}`);
-      obj.resolutions = t('core', `BOOL:${obj.resolutions}`);
 
       return obj;
     },

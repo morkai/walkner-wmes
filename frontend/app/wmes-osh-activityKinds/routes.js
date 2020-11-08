@@ -41,6 +41,9 @@ define([
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
         {id: 'kinds', className: 'is-min'},
+        {id: 'allowedTypes', className: 'is-min'},
+        {id: 'resolution', className: 'is-min'},
+        {id: 'participants', className: 'is-min'},
         {id: 'active', className: 'is-min'}
       ]
     })));

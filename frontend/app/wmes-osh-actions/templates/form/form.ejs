@@ -103,6 +103,22 @@
               labelClassName: 'is-required'
             }) %>
           </div>
+          <div class="row hidden">
+            <%- helpers.formGroup({
+              name: 'implementers',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-8',
+              labelClassName: 'is-required'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'plannedAt',
+              type: 'date',
+              label: 'FORM:',
+              groupClassName: 'col-lg-4',
+              labelClassName: 'is-required'
+            }) %>
+          </div>
           <div class="row">
             <%- helpers.formGroup({
               name: 'problem',
@@ -148,27 +164,40 @@
               <% }) %>
             </div>
           </div>
-          <%- helpers.formGroup({
-            name: 'solution',
-            type: 'textarea',
-            label: 'PROPERTY:',
-            rows: 4
-          }) %>
-          <div class="row hidden">
+          <div class="row">
             <%- helpers.formGroup({
-              name: 'implementers',
-              type: 'select2',
+              name: 'solution',
+              type: 'textarea',
               label: 'PROPERTY:',
-              groupClassName: 'col-lg-8',
-              labelClassName: 'is-required'
+              groupClassName: 'col-lg-12',
+              rows: 4
             }) %>
-            <%- helpers.formGroup({
-              name: 'plannedAt',
-              type: 'date',
-              label: 'FORM:',
-              groupClassName: 'col-lg-4',
-              labelClassName: 'is-required'
-            }) %>
+          </div>
+          <div id="<%- id('resolutionsGroup') %>" class="osh-actions-form-resolutions-group hidden is-colored">
+            <label class="control-label"><%- t('PROPERTY:resolutions') %></label>
+            <table class="table table-bordered table-hover table-condensed">
+              <thead>
+              <tr>
+                <th class="is-min"><%- t('resolutions:rid') %></th>
+                <th class="is-min"><%- t('resolutions:status') %></th>
+                <th><%- t('resolutions:subject') %></th>
+                <th class="is-min"><%- t('resolutions:implementers') %></th>
+                <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+              </tr>
+              </thead>
+              <tbody id="<%- id('resolutions') %>"></tbody>
+            </table>
+            <div id="<%- id('resolutionsActions') %>" class="input-group osh-actions-form-resolutions-actions">
+              <input id="<%- id('resolutionRid') %>" class="form-control text-mono" type="text" pattern="^[akAK]-[0-9]{4}-[0-9]{1,6}$" maxlength="13">
+              <span class="input-group-btn">
+                <button id="<%- id('linkResolution') %>" type="button" class="btn btn-default" title="<%- t('resolutions:link') %>"><i class="fa fa-link"></i></button>
+                <button id="<%- id('addResolution') %>" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('resolutions:add') %>"><i class="fa fa-plus"></i></button>
+                <ul class="dropdown-menu">
+                  <li><a id="<%- id('addKaizenResolution') %>" href="javascript:void(0)"><%- t('resolutions:add:kaizen') %></a></li>
+                  <li><a id="<%- id('addActionResolution') %>" href="javascript:void(0)"><%- t('resolutions:add:action') %></a></li>
+                </ul>
+              </span>
+            </div>
           </div>
         </div>
       </div>

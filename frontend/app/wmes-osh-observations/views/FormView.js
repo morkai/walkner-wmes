@@ -395,24 +395,6 @@ define([
       {
         this.toggleKind();
       }
-
-if (!this.options.editMode)
-{
-  this.$id('subject').val(`Auto test ${new Date().toISOString()}`);
-  this.$id('company').select2('data', this.$id('company').data('select2').opts.data[0]).trigger('change');
-  this.$id('workplace').select2('data', this.$id('workplace').data('select2').opts.data[0]).trigger('change');
-  this.$id('division').select2('data', this.$id('division').data('select2').opts.data[0]).trigger('change');
-  this.$id('building').select2('data', this.$id('building').data('select2').opts.data[0]).trigger('change');
-  this.$id('location').select2('data', this.$id('location').data('select2').opts.data[0]).trigger('change');
-  this.$id('behaviors').children().first().find('[name$="safe"]').last().click();
-  this.$id('behaviors').children().first().find('[name$="what"]').val('Auto what');
-  this.$id('behaviors').children().first().find('[name$="why"]').val('Auto why');
-  this.$id('behaviors').children().first().find('[name$="easy"]').last().click();
-  this.$id('workConditions').children().first().find('[name$="safe"]').last().click();
-  this.$id('workConditions').children().first().find('[name$="what"]').val('Auto what');
-  this.$id('workConditions').children().first().find('[name$="why"]').val('Auto why');
-  this.$id('workConditions').children().first().find('[name$="easy"]').first().click();
-}
     },
 
     setUpUserWorkplaceSelect2: function()

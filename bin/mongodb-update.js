@@ -3,25 +3,7 @@
 
 'use strict';
 
-db.comprelentries.dropIndex({oldCode: 1});
-db.comprelentries.dropIndex({newCode: 1});
-db.comprelentries.createIndex({'oldComponents._id': 1});
-db.comprelentries.createIndex({'newComponents._id': 1});
-
-db.comprelentries.find({newComponents: {$exists: false}}).forEach(compRel =>
-{
-  const newComponents = [{
-    _id: compRel.newCode,
-    name: compRel.newName
-  }];
-
-  db.comprelentries.updateOne({_id: compRel._id}, {
-    $unset: {
-      newCode: 1,
-      newName: 1
-    },
-    $set: {
-      newComponents
-    }
-  });
-});
+db.oshactivitykinds.updateMany({resolution: {$exists: false}}, {$set: {resolution: 'none'}});
+db.oshactivitykinds.updateMany({rootCauses: {$exists: true}}, {$unset: {rootCauses: 1}});
+db.oshactivitykinds.updateMany({implementers: {$exists: true}}, {$unset: {implementers: 1}});
+db.oshactivitykinds.updateMany({participants: {$exists: false}}, {$set: {participants: false}});
