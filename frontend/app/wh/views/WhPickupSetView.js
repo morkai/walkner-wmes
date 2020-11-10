@@ -340,7 +340,14 @@ define([
         html: true,
         content: function()
         {
-          var func = view.whOrders.get(view.$(this).closest('.wh-set-item')[0].dataset.id).getFunc(this.dataset.func);
+          var whOrder = view.whOrders.get(view.$(this).closest('.wh-set-item')[0].dataset.id);
+
+          if (!whOrder)
+          {
+            return;
+          }
+
+          var func = whOrder.getFunc(this.dataset.func);
 
           if (!func.carts.length && !func.problemArea && !func.comment)
           {

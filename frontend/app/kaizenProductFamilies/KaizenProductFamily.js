@@ -35,7 +35,6 @@ define([
       var obj = this.toJSON();
 
       obj.active = t('core', 'BOOL:' + obj.active);
-      obj.mrps = obj.mrps.join('; ');
 
       obj.coordSections = (obj.coordSections || []).map(function(coordSection)
       {
@@ -50,6 +49,15 @@ define([
           mor: coordSection.mor
         };
       });
+
+      return obj;
+    },
+
+    serializeRow: function()
+    {
+      var obj = this.serialize();
+
+      obj.mrps = obj.mrps.join('; ');
 
       return obj;
     }

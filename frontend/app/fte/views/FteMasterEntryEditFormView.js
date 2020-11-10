@@ -109,11 +109,15 @@ define([
       {
         var noPlanEl = this.$('.fte-masterEntry-noPlan[data-task="' + e.currentTarget.dataset.task + '"]')[0];
 
-        noPlanEl.checked = false;
+        if (noPlanEl)
+        {
+          noPlanEl.checked = false;
 
-        this.updatePlan(noPlanEl);
+          this.updatePlan(noPlanEl);
 
-        this.$(e.currentTarget).parent().remove();
+          this.$(e.currentTarget).parent().remove();
+        }
+
 
         return false;
       }

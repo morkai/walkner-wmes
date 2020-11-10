@@ -67,9 +67,10 @@ define([
       },
       'change #-faultCode': function()
       {
-        var fault = qiDictionaries.faults.get(this.$id('faultCode').val());
-        var name = fault.get('name').trim();
-        var description = fault.get('description').trim();
+        var code = this.$id('faultCode').val();
+        var fault = qiDictionaries.faults.get(code);
+        var name = fault ? fault.get('name').trim() : code;
+        var description = fault ? fault.get('description').trim() : '';
 
         this.$id('faultDescription').val(name + (description ? (':\n' + description) : ''));
       },

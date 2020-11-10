@@ -138,6 +138,7 @@ define([
         psDist: obj.psStatus === 'unknown' ? DIST_STATUS_TO_ICON.ignored : DIST_STATUS_TO_ICON[obj.psDistStatus]
       };
       obj.picklistDoneIcon = PICKLIST_DONE_TO_ICON[obj.picklistDone];
+      console.log(filters);
       obj.hidden = !filters
         || startTime < filters.startTime.from
         || startTime >= filters.startTime.to
@@ -157,14 +158,28 @@ define([
       return obj;
     },
 
-    serializeSet: function(setData, plan, whUser)
+    getFilters: function(plan)
     {
-      var obj = this.serialize(plan, setData.i, this.collection ? this.collection.getFilters(plan) : {
+      if (this.collection)
+      {
+        return this.collection.getFilters(plan);
+      }
+
+      return {
         startTime: {},
         whStatuses: [],
         psStatuses: [],
-        distStatuses: []
-      });
+        distStatuses: [],
+        orders: [],
+        sets: [],
+        lines: [],
+        mrps: []
+      };
+    },
+
+    serializeSet: function(setData, plan, whUser)
+    {
+      var obj = this.serialize(plan, setData.i, this.getFilters(plan));
       var canManage = user.isAllowedTo('WH:MANAGE');
       var canManageCarts = user.isAllowedTo('WH:MANAGE:CARTS');
       var userFunc = this.getUserFunc(whUser);

@@ -944,9 +944,12 @@ define([
         }
         else if (row.classList.contains('planning-wh-newLine-tr'))
         {
-          groups[groupNo].lines[groupLine].separator = row;
+          if (groups[groupNo] && groups[groupNo].lines[groupLine])
+          {
+            groups[groupNo].lines[groupLine].separator = row;
+          }
         }
-        else if (row.classList.contains('planning-wh-newGroup-tr'))
+        else if (groups[groupNo] && row.classList.contains('planning-wh-newGroup-tr'))
         {
           groups[groupNo].separator = row;
         }

@@ -80,14 +80,14 @@ define([
       var displayOptions = plan.displayOptions;
 
       return {
+        startTime: displayOptions.getStartTimeRange(plan.id),
         whStatuses: displayOptions.get('whStatuses') || [],
         psStatuses: displayOptions.get('psStatuses') || [],
         distStatuses: displayOptions.get('distStatuses') || [],
         orders: displayOptions.get('orders') || [],
-        lines: displayOptions.get('lines') || [],
-        mrps: displayOptions.get('mrps') || [],
         sets: displayOptions.get('sets') || [],
-        startTime: displayOptions.getStartTimeRange(plan.id)
+        lines: displayOptions.get('lines') || [],
+        mrps: displayOptions.get('mrps') || []
       };
     },
 
