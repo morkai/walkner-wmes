@@ -316,7 +316,9 @@ define([
 
       if (column.titleProperty)
       {
-        attrs.title = row[column.titleProperty];
+        attrs.title = typeof column.titleProperty === 'function'
+          ? row[column.titleProperty(row, column)]
+          : row[column.titleProperty];
       }
 
       if (attrs.title)

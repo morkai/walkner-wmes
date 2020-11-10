@@ -1,4 +1,8 @@
 {
+  "navbar:hr": "HR",
+  "navbar:users": "Użytkownicy",
+  "navbar:employment": "Zatrudnienie",
+  "navbar:brigades": "Brygady",
   "navbar:companies": "Firmy",
   "navbar:workplaces": "Zakłady",
   "navbar:divisions": "Wydziały",
@@ -16,10 +20,10 @@
   "navbar:kaizens": "Kaizen",
   "navbar:actions": "Akcje",
   "navbar:observations": "Obserwacje",
-  "navbar:search:nearMisses": "ZPW",
-  "navbar:search:kaizens": "kaizen",
-  "navbar:search:actions": "akcja",
-  "navbar:search:observations": "obserwacja",
+  "navbar:search:nearMiss": "ZPW",
+  "navbar:search:kaizen": "kaizen",
+  "navbar:search:action": "akcja",
+  "navbar:search:observation": "obserwacja",
 
   "type:nearMiss": "ZPW",
   "type:kaizen": "Kaizen",

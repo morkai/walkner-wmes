@@ -1,7 +1,6 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  './dashboard/routes',
   './events/routes',
   './users/routes',
   './changelog/routes',
@@ -15,6 +14,7 @@ define([
   './opinionSurveyQuestions/routes',
   './opinionSurveyScanTemplates/routes',
   './opinionSurveyOmrResults/routes',
+  './wmes-osh-dashboard/routes',
   './wmes-osh-companies/routes',
   './wmes-osh-workplaces/routes',
   './wmes-osh-divisions/routes',

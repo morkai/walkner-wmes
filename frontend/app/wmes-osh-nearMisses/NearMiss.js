@@ -47,15 +47,18 @@ define([
     {
       const obj = Entry.prototype.serializeRow.apply(this, arguments);
 
-      obj.eventDate = time.utc.format(obj.eventDate, 'L, H');
+      obj.eventDate = obj.eventDate ? time.utc.format(obj.eventDate, 'L, H') : '';
 
-      if (obj.resolution._id)
+      if (obj.resolution)
       {
-        obj.resolution = t(this.nlsDomain, `resolution:link:${obj.resolution.type}`, obj.resolution);
-      }
-      else
-      {
-        obj.resolution = t(this.nlsDomain, `resolution:desc:${obj.resolution.type}`);
+        if (obj.resolution._id)
+        {
+          obj.resolution = t(this.nlsDomain, `resolution:link:${obj.resolution.type}`, obj.resolution);
+        }
+        else
+        {
+          obj.resolution = t(this.nlsDomain, `resolution:desc:${obj.resolution.type}`);
+        }
       }
 
       return obj;

@@ -5,11 +5,11 @@
 @import url("./select2.css");
 @import url("../app/core/assets/main.css");
 @import url("../app/settings/assets/main.css");
-@import url("../app/dashboard/assets/main.css");
 @import url("../app/users/assets/main.css");
 @import url("../app/reports/assets/main.css");
 @import url("../app/updater/assets/main.css");
 @import url("../app/wmes-osh-common/assets/main.css");
+@import url("../app/wmes-osh-dashboard/assets/main.css");
 @import url("../app/wmes-osh-nearMisses/assets/main.css");
 @import url("../app/wmes-osh-kaizens/assets/main.css");
 @import url("../app/wmes-osh-actions/assets/main.css");

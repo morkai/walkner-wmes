@@ -18,13 +18,15 @@ define([
       this.timers.updateDuration = setInterval(this.updateDuration.bind(this), 60000);
     },
 
-    getTemplateData: function()
+    serialize: function()
     {
-      return {
-        details: this.model.serializeDetails(),
-        unseen: this.unseen.bind(this, this.model.getObserver()),
-        model: this.model.attributes
-      };
+      const templateData = DetailsView.prototype.serialize.apply(this, arguments);
+
+      templateData.details = templateData.model;
+      templateData.model = this.model.attributes;
+      templateData.unseen = this.unseen.bind(this, this.model.getObserver());
+
+      return templateData;
     },
 
     unseen: function(observer, prop, asClassName)

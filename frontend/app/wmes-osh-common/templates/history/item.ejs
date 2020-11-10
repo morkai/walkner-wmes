@@ -1,6 +1,6 @@
 <div class="osh-history-item <%- item.comment !== '' ? 'has-comment' : '' %>">
   <span class="osh-history-user <%- item.unseen ? 'osh-unseen' : '' %>"><%- item.user %></span>,
-  <time class="osh-history-time <%- item.unseen ? 'osh-eunseen' : '' %>" datetime="<%- item.time.iso %>" title="<%- item.time.long %>"><%- item.time.daysAgo > 3 ? item.time.long : item.time.human %></time>:
+  <time class="osh-history-time <%- item.unseen ? 'osh-unseen' : '' %>" datetime="<%- item.time.iso %>" title="<%- item.time.long %>"><%- item.time.daysAgo > 3 ? item.time.long : item.time.human %></time>:
   <% if (item.changes.length) { %>
     <table class="table table-condensed osh-history-changes">
       <tbody>

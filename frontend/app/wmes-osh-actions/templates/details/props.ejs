@@ -40,7 +40,7 @@
             {id: '!creator', nameClassName: unseen('creator', 1)},
             {
               id: '!implementers',
-              visible: model.implementers.length > 0,
+              visible: !!model.implementers && model.implementers.length > 0,
               nameClassName: unseen('implementers', 1),
               value: users =>
               {
@@ -73,7 +73,7 @@
             }},
             {
               id: '!participants',
-              visible: model.participants.length > 0,
+              visible: !!model.participants && model.participants.length > 0,
               nameClassName: unseen('participants', 1),
               value: users =>
               {
@@ -113,7 +113,7 @@
             {id: 'createdAt', nameClassName: unseen('createdAt', 1)},
             {id: 'startedAt', nameClassName: unseen('startedAt', 1)},
             {id: 'implementedAt', nameClassName: unseen('implementedAt', 1)},
-            {id: 'plannedAt', nameClassName: unseen('plannedAt', 1)},
+            {id: 'plannedAt', nameClassName: unseen('plannedAt', 1), visible: model.plannedAt !== null},
             {id: 'finishedAt', nameClassName: unseen('finishedAt', 1)},
             {id: 'duration', nameClassName: unseen('duration', 1)}
           ]) %>

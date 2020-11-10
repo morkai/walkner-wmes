@@ -56,7 +56,7 @@ define([
   {
     viewport.showPage(new DetailsPage({
       propsTemplate,
-      model: new NearMiss({_id: +req.params.id})
+      model: new NearMiss({_id: +req.params.id || req.params.id})
     }));
   });
 
@@ -72,7 +72,7 @@ define([
   {
     viewport.showPage(new EditFormPage({
       FormView,
-      model: new NearMiss({_id: +req.params.id})
+      model: new NearMiss({_id: +req.params.id || req.params.id})
     }));
   });
 

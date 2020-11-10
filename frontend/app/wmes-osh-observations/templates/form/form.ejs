@@ -6,8 +6,10 @@
       <% if (!editMode) { %>
         <div class="form-group">
           <label class="control-label"><%- t('PROPERTY:observationKind') %></label>
-          <br>
-          <% kinds.forEach(option => { %>
+          <% kinds.forEach((option, optionI) => { %>
+            <% if (kinds.length > 5 || optionI === 0) { %>
+              <br>
+            <% } %>
             <label class="radio-inline" title="<%= option.title %>">
               <input name="observationKind" type="radio" value="<%- option.value %>">
               <%= option.label %>

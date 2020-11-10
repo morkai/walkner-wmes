@@ -1,195 +1,199 @@
 <ul id="<%- idPrefix %>-searchResults" class="dropdown-menu navbar-search-results">
   <% if (results.from) { %>
-  <li class="dropdown-header">
-    <%- time.format(results.from, 'LL') %><!--
-    //--><%- results.shift ? (', ' + t('SHIFT:' + results.shift)) : '' %><!--
-    //--><%- results.division ? (', ' + results.division) : '' %>
-  </li>
-  <% if (loadedModules.isLoaded('planning') && user.isAllowedTo('PLANNING:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#planning/plans/<%- time.format(results.from, 'YYYY-MM-DD') %>"><%- t('NAVBAR:SEARCH:plan:prod') %></a></li>
-  <li class="navbar-search-result"><a href="#planning/wh/<%- time.format(results.from, 'YYYY-MM-DD') %>"><%- t('NAVBAR:SEARCH:plan:wh') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('paintShop') && user.isAllowedTo('PAINT_SHOP:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#paintShop/<%- time.format(results.from, 'YYYY-MM-DD') %>"><%- t('NAVBAR:SEARCH:plan:ps') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?limit(-1337)&scheduledStartDate>=<%- results.from %>&scheduledStartDate<=<%- results.to %>"><%- t('NAVBAR:SEARCH:sapOrdersStart') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('hourlyPlans') && user.isAllowedTo('HOURLY_PLANS:VIEW')) { %>
-  <% if (results.division) { %>
-  <li class="navbar-search-result"><a href="#hourlyPlans/<%- results.fromShift %>/<%- results.division %>"><%- t('NAVBAR:SEARCH:hourlyPlan') %></a></li>
-  <% } else { %>
-  <li class="navbar-search-result"><a href="#hourlyPlans?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %>"><%- t('NAVBAR:SEARCH:hourlyPlans') %></a></li>
-  <% } %>
-  <% } %>
-  <% if (loadedModules.isLoaded('fte')) { %>
-  <% if (user.isAllowedTo('FTE:MASTER:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#fte/master?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:fte:master') %></a></li>
-  <% } %>
-  <% if (user.isAllowedTo('FTE:WH:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#fte/wh?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:fte:wh') %></a></li>
-  <% } %>
-  <% if (user.isAllowedTo('FTE:LEADER:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#fte/leader?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:fte:leader') %></a></li>
-  <% } %>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodShifts?sort(createdAt)&limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodShifts') %></a></li>
-  <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&startedAt>=<%- results.fromShift %>&startedAt<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodShiftOrdersList') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodDowntimes?sort(startedAt)&limit(-1337)&startedAt>=<%- results.fromShift %>&startedAt<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodDowntimes') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&reqDate>=<%- results.from %>&reqDate<<%- results.to %>"><%- t('NAVBAR:SEARCH:xiconfOrders') %></a></li>
-  <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&startedAt>=<%- results.shiftStart %>&startedAt<<%- results.shiftEnd %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
-  <% } %>
-  <li class="divider"></li>
+    <li class="dropdown-header">
+      <%- time.format(results.from, 'LL') %><!--
+      //--><%- results.shift ? (', ' + t('SHIFT:' + results.shift)) : '' %><!--
+      //--><%- results.division ? (', ' + results.division) : '' %>
+    </li>
+    <% if (loadedModules.isLoaded('planning') && user.isAllowedTo('PLANNING:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#planning/plans/<%- time.format(results.from, 'YYYY-MM-DD') %>"><%- t('NAVBAR:SEARCH:plan:prod') %></a></li>
+      <li class="navbar-search-result"><a href="#planning/wh/<%- time.format(results.from, 'YYYY-MM-DD') %>"><%- t('NAVBAR:SEARCH:plan:wh') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('paintShop') && user.isAllowedTo('PAINT_SHOP:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#paintShop/<%- time.format(results.from, 'YYYY-MM-DD') %>"><%- t('NAVBAR:SEARCH:plan:ps') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#orders?limit(-1337)&scheduledStartDate>=<%- results.from %>&scheduledStartDate<=<%- results.to %>"><%- t('NAVBAR:SEARCH:sapOrdersStart') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('hourlyPlans') && user.isAllowedTo('HOURLY_PLANS:VIEW')) { %>
+      <% if (results.division) { %>
+        <li class="navbar-search-result"><a href="#hourlyPlans/<%- results.fromShift %>/<%- results.division %>"><%- t('NAVBAR:SEARCH:hourlyPlan') %></a></li>
+      <% } else { %>
+        <li class="navbar-search-result"><a href="#hourlyPlans?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %>"><%- t('NAVBAR:SEARCH:hourlyPlans') %></a></li>
+      <% } %>
+    <% } %>
+    <% if (loadedModules.isLoaded('fte')) { %>
+      <% if (user.isAllowedTo('FTE:MASTER:VIEW')) { %>
+        <li class="navbar-search-result"><a href="#fte/master?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:fte:master') %></a></li>
+      <% } %>
+      <% if (user.isAllowedTo('FTE:WH:VIEW')) { %>
+        <li class="navbar-search-result"><a href="#fte/wh?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:fte:wh') %></a></li>
+      <% } %>
+      <% if (user.isAllowedTo('FTE:LEADER:VIEW')) { %>
+        <li class="navbar-search-result"><a href="#fte/leader?limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:fte:leader') %></a></li>
+      <% } %>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodShifts?sort(createdAt)&limit(-1337)&date>=<%- results.fromShift %>&date<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodShifts') %></a></li>
+      <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&startedAt>=<%- results.fromShift %>&startedAt<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodShiftOrdersList') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodDowntimes?sort(startedAt)&limit(-1337)&startedAt>=<%- results.fromShift %>&startedAt<<%- results.toShift %><%- results.shift ? ('&shift=' + results.shift) : '' %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodDowntimes') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&reqDate>=<%- results.from %>&reqDate<<%- results.to %>"><%- t('NAVBAR:SEARCH:xiconfOrders') %></a></li>
+      <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&startedAt>=<%- results.shiftStart %>&startedAt<<%- results.shiftEnd %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
+    <% } %>
+    <li class="divider"></li>
   <% } %>
 
   <% if (results.fullOrderNo) { %>
-  <li class="dropdown-header"><%- t('NAVBAR:SEARCH:fullOrderNo', {orderNo: results.fullOrderNo}) %></li>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders/<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:sapDetails') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/orders/<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfDetails') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('wh') && user.isAllowedTo('WH:VIEW', 'PLANNING:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#wh/deliveredOrders?sort(date,set,startTime)&limit(-1337)&sapOrder=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:deliveredOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:prodShiftOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodDowntimes?sort(startedAt)&limit(-1337)&orderId=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:prodDowntimes') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
-  <% } %>
-  <li class="navbar-search-result"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:fapEntries') %></a></li>
-  <% if (loadedModules.isLoaded('wmes-ct-frontend') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#ct/reports/pce?orders=<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:cycleTime') %></a></li>
-  <li class="navbar-search-result"><a href="#ct/balancing/pces?sort(-startedAt)&limit(100)&order._id=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:balancing') %></a></li>
-  <% } %>
-  <li class="divider"></li>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:fullOrderNo', {orderNo: results.fullOrderNo}) %></li>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#orders/<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:sapDetails') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/orders/<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfDetails') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('wh') && user.isAllowedTo('WH:VIEW', 'PLANNING:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#wh/deliveredOrders?sort(date,set,startTime)&limit(-1337)&sapOrder=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:deliveredOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:prodShiftOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodDowntimes?sort(startedAt)&limit(-1337)&orderId=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:prodDowntimes') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('wmes-fap')) { %>
+      <li class="navbar-search-result"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&orderNo=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:fapEntries') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('wmes-ct-frontend') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#ct/reports/pce?orders=<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:cycleTime') %></a></li>
+      <li class="navbar-search-result"><a href="#ct/balancing/pces?sort(-startedAt)&limit(100)&order._id=string:<%- results.fullOrderNo %>"><%- t('NAVBAR:SEARCH:balancing') %></a></li>
+    <% } %>
+    <li class="divider"></li>
   <% } %>
 
-  <% if (results.entryId && user.isAllowedTo()) { %>
-  <li class="dropdown-header"><%- t('NAVBAR:SEARCH:entryId', {entryId: results.entryId}) %></li>
-  <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#qi/results/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:qi') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('wmes-fap')) { %>
-  <li class="navbar-search-result"><a href="#fap/entries/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:fap') %></a></li>
-  <% } %>
-  <% ['kaizenOrders', 'suggestions', 'behaviorObsCards', 'minutesForSafetyCards'].forEach(function(type) { %>
-  <% if (loadedModules.isLoaded(type === 'kaizenOrders' ? 'kaizen' : type)) { %>
-  <li class="navbar-search-result"><a href="#<%- type %>/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:' + type) %></a></li>
-  <% } %>
-  <% }) %>
-  <% if (loadedModules.isLoaded('wmes-osh')) { %>
-  <% ['nearMisses', 'kaizens', 'actions', 'observations'].forEach(function(type) { %>
-  <li class="navbar-search-result"><a href="#osh/<%- type %>/<%- results.entryId %>"><%- t('wmes-osh-common', 'navbar:search:' + type) %></a></li>
-  <% }) %>
-  <% } %>
-  <li class="divider"></li>
+  <% if (results.oshEntry && user.isAllowedTo()) { %>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:entryId', {entryId: results.oshEntry.rid}) %></li>
+    <li class="navbar-search-result"><a href="#osh/<%- results.oshEntry.module %>/<%- results.oshEntry.rid %>"><%- t('wmes-osh-common', 'navbar:search:' + results.oshEntry.type) %></a></li>
+    <li class="divider"></li>
+  <% } else if (results.entryId && user.isAllowedTo()) { %>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:entryId', {entryId: results.entryId}) %></li>
+    <% if (loadedModules.isLoaded('wmes-fap')) { %>
+      <li class="navbar-search-result"><a href="#fap/entries/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:fap') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#qi/results/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:qi') %></a></li>
+    <% } %>
+    <% ['kaizenOrders', 'suggestions', 'behaviorObsCards', 'minutesForSafetyCards'].forEach(function(type) { %>
+      <% if (loadedModules.isLoaded(type === 'kaizenOrders' ? 'kaizen' : type)) { %>
+        <li class="navbar-search-result"><a href="#<%- type %>/<%- results.entryId %>"><%- t('NAVBAR:SEARCH:' + type) %></a></li>
+      <% } %>
+    <% }) %>
+    <% oshEntries.forEach(function(oshEntry) { %>
+      <li class="navbar-search-result"><a href="#osh/<%- oshEntry.module %>/<%- oshEntry.prefix %>-<%- time.format(Date.now(), 'YYYY') %>-<%- results.entryId.padStart(6, '0') %>"><%- t('wmes-osh-common', 'navbar:search:' + oshEntry.type) %></a></li>
+    <% }) %>
+    <li class="divider"></li>
   <% } %>
 
   <% if (results.fullNc12) { %>
-  <li class="dropdown-header"><%- t('NAVBAR:SEARCH:fullNc12', {nc12: results.fullNc12}) %></li>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#mechOrders/<%- results.fullNc12 %>">szczegóły zlecenia mechanicznego</a></li>
-  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:sapOrders') %></a></li>
-  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&bom.nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:sapOrdersBom') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:xiconfOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(100)&mechOrder=true&orderId=string:<%- results.fullNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:worksheetOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&nc12=string:<%- results.fullNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('kanban') && user.isAllowedTo('USER')) { %>
-  <li class="navbar-search-result"><a href="#kanban?nc12=<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:kanbanEntries') %></a></li>
-  <li class="navbar-search-result"><a href="#kanban/components/<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:kanbanComponent') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('wmes-ct-frontend') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#ct/reports/pce?orders=<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:cycleTime') %></a></li>
-  <li class="navbar-search-result"><a href="#ct/balancing/pces?sort(-startedAt)&limit(100)&order.nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:balancing') %></a></li>
-  <% } %>
-  <li class="divider"></li>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:fullNc12', {nc12: results.fullNc12}) %></li>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#mechOrders/<%- results.fullNc12 %>">szczegóły zlecenia mechanicznego</a></li>
+      <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:sapOrders') %></a></li>
+      <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&bom.nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:sapOrdersBom') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:xiconfOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(100)&mechOrder=true&orderId=string:<%- results.fullNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:worksheetOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&nc12=string:<%- results.fullNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('kanban') && user.isAllowedTo('USER')) { %>
+      <li class="navbar-search-result"><a href="#kanban?nc12=<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:kanbanEntries') %></a></li>
+      <li class="navbar-search-result"><a href="#kanban/components/<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:kanbanComponent') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('wmes-ct-frontend') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#ct/reports/pce?orders=<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:cycleTime') %></a></li>
+      <li class="navbar-search-result"><a href="#ct/balancing/pces?sort(-startedAt)&limit(100)&order.nc12=string:<%- results.fullNc12 %>"><%- t('NAVBAR:SEARCH:balancing') %></a></li>
+    <% } %>
+    <li class="divider"></li>
   <% } %>
 
   <% if (results.partialOrderNo) { %>
-  <li class="dropdown-header"><%- t('NAVBAR:SEARCH:partialOrderNo', {orderNo: results.partialOrderNo}) %></li>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('NAVBAR:SEARCH:sapList') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfList') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=regex=%5E<%- results.partialOrderNo %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodShiftOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodDowntimes?sort(startedAt)&limit(-1337)&orderId=regex=%5E<%- results.partialOrderNo %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodDowntimes') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&orderNo=regex=%5E<%- results.partialOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&orderNo=regex=%5E<%- results.partialOrderNo %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
-  <% } %>
-  <li class="divider"></li>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:partialOrderNo', {orderNo: results.partialOrderNo}) %></li>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('NAVBAR:SEARCH:sapList') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfList') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=regex=%5E<%- results.partialOrderNo %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodShiftOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodDowntimes?sort(startedAt)&limit(-1337)&orderId=regex=%5E<%- results.partialOrderNo %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:prodDowntimes') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&orderNo=regex=%5E<%- results.partialOrderNo %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&orderNo=regex=%5E<%- results.partialOrderNo %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
+    <% } %>
+    <li class="divider"></li>
   <% } %>
 
   <% if (results.partialNc12) { %>
-  <li class="dropdown-header"><%- t('NAVBAR:SEARCH:partialNc12', {nc12: results.partialNc12}) %></li>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:sapOrders') %></a></li>
-  <li class="navbar-search-result"><a href="#mechOrders?limit(-1337)&_id=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:mechOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:xiconfOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(100)&mechOrder=true&orderId=regex=%5E<%- results.partialNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:worksheetOrders') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('kanban') && user.isAllowedTo('USER')) { %>
-  <li class="navbar-search-result"><a href="#kanban?nc12=<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:kanbanEntries') %></a></li>
-  <% } %>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:partialNc12', {nc12: results.partialNc12}) %></li>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:sapOrders') %></a></li>
+      <li class="navbar-search-result"><a href="#mechOrders?limit(-1337)&_id=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:mechOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:xiconfOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('PROD_DATA:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#prodShiftOrders?sort(startedAt)&limit(100)&mechOrder=true&orderId=regex=%5E<%- results.partialNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:worksheetOrders') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('xiconf') && user.isAllowedTo('XICONF:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#xiconf/results?exclude(log,metrics,leds)&sort(startedAt)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:xiconfResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('qi') && user.isAllowedTo('QI:RESULTS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('NAVBAR:SEARCH:qiResults') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('kanban') && user.isAllowedTo('USER')) { %>
+      <li class="navbar-search-result"><a href="#kanban?nc12=<%- results.partialNc12 %>"><%- t('NAVBAR:SEARCH:kanbanEntries') %></a></li>
+    <% } %>
   <% } %>
 
   <% if (results.fullNc15) { %>
-  <li class="dropdown-header"><%- t('NAVBAR:SEARCH:fullNc15', {nc15: results.fullNc15}) %></li>
-  <% if (loadedModules.isLoaded('orderDocuments') && user.isAllowedTo('DOCUMENTS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orderDocuments/tree?file=<%- results.fullNc15 %>"><%- t('NAVBAR:SEARCH:document') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('orderDocuments')) { %>
-  <li class="navbar-search-result"><a href="/orderDocuments/<%- results.fullNc15 %>" target="_blank"><%- t('NAVBAR:SEARCH:documentFile') %></a></li>
-  <% } %>
-  <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&documents.nc15=string:<%- results.fullNc15 %>"><%- t('NAVBAR:SEARCH:sapOrdersDoc') %></a></li>
-  <% } %>
+    <li class="dropdown-header"><%- t('NAVBAR:SEARCH:fullNc15', {nc15: results.fullNc15}) %></li>
+    <% if (loadedModules.isLoaded('orderDocuments') && user.isAllowedTo('DOCUMENTS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#orderDocuments/tree?file=<%- results.fullNc15 %>"><%- t('NAVBAR:SEARCH:document') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('orderDocuments')) { %>
+      <li class="navbar-search-result"><a href="/orderDocuments/<%- results.fullNc15 %>" target="_blank"><%- t('NAVBAR:SEARCH:documentFile') %></a></li>
+    <% } %>
+    <% if (loadedModules.isLoaded('production') && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&documents.nc15=string:<%- results.fullNc15 %>"><%- t('NAVBAR:SEARCH:sapOrdersDoc') %></a></li>
+    <% } %>
   <% } %>
 
   <% if (results.searchName && user.isAllowedTo('USERS:VIEW')) { %>
-  <li id="<%- idPrefix %>-searchName" class="dropdown-header"><%- t('NAVBAR:SEARCH:searchName', {nc12: results.searchName}) %></li>
-  <li class="navbar-search-result"><a href="#users?limit(-1337)&searchName=regex=%5E<%- results.searchName %>"><i class="fa fa-spinner fa-spin"></i></a></li>
+    <li id="<%- idPrefix %>-searchName" class="dropdown-header"><%- t('NAVBAR:SEARCH:searchName', {nc12: results.searchName}) %></li>
+    <li class="navbar-search-result"><a href="#users?limit(-1337)&searchName=regex=%5E<%- results.searchName %>"><i class="fa fa-spinner fa-spin"></i></a></li>
   <% } %>
 </ul>

@@ -86,6 +86,7 @@ define([
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
       'priority': 'kind',
+      'status': 'kind',
       'users.user.id': (propertyName, term, formData) =>
       {
         const userId = term.args[1];

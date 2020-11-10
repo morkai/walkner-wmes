@@ -1,0 +1,31 @@
+<div class="osh-dashboard-buttonAndMetrics">
+  <a class="btn btn-<%- buttonType %>" href="<%- buttonUrl %>"><%- buttonLabel %></a>
+  <div class="osh-dashboard-metrics">
+    <a class="well osh-dashboard-metric" href="<%- browseUrl %>">
+      <span class="osh-dashboard-metric-value"><%- total ? total.allCount : '?' %></span>
+      <span class="osh-dashboard-metric-name"><%- t('metrics:total:allCount') %></span>
+    </a>
+    <a class="well osh-dashboard-metric" href="<%- browseUrl %>?status=in=(<%- openStatuses %>)&sort(-<%- sortProperty %>)&limit(20)">
+      <span class="osh-dashboard-metric-value"><%- total ? total.openCount : '?' %></span>
+      <span class="osh-dashboard-metric-name"><%- t('metrics:total:openCount') %></span>
+    </a>
+    <div class="well osh-dashboard-metric">
+      <span class="osh-dashboard-metric-value"><%- total ? total.monthCount : '?' %></span>
+      <span class="osh-dashboard-metric-name"><%- t('metrics:total:monthCount') %></span>
+    </div>
+  </div>
+  <div class="osh-dashboard-metrics">
+    <a class="well osh-dashboard-metric" href="<%- browseUrl %>?users.user.id=<%- userId %>&sort(-eventDate)&limit(20)">
+      <span class="osh-dashboard-metric-value"><%- user ? user.allCount : '?' %></span>
+      <span class="osh-dashboard-metric-name"><%- t('metrics:user:allCount') %></span>
+    </a>
+    <a class="well osh-dashboard-metric" href="<%- browseUrl %>?status=in=(<%- openStatuses %>)&sort(-<%- sortProperty %>)&limit(20)&users.user.id=<%- userId %>">
+      <span class="osh-dashboard-metric-value"><%- user ? user.openCount : '?' %></span>
+      <span class="osh-dashboard-metric-name"><%- t('metrics:user:openCount') %></span>
+    </a>
+    <div class="well osh-dashboard-metric">
+      <span class="osh-dashboard-metric-value"><%- user ? user.monthCount : '?' %></span>
+      <span class="osh-dashboard-metric-name"><%- t('metrics:user:monthCount') %></span>
+    </div>
+  </div>
+</div>

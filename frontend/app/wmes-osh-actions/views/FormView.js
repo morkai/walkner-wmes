@@ -505,21 +505,6 @@ define([
       {
         this.resolutions.forEach(resolution => this.addResolution(resolution, this.resolutions, {}));
       }
-
-if (!this.options.editMode)
-{
-  this.$id('subject').val(`Auto test ${new Date().toISOString()}`);
-  this.$id('userWorkplace').select2('data', this.$id('userWorkplace').data('select2').opts.data[0]).trigger('change');
-  this.$id('userDivision').select2('data', this.$id('userDivision').data('select2').opts.data[0]).trigger('change');
-  if (this.$id('workplace').length) {
-    this.$id('workplace').select2('data', this.$id('workplace').data('select2').opts.data[0]).trigger('change');
-    this.$id('division').select2('data', this.$id('division').data('select2').opts.data[0]).trigger('change');
-    this.$id('building').select2('data', this.$id('building').data('select2').opts.data[0]).trigger('change');
-    this.$id('location').select2('data', this.$id('location').data('select2').opts.data[0]).trigger('change');
-  }
-  this.$id('activityKind').select2('data', this.$id('activityKind').data('select2').opts.data[4]).trigger('change');
-  this.$('[name="rootCauses[0].why[0]"]').val('Test');
-}
     },
 
     setUpUserWorkplaceSelect2: function()

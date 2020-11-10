@@ -1,0 +1,14 @@
+<div>
+  <% include ./nearMiss.ejs %>
+  <% include ./kaizen.ejs %>
+  <% if (can.addAction || can.addObservation) { %>
+  <div class="osh-dashboard-buttons">
+    <% if (can.addAction) { %>
+      <a class="btn btn-info" href="#osh/actions;add"><%- t('addButton:action') %></a>
+    <% } %>
+    <% if (can.addObservation) { %>
+      <a class="btn btn-warning" href="#osh/observations;add"><%- t('addButton:observation') %></a>
+    <% } %>
+  </div>
+  <% } %>
+</div>

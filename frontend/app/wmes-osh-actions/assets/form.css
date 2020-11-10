@@ -1,11 +1,11 @@
-.osh-actions-form .panel-success {
+.osh-actions-form .panel-primary .panel {
   margin-left: -15px;
   margin-right: -15px;
   border-left: none;
   border-right: none;
 }
-.osh-actions-form .panel-success > .panel-body {
-  background-color: #dff0d8;
+.osh-actions-form .panel-primary .panel > .panel-body {
+  background-color: #d9edf7;
 }
 .osh-actions-form-rootCauses {
   display: flex;

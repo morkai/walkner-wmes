@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/i18n',
   'app/user',
@@ -15,6 +16,7 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/core/templates/navbar/searchResults'
 ], function(
+  require,
   _,
   t,
   user,
@@ -1017,10 +1019,27 @@ define([
    */
   NavbarView.prototype.renderSearchResults = function(results)
   {
-    return this.renderPartial(searchResultsTemplate, {
+    var templateData = {
       loadedModules: loadedModules,
-      results: results
-    });
+      results: results,
+      oshEntries: []
+    };
+
+    if (loadedModules.isLoaded('wmes-osh'))
+    {
+      var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+
+      Object.keys(oshDictionaries.TYPE_TO_PREFIX).forEach(function(type)
+      {
+        templateData.oshEntries.push({
+          type: type,
+          prefix: oshDictionaries.TYPE_TO_PREFIX[type],
+          module: oshDictionaries.TYPE_TO_MODULE[type]
+        });
+      });
+    }
+
+    return this.renderPartial(searchResultsTemplate, templateData);
   };
 
   /**
@@ -1036,6 +1055,7 @@ define([
       fullNc12: null,
       partialNc12: null,
       fullNc15: null,
+      oshEntry: null,
       entryId: null,
       year: null,
       month: null,
@@ -1102,6 +1122,29 @@ define([
         }
 
         searchPhrase = searchPhrase.replace(/(1[0-9]{8})/g, '');
+      }
+    }
+
+    // OSH entry
+    if (loadedModules.isLoaded('wmes-osh'))
+    {
+      matches = searchPhrase.match(/[^0-9]([ZKAO])[^0-9]?([0-9]{4})?[^0-9]?([0-9]{1,6})[^0-9]/);
+
+      if (matches)
+      {
+        var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+        var oshPrefix = matches[1];
+        var oshType = oshDictionaries.PREFIX_TO_TYPE[oshPrefix];
+        var oshYear = matches[2] || time.format(Date.now(), 'YYYY');
+        var oshInc = parseInt(matches[3], 10).toString().padStart(6, '0');
+
+        results.oshEntry = {
+          type: oshType,
+          module: oshDictionaries.TYPE_TO_MODULE[oshType],
+          rid: oshPrefix + '-' + oshYear + '-' + oshInc
+        };
+
+        searchPhrase = searchPhrase.replace(/([ZKAO]).?([0-9]{4})?.?([0-9]{1,6})/g, '');
       }
     }
 

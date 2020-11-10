@@ -338,27 +338,54 @@ define([
       });
 
       const users = this.attributes.users;
-      const user = this.getCurrentUser();
+      const observer = this.getObserver();
+      let user = this.getCurrentUser();
       let seen = false;
+
+      if (observer.user.id === change.user.id)
+      {
+        seen = true;
+
+        observer.lastSeenAt = new Date(change.date);
+        observer.notify = false;
+        observer.changes = {
+          any: false,
+          all: false
+        };
+      }
+      else
+      {
+        observer.notify = true;
+        observer.changes = notify[observer.user.id] || {};
+        observer.changes.all = !Object.keys(observer.changes).length;
+        observer.changes.any = true;
+      }
+
+      if (!user && observer.user.id === change.user.id)
+      {
+        user = {
+          user: currentUser.getInfo(),
+          roles: ['subscriber'],
+          lastSeenAt: change.date,
+          notify: false,
+          changes: {}
+        };
+
+        users.push(user);
+      }
 
       if (user)
       {
         if (user.user.id === change.user.id)
         {
-          seen = true;
           user.lastSeenAt = change.date;
           user.notify = false;
-          user.changes = {
-            any: false,
-            all: false
-          };
+          user.changes = {};
         }
         else
         {
           user.notify = true;
           user.changes = notify[user.user.id] || {};
-          user.changes.all = !Object.keys(user.changes).length;
-          user.changes.any = true;
         }
 
         this.attributes.users = null;

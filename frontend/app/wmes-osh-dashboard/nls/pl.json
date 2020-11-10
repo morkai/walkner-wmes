@@ -1,0 +1,26 @@
+{
+  "breadcrumbs:logIn": "Logowanie do systemu",
+
+  "metrics:total:allCount": "wszystkich<br>zgłoszeń",
+  "metrics:total:openCount": "otwartych<br>zgłoszeń",
+  "metrics:total:monthCount": "wszystkich<br>w miesiącu",
+  "metrics:user:allCount": "wszystkich<br>Twoich",
+  "metrics:user:openCount": "otwartych<br>Twoich",
+  "metrics:user:monthCount": "Twoich<br>w miesiącu",
+
+  "top10:title": "Najaktywniejsi {month, plural, =1{w styczniu} =2{w lutym} =3{w marcu} =4{w kwietniu} =5{w maju} =6{w czerwcu} =7{w lipcu} =8{w sierpniu} =9{we wrześniu} =10{w październiku} =11{w listopadzie} =12{w grudniu} other{w miesiącu}}",
+  "top10:loading": "Ładowanie danych...",
+  "top10:empty": "Brak zgłoszeń w danym miesiącu.",
+
+  "addButton:nearMiss": "Zgłoś<br>ZPW!",
+  "addButton:kaizen": "Zgłoś<br>kaizen!",
+  "addButton:action": "Zarejestruj akcję!",
+  "addButton:observation": "Zarejestruj obserwację!",
+  "addButton:testing": "(wersja testowa)",
+
+  "list:rid": "ID",
+  "list:status": "Status",
+  "list:subject": "Temat",
+  "list:noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW.",
+  "list:noData:kaizen": "Nie uczestniczysz w żadnych otwartych zgłoszeniach kaizen."
+}

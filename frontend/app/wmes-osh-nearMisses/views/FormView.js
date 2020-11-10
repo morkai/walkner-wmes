@@ -1406,7 +1406,9 @@ define([
 
     showResolutionPopover: function(type, rid)
     {
-      if (type !== this.resolution.type || rid !== this.resolution.rid)
+      if (type !== this.resolution.type
+        || rid !== this.resolution.rid
+        || !this.resolution.data)
       {
         return this.loadResolution(type, rid, true);
       }

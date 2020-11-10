@@ -188,6 +188,14 @@ code.multiline {
   background-color: #5cb85c;
   border-color: #5cb85c;
 }
+.panel-info {
+   border-color: #5bc0de;
+}
+.panel-info > .panel-heading {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
 .panel-danger {
   border-color: #d9534f;
 }
@@ -203,9 +211,6 @@ code.multiline {
   color: #fff;
   background-color: #af00af;
   border-color: #af00af;
-}
-.panel-info > .panel-heading {
-  text-shadow: none;
 }
 .panel-heading.is-with-actions {
   position: relative;

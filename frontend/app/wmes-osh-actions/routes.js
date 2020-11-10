@@ -50,7 +50,7 @@ define([
   router.map('/osh/actions/:id', canView, req =>
   {
     viewport.showPage(new DetailsPage({
-      model: new Action({_id: +req.params.id})
+      model: new Action({_id: +req.params.id || req.params.id})
     }));
   });
 
@@ -64,7 +64,7 @@ define([
   router.map('/osh/actions/:id;edit', canEdit, (req) =>
   {
     viewport.showPage(new EditFormPage({
-      model: new Action({_id: +req.params.id})
+      model: new Action({_id: +req.params.id || req.params.id})
     }));
   });
 

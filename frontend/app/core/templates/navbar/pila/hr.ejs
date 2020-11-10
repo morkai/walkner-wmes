@@ -1,0 +1,10 @@
+<li data-online class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('wmes-osh-common', 'navbar:hr') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li data-privilege="USERS:VIEW" data-module><a href="#users"><%- t('wmes-osh-common', 'navbar:users') %></a>
+    <li data-privilege="OSH:DICTIONARIES:VIEW OSH:COORDINATOR" data-module="wmes-osh"><a href="#osh/employment"><%- t('wmes-osh-common', 'navbar:employment') %></a>
+    <li data-privilege="OSH:DICTIONARIES:VIEW OSH:COORDINATOR OSH:LEADER" data-module="wmes-osh"><a href="#osh/brigades"><%- t('wmes-osh-common', 'navbar:brigades') %></a>
+  </ul>

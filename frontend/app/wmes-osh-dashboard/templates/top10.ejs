@@ -1,0 +1,26 @@
+<table class="table table-bordered table-condensed table-hover">
+  <thead>
+  <tr>
+    <th colspan="3"><%- t('top10:title', {month: month}) %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% if (state === 'loading') { %>
+  <tr>
+    <td><%- t('top10:loading') %></td>
+  </tr>
+  <% } else if (state === 'empty') { %>
+  <tr>
+    <td><%- t('top10:empty') %></td>
+  </tr>
+  <% } else { %>
+  <% _.forEach(top10, function(entry) { %>
+  <tr>
+    <td class="osh-dashboard-top-place"><%- entry.place %>.</td>
+    <td><span class="osh-dashboard-top-name"><a href="<%- entry.url %>"><%= entry.name %></a></span></td>
+    <td class="osh-dashboard-top-count" data-place="<%- entry.place %>"><%- entry.count %></td>
+  </tr>
+  <% }) %>
+  <% } %>
+  </tbody>
+</table>

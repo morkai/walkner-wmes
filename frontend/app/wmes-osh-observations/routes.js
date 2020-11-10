@@ -52,7 +52,7 @@ define([
   router.map('/osh/observations/:id', canView, req =>
   {
     viewport.showPage(new DetailsPage({
-      model: new Observation({_id: +req.params.id})
+      model: new Observation({_id: +req.params.id || req.params.id})
     }));
   });
 
@@ -68,7 +68,7 @@ define([
   {
     viewport.showPage(new EditFormPage({
       FormView,
-      model: new Observation({_id: +req.params.id})
+      model: new Observation({_id: +req.params.id || req.params.id})
     }));
   });
 
