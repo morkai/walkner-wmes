@@ -227,14 +227,26 @@ define([
         width: '100%',
         allowClear: true,
         placeholder: ' ',
-        data: oshDictionaries.workplaces.map(idAndLabel)
+        data: oshDictionaries.workplaces.map(function(w)
+        {
+          return {
+            id: w.id,
+            text: w.getLabel({long: true})
+          };
+        })
       });
 
       $division.select2({
         width: '100%',
         allowClear: true,
         placeholder: ' ',
-        data: oshDictionaries.divisions.where({workplace: +workplace}).map(idAndLabel)
+        data: oshDictionaries.divisions.where({workplace: +workplace}).map(function(d)
+        {
+          return {
+            id: d.id,
+            text: d.getLabel({long: true})
+          };
+        })
       });
     },
 
