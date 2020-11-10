@@ -4,12 +4,14 @@ define([
   '../i18n',
   '../router',
   '../viewport',
-  '../user'
+  '../user',
+  '../core/util/pageActions'
 ], function(
   t,
   router,
   viewport,
-  user
+  user,
+  pageActions
 ) {
   'use strict';
 
@@ -70,7 +72,12 @@ define([
           FilterView: FilterView,
           ListView: ListView,
           collection: new Collection(null, {rqlQuery: req.rql}),
-          actions: []
+          actions: function(layout)
+          {
+            return [
+              pageActions.export(layout, this, this.collection, false)
+            ];
+          }
         });
       }
     );
