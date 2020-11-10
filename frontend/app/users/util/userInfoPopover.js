@@ -1,20 +1,24 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'jquery',
   'app/pubsub',
   'app/time',
   'app/data/prodFunctions',
   'app/data/companies',
+  'app/data/loadedModules',
   'app/users/templates/userInfoPopover'
 ], function(
+  require,
   _,
   $,
   pubsub,
   time,
   prodFunctions,
   companies,
+  loadedModules,
   contentTemplate
 ) {
   'use strict';
@@ -29,7 +33,9 @@ define([
     'prodFunction',
     'company',
     'kdPosition',
-    'presence'
+    'presence',
+    'oshWorkplace',
+    'oshDivision'
   ];
 
   var users = {};
@@ -135,6 +141,17 @@ define([
       containerTemplate = $($.fn.popover.Constructor.DEFAULTS.template).addClass('userInfoPopover')[0].outerHTML;
     }
 
+    var oshWorkplace = '';
+    var oshDivision = '';
+
+    if (loadedModules.isLoaded('wmes-osh'))
+    {
+      var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+
+      oshWorkplace = oshDictionaries.workplaces.getLabel(user.oshWorkplace);
+      oshDivision = oshDictionaries.divisions.getLabel(user.oshDivision);
+    }
+
     $popover = $(userInfoEl).popover({
       placement: 'top',
       container: userInfoEl.parentNode,
@@ -149,7 +166,9 @@ define([
           position: user.kdPosition || (prodFunction ? prodFunction.getLabel() : null),
           company: company ? company.getLabel() : user.company,
           email: user.email,
-          mobile: mobile
+          mobile: mobile,
+          oshWorkplace: oshWorkplace,
+          oshDivision: oshDivision
         }
       }),
       template: containerTemplate
