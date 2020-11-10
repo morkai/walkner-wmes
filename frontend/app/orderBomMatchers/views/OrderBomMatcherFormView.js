@@ -88,19 +88,37 @@ define([
         }
       },
 
-      'focus input[name$="pattern"]': function(e)
+      'focus input[name$="attern"]': function(e)
       {
+        if (e.target.getBoundingClientRect().width >= 878)
+        {
+          return;
+        }
+
         var $input = this.$(e.target);
 
         $input.parent().css({
           position: 'relative'
         });
 
+        var left = '';
+        var right = '';
+
+        if ($input[0].getBoundingClientRect().left + 878 + 15 > window.innerWidth)
+        {
+          right = '5px';
+        }
+        else
+        {
+          left = '5px';
+        }
+
         $input.css({
           position: 'absolute',
           width: '878px',
           top: '5px',
-          left: '5px'
+          left: left,
+          right: right
         });
 
         $input.one('blur', function()
@@ -212,6 +230,11 @@ define([
         if (!c.pattern)
         {
           c.pattern = '';
+        }
+
+        if (!c.notPattern)
+        {
+          c.notPattern = '';
         }
 
         c.nc12Index = (c.nc12Index || '').split(', ')

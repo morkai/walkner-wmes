@@ -1,16 +1,19 @@
 <tr>
   <td class="is-min is-number"><%- i + 1 %>.</td>
-  <td class="is-min"><input class="form-control text-mono" type="text" name="components[<%- i %>].pattern" value="<%= component.pattern %>" maxlength="400"></td>
+  <td class="is-min"><input class="form-control text-mono" type="text" name="components[<%- i %>].pattern" value="<%= component.pattern %>" maxlength="500"></td>
+  <td class="is-min"><input class="form-control text-mono" type="text" name="components[<%- i %>].notPattern" value="<%= component.notPattern %>" maxlength="500"></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].description" value="<%= component.description %>" required maxlength="40" style="width: 300px"></td>
+  <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].optional" value="true" <%- component.optional ? 'checked' : '' %>></td>
   <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].missing" value="true" <%- component.missing ? 'checked' : '' %>></td>
+  <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].first" value="true" <%- component.first ? 'checked' : '' %>></td>
   <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].single" value="true" <%- component.single ? 'checked' : '' %>></td>
   <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].unique" value="true" <%- component.unique ? 'checked' : '' %>></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].nc12Index" value="<%- component.nc12Index.join(', ') %>" maxlength="20" style="width: 120px"></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].snIndex" value="<%- component.snIndex.join(', ') %>" maxlength="20" style="width: 120px"></td>
-  <td><input class="form-control text-mono" type="text" name="components[<%- i %>].labelPattern" value="<%= component.labelPattern %>" required maxlength="400"></td>
+  <td><input class="form-control text-mono" type="text" name="components[<%- i %>].labelPattern" value="<%= component.labelPattern %>" required maxlength="500"></td>
   <td class="actions">
     <div class="actions-group">
-      <button type="button" class="btn btn-default" data-action="removeComponent" title="<%- helpers.t('FORM:ACTION:removeComponent') %>"><i class="fa fa-times"></i></button>
+      <button type="button" class="btn btn-default" data-action="removeComponent" title="<%- t('FORM:ACTION:removeComponent') %>"><i class="fa fa-times"></i></button>
     </div>
   </td>
 </tr>

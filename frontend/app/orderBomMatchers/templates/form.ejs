@@ -7,49 +7,52 @@
         <div class="checkbox">
           <label class="control-label">
             <input type="checkbox" name="active" value="true">
-            <%- helpers.t('PROPERTY:active') %>
+            <%- t('PROPERTY:active') %>
           </label>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" required maxlength="60">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-matchers-line" class="control-label"><%- helpers.t('PROPERTY:line') %></label>
+        <label for="<%- idPrefix %>-matchers-line" class="control-label"><%- t('PROPERTY:line') %></label>
         <input id="<%- idPrefix %>-matchers-line" type="text" autocomplete="new-password" name="matchers.line">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-matchers-mrp" class="control-label"><%- helpers.t('PROPERTY:mrp') %></label>
+        <label for="<%- idPrefix %>-matchers-mrp" class="control-label"><%- t('PROPERTY:mrp') %></label>
         <input id="<%- idPrefix %>-matchers-mrp" class="form-control" type="text" autocomplete="new-password" name="matchers.mrp">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-matchers-nc12" class="control-label"><%- helpers.t('PROPERTY:nc12') %></label>
+        <label for="<%- idPrefix %>-matchers-nc12" class="control-label"><%- t('PROPERTY:nc12') %></label>
         <input id="<%- idPrefix %>-matchers-nc12" class="form-control" type="text" autocomplete="new-password" name="matchers.nc12">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-matchers-name" class="control-label"><%- helpers.t('PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-matchers-name" class="control-label"><%- t('PROPERTY:name') %></label>
         <textarea id="<%- idPrefix %>-matchers-name" class="form-control" type="text" name="matchers.name" rows="4" style="font-family: monospace"></textarea>
       </div>
-      <label class="control-label"><%- helpers.t('PROPERTY:components') %></label>
+      <label class="control-label"><%- t('PROPERTY:components') %></label>
       <table class="table table-bordered table-condensed">
         <thead>
         <tr>
-          <th class="is-min"><%- helpers.t('core', '#') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.pattern') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.description') %></th>
-          <th class="is-min text-center"><%- helpers.t('PROPERTY:components.missing') %></th>
-          <th class="is-min text-center"><%- helpers.t('PROPERTY:components.single') %></th>
-          <th class="is-min text-center"><%- helpers.t('PROPERTY:components.unique') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.nc12Index') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.snIndex') %></th>
-          <th><%- helpers.t('PROPERTY:components.labelPattern') %></th>
-          <th class="actions"><%- helpers.t('core', 'LIST:COLUMN:actions') %></th>
+          <th class="is-min"><%- t('core', '#') %></th>
+          <th class="is-min"><%- t('PROPERTY:components.pattern') %></th>
+          <th class="is-min"><%- t('PROPERTY:components.notPattern') %></th>
+          <th class="is-min"><%- t('PROPERTY:components.description') %></th>
+          <th class="is-min text-center"><%- t('PROPERTY:components.optional') %></th>
+          <th class="is-min text-center"><%- t('PROPERTY:components.missing') %></th>
+          <th class="is-min text-center"><%- t('PROPERTY:components.first') %></th>
+          <th class="is-min text-center"><%- t('PROPERTY:components.single') %></th>
+          <th class="is-min text-center"><%- t('PROPERTY:components.unique') %></th>
+          <th class="is-min"><%- t('PROPERTY:components.nc12Index') %></th>
+          <th class="is-min"><%- t('PROPERTY:components.snIndex') %></th>
+          <th><%- t('PROPERTY:components.labelPattern') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-components"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addComponent" type="button" class="btn btn-default"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:ACTION:addComponent') %></span></button>
+      <button id="<%- idPrefix %>-addComponent" type="button" class="btn btn-default"><i class="fa fa-plus"></i><span><%- t('FORM:ACTION:addComponent') %></span></button>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

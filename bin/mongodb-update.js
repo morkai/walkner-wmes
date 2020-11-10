@@ -3,7 +3,25 @@
 
 'use strict';
 
-db.oshactivitykinds.updateMany({resolution: {$exists: false}}, {$set: {resolution: 'none'}});
-db.oshactivitykinds.updateMany({rootCauses: {$exists: true}}, {$unset: {rootCauses: 1}});
-db.oshactivitykinds.updateMany({implementers: {$exists: true}}, {$unset: {implementers: 1}});
-db.oshactivitykinds.updateMany({participants: {$exists: false}}, {$set: {participants: false}});
+db.orderbommatchers.find({}).forEach(obm =>
+{
+  obm.components.forEach(c =>
+  {
+    if (!c.notPattern)
+    {
+      c.notPattern = '';
+    }
+
+    if (!c.optional)
+    {
+      c.optional = false;
+    }
+
+    if (!c.first)
+    {
+      c.first = false;
+    }
+  });
+
+  db.orderbommatchers.updateOne({_id: obm._id}, {$set: {components: obm.components}});
+});

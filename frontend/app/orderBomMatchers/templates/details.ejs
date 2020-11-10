@@ -4,16 +4,16 @@
   <div class="panel-details">
     <div class="props first">
       <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:description') %></div>
+        <div class="prop-name"><%- t('PROPERTY:description') %></div>
         <div class="prop-value"><%= model.description %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:active') %></div>
+        <div class="prop-name"><%- t('PROPERTY:active') %></div>
         <div class="prop-value"><%= t('core', 'BOOL:' + model.active) %></div>
       </div>
       <% ['line', 'mrp', 'nc12', 'name'].forEach(function(prop) { %>
         <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+          <div class="prop-name"><%- t('PROPERTY:' + prop) %></div>
           <div class="prop-value">
             <% model.matchers[prop].forEach(function(matcher) { %>
             <code><%= matcher %></code>
@@ -25,33 +25,41 @@
   </div>
 </div>
 <div class="panel panel-default">
-  <div class="panel-heading"><%- helpers.t('PROPERTY:components') %></div>
+  <div class="panel-heading"><%- t('PROPERTY:components') %></div>
   <table class="table table-bordered table-condensed table-hover">
     <thead>
     <tr>
-      <th class="is-min"><%- helpers.t('core', '#') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.pattern') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.description') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.missing') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.single') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.unique') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.nc12Index') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.snIndex') %></th>
-      <th><%- helpers.t('PROPERTY:components.labelPattern') %></th>
+      <th class="is-min"><%- t('core', '#') %></th>
+      <th class="obm-pattern"><%- t('PROPERTY:components.pattern') %></th>
+      <th class="obm-pattern"><%- t('PROPERTY:components.notPattern') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.description') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.optional') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.missing') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.first') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.single') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.unique') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.nc12Index') %></th>
+      <th class="is-min"><%- t('PROPERTY:components.snIndex') %></th>
+      <th class="obm-pattern"><%- t('PROPERTY:components.labelPattern') %></th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
       <% model.components.forEach(function(component, i) { %>
       <tr>
         <td class="is-min is-number"><%- i + 1 %>.</td>
-        <td class="is-min"><code><%= component.pattern %></code></td>
+        <td class="obm-pattern"><textarea readonly><%= component.pattern %></textarea></td>
+        <td class="obm-pattern"><textarea readonly><%= component.notPattern %></textarea></td>
         <td class="is-min"><%= component.description %></td>
+        <td class="is-min"><%- t('core', 'BOOL:' + component.optional) %></td>
         <td class="is-min"><%- t('core', 'BOOL:' + component.missing) %></td>
+        <td class="is-min"><%- t('core', 'BOOL:' + component.first) %></td>
         <td class="is-min"><%- t('core', 'BOOL:' + component.single) %></td>
         <td class="is-min"><%- t('core', 'BOOL:' + component.unique) %></td>
         <td class="is-min"><%- component.nc12Index.join(', ') %></td>
         <td class="is-min"><%- component.snIndex.join(', ') %></td>
-        <td><code><%= component.labelPattern %></code></td>
+        <td class="obm-pattern"><textarea readonly><%= component.labelPattern %></textarea></td>
+        <td></td>
       </tr>
       <% }) %>
     </tbody>

@@ -63,7 +63,8 @@ define([
         'app/core/pages/DetailsPage',
         'app/orderBomMatchers/OrderBomMatcher',
         'app/orderBomMatchers/templates/details',
-        nls
+        nls,
+        'css!app/orderBomMatchers/assets/details.css'
       ],
       function(DetailsPage, OrderBomMatcher, template)
       {
