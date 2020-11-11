@@ -1,1 +1,1 @@
-define([],function(){"use strict";return function(n){return n?(n.name||n.description||"").trim():""}});
+define([],function(){"use strict";return function(n){return n?/^[A-Z]/.test(n.nc12)?(n.description||n.name||"").trim():(n.name||n.description||"").trim():""}});

@@ -1,0 +1,1 @@
+define(["underscore","app/broker","app/user","app/router","app/viewport","./pages/DashboardPage","i18n!app/nls/wmes-osh-dashboard","i18n!app/nls/wmes-osh-nearMisses","i18n!app/nls/wmes-osh-kaizens"],function(s,e,a,p,n,o){"use strict";p.map("/",function(){n.showPage(new o)})});

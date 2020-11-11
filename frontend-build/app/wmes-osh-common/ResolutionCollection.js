@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Resolution"],function(t,n){"use strict";return t.extend({model:n,paginate:!1,initialize:function(t,n){this.parent=n.parent},url:function(){return`${this.parent.urlRoot}/${this.parent.id}/resolutions`}})});

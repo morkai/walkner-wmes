@@ -5,8 +5,8 @@
   "version": "0.154.0",
   "updater": {
     "wmes": {
-      "backend": 624,
-      "frontend": 773,
+      "backend": 625,
+      "frontend": 774,
       "reports": 132,
       "attachments": 3,
       "importer-sap": 68,
@@ -19,7 +19,7 @@
       "planning": 93,
       "ps-queue": 58,
       "ps-load": 16,
-      "wh-pickup": 68,
+      "wh-pickup": 69,
       "wh-problems": 47,
       "wh-delivery-components": 42,
       "wh-delivery-packaging": 42,
@@ -38,8 +38,8 @@
       "importer": 2
     },
     "pila": {
-      "backend": 8,
-      "frontend": 8,
+      "backend": 9,
+      "frontend": 9,
       "reports": 2
     }
   },
