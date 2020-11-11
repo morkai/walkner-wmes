@@ -138,7 +138,7 @@ define([
         psDist: obj.psStatus === 'unknown' ? DIST_STATUS_TO_ICON.ignored : DIST_STATUS_TO_ICON[obj.psDistStatus]
       };
       obj.picklistDoneIcon = PICKLIST_DONE_TO_ICON[obj.picklistDone];
-      console.log(filters);
+
       obj.hidden = !filters
         || startTime < filters.startTime.from
         || startTime >= filters.startTime.to

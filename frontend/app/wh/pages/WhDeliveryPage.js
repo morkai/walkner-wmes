@@ -503,13 +503,23 @@ define([
     isPendingSetCart: function(setCart, utcNow)
     {
       var page = this;
+      var status = setCart.get('status');
 
-      if (setCart.get('status') === 'completing')
+      if (status === 'completing')
       {
         return false;
       }
 
-      if (setCart.get('pending') && !setCart.get('deliveringAt'))
+      var pending = setCart.get('pending');
+
+      if (pending && !setCart.get('deliveringAt'))
+      {
+        return true;
+      }
+
+      if (!pending
+        && setCart.get('forced')
+        && status === 'completed')
       {
         return true;
       }

@@ -1,0 +1,11 @@
+<div class="form-group form-embeddedPicker">
+  <label class="control-label <%- required ? 'is-required' : '' %>"><%- label %></label>
+  <div class="form-embeddedPicker-buttons">
+    <button type="button" class="btn btn-default form-embeddedPicker-selected"><%- placeholder %></button>
+    <button type="button" class="btn btn-default form-embeddedPicker-clear"><i class="fa fa-eraser"></i></button>
+  </div>
+  <div class="form-embeddedPicker-list">
+    <input class="form-control" type="text" data-ignore-key="1" data-vkb="alpha numeric" placeholder="<%- filter %>">
+    <div class="form-embeddedPicker-options"></div>
+  </div>
+</div>

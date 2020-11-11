@@ -1,20 +1,24 @@
 <form class="wh-pickup-forceLine" autocomplete="off">
-  <p class="message message-inline message-info" style="margin-bottom: 15px"><%- t('pickup:forceLine:message') %></p>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-line" class="control-label is-required"><%- t('pickup:forceLine:line') %></label>
-    <input id="<%- idPrefix %>-filter" class="form-control" type="text" autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric">
-    <div class="btn-group-vertical">
-      <% lines.forEach(function(line) { %>
-      <button class="btn btn-lg btn-default" type="button" data-line="<%= line._id %>" data-filter="<%- line.filter %>"><%= line._id %></button>
-      <% }) %>
-    </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- id('forceLine') %>" class="control-label is-required"><%- t('pickup:forceLine:forceLine:label') %></label>
+    <input id="<%- id('forceLine') %>" name="forceLine" type="text" required placeholder="<%- t('pickup:forceLine:forceLine:placeholder') %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-card" class="control-label is-required"><%- t('pickup:forceLine:card') %></label>
-    <input id="<%- idPrefix %>-card" class="form-control" name="card" value="<%- card %>" type="text" required autocomplete="new-password" data-vkb="numeric">
+    <label for="<%- id('redirLine') %>" class="control-label"><%- t('pickup:forceLine:redirLine:label') %></label>
+    <input id="<%- id('redirLine') %>" name="redirLine" type="text" placeholder="<%- t('pickup:forceLine:forceLine:placeholder') %>">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input id="<%- id('forceDelivery') %>" type="checkbox" value="true" checked>
+      <%- t('pickup:forceLine:forceDelivery') %>
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('card') %>" class="control-label is-required"><%- t('pickup:forceLine:card') %></label>
+    <input id="<%- id('card') %>" class="form-control" name="card" value="<%- card %>" type="text" required>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary"><%- t('pickup:forceLine:submit') %></button>
-    <button type="button" class="cancel btn btn-lg btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- t('pickup:forceLine:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
 </form>

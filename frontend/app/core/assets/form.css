@@ -237,3 +237,83 @@ label + .help-block {
 .form-row + .radio {
   margin-top: 0;
 }
+.form-embeddedPicker {
+
+}
+.form-embeddedPicker-buttons {
+  position: relative;
+  display: flex;
+}
+.form-embeddedPicker-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 57px;
+  pointer-events: none;
+  opacity: 0;
+}
+.form-embeddedPicker-selected {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  height: 57px;
+  text-align: left;
+  font-size: 18px;
+}
+.form-embeddedPicker-clear {
+  flex: 0 0 auto;
+  width: 100px;
+  height: 57px;
+  font-size: 18px;
+  border-left: none;
+}
+.form-embeddedPicker-list {
+  display: none;
+}
+.form-embeddedPicker-filter {
+  font-size: 24px;
+  padding: 6px 12px;
+  height: 57px;
+}
+.form-embeddedPicker-options {
+  height: 360px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.form-embeddedPicker-options > .btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 57px;
+  font-size: 18px;
+  text-align: left;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+.form-embeddedPicker-options > .btn:last-child {
+  margin-bottom: 57px;
+}
+.form-embeddedPicker-label {
+  margin-right: 12px;
+  font-weight: bold;
+}
+.form-embeddedPicker-description {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.form-embeddedPicker-selecting .form-embeddedPicker-buttons {
+  display: none;
+}
+.form-embeddedPicker-selecting .form-embeddedPicker-list {
+  display: block;
+}
+.form-control-embedded {
+  padding: 6px 12px;
+  font-size: 18px;
+  height: 57px;
+}

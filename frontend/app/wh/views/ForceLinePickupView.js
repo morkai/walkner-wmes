@@ -1,10 +1,16 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/core/View',
+  'app/core/util/formatResultWithDescription',
+  'app/data/orgUnits',
   'app/wh/templates/pickup/forceLine'
 ], function(
+  _,
   View,
+  formatResultWithDescription,
+  orgUnits,
   template
 ) {
   'use strict';
@@ -18,76 +24,70 @@ define([
     events: {
       'submit': function()
       {
-        var $line = this.$('.active[data-line]');
-
-        if (!$line.length || $line.hasClass('hidden'))
-        {
-          return false;
-        }
-
         this.trigger('picked', {
-          line: $line[0].dataset.line,
+          forceLine: this.$id('forceLine').val(),
+          redirLine: this.$id('redirLine').val(),
+          forceDelivery: this.$id('forceDelivery').prop('checked'),
           card: this.$id('card').val().trim()
         });
 
         return false;
-      },
-      'click .btn[data-line]': function(e)
-      {
-        this.$('.active[data-line]').removeClass('active');
-
-        e.currentTarget.classList.add('active');
-      },
-      'input #-filter': function()
-      {
-        var filter = this.transliterate(this.$id('filter').val().trim());
-
-        this.$('.btn[data-line]').each(function()
-        {
-          this.classList.toggle('hidden', this.dataset.filter.indexOf(filter) === -1);
-        });
       }
     },
 
     getTemplateData: function()
     {
       return {
-        card: this.model.personnelId,
-        lines: this.serializeLines()
+        card: this.model.personnelId
       };
-    },
-
-    serializeLines: function()
-    {
-      var view = this;
-
-      return view.model.whLines.map(function(whLine)
-      {
-        return {
-          _id: whLine.id,
-          filter: view.transliterate(whLine.id)
-        };
-      });
     },
 
     afterRender: function()
     {
-      this.$('.btn[data-filter]').first().click();
-    },
+      this.$id('forceLine').select2({
+        width: '100%',
+        data: this.model.whLines
+          .map(function(whLine)
+          {
+            var prodLine = orgUnits.getByTypeAndId('prodLine', whLine.id);
 
-    onDialogShown: function()
-    {
-      var $active = this.$('.active[data-filter]');
+            return {
+              id: whLine.id,
+              text: whLine.id,
+              description: prodLine ? prodLine.get('description') : ''
+            };
+          })
+          .sort(function(a, b)
+          {
+            return a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true});
+          }),
+        formatResult: formatResultWithDescription.bind(null, 'text', 'description')
+      });
 
-      if ($active.length)
-      {
-        $active[0].scrollIntoView();
-      }
-    },
+      this.$id('redirLine').select2({
+        width: '100%',
+        allowClear: true,
+        data: orgUnits.getActiveByType('prodLine')
+          .filter(function(prodLine)
+          {
+            var subdivision = orgUnits.getSubdivisionFor(prodLine);
 
-    transliterate: function(s)
-    {
-      return s.toUpperCase().replace(/[^A-Z0-9]+/g, '');
+            return !!subdivision && subdivision.get('type') === 'assembly';
+          })
+          .map(function(prodLine)
+          {
+            return {
+              id: prodLine.id,
+              text: prodLine.id,
+              description: prodLine.get('description')
+            };
+          })
+          .sort(function(a, b)
+          {
+            return a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true});
+          }),
+        formatResult: formatResultWithDescription.bind(null, 'text', 'description')
+      });
     },
 
     getCard: function()

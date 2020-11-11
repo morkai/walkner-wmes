@@ -1204,12 +1204,16 @@ define([
 
       page.listenTo(dialogView, 'picked', function(data)
       {
-        viewport.closeAllDialogs();
-
         page.broker.subscribe('viewport.dialog.hidden').setLimit(1).on('message', function()
         {
-          page.resolveAction(data.card, {forceLine: data.line});
+          page.resolveAction(data.card, {
+            forceLine: data.forceLine,
+            redirLine: !!data.redirLine && data.redirLine !== data.forceLine ? data.redirLine : null,
+            forceDelivery: data.forceDelivery
+          });
         });
+
+        viewport.closeAllDialogs();
       });
 
       viewport.showDialog(dialogView, page.t('pickup:forceLine:title'));

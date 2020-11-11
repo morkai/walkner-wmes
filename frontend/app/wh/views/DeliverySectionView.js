@@ -212,6 +212,11 @@ define([
         return 'wh-status-delivering';
       }
 
+      if (status === 'completed' && setCart.get('forced'))
+      {
+        return 'wh-status-late';
+      }
+
       var lateDeliveryTime = this.whSettings.getLateDeliveryTime();
       var minTimeForDelivery = this.whSettings.getMinTimeForDelivery();
       var lines = setCart.get('lines');
