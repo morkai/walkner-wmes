@@ -5,17 +5,17 @@
   </div>
   <div class="form-group">
     <label for="<%- id('redirLine') %>" class="control-label"><%- t('pickup:forceLine:redirLine:label') %></label>
-    <input id="<%- id('redirLine') %>" name="redirLine" type="text" placeholder="<%- t('pickup:forceLine:forceLine:placeholder') %>">
+    <input id="<%- id('redirLine') %>" name="redirLine" type="text" placeholder="<%- t('pickup:forceLine:forceLine:placeholder') %>" disabled>
   </div>
   <div class="checkbox">
     <label>
-      <input id="<%- id('forceDelivery') %>" type="checkbox" value="true" checked>
+      <input id="<%- id('forceDelivery') %>" type="checkbox" value="true" disabled>
       <%- t('pickup:forceLine:forceDelivery') %>
     </label>
   </div>
   <div class="form-group">
-    <label for="<%- id('card') %>" class="control-label is-required"><%- t('pickup:forceLine:card') %></label>
-    <input id="<%- id('card') %>" class="form-control" name="card" value="<%- card %>" type="text" required>
+    <label for="<%- id('card') %>" class="control-label is-required"><%- t('pickup:forceLine:card:label') %></label>
+    <input id="<%- id('card') %>" class="form-control" name="card" value="<%- card %>" type="text" required placeholder="<%- t('pickup:forceLine:card:placeholder') %>">
   </div>
   <div class="form-actions">
     <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- t('pickup:forceLine:submit') %></button>
