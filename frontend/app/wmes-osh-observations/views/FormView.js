@@ -164,6 +164,7 @@ define([
 
         $tr.remove();
         this.toggleEasyConfirmed(reset);
+        this.toggleRequiredWorkCondition();
       },
 
       'click .btn[data-action="addResolution"]': function(e)
@@ -1081,10 +1082,49 @@ define([
         }
       }
 
+      if (!behavior)
+      {
+        this.scheduleRequiredWorkConditionToggle();
+      }
+
       $fields.prop('disabled', !enabled);
-      $id.val(relation._id);
-      $rid.val(relation.rid).prop('placeholder', this.t(`FORM:resolution:placeholder:${relation.type}`));
       $type.val(relation.type);
+      $id.val(relation._id);
+      $rid.val(relation.rid)
+        .prop('required', newRelationType === 'nearMiss')
+        .prop('placeholder', this.t(`FORM:resolution:placeholder:${relation.type}`));
+    },
+
+    scheduleRequiredWorkConditionToggle: function()
+    {
+      clearTimeout(this.timers.toggleRequiredWorkCondition);
+      this.timers.toggleRequiredWorkCondition = setTimeout(this.toggleRequiredWorkCondition.bind(this), 1);
+    },
+
+    toggleRequiredWorkCondition: function()
+    {
+      if (this.options.editMode && !this.model.isCreator())
+      {
+        return;
+      }
+
+      const $workConditions = this.$id('workConditions');
+      const $kaizens = $workConditions
+        .find('input[name$=".rid"]:not([disabled])')
+        .filter((i, ridEl) => ridEl.previousElementSibling.value === 'kaizen');
+
+      if ($kaizens.length === 0)
+      {
+        return;
+      }
+
+      const $notEmpty = $kaizens.filter((i, ridEl) => ridEl.value !== '');
+      const required = $notEmpty.length === 0;
+
+      $kaizens.each((i, ridEl) =>
+      {
+        ridEl.required = i === 0 && required;
+      });
     },
 
     toggleEasyConfirmed: function(reset)
@@ -1331,6 +1371,11 @@ define([
       resolutionInfo.$rid[0].setCustomValidity('');
 
       this.hideResolutionPopover();
+
+      if (resolutionInfo.relation.type === 'kaizen')
+      {
+        this.scheduleRequiredWorkConditionToggle();
+      }
     },
 
     loadResolution: function($observation, showPopover)
@@ -1367,6 +1412,11 @@ define([
       if (this.loadedResolutions[rid])
       {
         resolutionInfo.$id.val(this.loadedResolutions[rid].id);
+
+        if (resolutionInfo.relation.type === 'kaizen')
+        {
+          this.toggleRequiredWorkCondition();
+        }
 
         return;
       }
@@ -1438,6 +1488,11 @@ define([
         if (!resolutionInfo.$rid[0].checkValidity())
         {
           resolutionInfo.$rid[0].reportValidity();
+        }
+
+        if (resolutionInfo.relation.type === 'kaizen')
+        {
+          this.toggleRequiredWorkCondition();
         }
       });
     },
