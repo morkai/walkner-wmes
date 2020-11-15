@@ -1,0 +1,36 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'date',
+        type: 'month',
+        label: 'PROPERTY:',
+        required: true,
+        placeholder: 'YYYY-MM',
+        min: time.format(window.PRODUCTION_DATA_START_DATE || '2020-01-01', 'YYYY-MM'),
+        max: time.getMoment().startOf('month').add(1, 'months').format('YYYY-MM'),
+        inputStyle: {
+          width: '175px'
+        },
+        disabled: editMode
+      }) %>
+      <%- helpers.formGroup({
+        name: 'leader',
+        type: 'select2',
+        label: 'PROPERTY:',
+        required: true,
+        disabled: editMode
+      }) %>
+      <%- helpers.formGroup({
+        name: 'members',
+        type: 'select2',
+        label: 'PROPERTY:'
+      }) %>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

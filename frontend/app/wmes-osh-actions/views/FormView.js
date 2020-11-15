@@ -1033,6 +1033,7 @@ define([
         width: '100%',
         multiple: true,
         maximumSelectionSize: privileged ? 10 : 2,
+        noPersonnelId: true,
         userInfoDecorators: [userInfoDecorator]
       });
 
@@ -1073,6 +1074,7 @@ define([
         width: '100%',
         multiple: true,
         userInfoDecorators: [userInfoDecorator],
+        noPersonnelId: true,
         currentUserInfo: this.model.get('participants') || []
       });
     },

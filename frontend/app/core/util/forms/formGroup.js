@@ -110,6 +110,7 @@ define([
     {
       case 'number':
       case 'date':
+      case 'month':
         inputAttrs.type = options.type;
         inputAttrs.min = options.min == null ? false : options.min;
         inputAttrs.max = options.max == null ? false : options.max;

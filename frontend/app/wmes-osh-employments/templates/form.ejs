@@ -1,0 +1,52 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'month',
+        type: 'month',
+        label: 'PROPERTY:',
+        required: true,
+        placeholder: 'YYYY-MM',
+        min: time.format(window.PRODUCTION_DATA_START_DATE || '2020-01-01', 'YYYY-MM'),
+        max: time.getMoment().startOf('month').add(1, 'months').format('YYYY-MM'),
+        inputStyle: {
+          width: '175px'
+        },
+        disabled: editMode
+      }) %>
+      <table class="table" style="margin-bottom: 0">
+        <thead>
+        <tr>
+          <th class="is-min"><%- t('PROPERTY:workplace') %></th>
+          <th class="is-min"><%- t('PROPERTY:division') %></th>
+          <th class="is-min"><%- t('PROPERTY:count') %></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% workplaces.forEach(workplace => { %>
+          <% workplace.divisions.forEach((division, divisionI) => { %>
+          <tr>
+            <% if (!divisionI) { %>
+            <td class="is-min" rowspan="<%- workplace.divisions.length %>"><%= workplace.label %></td>
+            <% } %>
+            <td class="is-min"><%= division.label %></td>
+            <td class="is-min">
+              <input name="divisions[<%- division.i %>].workplace" value="<%- workplace._id %>" type="hidden">
+              <input name="divisions[<%- division.i %>].division" value="<%- division._id %>" type="hidden">
+              <input name="divisions[<%- division.i %>].count" value="<%- division.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+            </td>
+            <td></td>
+          </tr>
+          <% }) %>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

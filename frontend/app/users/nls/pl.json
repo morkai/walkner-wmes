@@ -211,6 +211,8 @@
   "PRIVILEGE:OSH:KAIZENS:MANAGE": "BHP > Kaizen: zarządzanie",
   "PRIVILEGE:OSH:ACTIONS:MANAGE": "BHP > Akcje: zarządzanie",
   "PRIVILEGE:OSH:OBSERVATIONS:MANAGE": "BHP > Obserwacje: zarządzanie",
+  "PRIVILEGE:OSH:HR:VIEW": "BHP > HR: przeglądanie",
+  "PRIVILEGE:OSH:HR:MANAGE": "BHP > HR: zarządzanie",
   "PRIVILEGE:OSH:DICTIONARIES:VIEW": "BHP > Słowniki: przeglądanie",
   "PRIVILEGE:OSH:DICTIONARIES:MANAGE": "BHP > Słowniki: zarządzanie",
 

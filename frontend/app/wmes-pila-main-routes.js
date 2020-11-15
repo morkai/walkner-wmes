@@ -15,6 +15,8 @@ define([
   './opinionSurveyScanTemplates/routes',
   './opinionSurveyOmrResults/routes',
   './wmes-osh-dashboard/routes',
+  './wmes-osh-employments/routes',
+  './wmes-osh-brigades/routes',
   './wmes-osh-companies/routes',
   './wmes-osh-workplaces/routes',
   './wmes-osh-divisions/routes',

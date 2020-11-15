@@ -807,6 +807,7 @@ define([
         width: '100%',
         multiple: true,
         maximumSelectionSize: 2,
+        noPersonnelId: true,
         userInfoDecorators: [userInfoDecorator]
       });
 

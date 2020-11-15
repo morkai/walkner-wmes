@@ -115,3 +115,6 @@
 .select2-results .select2-result-selectable .select2-result-label {
   cursor: pointer;
 }
+.select2-container.select2-container-disabled .select2-choice {
+  cursor: not-allowed;
+}

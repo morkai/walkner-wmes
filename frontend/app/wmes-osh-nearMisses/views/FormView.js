@@ -1018,6 +1018,7 @@ define([
     {
       setUpUserSelect2(this.$id('implementer'), {
         width: '100%',
+        noPersonnelId: true,
         userInfoDecorators: [userInfoDecorator],
         currentUserInfo: this.model.get('implementer')
       });
