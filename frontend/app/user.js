@@ -169,8 +169,15 @@ function(
     userInfo.cname = window.COMPUTERNAME;
     userInfo.label = user.getLabel();
 
+    user.getInfo.decorators.forEach(function(decorate)
+    {
+      decorate(userInfo, user.data);
+    });
+
     return userInfo;
   };
+
+  user.getInfo.decorators = [];
 
   user.isAllowedTo = function(privilege)
   {

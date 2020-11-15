@@ -10,6 +10,7 @@ define([
   'app/core/util/formatResultWithDescription',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/util/userInfoDecorator',
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-kaizens/views/FormView',
   'app/wmes-osh-actions/Action',
@@ -27,6 +28,7 @@ define([
   formatResultWithDescription,
   setUpUserSelect2,
   dictionaries,
+  userInfoDecorator,
   Kaizen,
   KaizenFormView,
   Action,
@@ -1014,21 +1016,11 @@ define([
 
     setUpImplementerSelect2: function()
     {
-      const $input = this.$id('implementer');
-
-      setUpUserSelect2($input, {
-        width: '100%'
+      setUpUserSelect2(this.$id('implementer'), {
+        width: '100%',
+        userInfoDecorators: [userInfoDecorator],
+        currentUserInfo: this.model.get('implementer')
       });
-
-      const current = this.model.get('implementer');
-
-      if (current)
-      {
-        $input.select2('data', {
-          id: current.id,
-          text: current.label
-        });
-      }
     },
 
     setUpEventCategorySelect2: function()

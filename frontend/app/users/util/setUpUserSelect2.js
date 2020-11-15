@@ -166,7 +166,8 @@ define([
       {
         data.push({
           id: userInfo[user.idProperty],
-          text: userInfo.label
+          text: userInfo.label,
+          user: userInfo
         });
       }
     });
@@ -278,7 +279,8 @@ define([
         {
           return {
             id: u.id,
-            text: u.label
+            text: u.label,
+            user: u
           };
         }));
       }
@@ -286,7 +288,8 @@ define([
       {
         $input.select2('data', {
           id: userInfo.id,
-          text: userInfo.label
+          text: userInfo.label,
+          user: userInfo
         });
       }
     }
@@ -336,15 +339,25 @@ define([
   setUpUserSelect2.getUserInfo = function($input)
   {
     var data = $input.select2('data');
+    var select2 = $input.data('select2');
+    var userInfoDecorators = user.getInfo.decorators.concat(
+      select2 && select2.opts.userInfoDecorators || []
+    );
 
     if (Array.isArray(data))
     {
       return data.map(function(item)
       {
         var userInfo = {};
+        var userData = item.user || {};
 
         userInfo[user.idProperty] = item.id;
         userInfo.label = item.text;
+console.log({userInfo, userData})
+        userInfoDecorators.forEach(function(decorate)
+        {
+          decorate(userInfo, userData);
+        });
 
         return userInfo;
       });
@@ -353,9 +366,15 @@ define([
     if (data)
     {
       var userInfo = {};
+      var userData = data.user || {};
 
       userInfo[user.idProperty] = data.id;
       userInfo.label = data.text;
+
+      userInfoDecorators.forEach(function(decorate)
+      {
+        decorate(userInfo, userData);
+      });
 
       return userInfo;
     }

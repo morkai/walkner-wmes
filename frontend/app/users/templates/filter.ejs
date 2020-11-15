@@ -1,15 +1,15 @@
-<form class="well filter-form">
+<form class="well filter-form" autocomplete="off">
   <div class="form-group">
     <label for="<%- id('personellId') %>"><%- t('PROPERTY:personellId') %></label>
-    <input id="<%- id('personellId') %>" class="form-control" name="personellId" type="text" autocomplete="new-password">
+    <input id="<%- id('personellId') %>" class="form-control" name="personellId" type="text" style="width: 100px">
   </div>
   <div class="form-group">
     <label for="<%- id('login') %>"><%- t('PROPERTY:login') %></label>
-    <input id="<%- id('login') %>" class="form-control" name="login" type="text" autocomplete="new-password">
+    <input id="<%- id('login') %>" class="form-control" name="login" type="text">
   </div>
   <div class="form-group">
     <label for="<%- id('searchName') %>"><%- t('PROPERTY:lastName') %></label>
-    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text" autocomplete="new-password">
+    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text">
   </div>
   <% if (prodFunctions.length) { %>
   <div class="form-group">
@@ -18,6 +18,17 @@
       <option></option>
       <% prodFunctions.forEach(function(prodFunction) { %>
       <option value="<%= prodFunction.id %>"><%= prodFunction.text %></option>
+      <% }) %>
+    </select>
+  </div>
+  <% } %>
+  <% if (privileges.length) { %>
+  <div class="form-group">
+    <label for="<%- id('privileges') %>"><%- t('PROPERTY:privileges') %></label>
+    <select id="<%- id('privileges') %>" name="privileges">
+      <option></option>
+      <% privileges.forEach(function(privilege) { %>
+      <option value="<%= privilege %>"><%- t('PRIVILEGE:' + privilege) %></option>
       <% }) %>
     </select>
   </div>

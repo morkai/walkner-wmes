@@ -208,6 +208,9 @@
   "PRIVILEGE:OSH:LEADER": "BHP > Lider",
   "PRIVILEGE:OSH:OBSERVER": "BHP > Obserwator",
   "PRIVILEGE:OSH:NEAR_MISSES:MANAGE": "BHP > ZPW: zarządzanie",
+  "PRIVILEGE:OSH:KAIZENS:MANAGE": "BHP > Kaizen: zarządzanie",
+  "PRIVILEGE:OSH:ACTIONS:MANAGE": "BHP > Akcje: zarządzanie",
+  "PRIVILEGE:OSH:OBSERVATIONS:MANAGE": "BHP > Obserwacje: zarządzanie",
   "PRIVILEGE:OSH:DICTIONARIES:VIEW": "BHP > Słowniki: przeglądanie",
   "PRIVILEGE:OSH:DICTIONARIES:MANAGE": "BHP > Słowniki: zarządzanie",
 

@@ -10,6 +10,7 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/Resolution',
+  'app/wmes-osh-common/util/userInfoDecorator',
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-kaizens/views/FormView',
   '../Action',
@@ -25,6 +26,7 @@ define([
   setUpUserSelect2,
   dictionaries,
   Resolution,
+  userInfoDecorator,
   Kaizen,
   KaizenFormView,
   Action,
@@ -1030,7 +1032,8 @@ define([
       setUpUserSelect2($input, {
         width: '100%',
         multiple: true,
-        maximumSelectionSize: privileged ? 10 : 2
+        maximumSelectionSize: privileged ? 10 : 2,
+        userInfoDecorators: [userInfoDecorator]
       });
 
       const creator = this.model.get('creator') || currentUser.getInfo();
@@ -1039,14 +1042,16 @@ define([
       const data = [{
         id: creator.id,
         text: creator.label,
-        locked: !privileged
+        locked: !privileged,
+        user: creator
       }];
 
       if (helper)
       {
         data.push({
           id: helper.id,
-          text: helper.label
+          text: helper.label,
+          user: helper
         });
       }
 
@@ -1067,6 +1072,7 @@ define([
       setUpUserSelect2(this.$id('participants'), {
         width: '100%',
         multiple: true,
+        userInfoDecorators: [userInfoDecorator],
         currentUserInfo: this.model.get('participants') || []
       });
     },

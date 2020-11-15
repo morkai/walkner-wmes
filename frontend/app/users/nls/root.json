@@ -207,6 +207,9 @@
     "PRIVILEGE:OSH:LEADER": "OSH > Leader",
     "PRIVILEGE:OSH:OBSERVER": "OSH > Observer",
     "PRIVILEGE:OSH:NEAR_MISSES:MANAGE": "OSH > Near miss: manage",
+    "PRIVILEGE:OSH:KAIZENS:MANAGE": "OSH > Kaizen: manage",
+    "PRIVILEGE:OSH:ACTIONS:MANAGE": "OSH > Actions: manage",
+    "PRIVILEGE:OSH:OBSERVATIONS:MANAGE": "OSH > Observations: manage",
     "PRIVILEGE:OSH:DICTIONARIES:VIEW": "OSH > Dictionaries: view",
     "PRIVILEGE:OSH:DICTIONARIES:MANAGE": "OSH > Dictionaries: manage",
 
