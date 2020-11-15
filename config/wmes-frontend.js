@@ -442,7 +442,10 @@ exports.user = {
   userInfoIdProperty: 'id',
   localAddresses: [/^192\.168\./, /^161\.87\./],
   privileges: [
-    'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
+    'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
+    'REPORTS:1:VIEW', 'REPORTS:2:VIEW', 'REPORTS:3:VIEW', 'REPORTS:4:VIEW',
+    'REPORTS:5:VIEW', 'REPORTS:6:VIEW', 'REPORTS:7:VIEW', 'REPORTS:8:VIEW',
+    'REPORTS:9:VIEW', 'REPORTS:REARM:VIEW'
   ]
 };
 
