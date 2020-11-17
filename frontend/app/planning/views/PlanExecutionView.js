@@ -1,12 +1,16 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/core/View',
+  'app/planning/util/shift',
   'app/planning/templates/planExecution'
 ], function(
+  _,
   time,
   View,
+  shiftUtil,
   template
 ) {
   'use strict';
@@ -50,32 +54,66 @@ define([
                     return null;
                   }
 
+                  var timeWindow = 4 * 3600 * 1000;
+                  var lineShiftOrders = view.plan.shiftOrders.cache.byLine[line.id] || {all: []};
                   var operationNo = planOrder.getOperationNo();
                   var quantityPlanned = lineOrder.get('quantity');
                   var startAt = time.utc.getMoment(lineOrder.get('startAt'));
+                  var startAtTime = startAt.valueOf();
                   var startAtDate = startAt.format('YYYY-MM-DD');
+                  var shiftEndTime = shiftUtil.getShiftEndTime(startAtTime);
+                  var nextShiftOverlap = (startAtTime + timeWindow) - shiftEndTime;
+
+                  if (nextShiftOverlap > 0)
+                  {
+                    var nextShiftNo = shiftUtil.getShiftNo(startAtTime) + 1;
+                    var nextShiftWorking = nextShiftNo !== 4 && _.findLastIndex(
+                      lineShiftOrders.all, function(pso) { return pso.attributes.shift === nextShiftNo; }
+                    ) !== -1;
+
+                    if (nextShiftWorking)
+                    {
+                      nextShiftOverlap = 0;
+                    }
+                  }
+
                   var shiftOrders = [];
                   var ok = false;
 
                   view.plan.shiftOrders.findOrders(orderNo).forEach(function(shiftOrder)
                   {
-                    var opNo = shiftOrder.get('operationNo');
+                    var opNo = shiftOrder.attributes.operationNo;
 
                     if (operationNo !== opNo)
                     {
                       return;
                     }
 
-                    var prodLine = shiftOrder.get('prodLine');
-                    var quantityDone = shiftOrder.get('quantityDone');
-                    var startedAt = time.getMoment(shiftOrder.get('startedAt')).utc(true);
+                    var prodLine = shiftOrder.attributes.prodLine;
+                    var quantityDone = shiftOrder.attributes.quantityDone;
+                    var startedAt = time.getMoment(shiftOrder.attributes.startedAt).utc(true);
+                    var startedAtTime = startedAt.valueOf();
                     var startedAtDate = startedAt.format('YYYY-MM-DD');
                     var classNames = {
                       line: cmpClass[prodLine === line.id],
                       quantity: cmpClass[quantityDone === quantityPlanned],
                       date: cmpClass[startedAtDate === startAtDate],
-                      time: cmpClass[Math.abs(startedAt.diff(startAt, 'minutes')) <= 240]
+                      time: cmpClass[Math.abs(startedAt.diff(startAt)) <= timeWindow]
                     };
+
+                    if (classNames.time === cmpClass.false
+                      && shiftOrder.attributes.shift === 1
+                      && nextShiftOverlap > 0
+                      && startedAtTime > (startAtTime + timeWindow))
+                    {
+                      var fromTime = shiftUtil.getShiftStartTime(startedAtTime);
+                      var toTime = fromTime + nextShiftOverlap;
+
+                      if (startedAt >= fromTime && startedAt <= toTime)
+                      {
+                        classNames.time = cmpClass.true;
+                      }
+                    }
 
                     shiftOrders.push({
                       line: prodLine,

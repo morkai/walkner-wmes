@@ -39,9 +39,9 @@ define([
       return now >= startTime && now < endTime;
     },
 
-    getShiftNo: function(time)
+    getShiftNo: function(time, local)
     {
-      var h = new Date(time).getUTCHours();
+      var h = new Date(time)[local ? 'getHours' : 'getUTCHours']();
 
       return h >= 6 && h < 14 ? 1 : h >= 14 && h < 22 ? 2 : 3;
     },
@@ -121,9 +121,36 @@ define([
       return date.getTime();
     },
 
-    getShiftEndTime: function(time)
+    getFirstShiftStartTime: function(time, local)
     {
-      return this.getShiftStartTime(time) + this.SHIFT_DURATION;
+      var date = new Date(time);
+      var setHours = 'setUTCHours';
+      var getHours = 'getUTCHours';
+
+      if (local)
+      {
+        setHours = 'setHours';
+        getHours = 'getHours';
+      }
+
+      var h = date[getHours]();
+
+      if (h < 6)
+      {
+        date[setHours](0, 0, 0, 0);
+        date[setHours](-(2 + 8 + 8));
+      }
+      else
+      {
+        date[setHours](6, 0, 0, 0);
+      }
+
+      return date.getTime();
+    },
+
+    getShiftEndTime: function(time, local)
+    {
+      return this.getShiftStartTime(time, local) + this.SHIFT_DURATION;
     },
 
     getDateWithTime: function(timeOrDate, h, m)

@@ -61,7 +61,10 @@ define([
       });
 
       self.on('add', self.cacheOrder, self);
-      self.on('change:quantityDone', function() { this.cache.execution = {}; });
+      self.on('change:quantityDone', function()
+      {
+        this.cache.execution = {};
+      });
 
       self.forEach(self.cacheOrder, self);
     },
@@ -129,28 +132,39 @@ define([
 
       var utcStartAt = Date.parse(lineOrder.get('startAt'));
       var localStartAt = time.utc.getMoment(utcStartAt).local(true).valueOf();
-      var timeWindow = 240 * 60 * 1000;
+      var timeWindow = 4 * 3600 * 1000;
       var fromTime = localStartAt - timeWindow;
       var toTime = localStartAt + timeWindow;
       var requiredOperationNo = planOrder.getOperationNo();
       var requiredShiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
-      var requiredShiftEndTime = requiredShiftStartTime + 24 * 3600 * 1000;
+      var requiredDayStartTime = shiftUtil.getFirstShiftStartTime(requiredShiftStartTime, true);
+      var requiredDayEndTime = requiredDayStartTime + shiftUtil.SHIFT_DURATION * 3;
+      var shiftEndTime = requiredShiftStartTime + shiftUtil.SHIFT_DURATION;
+      var nextShiftOverlap = toTime - shiftEndTime;
 
-      lineShiftOrders.all.forEach(function(pso)
+      if (nextShiftOverlap > 0)
       {
-        if (pso.get('orderId') !== orderNo)
-        {
-          return;
-        }
+        var nextShiftNo = shiftUtil.getShiftNo(localStartAt, true) + 1;
+        var nextShiftWorking = nextShiftNo !== 4 && _.findLastIndex(
+          lineShiftOrders.all, function(pso) { return pso.attributes.shift === nextShiftNo; }
+        ) !== -1;
 
-        var quantityDone = pso.get('quantityDone');
+        if (nextShiftWorking)
+        {
+          nextShiftOverlap = 0;
+        }
+      }
+
+      this.findOrders(orderNo, line).forEach(function(pso)
+      {
+        var quantityDone = pso.attributes.quantityDone;
 
         if (!quantityDone)
         {
           return;
         }
 
-        var actualOperationNo = pso.get('operationNo');
+        var actualOperationNo = pso.attributes.operationNo;
 
         if (!requiredOperationNo || !actualOperationNo || actualOperationNo !== requiredOperationNo)
         {
@@ -159,9 +173,9 @@ define([
 
         execution.quantityDoneOnLine += quantityDone;
 
-        var startedAt = Date.parse(pso.get('startedAt'));
+        var startedAt = Date.parse(pso.attributes.startedAt);
 
-        if (startedAt >= requiredShiftStartTime && startedAt <= requiredShiftEndTime)
+        if (startedAt >= requiredDayStartTime && startedAt <= requiredDayEndTime)
         {
           execution.quantityDoneOnDay += quantityDone;
         }
@@ -175,6 +189,17 @@ define([
         {
           execution.plannedQuantityDone += quantityDone;
           execution.plannedQuantitiesDone.push(quantityDone);
+        }
+        else if (pso.attributes.shift === 1 && nextShiftOverlap > 0 && startedAt > toTime)
+        {
+          fromTime = shiftUtil.getShiftStartTime(startedAt, true);
+          toTime = fromTime + nextShiftOverlap;
+
+          if (startedAt >= fromTime && startedAt <= toTime)
+          {
+            execution.plannedQuantityDone += quantityDone;
+            execution.plannedQuantitiesDone.push(quantityDone);
+          }
         }
       });
 

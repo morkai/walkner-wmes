@@ -148,8 +148,7 @@ define([
         {
           groupedLineOrders.forEach(function(lineOrder)
           {
-            var startAt = Date.parse(lineOrder.get('startAt'));
-            var shiftNo = shiftUtil.getShiftNo(startAt);
+            var shiftNo = shiftUtil.getShiftNo(Date.parse(lineOrder.get('startAt')));
             var quantityTodo = lineOrder.get('quantity');
             var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder);
             var executed = execution.plannedQuantitiesDone.some(function(quantityDone)
