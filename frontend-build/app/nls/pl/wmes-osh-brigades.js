@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:browse":function(n){return"Brygady"},"PROPERTY:date":function(n){return"Miesiąc"},"PROPERTY:leader":function(n){return"Lider"},"PROPERTY:members":function(n){return"Członkowie"}}});

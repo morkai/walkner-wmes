@@ -2530,6 +2530,18 @@ app/settings/SettingCollection.js
 app/wmes-osh-common/Setting.js
 app/wmes-osh-common/SettingCollection.js
 app/wmes-osh-common/dictionaries.js
+app/wmes-osh-employments/Employment.js
+app/wmes-osh-employments/EmploymentCollection.js
+app/nls/wmes-osh-employments.js
+app/nls/pl/wmes-osh-employments.js
+i18n!app/nls/wmes-osh-employments
+app/wmes-osh-employments/routes.js
+app/wmes-osh-brigades/Brigade.js
+app/wmes-osh-brigades/BrigadeCollection.js
+app/nls/wmes-osh-brigades.js
+app/nls/pl/wmes-osh-brigades.js
+i18n!app/nls/wmes-osh-brigades
+app/wmes-osh-brigades/routes.js
 app/nls/wmes-osh-companies.js
 app/nls/pl/wmes-osh-companies.js
 i18n!app/nls/wmes-osh-companies
@@ -2609,6 +2621,7 @@ app/core/views/FilterView.js
 app/wmes-osh-nearMisses/templates/filter.js
 app/core/util/ExpandableSelect.js
 app/wmes-osh-nearMisses/views/FilterView.js
+app/wmes-osh-common/util/userInfoDecorator.js
 app/wmes-osh-kaizens/templates/form.js
 app/wmes-osh-kaizens/views/FormView.js
 app/wmes-osh-common/Resolution.js
@@ -4181,6 +4194,8 @@ app/planning/PlanSapOrder.js
 app/planning/PlanSapOrderCollection.js
 app/planning/PlanLateOrder.js
 app/planning/PlanLateOrderCollection.js
+app/planning/PlanWorkingLine.js
+app/planning/PlanWorkingLineCollection.js
 app/planning/Plan.js
 app/data/createSettings.js
 app/settings/Setting.js
@@ -4406,6 +4421,8 @@ app/planning/PlanSapOrder.js
 app/planning/PlanSapOrderCollection.js
 app/planning/PlanLateOrder.js
 app/planning/PlanLateOrderCollection.js
+app/planning/PlanWorkingLine.js
+app/planning/PlanWorkingLineCollection.js
 app/planning/Plan.js
 app/data/createSettings.js
 app/settings/Setting.js

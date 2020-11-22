@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){"use strict";return e.extend({})});

@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:browse":function(n){return"Zatrudnienie"},"PROPERTY:month":function(n){return"Miesiąc"},"PROPERTY:workplace":function(n){return"Zakład"},"PROPERTY:division":function(n){return"Wydział"},"PROPERTY:count":function(n){return"Ilość osób"}}});

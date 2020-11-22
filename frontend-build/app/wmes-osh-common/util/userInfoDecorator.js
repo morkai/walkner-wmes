@@ -1,0 +1,1 @@
+define([],function(){"use strict";return function(o,i){i.oshWorkplace&&(o.oshWorkplace=i.oshWorkplace,o.oshDivision=i.oshDivision||0)}});

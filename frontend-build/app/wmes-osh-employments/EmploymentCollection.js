@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Employment"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-_id)&limit(-1337)"})});

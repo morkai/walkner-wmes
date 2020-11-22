@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Brigade"],function(e,i){"use strict";return e.extend({model:i,rqlQuery:"sort(-_id)&limit(-1337)"})});

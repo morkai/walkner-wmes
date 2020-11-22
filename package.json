@@ -5,21 +5,21 @@
   "version": "0.154.0",
   "updater": {
     "wmes": {
-      "backend": 626,
-      "frontend": 776,
-      "reports": 132,
+      "backend": 627,
+      "frontend": 777,
+      "reports": 133,
       "attachments": 3,
       "importer-sap": 68,
       "importer-results": 12,
       "watchdog": 14,
       "mailer": 17,
-      "operator": 98,
-      "docs": 55,
-      "heff": 45,
+      "operator": 99,
+      "docs": 56,
+      "heff": 46,
       "planning": 94,
       "ps-queue": 58,
       "ps-load": 16,
-      "wh-pickup": 71,
+      "wh-pickup": 72,
       "wh-problems": 47,
       "wh-delivery-components": 43,
       "wh-delivery-packaging": 43,
@@ -38,8 +38,8 @@
       "importer": 2
     },
     "pila": {
-      "backend": 9,
-      "frontend": 9,
+      "backend": 10,
+      "frontend": 10,
       "reports": 2
     }
   },
