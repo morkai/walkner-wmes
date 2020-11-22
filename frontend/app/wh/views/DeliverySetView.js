@@ -129,7 +129,7 @@ define([
 
           view.$('tbody').replaceWith(view.renderPartial(template, view.getTemplateData()).find('tbody'));
 
-          view.$id('completedSapOrders').toggleClass('hidden', view.model.completedSapOrders.length > 0);
+          view.$id('completedSapOrders').toggleClass('hidden', view.model.completedSapOrders.length === 0);
         }
       });
 

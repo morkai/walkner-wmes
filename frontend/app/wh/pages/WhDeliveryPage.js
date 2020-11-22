@@ -500,7 +500,7 @@ define([
       }
     },
 
-    isPendingSetCart: function(setCart, utcNow)
+    isPendingSetCart: function(setCart)
     {
       var page = this;
       var status = setCart.get('status');
@@ -524,68 +524,13 @@ define([
         return true;
       }
 
-      if (!utcNow)
-      {
-        utcNow = this.utcNow();
-      }
-
       var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
-      var maxDeliveryStartTime = page.whSettings.getMaxDeliveryStartTime();
-      var startTime = new Date(setCart.get('startTime'));
-      var startTimeDiff = startTime.getTime() - utcNow;
-      var timeForDelivery = startTimeDiff < maxDeliveryStartTime;
-      var minStartTimeHour = 6;
-      var maxStartTimeHour = minStartTimeHour + maxDeliveryStartTime / 60000 / 60;
 
       return setCart.get('lines').some(function(lineId)
       {
         var whLine = page.lines.get(lineId);
 
-        if (!whLine)
-        {
-          return false;
-        }
-
-        if (whLine.get('available').time >= minTimeForDelivery)
-        {
-          return false;
-        }
-
-        if (timeForDelivery || whLine.get('working'))
-        {
-          return true;
-        }
-
-        var startTimeHour = startTime.getUTCHours();
-
-        if (startTimeHour < minStartTimeHour || startTimeHour >= maxStartTimeHour)
-        {
-          return false;
-        }
-
-        var firstWorkingPlan = page.planStats.getFirstWorkingPlanBefore(startTime);
-
-        if (!firstWorkingPlan)
-        {
-          return false;
-        }
-
-        var endOfWork = time.utc.getMoment(firstWorkingPlan.get('date').valueOf());
-        var workingShifts = firstWorkingPlan.get('workingShifts');
-
-        for (var shiftNo = 3; shiftNo > 0; --shiftNo)
-        {
-          if (workingShifts[shiftNo])
-          {
-            endOfWork.hours(shiftUtil.getStartHourFromShiftNo(shiftNo));
-
-            break;
-          }
-        }
-
-        endOfWork.add(shiftUtil.SHIFT_DURATION - maxDeliveryStartTime, 'ms');
-
-        return utcNow >= endOfWork.valueOf();
+        return !!whLine && whLine.get('available').time < minTimeForDelivery;
       });
     },
 
