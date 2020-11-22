@@ -11,7 +11,7 @@ db.plans.find({}, {lines: 1}).forEach(plan =>
 {
   plan.lines.forEach(l =>
   {
-    if (!l.shiftData) return;
+    if (!l.shiftData || !l.shiftData.length) return;
 
     if (l.shiftData.length === 3)
     {
