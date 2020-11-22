@@ -1221,9 +1221,28 @@ define([
 
     showAddResolutionDialog: function($observation)
     {
-      if (!this.el.checkValidity())
+      const $requiredRids = this.$('input[name$="resolution.rid"][required]');
+
+      $requiredRids.each((i, ridEl) =>
       {
-        return this.$id('save').click();
+        ridEl.required = false;
+      });
+
+      const validity = this.el.checkValidity();
+
+      if (!validity)
+      {
+        this.$id('save').click();
+      }
+
+      $requiredRids.each((i, ridEl) =>
+      {
+        ridEl.required = true;
+      });
+
+      if (!validity)
+      {
+        return;
       }
 
       const resolutionInfo = this.getResolutionInfo($observation);

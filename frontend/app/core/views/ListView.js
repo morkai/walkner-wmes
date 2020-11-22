@@ -540,7 +540,7 @@ define([
       var view = this;
       var model = this.collection.get(id);
 
-      if (!model)
+      if (!model || !view.serializeActions)
       {
         return;
       }
