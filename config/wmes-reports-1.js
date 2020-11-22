@@ -5,6 +5,8 @@ const mongodb = require('./wmes-mongodb');
 
 exports.id = 'wmes-reports-1';
 
+Object.assign(exports, require('./wmes-common'));
+
 exports.modules = [
   {id: 'h5-mongoose', name: 'mongoose'},
   'events',
