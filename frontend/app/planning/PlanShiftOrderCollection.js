@@ -99,9 +99,9 @@ define([
       return shiftOrders;
     },
 
-    getLineOrderExecution: function(line, lineOrder)
+    getLineOrderExecution: function(lineId, lineOrder, nextStartTime)
     {
-      var key = line + lineOrder.id;
+      var key = lineId + lineOrder.id;
 
       if (this.cache.execution[key])
       {
@@ -123,7 +123,7 @@ define([
         return execution;
       }
 
-      var lineShiftOrders = this.cache.byLine[line];
+      var lineShiftOrders = this.cache.byLine[lineId];
 
       if (!lineShiftOrders)
       {
@@ -142,20 +142,17 @@ define([
       var shiftEndTime = requiredShiftStartTime + shiftUtil.SHIFT_DURATION;
       var nextShiftOverlap = toTime - shiftEndTime;
 
-      if (nextShiftOverlap > 0)
+      if (nextShiftOverlap > 0 && nextStartTime)
       {
-        var nextShiftNo = shiftUtil.getShiftNo(localStartAt, true) + 1;
-        var nextShiftWorking = nextShiftNo !== 4 && _.findLastIndex(
-          lineShiftOrders.all, function(pso) { return pso.attributes.shift === nextShiftNo; }
-        ) !== -1;
+        var shiftNo = shiftUtil.getShiftNo(localStartAt, true);
 
-        if (nextShiftWorking)
+        if (nextStartTime[shiftNo])
         {
-          nextShiftOverlap = 0;
+          toTime = time.utc.getMoment(nextStartTime[shiftNo]).local(true).valueOf() + nextShiftOverlap;
         }
       }
 
-      this.findOrders(orderNo, line).forEach(function(pso)
+      this.findOrders(orderNo, lineId).forEach(function(pso)
       {
         var quantityDone = pso.attributes.quantityDone;
 
@@ -189,17 +186,6 @@ define([
         {
           execution.plannedQuantityDone += quantityDone;
           execution.plannedQuantitiesDone.push(quantityDone);
-        }
-        else if (pso.attributes.shift === 1 && nextShiftOverlap > 0 && startedAt > toTime)
-        {
-          fromTime = shiftUtil.getShiftStartTime(startedAt, true);
-          toTime = fromTime + nextShiftOverlap;
-
-          if (startedAt >= fromTime && startedAt <= toTime)
-          {
-            execution.plannedQuantityDone += quantityDone;
-            execution.plannedQuantitiesDone.push(quantityDone);
-          }
         }
       });
 

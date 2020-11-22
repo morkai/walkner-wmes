@@ -187,6 +187,7 @@ define([
       'orders.synced': function()
       {
         this.reloadOrders();
+        this.reloadWorkingLines();
       },
       'orders.updated.*': function(message)
       {
@@ -299,6 +300,7 @@ define([
 
       bindLoadingMessage(plan, page, nlsPrefix + 'plan', nlsDomain);
       bindLoadingMessage(plan.settings, page, nlsPrefix + 'settings', nlsDomain);
+      bindLoadingMessage(plan.workingLines, page, nlsPrefix + 'workingLines', nlsDomain);
       bindLoadingMessage(plan.lateOrders, page, nlsPrefix + 'lateOrders', nlsDomain);
       bindLoadingMessage(plan.sapOrders, page, nlsPrefix + 'sapOrders', nlsDomain);
       bindLoadingMessage(plan.shiftOrders, page, nlsPrefix + 'shiftOrders', nlsDomain);
@@ -363,6 +365,7 @@ define([
         page.promised(productionState.load(forceReloadProdState)),
         page.promised(page.delayReasons.fetch({reset: true})),
         page.promised(plan.settings.fetch()),
+        page.promised(plan.workingLines.fetch({reset: true})),
         page.promised(plan.shiftOrders.fetch({reset: true})),
         page.promised(plan.sapOrders.fetch({reset: true})),
         page.promised(plan.lateOrders.fetch({reset: true})),
@@ -414,6 +417,7 @@ define([
 
           var promise = $.when(
             productionState.load(forceReloadProdState),
+            plan.workingLines.fetch({reset: true, reload: true}),
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
             plan.lateOrders.fetch({reset: true, reload: true}),
@@ -485,12 +489,23 @@ define([
 
     reloadOrders: function(onlySap)
     {
+      if (this.timers.reloadOrders)
+      {
+        clearTimeout(this.timers.reloadOrders);
+        this.timers.reloadOrders = null;
+      }
+
       if (!onlySap)
       {
         this.promised(this.plan.lateOrders.fetch({reset: true}));
       }
 
       this.promised(this.plan.sapOrders.fetch({reset: true}));
+    },
+
+    reloadWorkingLines: function()
+    {
+      this.promised(this.plan.workingLines.fetch({reset: true}));
     },
 
     scheduleStatRecount: function()

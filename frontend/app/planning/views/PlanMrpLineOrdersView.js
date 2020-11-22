@@ -323,8 +323,13 @@ define([
       var quantity = 0;
       var manHours = 0;
 
-      (this.line.get('shiftData') || []).forEach(function(shift)
+      (this.line.get('shiftData') || []).forEach(function(shift, shiftNo)
       {
+        if (shiftNo === 0)
+        {
+          return;
+        }
+
         orderCount += shift.orderCount;
         quantity += shift.quantity;
         manHours += shift.manHours;
@@ -343,7 +348,7 @@ define([
     serializeShiftPopover: function(shiftI)
     {
       var hourlyPlan = this.line.get('hourlyPlan').slice(shiftI * 8, shiftI * 8 + 8);
-      var shiftData = (this.line.get('shiftData') || [])[shiftI] || {};
+      var shiftData = (this.line.get('shiftData') || [])[shiftI + 1] || {};
 
       return lineOrderShiftPopoverTemplate({
         stats: {

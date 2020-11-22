@@ -7,6 +7,7 @@
 
     "MSG:LOADING_FAILURE:plan": "Failed to load the plan.",
     "MSG:LOADING_FAILURE:settings": "Failed to load the plan settings.",
+    "MSG:LOADING_FAILURE:workingLines": "Failed to load the working lines.",
     "MSG:LOADING_FAILURE:sapOrders": "Failed to load the SAP orders.",
     "MSG:LOADING_FAILURE:shifts": "Failed to load the production shifts.",
     "MSG:LOADING_FAILURE:lateOrders": "Failed to load the late orders.",

@@ -6,6 +6,7 @@
 
   "MSG:LOADING_FAILURE:plan": "Nie udało się załadować planu.",
   "MSG:LOADING_FAILURE:settings": "Nie udało się załadować ustawień planu.",
+  "MSG:LOADING_FAILURE:workingLines": "Nie udało się załadować pracujących linii.",
   "MSG:LOADING_FAILURE:sapOrders": "Nie udało się załadować zleceń SAP.",
   "MSG:LOADING_FAILURE:shifts": "Nie udało się załadować zmian produkcyjnych.",
   "MSG:LOADING_FAILURE:lateOrders": "Nie udało się załadować opóźnionych zleceń.",

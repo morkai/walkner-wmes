@@ -44,7 +44,8 @@
 <h3>Planowanie</h3>
 <ul>
   <li>Zmieniono sposób liczenia realizacji sekwencji tak, aby zlecenie, którego zaplanowany czas rozpoczęcia+4 godz.
-    przekracza zmianę produkcyjną i zlecenie zaplanowane jest na III zmianę lub kolejna zmiana produkcyjna jest
-    niepracująca, było zaliczane jako zrealizowane, jeżeli jego czas rozpoczęcia mieści się w godzinach od 06:00
-    do 06:00+&lt;czas przekroczenia zmiany&gt;.</li>
+    przekracza zmianę produkcyjną, było zaliczane jako zrealizowane, jeżeli jego rzeczywisty czas rozpoczęcia jest przed
+    planowanym czasem rozpoczęcia pierwszego zlecenia na kolejnej pracującej zmianie powiększonym o czas przekroczenia
+    zmiany. Jeżeli zlecenie zaplanowano na piątek 12:00, to czas na realizację zlecenia jest do godziny 08:00
+    w następny poniedziałek, zakładając, że II i III zmiana w piątek oraz cały weekend są niepracujące.</li>
 </ul>
