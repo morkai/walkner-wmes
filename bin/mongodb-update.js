@@ -3,29 +3,15 @@
 
 'use strict';
 
-db.orderbommatchers.find({}).forEach(obm =>
+db.plans.find({}, {lines: 1}).forEach(plan =>
 {
-  obm.components.forEach(c =>
+  plan.lines.forEach(l =>
   {
-    if (!c.notPattern)
+    l.orders.forEach(o =>
     {
-      c.notPattern = '';
-    }
-
-    if (!c.optional)
-    {
-      c.optional = false;
-    }
-
-    if (!c.first)
-    {
-      c.first = false;
-    }
+      o.pceTimes = [];
+    });
   });
 
-  db.orderbommatchers.updateOne({_id: obm._id}, {$set: {components: obm.components}});
+  db.plans.updateOne({_id: plan._id}, {$set: {lines: plan.lines}});
 });
-
-db.oldwhorders.updateMany({forceDelivery: {$exists: false}}, {$set: {forceDelivery: false}});
-db.oldwhorders.updateMany({forcedRedir: {$exists: false}}, {$set: {forcedRedir: null}});
-db.oldwhsetcarts.updateMany({forced: {$exists: false}}, {$set: {forced: false}});

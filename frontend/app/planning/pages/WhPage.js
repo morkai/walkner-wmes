@@ -195,8 +195,7 @@ define([
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
         settings: PlanSettings.fromDate(page.options.date),
-        minMaxDates: true,
-        pceTimes: false
+        minMaxDates: true
       });
 
       page.delayReasons = new DelayReasonCollection();

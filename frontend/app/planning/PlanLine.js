@@ -18,8 +18,7 @@ define([
         orders: [],
         downtimes: [],
         totalQuantity: 0,
-        hourlyPlan: [],
-        pceTimes: []
+        hourlyPlan: []
       };
     },
 

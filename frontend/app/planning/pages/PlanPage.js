@@ -287,7 +287,6 @@ define([
         }),
         settings: PlanSettings.fromDate(page.options.date),
         minMaxDates: true,
-        pceTimes: false,
         activeMrps: true
       });
 

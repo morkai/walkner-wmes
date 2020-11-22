@@ -66,8 +66,7 @@ define([
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
         settings: PlanSettings.fromDate(planDate),
-        minMaxDates: false,
-        pceTimes: false
+        minMaxDates: false
       });
 
       view.chatView = new WhProblemChatView({

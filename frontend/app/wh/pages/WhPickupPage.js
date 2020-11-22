@@ -309,8 +309,7 @@ define([
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH2'
         }),
         settings: PlanSettings.fromDate(page.options.date),
-        minMaxDates: true,
-        pceTimes: false
+        minMaxDates: true
       });
 
       page.whSettings = bindLoadingMessage(whSettings.acquire(), page);

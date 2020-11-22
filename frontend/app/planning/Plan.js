@@ -58,12 +58,10 @@ define([
         displayOptions: null,
         settings: null,
         sapOrders: null,
-        minMaxDates: false,
-        pceTimes: false
+        minMaxDates: false
       });
 
       this.urlQuery = 'minMaxDates=' + (options.minMaxDates ? 1 : 0)
-        + '&pceTimes=' + (options.pceTimes ? 1 : 0)
         + '&activeMrps=' + (options.activeMrps ? 1 : 0);
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
