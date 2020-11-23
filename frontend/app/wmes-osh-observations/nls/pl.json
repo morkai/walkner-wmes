@@ -60,6 +60,7 @@
   "easy:false": "Trudne",
 
   "FORM:ACTION:add": "Dodaj nową kartę obserwacji",
+  "FRM:ERROR:empty": "Opisz przynajmniej jedną obserwację zachowań lub warunków pracy.",
   "FORM:placeholder:noUserWorkplace": "Wybierz zakład obserwatora...",
   "FORM:placeholder:noWorkplace": "Wybierz zakład...",
   "FORM:placeholder:noDivision": "Wybierz wydział...",

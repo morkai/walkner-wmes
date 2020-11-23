@@ -16,6 +16,7 @@
   "navbar:eventCategories": "Kategorie zdarzeń",
   "navbar:reasonCategories": "Kategorie przyczyn zdarzeń",
   "navbar:rootCauseCategories": "Kategorie przyczyn źródłowych",
+  "navbar:kaizenCategories": "Kategorie kaizen",
   "navbar:nearMisses": "ZPW",
   "navbar:kaizens": "Kaizen",
   "navbar:actions": "Akcje",

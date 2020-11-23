@@ -52,9 +52,9 @@ define([
     USER_PROPS: ['creator', 'implementers', 'coordinators'],
     DICT_PROPS: [
       'workplace', 'division', 'building', 'location', 'station',
-      'kind', 'eventCategory'
+      'kind', 'kaizenCategory'
     ],
-    DESC_PROPS: ['kind', 'eventCategory']
+    DESC_PROPS: ['kind', 'kaizenCategory']
 
   });
 

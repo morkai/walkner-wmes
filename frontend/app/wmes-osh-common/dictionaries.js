@@ -19,6 +19,7 @@ define([
   'app/wmes-osh-eventCategories/EventCategoryCollection',
   'app/wmes-osh-reasonCategories/ReasonCategoryCollection',
   'app/wmes-osh-rootCauseCategories/RootCauseCategoryCollection',
+  'app/wmes-osh-kaizenCategories/KaizenCategoryCollection',
   'app/wmes-osh-nearMisses/NearMiss',
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-actions/Action',
@@ -43,6 +44,7 @@ define([
   EventCategoryCollection,
   ReasonCategoryCollection,
   RootCauseCategoryCollection,
+  KaizenCategoryCollection,
   NearMiss,
   Kaizen,
   Action,
@@ -65,7 +67,8 @@ define([
     observationCategory: 'observationCategories',
     eventCategory: 'eventCategories',
     reasonCategory: 'reasonCategories',
-    rootCauseCategory: 'rootCauseCategories'
+    rootCauseCategory: 'rootCauseCategories',
+    kaizenCategory: 'kaizenCategories'
   };
   const TYPE_TO_PREFIX = {
     nearMiss: 'Z',
@@ -125,6 +128,7 @@ define([
     eventCategories: new EventCategoryCollection(),
     reasonCategories: new ReasonCategoryCollection(),
     rootCauseCategories: new RootCauseCategoryCollection(),
+    kaizenCategories: new KaizenCategoryCollection(),
     loaded: false,
     load: function()
     {

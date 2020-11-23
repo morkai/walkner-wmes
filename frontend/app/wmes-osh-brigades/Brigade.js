@@ -2,10 +2,12 @@
 
 define([
   'app/time',
+  'app/user',
   'app/core/Model',
   'app/core/templates/userInfo'
 ], function(
   time,
+  currentUser,
   Model,
   userInfoTemplate
 ) {
@@ -60,6 +62,32 @@ define([
       obj.members = obj.members.map(userInfoTemplate);
 
       return obj;
+    }
+
+  }, {
+
+    can: {
+
+      add: function()
+      {
+        return currentUser.isAllowedTo('OSH:HR:MANAGE', 'OSH:LEADER');
+      },
+
+      edit: function(model)
+      {
+        if (currentUser.isAllowedTo('OSH:HR:MANAGE'))
+        {
+          return true;
+        }
+
+        if (model.get('leader').id === currentUser.data._id)
+        {
+          return true;
+        }
+
+        return false;
+      }
+
     }
 
   });

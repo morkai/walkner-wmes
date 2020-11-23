@@ -21,7 +21,7 @@
   "PROPERTY:station": "Stanowisko",
   "PROPERTY:locationPath": "Lokalizacja",
   "PROPERTY:kind": "Rodzaj",
-  "PROPERTY:eventCategory": "Kategoria zdarzenia",
+  "PROPERTY:kaizenCategory": "Kategoria",
   "PROPERTY:subject": "Temat",
   "PROPERTY:problem": "Opis problemu",
   "PROPERTY:reason": "Przyczyna wystąpienia",

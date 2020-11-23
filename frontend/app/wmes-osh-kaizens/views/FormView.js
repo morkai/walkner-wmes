@@ -84,9 +84,9 @@ define([
 
       'change input[name="kind"]': function()
       {
-        this.$id('eventCategory').val('');
+        this.$id('kaizenCategory').val('');
 
-        this.setUpEventCategorySelect2();
+        this.setUpKaizenCategorySelect2();
       },
 
       'change input[type="file"][data-max]': function(e)
@@ -306,7 +306,7 @@ define([
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
       this.setUpStationSelect2();
-      this.setUpEventCategorySelect2();
+      this.setUpKaizenCategorySelect2();
       this.setUpImplementersSelect2();
       this.toggleKind();
     },
@@ -737,13 +737,13 @@ define([
       );
     },
 
-    setUpEventCategorySelect2: function()
+    setUpKaizenCategorySelect2: function()
     {
-      const $input = this.$id('eventCategory');
+      const $input = this.$id('kaizenCategory');
       const kind = +this.$('input[name="kind"]:checked').val() || this.model.get('kind');
       const map = {};
 
-      dictionaries.eventCategories.forEach(model =>
+      dictionaries.kaizenCategories.forEach(model =>
       {
         if (!model.get('active') || !model.hasKind(kind))
         {
@@ -758,8 +758,8 @@ define([
         };
       });
 
-      const currentId = this.model.get('eventCategory');
-      const currentModel = dictionaries.eventCategories.get(currentId);
+      const currentId = this.model.get('kaizenCategory');
+      const currentModel = dictionaries.kaizenCategories.get(currentId);
 
       if (currentId && !map[currentId])
       {

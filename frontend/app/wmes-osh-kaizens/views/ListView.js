@@ -45,7 +45,7 @@ define([
           thClassName: 'is-filter'
         },
         {
-          id: 'eventCategory',
+          id: 'kaizenCategory',
           className: 'is-overflow w175',
           thClassName: 'is-filter'
         },

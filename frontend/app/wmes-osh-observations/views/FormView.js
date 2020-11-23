@@ -370,7 +370,21 @@ define([
 
     checkValidity: function(formData)
     {
-      console.log(formData);
+      if (!formData.behaviors.length && !formData.workConditions.length)
+      {
+        const $required = this.$('input[name$=".safe"]').first();
+
+        $required[0].setCustomValidity(this.t('FORM:ERROR:empty'));
+
+        $required.one('blur', () =>
+        {
+          $required[0].setCustomValidity('');
+        });
+
+        $required.focus()[0].reportValidity();
+
+        return false;
+      }
 
       return true;
     },

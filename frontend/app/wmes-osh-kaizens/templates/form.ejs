@@ -87,17 +87,33 @@
               }) %>
             </div>
           <% } %>
-          <% if (!relation || !model.eventCategory) { %>
-            <div class="row">
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'kaizenCategory',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'implementers',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <% if (!relation || relation.getModelType() !== 'nearMiss') { %>
               <%- helpers.formGroup({
-                name: 'eventCategory',
-                type: 'select2',
-                label: 'PROPERTY:',
+                name: 'plannedAt',
+                type: 'date',
+                label: 'FORM:',
                 required: true,
                 groupClassName: 'col-lg-4'
               }) %>
-            </div>
-          <% } %>
+            <% } %>
+          </div>
           <div class="row">
             <%- helpers.formGroup({
               name: 'problem',
@@ -131,24 +147,6 @@
               rows: 4
             }) %>
           <% } %>
-          <div class="row">
-            <%- helpers.formGroup({
-              name: 'implementers',
-              type: 'select2',
-              label: 'PROPERTY:',
-              required: true,
-              groupClassName: 'col-lg-4'
-            }) %>
-            <% if (!relation || relation.getModelType() !== 'nearMiss') { %>
-              <%- helpers.formGroup({
-                name: 'plannedAt',
-                type: 'date',
-                label: 'FORM:',
-                required: true,
-                groupClassName: 'col-lg-4'
-              }) %>
-            <% } %>
-          </div>
           <% if (model.status === 'verification' || model.status === 'finished') { %>
             <div class="row">
               <div class="col-lg-4 form-group">
