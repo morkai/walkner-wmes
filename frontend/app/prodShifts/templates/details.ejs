@@ -13,7 +13,15 @@
         '!leader',
         '!operator',
         'totalQuantityDone',
-        {id: 'efficiency', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF')}
+        {id: 'efficiency', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF'), value: function(value)
+        {
+          if (efficiency >= 0)
+          {
+            return efficiency + '%';
+          }
+
+          return value;
+        }}
       ]) %>
     </div>
   </div>

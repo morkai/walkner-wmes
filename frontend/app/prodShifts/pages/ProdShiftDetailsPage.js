@@ -73,7 +73,7 @@ define([
       if (this.prodShift.id)
       {
         actions.push({
-          label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
+          label: this.t('PAGE_ACTION:prodLogEntries'),
           icon: 'list-ol',
           href: '#prodLogEntries?sort(createdAt)&limit(-1337)'
           + '&prodShift=' + encodeURIComponent(this.prodShift.id)
@@ -100,9 +100,9 @@ define([
       this.defineViews();
       this.defineBindings();
 
-      this.setView('.prodShifts-details-container', this.detailsView);
-      this.setView('.prodShifts-timeline-container', this.timelineView);
-      this.setView('.prodShifts-quantitiesDone-container', this.quantitiesDoneChartView);
+      this.setView('#-details', this.detailsView);
+      this.setView('#-timeline', this.timelineView);
+      this.setView('#-quantitiesDone', this.quantitiesDoneChartView);
     },
 
     setUpLayout: function(layout)
@@ -164,7 +164,9 @@ define([
     defineViews: function()
     {
       this.detailsView = new ProdShiftDetailsView({
-        model: this.prodShift
+        model: this.prodShift,
+        prodShiftOrders: this.options.latest ? this.prodShiftOrders : null,
+        prodDowntimes: this.options.latest ? this.prodDowntimes : null
       });
 
       this.timelineView = new ProdShiftTimelineView({
@@ -211,7 +213,10 @@ define([
 
       if (this.options.latest)
       {
-        this.setUpDetailsPanelType();
+        var updateDetails = _.debounce(this.updateDetails.bind(this), 1);
+
+        this.listenTo(this.prodShiftOrders, 'reset add remove change', updateDetails);
+        this.listenTo(this.prodDowntimes, 'reset add remove change', updateDetails);
       }
     },
 
@@ -231,15 +236,12 @@ define([
 
     updatePanelType: function()
     {
-      this.detailsView.setPanelType(STATE_TO_PANEL_TYPE[this.timelineView.getLastState()]);
+      this.detailsView.updatePanelType(STATE_TO_PANEL_TYPE[this.timelineView.getLastState()]);
     },
 
-    setUpDetailsPanelType: function()
+    updateDetails: function()
     {
-      var updatePanelType = _.debounce(this.updatePanelType.bind(this), 1);
-
-      this.listenTo(this.prodShiftOrders, 'reset add remove change', updatePanelType);
-      this.listenTo(this.prodDowntimes, 'reset add remove change', updatePanelType);
+      this.updatePanelType();
     },
 
     setUpShiftRemoteTopics: function()
