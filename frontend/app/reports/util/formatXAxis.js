@@ -2,17 +2,20 @@
 
 define([
   'app/i18n',
-  'app/time'
+  'app/time',
+  'app/planning/util/shift'
 ],
 function(
   t,
-  time
+  time,
+  shiftUtil
 ) {
   'use strict';
 
   function formatXAxis(view, ctx)
   {
     var moment = time.getMoment(ctx.value);
+    var online = view.model.query && !view.model.query.get('from') && !view.model.query.get('to');
     var interval;
     var data;
 
@@ -29,10 +32,21 @@ function(
       interval = view.model.get('interval');
     }
 
-    if (interval === 'shift')
+    if (online && interval === 'hour')
     {
+      return moment.format('H');
+    }
+    else if (interval === 'shift')
+    {
+      var shift = t('core', 'SHIFT:' + shiftUtil.getShiftNo(ctx.value, true));
+
+      if (online)
+      {
+        return shift;
+      }
+
       data = {
-        shift: t('core', 'SHIFT:' + (moment.hours() === 6 ? 1 : moment.hours() === 14 ? 2 : 3))
+        shift: shift
       };
     }
     else if (interval === 'quarter')

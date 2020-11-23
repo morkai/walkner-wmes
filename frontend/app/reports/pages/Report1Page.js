@@ -129,7 +129,7 @@ define([
 
       if (this.query.isAutoMode())
       {
-        this.timers.autoRefresh = setTimeout(this.refresh.bind(this), 10 * 60 * 1000);
+        this.timers.autoRefresh = setTimeout(this.refresh.bind(this), 4 * 60 * 1000);
       }
     },
 
