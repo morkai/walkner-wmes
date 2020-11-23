@@ -2525,6 +2525,8 @@ app/wmes-osh-reasonCategories/ReasonCategory.js
 app/wmes-osh-reasonCategories/ReasonCategoryCollection.js
 app/wmes-osh-rootCauseCategories/RootCauseCategory.js
 app/wmes-osh-rootCauseCategories/RootCauseCategoryCollection.js
+app/wmes-osh-kaizenCategories/KaizenCategory.js
+app/wmes-osh-kaizenCategories/KaizenCategoryCollection.js
 app/settings/Setting.js
 app/settings/SettingCollection.js
 app/wmes-osh-common/Setting.js
@@ -2594,6 +2596,10 @@ app/nls/wmes-osh-rootCauseCategories.js
 app/nls/pl/wmes-osh-rootCauseCategories.js
 i18n!app/nls/wmes-osh-rootCauseCategories
 app/wmes-osh-rootCauseCategories/routes.js
+app/nls/wmes-osh-kaizenCategories.js
+app/nls/pl/wmes-osh-kaizenCategories.js
+i18n!app/nls/wmes-osh-kaizenCategories
+app/wmes-osh-kaizenCategories/routes.js
 app/core/templates/listPage.js
 app/core/pages/FilteredListPage.js
 app/wmes-osh-common/templates/list/markAsSeenAction.js
@@ -3750,6 +3756,7 @@ app/nls/pl/core.js
 i18n!app/nls/core
 app/highcharts.js
 app/reports/util/formatTooltipHeader.js
+app/planning/util/shift.js
 app/reports/util/formatXAxis.js
 app/paintShop/views/PaintShopLoadReportView.js
 app/paintShop/templates/load/stats.js

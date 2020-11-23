@@ -1,0 +1,1 @@
+define(["app/core/Collection","./KaizenCategory"],function(e,n){"use strict";return e.extend({model:n,sort:function(e,n){return e.get("longName").localeCompare(n.get("longName"))}})});
