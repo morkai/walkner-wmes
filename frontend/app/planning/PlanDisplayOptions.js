@@ -135,7 +135,7 @@ define([
 
       displayOptions.readFromLocalStorage();
 
-      if (attrs.division)
+      if (attrs.division !== undefined)
       {
         displayOptions.set('division', attrs.division);
       }
