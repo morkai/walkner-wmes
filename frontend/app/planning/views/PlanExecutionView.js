@@ -55,25 +55,33 @@ define([
                   }
 
                   var timeWindow = 4 * 3600 * 1000;
-                  var lineShiftOrders = view.plan.shiftOrders.cache.byLine[line.id] || {all: []};
                   var operationNo = planOrder.getOperationNo();
                   var quantityPlanned = lineOrder.get('quantity');
                   var startAt = time.utc.getMoment(lineOrder.get('startAt'));
                   var startAtTime = startAt.valueOf();
                   var startAtDate = startAt.format('YYYY-MM-DD');
-                  var shiftEndTime = shiftUtil.getShiftEndTime(startAtTime);
-                  var nextShiftOverlap = (startAtTime + timeWindow) - shiftEndTime;
+                  var shiftStartTime = shiftUtil.getShiftStartTime(startAtTime, false);
+                  var shiftEndTime = shiftStartTime + shiftUtil.SHIFT_DURATION;
+                  var fromTime = startAtTime - timeWindow;
+                  var toTime = startAtTime + timeWindow;
+                  var prevShiftOverlap = fromTime - shiftStartTime;
+                  var nextShiftOverlap = toTime - shiftEndTime;
 
-                  if (nextShiftOverlap > 0)
+                  if (prevShiftOverlap < 0 || nextShiftOverlap > 0)
                   {
-                    var nextShiftNo = shiftUtil.getShiftNo(startAtTime) + 1;
-                    var nextShiftWorking = nextShiftNo !== 4 && _.findLastIndex(
-                      lineShiftOrders.all, function(pso) { return pso.attributes.shift === nextShiftNo; }
-                    ) !== -1;
+                    var workingTimes = view.plan.workingLines.getWorkingTimes(line);
+                    var shiftNo = shiftUtil.getShiftNo(startAtTime, false);
 
-                    if (nextShiftWorking)
+                    if (prevShiftOverlap < 0 && workingTimes.prevAt[shiftNo])
                     {
-                      nextShiftOverlap = 0;
+                      fromTime = time.utc.getMoment(workingTimes.prevAt[shiftNo]).local(true).valueOf()
+                        + prevShiftOverlap;
+                    }
+
+                    if (nextShiftOverlap > 0 && workingTimes.nextAt[shiftNo])
+                    {
+                      toTime = time.utc.getMoment(workingTimes.nextAt[shiftNo]).local(true).valueOf()
+                        + nextShiftOverlap;
                     }
                   }
 
@@ -98,22 +106,8 @@ define([
                       line: cmpClass[prodLine === line.id],
                       quantity: cmpClass[quantityDone === quantityPlanned],
                       date: cmpClass[startedAtDate === startAtDate],
-                      time: cmpClass[Math.abs(startedAt.diff(startAt)) <= timeWindow]
+                      time: cmpClass[startedAtTime >= fromTime && startedAtTime <= toTime]
                     };
-
-                    if (classNames.time === cmpClass.false
-                      && shiftOrder.attributes.shift === 1
-                      && nextShiftOverlap > 0
-                      && startedAtTime > (startAtTime + timeWindow))
-                    {
-                      var fromTime = shiftUtil.getShiftStartTime(startedAtTime);
-                      var toTime = fromTime + nextShiftOverlap;
-
-                      if (startedAt >= fromTime && startedAt <= toTime)
-                      {
-                        classNames.time = cmpClass.true;
-                      }
-                    }
 
                     shiftOrders.push({
                       line: prodLine,

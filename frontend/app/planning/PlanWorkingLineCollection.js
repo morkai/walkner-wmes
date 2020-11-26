@@ -43,8 +43,40 @@ define([
           }
         }
 
-        return workingLine ? workingLine.get('startAt') : 0;
+        return workingLine ? workingLine.get('nextAt') : 0;
       });
+    },
+
+    getPrevFinishTime: function(planLine)
+    {
+      var shiftData = planLine.get('shiftData');
+      var workingLine = this.get(planLine.id);
+
+      return shiftData.map(function(data, shiftNo)
+      {
+        if (shiftNo === 0)
+        {
+          return 0;
+        }
+
+        for (var s = shiftNo - 1; s >= 1; --s)
+        {
+          if (shiftData[s].finishAt)
+          {
+            return Date.parse(shiftData[s].finishAt);
+          }
+        }
+
+        return workingLine ? workingLine.get('prevAt') : 0;
+      });
+    },
+
+    getWorkingTimes: function(planLine)
+    {
+      return {
+        prevAt: this.getPrevFinishTime(planLine),
+        nextAt: this.getNextStartTime(planLine)
+      };
     }
 
   });

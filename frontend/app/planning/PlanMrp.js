@@ -144,7 +144,7 @@ define([
           }
         });
 
-        var nextStartTime = plan.workingLines.getNextStartTime(line);
+        var workingTimes = plan.workingLines.getWorkingTimes(line);
 
         lineOrders.forEach(function(groupedLineOrders)
         {
@@ -152,7 +152,7 @@ define([
           {
             var shiftNo = shiftUtil.getShiftNo(Date.parse(lineOrder.get('startAt')));
             var quantityTodo = lineOrder.get('quantity');
-            var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, nextStartTime);
+            var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, workingTimes);
             var executed = execution.plannedQuantitiesDone.some(function(quantityDone)
             {
               return quantityDone === quantityTodo;

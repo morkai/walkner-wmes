@@ -99,7 +99,7 @@ define([
       return shiftOrders;
     },
 
-    getLineOrderExecution: function(lineId, lineOrder, nextStartTime)
+    getLineOrderExecution: function(lineId, lineOrder, workingTimes)
     {
       var key = lineId + lineOrder.id;
 
@@ -135,20 +135,26 @@ define([
       var timeWindow = 4 * 3600 * 1000;
       var fromTime = localStartAt - timeWindow;
       var toTime = localStartAt + timeWindow;
-      var requiredOperationNo = planOrder.getOperationNo();
-      var requiredShiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
-      var requiredDayStartTime = shiftUtil.getFirstShiftStartTime(requiredShiftStartTime, true);
-      var requiredDayEndTime = requiredDayStartTime + shiftUtil.SHIFT_DURATION * 3;
-      var shiftEndTime = requiredShiftStartTime + shiftUtil.SHIFT_DURATION;
+      var operationNo = planOrder.getOperationNo();
+      var shiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
+      var dayStartTime = shiftUtil.getFirstShiftStartTime(shiftStartTime, true);
+      var dayEndTime = dayStartTime + shiftUtil.SHIFT_DURATION * 3;
+      var shiftEndTime = shiftStartTime + shiftUtil.SHIFT_DURATION;
+      var prevShiftOverlap = fromTime - shiftStartTime;
       var nextShiftOverlap = toTime - shiftEndTime;
 
-      if (nextShiftOverlap > 0 && nextStartTime)
+      if (workingTimes && (prevShiftOverlap < 0 || nextShiftOverlap > 0))
       {
         var shiftNo = shiftUtil.getShiftNo(localStartAt, true);
 
-        if (nextStartTime[shiftNo])
+        if (prevShiftOverlap < 0 && workingTimes.prevAt[shiftNo])
         {
-          toTime = time.utc.getMoment(nextStartTime[shiftNo]).local(true).valueOf() + nextShiftOverlap;
+          fromTime = time.utc.getMoment(workingTimes.prevAt[shiftNo]).local(true).valueOf() + prevShiftOverlap;
+        }
+
+        if (nextShiftOverlap > 0 && workingTimes.nextAt[shiftNo])
+        {
+          toTime = time.utc.getMoment(workingTimes.nextAt[shiftNo]).local(true).valueOf() + nextShiftOverlap;
         }
       }
 
@@ -163,7 +169,7 @@ define([
 
         var actualOperationNo = pso.attributes.operationNo;
 
-        if (!requiredOperationNo || !actualOperationNo || actualOperationNo !== requiredOperationNo)
+        if (!operationNo || !actualOperationNo || actualOperationNo !== operationNo)
         {
           return;
         }
@@ -172,12 +178,12 @@ define([
 
         var startedAt = Date.parse(pso.attributes.startedAt);
 
-        if (startedAt >= requiredDayStartTime && startedAt <= requiredDayEndTime)
+        if (startedAt >= dayStartTime && startedAt <= dayEndTime)
         {
           execution.quantityDoneOnDay += quantityDone;
         }
 
-        if (shiftUtil.getShiftStartTime(startedAt, true) === requiredShiftStartTime)
+        if (shiftUtil.getShiftStartTime(startedAt, true) === shiftStartTime)
         {
           execution.quantityDoneOnShift += quantityDone;
         }
