@@ -157,7 +157,7 @@
   "settings:wh.planning.maxPickupDowntime:help": "Jeżeli czas trwania przestoju byłby dłuższy niż podana wartość, to przestój nie jest zapisywany.",
   "settings:wh.planning.maxSetsPerLine": "Maksymalna ilość skompletowanych zestawów na linię",
   "settings:wh.planning.minTimeForDelivery": "Czas na wysyłkę [min]",
-  "settings:wh.planning.minTimeForDelivery:help": "Wózki dla linii, które mają dostępny czas komponentów mniejszy niż dana wartość zostaną oznaczone na żółto i będą mogły zostać wysłane na linię.",
+  "settings:wh.planning.minTimeForDelivery:help": "Wózki dla linii, które mają dostępny czas komponentów mniejszy niż dana wartość zostaną oznaczone na żółto i będą mogły zostać wysłane na linię. W oddzielnych liniach można zdefiniować wartość dla różnych MRP: <code>ID_MRP: CZAS_NA_WYSYŁKĘ</code>",
   "settings:wh.planning.lateDeliveryTime": "Czas opóźnionej wysyłki [min]",
   "settings:wh.planning.lateDeliveryTime:help": "Wózki dla linii, które mają dostępny czas komponentów mniejszy niż dana wartość zostaną oznaczone na czerwono.",
   "settings:wh.planning.minDeliveryDowntime": "Maksymalny czas między wysyłkami [s]",

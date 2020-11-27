@@ -524,7 +524,7 @@ define([
         return true;
       }
 
-      var minTimeForDelivery = page.whSettings.getMinTimeForDelivery();
+      var minTimeForDelivery = page.whSettings.getMaxMinTimeForDelivery(setCart.get('orders'));
 
       return setCart.get('lines').some(function(lineId)
       {

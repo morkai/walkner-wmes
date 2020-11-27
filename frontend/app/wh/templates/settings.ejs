@@ -172,7 +172,11 @@
         name: 'wh.planning.minTimeForDelivery',
         label: 'settings:',
         helpBlock: true,
-        type: 'number', min: 1, max: 480
+        type: 'textarea', rows: 6,
+        inputClassName: 'text-fixed',
+        inputAttrs: {
+          'data-keyup-delay': 5000
+        }
       }) %>
       <%- helpers.formGroup({
         name: 'wh.planning.lateDeliveryTime',

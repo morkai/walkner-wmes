@@ -218,7 +218,7 @@ define([
       }
 
       var lateDeliveryTime = this.whSettings.getLateDeliveryTime();
-      var minTimeForDelivery = this.whSettings.getMinTimeForDelivery();
+      var minTimeForDelivery = this.whSettings.getMaxMinTimeForDelivery(setCart.get('orders'));
       var lines = setCart.get('lines');
       var className = this.options.status === 'pending' ? 'wh-status-pending' : '';
 
