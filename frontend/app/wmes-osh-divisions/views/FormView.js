@@ -32,14 +32,16 @@ define([
     {
       this.$id('workplace').select2({
         width: '100%',
-        data: dictionaries.workplaces.map(idAndLabel)
+        data: dictionaries.workplaces.map(workplace => ({
+          id: workplace.id,
+          text: workplace.getLabel({long: true})
+        }))
       });
     },
 
     setUpManagerSelect2: function()
     {
       setUpUserSelect2(this.$id('manager'), {
-        allowClear: false,
         currentUserInfo: this.model.get('manager')
       });
     },
@@ -57,6 +59,11 @@ define([
     {
       formData.manager = setUpUserSelect2.getUserInfo(this.$id('manager'));
       formData.coordinators = setUpUserSelect2.getUserInfo(this.$id('coordinators'));
+
+      if (!formData.syncPatterns)
+      {
+        formData.syncPatterns = '';
+      }
 
       return formData;
     }

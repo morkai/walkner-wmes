@@ -9,7 +9,7 @@ define([
 
   return UserCollection.extend({
 
-    rqlQuery: 'select(firstName,lastName,personellId,card,cardUid)&limit(0)&privileges=ISA%3AWHMAN'
+    rqlQuery: 'select(firstName,lastName,personnelId,card,cardUid)&limit(0)&privileges=ISA%3AWHMAN'
 
   });
 });

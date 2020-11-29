@@ -46,12 +46,8 @@
           </div>
           <div class="row">
             <div class="col-lg-6 form-group">
-              <label for="<%- id('personellId') %>" class="control-label"><%- t('PROPERTY:personellId') %></label>
-              <input id="<%- id('personellId') %>" class="form-control" type="text" name="personellId" maxlength="15">
-            </div>
-            <div class="col-lg-6 form-group">
-              <label for="<%- id('kdId') %>" class="control-label"><%- t('PROPERTY:kdId') %></label>
-              <input id="<%- id('kdId') %>" class="form-control" type="text" name="kdId" pattern="^-?[0-9]+$">
+              <label for="<%- id('personnelId') %>" class="control-label"><%- t('PROPERTY:personnelId') %></label>
+              <input id="<%- id('personnelId') %>" class="form-control" type="text" name="personnelId" maxlength="15">
             </div>
           </div>
           <div class="row">
@@ -122,7 +118,7 @@
           <% if (loadedModules.isLoaded('aors')) { %>
           <div class="form-group users-form-aor">
             <label for="<%- id('aors') %>" class="control-label"><%- t('PROPERTY:aors') %></label>
-            <input id="<%- id('aors') %>" name="aors[]">
+            <input id="<%- id('aors') %>" name="aors">
           </div>
           <% } %>
           <% if (loadedModules.isLoaded('mrpControllers')) { %>

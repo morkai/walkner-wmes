@@ -54,14 +54,6 @@ define([
 
     labelAttribute: 'login',
 
-    defaults: function()
-    {
-      return {
-        privileges: [],
-        aors: []
-      };
-    },
-
     getLabel: function()
     {
       var lastName = this.get('lastName') || '';

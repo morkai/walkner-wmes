@@ -30,13 +30,18 @@
       <%- helpers.formGroup({
         name: 'manager',
         type: 'select2',
-        label: 'PROPERTY:',
-        required: true
+        label: 'PROPERTY:'
       }) %>
       <%- helpers.formGroup({
         name: 'coordinators',
         type: 'select2',
         label: 'PROPERTY:'
+      }) %>
+      <%- helpers.formGroup({
+        name: 'syncPatterns',
+        type: 'textarea', rows: 4,
+        label: 'PROPERTY:',
+        inputClassName: 'text-fixed'
       }) %>
     </div>
     <div class="panel-footer">

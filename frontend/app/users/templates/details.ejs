@@ -7,12 +7,13 @@
           <%- helpers.props(model, [
             'active',
             'login',
-            'personellId',
+            'personnelId',
             'card',
-            'cardUid',
-            'kdId',
-            'kdDivision',
-            'kdPosition'
+            {id: 'cardUid', visible: !!model.cardUid},
+            {id: 'company', visible: !!model.syncData.company, value: () => model.syncData.company},
+            {id: 'workplace', visible: !!model.syncData.workplace, value: () => model.syncData.workplace},
+            {id: 'division', visible: !!model.syncData.division, value: () => model.syncData.division},
+            {id: 'jobTitle', visible: !!model.syncData.jobTitle, value: () => model.syncData.jobTitle}
           ]) %>
         </div>
       </div>
@@ -58,7 +59,7 @@
             {
               if (_.isEmpty(aors))
               {
-                return t('NO_DATA:aors');
+                return '';
               }
 
               if (aors.length === 1)

@@ -735,7 +735,7 @@ define([
 
       return this.warehousemen.find(function(user)
       {
-        return user.get('personellId') === personnelId
+        return user.get('personnelId') === personnelId
           || user.get('card') === cardId
           || user.get('cardUid') === cardId;
       });

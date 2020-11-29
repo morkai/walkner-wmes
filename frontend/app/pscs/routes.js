@@ -65,7 +65,7 @@ define([
             formMethod: 'POST',
             formAction: '/pscs/results',
             model: new PscsResult({
-              personnelId: user.data.personellId || ''
+              personnelId: user.data.personnelId || ''
             })
           })
         });

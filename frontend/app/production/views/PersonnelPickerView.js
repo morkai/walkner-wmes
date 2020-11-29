@@ -288,7 +288,7 @@ define([
       }
 
       view.searchReq = this.ajax({
-        url: '/users?select(firstName,lastName,searchName,personellId)'
+        url: '/users?select(firstName,lastName,searchName,personnelId)'
           + '&sort(searchName)&limit(999)'
           + '&searchName=regex=' + encodeURIComponent('^' + phrase)
       });
@@ -340,15 +340,15 @@ define([
           label += user.firstName;
         }
 
-        if (user.personellId)
+        if (user.personnelId)
         {
           if (label.length)
           {
-            label += ' (' + user.personellId + ')';
+            label += ' (' + user.personnelId + ')';
           }
           else
           {
-            label = user.personellId;
+            label = user.personnelId;
           }
         }
 

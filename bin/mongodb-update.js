@@ -7,7 +7,6 @@ db.users.dropIndex({kdId: 1});
 db.users.dropIndex({personellId: 1});
 
 const old2new = {
-  kdId: 'id',
   kdPosition: 'jobTitle',
   kdWorkplace: 'workplace',
   kdDivision: 'division',
@@ -19,6 +18,13 @@ db.users.find({kdId: {$exists: true}}).forEach(u =>
 {
   u.syncId = null;
 
+  if (u.kdId > 0)
+  {
+    u.syncId = u.kdId.toString();
+
+    delete u.kdId;
+  }
+
   const d = u.syncData = {};
 
   oldKeys.forEach(oldKey =>
@@ -26,20 +32,6 @@ db.users.find({kdId: {$exists: true}}).forEach(u =>
     const value = u[oldKey];
 
     delete u[oldKey];
-
-    if (oldKey === 'kdId')
-    {
-      if (value > 0)
-      {
-        u.syncId = String(value);
-      }
-      else
-      {
-        return;
-      }
-
-      return;
-    }
 
     if (!!value || value === 0)
     {
@@ -61,6 +53,14 @@ db.users.find({personellId: {$exists: true}}).forEach(u =>
 });
 
 db.users.updateMany({}, {$unset: {sapPosition: 1, division: 1, registerDate: 1}});
+db.users.updateMany({syncId: null}, {$set: {syncId: ''}});
+db.users.updateMany({email: null}, {$set: {email: ''}});
+db.users.updateMany({personnelId: null}, {$set: {personnelId: ''}});
+db.users.updateMany({card: null}, {$set: {card: ''}});
+db.users.updateMany({card: 'null'}, {$set: {card: ''}});
+db.users.updateMany({cardUid: null}, {$set: {cardUid: ''}});
+db.users.updateMany({preferences: null}, {$set: {preferences: {}}});
+db.users.updateMany({preferences: {$exists: false}}, {$set: {preferences: {}}});
 
 db.users.createIndex({syncId: 1});
 db.users.createIndex({personnelId: 1});
@@ -80,10 +80,24 @@ db.oldwhsetcarts.find({}).forEach(setCart =>
   db.oldwhsetcarts.updateOne({_id: setCart._id}, {$set: {orders: setCart.orders}});
 });
 
-db.settings.update({_id: "wh.planning.minTimeForDelivery"}, {
+db.oshdivisions.updateMany({syncPatterns: {$exists: false}}, {$set: {syncPatterns: ''}});
+
+db.settings.update({_id: "wh.planning.minTimeForDelivery", value: {$type: 'number'}}, {
   $set: {
     "value": {
       "*": 90
     }
   }
 });
+
+db.users.updateOne({_id: new ObjectId('57fde23cacc4c609648bd4fd')}, {$set: {
+  "personnelId": "46252256",
+  "card": "115204",
+  company: 'PHILIPS',
+  syncId: '23088',
+  syncData: {
+    "company": "PHILIPS",
+    "division": "MDe ETO",
+    "jobTitle": "Konstruktor"
+  }
+}});

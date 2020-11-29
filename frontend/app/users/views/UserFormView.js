@@ -381,6 +381,7 @@ define([
       formData.active = (!!formData.active).toString();
       formData.privileges = (formData.privileges || []).join(',');
       formData.vendor = null;
+      formData.aors = (formData.aors || []).join(',');
       formData.mrps = (formData.mrps || []).join(',');
 
       return formData;
@@ -395,7 +396,7 @@ define([
         preferences: {}
       });
 
-      ['firstName', 'lastName', 'personellId', 'email'].forEach(function(prop)
+      ['firstName', 'lastName', 'personnelId', 'email'].forEach(function(prop)
       {
         if (!formData[prop] || !formData[prop].length)
         {
@@ -441,12 +442,6 @@ define([
       }
 
       formData.mobile = this.serializeMobile();
-      formData.kdId = parseInt(formData.kdId, 10);
-
-      if (isNaN(formData.kdId) || formData.kdId < 1)
-      {
-        formData.kdId = -1;
-      }
 
       return formData;
     },

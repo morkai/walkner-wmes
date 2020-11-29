@@ -8,7 +8,8 @@
         'shortName',
         'longName',
         '!manager',
-        {id: '!coordinators', value: users => users.length ? `<ul><li>${users.join('<li>')}</ul>` : ''}
+        {id: '!coordinators', value: users => users.length ? `<ul><li>${users.join('<li>')}</ul>` : ''},
+        {id: '!syncPatterns', value: v => `<pre>${v}</pre>`}
       ]) %>
     </div>
   </div>

@@ -330,7 +330,7 @@ define([
           html += '<tr>'
             + '<td class="is-min">' + _.escape(user.lastName) + ' ' + _.escape(user.firstName) + '</td>'
             + '<td class="is-min">' + _.escape(prodFunction ? prodFunction.getLabel() : user.prodFunction) + '</td>'
-            + '<td class="is-min">' + _.escape(user.kdPosition) + '</td>'
+            + '<td class="is-min">' + _.escape(user.syncData && user.syncData.jobTitle || '') + '</td>'
             + '<td class="is-min">' + view.t('core', 'BOOL:' + user.sms) + '</td>'
             + '<td></td>';
         });

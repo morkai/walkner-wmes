@@ -118,7 +118,7 @@ define([
           {
             return {
               id: user._id,
-              text: user.lastName + ' ' + user.firstName + ' (' + user.personellId + ')'
+              text: user.lastName + ' ' + user.firstName + ' (' + user.personnelId + ')'
             };
           }
 

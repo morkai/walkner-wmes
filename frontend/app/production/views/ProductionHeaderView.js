@@ -335,12 +335,12 @@ define([
           fields: {
             firstName: 1,
             lastName: 1,
-            personellId: 1
+            personnelId: 1
           },
           selector: {
             name: missingPersonellIds.length > 1 ? 'in' : 'eq',
             args: [
-              'personellId',
+              'personnelId',
               missingPersonellIds.length > 1 ? missingPersonellIds : missingPersonellIds[0]
             ]
           }
@@ -353,9 +353,9 @@ define([
       {
         var updates = 0;
 
-        missingPersonellIds.forEach(function(personellId, i)
+        missingPersonellIds.forEach(function(personnelId, i)
         {
-          var user = users.findWhere({personellId: personellId});
+          var user = users.findWhere({personnelId: personnelId});
 
           if (user)
           {

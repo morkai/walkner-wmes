@@ -28,7 +28,7 @@ define([
     template: filterTemplate,
 
     termToForm: {
-      'personellId': function(propertyName, term, formData)
+      'personnelId': function(propertyName, term, formData)
       {
         if (term.name === 'regex')
         {
@@ -39,8 +39,8 @@ define([
       {
         formData[propertyName] = term.args[1];
       },
-      'login': 'personellId',
-      'searchName': 'personellId'
+      'login': 'personnelId',
+      'searchName': 'personnelId'
     },
 
     getTemplateData: function()
@@ -63,7 +63,7 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      this.serializeRegexTerm(selector, 'personellId', null, undefined, false, true);
+      this.serializeRegexTerm(selector, 'personnelId', null, undefined, false, true);
       this.serializeRegexTerm(selector, 'login', null, null, true, true);
       this.serializeRegexTerm(selector, 'searchName', null, null, true, true);
 

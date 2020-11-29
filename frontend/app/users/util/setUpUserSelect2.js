@@ -17,9 +17,9 @@ define([
 
   function formatText(noPersonnelId, user, name, query) // eslint-disable-line no-unused-vars
   {
-    if (!noPersonnelId && user.personellId)
+    if (!noPersonnelId && user.personnelId)
     {
-      name += ' (' + user.personellId + ')';
+      name += ' (' + user.personnelId + ')';
     }
 
     return name;
@@ -120,7 +120,7 @@ define([
   {
     term = term.trim();
 
-    var property = /^[0-9]+$/.test(term) ? 'personellId' : 'searchName';
+    var property = /^[0-9]+$/.test(term) ? 'personnelId' : 'searchName';
 
     if (property === 'searchName')
     {

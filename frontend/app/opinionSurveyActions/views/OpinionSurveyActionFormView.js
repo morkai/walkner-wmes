@@ -94,9 +94,9 @@ define([
         view: this,
         textFormatter: function(user, name, query)
         {
-          if (user.personellId && query && /^[0-9]+$/.test(query.term))
+          if (user.personnelId && query && /^[0-9]+$/.test(query.term))
           {
-            name += ' (' + user.personellId + ')';
+            name += ' (' + user.personnelId + ')';
           }
           else if (user.orgUnitType === 'division')
           {
