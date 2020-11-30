@@ -89,6 +89,11 @@ define([
 
       this.$el.prop('size', 1);
       this.$el.removeClass(this.options.isExpandedClassName);
+
+      if (this.$el[0].selectedOptions.length)
+      {
+        this.$el[0].selectedOptions[0].scrollIntoView();
+      }
     },
 
     toggleSelection: function()
