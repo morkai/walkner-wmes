@@ -184,6 +184,11 @@ define([
 
         this.$errorMessage = null;
       }
+    },
+
+    onDialogShown: function()
+    {
+      this.$('.form-actions').find('.btn').first().focus();
     }
 
   }, {
