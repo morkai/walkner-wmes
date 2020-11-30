@@ -11,9 +11,9 @@ define([
   'app/core/pages/EditFormPage',
   'app/core/util/showDeleteFormPage',
   'app/wmes-osh-common/dictionaries',
-  './Division',
-  './DivisionCollection',
-  'i18n!app/nls/wmes-osh-divisions'
+  './Department',
+  './DepartmentCollection',
+  'i18n!app/nls/wmes-osh-departments'
 ], function(
   _,
   router,
@@ -25,18 +25,18 @@ define([
   EditFormPage,
   showDeleteFormPage,
   dictionaries,
-  Division
+  Department
 ) {
   'use strict';
 
   var canView = user.auth('OSH:DICTIONARIES:VIEW');
   var canManage = user.auth('OSH:DICTIONARIES:MANAGE');
 
-  router.map('/osh/divisions', canView, () =>
+  router.map('/osh/departments', canView, () =>
   {
     viewport.showPage(dictionaries.bind(new ListPage({
       load: null,
-      collection: dictionaries.divisions,
+      collection: dictionaries.departments,
       columns: [
         {id: 'workplace', className: 'is-min'},
         {id: 'shortName', className: 'is-min'},
@@ -47,59 +47,59 @@ define([
     })));
   });
 
-  router.map('/osh/divisions/:id', canView, req =>
+  router.map('/osh/departments/:id', canView, req =>
   {
     viewport.loadPage(
       [
-        'app/wmes-osh-divisions/templates/details'
+        'app/wmes-osh-departments/templates/details'
       ],
       (detailsTemplate) =>
       {
-        const model = dictionaries.divisions.get(req.params.id);
+        const model = dictionaries.departments.get(req.params.id);
 
         return dictionaries.bind(new DetailsPage({
           detailsTemplate,
-          model: model || new Division({_id: req.params.id})
+          model: model || new Department({_id: req.params.id})
         }));
       }
     );
   });
 
-  router.map('/osh/divisions;add', canManage, () =>
+  router.map('/osh/departments;add', canManage, () =>
   {
     viewport.loadPage(
       [
-        'app/wmes-osh-divisions/views/FormView'
+        'app/wmes-osh-departments/views/FormView'
       ],
       (FormView) =>
       {
         return dictionaries.bind(new AddFormPage({
           FormView,
-          model: new Division()
+          model: new Department()
         }));
       }
     );
   });
 
-  router.map('/osh/divisions/:id;edit', canManage, req =>
+  router.map('/osh/departments/:id;edit', canManage, req =>
   {
     viewport.loadPage(
       [
-        'app/wmes-osh-divisions/views/FormView'
+        'app/wmes-osh-departments/views/FormView'
       ],
       (FormView) =>
       {
-        const model = dictionaries.divisions.get(req.params.id);
+        const model = dictionaries.departments.get(req.params.id);
 
         return dictionaries.bind(new EditFormPage({
           FormView,
-          model: model || new Division({_id: req.params.id})
+          model: model || new Department({_id: req.params.id})
         }));
       }
     );
   });
 
-  router.map('/osh/divisions/:id;delete', canManage, _.partial(showDeleteFormPage, Division, _, _, {
+  router.map('/osh/departments/:id;delete', canManage, _.partial(showDeleteFormPage, Department, _, _, {
 
   }));
 });

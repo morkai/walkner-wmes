@@ -205,7 +205,7 @@ define([
     setUpOshSelect2: function(workplace, division)
     {
       var $workplace = this.$id('oshWorkplace');
-      var $division = this.$id('oshDivision');
+      var $division = this.$id('oshDepartment');
 
       if (!$workplace.length)
       {
@@ -215,7 +215,7 @@ define([
       if (workplace === undefined)
       {
         workplace = this.model.get('oshWorkplace');
-        division = this.model.get('oshDivision');
+        division = this.model.get('oshDepartment');
       }
 
       $workplace.val(workplace || '');
@@ -240,7 +240,7 @@ define([
         width: '100%',
         allowClear: true,
         placeholder: ' ',
-        data: oshDictionaries.divisions.where({workplace: +workplace}).map(function(d)
+        data: oshDictionaries.departments.where({workplace: +workplace}).map(function(d)
         {
           return {
             id: d.id,
@@ -404,7 +404,7 @@ define([
         }
       });
 
-      ['company', 'prodFunction', 'vendor', 'oshWorkplace', 'oshDivision'].forEach(function(prop)
+      ['company', 'prodFunction', 'vendor', 'oshWorkplace', 'oshDepartment'].forEach(function(prop)
       {
         if (!formData[prop] || !formData[prop].length)
         {

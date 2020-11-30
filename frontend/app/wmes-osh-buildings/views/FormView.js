@@ -21,14 +21,14 @@ define([
     {
       const formData = this.model.toJSON();
 
-      formData.divisions = (formData.divisions || []).join(',');
+      formData.departments = (formData.departments || []).join(',');
 
       return formData;
     },
 
     serializeForm: function(formData)
     {
-      formData.divisions = formData.divisions.split(',').map(v => +v).filter(v => v > 0);
+      formData.departments = formData.departments.split(',').map(v => +v).filter(v => v > 0);
 
       return formData;
     },
@@ -37,30 +37,30 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
-      this.setUpDivisionsSelect2();
+      this.setUpDepartmentsSelect2();
     },
 
-    setUpDivisionsSelect2: function()
+    setUpDepartmentsSelect2: function()
     {
-      this.$id('divisions').select2({
+      this.$id('departments').select2({
         multiple: true,
         data: dictionaries.workplaces.map(workplace =>
         {
           return {
             text: workplace.getLabel({long: true}),
-            children: workplace.getDivisions().map(division =>
+            children: workplace.getDepartments().map(department =>
             {
               return {
-                id: division.id,
-                text: division.getLabel({long: true}),
-                division
+                id: department.id,
+                text: department.getLabel({long: true}),
+                department
               };
             })
           };
         }),
         formatSelection: (item, $el, e) =>
         {
-          return e(item.division.getLabel({path: true}));
+          return e(item.department.getLabel({path: true}));
         }
       });
     }

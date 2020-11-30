@@ -31,7 +31,7 @@ define([
     {
       return {
         active: true,
-        divisions: []
+        departments: []
       };
     },
 
@@ -61,7 +61,7 @@ define([
       var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.serialize();
 
-      obj.divisions = dictionaries.divisions.getLabels(obj.divisions, {path: true}).join('; ');
+      obj.departments = dictionaries.departments.getLabels(obj.departments, {path: true}).join('; ');
 
       return obj;
     },
@@ -71,12 +71,12 @@ define([
       var dictionaries = require('app/wmes-osh-common/dictionaries');
       var obj = this.serialize();
 
-      obj.divisions = dictionaries.divisions.getLabels(obj.divisions, {path: true, long: true, link: true});
+      obj.departments = dictionaries.departments.getLabels(obj.departments, {path: true, long: true, link: true});
 
       return obj;
     },
 
-    hasDivision: function(id)
+    hasDepartment: function(id)
     {
       id = parseInt(id, 10);
 
@@ -85,9 +85,9 @@ define([
         return false;
       }
 
-      const divisions = this.get('divisions');
+      const departments = this.get('departments');
 
-      return divisions.length === 0 || divisions.includes(id);
+      return departments.length === 0 || departments.includes(id);
     }
 
   });

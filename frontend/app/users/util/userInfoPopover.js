@@ -35,7 +35,7 @@ define([
     'syncData',
     'presence',
     'oshWorkplace',
-    'oshDivision'
+    'oshDepartment'
   ];
 
   var users = {};
@@ -142,14 +142,14 @@ define([
     }
 
     var oshWorkplace = '';
-    var oshDivision = '';
+    var oshDepartment = '';
 
     if (loadedModules.isLoaded('wmes-osh'))
     {
       var oshDictionaries = require('app/wmes-osh-common/dictionaries');
 
       oshWorkplace = oshDictionaries.workplaces.getLabel(user.oshWorkplace);
-      oshDivision = oshDictionaries.divisions.getLabel(user.oshDivision);
+      oshDepartment = oshDictionaries.departments.getLabel(user.oshDepartment);
     }
 
     $popover = $(userInfoEl).popover({
@@ -168,7 +168,7 @@ define([
           email: user.email,
           mobile: mobile,
           oshWorkplace: oshWorkplace,
-          oshDivision: oshDivision
+          oshDepartment: oshDepartment
         }
       }),
       template: containerTemplate

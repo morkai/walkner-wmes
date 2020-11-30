@@ -147,7 +147,7 @@ define([
           model: new Kaizen({
             subject: this.model.get('subject'),
             workplace: this.model.get('workplace'),
-            division: this.model.get('division'),
+            department: this.model.get('department'),
             building: this.model.get('building'),
             location: this.model.get('location'),
             station: this.model.get('station'),
@@ -163,7 +163,7 @@ define([
           model: new NearMiss({
             subject: this.model.get('subject'),
             workplace: this.model.get('workplace'),
-            division: this.model.get('division'),
+            department: this.model.get('department'),
             building: this.model.get('building'),
             location: this.model.get('location'),
             station: this.model.get('station'),

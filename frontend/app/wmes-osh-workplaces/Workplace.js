@@ -52,11 +52,11 @@ define([
       return obj;
     },
 
-    getDivisions: function()
+    getDepartments: function()
     {
       var dictionaries = require('app/wmes-osh-common/dictionaries');
 
-      return dictionaries.divisions.where({workplace: this.id});
+      return dictionaries.departments.where({workplace: this.id});
     }
 
   });

@@ -101,7 +101,7 @@ define([
         obj.className += ' osh-unseen';
       }
 
-      obj.locationPath = `${obj.workplace} \\ ${obj.division} \\ ${obj.building} \\ ${obj.location}`;
+      obj.locationPath = `${obj.workplace} \\ ${obj.department} \\ ${obj.building} \\ ${obj.location}`;
 
       if (obj.station)
       {

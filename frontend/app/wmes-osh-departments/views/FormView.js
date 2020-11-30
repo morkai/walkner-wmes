@@ -5,7 +5,7 @@ define([
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
-  'app/wmes-osh-divisions/templates/form'
+  'app/wmes-osh-departments/templates/form'
 ], function(
   FormView,
   idAndLabel,

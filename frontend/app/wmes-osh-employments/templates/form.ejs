@@ -20,23 +20,23 @@
         <thead>
         <tr>
           <th class="is-min"><%- t('PROPERTY:workplace') %></th>
-          <th class="is-min"><%- t('PROPERTY:division') %></th>
+          <th class="is-min"><%- t('PROPERTY:department') %></th>
           <th class="is-min"><%- t('PROPERTY:count') %></th>
           <th></th>
         </tr>
         </thead>
         <tbody>
         <% workplaces.forEach(workplace => { %>
-          <% workplace.divisions.forEach((division, divisionI) => { %>
+          <% workplace.departments.forEach((department, departmentI) => { %>
           <tr>
-            <% if (!divisionI) { %>
-            <td class="is-min" rowspan="<%- workplace.divisions.length %>"><%= workplace.label %></td>
+            <% if (!departmentI) { %>
+            <td class="is-min" rowspan="<%- workplace.departments.length %>"><%= workplace.label %></td>
             <% } %>
-            <td class="is-min"><%= division.label %></td>
+            <td class="is-min"><%= department.label %></td>
             <td class="is-min">
-              <input name="divisions[<%- division.i %>].workplace" value="<%- workplace._id %>" type="hidden">
-              <input name="divisions[<%- division.i %>].division" value="<%- division._id %>" type="hidden">
-              <input name="divisions[<%- division.i %>].count" value="<%- division.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              <input name="departments[<%- department.i %>].workplace" value="<%- workplace._id %>" type="hidden">
+              <input name="departments[<%- department.i %>].department" value="<%- department._id %>" type="hidden">
+              <input name="departments[<%- department.i %>].count" value="<%- department.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
             </td>
             <td></td>
           </tr>

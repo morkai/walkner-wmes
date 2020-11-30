@@ -4,7 +4,7 @@
     <div class="panel-details">
       <%- helpers.props(model, [
         'active',
-        {id: '!divisions', value: v => v.length ? `<ul><li>${v.join('<li>')}</ul>` : ''},
+        {id: '!departments', value: v => v.length ? `<ul><li>${v.join('<li>')}</ul>` : ''},
         'shortName',
         'longName'
       ]) %>

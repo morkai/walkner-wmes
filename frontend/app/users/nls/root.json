@@ -48,7 +48,7 @@
     "PROPERTY:notifications": "Notifications",
     "PROPERTY:apiKey": "API key",
     "PROPERTY:oshWorkplace": "Workplace",
-    "PROPERTY:oshDivision": "Division",
+    "PROPERTY:oshDepartment": "Division",
 
     "active:true": "Yes",
     "active:false": "No",

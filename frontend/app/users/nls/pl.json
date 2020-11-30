@@ -49,7 +49,7 @@
   "PROPERTY:notifications": "Powiadomienia",
   "PROPERTY:apiKey": "Klucz API",
   "PROPERTY:oshWorkplace": "Zakład",
-  "PROPERTY:oshDivision": "Wydział",
+  "PROPERTY:oshDepartment": "Wydział",
 
   "active:true": "Tak",
   "active:false": "Nie",

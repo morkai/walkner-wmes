@@ -93,7 +93,7 @@ define([
           relation: this.model,
           model: new Kaizen({
             workplace: this.model.get('workplace'),
-            division: this.model.get('division'),
+            department: this.model.get('department'),
             building: this.model.get('building'),
             location: this.model.get('location'),
             station: this.model.get('station')
@@ -106,7 +106,7 @@ define([
           relation: this.model,
           model: new Action({
             workplace: this.model.get('workplace'),
-            division: this.model.get('division'),
+            department: this.model.get('department'),
             building: this.model.get('building'),
             location: this.model.get('location'),
             station: this.model.get('station')

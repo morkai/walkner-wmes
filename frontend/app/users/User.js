@@ -154,7 +154,7 @@ define([
         var oshDictionaries = require('app/wmes-osh-common/dictionaries');
 
         obj.oshWorkplace = oshDictionaries.getLabel('workplace', obj.oshWorkplace, {long: true});
-        obj.oshDivision = oshDictionaries.getLabel('division', obj.oshDivision, {long: true});
+        obj.oshDepartment = oshDictionaries.getLabel('department', obj.oshDepartment, {long: true});
       }
 
       return obj;

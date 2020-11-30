@@ -43,7 +43,7 @@ define([
 
       obj.count = 0;
 
-      obj.divisions.forEach(({count}) => obj.count += count);
+      obj.departments.forEach(({count}) => obj.count += count);
 
       return obj;
     },
@@ -54,18 +54,18 @@ define([
       const obj = this.serialize();
       const workplaces = new Map();
 
-      obj.divisions.forEach(d =>
+      obj.departments.forEach(d =>
       {
         if (!workplaces.has(d.workplace))
         {
           workplaces.set(d.workplace, {
             label: dictionaries.getLabel('workplaces', d.workplace),
-            divisions: []
+            departments: []
           });
         }
 
-        workplaces.get(d.workplace).divisions.push({
-          label: dictionaries.getLabel('divisions', d.division),
+        workplaces.get(d.workplace).departments.push({
+          label: dictionaries.getLabel('departments', d.department),
           count: d.count
         });
       });

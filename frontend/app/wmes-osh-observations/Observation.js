@@ -67,7 +67,7 @@ define([
     DICT_PROPS: [
       'company',
       'observationKind',
-      'workplace', 'division', 'building', 'location', 'station'
+      'workplace', 'department', 'building', 'location', 'station'
     ],
     DESC_PROPS: ['observationKind'],
 

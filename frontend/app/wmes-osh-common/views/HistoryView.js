@@ -299,7 +299,7 @@ define([
         case 'status':
         case 'kind':
         case 'workplace':
-        case 'division':
+        case 'department':
         case 'building':
         case 'location':
         case 'station':

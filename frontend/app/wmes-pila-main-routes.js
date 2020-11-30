@@ -19,7 +19,7 @@ define([
   './wmes-osh-brigades/routes',
   './wmes-osh-companies/routes',
   './wmes-osh-workplaces/routes',
-  './wmes-osh-divisions/routes',
+  './wmes-osh-departments/routes',
   './wmes-osh-buildings/routes',
   './wmes-osh-locations/routes',
   './wmes-osh-stations/routes',

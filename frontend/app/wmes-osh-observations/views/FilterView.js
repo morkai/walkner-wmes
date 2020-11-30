@@ -29,7 +29,7 @@ define([
     filterList: [
       'createdAt',
       'workplace',
-      'division',
+      'department',
       'building',
       'location',
       'station',
@@ -72,7 +72,7 @@ define([
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       },
-      'division': 'workplace',
+      'department': 'workplace',
       'building': 'workplace',
       'location': 'workplace',
       'station': 'workplace',
@@ -111,7 +111,7 @@ define([
       [
         'status',
         'workplace',
-        'division',
+        'department',
         'building',
         'location',
         'station',
@@ -168,7 +168,7 @@ define([
       });
 
       this.setUpWorkplaceSelect2();
-      this.setUpDivisionSelect2();
+      this.setUpDepartmentSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
       this.setUpStationSelect2();
@@ -192,9 +192,9 @@ define([
       });
     },
 
-    setUpDivisionSelect2: function()
+    setUpDepartmentSelect2: function()
     {
-      this.$id('division').select2({
+      this.$id('department').select2({
         width: '250px',
         multiple: true,
         placeholder: ' ',
@@ -202,12 +202,12 @@ define([
           .filter(i => i.get('active'))
           .map(workplace => ({
             text: workplace.getLabel({long: true}),
-            children: dictionaries.divisions
-              .filter(division => division.get('active') && division.get('workplace') === workplace.id)
-              .map(division => ({
-                id: division.id,
-                text: division.getLabel({long: true}),
-                model: division
+            children: dictionaries.departments
+              .filter(department => department.get('active') && department.get('workplace') === workplace.id)
+              .map(department => ({
+                id: department.id,
+                text: department.getLabel({long: true}),
+                model: department
               }))
           })),
         formatSelection: ({model}, $el, e) => e(model.getLabel())

@@ -17,15 +17,15 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/osh/divisions',
+    urlRoot: '/osh/departments',
 
-    clientUrlRoot: '#osh/divisions',
+    clientUrlRoot: '#osh/departments',
 
-    topicPrefix: 'osh.divisions',
+    topicPrefix: 'osh.departments',
 
     privilegePrefix: 'OSH:DICTIONARIES',
 
-    nlsDomain: 'wmes-osh-divisions',
+    nlsDomain: 'wmes-osh-departments',
 
     labelAttribute: 'shortName',
 

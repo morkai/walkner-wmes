@@ -12,7 +12,7 @@ define([
     if (userData.oshWorkplace)
     {
       userInfo.oshWorkplace = userData.oshWorkplace;
-      userInfo.oshDivision = userData.oshDivision || 0;
+      userInfo.oshDepartment = userData.oshDepartment || 0;
     }
   };
 });

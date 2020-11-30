@@ -8,7 +8,7 @@ define([
   'app/i18n',
   'app/wmes-osh-companies/CompanyCollection',
   'app/wmes-osh-workplaces/WorkplaceCollection',
-  'app/wmes-osh-divisions/DivisionCollection',
+  'app/wmes-osh-departments/DepartmentCollection',
   'app/wmes-osh-buildings/BuildingCollection',
   'app/wmes-osh-locations/LocationCollection',
   'app/wmes-osh-stations/StationCollection',
@@ -33,7 +33,7 @@ define([
   t,
   CompanyCollection,
   WorkplaceCollection,
-  DivisionCollection,
+  DepartmentCollection,
   BuildingCollection,
   LocationCollection,
   StationCollection,
@@ -57,7 +57,7 @@ define([
   const PROP_TO_DICT = {
     company: 'companies',
     workplace: 'workplaces',
-    division: 'divisions',
+    department: 'departments',
     building: 'buildings',
     location: 'locations',
     station: 'stations',
@@ -117,7 +117,7 @@ define([
     settings: new SettingCollection(),
     companies: new CompanyCollection(),
     workplaces: new WorkplaceCollection(),
-    divisions: new DivisionCollection(),
+    departments: new DepartmentCollection(),
     buildings: new BuildingCollection(),
     locations: new LocationCollection(),
     stations: new StationCollection(),
@@ -267,7 +267,7 @@ define([
       {
         coordinator = currentUser.isAllowedTo('OSH:COORDINATOR')
           || dictionaries.kinds.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id))
-          || dictionaries.divisions.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id));
+          || dictionaries.departments.some(k => k.get('coordinators').some(u => u.id === currentUser.data._id));
       }
 
       return coordinator;
@@ -277,7 +277,7 @@ define([
   broker.subscribe('user.reloaded', () => setUpSeenSub());
 
   dictionaries.kinds.on('reset change:coordinators', () => coordinator = null);
-  dictionaries.divisions.on('reset change:coordinators', () => coordinator = null);
+  dictionaries.departments.on('reset change:coordinators', () => coordinator = null);
 
   function setUpSeenSub()
   {

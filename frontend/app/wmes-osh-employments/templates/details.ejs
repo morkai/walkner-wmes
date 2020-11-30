@@ -5,20 +5,20 @@
       <thead>
       <tr>
         <th class="is-min"><%- t('PROPERTY:workplace') %></th>
-        <th class="is-min"><%- t('PROPERTY:division') %></th>
+        <th class="is-min"><%- t('PROPERTY:department') %></th>
         <th class="is-min"><%- t('PROPERTY:count') %></th>
         <th></th>
       </tr>
       </thead>
       <tbody>
         <% model.workplaces.forEach(workplace => { %>
-          <% workplace.divisions.forEach((division, i) => { %>
+          <% workplace.departments.forEach((department, i) => { %>
             <tr>
               <% if (i === 0) { %>
-                <td class="is-min" rowspan="<%- workplace.divisions.length %>"><%- workplace.label %></td>
+                <td class="is-min" rowspan="<%- workplace.departments.length %>"><%- workplace.label %></td>
               <% } %>
-              <td class="is-min"><%- division.label %></td>
-              <td class="is-min is-number"><%- division.count.toLocaleString() %></td>
+              <td class="is-min"><%- department.label %></td>
+              <td class="is-min is-number"><%- department.count.toLocaleString() %></td>
               <td></td>
             </tr>
           <% }) %>

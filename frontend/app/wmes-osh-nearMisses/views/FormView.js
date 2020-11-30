@@ -50,7 +50,7 @@ define([
       'change #-anonymous': function()
       {
         this.setUpUserWorkplaceSelect2();
-        this.setUpUserDivisionSelect2();
+        this.setUpUserDepartmentSelect2();
         this.toggleImplement();
         this.toggleCreator();
       },
@@ -62,25 +62,25 @@ define([
 
       'change #-userWorkplace': function()
       {
-        this.$id('userDivision').val('');
+        this.$id('userDepartment').val('');
 
-        this.setUpUserDivisionSelect2();
+        this.setUpUserDepartmentSelect2();
       },
 
       'change #-workplace': function()
       {
-        this.$id('division').val('');
+        this.$id('department').val('');
         this.$id('building').val('');
         this.$id('location').val('');
         this.$id('station').val('');
 
-        this.setUpDivisionSelect2();
+        this.setUpDepartmentSelect2();
         this.setUpBuildingSelect2();
         this.setUpLocationSelect2();
         this.setUpStationSelect2();
       },
 
-      'change #-division': function()
+      'change #-department': function()
       {
         this.$id('building').val('');
         this.$id('location').val('');
@@ -431,7 +431,7 @@ define([
       }
 
       formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
-      formData.userDivision = this.$id('userDivision').select2('data').id;
+      formData.userDepartment = this.$id('userDepartment').select2('data').id;
 
       const relation = this.options.relation;
 
@@ -446,7 +446,7 @@ define([
       else
       {
         formData.workplace = this.$id('workplace').select2('data').id;
-        formData.division = this.$id('division').select2('data').id;
+        formData.department = this.$id('department').select2('data').id;
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
         formData.station = parseInt(this.$id('station').val(), 10) || null;
@@ -524,9 +524,9 @@ define([
       FormView.prototype.afterRender.apply(this, arguments);
 
       this.setUpUserWorkplaceSelect2();
-      this.setUpUserDivisionSelect2();
+      this.setUpUserDepartmentSelect2();
       this.setUpWorkplaceSelect2();
-      this.setUpDivisionSelect2();
+      this.setUpDepartmentSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
       this.setUpStationSelect2();
@@ -659,13 +659,13 @@ define([
       $input.select2('enable', true);
     },
 
-    setUpUserDivisionSelect2: function()
+    setUpUserDepartmentSelect2: function()
     {
-      const $input = this.$id('userDivision');
+      const $input = this.$id('userDepartment');
 
       if (this.options.editMode)
       {
-        const current = dictionaries.divisions.get(this.model.get('userDivision'));
+        const current = dictionaries.departments.get(this.model.get('userDepartment'));
 
         $input.val(current ? current.id : '').select2({
           width: '100%',
@@ -702,20 +702,20 @@ define([
       }
 
       const currentWorkplaceId = +this.$id('userWorkplace').val();
-      let currentDivision = dictionaries.divisions.get(+$input.val());
+      let currentDepartment = dictionaries.departments.get(+$input.val());
 
-      if (currentDivision)
+      if (currentDepartment)
       {
-        currentDivision = {
-          id: currentDivision.id,
-          text: currentDivision.getLabel({long: true}),
-          model: currentDivision
+        currentDepartment = {
+          id: currentDepartment.id,
+          text: currentDepartment.getLabel({long: true}),
+          model: currentDepartment
         };
       }
 
       const map = {};
 
-      dictionaries.divisions.forEach(model =>
+      dictionaries.departments.forEach(model =>
       {
         if (!model.get('active') || model.get('workplace') !== currentWorkplaceId)
         {
@@ -729,11 +729,11 @@ define([
         };
       });
 
-      if (currentDivision
-        && !map[currentDivision.id]
-        && currentDivision.model.get('workplace') === currentWorkplaceId)
+      if (currentDepartment
+        && !map[currentDepartment.id]
+        && currentDepartment.model.get('workplace') === currentWorkplaceId)
       {
-        map[currentDivision.id] = currentDivision;
+        map[currentDepartment.id] = currentDepartment;
       }
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
@@ -752,21 +752,21 @@ define([
         data
       });
 
-      const userDivision = dictionaries.divisions.get(currentUser.data.oshDivision);
+      const userDepartment = dictionaries.departments.get(currentUser.data.oshDepartment);
 
-      if (this.options.editMode && currentDivision)
+      if (this.options.editMode && currentDepartment)
       {
-        $input.select2('enable', false).select2('data', currentDivision);
+        $input.select2('enable', false).select2('data', currentDepartment);
 
         return;
       }
 
-      if (userDivision)
+      if (userDepartment)
       {
         $input.select2('enable', false).select2('data', {
-          id: userDivision.id,
-          text: userDivision.getLabel({long: true}),
-          model: userDivision
+          id: userDepartment.id,
+          text: userDepartment.getLabel({long: true}),
+          model: userDepartment
         });
 
         return;
@@ -831,25 +831,25 @@ define([
       );
     },
 
-    setUpDivisionSelect2: function()
+    setUpDepartmentSelect2: function()
     {
-      const $input = this.$id('division');
+      const $input = this.$id('department');
 
       const currentWorkplaceId = +this.$id('workplace').val();
-      let currentDivision = dictionaries.divisions.get(+$input.val());
+      let currentDepartment = dictionaries.departments.get(+$input.val());
 
-      if (currentDivision)
+      if (currentDepartment)
       {
-        currentDivision = {
-          id: currentDivision.id,
-          text: currentDivision.getLabel({long: true}),
-          model: currentDivision
+        currentDepartment = {
+          id: currentDepartment.id,
+          text: currentDepartment.getLabel({long: true}),
+          model: currentDepartment
         };
       }
 
       const map = {};
 
-      dictionaries.divisions.forEach(model =>
+      dictionaries.departments.forEach(model =>
       {
         if (!model.get('active') || !model.hasWorkplace(currentWorkplaceId))
         {
@@ -863,9 +863,9 @@ define([
         };
       });
 
-      if (currentDivision && !map[currentDivision.id])
+      if (currentDepartment && !map[currentDepartment.id])
       {
-        map[currentDivision.id] = currentDivision;
+        map[currentDepartment.id] = currentDepartment;
       }
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
@@ -895,12 +895,12 @@ define([
     setUpBuildingSelect2: function()
     {
       const $input = this.$id('building');
-      const currentDivisionId = +this.$id('division').val();
+      const currentDepartmentId = +this.$id('department').val();
       const map = {};
 
       dictionaries.buildings.forEach(model =>
       {
-        if (!model.get('active') || !model.hasDivision(currentDivisionId))
+        if (!model.get('active') || !model.hasDepartment(currentDepartmentId))
         {
           return;
         }
@@ -916,7 +916,7 @@ define([
 
       $input.select2({
         width: '100%',
-        placeholder: currentDivisionId ? ' ' : this.t('FORM:placeholder:noDivision'),
+        placeholder: currentDepartmentId ? ' ' : this.t('FORM:placeholder:noDepartment'),
         data
       });
 
@@ -927,7 +927,7 @@ define([
 
       $input.select2(
         'enable',
-        !!currentDivisionId
+        !!currentDepartmentId
           && (!this.options.editMode || NearMiss.can.manage() || this.model.isCoordinator())
       );
     },
@@ -1576,7 +1576,7 @@ define([
             subject: formData.subject,
             kind: formData.kind,
             workplace: formData.workplace,
-            division: formData.division,
+            department: formData.department,
             building: formData.building,
             location: formData.location,
             station: formData.station,
@@ -1599,7 +1599,7 @@ define([
             subject: formData.subject,
             kind: formData.kind,
             workplace: formData.workplace,
-            division: formData.division,
+            department: formData.department,
             building: formData.building,
             location: formData.location,
             station: formData.station,

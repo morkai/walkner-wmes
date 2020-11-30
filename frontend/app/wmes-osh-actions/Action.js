@@ -34,7 +34,7 @@ define([
     TIME_PROPS: ['createdAt', 'startedAt', 'implementedAt', 'finishedAt'],
     USER_PROPS: ['creator', 'implementers', 'coordinators', 'participants'],
     DICT_PROPS: [
-      'workplace', 'division', 'building', 'location', 'station',
+      'workplace', 'department', 'building', 'location', 'station',
       'kind', 'activityKind'
     ],
     DESC_PROPS: ['kind', 'activityKind']

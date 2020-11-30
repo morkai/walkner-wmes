@@ -2,16 +2,16 @@
 
 define([
   'app/core/Collection',
-  './Division'
+  './Department'
 ], function(
   Collection,
-  Division
+  Department
 ) {
   'use strict';
 
   return Collection.extend({
 
-    model: Division
+    model: Department
 
   });
 });
