@@ -124,7 +124,13 @@ define([
 
       if (Array.isArray(data.setCarts) && data.setCarts.length)
       {
-        html.push(prop('setCarts', _.map(data.setCarts, 'cart').join(', ')));
+        html.push(prop('setCarts', data.setCarts
+          .map(function(setCart)
+          {
+            return setCart.cart + (setCart.forced ? '!' : '');
+          })
+          .join(', ')
+        ));
       }
 
       if (data.kind)
@@ -203,6 +209,16 @@ define([
       if (data.forceLine)
       {
         html.push(prop('forceLine', _.escape(data.forceLine)));
+      }
+
+      if (data.forceDelivery)
+      {
+        html.push(prop('forceDelivery', t('core', 'BOOL:true')));
+      }
+
+      if (data.priorityPickup)
+      {
+        html.push(prop('priorityPickup', t('core', 'BOOL:true')));
       }
 
       if (data.comment)

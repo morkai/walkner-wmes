@@ -36,6 +36,8 @@
     "data:targetQty": "Target quantity",
     "data:redirReason": "Redir reason",
     "data:forceLine": "Forced line",
+    "data:forceDelivery": "Forced delivery",
+    "data:priorityPickup": "Priority pickup",
     "data:comment": "Comment",
 
     "kind:components": "FIFO",

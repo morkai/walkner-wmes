@@ -35,6 +35,8 @@
   "data:targetQty": "Ilość docelowa",
   "data:redirReason": "Powód przekierowania",
   "data:forceLine": "Wymuszona linia",
+  "data:forceDelivery": "Wymuszona wysyłka",
+  "data:priorityPickup": "Priorytetowa kompletacja",
   "data:comment": "Komentarz",
 
   "kind:components": "FIFO",
