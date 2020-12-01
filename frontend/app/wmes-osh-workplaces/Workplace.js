@@ -31,13 +31,21 @@ define([
       active: true
     },
 
-    getLabel: function({long, link} = {})
+    getLabel: function({long, path, link} = {})
     {
-      const label = this.get(long ? 'longName' : 'shortName');
+      let label = this.get(long ? 'longName' : 'shortName');
 
       if (link)
       {
-        return `<a href="${this.genClientUrl()}">${_.escape(label)}</a>`;
+        label = `<a href="${this.genClientUrl()}">${_.escape(label)}</a>`;
+      }
+
+      if (path)
+      {
+        const dictionaries = require('app/wmes-osh-common/dictionaries');
+        const divisionLabel = dictionaries.getLabel('division', this.get('division'), {long, path, link});
+
+        label = `${divisionLabel} \\ ${label}`;
       }
 
       return label;
@@ -45,11 +53,36 @@ define([
 
     serialize: function()
     {
-      var obj = this.toJSON();
+      const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
 
       return obj;
+    },
+
+    serializeRow: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.division = dictionaries.divisions.getLabel(obj.division);
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
+
+      obj.division = dictionaries.divisions.getLabel(obj.division, {long: true, link: true});
+
+      return obj;
+    },
+
+    hasDivision: function(id)
+    {
+      return this.get('division') === +id;
     },
 
     getDepartments: function()

@@ -49,7 +49,7 @@ define([
       if (path)
       {
         const dictionaries = require('app/wmes-osh-common/dictionaries');
-        const workplaceLabel = dictionaries.getLabel('workplace', this.get('workplace'), {long, link});
+        const workplaceLabel = dictionaries.getLabel('workplace', this.get('workplace'), {long, path, link});
 
         label = `${workplaceLabel} \\ ${label}`;
       }
@@ -90,14 +90,7 @@ define([
 
     hasWorkplace: function(id)
     {
-      id = parseInt(id, 10);
-
-      if (!id)
-      {
-        return false;
-      }
-
-      return this.get('workplace') === id;
+      return this.get('workplace') === +id;
     }
 
   });

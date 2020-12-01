@@ -293,9 +293,16 @@ define([
         formData.companyName = company.text;
       }
 
-      formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
+      const userWorkplace = this.$id('userWorkplace').select2('data');
+
+      formData.userDivision = userWorkplace.model.get('division');
+      formData.userWorkplace = userWorkplace.id;
       formData.userDepartment = this.$id('userDepartment').select2('data').id;
-      formData.workplace = this.$id('workplace').select2('data').id;
+
+      const workplace = this.$id('workplace').select2('data');
+
+      formData.division = workplace.model.get('division');
+      formData.workplace = workplace.id;
       formData.department = this.$id('department').select2('data').id;
       formData.building = this.$id('building').select2('data').id;
       formData.location = this.$id('location').select2('data').id;
@@ -1280,6 +1287,7 @@ define([
           relation: this.model,
           model: new Kaizen({
             subject,
+            division: formData.division,
             workplace: formData.workplace,
             department: formData.department,
             building: formData.building,
@@ -1296,6 +1304,7 @@ define([
           relation: this.model,
           model: new NearMiss({
             subject,
+            division: formData.division,
             workplace: formData.workplace,
             department: formData.department,
             building: formData.building,

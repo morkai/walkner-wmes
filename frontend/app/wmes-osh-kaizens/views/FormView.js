@@ -256,7 +256,10 @@ define([
         formData.status = this.newStatus;
       }
 
-      formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
+      const userWorkplace = this.$id('userWorkplace').select2('data');
+
+      formData.userDivision = userWorkplace.model.get('division');
+      formData.userWorkplace = userWorkplace.id;
       formData.userDepartment = this.$id('userDepartment').select2('data').id;
       formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
 
@@ -272,11 +275,14 @@ define([
       }
       else
       {
-        formData.workplace = this.$id('workplace').select2('data').id;
+        const workplace = this.$id('workplace').select2('data');
+
+        formData.division = workplace.model.get('division');
+        formData.workplace = workplace.id;
         formData.department = this.$id('department').select2('data').id;
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
-        formData.station = parseInt(this.$id('station').val(), 10) || null;
+        formData.station = parseInt(this.$id('station').val(), 10) || 0;
       }
 
       const $plannedAt = this.$id('plannedAt');

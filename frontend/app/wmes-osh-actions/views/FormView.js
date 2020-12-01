@@ -400,8 +400,10 @@ define([
     serializeForm: function(formData)
     {
       const features = this.getActivityFeatures();
+      const userWorkplace = this.$id('userWorkplace').select2('data');
 
-      formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
+      formData.userDivision = userWorkplace.model.get('division');
+      formData.userWorkplace = userWorkplace.id;
       formData.userDepartment = this.$id('userDepartment').select2('data').id;
       formData.activityKind = this.$id('activityKind').select2('data').id;
 
@@ -411,7 +413,10 @@ define([
       }
       else
       {
-        formData.workplace = this.$id('workplace').select2('data').id;
+        const workplace = this.$id('workplace').select2('data');
+
+        formData.division = workplace.model.get('division');
+        formData.workplace = workplace.id;
         formData.department = this.$id('department').select2('data').id;
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
@@ -1468,6 +1473,7 @@ define([
           relation: this.model,
           model: new Kaizen({
             kind: formData.kind,
+            division: formData.division,
             workplace: formData.workplace,
             department: formData.department,
             building: formData.building,
@@ -1484,6 +1490,7 @@ define([
           relation: this.model,
           model: new Action({
             kind: formData.kind,
+            division: formData.division,
             workplace: formData.workplace,
             department: formData.department,
             building: formData.building,

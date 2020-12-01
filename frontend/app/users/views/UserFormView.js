@@ -231,7 +231,8 @@ define([
         {
           return {
             id: w.id,
-            text: w.getLabel({long: true})
+            text: w.getLabel({long: true}),
+            model: w
           };
         })
       });
@@ -244,7 +245,8 @@ define([
         {
           return {
             id: d.id,
-            text: d.getLabel({long: true})
+            text: d.getLabel({long: true}),
+            model: d
           };
         })
       });
@@ -404,13 +406,25 @@ define([
         }
       });
 
-      ['company', 'prodFunction', 'vendor', 'oshWorkplace', 'oshDepartment'].forEach(function(prop)
+      ['company', 'prodFunction', 'vendor'].forEach(function(prop)
       {
         if (!formData[prop] || !formData[prop].length)
         {
           formData[prop] = null;
         }
       });
+
+      var $oshWorkplace = this.$id('oshWorkplace');
+
+      if ($oshWorkplace.length)
+      {
+        var oshWorkplace = $oshWorkplace.select2('data');
+        var oshDepartment = this.$id('oshDepartment').select2('data');
+
+        formData.oshDivision = oshWorkplace && oshWorkplace.model.get('division') || 0;
+        formData.oshWorkplace = oshWorkplace && oshWorkplace.model.id || 0;
+        formData.oshDepartment = oshDepartment && oshDepartment.model.id || 0;
+      }
 
       ['card', 'cardUid'].forEach(function(prop)
       {

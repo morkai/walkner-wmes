@@ -430,7 +430,10 @@ define([
         formData.status = this.newStatus;
       }
 
-      formData.userWorkplace = this.$id('userWorkplace').select2('data').id;
+      const userWorkplace = this.$id('userWorkplace').select2('data');
+
+      formData.userDivision = userWorkplace.model.get('division');
+      formData.userWorkplace = userWorkplace.id;
       formData.userDepartment = this.$id('userDepartment').select2('data').id;
 
       const relation = this.options.relation;
@@ -445,11 +448,14 @@ define([
       }
       else
       {
-        formData.workplace = this.$id('workplace').select2('data').id;
+        const workplace = this.$id('workplace').select2('data');
+
+        formData.division = workplace.model.get('division');
+        formData.workplace = workplace.id;
         formData.department = this.$id('department').select2('data').id;
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
-        formData.station = parseInt(this.$id('station').val(), 10) || null;
+        formData.station = parseInt(this.$id('station').val(), 10) || 0;
       }
 
       formData.eventDate = time.utc.getMoment(
@@ -1575,6 +1581,7 @@ define([
           model: new Kaizen({
             subject: formData.subject,
             kind: formData.kind,
+            division: formData.division,
             workplace: formData.workplace,
             department: formData.department,
             building: formData.building,
@@ -1598,6 +1605,7 @@ define([
           model: new Action({
             subject: formData.subject,
             kind: formData.kind,
+            division: formData.division,
             workplace: formData.workplace,
             department: formData.department,
             building: formData.building,

@@ -7,6 +7,7 @@ define([
   'app/user',
   'app/i18n',
   'app/wmes-osh-companies/CompanyCollection',
+  'app/wmes-osh-divisions/DivisionCollection',
   'app/wmes-osh-workplaces/WorkplaceCollection',
   'app/wmes-osh-departments/DepartmentCollection',
   'app/wmes-osh-buildings/BuildingCollection',
@@ -32,6 +33,7 @@ define([
   currentUser,
   t,
   CompanyCollection,
+  DivisionCollection,
   WorkplaceCollection,
   DepartmentCollection,
   BuildingCollection,
@@ -56,6 +58,7 @@ define([
   const TOPIC_PREFIX = 'osh';
   const PROP_TO_DICT = {
     company: 'companies',
+    division: 'divisions',
     workplace: 'workplaces',
     department: 'departments',
     building: 'buildings',
@@ -116,6 +119,7 @@ define([
     kindTypes: [],
     settings: new SettingCollection(),
     companies: new CompanyCollection(),
+    divisions: new DivisionCollection(),
     workplaces: new WorkplaceCollection(),
     departments: new DepartmentCollection(),
     buildings: new BuildingCollection(),
