@@ -80,6 +80,8 @@
   "prop:status": "Status",
   "prop:pickup": "Kompletacja",
   "prop:delivery": "Wysyłka",
+  "prop:startedAt": "Czas rozpoczęcia",
+  "prop:duration": "Czas trwania",
 
   "func:fmx": "FMX",
   "func:kitter": "Kitter",

@@ -81,6 +81,8 @@
     "prop:status": "Status",
     "prop:pickup": "Pickup",
     "prop:delivery": "Delivery",
+    "prop:startedAt": "Started at",
+    "prop:duration": "Duration",
 
     "func:fmx": "FMX",
     "func:kitter": "Kitter",

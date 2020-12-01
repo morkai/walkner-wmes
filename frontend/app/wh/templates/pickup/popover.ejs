@@ -27,4 +27,12 @@
   <dt><%= lineTime.line %></dt>
   <dd><%- t('list:popover:timeRange', {start: lineTime.startTime, finish: lineTime.finishTime}) %></dd>
   <% }) %>
+  <% if (startedAt) { %>
+  <dt><%- t('prop:startedAt') %></dt>
+  <dd><%- startedAt %></dd>
+  <% } %>
+  <% if (duration) { %>
+  <dt><%- t('prop:duration') %></dt>
+  <dd><%- duration %></dd>
+  <% } %>
 </dl>

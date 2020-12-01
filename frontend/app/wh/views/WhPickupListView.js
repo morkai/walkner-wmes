@@ -285,7 +285,9 @@ define([
         problemArea: '',
         comment: '',
         qtyPerLine: [],
-        timePerLine: []
+        timePerLine: [],
+        startedAt: '',
+        duration: ''
       };
 
       switch (columnId)
@@ -342,6 +344,20 @@ define([
           {
             templateData.status = view.t('status:pending');
           }
+
+          var startedAt = Date.parse(whOrder.get('startedAt'));
+
+          if (startedAt)
+          {
+            var finishedAt = Date.parse(whOrder.get('finishedAt'));
+
+            templateData.startedAt = time.format(startedAt, 'L LT');
+
+            if (finishedAt)
+            {
+              templateData.duration = time.toString((finishedAt - startedAt) / 1000);
+            }
+          }
           break;
 
         case 'fmx':
@@ -359,6 +375,16 @@ define([
           if (func.user)
           {
             templateData.user = func.user.label;
+          }
+
+          if (func.startedAt)
+          {
+            templateData.startedAt = time.format(func.startedAt, 'L LT');
+
+            if (func.finishedAt)
+            {
+              templateData.duration = time.toString((Date.parse(func.finishedAt) - Date.parse(func.startedAt)) / 1000);
+            }
           }
           break;
       }
