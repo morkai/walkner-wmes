@@ -70,7 +70,7 @@ define([
           id: 'name',
           titleProperty: function(row)
           {
-            return /^[A-Z]/.test(row.nc12) ? 'name' : 'description';
+            return /^[A-Z]/.test(row.nc12) && row.name ? 'name' : 'description';
           },
           className: 'is-min',
           tdDecorator: function(columnId, value, row)
@@ -100,7 +100,7 @@ define([
               name.push('<i class="fa fa-question-circle"></i>');
             }
 
-            name.push(/^[A-Z]/.test(row.nc12) ? row.description : row.name);
+            name.push(/^[A-Z]/.test(row.nc12) && row.description ? row.description : row.name);
 
             return name.join(' ');
           }
