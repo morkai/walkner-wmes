@@ -58,6 +58,7 @@
     "funcStatus:accepted": "Accepted",
     "funcStatus:rejected": "Rejected",
 
+    "filter:invalid": "Invalid",
     "filter:user:mine": "Mine",
     "filter:user:mine:title": "Entries you are a part of",
     "filter:user:creator": "Creator",
@@ -110,6 +111,7 @@
     "orders:all": "All",
     "orders:export": "Export orders",
     "orders:add": "Release orders",
+    "orders:invalidOnly": "Show invalid only",
     "orders:title": "Releasing orders",
     "orders:validFrom": "Valid from",
     "orders:validTo": "Valid to",

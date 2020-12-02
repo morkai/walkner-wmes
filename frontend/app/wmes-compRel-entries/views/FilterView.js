@@ -81,7 +81,8 @@ define([
     defaultFormData: function()
     {
       return {
-        userType: 'others'
+        userType: 'others',
+        invalid: false
       };
     },
 
@@ -129,6 +130,10 @@ define([
       'mrps': function(propertyName, term, formData)
       {
         formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
+      },
+      'valid': function(propertyName, term, formData)
+      {
+        formData.invalid = term.args[1] === false;
       }
     },
 
@@ -148,6 +153,7 @@ define([
       var oldComponent = this.$id('oldComponent').val().trim();
       var newComponent = this.$id('newComponent').val().trim();
       var mrps = this.$id('mrps').val();
+      var invalid = this.$('input[name="invalid"]:checked').val();
 
       dateTimeRange.formToRql(this, selector);
 
@@ -197,6 +203,11 @@ define([
       {
         selector.push({name: 'eq', args: ['newComponents._id', newComponent]});
       }
+
+      if (invalid)
+      {
+        selector.push({name: 'eq', args: ['valid', false]});
+      }
     },
 
     afterRender: function()
@@ -218,6 +229,7 @@ define([
         width: '250px'
       });
 
+      this.toggleButtonGroup('invalid');
       this.toggleUserSelect2();
     },
 

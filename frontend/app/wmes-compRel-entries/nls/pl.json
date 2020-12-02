@@ -57,6 +57,7 @@
   "funcStatus:accepted": "Dopuszczono",
   "funcStatus:rejected": "Odrzucono",
 
+  "filter:invalid": "Nieprawidłowe",
   "filter:user:mine": "Moje",
   "filter:user:mine:title": "Zgłoszenia, w których jesteś uczestnikiem",
   "filter:user:creator": "Zgłaszający",
@@ -109,6 +110,7 @@
   "orders:all": "Wszystkie",
   "orders:export": "Eksportuj zlecenia",
   "orders:add": "Dopuść zlecenia",
+  "orders:invalidOnly": "Tylko nieprawidłowe",
   "orders:title": "Dopuszczanie zleceń",
   "orders:mode": "Typ dopuszczenia",
   "orders:mode:date": "Według planowanej daty rozpoczęcia zlecenia",

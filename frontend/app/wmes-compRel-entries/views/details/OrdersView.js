@@ -6,6 +6,7 @@ define([
   'app/core/View',
   'app/core/views/DialogView',
   'app/core/util/pageActions',
+  'app/data/localStorage',
   'app/wmes-compRel-entries/Entry',
   './ReleaseOrderView',
   './RemoveOrdersView',
@@ -17,6 +18,7 @@ define([
   View,
   DialogView,
   pageActions,
+  localStorage,
   Entry,
   ReleaseOrderView,
   RemoveOrdersView,
@@ -30,6 +32,24 @@ define([
     template: template,
 
     events: {
+
+      'click .btn[data-action="invalidOnly"]': function(e)
+      {
+        e.currentTarget.classList.toggle('active');
+
+        this.invalidOnly = !this.invalidOnly;
+
+        if (this.invalidOnly)
+        {
+          localStorage.setItem('WMES_COMP_REL_INVALID_ONLY', '1');
+        }
+        else
+        {
+          localStorage.removeItem('WMES_COMP_REL_INVALID_ONLY');
+        }
+
+        this.toggleInvalidOnly();
+      },
 
       'click .btn[data-action="add"]': function()
       {
@@ -53,6 +73,28 @@ define([
         pageActions.exportXlsx('/compRel/entries;export.xlsx?_id=' + this.model.id + '&mode=orders');
 
         this.timers.enableExport = setTimeout(function() { e.currentTarget.disabled = false; }, 3000);
+      },
+
+      'click a[target="_blank"]': function(e)
+      {
+        e.target.style.cursor = 'wait';
+
+        var req = this.ajax({
+          type: 'HEAD',
+          url: e.target.href.replace('#', '/')
+        });
+
+        req.fail(function()
+        {
+          e.target.parentNode.textContent = e.target.textContent;
+        });
+
+        req.done(function()
+        {
+          window.open(e.target.href, '_blank');
+        });
+
+        return false;
       }
 
     },
@@ -62,28 +104,41 @@ define([
       var view = this;
       var entry = view.model;
 
+      view.invalidOnly = localStorage.getItem('WMES_COMP_REL_INVALID_ONLY') === '1';
+
       view.once('afterRender', function()
       {
         view.listenTo(entry, 'change:orders', view.render);
         view.listenTo(entry, 'change:status', view.toggleButtons);
+        view.listenTo(entry, 'change:valid', view.toggleValid);
       });
     },
 
     getTemplateData: function()
     {
       return {
-        orders: this.model.serializeOrders()
+        invalidOnly: this.invalidOnly,
+        valid: this.model.get('valid'),
+        orders: this.model.serializeOrders(),
+        canManage: Entry.can.releaseOrder(this.model)
       };
-    },
-
-    afterRender: function()
-    {
-      this.toggleButtons();
     },
 
     toggleButtons: function()
     {
-      this.$('.btn').toggleClass('hidden', !Entry.can.releaseOrder(this.model));
+      this.$('.can-manage').toggleClass('hidden', !Entry.can.releaseOrder(this.model));
+    },
+
+    toggleValid: function()
+    {
+      this.$el
+        .removeClass('panel-default panel-danger')
+        .addClass('panel-' + (this.model.get('valid') ? 'default' : 'danger'));
+    },
+
+    toggleInvalidOnly: function()
+    {
+      this.$('tbody').find('.default').toggleClass('hidden', this.invalidOnly);
     },
 
     showReleaseOrderDialog: function()

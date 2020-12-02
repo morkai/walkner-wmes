@@ -98,6 +98,8 @@ define([
     {
       var obj = this.serialize();
 
+      obj.className += ' is-' + (obj.valid ? 'valid' : 'invalid');
+
       obj.newComponent = obj.newComponents[0]._id + ': ' + _.escape(obj.newComponents[0].name);
       obj.oldComponent = obj.oldComponents[0]._id + ': ' + _.escape(obj.oldComponents[0].name);
 
@@ -418,7 +420,8 @@ define([
             releasedAtText: time.format(releasedAt, 'L HH:mm'),
             releasedBy: userInfoTemplate({userInfo: order.releasedBy, noIp: true}),
             validFrom: time.format(order.validFrom, 'L'),
-            validTo: time.format(order.validTo, 'L')
+            validTo: time.format(order.validTo, 'L'),
+            valid: order.valid
           };
         })
         .sort(function(a, b)
@@ -499,7 +502,10 @@ define([
     handleChange: function(change)
     {
       var entry = this;
-      var data = {};
+      var data = {
+        updatedAt: change.date,
+        updater: change.user
+      };
 
       if (change.comment.length || !_.isEmpty(change.data))
       {
@@ -535,7 +541,7 @@ define([
     {
       var entry = this;
       var req = $.ajax({
-        method: 'PUT',
+        method: 'PATCH',
         url: '/compRel/entries/' + entry.id,
         data: JSON.stringify({
           socketId: socket.getId(),
@@ -604,6 +610,50 @@ define([
       orders: function(data, entry, newOrders)
       {
         this.list('orders', data, entry, newOrders);
+      },
+
+      invalidOrders: function(data, entry, invalidOrderList)
+      {
+        var invalidOrderMap = {};
+
+        invalidOrderList.forEach(function(orderNo)
+        {
+          invalidOrderMap[orderNo] = true;
+        });
+
+        var newOrders = [].concat(entry.get('orders'));
+
+        newOrders.forEach(function(order)
+        {
+          if (invalidOrderMap[order.orderNo])
+          {
+            order.valid = false;
+          }
+        });
+
+        data.orders = newOrders;
+      },
+
+      validOrders: function(data, entry, validOrderList)
+      {
+        var validOrderMap = {};
+
+        validOrderList.forEach(function(orderNo)
+        {
+          validOrderMap[orderNo] = true;
+        });
+
+        var newOrders = [].concat(entry.get('orders'));
+
+        newOrders.forEach(function(order)
+        {
+          if (validOrderMap[order.orderNo])
+          {
+            order.valid = true;
+          }
+        });
+
+        data.orders = newOrders;
       },
 
       list: function(property, data, entry, newList)

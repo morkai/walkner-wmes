@@ -1,10 +1,11 @@
-<div class="panel panel-default is-with-actions">
+<div class="panel panel-<%- valid ? 'default' : 'danger' %> is-with-actions is-colored">
   <div class="panel-heading">
     <div class="panel-heading-title"><%- t('PANEL:TITLE:orders') %></div>
     <div class="panel-heading-actions">
+      <button data-action="invalidOnly" class="btn btn-default <%- invalidOnly ? 'active' : '' %>" type="button" title="<%- t('orders:invalidOnly') %>"><i class="fa fa-bug"></i></button>
       <button data-action="export" class="btn btn-default" type="button" title="<%- t('orders:export') %>"><i class="fa fa-download"></i></button>
-      <button data-action="add" class="btn btn-default" type="button" title="<%- t('orders:add') %>"><i class="fa fa-plus"></i></button>
-      <button data-action="removeMany" class="btn btn-default" type="button" title="<%- t('orders:removeMany') %>"><i class="fa fa-times"></i></button>
+      <button data-action="add" class="btn btn-default can-manage <%- canManage ? '' : 'hidden' %>" type="button" title="<%- t('orders:add') %>"><i class="fa fa-plus"></i></button>
+      <button data-action="removeMany" class="btn btn-default can-manage <%- canManage ? '' : 'hidden' %>" type="button" title="<%- t('orders:removeMany') %>"><i class="fa fa-times"></i></button>
     </div>
   </div>
   <% if (orders.length) { %>
@@ -22,7 +23,7 @@
     </thead>
     <tbody>
     <% orders.forEach(function(order) { %>
-    <tr>
+    <tr class="<%- order.valid ? 'default' : 'danger' %> <%- invalidOnly && order.valid ? 'hidden' : '' %>">
       <% if (order.orderNo === '000000000') { %>
       <td class="is-min"><%- t('orders:all') %></td>
       <td class="is-min"><%- order.validFrom %></td>
@@ -37,7 +38,7 @@
       <td></td>
       <td class="actions">
         <div class="actions-group">
-          <button data-action="removeOne" data-id="<%- order._id %>" class="btn btn-default" type="button" title="<%- t('orders:removeOne') %>"><i class="fa fa-times"></i></button>
+          <button data-action="removeOne" data-id="<%- order._id %>" class="btn btn-default can-manage <%- canManage ? '' : 'hidden' %>" type="button" title="<%- t('orders:removeOne') %>"><i class="fa fa-times"></i></button>
         </div>
       </td>
     </tr>

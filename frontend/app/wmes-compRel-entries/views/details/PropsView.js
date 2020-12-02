@@ -51,8 +51,7 @@ define([
       DetailsView.prototype.afterRender.apply(this, arguments);
 
       this.usedProps = this.$('.prop[data-prop]').map(function() { return this.dataset.prop; }).get().concat([
-        'oldCode', 'oldName',
-        'newCode', 'newName'
+        'oldComponents', 'newComponents'
       ]);
     },
 

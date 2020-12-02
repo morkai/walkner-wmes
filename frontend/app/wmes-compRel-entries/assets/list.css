@@ -10,3 +10,7 @@
 .compRel-entries-list .is-filter:hover {
   background: #e6e6e6;
 }
+.compRel-entries-list .is-invalid {
+  color: #F00;
+  font-weight: bold;
+}

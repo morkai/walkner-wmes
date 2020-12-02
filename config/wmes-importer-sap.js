@@ -92,7 +92,8 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'orderDocuments.synced', 'orderDocuments.eto.synced', 'orderDocuments.missing.updated',
     'cags.plan.synced', 'cags.plan.syncFailed',
     'kanban.import.*',
-    'old.wh.cancelQueue.updated'
+    'old.wh.cancelQueue.updated',
+    'compRel.entries.updated.*'
   ]
 });
 
