@@ -1,1 +1,1 @@
-define(["app/core/views/FormView","app/wmes-osh-workplaces/templates/form"],function(e,t){"use strict";return e.extend({template:t})});
+define(["app/core/views/FormView","app/wmes-osh-common/dictionaries","app/wmes-osh-workplaces/templates/form"],function(e,i,t){"use strict";return e.extend({template:t,afterRender:function(){e.prototype.afterRender.apply(this,arguments),this.setUpDivisionSelect2()},setUpDivisionSelect2:function(){this.$id("division").select2({width:"100%",data:i.divisions.map(e=>({id:e.id,text:e.getLabel({long:!0})}))})}})});

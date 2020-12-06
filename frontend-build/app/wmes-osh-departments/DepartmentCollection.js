@@ -1,0 +1,1 @@
+define(["app/core/Collection","./Department"],function(e,t){"use strict";return e.extend({model:t})});
