@@ -66,6 +66,7 @@ define([
           workplaces.set(workplaceId, {
             _id: workplaceId,
             label: dictionaries.getLabel('workplaces', workplaceId),
+            division: dictionaries.workplaces.get(workplaceId).get('division'),
             departments: []
           });
         }
@@ -89,6 +90,7 @@ define([
         workplace.departments.forEach(department =>
         {
           this.departments.push({
+            division: workplace.division,
             workplace: workplace._id,
             department: department._id,
             count: department.count

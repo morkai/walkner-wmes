@@ -34,6 +34,7 @@
             <% } %>
             <td class="is-min"><%= department.label %></td>
             <td class="is-min">
+              <input name="departments[<%- department.i %>].division" value="<%- workplace.division %>" type="hidden">
               <input name="departments[<%- department.i %>].workplace" value="<%- workplace._id %>" type="hidden">
               <input name="departments[<%- department.i %>].department" value="<%- department._id %>" type="hidden">
               <input name="departments[<%- department.i %>].count" value="<%- department.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
