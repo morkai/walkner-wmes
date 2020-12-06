@@ -13,7 +13,7 @@ define([
 
     model: Entry,
 
-    rqlQuery: 'exclude(changes)&limit(-1337)&sort(-createdAt)'
+    rqlQuery: 'exclude(orders,changes)&limit(-1337)&sort(-createdAt)'
 
   });
 });
