@@ -1,33 +1,33 @@
 .planning-darker .planning-mrp {
-  border-top-color: #333;
+  border-top-color: #555;
   color: #000;
 }
 .planning-darker .planning-mrp-list,
 .planning-darker .planning-mrp-list-hd {
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker.wrap .planning-mrp-list-action + .planning-mrp-list {
-  border-left-color: #333;
+  border-left-color: #555;
 }
 .planning-darker .planning-mrp-list-item {
-  border-right-color: #333;
-  border-bottom-color: #333;
+  border-right-color: #555;
+  border-bottom-color: #555;
 }
 .planning-darker .planning-mrp-list-item.is-started {
   background-color: #ccc;
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-list-item.is-incomplete {
   background-color: #fe9;
 }
 .planning-darker .planning-mrp-list-item.is-unplanned {
   background-color: #ffe555;
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-list-item.is-completed {
   background-color: #00e600;
   color: #000;
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-list-item.is-surplus {
   background-color: #f00;
@@ -46,10 +46,10 @@
   color: #fff;
 }
 .planning-darker .planning-mrp-list-ending {
-  border-bottom-color: #333;
+  border-bottom-color: #555;
 }
 .planning-darker .planning-mrp-list-action {
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-list-property.is-invalid {
   color: #E00;
@@ -71,7 +71,7 @@
   text-shadow: 1px 1px 1px #000;
 }
 .planning-darker .planning-mrp-lineOrders .planning-mrp-list {
-  background-color: #333;
+  background-color: #555;
 }
 .planning-darker .planning-mrp-list-item.is-external {
   opacity: 1;
@@ -85,7 +85,7 @@
 }
 .planning-darker .planning-mrp-lineOrders-shift {
   background: #FFF;
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-lineOrders-shift[data-state="idle"] {
   background: #000;
@@ -113,10 +113,10 @@
   color: #e00;
 }
 .planning-darker .planning-mrp-timeline {
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-timeline-h {
-  border-left-color: #333;
+  border-left-color: #555;
 }
 .planning-darker .planning-mrp-crosshair {
   background: #E00;
@@ -131,26 +131,26 @@
   border-color: #999;
 }
 .planning-darker .planning-mrp-lineOrders-list {
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-lineOrders-container > hr {
-  background: #333;
+  background: #000;
 }
 .planning-darker .planning-mrp-lineOrders-list {
-  border-color: #333;
+  border-color: #555;
 }
 .planning-darker .planning-mrp-lineOrders-table > thead > tr > th {
-  border-color: #333;
+  border-color: #555;
   box-shadow: inset -3px -3px 24px #ccc;
 }
 .planning-darker .planning-mrp-lineOrders-table > tbody > tr > td {
-  border-bottom-color: #333;
-  border-left-color: #333;
+  border-bottom-color: #555;
+  border-left-color: #555;
 }
 .planning-darker .planning-mrp-lineOrders-table > tbody > tr:hover > td,
 .planning-darker .planning-mrp-lineOrders-table > tbody > tr.is-highlighted > td {
   background-color: #ff0;
-  border-left-color: #333;
+  border-left-color: #555;
   color: #000;
 }
 

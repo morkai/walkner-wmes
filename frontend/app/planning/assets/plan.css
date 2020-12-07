@@ -276,8 +276,8 @@
 }
 .planning-mrp-lineOrders-container > hr {
   margin: 0 0 0 100px;
-  height: 4px;
-  background: #ccc;
+  height: 5px;
+  background: #999;
   border: 0;
 }
 .planning-mrp-lineOrders-container > hr:first-child {
