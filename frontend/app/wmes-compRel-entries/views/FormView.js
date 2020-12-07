@@ -168,13 +168,6 @@ define([
       );
     },
 
-    checkValidity: function(formData)
-    {
-      console.log(formData);
-
-      return false;
-    },
-
     serializeToForm: function()
     {
       var formData = this.model.toJSON();
