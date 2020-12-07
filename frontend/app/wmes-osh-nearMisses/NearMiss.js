@@ -90,7 +90,7 @@ define([
     TIME_PROPS: ['createdAt', 'startedAt', 'finishedAt'],
     USER_PROPS: ['creator', 'implementer', 'coordinators'],
     DICT_PROPS: [
-      'workplace', 'department', 'building', 'location', 'station',
+      'division', 'workplace', 'department', 'building', 'location', 'station',
       'kind', 'eventCategory', 'reasonCategory'
     ],
     DESC_PROPS: ['kind', 'eventCategory', 'reasonCategory']

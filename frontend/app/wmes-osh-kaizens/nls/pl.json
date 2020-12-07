@@ -14,6 +14,7 @@
   "PROPERTY:coordinators": "Koordynatorzy",
   "PROPERTY:userWorkplace": "Zakład zgłaszający",
   "PROPERTY:userDepartment": "Wydział zgłaszający",
+  "PROPERTY:division": "Dywizja",
   "PROPERTY:workplace": "Zakład usprawnienia",
   "PROPERTY:department": "Wydział usprawnienia",
   "PROPERTY:building": "Budynek",

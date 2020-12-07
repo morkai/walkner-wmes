@@ -10,6 +10,7 @@
   "PROPERTY:coordinators": "Koordynatorzy",
   "PROPERTY:userWorkplace": "Zakład obserwatora",
   "PROPERTY:userDepartment": "Wydział obserwatora",
+  "PROPERTY:division": "Dywizja",
   "PROPERTY:workplace": "Zakład",
   "PROPERTY:department": "Wydział",
   "PROPERTY:building": "Budynek",

@@ -43,7 +43,7 @@ define([
     serializeRow: function()
     {
       const obj = this.serialize();
-      const members = obj.members
+      const members = obj.members;
 
       obj.members = members.length ? userInfoTemplate(obj.members[0]) : '';
 

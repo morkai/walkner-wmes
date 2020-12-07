@@ -15,6 +15,7 @@
   "PROPERTY:participants": "Uczestnicy",
   "PROPERTY:userWorkplace": "Zakład zgłaszający",
   "PROPERTY:userDepartment": "Wydział zgłaszający",
+  "PROPERTY:division": "Dywizja",
   "PROPERTY:workplace": "Zakład",
   "PROPERTY:department": "Wydział",
   "PROPERTY:building": "Budynek",
