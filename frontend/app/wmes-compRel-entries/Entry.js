@@ -100,8 +100,12 @@ define([
 
       obj.className += ' is-' + (obj.valid ? 'valid' : 'invalid');
 
-      obj.newComponent = obj.newComponents[0]._id + ': ' + _.escape(obj.newComponents[0].name);
-      obj.oldComponent = obj.oldComponents[0]._id + ': ' + _.escape(obj.oldComponents[0].name);
+      obj.newComponent = obj.newComponents.length
+        ? (obj.newComponents[0]._id + ': ' + _.escape(obj.newComponents[0].name))
+        : '';
+      obj.oldComponent = obj.oldComponents.length
+        ? (obj.oldComponents[0]._id + ': ' + _.escape(obj.oldComponents[0].name))
+        : '';
 
       if (obj.oldComponents.length > 1)
       {
@@ -165,7 +169,7 @@ define([
       {
         obj.oldComponent = oldComponents[0]._id + ': ' + _.escape(oldComponents[0].name);
       }
-      else
+      else if (oldComponents.length)
       {
         obj.oldComponent = '<ul>';
 
@@ -181,7 +185,7 @@ define([
       {
         obj.newComponent = newComponents[0]._id + ': ' + _.escape(newComponents[0].name);
       }
-      else
+      else if (newComponents.length)
       {
         obj.newComponent = '<ul>';
 

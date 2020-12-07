@@ -144,6 +144,12 @@ define([
         view.addComponent('new', comp);
       });
 
+      if (!this.options.editMode)
+      {
+        view.addComponent('old', {_id: '', name: ''});
+        view.addComponent('new', {_id: '', name: ''});
+      }
+
       (view.model.get('funcs') || []).forEach(function(func)
       {
         view.addFunc(func._id, false);
@@ -151,6 +157,8 @@ define([
 
       view.setUpUsersSelect2();
       view.setUpAvailableFuncs();
+      view.checkComponentValidity('old');
+      view.checkComponentValidity('new');
     },
 
     checkFuncsValidity: function()
@@ -158,6 +166,13 @@ define([
       this.$id('availableFuncs')[0].setCustomValidity(
         this.$('.compRel-form-func').length ? '' : this.t('FORM:ERROR:noFuncs')
       );
+    },
+
+    checkValidity: function(formData)
+    {
+      console.log(formData);
+
+      return false;
     },
 
     serializeToForm: function()
