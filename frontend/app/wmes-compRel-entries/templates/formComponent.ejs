@@ -1,5 +1,5 @@
 <tr data-id="<%= component._id %>">
-  <td style="width: 154px"><input class="form-control" name="<%- type %>Components[<%- i %>]._id" value="<%= component._id %>" pattern="^[0-9]{12}$" placeholder="<%- t('PROPERTY:' + type + 'Code') %>"></td>
+  <td style="width: 154px"><input class="form-control" name="<%- type %>Components[<%- i %>]._id" value="<%= component._id %>" pattern="^[0-9]{12}$" maxlength="12" placeholder="<%- t('PROPERTY:' + type + 'Code') %>"></td>
   <td><input class="form-control" name="<%- type %>Components[<%- i %>].name" value="<%= component.name %>" placeholder="<%- t('PROPERTY:' + type + 'Name') %>"></td>
   <td class="actions">
     <div class="actions-group">
