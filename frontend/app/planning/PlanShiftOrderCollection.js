@@ -101,16 +101,16 @@ define([
 
     getLineOrderExecution: function(lineId, lineOrder, workingTimes)
     {
-      var key = lineId + lineOrder.id;
+      const key = lineId + lineOrder.id;
 
       if (this.cache.execution[key])
       {
         return this.cache.execution[key];
       }
 
-      var orderNo = lineOrder.get('orderNo');
-      var planOrder = this.plan.orders.get(orderNo);
-      var execution = this.cache.execution[key] = {
+      const orderNo = lineOrder.get('orderNo');
+      const planOrder = this.plan.orders.get(orderNo);
+      const execution = this.cache.execution[key] = {
         quantityDoneOnLine: 0,
         quantityDoneOnDay: 0,
         quantityDoneOnShift: 0,
@@ -130,18 +130,18 @@ define([
         return execution;
       }
 
-      var utcStartAt = Date.parse(lineOrder.get('startAt'));
-      var localStartAt = time.utc.getMoment(utcStartAt).local(true).valueOf();
-      var timeWindow = 4 * 3600 * 1000;
-      var fromTime = localStartAt - timeWindow;
-      var toTime = localStartAt + timeWindow;
-      var operationNo = planOrder.getOperationNo();
-      var shiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
-      var dayStartTime = shiftUtil.getFirstShiftStartTime(shiftStartTime, true);
-      var dayEndTime = dayStartTime + shiftUtil.SHIFT_DURATION * 3;
-      var shiftEndTime = shiftStartTime + shiftUtil.SHIFT_DURATION;
-      var prevShiftOverlap = fromTime - shiftStartTime;
-      var nextShiftOverlap = toTime - shiftEndTime;
+      const utcStartAt = Date.parse(lineOrder.get('startAt'));
+      const localStartAt = time.utc.getMoment(utcStartAt).local(true).valueOf();
+      const timeWindow = 4 * 3600 * 1000;
+      let fromTime = localStartAt - timeWindow;
+      let toTime = localStartAt + timeWindow;
+      const operationNo = planOrder.getOperationNo();
+      const shiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
+      const dayStartTime = shiftUtil.getFirstShiftStartTime(shiftStartTime, true);
+      const dayEndTime = dayStartTime + shiftUtil.SHIFT_DURATION * 3;
+      const shiftEndTime = shiftStartTime + shiftUtil.SHIFT_DURATION;
+      const prevShiftOverlap = fromTime - shiftStartTime;
+      const nextShiftOverlap = toTime - shiftEndTime;
 
       if (workingTimes && (prevShiftOverlap < 0 || nextShiftOverlap > 0))
       {
@@ -158,44 +158,70 @@ define([
         }
       }
 
-      this.findOrders(orderNo, lineId).forEach(function(pso)
+      this.sumExecutionOrders(this.findOrders(orderNo, lineId)).forEach(pso =>
       {
-        var quantityDone = pso.attributes.quantityDone;
-
-        if (!quantityDone)
+        if (!operationNo || !pso.operationNo || pso.operationNo !== operationNo)
         {
           return;
         }
 
-        var actualOperationNo = pso.attributes.operationNo;
+        execution.quantityDoneOnLine += pso.quantityDone;
 
-        if (!operationNo || !actualOperationNo || actualOperationNo !== operationNo)
+        if (pso.startedAt >= dayStartTime && pso.startedAt <= dayEndTime)
         {
-          return;
+          execution.quantityDoneOnDay += pso.quantityDone;
         }
 
-        execution.quantityDoneOnLine += quantityDone;
-
-        var startedAt = Date.parse(pso.attributes.startedAt);
-
-        if (startedAt >= dayStartTime && startedAt <= dayEndTime)
+        if (shiftUtil.getShiftStartTime(pso.startedAt, true) === shiftStartTime)
         {
-          execution.quantityDoneOnDay += quantityDone;
+          execution.quantityDoneOnShift += pso.quantityDone;
         }
 
-        if (shiftUtil.getShiftStartTime(startedAt, true) === shiftStartTime)
+        if (pso.startedAt >= fromTime && pso.startedAt <= toTime)
         {
-          execution.quantityDoneOnShift += quantityDone;
-        }
-
-        if (startedAt >= fromTime && startedAt <= toTime)
-        {
-          execution.plannedQuantityDone += quantityDone;
-          execution.plannedQuantitiesDone.push(quantityDone);
+          execution.plannedQuantityDone += pso.quantityDone;
+          execution.plannedQuantitiesDone.push(pso.quantityDone);
         }
       });
 
       return execution;
+    },
+
+    sumExecutionOrders: function(psos)
+    {
+      const summed = [];
+
+      if (psos.length === 0)
+      {
+        return summed;
+      }
+
+      psos.forEach(({attributes}) =>
+      {
+        const pso = {
+          prodLine: attributes.prodLine,
+          quantityDone: attributes.quantityDone,
+          operationNo: attributes.operationNo,
+          startedAt: Date.parse(attributes.startedAt),
+          finishedAt: Date.parse(attributes.finishedAt)
+        };
+        const prev = summed[summed.length - 1];
+
+        if (prev
+          && pso.prodLine === prev.prodLine
+          && pso.operationNo === prev.operationNo
+          && Math.abs(pso.startedAt - prev.finishedAt) < 60000)
+        {
+          prev.quantityDone += pso.quantityDone;
+          prev.finishedAt = pso.finishedAt;
+        }
+        else
+        {
+          summed.push(pso);
+        }
+      });
+
+      return summed;
     },
 
     getTotalQuantityDone: function(line, lineOrder)
