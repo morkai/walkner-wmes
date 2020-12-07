@@ -93,11 +93,8 @@ define([
       {
         var $tbody = this.$(e.target).closest('tbody');
 
-        if ($tbody.children().length > 1)
-        {
-          this.$(e.target).closest('tr').remove();
-          this.checkComponentValidity($tbody[0].dataset.type);
-        }
+        this.$(e.target).closest('tr').remove();
+        this.checkComponentValidity($tbody[0].dataset.type);
       },
       'change #-mrps': function()
       {
@@ -188,6 +185,16 @@ define([
       {
         formData.funcs.push(view.model.getFunc(this.dataset.id));
       });
+
+      if (!formData.oldComponents)
+      {
+        formData.oldComponents = [];
+      }
+
+      if (!formData.newComponents)
+      {
+        formData.newComponents = [];
+      }
 
       return formData;
     },
@@ -309,6 +316,20 @@ define([
       {
         viewport.msg.loaded();
       });
+    },
+
+    checkValidity: function(formData)
+    {
+      if (!formData.newComponents.length)
+      {
+        this.$id('addNewComponent').click();
+
+        setTimeout(() => this.$('.btn-primary').click(), 1);
+
+        return false;
+      }
+
+      return true;
     },
 
     checkComponentValidity: function(type)

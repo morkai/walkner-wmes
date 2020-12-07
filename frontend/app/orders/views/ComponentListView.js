@@ -117,10 +117,11 @@ define([
 
     getTemplateData: function()
     {
-      var bom = [];
+      var components = [];
       var oldToNew = {};
       var newToOld = {};
       var colored = false;
+      var extraCompRels = [];
 
       (this.model.get('compRels') || []).forEach(function(compRel)
       {
@@ -131,6 +132,11 @@ define([
             newToOld[newComponent._id] = [];
           }
         });
+
+        if (compRel.oldComponents.length === 0)
+        {
+          extraCompRels.push(compRel);
+        }
 
         compRel.oldComponents.forEach(function(oldComponent)
         {
@@ -167,7 +173,7 @@ define([
           qty[1] ? (decimalSeparator + qty[1]) : ''
         ];
 
-        bom.push(component);
+        components.push(component);
 
         var newComponents = oldToNew[component.nc12];
 
@@ -180,7 +186,7 @@ define([
           {
             compRel.newComponents.forEach(function(newComponent)
             {
-              bom.push({
+              components.push({
                 compRel: true,
                 rowClassName: 'success',
                 orderNo: component.orderNo,
@@ -210,7 +216,7 @@ define([
             component.releasedAt = time.format(compRel.releasedAt, 'L HH:mm');
             component.releasedBy = userInfoTemplate({userInfo: compRel.releasedBy, noIp: true});
 
-            bom.push({
+            components.push({
               compRel: true,
               rowClassName: 'danger',
               orderNo: component.orderNo,
@@ -222,12 +228,34 @@ define([
         }
       });
 
+      if (extraCompRels.length)
+      {
+        colored = true;
+
+        extraCompRels.forEach(compRel =>
+        {
+          compRel.newComponents.forEach(newComponent =>
+          {
+            components.unshift({
+              compRel: true,
+              rowClassName: 'success',
+              orderNo: '',
+              mrp: '',
+              nc12: newComponent._id,
+              name: newComponent.name,
+              releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
+              releasedBy: compRel.releasedBy.label
+            });
+          });
+        });
+      }
+
       return {
         colored: colored,
-        empty: bom.length === 0,
+        empty: components.length === 0,
         paint: !!this.options.paint,
         linkPfep: !!this.options.linkPfep && user.isAllowedTo('PFEP:VIEW'),
-        bom: bom
+        bom: components
       };
     },
 
