@@ -68,12 +68,8 @@
     BlankLayout)
   {
     var startBroker = broker.sandbox();
-    var heffLine = localStorage.getItem('HEFF:LINE');
 
-    if (heffLine)
-    {
-      socket.connect();
-    }
+    socket.connect();
 
     moment.locale(window.appLocale);
 
@@ -104,7 +100,7 @@
       document.title = newTitle.reverse().join(' < ');
     });
 
-    if (navigator.onLine && heffLine)
+    if (navigator.onLine)
     {
       startBroker.subscribe('socket.connected', function()
       {
