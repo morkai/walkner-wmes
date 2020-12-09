@@ -21,7 +21,7 @@ define([
 
   var DATE_PROPERTIES = ['date', 'kaizenStartDate', 'kaizenFinishDate'];
   var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt', 'finishedAt'];
-  var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer'];
+  var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer', 'superior'];
   var OWNER_PROPERTIES = ['suggestionOwners', 'kaizenOwners'];
 
   t = t.forDomain('suggestions');

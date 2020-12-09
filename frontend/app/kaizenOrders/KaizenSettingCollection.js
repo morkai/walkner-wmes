@@ -32,6 +32,18 @@ define([
       {
         return newValue || '';
       }
+
+      if (/superiorFuncs$/.test(id))
+      {
+        return newValue.split(',').filter(function(v) { return !!v; });
+      }
+
+      if (/reward/.test(id))
+      {
+        var v = Math.round(parseFloat(newValue) * 100) / 100;
+
+        return v > 0 ? v : 0;
+      }
     }
 
   });

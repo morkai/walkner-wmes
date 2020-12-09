@@ -39,6 +39,10 @@
               <div class="prop-name <%- model.changed.confirmer ? 'is-changed' : '' %>"><%- t('PROPERTY:confirmer') %></div>
               <div class="prop-value"><%- model.confirmer %></div>
             </div>
+            <div class="prop">
+              <div class="prop-name <%- model.changed.superior ? 'is-changed' : '' %>"><%- t('PROPERTY:superior') %></div>
+              <div class="prop-value"><%- model.superior %></div>
+            </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -53,11 +57,11 @@
             </div>
             <div class="prop">
               <div class="prop-name"><%- t('PROPERTY:confirmedAt') %></div>
-              <div class="prop-value"><%- model.confirmedAt || '-' %></div>
+              <div class="prop-value"><%- model.confirmedAt || '' %></div>
             </div>
             <div class="prop">
               <div class="prop-name"><%- t('PROPERTY:finishedAt') %></div>
-              <div class="prop-value"><%- model.finishedAt || '-' %></div>
+              <div class="prop-value"><%- model.finishedAt || '' %></div>
             </div>
           </div>
         </div>

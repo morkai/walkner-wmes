@@ -2,12 +2,14 @@
 
 define([
   'app/core/View',
+  'app/kaizenOrders/dictionaries',
   '../RewardReport',
   '../views/RewardReportFilterView',
   '../views/RewardReportView',
   'app/suggestions/templates/rewardReportPage'
 ], function(
   View,
+  kaizenDictionaries,
   RewardReport,
   RewardReportFilterView,
   RewardReportView,
@@ -63,11 +65,18 @@ define([
             btnEl.disabled = false;
           });
         }
+      }, {
+        label: this.t('PAGE_ACTION:settings'),
+        icon: 'cogs',
+        privileges: 'KAIZEN:DICTIONARIES:MANAGE',
+        href: '#kaizenOrders;settings?tab=reward'
       }];
     },
 
     initialize: function()
     {
+      kaizenDictionaries.bind(this);
+
       this.defineViews();
 
       this.setView('#-filter', this.filterView);

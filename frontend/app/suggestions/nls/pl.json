@@ -22,6 +22,7 @@
     "PAGE_ACTION:accept": "Akceptuj",
     "PAGE_ACTION:complete": "Do weryfikacji",
     "PAGE_ACTION:verify": "Weryfikuj",
+    "PAGE_ACTION:settings": "Ustawienia",
 
     "PANEL:TITLE:coordSections": "Opiniowanie pomysłu",
     "PANEL:TITLE:attachments": "Załączniki zgłoszenia",
@@ -57,6 +58,7 @@
     "PROPERTY:creator": "Stworzone przez",
     "PROPERTY:updater": "Ostatnia zmiana przez",
     "PROPERTY:confirmer": "Koordynator Kaizen",
+    "PROPERTY:superior": "Przełożony",
     "PROPERTY:createdAt": "Czas utworzenia",
     "PROPERTY:updatedAt": "Czas ostatniej zmiany",
     "PROPERTY:confirmedAt": "Czas potwierdzenia",
@@ -100,6 +102,7 @@
 
     "role:creator": "Zgłaszający",
     "role:confirmer": "Zatwierdzający",
+    "role:superior": "Przełożony",
     "role:owner": "Właściciel",
     "role:subscriber": "Obserwator",
     "role:coordinator": "Koordynator",
@@ -168,6 +171,7 @@
     "report:title:productFamily": "Ilość zgłoszeń wg rodzin produktów",
     "report:title:category": "Ilość zgłoszeń wg kategorii",
     "report:title:confirmer": "Ilość zgłoszeń wg zatwiedzających",
+    "report:title:superior": "Ilość zgłoszeń wg przełożonych",
     "report:title:owner": "Ilość zgłoszeń wg właścicieli",
     "report:series:total": "Suma",
     "report:series:entry": "Zgłoszenia",
@@ -180,6 +184,7 @@
     "report:filenames:productFamily": "SUG_IloscWgRodzinProduktow",
     "report:filenames:category": "SUG_IloscWgKategorii",
     "report:filenames:confirmer": "SUG_IloscWgZatwierdzajacych",
+    "report:filenames:superior": "SUG_IloscWgPrzelozonych",
     "report:filenames:owner": "SUG_IloscWgWlascicieli",
 
     "report:title:summary:averageDuration": "Średnia ilość dni realizacji w poszczególnych tygodniach",
@@ -220,6 +225,7 @@
     "reward:sections": "Dział zgłaszający",
     "reward:count": "Ilość",
     "reward:part": "Udział",
+    "reward:value": "Wynagrodzenie",
     "reward:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
     "reward:filter:month": "Miesiąc",
     "reward:export:action": "Eksportuj do pliku",

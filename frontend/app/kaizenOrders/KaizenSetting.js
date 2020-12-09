@@ -9,7 +9,9 @@ define([
 
   return Setting.extend({
 
-    urlRoot: '/kaizen/settings'
+    urlRoot: '/kaizen/settings',
+
+    nlsDomain: 'kaizenOrders'
 
   });
 });

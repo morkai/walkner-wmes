@@ -183,6 +183,7 @@ define([
           return time.format(value, 'L');
 
         case 'confirmer':
+        case 'superior':
           return renderUserInfo({userInfo: value});
 
         case 'suggestionOwners':

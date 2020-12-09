@@ -232,7 +232,12 @@
     "report:filenames:count": "NR_Metrics_Count",
     "report:filenames:users": "NR_Metrics_Users",
 
+    "settings:tab:general": "General",
+    "settings:tab:reward": "Reward",
     "settings:tab:fm24": "FM-24",
+    "settings:superiorFuncs": "Superiors' functions",
+    "settings:reward:kz": "Kaizen",
+    "settings:reward:kom": "Kaizen of the month",
     "settings:fm24:subject": "E-mail subject",
     "settings:fm24:message": "Extra e-mail message"
   },

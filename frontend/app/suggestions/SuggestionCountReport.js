@@ -100,7 +100,11 @@ define([
         },
         confirmer: {
           categories: this.prepareUserCategories(report.users, totals.confirmer),
-          series: this.prepareConfirmerSeries(totals.confirmer, report.groups)
+          series: this.prepareUserSeries(totals.confirmer, report.groups)
+        },
+        superior: {
+          categories: this.prepareUserCategories(report.users, totals.superior),
+          series: this.prepareUserSeries(totals.superior, report.groups)
         },
         productFamily: {
           rows: this.prepareProductFamilyRows(report),
@@ -296,7 +300,7 @@ define([
       return series;
     },
 
-    prepareConfirmerSeries: function(confirmerTotals)
+    prepareUserSeries: function(confirmerTotals)
     {
       return [
         {

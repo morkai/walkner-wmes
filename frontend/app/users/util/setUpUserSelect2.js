@@ -147,6 +147,11 @@ define([
 
     rqlQuery.sort[property] = 1;
 
+    if (options.rqlQueryDecorator)
+    {
+      options.rqlQueryDecorator(rqlQuery, term, options);
+    }
+
     return rql.Query.fromObject(rqlQuery);
   }
 

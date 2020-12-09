@@ -480,13 +480,9 @@ define([
 
     serializeForm: function(formData)
     {
-      var confirmer = this.$id('confirmer').select2('data');
-
       formData.categories = formData.categories.split(',');
-      formData.confirmer = !confirmer ? null : {
-        id: confirmer.id,
-        label: confirmer.text
-      };
+      formData.confirmer = setUpUserSelect2.getUserInfo(this.$id('confirmer'));
+      formData.superior = setUpUserSelect2.getUserInfo(this.$id('superior'));
       formData.suggestionOwners = this.serializeOwners('suggestion');
       formData.kaizenOwners = formData.status === 'new' || formData.status === 'accepted'
         ? this.serializeOwners('suggestedKaizen')
@@ -595,6 +591,7 @@ define([
       this.setUpCategorySelect2();
       this.setUpProductFamily();
       this.setUpConfirmerSelect2();
+      this.setUpSuperiorSelect2();
       this.setUpOwnerSelect2();
 
       if (this.options.editMode)
@@ -811,6 +808,30 @@ define([
           text: confirmer.label
         });
       }
+    },
+
+    setUpSuperiorSelect2: function()
+    {
+      var $superior = this.$id('superior');
+
+      setUpUserSelect2($superior, {
+        width: '100%',
+        allowClear: false,
+        activeOnly: true,
+        noPersonnelId: true,
+        rqlQueryDecorator: function(rqlQuery)
+        {
+          var superiorFuncs = kaizenDictionaries.settings.getValue('superiorFuncs');
+
+          if (Array.isArray(superiorFuncs) && superiorFuncs.length)
+          {
+            rqlQuery.selector.args.push({
+              name: 'in',
+              args: ['prodFunction', superiorFuncs]
+            });
+          }
+        }
+      });
     },
 
     setUpOwnerSelect2: function()

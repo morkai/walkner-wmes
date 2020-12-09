@@ -22,12 +22,16 @@
           <label for="<%- id('section') %>" class="control-label is-required"><%- t('PROPERTY:section') %></label>
           <input id="<%- id('section') %>" type="text" autocomplete="new-password" name="section" required placeholder="<%- t('FORM:help:section') %>">
         </div>
-        <div class="form-group col-lg-8 has-required-select2">
+        <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- id('confirmer') %>" class="control-label is-required is-required-first-child" style="display: flex">
             <span><%- t('PROPERTY:confirmer') %></span>
             <a id="<%- id('confirmer-other') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('FORM:confirmer:other') %></a>
           </label>
           <input id="<%- id('confirmer') %>" type="text" autocomplete="new-password" name="confirmer" required>
+        </div>
+        <div class="form-group col-lg-4 has-required-select2">
+          <label for="<%- id('superior') %>" class="control-label is-required"><%- t('PROPERTY:superior') %></label>
+          <input id="<%- id('superior') %>" type="text" autocomplete="new-password" name="superior" required>
         </div>
       </div>
       <% if (editMode) { %>

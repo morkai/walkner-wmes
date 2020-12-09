@@ -5,6 +5,7 @@ define([
   'app/user',
   'app/data/loadedModules',
   'app/data/prodFunctions',
+  'app/data/companies',
   'app/data/privileges',
   'app/core/util/idAndLabel',
   'app/core/views/FilterView',
@@ -15,6 +16,7 @@ define([
   user,
   loadedModules,
   prodFunctions,
+  companies,
   privileges,
   idAndLabel,
   FilterView,
@@ -30,15 +32,13 @@ define([
     termToForm: {
       'personnelId': function(propertyName, term, formData)
       {
-        if (term.name === 'regex')
-        {
-          formData[propertyName] = term.args[1].replace('^', '');
-        }
+        formData[propertyName] = this.unescapeRegExp(term.args[1]);
       },
       'prodFunction': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
+      'company': 'prodFunction',
       'login': 'personnelId',
       'searchName': 'personnelId'
     },
@@ -47,6 +47,7 @@ define([
     {
       return {
         prodFunctions: loadedModules.isLoaded('prodFunctions') ? prodFunctions.map(idAndLabel) : [],
+        companies: loadedModules.isLoaded('companies') ? companies.map(idAndLabel) : [],
         privileges: !user.isAllowedTo('USERS:MANAGE') ? [] : privileges
       };
     },
@@ -54,6 +55,16 @@ define([
     afterRender: function()
     {
       FilterView.prototype.afterRender.apply(this, arguments);
+
+      this.$id('company').select2({
+        width: '150px',
+        allowClear: true
+      });
+
+      this.$id('prodFunction').select2({
+        width: '250px',
+        allowClear: true
+      });
 
       this.$id('privileges').select2({
         width: '250px',
@@ -73,19 +84,15 @@ define([
       this.serializeRegexTerm(selector, 'personnelId', null, undefined, false, true);
       this.serializeRegexTerm(selector, 'login', null, null, true, true);
 
-      var prodFunction = this.$id('prodFunction').val() || '';
-
-      if (prodFunction.length)
+      ['company', 'prodFunction', 'privileges'].forEach(p =>
       {
-        selector.push({name: 'eq', args: ['prodFunction', prodFunction]});
-      }
+        var v = this.$id(p).val() || '';
 
-      var privileges = this.$id('privileges').val() || '';
-
-      if (privileges.length)
-      {
-        selector.push({name: 'eq', args: ['privileges', privileges]});
-      }
+        if (v.length)
+        {
+          selector.push({name: 'eq', args: [p, v]});
+        }
+      });
     }
 
   });

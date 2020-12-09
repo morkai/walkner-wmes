@@ -30,27 +30,21 @@ define([
       return [
         pageActions.jump(this, collection),
         pageActions.export(layout, this, collection, false),
-        pageActions.add(collection, false)
+        pageActions.add(collection, false),
+        {
+          label: this.t('PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'KAIZEN:DICTIONARIES:MANAGE',
+          href: '#kaizenOrders;settings'
+        }
       ];
     },
 
-    load: function(when)
+    initialize: function()
     {
-      return when(this.collection.fetch({reset: true}), kaizenDictionaries.load());
-    },
+      FilteredListPage.prototype.initialize.apply(this, arguments);
 
-    destroy: function()
-    {
-      FilteredListPage.prototype.destroy.call(this);
-
-      kaizenDictionaries.unload();
-    },
-
-    afterRender: function()
-    {
-      FilteredListPage.prototype.afterRender.call(this);
-
-      kaizenDictionaries.load();
+      kaizenDictionaries.bind(this);
     }
 
   });

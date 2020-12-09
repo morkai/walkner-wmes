@@ -1,11 +1,13 @@
 <div class="suggestions-report">
   <div class="filter-container"></div>
   <% metrics.forEach(function(metric) { %>
-  <h3><%- helpers.t('report:title:' + metric) %></h3>
+  <h3><%- t('report:title:' + metric) %></h3>
   <div class="suggestions-report-<%- metric %>"></div>
   <% }) %>
-  <h3><%- helpers.t('report:title:confirmer') %></h3>
+  <h3><%- t('report:title:confirmer') %></h3>
   <div class="suggestions-report-confirmer"></div>
-  <h3><%- helpers.t('report:title:owner') %></h3>
+  <h3><%- t('report:title:superior') %></h3>
+  <div class="suggestions-report-superior"></div>
+  <h3><%- t('report:title:owner') %></h3>
   <div class="suggestions-report-owner"></div>
 </div>

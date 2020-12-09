@@ -22,6 +22,7 @@
     "PAGE_ACTION:accept": "Accept",
     "PAGE_ACTION:complete": "Complete",
     "PAGE_ACTION:verify": "Verify",
+    "PAGE_ACTION:settings": "Settings",
 
     "PANEL:TITLE:coordSections": "Coordinating departments",
     "PANEL:TITLE:attachments": "Attachments",
@@ -55,6 +56,7 @@
     "PROPERTY:creator": "Created by",
     "PROPERTY:updater": "Updated by",
     "PROPERTY:confirmer": "Confirmed by",
+    "PROPERTY:superior": "Superior",
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:updatedAt": "Updated at",
     "PROPERTY:confirmedAt": "Confirmed at",
@@ -98,6 +100,7 @@
 
     "role:creator": "Creator",
     "role:confirmer": "Confirmer",
+    "role:superior": "Superior",
     "role:owner": "Owner",
     "role:subscriber": "Subscriber",
     "role:coordinator": "Coordinator",
@@ -164,6 +167,7 @@
     "report:title:productFamily": "Entry count by product family",
     "report:title:category": "Entry count by category",
     "report:title:confirmer": "Entry count by confirmers",
+    "report:title:superior": "Entry count by superiors",
     "report:title:owner": "Entry count by owners",
     "report:series:total": "Total",
     "report:series:entry": "Entries",
@@ -176,6 +180,7 @@
     "report:filenames:productFamily": "SUG_CountByProductFamily",
     "report:filenames:category": "SUG_CountByCategory",
     "report:filenames:confirmer": "SUG_CountByConfirmer",
+    "report:filenames:superior": "SUG_CountBySuperior",
     "report:filenames:owner": "SUG_CountByOwner",
 
     "report:title:summary:averageDuration": "Average number of implementation days by week",
@@ -216,6 +221,7 @@
     "reward:sections": "Section",
     "reward:count": "Count",
     "reward:part": "Participation",
+    "reward:value": "Gratification",
     "reward:empty": "No entries matching the current filters.",
     "reward:filter:month": "Month",
     "reward:export:action": "Export to file",

@@ -9,6 +9,7 @@
       <th class="is-min" colspan="2"><%- t('reward:finished') %></th>
       <th class="is-min" colspan="2"><%- t('reward:kom') %></th>
       <th class="is-min" colspan="2"><%- t('reward:total') %></th>
+      <th class="is-min" rowspan="2"><%- t('reward:value') %></th>
       <th rowspan="2"><%- t('reward:sections') %></th>
     </tr>
     <tr>
@@ -30,6 +31,7 @@
       <td class="is-min is-number"><%- user.kom[1] ? user.kom[1].toLocaleString() : '' %></td>
       <td class="is-min is-number"><%- user.total[0].toLocaleString() %></td>
       <td class="is-min is-number"><%- user.total[1].toLocaleString() %></td>
+      <td class="text-right"><%- user.value.toLocaleString('pl-PL', {style: 'currency', currency: 'PLN'}) %></td>
       <td><%- user.sections.join('; ') %></td>
     </tr>
     <% }) %>

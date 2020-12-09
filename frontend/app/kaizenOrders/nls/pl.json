@@ -232,7 +232,12 @@
   "report:filenames:count": "ZPW_Wskazniki_Ilosci",
   "report:filenames:users": "ZPW_Wskazniki_Uzytkownicy",
 
+  "settings:tab:general": "Ogólne",
+  "settings:tab:reward": "Wynagrodzenie",
   "settings:tab:fm24": "FM-24",
+  "settings:superiorFuncs": "Funkcje przełożonych",
+  "settings:reward:kz": "Kaizen",
+  "settings:reward:kom": "Kaizen mesiąca",
   "settings:fm24:subject": "Temat e-maila",
   "settings:fm24:message": "Dodatkowa treść e-maila"
 }

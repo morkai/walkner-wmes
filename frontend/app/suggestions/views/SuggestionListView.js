@@ -45,8 +45,8 @@ define([
         },
         {
           id: 'subject',
-          className: 'has-popover',
-          tdAttrs: prepareTdAttrs,
+          className: (simple ? '' : 'is-overflow w300') + ' has-popover',
+          tdAttrs: simple ? '' : prepareTdAttrs,
           label: this.t('PROPERTY:subjectAndDescription')
         }
       ];
@@ -56,11 +56,11 @@ define([
         columns.push.apply(columns, [
           {id: 'date', className: 'is-min', tdAttrs: prepareTdAttrs},
           {id: 'finishedAt', className: 'is-min', tdAttrs: prepareTdAttrs},
-          {id: 'categories', tdAttrs: prepareTdAttrs},
-          {id: 'productFamily', tdAttrs: prepareTdAttrs},
-          {id: 'section', tdAttrs: prepareTdAttrs},
-          {id: 'confirmer', tdAttrs: prepareTdAttrs},
-          {id: 'owners', className: 'has-popover', label: this.t('PROPERTY:owners')}
+          {id: 'categories', className: 'is-overflow w300', tdAttrs: prepareTdAttrs},
+          {id: 'productFamily', className: 'is-min', tdAttrs: prepareTdAttrs},
+          {id: 'section', className: 'is-min', tdAttrs: prepareTdAttrs},
+          {id: 'confirmer', className: 'is-min', tdAttrs: prepareTdAttrs},
+          {id: 'owners', className: 'is-min has-popover', label: this.t('PROPERTY:owners')}
         ]);
       }
 

@@ -50,6 +50,10 @@ define([
         metric: 'confirmer',
         model: this.model
       }));
+      this.setView('.suggestions-report-superior', new SuggestionCountPerUserChartView({
+        metric: 'superior',
+        model: this.model
+      }));
       this.setView('.suggestions-report-owner', new SuggestionCountPerUserChartView({
         metric: 'owner',
         model: this.model

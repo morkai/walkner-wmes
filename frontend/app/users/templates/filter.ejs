@@ -11,10 +11,21 @@
     <label for="<%- id('searchName') %>"><%- t('PROPERTY:lastName') %></label>
     <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text">
   </div>
+  <% if (companies.length) { %>
+  <div class="form-group">
+    <label for="<%- id('company') %>"><%- t('PROPERTY:company') %></label>
+    <select id="<%- id('company') %>" name="company">
+      <option></option>
+      <% companies.forEach(function(company) { %>
+      <option value="<%= company.id %>"><%= company.text %></option>
+      <% }) %>
+    </select>
+  </div>
+  <% } %>
   <% if (prodFunctions.length) { %>
   <div class="form-group">
     <label for="<%- id('prodFunction') %>"><%- t('PROPERTY:prodFunction') %></label>
-    <select id="<%- id('prodFunction') %>" class="form-control" name="prodFunction">
+    <select id="<%- id('prodFunction') %>" name="prodFunction">
       <option></option>
       <% prodFunctions.forEach(function(prodFunction) { %>
       <option value="<%= prodFunction.id %>"><%= prodFunction.text %></option>
