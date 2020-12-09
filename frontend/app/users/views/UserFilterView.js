@@ -63,9 +63,15 @@ define([
 
     serializeFormToQuery: function(selector)
     {
+      var searchName = setUpUserSelect2.transliterate(this.$id('searchName').val());
+
+      if (searchName.length)
+      {
+        selector.push({name: 'regex', args: ['searchName', '^' + searchName]});
+      }
+
       this.serializeRegexTerm(selector, 'personnelId', null, undefined, false, true);
       this.serializeRegexTerm(selector, 'login', null, null, true, true);
-      this.serializeRegexTerm(selector, 'searchName', null, null, true, true);
 
       var prodFunction = this.$id('prodFunction').val() || '';
 

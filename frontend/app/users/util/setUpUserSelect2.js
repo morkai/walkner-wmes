@@ -353,7 +353,7 @@ define([
 
         userInfo[user.idProperty] = item.id;
         userInfo.label = item.text;
-console.log({userInfo, userData})
+
         userInfoDecorators.forEach(function(decorate)
         {
           decorate(userInfo, userData);
