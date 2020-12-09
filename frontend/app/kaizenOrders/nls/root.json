@@ -161,6 +161,7 @@
     "report:title:suggestionCategory": "Entry count by Suggestion categories",
     "report:title:confirmer": "Entry count by confirmers",
     "report:title:owner": "Entry count by owners",
+    "report:title:company": "Entry count by employment",
     "report:series:singleTotal": "Total (w/o type repeats)",
     "report:series:multiTotal": "Total (w/ type repeats)",
     "report:series:entry": "Entries",

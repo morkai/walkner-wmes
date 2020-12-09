@@ -3,27 +3,32 @@
 
 'use strict';
 
-db.comprelentries.dropIndex({mrps: 1, status: 1, 'orders.orderNo': 1});
-db.comprelentries.createIndex({mrps: 1, status: 1});
-db.comprelentries.createIndex({valid: 1});
-
-db.comprelentries.find({valid: {$exists: false}}, {oldComponents: 1, orders: 1}).forEach(entry =>
+db.kaizenorders.find({}, {nearMissOwners: 1, suggestionOwners: 1, kaizenOwners: 1}).forEach(kz =>
 {
-  var oldComponents = [];
+  var map = {};
 
-  entry.oldComponents.forEach(c => oldComponents.push(c._id));
-
-  entry.valid = true;
-
-  entry.orders.forEach(o =>
+  ['nearMissOwners', 'suggestionOwners', 'kaizenOwners'].forEach(prop =>
   {
-    o.valid = !db.orders.findOne({
-      _id: o.orderNo,
-      'bom.nc12': {$in: oldComponents}
-    }, {_id: 1});
+    kz[prop].forEach(owner =>
+    {
+      if (!map[owner.id])
+      {
+        map[owner.id] = [];
+      }
 
-    entry.valid = entry.valid && o.valid;
+      map[owner.id].push(owner);
+    });
   });
 
-  db.comprelentries.updateOne({_id: entry._id}, {$set: {valid: entry.valid, orders: entry.orders}});
+  var users = db.users.find({_id: {$in: Object.keys(map).map(id => new ObjectId(id))}}, {company: 1}).toArray();
+
+  users.forEach(user =>
+  {
+    map[user._id.valueOf()].forEach(owner =>
+    {
+      owner.company = user.company || null;
+    });
+  });
+
+  db.kaizenorders.updateOne({_id: kz._id}, {$set: kz});
 });

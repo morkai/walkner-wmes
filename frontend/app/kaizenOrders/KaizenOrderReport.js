@@ -24,7 +24,8 @@ define([
     'area',
     'cause',
     'risk',
-    'nearMissCategory'
+    'nearMissCategory',
+    'company'
   ];
   var METRIC_TO_DICTIONARY = {
     section: 'sections',
@@ -32,7 +33,8 @@ define([
     cause: 'causes',
     risk: 'risks',
     nearMissCategory: 'categories',
-    suggestionCategory: 'categories'
+    suggestionCategory: 'categories',
+    company: 'companies'
   };
 
   if (window.KAIZEN_MULTI)
@@ -230,16 +232,18 @@ define([
 
     prepareRows: function(totalCount, values, metric)
     {
-      var dictionary = METRIC_TO_DICTIONARY[metric];
+      var dictionary = kaizenDictionaries.forProperty(METRIC_TO_DICTIONARY[metric]);
 
       return values.map(function(value)
       {
+        var model = dictionary ? dictionary.get(value[0]) : null;
+
         return {
           id: value[0],
           abs: value[1],
           rel: value[1] / totalCount,
-          color: colorFactory.getColor(metric, value[0]),
-          label: dictionary ? kaizenDictionaries.getLabel(dictionary, value[0]) : undefined
+          color: (model ? model.get('color') : null) || colorFactory.getColor(metric, value[0]),
+          label: model ? model.getLabel() : undefined
         };
       });
     },

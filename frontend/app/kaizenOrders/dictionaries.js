@@ -6,6 +6,7 @@ define([
   '../pubsub',
   '../user',
   '../data/createSettings',
+  '../data/companies',
   '../kaizenSections/KaizenSectionCollection',
   '../kaizenAreas/KaizenAreaCollection',
   '../kaizenCategories/KaizenCategoryCollection',
@@ -20,6 +21,7 @@ define([
   pubsub,
   user,
   createSettings,
+  companies,
   KaizenSectionCollection,
   KaizenAreaCollection,
   KaizenCategoryCollection,
@@ -49,7 +51,8 @@ define([
     cause: 'causes',
     risk: 'risks',
     behaviour: 'behaviours',
-    productFamily: 'productFamilies'
+    productFamily: 'productFamilies',
+    company: 'companies'
   };
 
   var req = null;
@@ -78,6 +81,7 @@ define([
     risks: new KaizenRiskCollection(),
     behaviours: new KaizenBehaviourCollection(),
     productFamilies: new KaizenProductFamilyCollection(),
+    companies: companies,
     loaded: false,
     load: function()
     {
@@ -139,7 +143,7 @@ define([
     {
       if (typeof dictionary === 'string')
       {
-        dictionary = this.forProperty(dictionary) || dictionaries[dictionary];
+        dictionary = this.forProperty(dictionary);
       }
 
       if (!dictionary || Array.isArray(dictionary))
@@ -158,7 +162,7 @@ define([
     },
     forProperty: function(prop)
     {
-      return this[PROP_TO_DICT[prop]] || null;
+      return this[PROP_TO_DICT[prop]] || this[prop] || null;
     },
     bind: function(page)
     {

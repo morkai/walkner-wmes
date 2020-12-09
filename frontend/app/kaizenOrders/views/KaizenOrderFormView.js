@@ -451,7 +451,8 @@ define([
         {
           return {
             id: owner.id,
-            label: owner.text
+            label: owner.text,
+            company: owner.company || (owner.user && owner.user.company) || null
           };
         }).filter(function(owner)
         {
@@ -681,7 +682,8 @@ define([
         {
           return {
             id: owner.id,
-            text: owner.label
+            text: owner.label,
+            company: owner.company
           };
         });
 

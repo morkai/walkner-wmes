@@ -161,6 +161,7 @@
   "report:title:suggestionCategory": "Ilość zgłoszeń wg kategorii sugestii",
   "report:title:confirmer": "Ilość zgłoszeń wg zatwiedzających",
   "report:title:owner": "Ilość zgłoszeń wg właścicieli",
+  "report:title:company": "Ilość zgłoszeń wg zatrudnienia",
   "report:series:singleTotal": "Suma (bez powtórzeń typów)",
   "report:series:multiTotal": "Suma (z powtórzeniami typów)",
   "report:series:entry": "Zgłoszenia",
