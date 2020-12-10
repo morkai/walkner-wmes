@@ -1,1 +1,1 @@
-define(["../settings/Setting"],function(t){"use strict";return t.extend({urlRoot:"/kaizen/settings"})});
+define(["../settings/Setting"],function(e){"use strict";return e.extend({urlRoot:"/kaizen/settings",nlsDomain:"kaizenOrders"})});
