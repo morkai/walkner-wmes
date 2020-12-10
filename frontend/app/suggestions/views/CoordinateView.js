@@ -88,6 +88,11 @@ define([
         }
       });
 
+      if (data.length === 1)
+      {
+        selected = data[0].id;
+      }
+
       var $section = this.$id('section');
 
       if (selected && data.some(function(d) { return d.id === selected; }))
