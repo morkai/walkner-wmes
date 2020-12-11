@@ -833,6 +833,17 @@ define([
           }
         }
       });
+
+      var superior = this.model.get('superior');
+
+      if (superior)
+      {
+        $superior.select2('data', {
+          id: superior.id,
+          text: superior.label,
+          user: superior
+        });
+      }
     },
 
     setUpOwnerSelect2: function()
