@@ -126,9 +126,10 @@ define([
         var $group = this.$(e.target).closest('.form-group');
         var $help = $group.find('.help-block');
 
+        e.target.setCustomValidity('');
+
         if (daysAbs <= 7)
         {
-          e.target.setCustomValidity('');
           $help.remove();
 
           return;
