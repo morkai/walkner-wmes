@@ -3,7 +3,11 @@
     idPrefix: idPrefix,
     property: 'createdAt',
     startHour: 6,
-    hidden: true
+    hidden: true,
+    labels: {
+      text: t('PROPERTY:createdAt'),
+      ranges: true
+    }
   }) %>
   <div class="form-group" data-filter="search">
     <label for="<%- id('search') %>"><%- t('PROPERTY:search') %></label>
