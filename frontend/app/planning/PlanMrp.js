@@ -153,10 +153,7 @@ define([
             var shiftNo = shiftUtil.getShiftNo(Date.parse(lineOrder.get('startAt')));
             var quantityTodo = lineOrder.get('quantity');
             var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, workingTimes);
-            var executed = execution.plannedQuantitiesDone.some(function(quantityDone)
-            {
-              return quantityDone === quantityTodo;
-            });
+            var executed = execution.plannedQuantitiesDone.some(quantityDone => quantityDone === quantityTodo);
 
             stats.manHours.plan += lineOrder.get('manHours');
             stats.quantity.plan += quantityTodo;

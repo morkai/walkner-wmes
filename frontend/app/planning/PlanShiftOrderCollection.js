@@ -99,6 +99,41 @@ define([
       return shiftOrders;
     },
 
+    getExecutionOrders: function(lineId, orderNo, operationNo)
+    {
+      const linePsos = this.cache.byLine[lineId];
+      const result = [];
+
+      if (!linePsos)
+      {
+        return result;
+      }
+
+      const orderPsos = linePsos.orders[orderNo];
+
+      if (!orderPsos)
+      {
+        return result;
+      }
+
+      orderPsos.forEach(pso =>
+      {
+        if (pso.attributes.operationNo !== operationNo)
+        {
+          return;
+        }
+
+        result.push({
+          pso,
+          quantityDone: pso.attributes.quantityDone,
+          startedAt: Date.parse(pso.attributes.startedAt),
+          continuation: !!result.length && result[result.length - 1].pso.nextLinePso === pso
+        });
+      });
+
+      return result;
+    },
+
     getLineOrderExecution: function(lineId, lineOrder, workingTimes)
     {
       const key = lineId + lineOrder.id;
@@ -106,6 +141,11 @@ define([
       if (this.cache.execution[key])
       {
         return this.cache.execution[key];
+      }
+
+      if (!workingTimes)
+      {
+        workingTimes = this.plan.workingLines.getWorkingTimes(this.plan.lines.get(lineId));
       }
 
       const orderNo = lineOrder.get('orderNo');
@@ -123,19 +163,19 @@ define([
         return execution;
       }
 
-      var lineShiftOrders = this.cache.byLine[lineId];
+      const operationNo = planOrder.getOperationNo();
+      const shiftOrders = this.getExecutionOrders(lineId, orderNo, operationNo);
 
-      if (!lineShiftOrders)
+      if (!shiftOrders.length)
       {
         return execution;
       }
 
+      const timeWindow = 4 * 3600 * 1000;
       const utcStartAt = Date.parse(lineOrder.get('startAt'));
       const localStartAt = time.utc.getMoment(utcStartAt).local(true).valueOf();
-      const timeWindow = 4 * 3600 * 1000;
       let fromTime = localStartAt - timeWindow;
       let toTime = localStartAt + timeWindow;
-      const operationNo = planOrder.getOperationNo();
       const shiftStartTime = shiftUtil.getShiftStartTime(localStartAt, true);
       const dayStartTime = shiftUtil.getFirstShiftStartTime(shiftStartTime, true);
       const dayEndTime = dayStartTime + shiftUtil.SHIFT_DURATION * 3;
@@ -158,70 +198,49 @@ define([
         }
       }
 
-      this.sumExecutionOrders(this.findOrders(orderNo, lineId)).forEach(pso =>
+      let plannedQuantityDoneSum = 0;
+
+      shiftOrders.forEach(o =>
       {
-        if (!operationNo || !pso.operationNo || pso.operationNo !== operationNo)
+        execution.quantityDoneOnLine += o.quantityDone;
+
+        if (o.startedAt >= dayStartTime && o.startedAt <= dayEndTime)
         {
-          return;
+          execution.quantityDoneOnDay += o.quantityDone;
         }
 
-        execution.quantityDoneOnLine += pso.quantityDone;
-
-        if (pso.startedAt >= dayStartTime && pso.startedAt <= dayEndTime)
+        if (shiftUtil.getShiftStartTime(o.startedAt, true) === shiftStartTime)
         {
-          execution.quantityDoneOnDay += pso.quantityDone;
+          execution.quantityDoneOnShift += o.quantityDone;
         }
 
-        if (shiftUtil.getShiftStartTime(pso.startedAt, true) === shiftStartTime)
+        if (o.startedAt >= fromTime && o.startedAt <= toTime || o.continuation)
         {
-          execution.quantityDoneOnShift += pso.quantityDone;
-        }
+          execution.plannedQuantityDone += o.quantityDone;
+          execution.plannedQuantitiesDone.push(o.quantityDone);
 
-        if (pso.startedAt >= fromTime && pso.startedAt <= toTime)
-        {
-          execution.plannedQuantityDone += pso.quantityDone;
-          execution.plannedQuantitiesDone.push(pso.quantityDone);
+          if (o.continuation)
+          {
+            plannedQuantityDoneSum += o.quantityDone;
+          }
+          else
+          {
+            if (plannedQuantityDoneSum && _.last(execution.plannedQuantitiesDone) !== plannedQuantityDoneSum)
+            {
+              execution.plannedQuantitiesDone.push(plannedQuantityDoneSum);
+            }
+
+            plannedQuantityDoneSum = o.quantityDone;
+          }
         }
       });
 
-      return execution;
-    },
-
-    sumExecutionOrders: function(psos)
-    {
-      const summed = [];
-
-      if (psos.length === 0)
+      if (plannedQuantityDoneSum && _.last(execution.plannedQuantitiesDone) !== plannedQuantityDoneSum)
       {
-        return summed;
+        execution.plannedQuantitiesDone.push(plannedQuantityDoneSum);
       }
 
-      psos.forEach(({attributes}) =>
-      {
-        const pso = {
-          prodLine: attributes.prodLine,
-          quantityDone: attributes.quantityDone,
-          operationNo: attributes.operationNo,
-          startedAt: Date.parse(attributes.startedAt),
-          finishedAt: Date.parse(attributes.finishedAt)
-        };
-        const prev = summed[summed.length - 1];
-
-        if (prev
-          && pso.prodLine === prev.prodLine
-          && pso.operationNo === prev.operationNo
-          && Math.abs(pso.startedAt - prev.finishedAt) < 60000)
-        {
-          prev.quantityDone += pso.quantityDone;
-          prev.finishedAt = pso.finishedAt;
-        }
-        else
-        {
-          summed.push(pso);
-        }
-      });
-
-      return summed;
+      return execution;
     },
 
     getTotalQuantityDone: function(line, lineOrder)
@@ -278,7 +297,8 @@ define([
       if (!byLine[line])
       {
         byLine[line] = {
-          all: []
+          all: [],
+          orders: {}
         };
       }
 
@@ -294,14 +314,25 @@ define([
         byLine[line][shift][orderNo] = [];
       }
 
+      if (!byLine[line].orders[orderNo])
+      {
+        byLine[line].orders[orderNo] = [];
+      }
+
       if (!byOrder[orderNo])
       {
         byOrder[orderNo] = [];
       }
 
+      if (byLine[line].all.length)
+      {
+        byLine[line].all[byLine[line].all.length - 1].nextLinePso = pso;
+      }
+
       byLine[line].all.push(pso);
       byLine[line][shift].all.push(pso);
       byLine[line][shift][orderNo].push(pso);
+      byLine[line].orders[orderNo].push(pso);
       byOrder[orderNo].push(pso);
 
       this.cache.execution = {};

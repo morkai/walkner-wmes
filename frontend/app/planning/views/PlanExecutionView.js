@@ -78,11 +78,13 @@ define([
       var toTime = startAtTime + timeWindow;
       var prevShiftOverlap = fromTime - shiftStartTime;
       var nextShiftOverlap = toTime - shiftEndTime;
+      var workingTimes = null;
 
       if (prevShiftOverlap < 0 || nextShiftOverlap > 0)
       {
-        var workingTimes = this.plan.workingLines.getWorkingTimes(line);
         var shiftNo = shiftUtil.getShiftNo(startAtTime, false);
+
+        workingTimes = this.plan.workingLines.getWorkingTimes(line);
 
         if (prevShiftOverlap < 0 && workingTimes.prevAt[shiftNo])
         {
@@ -100,44 +102,48 @@ define([
       var shiftOrders = [];
       var ok = false;
 
-      this.plan.shiftOrders.sumExecutionOrders(this.plan.shiftOrders.findOrders(orderNo)).forEach(shiftOrder =>
+      this.plan.shiftOrders.findOrders(orderNo).forEach(pso =>
       {
-        var opNo = shiftOrder.operationNo;
-
-        if (operationNo !== opNo)
+        if (operationNo !== pso.get('operationNo'))
         {
           return;
         }
 
-        var prodLine = shiftOrder.prodLine;
-        var quantityDone = shiftOrder.quantityDone;
-        var startedAt = time.getMoment(shiftOrder.startedAt).utc(true);
+        var prodLine = pso.get('prodLine');
+        var quantityDone = pso.get('quantityDone');
+        var startedAt = time.getMoment(pso.get('startedAt')).utc(true);
         var startedAtTime = startedAt.valueOf();
         var startedAtDate = startedAt.format('YYYY-MM-DD');
+        var timeOk = startedAtTime >= fromTime && startedAtTime <= toTime;
         var classNames = {
           line: CMP_CLASS[prodLine === line.id],
           quantity: CMP_CLASS[quantityDone === quantityPlanned],
           date: CMP_CLASS[startedAtDate === startAtDate],
-          time: CMP_CLASS[startedAtTime >= fromTime && startedAtTime <= toTime]
+          time: CMP_CLASS[timeOk]
         };
 
         shiftOrders.push({
           line: prodLine,
-          quantityDone: quantityDone,
+          quantityDone,
           startedAtTime: startedAt.format('HH:mm:ss'),
-          startedAtDate: startedAtDate,
+          startedAtDate,
           startedAt: startedAt.valueOf(),
-          classNames: classNames,
+          classNames,
+          timeOk,
           ok: classNames.line === 'is-ok'
             && classNames.quantity === 'is-ok'
-            && classNames.time === 'is-ok'
+            && timeOk
         });
 
-        if (!ok)
-        {
-          ok = shiftOrders[shiftOrders.length - 1].ok;
-        }
+        ok = ok || shiftOrders[shiftOrders.length - 1].ok;
       });
+
+      if (!ok)
+      {
+        var execution = this.plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, workingTimes);
+
+        ok = execution.plannedQuantitiesDone.some(qty => qty === quantityPlanned);
+      }
 
       var cmpOpt = {numeric: true, ignorePunctuation: true};
 
