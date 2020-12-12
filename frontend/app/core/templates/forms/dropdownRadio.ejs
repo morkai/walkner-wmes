@@ -1,0 +1,13 @@
+<div class="dropdown dropdownRadio">
+  <a class="control-label" data-toggle="dropdown">
+    <span class="dropdownRadio-selectedLabel"><%- label %></span>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <% options.forEach(function(option) { %>
+      <li title="<%- option.title || '' %>">
+        <a href="javascript:void(0)"><%- option.optionLabel %></a>
+      </li>
+    <% }) %>
+  </ul>
+</div>

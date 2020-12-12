@@ -14,14 +14,7 @@
     <input id="<%- id('search') %>" name="search" class="form-control" type="text" maxlength="50" style="width: 125px">
   </div>
   <div class="form-group">
-    <div class="filter-radioLabels">
-      <% ['mine', 'unseen', 'others', 'active'].forEach(function(userType) { %>
-      <label title="<%- t('filter:user:' + userType + ':title') %>">
-        <input name="userType" type="radio" value="<%- userType %>">
-        <%- t('filter:user:' + userType) %>
-      </label>
-      <% }) %>
-    </div>
+    <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
     <input id="<%- id('user') %>" name="user" type="text">
   </div>
   <div class="form-group" style="min-width: 150px">

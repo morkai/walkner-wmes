@@ -6,6 +6,7 @@ define([
   'app/user',
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
+  'app/core/util/forms/dropdownRadio',
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
@@ -20,6 +21,7 @@ define([
   currentUser,
   FilterView,
   dateTimeRange,
+  dropdownRadio,
   idAndLabel,
   orgUnits,
   setUpUserSelect2,
@@ -111,6 +113,11 @@ define([
         formData.userType = 'active';
         formData.user = term.args[1];
       },
+      'creator.id': function(propertyName, term, formData)
+      {
+        formData.userType = 'creator';
+        formData.user = term.args[1];
+      },
       'status': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
@@ -171,7 +178,7 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var userType = this.$('input[name="userType"]:checked').val();
+      var userType = this.$('input[name="userType"]').val();
       var statusType = this.$('input[name="statusType"]:checked').val();
       var level = this.$('input[name="level"]:checked').val();
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
@@ -199,7 +206,10 @@ define([
       }
       else if (user)
       {
-        selector.push({name: 'eq', args: ['observers.user.id', user]});
+        selector.push({name: 'eq', args: [
+          userType === 'creator' ? 'creator.id' : 'observers.user.id',
+          user
+        ]});
       }
 
       if (order.length === 9)
@@ -293,7 +303,8 @@ define([
 
       setUpUserSelect2(this.$id('user'), {
         view: this,
-        width: '100%'
+        width: '275px',
+        noPersonnelId: true
       });
 
       setUpMrpSelect2(this.$id('mrp'), {
@@ -303,6 +314,7 @@ define([
       });
 
       this.setUpCategorySelect2();
+      this.setUpUserType();
       this.toggleButtonGroup('level');
       this.toggleUserSelect2(false);
       this.toggleStatus();
@@ -355,14 +367,36 @@ define([
       });
     },
 
+    setUpUserType: function()
+    {
+      var view = this;
+      var options = ['mine', 'unseen', 'others', 'active', 'creator'].map(function(userType)
+      {
+        return {
+          value: userType,
+          title: view.t('filter:user:' + userType + ':title'),
+          optionLabel: view.t('filter:user:' + userType)
+        };
+      });
+
+      dropdownRadio(view.$id('userType'), {
+        label: view.t('filter:user:label'),
+        options: options
+      });
+    },
+
     toggleUserSelect2: function(resetUser)
     {
-      var userType = this.$('input[name="userType"]:checked').val();
-      var $user = this.$id('user').select2('enable', userType === 'others' || userType === 'active');
+      var userType = this.$('input[name="userType"]').val();
+      var mine = userType === 'mine' || userType === 'unseen';
+      var $user = this.$id('user').select2('enable', !mine);
 
-      if (resetUser && $user.val() === currentUser.data._id)
+      if (resetUser && (mine || !$user.val()))
       {
-        $user.select2('data', null);
+        $user.select2('data', {
+          id: currentUser.data._id,
+          text: currentUser.getLabel()
+        });
       }
     },
 
