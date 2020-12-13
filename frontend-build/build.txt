@@ -39,6 +39,10 @@ app/core/assets/dateTimeRange.css
 ----------------
 app/core/assets/dateTimeRange.css
 
+app/core/assets/dropdownRadio.css
+----------------
+app/core/assets/dropdownRadio.css
+
 app/core/assets/embedded.css
 ----------------
 app/core/assets/embedded.css
@@ -50,6 +54,7 @@ app/core/assets/filter.css
 app/core/assets/form.css
 ----------------
 app/core/assets/./dateTimeRange.css
+app/core/assets/./dropdownRadio.css
 app/core/assets/form.css
 
 app/core/assets/highcharts.css
