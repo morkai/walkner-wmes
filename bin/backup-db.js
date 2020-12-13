@@ -56,6 +56,10 @@ for (let i = 0, l = oldBackupFiles.length - 3; i < l; ++i)
   }
 }
 
+const minDate = typeof config.minDate === 'function'
+  ? config.minDate(startTime)
+  : config.minDate;
+
 let excludeCollections = typeof config.excludeCollections === 'function'
   ? config.excludeCollections(startTime)
   : config.excludeCollections;
@@ -121,10 +125,17 @@ Object.keys(minCollections).forEach(collection =>
   }
 
   const dateProperty = minCollections[collection];
+  const query = JSON.stringify({
+    [dateProperty]: {
+      $gte: {
+        $date: {
+          $numberLong: minDate.toString()
+        }
+      }
+    }
+  }).replace(/"/g, '\\"');
 
-  dumpCmds.push(
-    `${dumpCmd} --collection ${collection} --query "{${dateProperty}: {$gte: {$date: ${config.minDate}}}}"`
-  );
+  dumpCmds.push(`${dumpCmd} --collection ${collection} --query "${query}"`);
 });
 
 console.log("Dumping the database...");
@@ -140,6 +151,7 @@ dumpCmds.forEach(dumpCmd =>
   }
   catch (err)
   {
+    console.log("Failed to dump: %s", err.message);
     process.exit(1); // eslint-disable-line no-process-exit
   }
 });
