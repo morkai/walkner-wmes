@@ -26,7 +26,7 @@ define([
           name: 'and',
           args: [{
             name: 'ge',
-            args: ['time', time.getMoment().startOf('day').subtract(14, 'days').hours(6).valueOf()]
+            args: ['time', time.getMoment().startOf('day').subtract(7, 'days').hours(6).valueOf()]
           }]
         }
       });
