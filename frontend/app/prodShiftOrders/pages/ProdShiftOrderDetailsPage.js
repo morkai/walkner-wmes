@@ -148,7 +148,10 @@ define([
 
     defineViews: function()
     {
-      this.detailsView = new ProdShiftOrderDetailsView({model: this.prodShiftOrder});
+      this.detailsView = new ProdShiftOrderDetailsView({
+        model: this.prodShiftOrder,
+        prodDowntimes: this.prodDowntimes
+      });
 
       this.downtimesView = new ProdDowntimeListView({
         collection: this.prodDowntimes,

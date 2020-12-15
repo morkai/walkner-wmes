@@ -2,24 +2,30 @@
 
 define([
   'underscore',
-  '../user',
-  '../time',
-  '../data/prodLog',
-  '../data/subdivisions',
-  '../core/Model',
-  '../core/util/getShiftEndDate',
-  '../orders/util/resolveProductName',
-  './util/decorateProdShiftOrder'
+  'app/i18n',
+  'app/user',
+  'app/time',
+  'app/data/prodLog',
+  'app/data/orgUnits',
+  'app/data/downtimeReasons',
+  'app/core/Model',
+  'app/core/util/getShiftStartInfo',
+  'app/core/util/getShiftEndDate',
+  'app/core/templates/userInfo',
+  'app/orders/util/resolveProductName'
 ], function(
   _,
+  t,
   user,
   time,
   prodLog,
-  subdivisions,
+  orgUnits,
+  downtimeReasons,
   Model,
+  getShiftStartInfo,
   getShiftEndDate,
-  resolveProductName,
-  decorateProdShiftOrder
+  renderUserInfo,
+  resolveProductName
 ) {
   'use strict';
 
@@ -51,7 +57,108 @@ define([
 
     serialize: function(options)
     {
-      return decorateProdShiftOrder(this, options);
+      var obj = this.toJSON();
+
+      var startedAt = Date.parse(obj.startedAt);
+      var finishedAt = Date.parse(obj.finishedAt);
+
+      if (!obj.date)
+      {
+        var shiftInfo = getShiftStartInfo(obj.startedAt);
+
+        obj.date = shiftInfo.moment.format('L');
+        obj.shift = shiftInfo.no;
+      }
+      else
+      {
+        obj.date = time.format(obj.date, 'L');
+      }
+
+      if (options.details && !finishedAt)
+      {
+        finishedAt = Date.now();
+      }
+
+      obj.shift = t('core', 'SHIFT:' + obj.shift);
+      obj.startedAt = time.format(obj.startedAt, 'LTS');
+      obj.finishedAt = time.format(obj.finishedAt, 'LTS');
+      obj.duration = time.toString((finishedAt - startedAt) / 1000, !options.details);
+      obj.creator = renderUserInfo(obj.creator);
+
+      if (options.orgUnits)
+      {
+        var subdivision = orgUnits.getByTypeAndId('subdivision', obj.subdivision);
+        var prodFlow = orgUnits.getByTypeAndId('prodFlow', obj.prodFlow);
+
+        obj.subdivision = subdivision ? subdivision.getLabel() : '?';
+        obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
+        obj.mrpControllers = Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
+          ? obj.mrpControllers.join(' ')
+          : '';
+      }
+
+      obj.prodShift = obj.prodShift
+        ? ('<a href="#prodShifts/' + obj.prodShift + '">' + obj.date + ', ' + obj.shift + '</a>')
+        : (obj.date + ', ' + obj.shift);
+
+      if (obj.orderData)
+      {
+        var operation = (obj.orderData.operations || {})[obj.operationNo] || {};
+
+        obj.productName = resolveProductName(obj.orderData);
+        obj.operationName = operation.name || '';
+        obj.order = obj.orderId;
+        obj.operation = obj.operationNo;
+
+        if (obj.productName)
+        {
+          obj.order += ': ' + obj.productName;
+        }
+
+        if (obj.operationName)
+        {
+          obj.operation += ': ' + obj.operationName;
+        }
+
+        obj.product = obj.productName;
+
+        if (obj.orderData.nc12 && obj.orderData.nc12 !== obj.orderId)
+        {
+          obj.product = obj.orderData.nc12 + ': ' + obj.product;
+        }
+      }
+      else
+      {
+        obj.productName = '';
+        obj.operationName = '';
+        obj.order = obj.orderId;
+        obj.operation = obj.operationNo;
+      }
+
+      if (options.orderUrl && user.isAllowedTo('ORDERS:VIEW'))
+      {
+        obj.orderUrl = '#' + (obj.mechOrder ? 'mechOrders' : 'orders') + '/' + encodeURIComponent(obj.orderId);
+      }
+
+      obj.taktTimeOk = this.isTaktTimeOk();
+      obj.taktTimeSap = this.getTaktTime();
+      obj.taktTime = this.getActualTaktTime();
+      obj.taktTimeEff = this.getTaktTimeEfficiency();
+      obj.workerCountSap = this.getWorkerCountSap();
+      obj.efficiency = '';
+
+      var eff = this.getEfficiency(options);
+
+      if (eff)
+      {
+        obj.efficiency = Math.round(eff * 100) + '%';
+      }
+      else if (obj.taktTimeEff)
+      {
+        obj.efficiency = obj.taktTimeEff + '%';
+      }
+
+      return obj;
     },
 
     serializeRow: function(options)
@@ -78,13 +185,13 @@ define([
       return row;
     },
 
-    serializeDetails: function()
+    serializeDetails: function(options)
     {
-      return this.serialize({
+      return this.serialize(Object.assign({
         orgUnits: true,
         orderUrl: true,
         details: true
-      });
+      }, options));
     },
 
     onShiftChanged: function()
@@ -307,9 +414,9 @@ define([
       return time.toString(Math.round((endTime - startTime) / 1000), compact);
     },
 
-    getEfficiency: function()
+    getEfficiency: function(options)
     {
-      return this.constructor.getEfficiency(this.attributes, false);
+      return this.constructor.getEfficiency(this.attributes, options);
     },
 
     getTaktTimeEfficiency: function()
@@ -702,11 +809,40 @@ define([
       return data;
     },
 
-    getEfficiency: function(pso)
+    getEfficiency: function(pso, options)
     {
+      var workDuration = pso.workDuration;
+
+      if (!workDuration && options && options.prodDowntimes)
+      {
+        var now = Date.now();
+        var startedAt = Date.parse(pso.startedAt);
+        var finishedAt = pso.finishedAt ? Date.parse(pso.finishedAt) : now;
+
+        workDuration = finishedAt - startedAt;
+
+        options.prodDowntimes.forEach(function(dt)
+        {
+          var reason = downtimeReasons.get(dt.get('reason'));
+
+          if (reason && reason.get('type') === 'break')
+          {
+            return;
+          }
+
+          var startedAt = Date.parse(dt.get('startedAt'));
+          var finishedAt = dt.get('finishedAt') ? Date.parse(dt.get('finishedAt')) : now;
+
+          workDuration -= finishedAt - startedAt;
+        });
+
+        workDuration /= 3600000;
+      }
+
       var taktTimeCoeff = this.getTaktTimeCoeff(pso);
-      var efficiency = (pso.laborTime * taktTimeCoeff / 100 * (pso.totalQuantity || pso.quantityDone))
-        / (pso.workDuration * pso.workerCount);
+      var num = pso.laborTime * taktTimeCoeff / 100 * (pso.totalQuantity || pso.quantityDone);
+      var den = workDuration * pso.workerCount;
+      var efficiency = num / den;
 
       return isNaN(efficiency) || !isFinite(efficiency) ? 0 : efficiency;
     },
