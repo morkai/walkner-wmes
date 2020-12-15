@@ -3,8 +3,10 @@
 define([
   'underscore',
   'app/time',
+  'app/user',
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
+  'app/core/util/forms/dropdownRadio',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/filter',
@@ -12,8 +14,10 @@ define([
 ], function(
   _,
   time,
+  currentUser,
   FilterView,
   dateTimeRange,
+  dropdownRadio,
   setUpUserSelect2,
   kaizenDictionaries,
   template
@@ -27,7 +31,7 @@ define([
     events: _.assign({
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
-      'change input[name="userType"]': 'toggleUserSelect2',
+      'change input[name="userType"]': function() { this.toggleUserSelect2(true); },
       'keyup select': function(e)
       {
         if (e.keyCode === 27)
@@ -67,9 +71,13 @@ define([
       'finishedAt': 'date',
       'owners.id': function(propertyName, term, formData)
       {
-        formData.userType = 'owner';
+        formData.userType = propertyName.split('.')[0];
         formData.user = term.args[1];
       },
+      'confirmer.id': 'owners.id',
+      'superior.id': 'owners.id',
+      'suggestionOwners.id': 'owners.id',
+      'kaizenOwners.id': 'owners.id',
       'observers.user.id': function(propertyName, term, formData)
       {
         if (term.args[1] === 'mine')
@@ -98,21 +106,21 @@ define([
       'productFamily': 'status'
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(FilterView.prototype.serialize.call(this), {
-        statuses: kaizenDictionaries.kzStatuses,
+      return {
+        statuses: kaizenDictionaries.kzStatuses.concat('kom'),
         sections: kaizenDictionaries.sections.toJSON(),
         areas: kaizenDictionaries.areas.toJSON(),
         categories: _.invoke(kaizenDictionaries.categories.inSuggestion(), 'toJSON'),
         productFamilies: kaizenDictionaries.productFamilies.toJSON()
-      });
+      };
     },
 
     serializeFormToQuery: function(selector, rqlQuery)
     {
       var dateType = this.$('input[name="dateType"]:checked').val();
-      var userType = this.$('input[name="userType"]:checked').val();
+      var userType = this.$('input[name="userType"]').val();
       var user = this.$id('user').val();
 
       rqlQuery.sort = {};
@@ -134,10 +142,12 @@ define([
       }
       else if (user)
       {
-        selector.push({name: 'eq', args: [
-          userType === 'owner' ? 'owners.id' : 'observers.user.id',
-          user
-        ]});
+        if (userType === 'others')
+        {
+          userType = 'observers.user';
+        }
+
+        selector.push({name: 'eq', args: [userType + '.id', user]});
       }
 
       ['status', 'categories', 'section', 'area', 'productFamily'].forEach(function(property)
@@ -162,10 +172,13 @@ define([
       this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('user'), {
-        view: this
+        view: this,
+        width: '275px',
+        noPersonnelId: true
       });
 
-      this.toggleUserSelect2();
+      this.setUpUserType();
+      this.toggleUserSelect2(false);
     },
 
     destroy: function()
@@ -175,11 +188,46 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    toggleUserSelect2: function()
+    setUpUserType: function()
     {
-      var userType = this.$('input[name="userType"]:checked').val();
+      var view = this;
+      var options = [
+        'mine',
+        'unseen',
+        'others',
+        'confirmer',
+        'superior',
+        'owners',
+        'suggestionOwners',
+        'kaizenOwners'
+      ].map(function(userType)
+      {
+        return {
+          value: userType,
+          title: view.t('filter:user:' + userType + ':title'),
+          optionLabel: view.t('filter:user:' + userType)
+        };
+      });
 
-      this.$id('user').select2('enable', userType === 'others' || userType === 'owner');
+      dropdownRadio(view.$id('userType'), {
+        label: view.t('filter:user:label'),
+        options: options
+      });
+    },
+
+    toggleUserSelect2: function(resetUser)
+    {
+      var userType = this.$('input[name="userType"]').val();
+      var mine = userType === 'mine' || userType === 'unseen';
+      var $user = this.$id('user').select2('enable', !mine);
+
+      if (resetUser && (mine || !$user.val()))
+      {
+        $user.select2('data', {
+          id: currentUser.data._id,
+          text: currentUser.getLabel()
+        });
+      }
     }
 
   });
