@@ -216,7 +216,18 @@ define([
       var template = function()
       {
         var totalCount = getTotalCount(options.collection);
-        var url = _.result(options.collection, 'url') + ';export.${format}?' + options.collection.rqlQuery;
+        var url = _.result(options.collection, 'url');
+        var qsI = url.indexOf('?');
+
+        if (qsI === -1)
+        {
+          url += ';export.${format}?' + options.collection.rqlQuery;
+        }
+        else
+        {
+          url = url.substring(0, qsI) + ';export.${format}' + url.substring(qsI);
+        }
+
         var formats = [
           {
             type: 'csv',

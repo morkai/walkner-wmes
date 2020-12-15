@@ -297,5 +297,12 @@
   "delivery:stats:qty": "Sztuki",
   "delivery:stats:time": "Czas produkcji",
 
-  "blockedPickup:title": "Kompletacja zablokowana"
+  "blockedPickup:title": "Kompletacja zablokowana",
+
+  "exportOrders:title": "Eksportowanie zleceń",
+  "exportOrders:submit": "Eksportuj zlecenia",
+  "exportOrders:mrps": "MRP",
+  "exportOrders:mrps:placeholder": "Wszystkie MRP",
+  "exportOrders:lines": "Linie",
+  "exportOrders:lines:placeholder": "Wszystkie linie"
 }

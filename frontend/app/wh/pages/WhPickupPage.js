@@ -11,6 +11,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/embedded',
+  'app/core/util/pageActions',
   'app/paintShop/views/PaintShopDatePickerView',
   'app/planning/Plan',
   'app/planning/PlanSettings',
@@ -27,6 +28,7 @@ define([
   '../views/DowntimePickerView',
   '../views/BlockedPickupView',
   '../views/ForceLinePickupView',
+  '../views/ExportOrdersDialogView',
   '../templates/messages',
   'app/wh/templates/pickup/page',
   'app/wh/templates/resolveAction',
@@ -42,6 +44,7 @@ define([
   View,
   bindLoadingMessage,
   embedded,
+  pageActions,
   PaintShopDatePickerView,
   Plan,
   PlanSettings,
@@ -58,6 +61,7 @@ define([
   DowntimePickerView,
   BlockedPickupView,
   ForceLinePickupView,
+  ExportOrdersDialogView,
   messageTemplates,
   pageTemplate,
   resolveActionTemplate,
@@ -118,7 +122,7 @@ define([
       ];
     },
 
-    actions: function()
+    actions: function(layout)
     {
       var page = this;
       var forceLine = {
@@ -168,6 +172,20 @@ define([
           }
         },
         forceLine,
+        {
+          label: page.t('core', 'PAGE_ACTION:export'),
+          icon: 'download',
+          callback: function()
+          {
+            viewport.showDialog(
+              new ExportOrdersDialogView({
+                plan: page.plan,
+                whOrders: page.whOrders
+              }),
+              page.t('exportOrders:title')
+            );
+          }
+        },
         {
           label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',

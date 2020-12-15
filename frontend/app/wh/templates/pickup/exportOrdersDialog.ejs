@@ -1,0 +1,28 @@
+<form>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    required: true,
+    startHour: 6
+  }) %>
+  <div class="form-group">
+    <div class="radio-inline">
+      <label class="control-label">
+        <input name="filter" value="mrps" type="radio" <%- lines ? '' : 'checked' %>>
+        <%- t('exportOrders:mrps') %>
+      </label>
+    </div>
+    <div class="radio-inline">
+      <label class="control-label">
+        <input name="filter" value="lines" type="radio" <%- lines ? 'checked' : '' %>>
+        <%- t('exportOrders:lines') %>
+      </label>
+    </div>
+    <br>
+    <input id="<%- id('mrps') %>" name="mrps" type="text" value="<%- mrps %>">
+    <input id="<%- id('lines') %>" name="lines" type="text" value="<%- lines %>">
+  </div>
+  <div class="form-actions">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- t('exportOrders:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

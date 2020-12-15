@@ -292,7 +292,16 @@
     "delivery:stats:sets": "Sets",
     "delivery:stats:orders": "Orders",
     "delivery:stats:qty": "PCE",
-    "delivery:stats:time": "Prod. time"
+    "delivery:stats:time": "Prod. time",
+
+    "blockedPickup:title": "Pickup blocked",
+
+    "exportOrders:title": "Exporting orders",
+    "exportOrders:submit": "Export orders",
+    "exportOrders:mrps": "MRP",
+    "exportOrders:mrps:placeholder": "All MRP",
+    "exportOrders:lines": "Lines",
+    "exportOrders:lines:placeholder": "All lines"
   },
   "pl": true
 }
