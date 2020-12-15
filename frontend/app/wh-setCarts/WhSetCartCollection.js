@@ -22,6 +22,12 @@ define([
     rqlQuery: function(rql)
     {
       return rql.Query.fromObject({
+        selector: {
+          name: 'and',
+          args: [
+            {name: 'ge', args: ['date', time.getMoment().startOf('day').subtract(7, 'days').utc(true).valueOf()]}
+          ]
+        },
         sort: {
           date: -1,
           set: 1,

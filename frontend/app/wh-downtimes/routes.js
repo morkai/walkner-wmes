@@ -1,13 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../router',
-  '../viewport',
-  '../user'
+  'app/router',
+  'app/viewport',
+  'app/user',
+  'app/core/util/pageActions'
 ], function(
   router,
   viewport,
-  user
+  user,
+  pageActions
 ) {
   'use strict';
 
@@ -30,7 +32,12 @@ define([
           FilterView: FilterView,
           ListView: ListView,
           collection: new WhDowntimeCollection(null, {rqlQuery: req.rql}),
-          actions: []
+          actions: function(layout)
+          {
+            return [
+              pageActions.export(layout, this, this.collection)
+            ];
+          }
         });
       }
     );
