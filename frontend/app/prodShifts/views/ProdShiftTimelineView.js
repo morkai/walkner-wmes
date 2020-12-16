@@ -241,11 +241,16 @@ define([
 
       function extendDatum(view)
       {
+        view.extendDatum();
+
         if (view.popover === null)
         {
-          view.extendDatum();
           view.renderChart();
           view.toggleExtendedDowntime();
+        }
+        else
+        {
+          view.updatePopover();
         }
       }
 
@@ -321,6 +326,12 @@ define([
       }
     },
 
+    canManage: function()
+    {
+      return this.options.editable !== false
+        && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
+    },
+
     showPopover: function(item, itemEl)
     {
       var view = this;
@@ -332,9 +343,7 @@ define([
 
       view.hidePopover();
 
-      var canManage = view.options.editable !== false
-        && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
-      var managing = canManage && item.ended;
+      var managing = this.canManage() && item.ended;
       var $item = $(itemEl);
 
       $item.popover({
@@ -376,6 +385,21 @@ define([
         $(this.popover.el).popover('destroy');
         this.popover = null;
       }
+    },
+
+    updatePopover: function()
+    {
+      if (!this.popover)
+      {
+        return;
+      }
+
+      var html = this.renderPopover(
+        this.popover.item,
+        this.canManage() && this.popover.item.ended
+      );
+
+      $(this.popover.el).data('bs.popover').$tip.find('.popover-content').html(html);
     },
 
     serializeDatum: function()
@@ -717,7 +741,7 @@ define([
 
       if (type === 'working')
       {
-        var efficiency = model.getEfficiency();
+        var efficiency = model.getEfficiency({prodDowntimes: this.prodDowntimes});
 
         if (efficiency)
         {

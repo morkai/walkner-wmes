@@ -220,7 +220,9 @@ exports.updater = {
       mainCssFile: '/assets/wmes-heff.css',
       template: manifestTemplates.main,
       frontendAppData: {},
-      dictionaryModules: {}
+      dictionaryModules: {
+        downtimeReasons: 'DOWNTIME_REASONS'
+      }
     },
     {
       frontendVersionKey: 'drilling',

@@ -811,7 +811,7 @@ define([
 
     getEfficiency: function(pso, options)
     {
-      var workDuration = pso.workDuration;
+      var workDuration = pso.workDuration || (options && options.workDuration) || 0;
 
       if (!workDuration && options && options.prodDowntimes)
       {
@@ -823,6 +823,11 @@ define([
 
         options.prodDowntimes.forEach(function(dt)
         {
+          if (pso._id && pso._id !== dt.get('prodShiftOrder'))
+          {
+            return;
+          }
+
           var reason = downtimeReasons.get(dt.get('reason'));
 
           if (reason && reason.get('type') === 'break')
@@ -837,6 +842,11 @@ define([
         });
 
         workDuration /= 3600000;
+      }
+
+      if (workDuration <= 0)
+      {
+        return 0;
       }
 
       var taktTimeCoeff = this.getTaktTimeCoeff(pso);

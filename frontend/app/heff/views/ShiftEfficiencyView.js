@@ -3,12 +3,14 @@
 define([
   'app/time',
   'app/core/View',
+  'app/data/downtimeReasons',
   'app/prodShiftOrders/ProdShiftOrder',
   './ExecutionTimelineView',
   'app/heff/templates/shiftEfficiency'
 ], function(
   time,
   View,
+  downtimeReasons,
   ProdShiftOrder,
   ShiftTimelineView,
   template
@@ -106,7 +108,6 @@ define([
         var now = Date.now();
         var workDuration = pso.get('workDuration');
         var quantityDone = pso.get('quantityDone') || 1;
-        var resetWorkDuration = false;
 
         if (workDuration > 0)
         {
@@ -121,15 +122,23 @@ define([
 
           this.model.prodDowntimes.forEach(function(pdt)
           {
-            // TODO downtime reasons of type break from settings
-            if (pdt.get('prodShiftOrder') === pso.id && pdt.get('reason') === 'A')
+            if (pdt.get('prodShiftOrder') !== pso.id)
             {
-              workDuration -= (Date.parse(pdt.get('finishedAt')) || now) - Date.parse(pdt.get('startedAt'));
+              return;
             }
-          });
 
-          pso.attributes.workDuration = workDuration / 3600000;
-          resetWorkDuration = true;
+            var reason = downtimeReasons.get(pdt.get('reason'));
+
+            if (reason && reason.get('type') === 'break')
+            {
+              return;
+            }
+
+            var startedAt = Date.parse(pdt.get('startedAt'));
+            var finishedAt = pdt.get('finishedAt') ? Date.parse(pdt.get('finishedAt')) : now;
+
+            workDuration -= finishedAt - startedAt;
+          });
         }
 
         var plannedTt = pso.get('sapTaktTime');
@@ -148,17 +157,12 @@ define([
 
         if (pso.get('quantityDone'))
         {
-          var orderEff = pso.getEfficiency();
+          var orderEff = pso.getEfficiency({workDuration: workDuration / 3600000});
 
           if (orderEff)
           {
             orderEffText = Math.min(999, Math.round(orderEff * 100)) + '%';
           }
-        }
-
-        if (resetWorkDuration)
-        {
-          pso.attributes.workDuration = 0;
         }
       }
 
