@@ -830,7 +830,7 @@ define([
 
           var reason = downtimeReasons.get(dt.get('reason'));
 
-          if (reason && reason.get('type') === 'break')
+          if (reason && reason.get('type') !== 'break')
           {
             return;
           }

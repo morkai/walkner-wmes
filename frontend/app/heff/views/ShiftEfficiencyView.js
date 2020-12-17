@@ -129,7 +129,7 @@ define([
 
             var reason = downtimeReasons.get(pdt.get('reason'));
 
-            if (reason && reason.get('type') === 'break')
+            if (reason && reason.get('type') !== 'break')
             {
               return;
             }
