@@ -394,12 +394,19 @@ define([
         return;
       }
 
+      var $tip = $(this.popover.el).data('bs.popover').$tip;
+
+      if (!$tip)
+      {
+        return;
+      }
+
       var html = this.renderPopover(
         this.popover.item,
         this.canManage() && this.popover.item.ended
       );
 
-      $(this.popover.el).data('bs.popover').$tip.find('.popover-content').html(html);
+      $tip.find('.popover-content').html(html);
     },
 
     serializeDatum: function()
