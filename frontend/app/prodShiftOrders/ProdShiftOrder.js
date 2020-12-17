@@ -823,7 +823,10 @@ define([
 
         options.prodDowntimes.forEach(function(dt)
         {
-          if (pso._id && pso._id !== dt.get('prodShiftOrder'))
+          var dtPso = dt.get('prodShiftOrder');
+          var dtPsoId = dtPso && dtPso._id || dtPso;
+
+          if (pso._id && pso._id !== dtPsoId)
           {
             return;
           }
@@ -850,7 +853,7 @@ define([
       }
 
       var taktTimeCoeff = this.getTaktTimeCoeff(pso);
-      var num = pso.laborTime * taktTimeCoeff / 100 * (pso.totalQuantity || pso.quantityDone);
+      var num = pso.laborTime * taktTimeCoeff / 100 * pso.quantityDone;
       var den = workDuration * pso.workerCount;
       var efficiency = num / den;
 
