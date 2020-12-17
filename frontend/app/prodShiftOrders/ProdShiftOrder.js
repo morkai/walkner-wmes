@@ -603,7 +603,7 @@ define([
 
     getSubdivisionType: function()
     {
-      var subdivision = subdivisions.get(this.get('subdivision'));
+      var subdivision = orgUnits.getByTypeAndId('subdivision', this.get('subdivision'));
 
       return subdivision ? subdivision.get('type') : null;
     },
