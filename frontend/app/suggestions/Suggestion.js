@@ -330,12 +330,8 @@ define([
         return false;
       }
 
-      if (status === 'new' && (this.isCreator() || this.isSuggestionOwner()))
-      {
-        return true;
-      }
-
-      return status === 'inProgress' && this.isKaizenOwner();
+      return (status === 'new' || status === 'inProgress')
+        && (this.isCreator() || this.isSuggestionOwner() || this.isKaizenOwner());
     },
 
     canDelete: function()
