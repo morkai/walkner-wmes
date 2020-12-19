@@ -75,7 +75,7 @@ define([
     {
       var last = this.stats.get('last');
       var duration = last
-        ? Math.max(0, Math.min(999, Math.floor((Date.now() - Date.parse(last._id)) / 1000))).toString()
+        ? Math.max(0, Math.min(999, Math.floor((Date.now() - Date.parse(last._id.ts)) / 1000))).toString()
         : '';
 
       return _.assign(

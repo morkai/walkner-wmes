@@ -3,5 +3,40 @@
 
 'use strict';
 
-db.suggestions.createIndex({'suggestionOwners.id': 1});
-db.suggestions.createIndex({'kaizenOwners.id': 1});
+var insert = [];
+var remove = [];
+
+db.paintshoploads.find({_id: {$type: 'date'}}).forEach(doc =>
+{
+  remove.push(doc._id);
+  insert.push(doc);
+
+  doc._id = {
+    ts: doc._id,
+    c: 1
+  };
+  doc.r = null;
+
+  if (remove.length === 500)
+  {
+    update();
+  }
+});
+
+update();
+
+function update()
+{
+  if (remove.length)
+  {
+    db.paintshoploads.deleteMany({_id: {$in: remove}});
+  }
+
+  if (insert.length)
+  {
+    db.paintshoploads.insertMany(insert);
+  }
+
+  remove = [];
+  insert = [];
+}
