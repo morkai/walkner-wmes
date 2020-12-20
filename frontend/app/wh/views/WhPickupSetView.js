@@ -528,7 +528,7 @@ define([
       }
     },
 
-    showUpdateMenu: function(whOrder, func, prop, e)
+    showUpdateMenu: function(whOrder, funcId, prop, e)
     {
       var view = this;
       var canManage = user.isAllowedTo('WH:MANAGE');
@@ -536,9 +536,9 @@ define([
       var $item = view.$('.wh-set-item[data-id="' + whOrder.id + '"]');
       var actionSelector = 'td.is-clickable[data-prop="' + prop + '"]';
 
-      if (func)
+      if (funcId)
       {
-        actionSelector += '[data-func="' + func + '"]';
+        actionSelector += '[data-func="' + funcId + '"]';
       }
 
       var $action = $item.find(actionSelector);
@@ -546,29 +546,36 @@ define([
       if ($action.length)
       {
         view.focused.whOrderId = whOrder.id;
-        view.focused.func = func;
+        view.focused.func = funcId;
         view.focused.prop = prop;
       }
 
+      var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
+      var isPicklistUser = picklistFunc
+        && view.model.user
+        && picklistFunc.user
+        && picklistFunc.user.id === view.model.user._id;
+      var func = whOrder.getFunc(funcId);
+
       if (!canManage
         && prop === 'pickup'
-        && whOrder.getFunc(func).pickup === 'success'
+        && func.pickup === 'success'
         && !whOrder.isDelivered()
         && user.isAllowedTo('WH:MANAGE:CARTS'))
       {
         menu.push({
           icon: 'fa-edit',
           label: view.t('menu:pickup:editCarts'),
-          handler: view.handleUpdate.bind(view, whOrder, func, 'pickup', 'success', {
+          handler: view.handleUpdate.bind(view, whOrder, funcId, 'pickup', 'success', {
             edit: true
           })
         });
       }
-      else if (func === 'platformer'
+      else if (funcId === 'platformer'
         && prop === 'pickup'
-        && whOrder.getFunc(func).pickup === 'pending')
+        && func.pickup === 'pending')
       {
-        setTimeout(view.handleUpdate.bind(view), 1, whOrder, func, prop, 'success');
+        setTimeout(view.handleUpdate.bind(view), 1, whOrder, funcId, prop, 'success');
       }
       else
       {
@@ -579,9 +586,17 @@ define([
             return;
           }
 
-          if (func === 'platformer'
+          if (funcId === 'platformer'
             && prop === 'pickup'
             && item.value === 'failure')
+          {
+            return;
+          }
+
+          if ((canManage || isPicklistUser)
+            && prop === 'picklist'
+            && item.value === 'require'
+            && !func.user)
           {
             return;
           }
@@ -589,7 +604,7 @@ define([
           menu.push({
             icon: item.icon,
             label: view.t('menu:' + prop + ':' + (item.label || item.value)),
-            handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value)
+            handler: view.handleUpdate.bind(view, whOrder, funcId, prop, item.value)
           });
         });
       }

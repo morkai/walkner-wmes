@@ -1236,6 +1236,33 @@ define([
       viewport.showDialog(dialogView, page.t('pickup:forceLine:title'));
     },
 
+    cancelAllOrders: function()
+    {
+      if (!currentUser.isAllowedTo('SUPER') || window.ENV !== 'development')
+      {
+        return;
+      }
+
+      const ids = new Set();
+
+      this.whOrders.forEach(o =>
+      {
+        if (o.get('status') !== 'cancelled')
+        {
+          ids.add(o.id);
+        }
+      });
+
+      ids.forEach(id =>
+      {
+        this.whOrders.act('resetOrders', {
+          orders: [id],
+          date: this.plan.id,
+          cancel: true
+        });
+      });
+    },
+
     resetAllSets: function(cancel)
     {
       if (!currentUser.isAllowedTo('SUPER') || window.ENV !== 'development')

@@ -184,6 +184,7 @@ define([
       var canManageCarts = user.isAllowedTo('WH:MANAGE:CARTS');
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
+      var isPicklistUser = isUser && userFunc._id === obj.picklistFunc;
       var picklistDone = obj.picklistDone === 'success';
       var undelivered = !setData.delivered;
 
@@ -206,10 +207,16 @@ define([
           obj.visible.funcs[func._id] = true;
         }
 
+        var canIgnorePicklist = !isAssigned
+          && (isPicklistUser || canManage)
+          && picklistDone
+          && (func.status === 'pending' || func.status === 'picklist' || func.picklist === 'ignore');
+
         obj.clickable[func._id] = {
           picklist: undelivered
             && (
-              (isAssigned && canManage && picklistDone)
+              canIgnorePicklist
+              || (isAssigned && canManage && picklistDone)
               || (picklistDone && isUser && isFunc && func.status === 'picklist')
             ),
           pickup: undelivered
@@ -221,8 +228,7 @@ define([
         };
       });
 
-      obj.visible.picklistDone = Object.keys(obj.visible.funcs).length !== 1
-        || (isUser && userFunc._id === obj.picklistFunc);
+      obj.visible.picklistDone = Object.keys(obj.visible.funcs).length !== 1 || isPicklistUser;
 
       var fmx = this.getFunc('fmx');
       var kitter = this.getFunc('kitter');
