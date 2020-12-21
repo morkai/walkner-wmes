@@ -4,10 +4,11 @@
     property: 'time',
     type: 'date+time',
     startHour: 6,
+    labelProperty: 'mode',
     labels: [
-      {text: t('reports', 'filter:mode:online'), input: {type: 'radio', name: 'mode', value: 'online'}},
-      {text: t('reports', 'filter:mode:date'), input: {type: 'radio', name: 'mode', value: 'date'}, ranges: '+shifts'}
-    ]
+      {text: t('reports', 'filter:mode:online'), value: 'online'},
+      {text: t('reports', 'filter:mode:date'), value: 'date', ranges: '+shifts'}
+    ],
   }) %>
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>

@@ -1,9 +1,10 @@
 <form class="well filter-form toolcal-tools-filter" autocomplete="off">
   <%- forms.dateTimeRange({
     idPrefix: idPrefix,
+    labelProperty: 'dateType',
     labels: [
-      {text: helpers.t('filter:date:last'), input: {type: 'radio', name: 'dateType', value: 'lastDate'}, ranges: true},
-      {text: helpers.t('filter:date:next'), input: {type: 'radio', name: 'dateType', value: 'nextDate'}, ranges: true}
+      {text: helpers.t('filter:date:last'), ranges: true, value: 'lastDate'},
+      {text: helpers.t('filter:date:next'), ranges: true, value: 'nextDate'}
     ]
   }) %>
   <div class="form-group">

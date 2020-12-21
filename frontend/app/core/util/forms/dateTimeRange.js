@@ -203,7 +203,9 @@ define([
       maxDate: options.maxDate === ''
         ? ''
         : (options.maxDate || time.getMoment().add(1, 'years').format(DATE_FORMATS[type])),
+      labelProperty: options.labelProperty || 'dateFilter',
       labels: [],
+      maxLabels: 2,
       separator: options.separator || '–',
       required: {
         date: [false, false],
@@ -265,10 +267,22 @@ define([
       return {
         text: label.text || t('core', 'dateTimeRange:label:' + templateData.type),
         dropdown: prepareDropdown(label),
-        input: label.input || null,
+        value: label.value || null,
         ranges: prepareRanges(label)
       };
     });
+
+    if (templateData.labels.length > templateData.maxLabels)
+    {
+      var id = templateData.idPrefix + '-dateTimeRange-' + templateData.property;
+
+      requestAnimationFrame(function()
+      {
+        $('#' + id).on('click', 'a[data-label-value]', handleLabelValueClick);
+
+        render.toggleLabel(id);
+      });
+    }
 
     return template(templateData);
   }
@@ -483,8 +497,10 @@ define([
       $toTime.val(toMoment.format('HH:mm:ss'));
     }
 
+    var $input = $container.find('.dateTimeRange-label-input:checked');
+
     return {
-      property: $container[0].dataset.property,
+      property: $input.length ? $input.val() : $container[0].dataset.property,
       from: fromMoment,
       to: toMoment
     };
@@ -529,7 +545,9 @@ define([
   render.rqlToForm = function(propertyName, term, formData)
   {
     var view = this;
-    var dataset = view.$('.dateTimeRange')[0].dataset;
+    var $dtr = view.$('.dateTimeRange');
+    var labelProperty = $dtr.find('.dateTimeRange-label-input').first().prop('name');
+    var dataset = $dtr[0].dataset;
     var dateFormat = DATE_FORMATS[dataset.type];
     var utc = dataset.utc === '1';
     var moment = (utc ? time.utc : time).getMoment(term.args[1]);
@@ -549,9 +567,45 @@ define([
       return;
     }
 
+    if (labelProperty)
+    {
+      formData[labelProperty] = propertyName;
+    }
+
     formData[dir + '-date'] = moment.format(dateFormat);
     formData[dir + '-time'] = moment.format('HH:mm:ss');
   };
+
+  render.toggleLabel = function(viewOrId)
+  {
+    var $dtr = typeof viewOrId === 'string' ? $('#' + viewOrId) : viewOrId.$('.dateTimeRange').first();
+    var $labels = $dtr.find('.dateTimeRange-labels');
+
+    if (!$labels.hasClass('dateTimeRange-labels-overflow'))
+    {
+      return;
+    }
+
+    $labels.find('.dateTimeRange-label').each(function()
+    {
+      this.classList.toggle('hidden', !$(this).find('.dateTimeRange-label-input').prop('checked'));
+    });
+  };
+
+  function handleLabelValueClick(e)
+  {
+    var $labels = $(e.currentTarget).closest('.dateTimeRange-labels');
+    var labelValue = e.currentTarget.dataset.labelValue;
+    var $input = $labels.find('.dateTimeRange-label-input[value="' + labelValue + '"]');
+
+    $input.prop('checked', true);
+
+    render.toggleLabel($labels.closest('.dateTimeRange').prop('id'));
+
+    $input.closest('.dropdown-toggle').click();
+
+    return false;
+  }
 
   return render;
 });

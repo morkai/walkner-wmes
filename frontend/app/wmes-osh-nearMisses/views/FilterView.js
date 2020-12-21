@@ -27,7 +27,7 @@ define([
   return FilterView.extend({
 
     filterList: [
-      'createdAt',
+      'date',
       'workplace',
       'department',
       'building',
@@ -40,7 +40,10 @@ define([
       'limit'
     ],
     filterMap: {
-
+      createdAt: 'date',
+      eventDate: 'date',
+      startedAt: 'date',
+      finishedAt: 'date'
     },
 
     template,
@@ -65,12 +68,16 @@ define([
     defaultFormData: function()
     {
       return {
-        userType: 'others'
+        userType: 'others',
+        dateFilter: 'createdAt'
       };
     },
 
     termToForm: {
       'createdAt': dateTimeRange.rqlToForm,
+      'eventDate': dateTimeRange.rqlToForm,
+      'startedAt': dateTimeRange.rqlToForm,
+      'finishedAt': dateTimeRange.rqlToForm,
       'workplace': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
@@ -342,7 +349,7 @@ define([
 
     filterHasValue: function(filter)
     {
-      if (filter === 'createdAt')
+      if (filter === 'date')
       {
         var $from = this.$id('from-date');
         var $to = this.$id('to-date');
@@ -358,15 +365,27 @@ define([
       if (filter === '_id')
       {
         $('.page-actions-jump').find('.form-control').focus();
+
+        return;
       }
-      else if (filter === 'creator' || filter === 'implementer' || filter === 'coordinator')
+
+      if (filter === 'creator' || filter === 'implementer')
       {
         this.$id('user').select2('focus');
+
+        return;
       }
-      else
+
+      var $dateFilter = this.$('.dateTimeRange-label-input[value="' + filter + '"]');
+
+      if ($dateFilter.length)
       {
-        FilterView.prototype.showFilter.apply(this, arguments);
+        $dateFilter.prop('checked', true);
+
+        dateTimeRange.toggleLabel(this);
       }
+
+      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });

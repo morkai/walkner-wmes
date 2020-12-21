@@ -41,7 +41,8 @@ define([
         },
         {
           id: 'eventDate',
-          min: 1
+          min: 1,
+          thClassName: 'is-filter'
         },
         {
           id: 'kind',

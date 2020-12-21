@@ -3,10 +3,10 @@
   padding: 5px 10px;
   white-space: nowrap;
 }
-.dateTimeRange-ranges tr:hover {
+.dateTimeRange-ranges-table tr:hover {
   background-color: #f5f5f5;
 }
-.dateTimeRange-ranges th {
+.dateTimeRange-ranges-table th {
   text-align: right;
   padding-right: 5px;
 }
@@ -15,9 +15,13 @@
   display: block;
   text-align: center;
   line-height: 24px;
+  color: #333;
+  text-decoration: none!important;
 }
-.dateTimeRange-ranges a:hover {
-  text-decoration: none;
+.dateTimeRange-ranges a[href] {
+  color: #337ab7;
+}
+.dateTimeRange-ranges a[href]:hover {
   background-color: #428bca;
   color: #fff;
 }
@@ -61,8 +65,23 @@
 .dateTimeRange-label + .dateTimeRange-label {
   margin-left: 15px;
 }
+.dateTimeRange-labels-overflow .dateTimeRange-label + .dateTimeRange-label {
+  margin-left: 0;
+}
 .dateTimeRange-is-input .dateTimeRange-label-input {
   vertical-align: top;
+}
+.dateTimeRange-labels-overflow .dateTimeRange-label-input {
+  display: none;
+}
+.dateTimeRange-labels-overflow > .open > .dateTimeRange-ranges {
+  display: flex;
+}
+.dateTimeRange-ranges-labels {
+  margin-right: 10px;
+}
+.dateTimeRange-ranges-labels > a {
+  text-align: left;
 }
 .dateTimeRange-help {
   font-size: 12px;

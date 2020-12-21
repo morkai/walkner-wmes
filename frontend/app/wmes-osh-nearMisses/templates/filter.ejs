@@ -9,8 +9,13 @@
   }) %>
   <%- forms.dateTimeRange({
     idPrefix,
-    property: 'createdAt',
-    hidden: true
+    hidden: true,
+    labels: [
+      {text: 'Czas zgłoszenia', ranges: true, value: 'createdAt'},
+      {text: 'Czas zdarzenia', ranges: true, value: 'eventDate'},
+      {text: 'Czas rozpoczęcia', ranges: true, value: 'startedAt'},
+      {text: 'Czas zakończenia', ranges: true, value: 'finishedAt'}
+    ]
   }) %>
   <div class="form-group" style="min-width: 280px">
     <div class="filter-radioLabels">
