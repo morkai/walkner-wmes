@@ -7,3 +7,6 @@
   text-decoration: none;
   cursor: pointer;
 }
+.dropdownRadio > .dropdown-menu {
+  margin-top: 0;
+}

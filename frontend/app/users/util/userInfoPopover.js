@@ -161,7 +161,7 @@ define([
         linkToDetails: linkToDetails,
         userInfo: {
           _id: user._id,
-          name: user.firstName && user.lastName ? (user.firstName + ' ' + user.lastName) : user.login,
+          name: user.firstName || user.lastName ? (user.firstName + ' ' + user.lastName).trim() : user.login,
           personnelId: user.personnelId,
           position: user.syncData.jobTitle || (prodFunction ? prodFunction.getLabel() : ''),
           company: company ? company.getLabel() : (user.syncData.company || user.company || ''),

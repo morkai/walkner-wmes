@@ -32,8 +32,8 @@ define([
       return user;
     }
 
-    user.name = user.lastName && user.firstName
-      ? (user.lastName + ' ' + user.firstName)
+    user.name = user.lastName || user.firstName
+      ? (user.lastName + ' ' + user.firstName).trim()
       : (user.name || user.login || user._id);
 
     return {
