@@ -43,7 +43,7 @@ define([
       {
         this.status = 'cancelled';
 
-        this.submitForm();
+        this.submitForm(false);
       }
 
     }, FormView.prototype.events),

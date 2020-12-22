@@ -101,11 +101,11 @@ define([
       return $actions.find('.btn:not(.cancel)');
     },
 
-    submitForm: function()
+    submitForm: function(checkValidity)
     {
       this.hideErrorMessage();
 
-      if (!this.el.checkValidity())
+      if (!this.el.checkValidity() && checkValidity !== false)
       {
         return false;
       }
