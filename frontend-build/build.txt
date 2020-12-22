@@ -2634,6 +2634,8 @@ app/core/util/buttonGroup.js
 app/core/templates/filterLimit.js
 app/core/templates/filterButton.js
 app/core/views/FilterView.js
+app/core/templates/forms/dropdownRadio.js
+app/core/util/forms/dropdownRadio.js
 app/wmes-osh-nearMisses/templates/filter.js
 app/core/util/ExpandableSelect.js
 app/wmes-osh-nearMisses/views/FilterView.js
