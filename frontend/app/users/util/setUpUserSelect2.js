@@ -5,13 +5,15 @@ define([
   'h5.rql/index',
   'app/core/util/transliterate',
   'app/i18n',
-  'app/user'
+  'app/user',
+  'app/data/companies'
 ], function(
   _,
   rql,
   transliterate,
   t,
-  user
+  user,
+  companies
 ) {
   'use strict';
 
@@ -25,6 +27,21 @@ define([
     return name;
   }
 
+  function formatResultWithDescription(result)
+  {
+    if (_.isEmpty(result.description))
+    {
+      return result.header;
+    }
+
+    var html = '<div class="select2-result-with-description">';
+    html += '<h3>' + result.header + '</h3>';
+    html += '<p>' + result.description + '</p>';
+    html += '</div>';
+
+    return html;
+  }
+
   function userToData(user, textFormatter, query)
   {
     if (user.id && user.text)
@@ -36,9 +53,78 @@ define([
       ? (user.lastName + ' ' + user.firstName).trim()
       : (user.name || user.login || user._id);
 
+    var text = textFormatter(user, user.name, query);
+    var header = _.escape(text);
+    var description = '';
+
+    if (user.duplicate)
+    {
+      if (user.personnelId)
+      {
+        header += ' (' + _.escape(user.personnelId) + ')';
+      }
+
+      if (user.syncData.jobTitle)
+      {
+        description = _.escape(user.syncData.jobTitle);
+      }
+
+      var company = companies.get(user.company);
+
+      if (company)
+      {
+        company = company.get('shortName');
+      }
+      else if (user.syncData.company)
+      {
+        company = user.syncData.company;
+      }
+
+      if (company)
+      {
+        if (description)
+        {
+          description += ' @ ';
+        }
+
+        description += _.escape(company);
+      }
+
+      if (user.syncData.workplace)
+      {
+        if (description)
+        {
+          description += '<br>';
+        }
+
+        description += _.escape(user.syncData.workplace);
+      }
+
+      if (user.syncData.department)
+      {
+        if (user.syncData.workplace)
+        {
+          description += ' \\ ';
+        }
+        else if (description)
+        {
+          description += '<br>';
+        }
+
+        description += _.escape(user.syncData.department);
+      }
+    }
+
+    if (!user.active)
+    {
+      header = '<del>' + header + '</del>';
+    }
+
     return {
       id: user._id,
-      text: textFormatter(user, user.name, query),
+      text: text,
+      header: header,
+      description: description,
       user: user
     };
   }
@@ -63,57 +149,81 @@ define([
     };
   }
 
-  function filterDuplicates(users)
+  function filterDuplicates(allUsers)
   {
     var map = {};
 
-    _.forEach(users, function(newUser)
+    allUsers.forEach(function(user)
     {
-      var searchName = newUser.searchName;
-      var mappedUser = map[searchName];
-
-      // First
-      if (!mappedUser)
+      if (!map[user.searchName])
       {
-        map[searchName] = newUser;
-
-        return;
+        map[user.searchName] = [];
       }
 
-      // Prefer active users
-      if (mappedUser.active === false && newUser.active === true)
-      {
-        map[searchName] = newUser;
+      var score = 0;
 
-        return;
+      if (!user.active)
+      {
+        score -= 10;
       }
 
-      if (mappedUser.active === true && newUser.active === false)
+      if (user.email)
       {
-        return;
+        score += 1;
       }
 
-      // Prefer users with e-mail
-      if (!mappedUser.email && newUser.email)
+      if (user.mobile && user.mobile.length)
       {
-        map[searchName] = newUser;
-
-        return;
+        score += 1;
       }
 
-      if (mappedUser.email && !newUser.email)
+      if (user.privileges && user.privileges.length)
       {
-        return;
+        score += 1;
       }
 
-      // Prefer users from PHILIPS
-      if (mappedUser.company !== 'PHILIPS' && newUser.company === 'PHILIPS')
+      if (user.personnelId)
       {
-        map[searchName] = newUser;
+        score += 1;
       }
+
+      if (user.syncData)
+      {
+        if (/PHILIPS|SIGNIFY/i.test(user.syncData.company))
+        {
+          score += 1;
+        }
+      }
+
+      if (user.orgUnitId)
+      {
+        score += 1;
+      }
+
+      if (user.oshDepartment)
+      {
+        score += 1;
+      }
+
+      user.duplicate = false;
+      user.score = score;
+
+      map[user.searchName].push(user);
     });
 
-    return _.values(map);
+    var result = [];
+
+    _.values(map).forEach(function(users)
+    {
+      users.forEach(function(user)
+      {
+        user.duplicate = users.length > 1;
+
+        result.push(user);
+      });
+    });
+
+    return result;
   }
 
   function createDefaultRqlQuery(rql, term, options)
@@ -157,7 +267,7 @@ define([
 
   function resolveTextFormatter(options)
   {
-    return options.textFormatter || formatText.bind(null, !!options.noPersonnelId);
+    return options.textFormatter || formatText.bind(null, options.noPersonnelId !== false);
   }
 
   function prepareData(options)
@@ -182,12 +292,25 @@ define([
       data.push(userToData(user.toJSON(), textFormatter));
     });
 
-    data.sort(function(a, b)
-    {
-      return a.text.localeCompare(b.text, undefined, {ignorePunctuation: true, sensitivity: 'base'});
-    });
+    data.sort(sortUsers);
 
     return data;
+  }
+
+  function sortUsers(a, b)
+  {
+    var cmp = (a.user && a.user.searchName || a.text).localeCompare(
+      b.user && b.user.searchName || b.text,
+      undefined,
+      {ignorePunctuation: true, sensitivity: 'base'}
+    );
+
+    if (cmp === 0)
+    {
+      cmp = (b.user && b.user.score || 0) - (a.user && a.user.score || 0);
+    }
+
+    return cmp;
   }
 
   function setUpUserSelect2($input, options)
@@ -207,7 +330,8 @@ define([
       openOnEnter: null,
       allowClear: true,
       minimumInputLength: 3,
-      placeholder: t('users', 'select2:placeholder')
+      placeholder: t('users', 'select2:placeholder'),
+      formatResult: formatResultWithDescription
     };
 
     if (options.collection)
@@ -230,24 +354,19 @@ define([
         },
         results: function(data, page, query)
         {
-          var results = [getSystemData(), getRootData()].filter(function(user)
-          {
-            return user.text.toLowerCase().indexOf(query.term.toLowerCase()) !== -1;
-          });
-
-          var users = options.filterDuplicates === false
-            ? results.concat(data.collection || [])
-            : results.concat(filterDuplicates(data.collection || []));
+          var results = [getSystemData(), getRootData()]
+            .filter(function(user) { return user.text.toLowerCase().indexOf(query.term.toLowerCase()) !== -1; })
+            .concat(filterDuplicates(data.collection || []));
 
           if (userFilter)
           {
-            users = users.filter(userFilter);
+            results = results.filter(userFilter);
           }
 
           return {
-            results: users
+            results: results
               .map(function(user) { return userToData(user, textFormatter, query); })
-              .sort(function(a, b) { return a.text.localeCompare(b.text); })
+              .sort(sortUsers)
           };
         }
       };

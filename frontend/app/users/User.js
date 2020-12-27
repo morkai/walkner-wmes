@@ -149,12 +149,30 @@ define([
         }
       }
 
+      return obj;
+    },
+
+    serializeRow: function()
+    {
+      var obj = this.serialize();
+
       if (loadedModules.isLoaded('wmes-osh'))
       {
         var oshDictionaries = require('app/wmes-osh-common/dictionaries');
 
-        obj.oshWorkplace = oshDictionaries.getLabel('workplace', obj.oshWorkplace, {long: true});
-        obj.oshDepartment = oshDictionaries.getLabel('department', obj.oshDepartment, {long: true});
+        obj.oshDivision = oshDictionaries.getLabel('division', obj.oshDivision);
+        obj.oshWorkplace = oshDictionaries.getLabel('workplace', obj.oshWorkplace);
+        obj.oshDepartment = oshDictionaries.getLabel('department', obj.oshDepartment);
+
+        if (!obj.oshWorkplace && obj.syncData.workplace)
+        {
+          obj.oshWorkplace = `<em>${obj.syncData.workplace}</em>`;
+        }
+
+        if (!obj.oshDepartment && obj.syncData.department)
+        {
+          obj.oshDepartment = `<em>${obj.syncData.department}</em>`;
+        }
       }
 
       return obj;
@@ -175,6 +193,15 @@ define([
       });
 
       obj.mrps = _.isEmpty(obj.mrps) ? '' : obj.mrps.join('; ');
+
+      if (loadedModules.isLoaded('wmes-osh'))
+      {
+        var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+
+        obj.oshDivision = oshDictionaries.getLabel('division', obj.oshDivision, {long: true});
+        obj.oshWorkplace = oshDictionaries.getLabel('workplace', obj.oshWorkplace, {long: true});
+        obj.oshDepartment = oshDictionaries.getLabel('department', obj.oshDepartment, {long: true});
+      }
 
       return obj;
     },
