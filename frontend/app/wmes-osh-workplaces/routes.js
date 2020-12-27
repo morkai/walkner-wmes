@@ -41,6 +41,7 @@ define([
         {id: 'division', className: 'is-min'},
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
+        {id: 'manager', className: 'is-min'},
         {id: 'active', className: 'is-min'}
       ]
     })));

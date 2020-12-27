@@ -4,12 +4,14 @@ define([
   'require',
   'underscore',
   'app/i18n',
-  'app/core/Model'
+  'app/core/Model',
+  'app/core/templates/userInfo'
 ], function(
   require,
   _,
   t,
-  Model
+  Model,
+  userInfoTemplate
 ) {
   'use strict';
 
@@ -56,6 +58,7 @@ define([
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
+      obj.manager = userInfoTemplate(obj.manager);
 
       return obj;
     },
@@ -65,7 +68,7 @@ define([
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
 
-      obj.division = dictionaries.divisions.getLabel(obj.division);
+      obj.division = dictionaries.divisions.getLabel(obj.division, {link: true});
 
       return obj;
     },

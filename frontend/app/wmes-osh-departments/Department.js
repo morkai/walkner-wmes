@@ -33,6 +33,7 @@ define([
     {
       return {
         active: true,
+        managers: [],
         coordinators: []
       };
     },
@@ -62,8 +63,6 @@ define([
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
-      obj.manager = userInfoTemplate({userInfo: obj.manager});
-      obj.coordinators = obj.coordinators.map(userInfo => userInfoTemplate({userInfo}));
 
       return obj;
     },
@@ -73,7 +72,39 @@ define([
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
 
-      obj.workplace = dictionaries.workplaces.getLabel(obj.workplace);
+      obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {path: true, link: true});
+
+      const managers = obj.managers;
+
+      if (managers.length)
+      {
+        obj.managers = userInfoTemplate(managers[0]);
+
+        if (managers.length > 1)
+        {
+          obj.managers += ` +${managers.length - 1}`;
+        }
+      }
+      else
+      {
+        obj.managers = '';
+      }
+
+      const coordinators = obj.coordinators;
+
+      if (coordinators.length)
+      {
+        obj.coordinators = userInfoTemplate(coordinators[0]);
+
+        if (coordinators.length > 1)
+        {
+          obj.coordinators += ` +${coordinators.length - 1}`;
+        }
+      }
+      else
+      {
+        obj.coordinators = '';
+      }
 
       return obj;
     },
@@ -84,6 +115,8 @@ define([
       const obj = this.serialize();
 
       obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {long: true, link: true});
+      obj.managers = obj.managers.map(userInfo => userInfoTemplate({userInfo}));
+      obj.coordinators = obj.coordinators.map(userInfo => userInfoTemplate({userInfo}));
 
       return obj;
     },

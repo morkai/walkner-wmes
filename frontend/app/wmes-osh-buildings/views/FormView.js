@@ -28,7 +28,7 @@ define([
 
     serializeForm: function(formData)
     {
-      formData.departments = formData.departments.split(',').map(v => +v).filter(v => v > 0);
+      formData.departments = (formData.departments || '').split(',').map(v => +v).filter(v => v > 0);
 
       return formData;
     },

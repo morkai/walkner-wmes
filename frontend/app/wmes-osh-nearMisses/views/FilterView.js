@@ -6,6 +6,7 @@ define([
   'app/user',
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
+  'app/core/util/forms/dropdownRadio',
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
@@ -17,6 +18,7 @@ define([
   currentUser,
   FilterView,
   dateTimeRange,
+  dropdownRadio,
   idAndLabel,
   setUpUserSelect2,
   dictionaries,
@@ -52,16 +54,7 @@ define([
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
 
-      'change input[name="userType"]': function()
-      {
-        if (this.$('input[name="userType"]:checked').val() === 'mine')
-        {
-          this.$id('user').select2('data', {
-            id: currentUser.data._id,
-            text: currentUser.getLabel()
-          });
-        }
-      }
+      'change input[name="userType"]': function() { this.toggleUserSelect2(true); }
 
     }, FilterView.prototype.events),
 
@@ -100,6 +93,28 @@ define([
 
         formData.userType = userId === currentUser.data._id ? 'mine' : 'others';
         formData.user = userId;
+      },
+      'confirmer.id': 'owners.id',
+      'superior.id': 'owners.id',
+      'suggestionOwners.id': 'owners.id',
+      'kaizenOwners.id': 'owners.id',
+      'observers.user.id': function(propertyName, term, formData)
+      {
+        if (term.args[1] === 'mine')
+        {
+          formData.userType = 'mine';
+          formData.user = null;
+        }
+        else if (term.args[1] === 'unseen')
+        {
+          formData.userType = 'unseen';
+          formData.user = null;
+        }
+        else
+        {
+          formData.userType = 'others';
+          formData.user = term.args[1];
+        }
       }
     },
 
@@ -121,8 +136,13 @@ define([
       };
     },
 
-    serializeFormToQuery: function(selector)
+    serializeFormToQuery: function(selector, rqlQuery)
     {
+      const dateFilter = this.$('input[name="dateFilter"]:checked').val();
+
+      rqlQuery.sort = {};
+      rqlQuery.sort[dateFilter] = -1;
+
       dateTimeRange.formToRql(this, selector);
 
       [
@@ -169,10 +189,20 @@ define([
       });
 
       const user = this.$id('user').val();
+      let userType = this.$('input[name="userType"]').val();
 
-      if (user)
+      if (userType === 'mine' || userType === 'unseen')
       {
-        selector.push({name: 'eq', args: ['users.user.id', user]});
+        selector.push({name: 'eq', args: ['users.user.id', userType]});
+      }
+      else if (user)
+      {
+        if (userType === 'others')
+        {
+          userType = 'users.user';
+        }
+
+        selector.push({name: 'eq', args: [userType + '.id', user]});
       }
     },
 
@@ -187,6 +217,7 @@ define([
         width: '100%'
       });
 
+      this.setUpUserType();
       this.setUpWorkplaceSelect2();
       this.setUpDepartmentSelect2();
       this.setUpBuildingSelect2();
@@ -194,6 +225,46 @@ define([
       this.setUpStationSelect2();
       this.setUpEventCategorySelect2();
       this.setUpReasonCategorySelect2();
+    },
+
+    setUpUserType: function()
+    {
+      var view = this;
+      var options = [
+        'mine',
+        'unseen',
+        'others',
+        'creator',
+        'implementer',
+        'coordinators'
+      ].map(function(userType)
+      {
+        return {
+          value: userType,
+          title: view.t('filter:user:' + userType + ':title'),
+          optionLabel: view.t('filter:user:' + userType)
+        };
+      });
+
+      dropdownRadio(view.$id('userType'), {
+        label: view.t('filter:user:others'),
+        options: options
+      });
+    },
+
+    toggleUserSelect2: function(resetUser)
+    {
+      var userType = this.$('input[name="userType"]').val();
+      var mine = userType === 'mine' || userType === 'unseen';
+      var $user = this.$id('user').select2('enable', !mine);
+
+      if (resetUser && (mine || !$user.val()))
+      {
+        $user.select2('data', {
+          id: currentUser.data._id,
+          text: currentUser.getLabel()
+        });
+      }
     },
 
     setUpWorkplaceSelect2: function()
@@ -371,6 +442,7 @@ define([
 
       if (filter === 'creator' || filter === 'implementer')
       {
+        this.$id('userType').val(filter).trigger('change');
         this.$id('user').select2('focus');
 
         return;

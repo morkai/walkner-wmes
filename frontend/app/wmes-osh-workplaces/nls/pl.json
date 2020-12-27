@@ -4,5 +4,6 @@
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:division": "Dywizja",
   "PROPERTY:shortName": "Krótka nazwa",
-  "PROPERTY:longName": "Długa nazwa"
+  "PROPERTY:longName": "Długa nazwa",
+  "PROPERTY:manager": "Dyrektor"
 }

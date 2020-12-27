@@ -431,10 +431,11 @@ define([
       }
 
       const userWorkplace = this.$id('userWorkplace').select2('data');
+      const userDepartment = this.$id('userDepartment').select2('data');
 
-      formData.userDivision = userWorkplace.model.get('division');
-      formData.userWorkplace = userWorkplace.id;
-      formData.userDepartment = this.$id('userDepartment').select2('data').id;
+      formData.userDivision = userWorkplace ? userWorkplace.model.get('division') : 0;
+      formData.userWorkplace = userWorkplace ? userWorkplace.id : 0;
+      formData.userDepartment = userDepartment ? userDepartment.id : 0;
 
       const relation = this.options.relation;
 

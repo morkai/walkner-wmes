@@ -18,14 +18,7 @@
     ]
   }) %>
   <div class="form-group" style="min-width: 280px">
-    <div class="filter-radioLabels">
-      <% ['mine', 'others'].forEach(function(userType) { %>
-      <label>
-        <input name="userType" type="radio" value="<%- userType %>">
-        <%- t('filter:user:' + userType) %>
-      </label>
-      <% }) %>
-    </div>
+    <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
     <input id="<%- id('user') %>" name="user" type="text">
   </div>
   <%- helpers.formGroup({

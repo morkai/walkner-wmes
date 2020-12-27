@@ -24,7 +24,7 @@ define([
       FormView.prototype.afterRender.apply(this, arguments);
 
       this.setUpWorkplaceSelect2();
-      this.setUpManagerSelect2();
+      this.setUpManagersSelect2();
       this.setUpCoordinatorsSelect2();
     },
 
@@ -39,10 +39,12 @@ define([
       });
     },
 
-    setUpManagerSelect2: function()
+    setUpManagersSelect2: function()
     {
-      setUpUserSelect2(this.$id('manager'), {
-        currentUserInfo: this.model.get('manager')
+      setUpUserSelect2(this.$id('managers'), {
+        multiple: true,
+        allowClear: true,
+        currentUserInfo: this.model.get('managers')
       });
     },
 
@@ -57,7 +59,7 @@ define([
 
     serializeForm: function(formData)
     {
-      formData.manager = setUpUserSelect2.getUserInfo(this.$id('manager'));
+      formData.managers = setUpUserSelect2.getUserInfo(this.$id('managers'));
       formData.coordinators = setUpUserSelect2.getUserInfo(this.$id('coordinators'));
 
       if (!formData.syncPatterns)

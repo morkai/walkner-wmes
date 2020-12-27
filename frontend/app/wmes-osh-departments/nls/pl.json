@@ -5,7 +5,7 @@
   "PROPERTY:workplace": "Zakład",
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
-  "PROPERTY:manager": "Kierownik",
+  "PROPERTY:managers": "Kierownicy",
   "PROPERTY:coordinators": "Koordynatorzy",
   "PROPERTY:syncPatterns": "Wzorce dopasowania użytkowników"
 }
