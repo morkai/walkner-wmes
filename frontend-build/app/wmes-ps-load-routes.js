@@ -1,1 +1,1 @@
-define(["./router","./viewport","./user","./paintShop/pages/PaintShopLoadPage","i18n!app/nls/paintShop"],function(n,a,e,p){"use strict";n.map("/",e.auth("LOCAL","PAINT_SHOP:VIEW"),function(){a.showPage(new p)})});
+define(["./router","./viewport","./user","./paintShop/pages/load/MonitoringPage","i18n!app/nls/paintShop"],function(n,e,i,o){"use strict";n.map("/",i.auth("LOCAL","PAINT_SHOP:VIEW"),function(){e.showPage(new o)})});

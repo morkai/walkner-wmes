@@ -1,1 +1,1 @@
-define(["../core/Model"],function(n){"use strict";return n.extend({nlsDomain:"paintShop",url:function(){return"/paintShop/load/stats"}})});
+define(["../core/Model"],function(t){"use strict";return t.extend({nlsDomain:"paintShop",defaults:function(){return{counter:1}},url:function(){return"/paintShop/load/stats?counter="+this.get("counter")}})});

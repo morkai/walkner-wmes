@@ -1,0 +1,1 @@
+define(["app/core/Collection","app/core/util/getShiftStartInfo","./PaintShopLoad"],function(t,e,i){"use strict";return t.extend({model:i,rqlQuery:function(){return"sort(-_id.ts)&limit(-1337)&_id.ts=ge="+e(Date.now()).startTime}})});

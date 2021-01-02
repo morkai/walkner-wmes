@@ -1,0 +1,1 @@
+define(["../core/Collection","./PaintShopLoadReason"],function(e,o){"use strict";return e.extend({model:o,rqlQuery:"sort(position)"})});
