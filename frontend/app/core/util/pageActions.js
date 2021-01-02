@@ -203,7 +203,7 @@ define([
       var options = {
         layout: layout,
         page: page,
-        collection: collection || page.collection,
+        collection: collection || (page && page.collection) || null,
         privilege: privilege,
         maxCount: 60000
       };
