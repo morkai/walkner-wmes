@@ -15,14 +15,14 @@ define([
     {
       return {
         counter: 1,
-        totalCount: window.screen.availWidth,
+        totalCount: 0,
         collection: []
       };
     },
 
     url: function()
     {
-      return '/paintShop/load/recent?counter=' + this.get('counter') + '&limit=' + this.get('totalCount');
+      return '/paintShop/load/recent?counter=' + this.get('counter') + '&limit=' + window.screen.availWidth;
     },
 
     update: function(items)
