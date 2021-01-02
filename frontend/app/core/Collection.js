@@ -154,6 +154,11 @@ define([
     else if (_.isFunction(rqlQuery))
     {
       rqlQuery = rqlQuery.call(this, rql);
+
+      if (rqlQuery && !(rqlQuery instanceof rql.Query))
+      {
+        return this.createRqlQuery(rqlQuery);
+      }
     }
     else if (_.isObject(rqlQuery))
     {
@@ -172,7 +177,14 @@ define([
 
     if (_.isFunction(this.rqlQuery))
     {
-      return this.rqlQuery.call(this, rql);
+      rqlQuery = this.rqlQuery.call(this, rql);
+
+      if (rqlQuery && !(rqlQuery instanceof rql.Query))
+      {
+        rqlQuery = this.createRqlQuery(rqlQuery);
+      }
+
+      return rqlQuery;
     }
 
     if (_.isObject(this.rqlQuery))

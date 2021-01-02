@@ -1,18 +1,18 @@
 <div>
-  <div id="<%- idPrefix %>-current" class="paintShopLoad-current" style="color: <%- current.color %>">
-    <div id="<%- idPrefix %>-current-duration" class="paintShopLoad-current-duration"><%- current.duration %></div>
-    <div id="<%- idPrefix %>-current-icon" class="paintShopLoad-current-icon"><i class="fa fa-<%- current.icon %>"></i></div>
+  <div id="<%- idPrefix %>-current" class="psLoad-current" style="color: <%- current.color %>">
+    <div id="<%- idPrefix %>-current-duration" class="psLoad-current-duration"><%- current.duration %></div>
+    <div id="<%- idPrefix %>-current-icon" class="psLoad-current-icon"><i class="fa fa-<%- current.icon %>"></i></div>
   </div>
-  <div class="paintShopLoad-hr-h"></div>
-  <div class="paintShopLoad-stats">
+  <div class="psLoad-hr-h"></div>
+  <div class="psLoad-stats">
     <% stats.forEach(function(stat) { %>
-    <div class="paintShopLoad-stat" data-stat="<%- stat.id %>">
-      <div class="paintShopLoad-stat-value" style="color: <%- stat.color %>"><%- stat.count %></div>
-      <div class="paintShopLoad-stat-label"><%- t('paintShop', 'load:stats:' + stat.id) %></div>
-      <div class="paintShopLoad-stat-value" style="color: <%- stat.color %>"><%- stat.duration %></div>
+    <div class="psLoad-stat" data-stat="<%- stat.id %>">
+      <div class="psLoad-stat-value" style="color: <%- stat.color %>"><%- stat.count %></div>
+      <div class="psLoad-stat-label"><%- t('paintShop', 'load:stats:' + stat.id) %></div>
+      <div class="psLoad-stat-value" style="color: <%- stat.color %>"><%- stat.duration %></div>
     </div>
-    <div class="paintShopLoad-hr-v"></div>
+    <div class="psLoad-hr-v"></div>
     <% }) %>
   </div>
-  <div class="paintShopLoad-hr-h"></div>
+  <div class="psLoad-hr-h"></div>
 </div>

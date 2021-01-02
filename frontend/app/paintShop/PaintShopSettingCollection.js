@@ -44,6 +44,11 @@ define([
       {
         return this.prepareDocumentsValue(newValue);
       }
+
+      if (/delayedDuration$/.test(id))
+      {
+        return this.prepareNumericValue(newValue, 0, 28800, 0);
+      }
     },
 
     prepareDocumentsValue: function(rawValue)

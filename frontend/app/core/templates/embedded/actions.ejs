@@ -1,4 +1,9 @@
 <div class="dropup embedded-actions <%- left ? 'embedded-left' : 'embedded-right' %>" data-app="<%- app %>">
+  <% _.forEach(actions, function(action, id) { %>
+  <button data-action="<%- id %>" class="btn btn-default btn-lg <%- action.separator ? 'embedded-separator' : '' %>" type="button" title="<%- action.title || '' %>">
+    <i class="fa <%- action.icon || 'fa-question' %>"></i>
+  </button>
+  <% }) %>
   <button data-action="switch" class="btn btn-default btn-lg" type="button" title="<%- t('core', 'embedded:actions:switch') %>">
     <i class="fa fa-window-restore"></i>
   </button>

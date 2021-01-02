@@ -5,13 +5,15 @@ define([
   '../time',
   '../router',
   '../viewport',
-  '../user'
+  '../user',
+  '../core/pages/FilteredListPage'
 ], function(
   broker,
   time,
   router,
   viewport,
-  user
+  user,
+  FilteredListPage
 ) {
   'use strict';
 
@@ -93,13 +95,47 @@ define([
     );
   });
 
-  router.map('/paintShop/load', canView, function(req)
+  router.map('/paintShop/load/monitoring', canView, function(req)
   {
     viewport.loadPage(
-      ['app/paintShop/pages/PaintShopLoadPage'].concat(css, nls),
-      function(PaintShopLoadPage)
+      ['app/paintShop/pages/load/MonitoringPage'].concat(css, nls),
+      function(MonitoringPage)
       {
-        return new PaintShopLoadPage({query: req.query});
+        return new MonitoringPage({
+          counter: +req.query.counter
+        });
+      }
+    );
+  });
+
+  router.map('/paintShop/load/history', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/paintShop/PaintShopLoadCollection',
+        'app/paintShop/pages/load/HistoryPage'
+      ].concat(css, nls),
+      function(PaintShopLoadCollection, HistoryPage)
+      {
+        return new HistoryPage({
+          collection: new PaintShopLoadCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
+  });
+
+  router.map('/paintShop/load/report', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/paintShop/PaintShopLoadReport',
+        'app/paintShop/pages/load/ReportPage'
+      ].concat(css, nls),
+      function(PaintShopLoadReport, ReportPage)
+      {
+        return new ReportPage({
+          model: PaintShopLoadReport.fromQuery(req.query)
+        });
       }
     );
   });

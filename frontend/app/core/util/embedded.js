@@ -185,10 +185,11 @@ define([
       var showCount = 0;
       var showCountTimer = null;
 
-      var actions = this.actions;
+      var actions = Object.assign({}, this.actions, options && options.actions);
       var $embeddedActions = $(actionsTemplate({
         app: window.WMES_APP_ID,
-        left: options && options.left === true
+        left: options && options.left === true,
+        actions: options && options.actions || {}
       }));
 
       $embeddedActions.on('click', '[data-action]', function(e)
@@ -197,7 +198,14 @@ define([
 
         if (action)
         {
-          action();
+          if (typeof action.handler === 'function')
+          {
+            action.handler();
+          }
+          else if (typeof action === 'function')
+          {
+            action();
+          }
         }
 
         e.preventDefault();

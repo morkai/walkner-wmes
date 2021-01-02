@@ -2,12 +2,16 @@
 
 define([
   'underscore',
+  'app/i18n',
   'app/time',
-  'app/core/Model'
+  'app/core/Model',
+  'app/data/colorFactory'
 ], function(
   _,
+  t,
   time,
-  Model
+  Model,
+  colorFactory
 ) {
   'use strict';
 
@@ -24,7 +28,11 @@ define([
       return {
         from: moment.valueOf(),
         to: moment.add(2, 'weeks').valueOf(),
-        interval: 'day'
+        interval: 'day',
+        reasonLabels: {},
+        load: {},
+        groups: [],
+        reasons: {}
       };
     },
 
@@ -45,7 +53,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/paintShop/load'
+      return '/paintShop/load/report'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval');
@@ -53,12 +61,137 @@ define([
 
     parse: function(res)
     {
-      return {
-        from: res.options.fromTime,
-        to: res.options.toTime,
-        interval: res.options.interval,
-        groups: res.groups
+      var report = this;
+      var attrs = {
+        reasonLabels: res.reasonLabels,
+        load: res.load,
+        groups: res.groups,
+        reasons: {},
+        losses: {}
       };
+
+      res.counters.forEach(function(c)
+      {
+        attrs.reasons[c] = {
+          rows: [],
+          series: {}
+        };
+        attrs.losses[c] = {
+          rows: [],
+          series: {}
+        };
+
+        var delayed = res.totals[c].delayed;
+
+        _.forEach(delayed.reasons, function(data, id)
+        {
+          var color = colorFactory.getColor('paintShop/load/reasons', id);
+
+          attrs.reasons[c].rows.push({
+            id: id,
+            abs: data[0],
+            rel: data[0] / delayed.count,
+            color: color,
+            label: res.reasonLabels[id]
+          });
+          attrs.reasons[c].series[id] = {
+            id: id,
+            name: res.reasonLabels[id],
+            type: 'column',
+            data: [],
+            color: color
+          };
+
+          attrs.losses[c].rows.push({
+            id: id,
+            abs: data[1] / 60,
+            rel: data[1] / delayed.time,
+            color: color,
+            label: res.reasonLabels[id]
+          });
+          attrs.losses[c].series[id] = {
+            id: id,
+            name: res.reasonLabels[id],
+            type: 'column',
+            data: [],
+            color: color
+          };
+        });
+
+        attrs.reasons[c].rows.sort(function(a, b) { return b.abs - a.abs; });
+        attrs.losses[c].rows.sort(function(a, b) { return b.abs - a.abs; });
+
+        attrs.reasons[c].rows.push({
+          id: 'total',
+          abs: delayed.count,
+          rel: 1,
+          color: '#DDD',
+          label: t(report.nlsDomain, 'load:report:series:total')
+        });
+        attrs.losses[c].rows.push({
+          id: 'total',
+          abs: delayed.time / 60,
+          rel: 1,
+          color: '#DDD',
+          label: t(report.nlsDomain, 'load:report:series:total')
+        });
+      });
+
+      res.groups.forEach(function(g)
+      {
+        res.counters.forEach(function(c)
+        {
+          var counter = g.counters[c];
+          var reason = attrs.reasons[c];
+          var losses = attrs.losses[c];
+
+          reason.rows.forEach(function(row)
+          {
+            if (row.id === 'total')
+            {
+              return;
+            }
+
+            var delayed = counter.delayed.reasons[row.id];
+
+            reason.series[row.id].data.push({
+              x: g.key,
+              y: delayed ? delayed[0] : null
+            });
+            losses.series[row.id].data.push({
+              x: g.key,
+              y: delayed ? (delayed[1] / 60) : null,
+              seconds: delayed ? delayed[1] : 0
+            });
+          });
+        });
+      });
+
+      return attrs;
+    }
+
+  }, {
+
+    fromQuery: function(query)
+    {
+      var attrs = {};
+
+      if (query.from > 0)
+      {
+        attrs.from = +query.from;
+      }
+
+      if (query.to > 0)
+      {
+        attrs.to = +query.to;
+      }
+
+      if (query.interval)
+      {
+        attrs.interval = query.interval;
+      }
+
+      return new this(attrs);
     }
 
   });

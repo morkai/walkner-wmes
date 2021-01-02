@@ -4,18 +4,18 @@ define([
   './router',
   './viewport',
   './user',
-  './paintShop/pages/PaintShopLoadPage',
+  './paintShop/pages/load/MonitoringPage',
   'i18n!app/nls/paintShop'
 ], function(
   router,
   viewport,
   user,
-  PaintShopLoadPage
+  MonitoringPage
 ) {
   'use strict';
 
   router.map('/', user.auth('LOCAL', 'PAINT_SHOP:VIEW'), function()
   {
-    viewport.showPage(new PaintShopLoadPage());
+    viewport.showPage(new MonitoringPage());
   });
 });

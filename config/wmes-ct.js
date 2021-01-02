@@ -11,7 +11,8 @@ exports.modules = [
   'events',
   'settings',
   'messenger/server',
-  'wmes-ct-backend'
+  'wmes-ct-backend',
+  'paintShop/loadMonitor'
 ];
 
 exports.events = {
@@ -53,10 +54,32 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   broadcastTopics: [
     'events.saved',
     'ct.state.updated',
-    'ct.pces.saved'
+    'ct.pces.saved',
+    'paintShop.load.changed'
   ]
 });
 
 exports['wmes-ct-backend'] = {
 
+};
+
+exports['paintShop/loadMonitor'] = {
+  master: {
+    connection: {
+      type: 'tcp',
+      socketOptions: {
+        host: '127.0.0.1',
+        port: 502
+      },
+      noActivityTime: 3000
+    },
+    transport: {
+      type: 'ip'
+    },
+    maxConcurrentTransactions: 1,
+    defaultUnit: 1,
+    defaultMaxRetries: 0,
+    defaultTimeout: 200,
+    suppressTransactionErrors: true
+  }
 };

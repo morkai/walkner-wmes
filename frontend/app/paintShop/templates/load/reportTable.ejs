@@ -1,0 +1,17 @@
+<table class="table table-bordered table-condensed">
+  <tbody>
+    <% rows.forEach(function(row) { %>
+    <tr data-id="<%- row.id %>">
+      <% if (row.no != null) { %>
+      <td class="is-min is-number" style="border-left: 0"><%- row.no %><%- (/^[0-9]+$/).test(row.no) ? '.' : '' %></td>
+      <% } %>
+      <td style="<% if (row.color) { %>border-left-color: <%- row.color %>;<% } else { %>border-left: 0;<% } %>"><%= row.label || t('paintShop', 'load:report:series:' + row.id) %></td>
+      <td class="is-min is-number"><%- Math.round(row.abs || 0).toLocaleString() %></td>
+      <td class="is-min is-number"><%- Math.round((row.rel || 0) * 100).toLocaleString() %>%</td>
+    </tr>
+    <% }) %>
+    <tr>
+      <td colspan="4" style="<% if (rows.length && !rows[0].color) { %>border-left: 0;<% } %>"></td>
+    </tr>
+  </tbody>
+</table>

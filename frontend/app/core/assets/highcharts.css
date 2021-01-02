@@ -2,9 +2,14 @@ table.highcharts-tooltip {
   width: 100%;
   white-space: nowrap;
 }
+.highcharts-tooltip-string {
+  padding: 0 0 0 5px;
+  text-align: left;
+  width: 1%;
+}
 .highcharts-tooltip-integer {
   font-family: Consolas, monospace;
-  padding: 0 0 0 5px;
+  padding: 0 0 0 15px;
   text-align: right;
   width: 1%;
 }
@@ -16,9 +21,6 @@ table.highcharts-tooltip {
 .highcharts-tooltip-suffix {
   font-family: Consolas, monospace;
   width: 1%;
-}
-.highcharts-tooltip-integer {
-  padding-left: 15px;
 }
 .highcharts-tooltip-label + .highcharts-tooltip-integer {
   padding-left: 4px;

@@ -4,13 +4,15 @@ define([
   'js2form',
   'app/time',
   'app/core/View',
+  'app/core/util/getShiftStartInfo',
   'app/core/util/buttonGroup',
   'app/core/util/forms/dateTimeRange',
-  'app/paintShop/templates/load/filter'
+  'app/paintShop/templates/load/reportFilter'
 ], function(
   js2form,
   time,
   View,
+  getShiftStartInfo,
   buttonGroup,
   dateTimeRange,
   template
@@ -59,6 +61,31 @@ define([
         to: range.to ? range.to.valueOf() : 0,
         interval: buttonGroup.getValue(this.$id('interval'))
       };
+
+      if (query.interval === 'none')
+      {
+        if (!query.from)
+        {
+          query.from = getShiftStartInfo(Date.now()).moment.startOf('day').valueOf();
+        }
+
+        query.to = time.getMoment(query.from).add(1, 'days').valueOf();
+      }
+
+      if (query.from && query.to && query.to <= query.from)
+      {
+        query.to = time.getMoment(query.from).add(1, query.interval === 'none' ? 'day' : query.interval).valueOf();
+      }
+
+      if (query.from)
+      {
+        this.$id('from-date').val(time.format(query.from, 'YYYY-MM-DD'));
+      }
+
+      if (query.to)
+      {
+        this.$id('to-date').val(time.format(query.to, 'YYYY-MM-DD'));
+      }
 
       this.model.set(query);
       this.model.trigger('filtered');

@@ -1,6 +1,6 @@
 {
   "APP_NAME": "WMES",
-  "TITLE": "Wannabe MES",
+  "TITLE": "WMES",
 
   "MSG:LOADING": "<i class='fa fa-spinner fa-spin'></i><span>Ładowanie...</span>",
   "MSG:LOADING_FAILURE": "Ładowanie nie powiodło się.",

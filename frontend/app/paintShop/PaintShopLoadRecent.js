@@ -14,6 +14,7 @@ define([
     defaults: function()
     {
       return {
+        counter: 1,
         totalCount: window.screen.availWidth,
         collection: []
       };
@@ -21,7 +22,7 @@ define([
 
     url: function()
     {
-      return '/paintShop/load/recent?limit(' + this.get('totalCount') + ')';
+      return '/paintShop/load/recent?counter=' + this.get('counter') + '&limit=' + this.get('totalCount');
     },
 
     update: function(items)

@@ -257,7 +257,9 @@ exports.updater = {
       mainJsFile: '/wmes-ps-load.js',
       mainCssFile: '/assets/wmes-ps-load.css',
       template: manifestTemplates.ps,
-      frontendAppData: {},
+      frontendAppData: {
+        IS_EMBEDDED: true
+      },
       dictionaryModules: {}
     },
     {

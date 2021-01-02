@@ -3,12 +3,29 @@
 
 'use strict';
 
-db.oshdepartments.find({manager: {$exists: true}}).forEach(d =>
-{
-  d.managers = [d.managers];
-
-  db.oshdepartments.updateOne({_id: d._id}, {
-    $unset: {manager: 1},
-    $set: {managers: [d.manager]}
-  });
-});
+db.paintshoploadreasons.insertMany([
+  {
+    "_id" : ObjectId("5fedec03b3b33925c8fe05e5"),
+    "active" : true,
+    "position" : 9999,
+    "label" : "Inne"
+  },
+  {
+    "_id" : ObjectId("5fedebfcb3b33925c8fe05e4"),
+    "active" : true,
+    "position" : 30,
+    "label" : "Brak trawersy"
+  },
+  {
+    "_id" : ObjectId("5fedebeeb3b33925c8fe05e3"),
+    "active" : true,
+    "position" : 20,
+    "label" : "Pełny piec"
+  },
+  {
+    "_id" : ObjectId("5fedebe6b3b33925c8fe05e2"),
+    "active" : true,
+    "position" : 10,
+    "label" : "Przezbrojenie"
+  }
+])

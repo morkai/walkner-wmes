@@ -11,9 +11,16 @@ define([
 
     nlsDomain: 'paintShop',
 
+    defaults: function()
+    {
+      return {
+        counter: 1
+      };
+    },
+
     url: function()
     {
-      return '/paintShop/load/stats';
+      return '/paintShop/load/stats?counter=' + this.get('counter');
     }
 
   });

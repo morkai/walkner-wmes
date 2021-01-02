@@ -1,0 +1,29 @@
+<div class="psLoad-reasonEditor">
+  <% if (loading) { %>
+  <p><i class="fa fa-spinner fa-spin"></i></p>
+  <% } else { %>
+  <div id="<%- id('loads') %>" class="psLoad-reasonEditor-loads" style="height: <%- height %>px">
+    <% loads.forEach(function(load) { %>
+    <div class="psLoad-reasonEditor-load" data-id="<%- load.id %>" tabindex="0">
+      <span class="psLoad-reasonEditor-time"><%- load.time %></span>
+      <span class="psLoad-reasonEditor-separator">▪</span>
+      <span class="psLoad-reasonEditor-duration"><%- load.duration %></span>
+      <span class="psLoad-reasonEditor-separator">▪</span>
+      <span class="psLoad-reasonEditor-reason"><%- load.reason || '?' %></span>
+    </div>
+    <% }) %>
+  </div>
+  <div id="<%- id('reasons') %>" class="psLoad-reasonEditor-reasons">
+    <% reasons.forEach(function(reason, i) { %>
+    <button data-reason="<%- reason._id %>" data-key="<%- i + 1 %>" class="btn btn-default" type="button">
+      <span class="psLoad-reasonEditor-key"><%- i + 1 %></span>
+      <span class="psLoad-reasonEditor-label"><%= reason.label %></span>
+    </button>
+    <% }) %>
+    <button data-reason="?" data-key="0" class="btn btn-default hidden" type="button">
+      <span class="psLoad-reasonEditor-key">0</span>
+      <span class="psLoad-reasonEditor-label">?</span>
+    </button>
+  </div>
+  <% } %>
+</div>

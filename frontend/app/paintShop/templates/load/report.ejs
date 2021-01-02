@@ -1,0 +1,13 @@
+<div class="psLoad-report">
+  <div id="<%- id('filter') %>" class="filter-container"></div>
+  <% [1, 2, 3].forEach(function(c) { %>
+    <h3><%- t('load:report:duration:title', {counter: t('load:counters:' + c)}) %></h3>
+    <div id="<%- id('duration' + c) %>"></div>
+    <% if (c !== 1) { %>
+      <h3><%- t('load:report:reasons:title', {counter: t('load:counters:' + c)}) %></h3>
+      <div id="<%- id('reasons' + c) %>"></div>
+      <h3><%- t('load:report:losses:title', {counter: t('load:counters:' + c)}) %></h3>
+      <div id="<%- id('losses' + c) %>"></div>
+    <% } %>
+  <% }) %>
+</div>

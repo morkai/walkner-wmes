@@ -221,6 +221,11 @@ function(
     {
       view.$('[aria-describedby="' + this.id + '"]').popover('destroy');
     });
+
+    view.$('.tooltip').each(function()
+    {
+      view.$('[aria-describedby="' + this.id + '"]').tooltip('destroy');
+    });
   };
 
   View.prototype.beforeRender = function() {};

@@ -44,6 +44,11 @@
         </tfoot>
         <tbody id="<%- id('load-statuses') %>"></tbody>
       </table>
+      <div class="form-group">
+        <label for="<%- id('load-delayedDuration') %>"><%- t('settings:load:delayedDuration') %></label>
+        <span class="help-block"><%- t('settings:load:delayedDuration:help') %></span>
+        <input id="<%- id('load-delayedDuration') %>" name="paintShop.load.delayedDuration" class="form-control" type="number" data-setting>
+      </div>
     </div>
   </div>
 </form>

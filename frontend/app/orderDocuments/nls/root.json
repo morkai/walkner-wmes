@@ -1,6 +1,6 @@
 {
   "root": {
-    "TITLE": "Documents < Wannabe MES",
+    "TITLE": "Documents < WMES",
 
     "controls:emptyOrderNo": "No order",
     "controls:emptyOrderName": "No order is selected.",

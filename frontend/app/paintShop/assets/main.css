@@ -67,7 +67,7 @@
 .paintShop-right {
   width: 520px;
 }
-.paintShop-is-embedded .paintShop-right {
+.is-embedded .paintShop-right {
   margin-bottom: 54px;
 }
 .paintShop-queue-container,

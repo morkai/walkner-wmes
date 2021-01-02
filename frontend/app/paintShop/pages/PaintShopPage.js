@@ -177,7 +177,7 @@ define([
           href: '#drilling/' + page.orders.getDateFilter()
         }, {
           icon: 'balance-scale',
-          href: '#paintShop/load',
+          href: '#paintShop/load/monitoring',
           privileges: 'PAINT_SHOP:VIEW',
           label: page.t('PAGE_ACTION:load'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
@@ -395,7 +395,7 @@ define([
 
       $(document.body)
         .css('overflow', '')
-        .removeClass('paintShop-is-fullscreen paintShop-is-embedded');
+        .removeClass('paintShop-is-fullscreen');
 
       $(window).off('.' + this.idPrefix);
       $(document).off('.' + this.idPrefix);
@@ -598,7 +598,6 @@ define([
     {
       document.body.style.overflow = 'hidden';
       document.body.classList.toggle('paintShop-is-fullscreen', this.isFullscreen());
-      document.body.classList.toggle('paintShop-is-embedded', embedded.isEnabled());
     },
 
     afterRender: function()

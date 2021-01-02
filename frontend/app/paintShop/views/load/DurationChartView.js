@@ -2,7 +2,6 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/time',
   'app/highcharts',
   'app/core/View',
@@ -10,7 +9,6 @@ define([
   'app/reports/util/formatXAxis'
 ], function(
   _,
-  t,
   time,
   Highcharts,
   View,
@@ -72,18 +70,19 @@ define([
 
     createChart: function()
     {
-      var data = this.serializeChartData();
-
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
-          plotBorderWidth: 1
+          plotBorderWidth: 1,
+          height: 400
         },
         exporting: {
-          filename: t('paintShop', 'load:report:filename'),
+          filename: this.t('load:report:duration:filename', {counter: this.options.counter}),
           chartOptions: {
             title: {
-              text: t('paintShop', 'load:report:title')
+              text: this.t('load:report:duration:title', {
+                counter: this.t('load:counters:' + this.options.counter)
+              })
             }
           }
         },
@@ -115,52 +114,98 @@ define([
         legend: {
           enabled: true
         },
-        series: [{
-          id: 'duration',
-          name: t('paintShop', 'load:report:avgDuration'),
-          data: data.duration,
+        series: this.serializeSeries()
+      });
+    },
+
+    serializeSeries: function()
+    {
+      var data = this.serializeChartData();
+
+      if (this.model.get('interval') === 'none')
+      {
+        return [{
+          id: 'actual',
+          name: this.t('load:report:duration:actual'),
+          data: data.actual,
           type: 'column',
           color: '#0af',
           yAxis: 0,
           tooltip: {
             valueSuffix: 's'
+          },
+          turboThreshold: 1501
+        }];
+      }
+
+      return [{
+        id: 'avg',
+        name: this.t('load:report:duration:avg'),
+        data: data.avg,
+        type: 'column',
+        color: '#0af',
+        yAxis: 0,
+        tooltip: {
+          valueSuffix: 's'
+        },
+        turboThreshold: 1501
+      }, {
+        id: 'count',
+        name: this.t('load:report:duration:count'),
+        data: data.count,
+        type: 'line',
+        color: '#000',
+        yAxis: 1,
+        tooltip: {
+          valueSuffix: this.t('reports', 'quantitySuffix')
+        },
+        marker: {
+          radius: 0,
+          states: {
+            hover: {
+              radius: 4
+            }
           }
-        }, {
-          id: 'count',
-          name: t('paintShop', 'load:report:count'),
-          data: data.count,
-          type: 'line',
-          color: '#000',
-          yAxis: 1,
-          tooltip: {
-            valueSuffix: t('reports', 'quantitySuffix')
-          }
-        }]
-      });
+        },
+        turboThreshold: 1501
+      }];
     },
 
     serializeChartData: function()
     {
       var view = this;
+      var counter = view.options.counter;
       var data = {
-        duration: [],
+        actual: [],
+        avg: [],
         count: []
       };
 
-      view.model.get('groups').forEach(function(g)
+      if (view.model.get('interval') === 'none')
       {
-        data.duration.push({
-          x: g.key,
-          y: g.avgDuration,
-          g: g,
-          color: view.settings.getLoadStatus(g.avgDuration).color
+        data.actual = view.model.get('load')[counter].map(function(d)
+        {
+          return {
+            x: d[0],
+            y: d[1],
+            color: view.settings.getLoadStatus(d[1]).color
+          };
         });
-        data.count.push({
-          x: g.key,
-          y: g.count,
-          g: g
+      }
+      else
+      {
+        view.model.get('groups').forEach(function(g)
+        {
+          var c = g.counters[counter];
+
+          data.avg.push({
+            x: g.key,
+            y: c.avg,
+            color: view.settings.getLoadStatus(c.avg).color
+          });
+          data.count.push([g.key, c.count]);
         });
-      });
+      }
 
       return data;
     },

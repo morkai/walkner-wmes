@@ -26,23 +26,51 @@ define([
   BlankLayout.prototype.initialize = function()
   {
     this.model = {
-      title: null,
-      breadcrumbs: []
+      id: null,
+      className: null,
+      breadcrumbs: [],
+      title: null
     };
   };
 
   BlankLayout.prototype.afterRender = function()
   {
     this.changeTitle();
+
+    if (this.model.id !== null)
+    {
+      this.setId(this.model.id);
+    }
+
+    if (this.model.className !== null)
+    {
+      this.setClassName(this.model.className);
+    }
   };
 
   BlankLayout.prototype.reset = function()
   {
+    this.setId(null);
+    this.setClassName(null);
+
+    this.model.title = null;
+    this.model.breadcrumbs = [];
+
     this.removeView(this.pageContainerSelector);
   };
 
   BlankLayout.prototype.setUpPage = function(page)
   {
+    if (page.pageId)
+    {
+      this.setId(page.pageId);
+    }
+
+    if (page.pageClassName)
+    {
+      this.setClassName(page.pageClassName);
+    }
+
     if (page.title)
     {
       this.setTitle(page.title, page);
@@ -57,6 +85,46 @@ define([
     {
       this.changeTitle();
     }
+  };
+
+  /**
+   * @param {string} id
+   * @returns {BlankLayout}
+   */
+  BlankLayout.prototype.setId = function(id)
+  {
+    if (this.isRendered())
+    {
+      this.$el.attr('data-id', id);
+    }
+
+    this.model.id = id;
+
+    return this;
+  };
+
+  /**
+   * @param {string} className
+   * @returns {BlankLayout}
+   */
+  BlankLayout.prototype.setClassName = function(className)
+  {
+    if (document.body)
+    {
+      if (this.model.className)
+      {
+        document.body.classList.remove(this.model.className);
+      }
+
+      if (this.isRendered() && className)
+      {
+        document.body.classList.add(className);
+      }
+    }
+
+    this.model.className = className;
+
+    return this;
   };
 
   /**

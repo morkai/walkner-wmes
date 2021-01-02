@@ -117,6 +117,9 @@
     "menu:dropZone:false": "Call drop zone",
     "menu:dropZone:failure": "Failed to change the drop zone state.",
 
+    "load:counters:1": "Hanged",
+    "load:counters:2": "Cabin 1",
+    "load:counters:3": "Cabin 2",
     "load:stats:last": "Last",
     "load:stats:current": "Current",
     "load:stats:10m": "10 minutes",
@@ -130,6 +133,30 @@
     "load:report:title": "Paint shop load",
     "load:report:avgDuration": "Average cycle time",
     "load:report:count": "Count",
+    "load:report:pageAction": "Report",
+    "load:report:breadcrumb": "Report",
+    "load:report:duration:filename": "WMES_PS_CycleTime",
+    "load:report:duration:title": "Cycle time ({counter})",
+    "load:report:duration:actual": "Cycle time",
+    "load:report:duration:avg": "Average cycle time",
+    "load:report:duration:count": "Quantity",
+    "load:report:reasons:filename": "WMES_PS_Incidents_L{counter}",
+    "load:report:reasons:title": "Incidents by category ({counter})",
+    "load:report:losses:filename": "WMES_PS_Losses_L{counter}",
+    "load:report:losses:title": "Losses by category ({counter}) [min]",
+    "load:report:series:total": "Total",
+    "load:history:pageAction": "History",
+    "load:history:breadcrumb": "History",
+    "load:history:time": "Time",
+    "load:history:counter": "Counter",
+    "load:history:duration": "Duration",
+    "load:history:reason": "Delay reason",
+    "load:export:pageAction": "Export",
+    "load:export:title": "Exporting load history",
+    "load:export:submit": "Export data",
+    "load:reasons:pageAction": "Delays",
+    "load:reasons:action": "Set delay reasons",
+    "load:reasons:title": "Delays",
 
     "settings:tab:general": "General",
     "settings:tab:planning": "Planning",
@@ -171,11 +198,7 @@
     "printPage:mrp": "MRP:",
     "printPage:order": "Order:",
     "printPage:page": "Page {n} of {total}",
-    "printPage:printed": "Printed on {time} by {user} with WMES.",
-
-    "exportLoad:pageAction": "Export",
-    "exportLoad:title": "Exporting load data",
-    "exportLoad:submit": "Export data"
+    "printPage:printed": "Printed on {time} by {user} with WMES."
   },
   "pl": true
 }

@@ -103,19 +103,29 @@ define([
 
     rows.forEach(function(row)
     {
-      var yParts = Highcharts.numberFormat(row.value, row.decimals).split(decimalPoint);
-      var integer = yParts[0];
-      var fraction = yParts.length === 2 ? (decimalPoint + yParts[1]) : '';
       var yPrefix = row.prefix || '';
       var ySuffix = row.suffix || '';
       var valueStyle = ' style="' + (row.valueStyle || '') + '"';
 
       str += '<tr><td class="highcharts-tooltip-label">'
-        + '<span style="color: ' + row.color + '">\u25cf</span> ' + row.name + ':</td>'
-        + '<td class="highcharts-tooltip-integer"' + valueStyle + '>' + yPrefix + integer + '</td>'
-        + '<td class="highcharts-tooltip-fraction"' + valueStyle + '>' + fraction + '</td>'
-        + '<td class="highcharts-tooltip-suffix"' + valueStyle + '>' + ySuffix + '</td>'
-        + (row.extraColumns || '') + '</tr>';
+        + '<span style="color: ' + row.color + '">\u25cf</span> ' + row.name + ':</td>';
+
+      if (typeof row.value === 'number')
+      {
+        var yParts = Highcharts.numberFormat(row.value, row.decimals).split(decimalPoint);
+        var integer = yParts[0];
+        var fraction = yParts.length === 2 ? (decimalPoint + yParts[1]) : '';
+
+        str += '<td class="highcharts-tooltip-integer"' + valueStyle + '>' + yPrefix + integer + '</td>'
+          + '<td class="highcharts-tooltip-fraction"' + valueStyle + '>' + fraction + '</td>'
+          + '<td class="highcharts-tooltip-suffix"' + valueStyle + '>' + ySuffix + '</td>';
+      }
+      else
+      {
+        str += '<td colspan="3" class="highcharts-tooltip-string"' + valueStyle + '>' + row.value + '</td>';
+      }
+
+      str += (row.extraColumns || '') + '</tr>';
     });
 
     str += '</table>';

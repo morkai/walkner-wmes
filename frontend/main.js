@@ -123,7 +123,9 @@
 
   window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:(?:#|&).*)?$/i) || [null, null])[1];
   window.INSTANCE_ID = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
-  window.IS_EMBEDDED = window.parent !== window || window.location.href.indexOf('_embedded=1') !== -1;
+  window.IS_EMBEDDED = window.IS_EMBEDDED
+    || window.parent !== window
+    || window.location.href.indexOf('_embedded=1') !== -1;
   window.IS_IE = navigator.userAgent.indexOf('Trident/') !== -1;
   window.IS_MOBILE = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino|android|ipad|playbook|silk/i
     .test(navigator.userAgent);

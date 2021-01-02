@@ -1,99 +1,173 @@
 <div class="hidden">
-    <h1>v0.155.0</h1>
-    <h2><%- time.format('2020-12-06', 'LL') %></h2>
-    <h3>Magazyn</h3>
-    <ul>
-      <li>Poprawiono błąd powodujący drukowanie nieprawidłowej ilości do skompletowania na pickliście malarnii, jeżeli
-        w secie znajduje się kilka zleceń z takim samym numerem.</li>
-      <li>Poprawiono błąd powodujący drukowanie picklisty malarnii z brakującymi zleceniami malarskimi, jeżeli były
-        zaplanowane na inny dzień niż zlecenie nadrzędne.</li>
-      <li>Poprawiono błąd powodujący wyświetlanie komunikatu o zawieraniu zakończonych zleceń po dodaniu dodatkowych
-        wózków do wysyłki, nawet gdy takowych zleceń nie ma w żadnym z wózków.</li>
-      <li>Poprawiono błąd powodujący niewyświetlanie komentarzy na pickliście malarnii.</li>
-      <li>Zmieniono przypisywanie Malarnii do kompletowania seta tak, aby brane pod uwagę były sety, w których pomyślnie
-        wykonano transakcję LP10 we wszystkich zleceniach malarskich, a nie tylko w przynajmniej jednym.</li>
-      <li>Zmieniono warunek kwalifikujący wózki do realizacji tak, aby zaliczane były wózki na linie z dostępnym czasem
-        poniżej limitu, bez względu na planowany czas rozpoczęcia zleceń z wózka.</li>
-      <li>Zmieniono wysyłkę wózków tak, aby najpierw przydzielane były wózki dla linii, które mają najmniej dostępnego
-        czasu.</li>
-      <li>Zmieniono opcję konfiguracyjną Czas na wysyłkę tak, aby można było definiować różne czasy dla różnych MRP.</li>
-      <li>Zmieniono wysyłkę wózków tak, aby po wysłaniu wózków na grupę linii, wózki zawierające zlecenia przeznaczone
-        bezpośrednio na linie z danej grupy były oznaczone do realizacji, jeżeli są zaplanowane na wcześniej niż
-        najwcześniejsze zlecenie z wózków przeznaczonych na grupę linii.</li>
-      <li>Zmieniono kompletację setów tak, aby po kompletacji na grupę linii, poszczególne linie z grupy miały priorytet
-        przy kolejnej kompletacji, jeżeli mają oczekujące zlecenia zaplanowane bezpośrednio na daną linię i na wcześniejszy
-        dzień niż set na grupę linii.</li>
-      <li>Dodano zapisywanie nowego zdarzenia: Edycja dostarczonej ilości - generowane podczas edycji dostarczonego
-        zdarzenia, jeżeli zmieniona została ilość. Nie dotyczy przenoszenia zleceń.</li>
-      <li>Dodano do zdarzeń Rozpoczęcie nowego seta oraz Rozpoczęcie dostawy informacji o wymuszeniu.</li>
-      <li>Dodano numery wózków do picklisty malarnii.</li>
-      <li>Dodano zapisywanie wartości 'Plan?' oraz 'Pracuje?' w historii stanu linii.</li>
-      <li>Dodano możliwość eksportowania historii stanu linii.</li>
-      <li>Dodano możliwość przeniesienia zleceń na inną linię podczas wymuszenia kompletacji seta.</li>
-      <li>Dodano możliwość wymuszenia dostawy podczas wymuszenia kompletacji seta.</li>
-      <li>Dodano Czas rozpoczęcia oraz Czas trwania do dymków poszczególnych funkcji kompletacji.</li>
-      <li>Dodano komponenty wiercone niemalowane do picklisty malarnii.</li>
-    </ul>
-    <h3>Zmiany produkcyjne</h3>
-    <ul>
-      <li>Zmieniono ekran aktualnej zmiany linii produkcyjnej tak, aby Wykonana ilość oraz Wydajność aktualizowała
-        się na bierząco.</li>
-    </ul>
-    <h3>Zlecenia produkcyjne</h3>
-    <ul>
-      <li>Poprawiono błąd powodujący pozostawienie nadrzędnego zlecenia z nieprawidłowym statusem malarnii,
-        jeżeli wszystkie podzlecenia malarskie zostały usunięte i/lub odpięte od zlecenia nadrzędnego.</li>
-      <li>Zmieniono wyświetlanie nazwy wyrobu tak, aby wartość brana była z pola Opis zamiast Nazwa, jeżeli zlecenie
-        jest z konfiguratora (12NC zaczyna się od A-Z).</li>
-      <li>Zmieniono wyświetlanie ETO w szczegółach zlecenia tak, aby tabela ETO dla nadrzędnego zlecenia była wyświetlana
-        w podrzędnym zleceniu, jeżeli nie ma ono swojej tabeli ETO.</li>
-    </ul>
-    <h3>Usprawnienia</h3>
-    <ul>
-      <li>Dodano nowy filtr: Data zakończenia.</li>
-    </ul>
-    <h3>Wydajność godzinowa</h3>
-    <ul>
-      <li>Zmieniono widok Wydajność zmiany tak, aby Czas cyklu nie był pokazywany.</li>
-    </ul>
-    <h3>Sprawdzanie komponentów</h3>
-    <ul>
-      <li>Dodano możliwość oznaczania komponentów jako opcjonalne. Opcjonalne komponenty nie muszą występować w BOM
-        aby inne, wymagane komponenty z danej strategii były sprawdzane.</li>
-      <li>Dodano możliwość definiowania wzorca komponentu jaki nie może pasować do 12NC lub nazwy komponentu,
-        aby dany komponent był sprawdzany.</li>
-      <li>Dodano możliwość oznaczania komponentu jako sprawdzany tylko przy pierwszej sztuce (komponent sprawdzany tylko
-        w momencie gdy Formatka operatora pokazuje Wykonaną ilość równą zero).</li>
-    </ul>
-    <h3>Planowanie</h3>
-    <ul>
-      <li>Zmieniono sposób liczenia realizacji sekwencji tak, aby zlecenie, którego zaplanowany czas rozpoczęcia+4 godz.
-        przekracza zmianę produkcyjną, było zaliczane jako zrealizowane, jeżeli jego rzeczywisty czas rozpoczęcia jest przed
-        planowanym czasem rozpoczęcia pierwszego zlecenia na kolejnej pracującej zmianie powiększonym o czas przekroczenia
-        zmiany. Jeżeli zlecenie zaplanowano na piątek 12:00, to czas na realizację zlecenia jest do godziny 08:00
-        w następny poniedziałek, zakładając, że II i III zmiana w piątek oraz cały weekend są niepracujące.</li>
-    </ul>
-    <h3>Raporty > Wskaźniki</h3>
-    <ul>
-      <li>Zmieniono generowanie raportu tak, aby zlecenia aktualnie robione na liniach produkcyjnych były wliczane
-        do wskaźników.</li>
-    </ul>
-    <h3>Raporty > Planowane obciążenie linii</h3>
-    <ul>
-      <li>Poprawiono błąd mogący spowodować niezaładowanie się raportu.</li>
-    </ul>
-    <h3>Użytkownicy</h3>
-    <ul>
-      <li>Poprawiono błąd powodujący nieaktualizowanie danych sesji zalogowanego użytkownika po edycji lub usunięciu,
-        jeżeli w momencie wykonania akcji dany użytkownik nie był podłączony do serwera.</li>
-    </ul>
-    <h3>Dopuszczenia</h3>
-    <ul>
-      <li>Poprawiono dokonywanie zmian w dopuszczeniu z dużą ilością przypisanych zleceń tak, aby było bardziej
-        optymalne.</li>
-      <li>Dodano sprawdzanie poprawności dopuszczonych zleceń. Dopuszczenie zlecenia jest nieprawidłowe, jeżeli
-        Materiał podstawowy występuje w BOM danego zlecenia.</li>
-    </ul>
+  <h1>v0.156.0</h1>
+  <h2><%- time.format('2020-12-30', 'LL') %></h2>
+  <h3>Dopuszczenia</h3>
+  <ul>
+    <li>Poprawiono błąd umożliwiający dodanie wniosku bez zdefiniowania przynajmniej jednego zastępczego
+      komponentu.</li>
+    <li>Zmieniono wyświetlanie dopuszczonych komponentów w zleceniu tak, aby pokazywały się także komponenty zastępcze
+      bez komponentu podstawowego.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Zmieniono obliczanie wskaźnika realizacji sekwencji tak, aby zlecenia o tym samym numerze rozpoczęte na tej
+      samej linii jedno po drugim były traktowane jako jedno, to samo zlecenie.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Dodano do raportu Ilość zgłoszeń wykres Ilość zgłoszeń wg zatrudnienia. Zatrudnienie właściciela zgłoszenia
+      brane jest z firmy do niego przypisanej w momencie dodania zgłoszenia.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie komunikatu o złej dacie realizacji, nawet gdy po wybraniu nieprawidłowej
+      daty wybrano prawidłową.</li>
+    <li>Zmieniono uprawnienia tak, aby przypisane Osoby wnioskujące mogły edytować zgłoszenie ze statusem
+      W realizacji.</li>
+    <li>Dodano nowe pole: Przełożony.</li>
+    <li>Dodano Ilość zgłoszeń wg przełożonych do raportu Ilość zgłoszeń.</li>
+    <li>Dodano filtr Przełożony do raportu Wynagrodzenie.</li>
+    <li>Dodano wartość wynagrodzenia do raportu Wynagrodzenie.</li>
+    <li>Dodano do filtra Użytkownik opcje wyszukiwania po Koordynatorze, Przełożonym oraz Właścicielach.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Dodano nowy filtr uczestnika zgłoszenia: zgłaszający.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Zmieniono eksportowanie historii stanu linii tak, aby wartości czasu kompletowanego/dostępnego były w godzinach
+      a nie sekundach.</li>
+    <li>Zmieniono kompletację seta tak, aby użytkownik wykonujący transakcję LP10 lub użytkownik z uprawnieniem
+      'Magazyn: zarządzanie' mógł ignorować kompletację innych funkcji, jeżeli jeszcze nie zostały przypisane.</li>
+    <li>Dodano możliwość eksportowania zleceń z kolejki kompletacji.</li>
+    <li>Dodano możliwość eksportowania historii wózków.</li>
+    <li>Dodano możliwość eksportowania historii przestojów.</li>
+  </ul>
+  <h3>Produkcja > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono obliczanie wskaźnika wydajności dla niezakończonych zleceń na ekranie szczegółów zlecenia tak, aby
+      był przeliczany ze wzoru na wydajność co 5 sekund. Wcześniej wyświetlana była wydajność obliczona na podstawie
+      Takt Time.</li>
+  </ul>
+  <h3>Produkcja > Zmiany produkcyjne</h3>
+  <ul>
+    <li>Zmieniono obliczanie wskaźnika wydajności dla niezakończonych zleceń na osi czasu tak, aby był przeliczany
+      ze wzoru na wydajność co 15 sekund. Wcześniej wyświetlana była wydajność obliczona na podstawie
+      Takt Time.</li>
+  </ul>
+  <h3>Wydajność godzinowa</h3>
+  <ul>
+    <li>Poprawiono błąd w obliczaniu wydajności aktualnego zlecenia, jeżeli w danym momencie na linii trwa przerwa.</li>
+  </ul>
+  <h3>Sprawdzanie komponentów</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący dodanie wszystkich komponentów do sprawdzenia, jeżeli strategia zawiera przynajmniej
+      jeden komponent wirtualny.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono pola z wyszukiwaniem użytkowników tak, aby w przypadku użytkowników z takim samym imieniem
+      i nazwiskiem wyświetlał wszystkie opcje z dodatkowymi informacjami. Wcześniej wyświetlana była tylko jedna,
+      najbardziej pasująca opcja.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.155.0</h1>
+  <h2><%- time.format('2020-12-06', 'LL') %></h2>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący drukowanie nieprawidłowej ilości do skompletowania na pickliście malarnii, jeżeli
+      w secie znajduje się kilka zleceń z takim samym numerem.</li>
+    <li>Poprawiono błąd powodujący drukowanie picklisty malarnii z brakującymi zleceniami malarskimi, jeżeli były
+      zaplanowane na inny dzień niż zlecenie nadrzędne.</li>
+    <li>Poprawiono błąd powodujący wyświetlanie komunikatu o zawieraniu zakończonych zleceń po dodaniu dodatkowych
+      wózków do wysyłki, nawet gdy takowych zleceń nie ma w żadnym z wózków.</li>
+    <li>Poprawiono błąd powodujący niewyświetlanie komentarzy na pickliście malarnii.</li>
+    <li>Zmieniono przypisywanie Malarnii do kompletowania seta tak, aby brane pod uwagę były sety, w których pomyślnie
+      wykonano transakcję LP10 we wszystkich zleceniach malarskich, a nie tylko w przynajmniej jednym.</li>
+    <li>Zmieniono warunek kwalifikujący wózki do realizacji tak, aby zaliczane były wózki na linie z dostępnym czasem
+      poniżej limitu, bez względu na planowany czas rozpoczęcia zleceń z wózka.</li>
+    <li>Zmieniono wysyłkę wózków tak, aby najpierw przydzielane były wózki dla linii, które mają najmniej dostępnego
+      czasu.</li>
+    <li>Zmieniono opcję konfiguracyjną Czas na wysyłkę tak, aby można było definiować różne czasy dla różnych MRP.</li>
+    <li>Zmieniono wysyłkę wózków tak, aby po wysłaniu wózków na grupę linii, wózki zawierające zlecenia przeznaczone
+      bezpośrednio na linie z danej grupy były oznaczone do realizacji, jeżeli są zaplanowane na wcześniej niż
+      najwcześniejsze zlecenie z wózków przeznaczonych na grupę linii.</li>
+    <li>Zmieniono kompletację setów tak, aby po kompletacji na grupę linii, poszczególne linie z grupy miały priorytet
+      przy kolejnej kompletacji, jeżeli mają oczekujące zlecenia zaplanowane bezpośrednio na daną linię i na wcześniejszy
+      dzień niż set na grupę linii.</li>
+    <li>Dodano zapisywanie nowego zdarzenia: Edycja dostarczonej ilości - generowane podczas edycji dostarczonego
+      zdarzenia, jeżeli zmieniona została ilość. Nie dotyczy przenoszenia zleceń.</li>
+    <li>Dodano do zdarzeń Rozpoczęcie nowego seta oraz Rozpoczęcie dostawy informacji o wymuszeniu.</li>
+    <li>Dodano numery wózków do picklisty malarnii.</li>
+    <li>Dodano zapisywanie wartości 'Plan?' oraz 'Pracuje?' w historii stanu linii.</li>
+    <li>Dodano możliwość eksportowania historii stanu linii.</li>
+    <li>Dodano możliwość przeniesienia zleceń na inną linię podczas wymuszenia kompletacji seta.</li>
+    <li>Dodano możliwość wymuszenia dostawy podczas wymuszenia kompletacji seta.</li>
+    <li>Dodano Czas rozpoczęcia oraz Czas trwania do dymków poszczególnych funkcji kompletacji.</li>
+    <li>Dodano komponenty wiercone niemalowane do picklisty malarnii.</li>
+  </ul>
+  <h3>Zmiany produkcyjne</h3>
+  <ul>
+    <li>Zmieniono ekran aktualnej zmiany linii produkcyjnej tak, aby Wykonana ilość oraz Wydajność aktualizowała
+      się na bierząco.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący pozostawienie nadrzędnego zlecenia z nieprawidłowym statusem malarnii,
+      jeżeli wszystkie podzlecenia malarskie zostały usunięte i/lub odpięte od zlecenia nadrzędnego.</li>
+    <li>Zmieniono wyświetlanie nazwy wyrobu tak, aby wartość brana była z pola Opis zamiast Nazwa, jeżeli zlecenie
+      jest z konfiguratora (12NC zaczyna się od A-Z).</li>
+    <li>Zmieniono wyświetlanie ETO w szczegółach zlecenia tak, aby tabela ETO dla nadrzędnego zlecenia była wyświetlana
+      w podrzędnym zleceniu, jeżeli nie ma ono swojej tabeli ETO.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano nowy filtr: Data zakończenia.</li>
+  </ul>
+  <h3>Wydajność godzinowa</h3>
+  <ul>
+    <li>Zmieniono widok Wydajność zmiany tak, aby Czas cyklu nie był pokazywany.</li>
+  </ul>
+  <h3>Sprawdzanie komponentów</h3>
+  <ul>
+    <li>Dodano możliwość oznaczania komponentów jako opcjonalne. Opcjonalne komponenty nie muszą występować w BOM
+      aby inne, wymagane komponenty z danej strategii były sprawdzane.</li>
+    <li>Dodano możliwość definiowania wzorca komponentu jaki nie może pasować do 12NC lub nazwy komponentu,
+      aby dany komponent był sprawdzany.</li>
+    <li>Dodano możliwość oznaczania komponentu jako sprawdzany tylko przy pierwszej sztuce (komponent sprawdzany tylko
+      w momencie gdy Formatka operatora pokazuje Wykonaną ilość równą zero).</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Zmieniono sposób liczenia realizacji sekwencji tak, aby zlecenie, którego zaplanowany czas rozpoczęcia+4 godz.
+      przekracza zmianę produkcyjną, było zaliczane jako zrealizowane, jeżeli jego rzeczywisty czas rozpoczęcia jest przed
+      planowanym czasem rozpoczęcia pierwszego zlecenia na kolejnej pracującej zmianie powiększonym o czas przekroczenia
+      zmiany. Jeżeli zlecenie zaplanowano na piątek 12:00, to czas na realizację zlecenia jest do godziny 08:00
+      w następny poniedziałek, zakładając, że II i III zmiana w piątek oraz cały weekend są niepracujące.</li>
+  </ul>
+  <h3>Raporty > Wskaźniki</h3>
+  <ul>
+    <li>Zmieniono generowanie raportu tak, aby zlecenia aktualnie robione na liniach produkcyjnych były wliczane
+      do wskaźników.</li>
+  </ul>
+  <h3>Raporty > Planowane obciążenie linii</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować niezaładowanie się raportu.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieaktualizowanie danych sesji zalogowanego użytkownika po edycji lub usunięciu,
+      jeżeli w momencie wykonania akcji dany użytkownik nie był podłączony do serwera.</li>
+  </ul>
+  <h3>Dopuszczenia</h3>
+  <ul>
+    <li>Poprawiono dokonywanie zmian w dopuszczeniu z dużą ilością przypisanych zleceń tak, aby było bardziej
+      optymalne.</li>
+    <li>Dodano sprawdzanie poprawności dopuszczonych zleceń. Dopuszczenie zlecenia jest nieprawidłowe, jeżeli
+      Materiał podstawowy występuje w BOM danego zlecenia.</li>
+  </ul>
 </div>
 <div class="hidden">
   <h1>v0.154.0</h1>

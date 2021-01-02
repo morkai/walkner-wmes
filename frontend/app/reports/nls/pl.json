@@ -84,6 +84,7 @@
   "tooltipHeaderFormat:day": "LL",
   "tooltipHeaderFormat:shift": "LL[, {shift} zmiana]",
   "tooltipHeaderFormat:hour": "LLL",
+  "tooltipHeaderFormat:none": "LL LTS",
 
   "tooltipHeaderFormat:short:year": "YYYY",
   "tooltipHeaderFormat:short:quarter": "YYYY[, {quarter}]",
@@ -92,6 +93,7 @@
   "tooltipHeaderFormat:short:day": "L",
   "tooltipHeaderFormat:short:shift": "L[, {shift}]",
   "tooltipHeaderFormat:short:hour": "L LT",
+  "tooltipHeaderFormat:short:none": "l LTS",
 
   "x:year": "YYYY",
   "x:quarter": "{quarter}'YY",
@@ -100,6 +102,7 @@
   "x:day": "D.M",
   "x:shift": "D.M[ {shift}]",
   "x:hour": "D.M HH:mm",
+  "x:none": "HH:mm:ss",
 
   "filter:mode": "Tryb",
   "filter:mode:online": "Online",

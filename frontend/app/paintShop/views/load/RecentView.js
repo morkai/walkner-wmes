@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/core/View',
+  'app/core/util/embedded',
   'app/paintShop/templates/load/recent'
 ], function(
   _,
@@ -13,6 +14,7 @@ define([
   t,
   time,
   View,
+  embedded,
   template
 ) {
   'use strict';
@@ -28,26 +30,18 @@ define([
       view.maxDuration = -1;
       view.colorCache = {};
 
-      view.listenTo(view.settings, 'change', function()
+      view.once('afterRender', function()
       {
-        if (view.isRendered())
+        view.listenTo(view.settings, 'change', function()
         {
           view.reset();
           view.render();
-        }
+        });
+        view.listenTo(view.recent, 'change', view.render);
+        view.listenTo(view.recent, 'update', view.update);
+
+        $(window).on('resize', view.resize.bind(view));
       });
-
-      view.listenTo(view.recent, 'change', function()
-      {
-        if (view.isRendered())
-        {
-          view.render();
-        }
-      });
-
-      view.listenTo(view.recent, 'update', this.update);
-
-      $(window).on('resize', view.resize.bind(view));
     },
 
     destroy: function()
@@ -58,6 +52,18 @@ define([
     afterRender: function()
     {
       this.resize();
+
+      if (!embedded.isEnabled())
+      {
+        this.$el.tooltip({
+          selector: '.psLoad-recent-item',
+          animation: false,
+          title: function()
+          {
+            return time.toString(+this.dataset.d, false, false);
+          }
+        });
+      }
     },
 
     reset: function()
@@ -70,12 +76,12 @@ define([
 
     resize: function()
     {
-      if (this.options.embedded && this.el.parentNode)
+      if (embedded.isEnabled() && this.el.parentNode)
       {
         this.el.parentNode.style.width = window.innerWidth + 'px';
       }
 
-      this.el.scrollLeft = 2560;
+      this.el.scrollLeft = 9999;
     },
 
     update: function(e)
@@ -94,7 +100,8 @@ define([
       {
         var item = view.serializeItem(d);
 
-        return '<div class="paintShopLoad-recent-item"'
+        return '<div class="psLoad-recent-item"'
+          + ' data-d="' + d + '"'
           + ' style="border-top-width: ' + item.padding + 'px; background: ' + item.color + '"></div>';
       });
 
@@ -103,7 +110,7 @@ define([
       view.resize();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       if (this.maxDuration === -1)
       {
@@ -111,7 +118,6 @@ define([
       }
 
       return {
-        idPrefix: this.idPrefix,
         items: this.recent.get('collection').map(this.serializeItem, this)
       };
     },
@@ -133,7 +139,7 @@ define([
       }
 
       return {
-        padding: padding,
+        padding: Math.round(padding),
         duration: d,
         color: color
       };
