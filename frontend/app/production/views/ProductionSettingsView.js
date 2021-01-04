@@ -267,6 +267,15 @@ define([
       {
         this.clearAutoDowntimeGroup();
       }
+
+      this.resizeTaktTimeCoeffs();
+    },
+
+    resizeTaktTimeCoeffs: function()
+    {
+      var $textarea = this.$id('taktTime-coeffs');
+
+      $textarea.prop('rows', $textarea.val().split('\n').length + 5);
     },
 
     setUpAutoDowntimeGroups: function()

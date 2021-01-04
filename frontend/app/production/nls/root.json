@@ -387,7 +387,7 @@
     "settings:taktTime:sap": "Show Takt Time for the current order",
     "settings:taktTime:smiley": "Show smiley",
     "settings:taktTime:coeffs": "Operation coefficients",
-    "settings:taktTime:coeffs:help": "Each line should contain order's MRP for which the Takt Time coefficients should be adjusted, followed by names of the operation WorkCenters, operation numbers and values of the coefficients. For example:<br><code class=multiline>*: *=1.053 */0010=1.1 PIVATIC5=0.9<br>KE6: *=1 OUTDOOR5=1.1 OUTDOOR5/0025=0.9</code>",
+    "settings:taktTime:coeffs:help": "Each line should contain order's MRP for which the Takt Time coefficients should be adjusted, followed by names of the operation WorkCenters, operation numbers and values of the coefficients. For example:<br><code class='multiline text-mono'>*:      *=1.053 */0010=1.1 PIVATIC5=0.9<br>KE6:    *=1 OUTDOOR5=1.1 OUTDOOR5/0025=0.9<br>XYZ: <* *=1 FOO=0.9 BAR=1.1</code>",
     "settings:lineAutoDowntimes": "Automatic downtimes",
     "settings:lineAutoDowntimes:groups:placeholder": "Choose an existing production line group to change its auto downtimes.",
     "settings:lineAutoDowntimes:groups:label": "Auto downtime groups",

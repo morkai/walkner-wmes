@@ -874,17 +874,17 @@ define([
       );
     },
 
-    getWcTaktTimeCoeff: function(wcTaktTimeCoeffs, operation)
+    getWcTaktTimeCoeff: function(wcToCoeff, operation)
     {
-      if (!wcTaktTimeCoeffs || !operation)
+      if (!wcToCoeff || !operation)
       {
         return 1;
       }
 
-      return wcTaktTimeCoeffs[operation.workCenter + '/' + operation.no]
-        || wcTaktTimeCoeffs['*' + '/' + operation.no]
-        || wcTaktTimeCoeffs[operation.workCenter]
-        || wcTaktTimeCoeffs['*']
+      return wcToCoeff[operation.workCenter + '/' + operation.no]
+        || wcToCoeff['*' + '/' + operation.no]
+        || wcToCoeff[operation.workCenter]
+        || wcToCoeff['*']
         || 1;
     }
 

@@ -82,7 +82,7 @@ define([
 
       if (/taktTime.coeffs$/.test(id))
       {
-        return this.prepareTaktTimeCoeffs(newValue);
+        return this.mapTaktTimeCoeffs(newValue);
       }
 
       if (/ignoredDowntimes$/i.test(id))
@@ -96,6 +96,16 @@ define([
       }
 
       return this.prepareNumericValue(newValue, 0, 60);
+    },
+
+    prepareFormValue: function(id, value)
+    {
+      if (/taktTime.coeffs$/.test(id))
+      {
+        return this.prepareTaktTimeCoeffs(value);
+      }
+
+      return SettingCollection.prototype.prepareFormValue.apply(this, arguments);
     },
 
     prepareSpigotPatterns: function(newValue)
@@ -204,19 +214,6 @@ define([
       return !!this.getValue('taktTime.smiley');
     },
 
-    getTaktTimeCoeff: function(mrp, operation)
-    {
-      var mrpCoeffs = this.cache.taktTimeCoeffs;
-
-      if (!mrpCoeffs)
-      {
-        mrpCoeffs = this.cache.taktTimeCoeffs = this.mapTaktTimeCoeffs(this.getValue('taktTime.coeffs'));
-      }
-
-      return ProdShiftOrder.getWcTaktTimeCoeff(mrpCoeffs[mrp] || mrpCoeffs['*'], operation);
-    },
-
-    // Check backend/node_modules/production/orderFinder.js#mapTaktTimeCoeffs
     mapTaktTimeCoeffs: function(value)
     {
       var mrpCoeffs = {};
@@ -226,48 +223,129 @@ define([
         return mrpCoeffs;
       }
 
-      value.split('\n').forEach(function(line)
+      var mrp = '';
+      var qty = 0;
+      var mrps = {};
+
+      value
+        .replace(/\s*:\s*/g, ': ')
+        .replace(/\s*<\s*/g, ' <')
+        .replace(/\s*=\s*/g, '=')
+        .split(/\s+/).forEach(function(token)
       {
-        var wcCoeffs = {};
-        var remaining = line;
-        var re = /([A-Z0-9]+[A-Z0-9_\- ]*|\*)(\/[0-9]{4})?\s*=\s*([0-9]+(?:[.,][0-9]+)?)/ig;
-        var matchCount = 0;
-        var match;
-
-        while ((match = re.exec(line)) !== null) // eslint-disable-line no-cond-assign
+        if (/^(\*|[A-Z0-9_]+):$/i.test(token))
         {
-          var wc = match[1].toUpperCase();
-          var op = match[2] || '';
+          mrp = token.substring(0, token.length - 1).toUpperCase();
+          qty = 0;
 
-          wcCoeffs[wc + op] = parseFloat(match[3].replace(',', '.'));
-          remaining = remaining.replace(match[0], '');
-          matchCount += 1;
+          return;
         }
 
-        var mrp = remaining.indexOf('*') === -1 ? remaining.split(/[^A-Za-z0-9]/)[0].toUpperCase() : '*';
-
-        if (matchCount && mrp.length)
+        if (/^<(\*|[0-9]+)$/.test(token))
         {
-          mrpCoeffs[mrp] = wcCoeffs;
+          qty = parseInt(token.substring(1), 10) || 0;
+
+          return;
         }
+
+        var matches = token.match(/^(\*|[A-Z0-9_]+)(\/(?:\*|[0-9])+)?=([0-9]+(?:[.,][0-9]+)?)$/i);
+
+        if (!matches)
+        {
+          return;
+        }
+
+        var wc = matches[1].toUpperCase();
+        var op = !matches[2] || matches[2] === '*' ? '' : matches[2];
+        var coeff = parseFloat(matches[3].replace(',', '.'));
+
+        if (!mrps[mrp])
+        {
+          mrps[mrp] = {0: {}};
+        }
+
+        if (!mrps[mrp][qty])
+        {
+          mrps[mrp][qty] = {};
+        }
+
+        mrps[mrp][qty][wc + op] = coeff;
       });
 
-      return mrpCoeffs;
+      Object.keys(mrps).forEach(function(mrp)
+      {
+        var sorted = [];
+
+        Object
+          .keys(mrps[mrp])
+          .sort(function(a, b)
+          {
+            if (a === '0')
+            {
+              return -1;
+            }
+
+            if (b === '0')
+            {
+              return 1;
+            }
+
+            return b - a;
+          })
+          .forEach(function(qty)
+          {
+            sorted.push({
+              qty: +qty,
+              wcs: mrps[mrp][qty]
+            });
+          });
+
+        mrps[mrp] = sorted;
+      });
+
+      return mrps;
     },
 
-    prepareTaktTimeCoeffs: function(newValue)
+    prepareTaktTimeCoeffs: function(mrps)
     {
-      var mrpCoeffs = this.mapTaktTimeCoeffs(newValue);
-
       return Object
-        .keys(mrpCoeffs)
+        .keys(mrps || {})
+        .sort(function(a, b)
+        {
+          return a.localeCompare(b, undefined, {ignorePunctuation: true, numeric: true});
+        })
         .map(function(mrp)
         {
           var line = mrp + ':';
+          var padStart1 = ''.padStart(line.length, ' ');
+          var maxQtyLength = mrps[mrp].reduce(
+            function(prev, cur) { return Math.max(prev, cur.qty.toString().length); },
+            0
+          );
 
-          Object.keys(mrpCoeffs[mrp]).forEach(function(wc)
+          mrps[mrp].forEach(function(candidate)
           {
-            line += ' ' + wc + '=' + mrpCoeffs[mrp][wc];
+            var qty = candidate.qty ? candidate.qty.toString() : '*';
+            var prefix = padStart1 + ' <' + qty + ''.padEnd(maxQtyLength - qty.length, ' ');
+            var padStart2 = ''.padStart(prefix.length, ' ');
+            var wcs = Object.keys(candidate.wcs);
+
+            line += '\n' + prefix;
+
+            wcs
+              .sort(function(a, b)
+              {
+                return a.localeCompare(b, undefined, {ignorePunctuation: true, numeric: true});
+              })
+              .forEach(function(wc, i)
+              {
+                line += ' ' + wc + '=' + candidate.wcs[wc];
+
+                if (((i + 1) % 10) === 0 && i !== wcs.length - 1)
+                {
+                  line += '\n' + padStart2;
+                }
+              });
           });
 
           return line;
