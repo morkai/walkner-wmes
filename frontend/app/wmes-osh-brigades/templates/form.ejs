@@ -16,13 +16,41 @@
         },
         disabled: editMode
       }) %>
-      <%- helpers.formGroup({
-        name: 'leader',
-        type: 'select2',
-        label: 'PROPERTY:',
-        required: true,
-        disabled: editMode
-      }) %>
+      <div class="row">
+        <%- helpers.formGroup({
+          name: 'leader',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          disabled: editMode,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'workplace',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+        <%- helpers.formGroup({
+          name: 'department',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-lg-4'
+        }) %>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('shift') %>"><%- t('PROPERTY:shift') %></label>
+        <br>
+        <div id="<%- id('shift') %>" class="btn-group" data-toggle="buttons">
+          <% [1, 2, 3, 4].forEach(function(shift) { %>
+            <label class="btn btn-default">
+              <input type="radio" name="shift" value="<%- shift %>"> <%- t(`shift:${shift}`) %>
+            </label>
+          <% }) %>
+        </div>
+      </div>
       <%- helpers.formGroup({
         name: 'members',
         type: 'select2',

@@ -33,7 +33,6 @@ define([
     {
       return {
         active: true,
-        managers: [],
         coordinators: []
       };
     },
@@ -74,22 +73,6 @@ define([
 
       obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {path: true, link: true});
 
-      const managers = obj.managers;
-
-      if (managers.length)
-      {
-        obj.managers = userInfoTemplate(managers[0]);
-
-        if (managers.length > 1)
-        {
-          obj.managers += ` +${managers.length - 1}`;
-        }
-      }
-      else
-      {
-        obj.managers = '';
-      }
-
       const coordinators = obj.coordinators;
 
       if (coordinators.length)
@@ -115,7 +98,6 @@ define([
       const obj = this.serialize();
 
       obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {long: true, link: true});
-      obj.managers = obj.managers.map(userInfo => userInfoTemplate({userInfo}));
       obj.coordinators = obj.coordinators.map(userInfo => userInfoTemplate({userInfo}));
 
       return obj;

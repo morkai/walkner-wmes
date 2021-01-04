@@ -97,7 +97,9 @@ input[type="month"] {
   width: 145px;
   margin-right: 1px;
 }
-.form-group-datetime > input[type="time"],
+.form-group-datetime > input[type="time"] {
+  width: auto;
+}
 .form-group-datetime > input[type="text"] {
   width: 120px;
 }

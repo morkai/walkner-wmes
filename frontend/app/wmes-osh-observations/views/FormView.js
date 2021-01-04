@@ -425,14 +425,15 @@ define([
 
       if (this.options.editMode)
       {
-        const current = dictionaries.workplaces.get(this.model.get('userWorkplace'));
+        const currentId = this.model.get('creator').oshWorkplace;
+        const current = dictionaries.workplaces.get(currentId);
 
-        $input.val(current ? current.id : '').select2({
+        $input.val(currentId).select2({
           width: '100%',
           placeholder: ' ',
           data: !current ? [] : [{
-            id: current.id,
-            text: current.getLabel({long: true}),
+            id: currentId,
+            text: current ? current.getLabel({long: true}) : `?${currentId}?`,
             model: current
           }]
         });
@@ -515,14 +516,15 @@ define([
 
       if (this.options.editMode)
       {
-        const current = dictionaries.departments.get(this.model.get('userDepartment'));
+        const currentId = this.model.get('creator').oshDepartment;
+        const current = dictionaries.departments.get(currentId);
 
-        $input.val(current ? current.id : '').select2({
+        $input.val(currentId).select2({
           width: '100%',
           placeholder: ' ',
           data: !current ? [] : [{
-            id: current.id,
-            text: current.getLabel({long: true}),
+            id: currentId,
+            text: current ? current.getLabel({long: true}) : `?${currentId}?`,
             model: current
           }]
         });

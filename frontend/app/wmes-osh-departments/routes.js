@@ -41,7 +41,6 @@ define([
         {id: 'workplace', className: 'is-min'},
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
-        {id: 'managers', className: 'is-min'},
         {id: 'active', className: 'is-min'}
       ]
     })));

@@ -40,6 +40,9 @@ define([
       columns: [
         {id: 'date', className: 'is-min'},
         {id: 'leader', className: 'is-min'},
+        {id: 'workplace', className: 'is-min'},
+        {id: 'department', className: 'is-min'},
+        {id: 'shift', className: 'is-min'},
         {id: 'members', className: 'is-min'},
         '-'
       ]

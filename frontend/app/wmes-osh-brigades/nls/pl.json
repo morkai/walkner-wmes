@@ -2,6 +2,16 @@
   "BREADCRUMB:browse": "Brygady",
 
   "PROPERTY:date": "Miesiąc",
+  "PROPERTY:shift": "Zmiana",
   "PROPERTY:leader": "Lider",
-  "PROPERTY:members": "Członkowie"
+  "PROPERTY:workplace": "Zakład",
+  "PROPERTY:department": "Wydział",
+  "PROPERTY:members": "Członkowie",
+
+  "shift:1": "A",
+  "shift:2": "B",
+  "shift:3": "C",
+  "shift:4": "D",
+
+  "FORM:placeholder:noWorkplace": "Wybierz zakład..."
 }

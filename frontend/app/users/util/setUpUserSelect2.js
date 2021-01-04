@@ -6,14 +6,16 @@ define([
   'app/core/util/transliterate',
   'app/i18n',
   'app/user',
-  'app/data/companies'
+  'app/data/companies',
+  'app/data/loadedModules'
 ], function(
   _,
   rql,
   transliterate,
   t,
   user,
-  companies
+  companies,
+  loadedModules
 ) {
   'use strict';
 
@@ -90,19 +92,49 @@ define([
         description += _.escape(company);
       }
 
-      if (user.syncData.workplace)
+      var workplace = '';
+      var department = '';
+
+      if (loadedModules.isLoaded('wmes-osh') && user.oshWorkplace)
+      {
+        var oshDictionaries = require('app/wmes-osh-common/dictionaries');
+        var oshWorkplace = oshDictionaries.workplaces.get(user.oshWorkplace);
+        var oshDepartment = oshDictionaries.departments.get(user.oshDepartment);
+
+        if (oshWorkplace)
+        {
+          workplace = oshWorkplace.getLabel({short: true});
+
+          if (oshDepartment)
+          {
+            department = oshDepartment.getLabel({short: true});
+          }
+        }
+      }
+
+      if (!workplace && user.syncData.workplace)
+      {
+        workplace = user.syncData.workplace;
+      }
+
+      if (!department && user.syncData.department)
+      {
+        department = user.syncData.department;
+      }
+
+      if (workplace)
       {
         if (description)
         {
           description += '<br>';
         }
 
-        description += _.escape(user.syncData.workplace);
+        description += _.escape(workplace);
       }
 
-      if (user.syncData.department)
+      if (department)
       {
-        if (user.syncData.workplace)
+        if (workplace)
         {
           description += ' \\ ';
         }
@@ -111,7 +143,7 @@ define([
           description += '<br>';
         }
 
-        description += _.escape(user.syncData.department);
+        description += _.escape(department);
       }
     }
 

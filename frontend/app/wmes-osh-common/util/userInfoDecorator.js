@@ -11,6 +11,7 @@ define([
   {
     if (userData.oshWorkplace)
     {
+      userInfo.oshDivision = userData.oshDivision;
       userInfo.oshWorkplace = userData.oshWorkplace;
       userInfo.oshDepartment = userData.oshDepartment || 0;
     }

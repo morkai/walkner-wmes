@@ -33,6 +33,7 @@
       'app/core/templates/navbar/pila/inner',
       'app/core/views/FormView',
       'app/users/views/LogInFormView',
+      'app/wmes-osh-common/dictionaries',
       'app/time',
       'app/wmes-pila-main-routes',
       'bootstrap',
@@ -66,7 +67,8 @@
     NavbarView,
     navbarTemplate,
     FormView,
-    LogInFormView)
+    LogInFormView,
+    oshDictionaries)
   {
     var startBroker = broker.sandbox();
 
@@ -270,6 +272,14 @@
       {
         broker.subscribe('viewport.page.shown', window.onPageShown).setLimit(1);
       }
+
+      broker.subscribe('viewport.page.loading', function(message)
+      {
+        if (user.isLoggedIn())
+        {
+          oshDictionaries.bind(message.page);
+        }
+      });
 
       domReady(function()
       {

@@ -51,7 +51,7 @@ define([
     TIME_PROPS: ['createdAt', 'startedAt', 'implementedAt', 'finishedAt'],
     USER_PROPS: ['creator', 'implementers', 'coordinators'],
     DICT_PROPS: [
-      'workplace', 'department', 'building', 'location', 'station',
+      'division', 'workplace', 'department', 'building', 'location', 'station',
       'kind', 'kaizenCategory'
     ],
     DESC_PROPS: ['kind', 'kaizenCategory']

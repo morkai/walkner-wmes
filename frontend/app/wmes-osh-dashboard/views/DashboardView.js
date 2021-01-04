@@ -82,7 +82,7 @@ define([
         paginate: false,
         rqlQuery: 'select(rid,status,subject)&sort(-updatedAt)&limit(11)'
           + `&users.user.id=${user.data._id}`
-          + '&status=in=(new,inProgress,verification,paused)'
+          + '&status=in=(new,inProgress,paused)'
       });
 
       this.kaizenStats = new Model(null, {
@@ -99,9 +99,9 @@ define([
 
     defineViews: function()
     {
-      const nmUrlTemplate = '#osh/nearMisses?exclude(changes)&sort(-eventDate)&limit(20)'
+      const nmUrlTemplate = '#osh/nearMisses?exclude(changes)&sort(-createdAt)&limit(-1337)'
         + '&createdAt=ge=${from}&createdAt=lt=${to}&users.user.id=${user}';
-      const kzUrlTemplate = '#osh/kaizens?exclude(changes)&sort(-date)&limit(20)'
+      const kzUrlTemplate = '#osh/kaizens?exclude(changes)&sort(-date)&limit(-1337)'
         + '&createdAt=ge=${from}&createdAt=lt=${to}&users.user.id=${user}';
 
       this.nearMissMetricsView = new MetricsView({
@@ -111,7 +111,7 @@ define([
         buttonLabel: this.t('addButton:nearMiss'),
         browseUrl: '#osh/nearMisses',
         sortProperty: 'createdAt',
-        openStatuses: 'new,inProgress,verification,paused'
+        openStatuses: 'new,inProgress,paused'
       });
 
       this.nearMissListView = new NearMissListView({

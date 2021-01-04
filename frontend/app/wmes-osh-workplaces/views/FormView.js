@@ -22,7 +22,6 @@ define([
       FormView.prototype.afterRender.apply(this, arguments);
 
       this.setUpDivisionSelect2();
-      this.setUpManagerSelect2();
     },
 
     setUpDivisionSelect2: function()
@@ -34,21 +33,6 @@ define([
           text: division.getLabel({long: true})
         }))
       });
-    },
-
-    setUpManagerSelect2: function()
-    {
-      setUpUserSelect2(this.$id('manager'), {
-        allowClear: true,
-        currentUserInfo: this.model.get('manager')
-      });
-    },
-
-    serializeForm: function(formData)
-    {
-      formData.manager = setUpUserSelect2.getUserInfo(this.$id('manager'));
-
-      return formData;
     }
 
   });

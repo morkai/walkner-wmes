@@ -9,18 +9,15 @@
   }) %>
   <%- forms.dateTimeRange({
     idPrefix,
-    property: 'createdAt',
-    hidden: true
+    hidden: true,
+    labels: ['createdAt', 'startedAt', 'implementedAt', 'plannedAt', 'finishedAt'].map(value => ({
+      text: t(`PROPERTY:${value}`),
+      ranges: true,
+      value
+    }))
   }) %>
   <div class="form-group" style="min-width: 280px">
-    <div class="filter-radioLabels">
-      <% ['mine', 'others'].forEach(function(userType) { %>
-      <label>
-        <input name="userType" type="radio" value="<%- userType %>">
-        <%- t('filter:user:' + userType) %>
-      </label>
-      <% }) %>
-    </div>
+    <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
     <input id="<%- id('user') %>" name="user" type="text">
   </div>
   <%- helpers.formGroup({
@@ -68,11 +65,11 @@
     options: kinds
   }) %>
   <%- helpers.formGroup({
-    name: 'eventCategory',
+    name: 'kaizenCategory',
     type: 'select2',
     label: 'PROPERTY:',
     groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'eventCategory'}
+    groupAttrs: {'data-filter': 'kaizenCategory'}
   }) %>
   <%- renderLimit({hidden: true}) %>
   <div class="form-group filter-actions">

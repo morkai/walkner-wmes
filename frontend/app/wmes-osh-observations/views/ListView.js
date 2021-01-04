@@ -52,10 +52,6 @@ define([
           min: 1,
           thClassName: 'is-filter'
         },
-        {
-          id: 'subject',
-          className: 'is-overflow w250'
-        },
         '-'
       ];
     }

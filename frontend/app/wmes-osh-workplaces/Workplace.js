@@ -58,7 +58,6 @@ define([
       const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
-      obj.manager = userInfoTemplate(obj.manager);
 
       return obj;
     },

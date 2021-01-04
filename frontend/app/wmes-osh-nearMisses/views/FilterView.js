@@ -87,18 +87,14 @@ define([
       },
       'priority': 'kind',
       'status': 'kind',
-      'users.user.id': (propertyName, term, formData) =>
+      'creator.id': (propertyName, term, formData) =>
       {
-        const userId = term.args[1];
-
-        formData.userType = userId === currentUser.data._id ? 'mine' : 'others';
-        formData.user = userId;
+        formData.userType = propertyName.split('.')[0];
+        formData.user = term.args[1];
       },
-      'confirmer.id': 'owners.id',
-      'superior.id': 'owners.id',
-      'suggestionOwners.id': 'owners.id',
-      'kaizenOwners.id': 'owners.id',
-      'observers.user.id': function(propertyName, term, formData)
+      'implementer.id': 'creator.id',
+      'coordinators.id': 'creator.id',
+      'users.user.id': (propertyName, term, formData) =>
       {
         if (term.args[1] === 'mine')
         {
@@ -218,6 +214,7 @@ define([
       });
 
       this.setUpUserType();
+      this.toggleUserSelect2();
       this.setUpWorkplaceSelect2();
       this.setUpDepartmentSelect2();
       this.setUpBuildingSelect2();
@@ -229,8 +226,8 @@ define([
 
     setUpUserType: function()
     {
-      var view = this;
-      var options = [
+      const view = this;
+      const options = [
         'mine',
         'unseen',
         'others',
@@ -241,8 +238,8 @@ define([
       {
         return {
           value: userType,
-          title: view.t('filter:user:' + userType + ':title'),
-          optionLabel: view.t('filter:user:' + userType)
+          title: view.t(`filter:user:${userType}:title`),
+          optionLabel: view.t(`filter:user:${userType}`)
         };
       });
 
@@ -254,11 +251,11 @@ define([
 
     toggleUserSelect2: function(resetUser)
     {
-      var userType = this.$('input[name="userType"]').val();
-      var mine = userType === 'mine' || userType === 'unseen';
-      var $user = this.$id('user').select2('enable', !mine);
+      const userType = this.$('input[name="userType"]').val();
+      const mine = userType === 'mine' || userType === 'unseen';
+      const $user = this.$id('user').select2('enable', !mine);
 
-      if (resetUser && (mine || !$user.val()))
+      if (mine || (resetUser && !$user.val()))
       {
         $user.select2('data', {
           id: currentUser.data._id,
@@ -422,8 +419,8 @@ define([
     {
       if (filter === 'date')
       {
-        var $from = this.$id('from-date');
-        var $to = this.$id('to-date');
+        const $from = this.$id('from-date');
+        const $to = this.$id('to-date');
 
         return $from.val().length > 0 || $to.val().length > 0;
       }
@@ -433,14 +430,9 @@ define([
 
     showFilter: function(filter)
     {
-      if (filter === '_id')
-      {
-        $('.page-actions-jump').find('.form-control').focus();
-
-        return;
-      }
-
-      if (filter === 'creator' || filter === 'implementer')
+      if (filter === 'creator'
+        || filter === 'implementer'
+        || filter === 'coordinators')
       {
         this.$id('userType').val(filter).trigger('change');
         this.$id('user').select2('focus');
@@ -448,7 +440,7 @@ define([
         return;
       }
 
-      var $dateFilter = this.$('.dateTimeRange-label-input[value="' + filter + '"]');
+      const $dateFilter = this.$('.dateTimeRange-label-input[value="' + filter + '"]');
 
       if ($dateFilter.length)
       {

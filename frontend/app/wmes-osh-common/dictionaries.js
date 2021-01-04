@@ -103,6 +103,7 @@ define([
   let pubsubSandbox = null;
   let seenSub = null;
   let coordinator = null;
+  const boundPages = new WeakSet();
 
   const dictionaries = {
     TYPE_TO_PREFIX,
@@ -216,7 +217,7 @@ define([
         return String(id);
       }
 
-      var model = dictionary.get(id);
+      const model = dictionary.get(id);
 
       if (!model)
       {
@@ -237,7 +238,7 @@ define([
         return '';
       }
 
-      var model = dictionary.get(id);
+      const model = dictionary.get(id);
 
       if (!model)
       {
@@ -252,16 +253,28 @@ define([
     },
     bind: function(page)
     {
-      var dictionaries = this;
+      if (boundPages.has(page))
+      {
+        return page;
+      }
+
+      boundPages.add(page);
 
       page.on('beforeLoad', (page, requests) =>
       {
-        requests.push(dictionaries.load());
+        requests.push(this.load());
       });
 
-      page.on('afterRender', dictionaries.load.bind(dictionaries));
+      page.on('afterRender', () =>
+      {
+        this.load();
+      });
 
-      page.once('remove', dictionaries.unload.bind(dictionaries));
+      page.once('remove', () =>
+      {
+        this.unload();
+        boundPages.delete(page);
+      });
 
       return page;
     },
@@ -315,7 +328,7 @@ define([
 
     Object.keys(PROP_TO_DICT).forEach(prop =>
     {
-      var dict = PROP_TO_DICT[prop];
+      const dict = PROP_TO_DICT[prop];
 
       if (Array.isArray(dictionaries[dict]))
       {

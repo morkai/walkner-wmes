@@ -206,6 +206,7 @@
     "PRIVILEGE:OSH:COORDINATOR": "OSH > Coordinator",
     "PRIVILEGE:OSH:LEADER": "OSH > Leader",
     "PRIVILEGE:OSH:OBSERVER": "OSH > Observer",
+    "PRIVILEGE:OSH:MANAGER": "BHP > Manager",
     "PRIVILEGE:OSH:NEAR_MISSES:MANAGE": "OSH > Near miss: manage",
     "PRIVILEGE:OSH:KAIZENS:MANAGE": "OSH > Kaizen: manage",
     "PRIVILEGE:OSH:ACTIONS:MANAGE": "OSH > Actions: manage",

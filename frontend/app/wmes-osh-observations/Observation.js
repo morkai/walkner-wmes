@@ -67,7 +67,7 @@ define([
     DICT_PROPS: [
       'company',
       'observationKind',
-      'workplace', 'department', 'building', 'location', 'station'
+      'division', 'workplace', 'department', 'building', 'location', 'station'
     ],
     DESC_PROPS: ['observationKind'],
 
@@ -97,7 +97,7 @@ define([
 
     add: function()
     {
-      return (this.can || this).manage() || currentUser.isAllowedTo('OSH:OBSERVER', 'OSH:COORDINATOR');
+      return (this.can || this).manage() || currentUser.isAllowedTo('OSH:OBSERVER');
     },
 
     edit: function(model)

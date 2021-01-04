@@ -47,7 +47,7 @@ define([
     {
       const obj = Entry.prototype.serializeRow.apply(this, arguments);
 
-      obj.eventDate = obj.eventDate ? time.utc.format(obj.eventDate, 'L, H') : '';
+      obj.eventDate = obj.eventDate ? time.utc.format(obj.eventDate, 'L, LT') : '';
 
       if (obj.resolution)
       {

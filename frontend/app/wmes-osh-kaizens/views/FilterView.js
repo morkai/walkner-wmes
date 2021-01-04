@@ -6,6 +6,7 @@ define([
   'app/user',
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
+  'app/core/util/forms/dropdownRadio',
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
@@ -17,6 +18,7 @@ define([
   currentUser,
   FilterView,
   dateTimeRange,
+  dropdownRadio,
   idAndLabel,
   setUpUserSelect2,
   dictionaries,
@@ -34,11 +36,15 @@ define([
       'location',
       'station',
       'kind',
-      'eventCategory',
+      'kaizenCategory',
       'limit'
     ],
     filterMap: {
-
+      createdAt: 'date',
+      startedAt: 'date',
+      implementedAt: 'date',
+      plannedAt: 'date',
+      finishedAt: 'date'
     },
 
     template,
@@ -47,28 +53,24 @@ define([
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
 
-      'change input[name="userType"]': function()
-      {
-        if (this.$('input[name="userType"]:checked').val() === 'mine')
-        {
-          this.$id('user').select2('data', {
-            id: currentUser.data._id,
-            text: currentUser.getLabel()
-          });
-        }
-      }
+      'change input[name="userType"]': function() { this.toggleUserSelect2(true); }
 
     }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-        userType: 'others'
+        userType: 'others',
+        dateFilter: 'createdAt'
       };
     },
 
     termToForm: {
       'createdAt': dateTimeRange.rqlToForm,
+      'startedAt': dateTimeRange.rqlToForm,
+      'implementedAt': dateTimeRange.rqlToForm,
+      'plannedAt': dateTimeRange.rqlToForm,
+      'finishedAt': dateTimeRange.rqlToForm,
       'workplace': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
@@ -77,19 +79,12 @@ define([
       'building': 'workplace',
       'location': 'workplace',
       'station': 'station',
-      'eventCategory': 'workplace',
+      'kaizenCategory': 'workplace',
       'kind': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
       'status': 'kind',
-      'users.user.id': (propertyName, term, formData) =>
-      {
-        const userId = term.args[1];
-
-        formData.userType = userId === currentUser.data._id ? 'mine' : 'others';
-        formData.user = userId;
-      },
       'kom': (propertyName, term, formData) =>
       {
         if (!formData.status)
@@ -98,6 +93,31 @@ define([
         }
 
         formData.status.push('kom');
+      },
+      'creator.id': (propertyName, term, formData) =>
+      {
+        formData.userType = propertyName.split('.')[0];
+        formData.user = term.args[1];
+      },
+      'implementers.id': 'creator.id',
+      'coordinators.id': 'creator.id',
+      'users.user.id': (propertyName, term, formData) =>
+      {
+        if (term.args[1] === 'mine')
+        {
+          formData.userType = 'mine';
+          formData.user = null;
+        }
+        else if (term.args[1] === 'unseen')
+        {
+          formData.userType = 'unseen';
+          formData.user = null;
+        }
+        else
+        {
+          formData.userType = 'others';
+          formData.user = term.args[1];
+        }
       }
     },
 
@@ -115,8 +135,13 @@ define([
       };
     },
 
-    serializeFormToQuery: function(selector)
+    serializeFormToQuery: function(selector, rqlQuery)
     {
+      const dateFilter = this.$('input[name="dateFilter"]:checked').val();
+
+      rqlQuery.sort = {};
+      rqlQuery.sort[dateFilter] = -1;
+
       dateTimeRange.formToRql(this, selector);
 
       const status = this.$id('status').val();
@@ -194,10 +219,20 @@ define([
       });
 
       const user = this.$id('user').val();
+      let userType = this.$('input[name="userType"]').val();
 
-      if (user)
+      if (userType === 'mine' || userType === 'unseen')
       {
-        selector.push({name: 'eq', args: ['users.user.id', user]});
+        selector.push({name: 'eq', args: ['users.user.id', userType]});
+      }
+      else if (user)
+      {
+        if (userType === 'others')
+        {
+          userType = 'users.user';
+        }
+
+        selector.push({name: 'eq', args: [userType + '.id', user]});
       }
     },
 
@@ -212,12 +247,54 @@ define([
         width: '100%'
       });
 
+      this.setUpUserType();
+      this.toggleUserSelect2();
       this.setUpWorkplaceSelect2();
       this.setUpDepartmentSelect2();
       this.setUpBuildingSelect2();
       this.setUpLocationSelect2();
       this.setUpStationSelect2();
-      this.setUpEventCategorySelect2();
+      this.setUpKaizenCategorySelect2();
+    },
+
+    setUpUserType: function()
+    {
+      const view = this;
+      const options = [
+        'mine',
+        'unseen',
+        'others',
+        'creator',
+        'implementers',
+        'coordinators'
+      ].map(function(userType)
+      {
+        return {
+          value: userType,
+          title: view.t(`filter:user:${userType}:title`),
+          optionLabel: view.t(`filter:user:${userType}`)
+        };
+      });
+
+      dropdownRadio(view.$id('userType'), {
+        label: view.t('filter:user:others'),
+        options: options
+      });
+    },
+
+    toggleUserSelect2: function(resetUser)
+    {
+      const userType = this.$('input[name="userType"]').val();
+      const mine = userType === 'mine' || userType === 'unseen';
+      const $user = this.$id('user').select2('enable', !mine);
+
+      if (mine || (resetUser && !$user.val()))
+      {
+        $user.select2('data', {
+          id: currentUser.data._id,
+          text: currentUser.getLabel()
+        });
+      }
     },
 
     setUpWorkplaceSelect2: function()
@@ -330,13 +407,13 @@ define([
       });
     },
 
-    setUpEventCategorySelect2: function()
+    setUpKaizenCategorySelect2: function()
     {
-      this.$id('eventCategory').select2({
+      this.$id('kaizenCategory').select2({
         width: '250px',
         multiple: true,
         placeholder: ' ',
-        data: dictionaries.eventCategories
+        data: dictionaries.kaizenCategories
           .filter(i => i.get('active'))
           .map(i => ({
             id: i.id,
@@ -356,10 +433,10 @@ define([
 
     filterHasValue: function(filter)
     {
-      if (filter === 'createdAt')
+      if (filter === 'date')
       {
-        var $from = this.$id('from-date');
-        var $to = this.$id('to-date');
+        const $from = this.$id('from-date');
+        const $to = this.$id('to-date');
 
         return $from.val().length > 0 || $to.val().length > 0;
       }
@@ -369,14 +446,26 @@ define([
 
     showFilter: function(filter)
     {
-      if (filter === 'creator' || filter === 'implementers' || filter === 'coordinators')
+      if (filter === 'creator'
+        || filter === 'implementers'
+        || filter === 'coordinators')
       {
+        this.$id('userType').val(filter).trigger('change');
         this.$id('user').select2('focus');
+
+        return;
       }
-      else
+
+      const $dateFilter = this.$('.dateTimeRange-label-input[value="' + filter + '"]');
+
+      if ($dateFilter.length)
       {
-        FilterView.prototype.showFilter.apply(this, arguments);
+        $dateFilter.prop('checked', true);
+
+        dateTimeRange.toggleLabel(this);
       }
+
+      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });

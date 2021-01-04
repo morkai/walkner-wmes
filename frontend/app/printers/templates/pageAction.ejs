@@ -1,11 +1,11 @@
 <div class="page-actions-printers btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-print"></i><span><%- label %></span> <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-right">
-        <li><a href="javascript:void(0)" data-printer-id=""><%- t('printers', 'menu:browser') %></a></li>
-        <% _.forEach(printers, function(printer) { %>
-        <li><a href="javascript:void(0)" data-printer-id="<%- printer._id %>"><%= printer.label %></a></li>
-        <% }) %>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-print"></i><span><%- label %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+    <li><a href="javascript:void(0)" data-printer-id=""><%- t('printers', 'menu:browser') %></a></li>
+    <% _.forEach(printers, function(printer) { %>
+    <li><a href="javascript:void(0)" data-printer-id="<%- printer._id %>"><%= printer.label %></a></li>
+    <% }) %>
     </ul>
 </div>

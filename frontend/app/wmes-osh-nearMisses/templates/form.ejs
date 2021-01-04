@@ -95,9 +95,9 @@
           <% } %>
           <div class="form-group">
             <label for="<%- id('eventDate') %>" class="control-label is-required"><%- t('PROPERTY:eventDate') %></label>
-            <div class=" form-group-datetime">
+            <div class="form-group-datetime">
               <input id="<%- id('eventDate') %>" class="form-control" name="eventDate" type="date" required min="<%- window.PRODUCTION_DATA_START_DATE || '2020-01-01' %>" max="<%- today %>">
-              <input id="<%- id('eventTime') %>" class="form-control no-controls" name="eventTime" type="number" min="0" max="23" placeholder="<%- t('FORM:eventTime:placeholder') %>" title="<%- t('FORM:eventTime:title') %>">
+              <input id="<%- id('eventTime') %>" class="form-control" name="eventTime" type="time" placeholder="<%- t('FORM:eventTime:placeholder') %>" title="<%- t('FORM:eventTime:title') %>">
             </div>
           </div>
           <div class="row">

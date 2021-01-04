@@ -1,1 +1,12 @@
-<li data-privilege="USER" data-module="wmes-osh" data-online><a href="#osh/actions"><%- t('wmes-osh-common', 'navbar:actions') %></a>
+<li data-privilege="USER" data-module="wmes-osh" data-online class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('wmes-osh-common', 'navbar:actions') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="navbar-with-button"><a href="#osh/actions"><%- t('wmes-osh-common', 'navbar:entries:all') %></a><button class="btn btn-default" data-href="#osh/actions;add" data-privilege="OSH:ACTIONS:MANAGE OSH:COORDINATOR"><i class="fa fa-plus"></i></button></li>
+    <li><a href="#osh/actions?exclude(changes)&sort(-createdAt)&limit(-1337)&status=in=(new,inProgress,verification,paused)"><%- t('wmes-osh-common', 'navbar:entries:open') %></a></li>
+    <li><a href="#osh/actions?exclude(changes)&sort(-createdAt)&limit(-1337)&users.user.id=mine"><%- t('wmes-osh-common', 'navbar:entries:mine') %></a></li>
+    <li><a href="#osh/actions?exclude(changes)&sort(-createdAt)&limit(-1337)&users.user.id=unseen"><%- t('wmes-osh-common', 'navbar:entries:unseen') %></a></li>
+  </ul>
+</li>

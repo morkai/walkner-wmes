@@ -4,7 +4,10 @@
     <div class="panel-details">
       <%- helpers.props(model, [
         'date',
+        'workplace',
+        'department',
         '!leader',
+        'shift',
         {id: '!members', value: members =>
         {
           if (!members.length)

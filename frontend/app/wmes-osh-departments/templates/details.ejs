@@ -7,20 +7,6 @@
         '!workplace',
         'shortName',
         'longName',
-        {id: '!managers', value: users =>
-        {
-          if (!users.length)
-          {
-            return '';
-          }
-
-          if (users.length === 1)
-          {
-            return users[0];
-          }
-
-          return `<ul><li>${users.join('<li>')}</ul>`;
-        }},
         {id: '!coordinators', value: users =>
         {
           if (!users.length)

@@ -285,6 +285,18 @@ define([
       'click #-addResolution': function()
       {
         this.showAddResolutionDialog();
+      },
+
+      'change input[name="eventTime"]': function()
+      {
+        const $eventTime = this.$id('eventTime');
+        const matches = $eventTime.val().match(/([0-9]{1,2})(?::([0-9]{1,2}))/) || [null, '00', '00'];
+        const h = parseInt(matches[1], 10);
+        const m = parseInt(matches[2], 10);
+        const hh = h >= 0 && h < 24 ? h.toString().padStart(2, '0') : '00';
+        const mm = m >= 0 && m < 60 ? m.toString().padStart(2, '0') : '00';
+
+        $eventTime.val(`${hh}:${mm}`);
       }
 
     }, FormView.prototype.events),
@@ -377,14 +389,14 @@ define([
         const eventDate = time.utc.getMoment(formData.eventDate);
 
         formData.eventDate = eventDate.format('YYYY-MM-DD');
-        formData.eventTime = eventDate.format('H');
+        formData.eventTime = eventDate.format('HH:mm');
       }
       else
       {
         const now = time.getMoment();
 
         formData.eventDate = now.format('YYYY-MM-DD');
-        formData.eventTime = now.format('H');
+        formData.eventTime = now.format('HH:mm');
       }
 
       if (formData.plannedAt)
@@ -431,11 +443,10 @@ define([
       }
 
       const userWorkplace = this.$id('userWorkplace').select2('data');
-      const userDepartment = this.$id('userDepartment').select2('data');
 
-      formData.userDivision = userWorkplace ? userWorkplace.model.get('division') : 0;
-      formData.userWorkplace = userWorkplace ? userWorkplace.id : 0;
-      formData.userDepartment = userDepartment ? userDepartment.id : 0;
+      formData.userDivision = userWorkplace.model.get('division');
+      formData.userWorkplace = userWorkplace.id;
+      formData.userDepartment = this.$id('userDepartment').select2('data').id;
 
       const relation = this.options.relation;
 
@@ -460,7 +471,7 @@ define([
       }
 
       formData.eventDate = time.utc.getMoment(
-        `${formData.eventDate} ${(formData.eventTime || '00').padStart(2, '0')}:00:00`,
+        `${formData.eventDate} ${formData.eventTime || '00:00'}:00`,
         'YYYY-MM-DD HH:mm:ss'
       ).toISOString();
 
@@ -563,14 +574,15 @@ define([
 
       if (this.options.editMode)
       {
-        const current = dictionaries.workplaces.get(this.model.get('userWorkplace'));
+        const currentId = this.model.get('creator').oshWorkplace;
+        const current = dictionaries.workplaces.get(currentId);
 
-        $input.val(current ? current.id : '').select2({
+        $input.val(currentId).select2({
           width: '100%',
           placeholder: ' ',
           data: !current ? [] : [{
-            id: current.id,
-            text: current.getLabel({long: true}),
+            id: currentId,
+            text: current ? current.getLabel({long: true}) : `?${currentId}?`,
             model: current
           }]
         });
@@ -672,14 +684,15 @@ define([
 
       if (this.options.editMode)
       {
-        const current = dictionaries.departments.get(this.model.get('userDepartment'));
+        const currentId = this.model.get('creator').oshDepartment;
+        const current = dictionaries.departments.get(currentId);
 
-        $input.val(current ? current.id : '').select2({
+        $input.val(currentId).select2({
           width: '100%',
           placeholder: ' ',
           data: !current ? [] : [{
-            id: current.id,
-            text: current.getLabel({long: true}),
+            id: currentId,
+            text: current ? current.getLabel({long: true}) : `?${currentId}?`,
             model: current
           }]
         });

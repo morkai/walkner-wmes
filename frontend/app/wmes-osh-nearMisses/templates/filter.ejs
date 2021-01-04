@@ -10,12 +10,11 @@
   <%- forms.dateTimeRange({
     idPrefix,
     hidden: true,
-    labels: [
-      {text: 'Czas zgłoszenia', ranges: true, value: 'createdAt'},
-      {text: 'Czas zdarzenia', ranges: true, value: 'eventDate'},
-      {text: 'Czas rozpoczęcia', ranges: true, value: 'startedAt'},
-      {text: 'Czas zakończenia', ranges: true, value: 'finishedAt'}
-    ]
+    labels: ['createdAt', 'eventDate', 'startedAt', 'finishedAt'].map(value => ({
+      text: t(`PROPERTY:${value}`),
+      ranges: true,
+      value
+    }))
   }) %>
   <div class="form-group" style="min-width: 280px">
     <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">

@@ -207,6 +207,7 @@
   "PRIVILEGE:OSH:COORDINATOR": "BHP > Koordynator",
   "PRIVILEGE:OSH:LEADER": "BHP > Lider",
   "PRIVILEGE:OSH:OBSERVER": "BHP > Obserwator",
+  "PRIVILEGE:OSH:MANAGER": "BHP > Kierownik",
   "PRIVILEGE:OSH:NEAR_MISSES:MANAGE": "BHP > ZPW: zarządzanie",
   "PRIVILEGE:OSH:KAIZENS:MANAGE": "BHP > Kaizen: zarządzanie",
   "PRIVILEGE:OSH:ACTIONS:MANAGE": "BHP > Akcje: zarządzanie",

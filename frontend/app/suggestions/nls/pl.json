@@ -202,7 +202,7 @@
   "report:title:summary:averageDuration": "Średnia ilość dni realizacji w poszczególnych tygodniach",
   "report:title:summary:count": "Ilość zgłoszeń w poszczególnych tygodniach",
   "report:title:summary:suggestionOwners": "Ilość pomysłów zgłoszonych przez pracownika",
-  "report:title:summary:categories": "Ilość ppomysłów zgłoszonych w kategoriach",
+  "report:title:summary:categories": "Ilość pomysłów zgłoszonych w kategoriach",
   "report:subtitle:summary:averageDuration": "Całkowita średnia dla wybranego okresu: {averageDuration}",
   "report:subtitle:summary:averageDuration:short": "Całkowita średnia: {averageDuration}",
   "report:subtitle:summary:productFamily": "Rodzina: {productFamily}",
