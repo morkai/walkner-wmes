@@ -5,9 +5,9 @@
   "version": "0.156.0",
   "updater": {
     "wmes": {
-      "backend": 635,
-      "frontend": 790,
-      "reports": 137,
+      "backend": 636,
+      "frontend": 791,
+      "reports": 138,
       "attachments": 3,
       "importer-sap": 68,
       "importer-results": 12,
@@ -16,7 +16,7 @@
       "operator": 101,
       "docs": 57,
       "heff": 52,
-      "planning": 94,
+      "planning": 95,
       "ps-queue": 58,
       "ps-load": 19,
       "wh-pickup": 74,
@@ -38,8 +38,8 @@
       "importer": 2
     },
     "pila": {
-      "backend": 11,
-      "frontend": 11,
+      "backend": 12,
+      "frontend": 12,
       "reports": 2
     }
   },
