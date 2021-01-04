@@ -3,6 +3,9 @@
 
 'use strict';
 
+db.paintshoploads.createIndex({'_id.ts': -1});
+db.paintshoploads.createIndex({'_id.c': 1, '_id.ts': -1});
+
 db.settings.updateOne({_id: 'production.taktTime.coeffs'}, {$set: {
   value: {
     "*": [
