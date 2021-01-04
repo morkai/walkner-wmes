@@ -13,6 +13,10 @@ define([
 
     className: '',
 
+    remoteTopics: {
+      'paintShop.load.updated': 'refreshCollection'
+    },
+
     serializeColumns: function()
     {
       return [
