@@ -20,8 +20,8 @@ define([
   'use strict';
 
   var nls = 'i18n!app/nls/orderBomMatchers';
-  var canView = user.auth('PROD_DATA:VIEW');
-  var canManage = user.auth('PROD_DATA:MANAGE');
+  var canView = user.auth('PROD_DATA:VIEW', ' FN:process-engineer');
+  var canManage = user.auth('PROD_DATA:MANAGE', ' FN:process-engineer');
 
   router.map('/orderBomMatchers', canView, function(req)
   {

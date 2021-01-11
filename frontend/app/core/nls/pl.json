@@ -210,6 +210,8 @@
   "NAVBAR:fa": "Środki Trwałe",
   "NAVBAR:dummyPaint": "Dummy paint",
   "NAVBAR:compRel:entries": "Dopuszczenia",
+  "NAVBAR:orderBomMatchers": "Sprawdzanie komponentów",
+  "NAVBAR:componentLabels": "Etykiety komponentów",
 
   "NAVBAR:OPINION:main": "Badanie Opinia",
   "NAVBAR:OPINION:current": "Aktualne badanie",
