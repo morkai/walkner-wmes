@@ -10,6 +10,7 @@ define([
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/views/OrgUnitPickerFilterView',
   'app/wmes-osh-observations/templates/filter',
   'app/core/util/ExpandableSelect'
 ], function(
@@ -22,6 +23,7 @@ define([
   idAndLabel,
   setUpUserSelect2,
   dictionaries,
+  OrgUnitPickerFilterView,
   template
 ) {
   'use strict';
@@ -30,11 +32,7 @@ define([
 
     filterList: [
       'createdAt',
-      'workplace',
-      'department',
-      'building',
-      'location',
-      'station',
+      'locationPath',
       'observationKind',
       'limit'
     ],
@@ -49,7 +47,9 @@ define([
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
 
-      'change input[name="userType"]': function() { this.toggleUserSelect2(true); }
+      'change input[name="userType"]': function() { this.toggleUserSelect2(true); },
+
+      'click #-clearObs': 'clearObsFilter'
 
     }, FilterView.prototype.events),
 
@@ -100,7 +100,30 @@ define([
           formData.userType = 'others';
           formData.user = term.args[1];
         }
+      },
+      '@observation': (propertyName, term, formData) =>
+      {
+        formData.obsType = term.args[0];
+        formData.obsFilter = term.args[1] || 'any';
+        formData.obsCategory = (term.args[2] || []).join(',');
       }
+    },
+
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.setView('#-locationPath', new OrgUnitPickerFilterView({
+        filterView: this,
+        emptyLabel: this.t('PROPERTY:locationPath')
+      }));
+    },
+
+    destroy: function()
+    {
+      FilterView.prototype.destroy.call(this);
+
+      this.$('.is-expandable').expandableSelect('destroy');
     },
 
     getTemplateData: function()
@@ -110,9 +133,9 @@ define([
           value: status,
           label: dictionaries.getLabel('status', status)
         })),
-        kinds: dictionaries.observationKinds.map(kind => ({
+        observationKinds: dictionaries.observationKinds.map(kind => ({
           value: kind.id,
-          label: kind.getLabel({long: true})
+          label: kind.getLabel({long: false})
         }))
       };
     },
@@ -128,11 +151,6 @@ define([
 
       [
         'status',
-        'workplace',
-        'department',
-        'building',
-        'location',
-        'station',
         'observationKind'
       ].forEach(prop =>
       {
@@ -182,6 +200,8 @@ define([
 
         selector.push({name: 'eq', args: [userType + '.id', user]});
       }
+
+      this.serializeObsFilter(selector);
     },
 
     afterRender: function()
@@ -197,43 +217,38 @@ define([
 
       this.setUpUserType();
       this.toggleUserSelect2();
-      this.setUpWorkplaceSelect2();
-      this.setUpDepartmentSelect2();
-      this.setUpBuildingSelect2();
-      this.setUpLocationSelect2();
-      this.setUpStationSelect2();
       this.setUpActivityKindSelect2();
+      this.setUpObsFilter();
     },
 
     setUpUserType: function()
     {
-      var view = this;
-      var options = [
+      const options = [
         'mine',
         'unseen',
         'others',
         'creator',
         'coordinators'
-      ].map(function(userType)
+      ].map(userType =>
       {
         return {
           value: userType,
-          title: view.t(`filter:user:${userType}:title`),
-          optionLabel: view.t(`filter:user:${userType}`)
+          title: this.t(`filter:user:${userType}:title`),
+          optionLabel: this.t(`filter:user:${userType}`)
         };
       });
 
-      dropdownRadio(view.$id('userType'), {
-        label: view.t('filter:user:others'),
+      dropdownRadio(this.$id('userType'), {
+        label: this.t('filter:user:others'),
         options: options
       });
     },
 
     toggleUserSelect2: function(resetUser)
     {
-      var userType = this.$('input[name="userType"]').val();
-      var mine = userType === 'mine' || userType === 'unseen';
-      var $user = this.$id('user').select2('enable', !mine);
+      const userType = this.$('input[name="userType"]').val();
+      const mine = userType === 'mine' || userType === 'unseen';
+      const $user = this.$id('user').select2('enable', !mine);
 
       if (mine || (resetUser && !$user.val()))
       {
@@ -242,116 +257,6 @@ define([
           text: currentUser.getLabel()
         });
       }
-    },
-
-    setUpWorkplaceSelect2: function()
-    {
-      this.$id('workplace').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.workplaces
-          .filter(i => i.get('active'))
-          .map(i => ({
-            id: i.id,
-            text: i.getLabel({long: true}),
-            model: i
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpDepartmentSelect2: function()
-    {
-      this.$id('department').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.workplaces
-          .filter(i => i.get('active'))
-          .map(workplace => ({
-            text: workplace.getLabel({long: true}),
-            children: dictionaries.departments
-              .filter(department => department.get('active') && department.get('workplace') === workplace.id)
-              .map(department => ({
-                id: department.id,
-                text: department.getLabel({long: true}),
-                model: department
-              }))
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpBuildingSelect2: function()
-    {
-      this.$id('building').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.buildings
-          .filter(i => i.get('active'))
-          .map(i => ({
-            id: i.id,
-            text: i.getLabel({long: true}),
-            model: i
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpLocationSelect2: function()
-    {
-      this.$id('location').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.locations
-          .filter(i => i.get('active'))
-          .map(i => ({
-            id: i.id,
-            text: i.getLabel({long: true}),
-            model: i
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpStationSelect2: function()
-    {
-      const data = [];
-
-      dictionaries.locations.forEach(location =>
-      {
-        if (!location.get('active'))
-        {
-          return;
-        }
-
-        const stations = dictionaries.stations.getByLocation(location.id).filter(s => s.get('active'));
-
-        if (!stations.length)
-        {
-          return;
-        }
-
-        data.push({
-          text: location.getLabel({long: true}),
-          children: stations.map(station => ({
-            id: station.id,
-            text: station.getLabel({long: true}),
-            model: station
-          }))
-        });
-      });
-
-      this.$id('station').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data,
-        formatSelection: ({model}, $el, e) => e(model.getLabel({path: true}))
-      });
     },
 
     setUpActivityKindSelect2: function()
@@ -371,19 +276,88 @@ define([
       });
     },
 
-    destroy: function()
+    setUpObsFilter: function()
     {
-      FilterView.prototype.destroy.call(this);
+      dropdownRadio(this.$id('obsType'), {
+        label: this.t('filter:obsType:any'),
+        options: ['any', 'behaviors', 'workConditions'].map(value =>
+        {
+          return {
+            value,
+            optionLabel: this.t(`filter:obsType:${value}`)
+          };
+        })
+      });
 
-      this.$('.is-expandable').expandableSelect('destroy');
+      dropdownRadio(this.$id('obsFilter'), {
+        label: this.t('filter:obsFilter:any'),
+        options: ['any', 'safe', 'risky', 'easy', 'hard'].map(value =>
+        {
+          return {
+            value,
+            optionLabel: this.t(`filter:obsFilter:${value}`)
+          };
+        })
+      });
+
+      this.$id('obsCategory').select2({
+        width: '350px',
+        multiple: true,
+        placeholder: this.t('filter:obsCategory'),
+        data: dictionaries.observationCategories
+          .filter(i => i.get('active'))
+          .map(i => ({
+            id: i.id,
+            text: i.getLabel({long: true}),
+            model: i
+          })),
+        formatSelection: ({model}, $el, e) => e(model.getLabel({long: false}))
+      });
+    },
+
+    serializeObsFilter: function(selector)
+    {
+      const type = this.$id('obsType').val();
+
+      if (!type)
+      {
+        return;
+      }
+
+      const filter = this.$id('obsFilter').val();
+      const category = this.$id('obsCategory').val().split(',').map(v => +v).filter(v => v > 0);
+
+      if (category.length || type !== 'any' || filter !== 'any')
+      {
+        const args = [type];
+
+        if (filter !== 'any' || category.length)
+        {
+          args.push(filter);
+
+          if (category.length)
+          {
+            args.push(category);
+          }
+        }
+
+        selector.push({name: 'observation', args});
+      }
+    },
+
+    clearObsFilter: function()
+    {
+      this.$id('obsType').val('any').trigger('change');
+      this.$id('obsFilter').val('any').trigger('change');
+      this.$id('obsCategory').select2('data', []);
     },
 
     filterHasValue: function(filter)
     {
       if (filter === 'date')
       {
-        var $from = this.$id('from-date');
-        var $to = this.$id('to-date');
+        const $from = this.$id('from-date');
+        const $to = this.$id('to-date');
 
         return $from.val().length > 0 || $to.val().length > 0;
       }

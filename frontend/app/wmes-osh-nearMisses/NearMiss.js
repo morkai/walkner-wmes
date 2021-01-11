@@ -38,7 +38,7 @@ define([
       const obj = Entry.prototype.serialize.apply(this, arguments);
 
       obj.priority = dictionaries.getLabel('priority', obj.priority);
-      obj.materialLoss = t('core', `BOOL:${obj.materialLoss}`);
+      obj.materialLoss = t('core', `BOOL:${!!obj.materialLoss}`);
 
       return obj;
     },

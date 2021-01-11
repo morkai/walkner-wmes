@@ -1,0 +1,32 @@
+.osh-report-observers-users th,
+.osh-report-observers-users td {
+  white-space: nowrap;
+  width: 1px;
+  text-align: center;
+}
+.osh-report-observers-users th[rowspan]:last-child,
+.osh-report-observers-users td:last-child {
+  width: auto;
+}
+.osh-report-observers-users th[rowspan]:first-child,
+.osh-report-observers-users td:first-child {
+  text-align: left;
+}
+.osh-report-observers-metric {
+  border-right: none!important;
+}
+td.osh-report-observers-metric {
+  font-family: Consolas, Menlo, Monaco, monospace;
+}
+.osh-report-observers-separator {
+  padding-left: 0!important;
+  padding-right: 0!important;
+  border-left: none!important;
+  border-right: none!important;
+}
+.osh-report-observers-separator + .osh-report-observers-metric {
+  border-left: none!important;
+}
+.osh-report-observers-orgUnits td[rowspan] {
+  vertical-align: top;
+}

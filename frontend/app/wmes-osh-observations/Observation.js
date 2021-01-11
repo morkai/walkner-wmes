@@ -36,7 +36,10 @@ define([
     {
       const obj = Entry.prototype.serialize.apply(this, arguments);
 
-      obj.company = obj.companyName;
+      if (!obj.company)
+      {
+        obj.company = obj.companyName;
+      }
 
       return obj;
     },

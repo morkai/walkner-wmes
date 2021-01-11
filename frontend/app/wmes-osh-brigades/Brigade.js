@@ -58,9 +58,9 @@ define([
         obj.members += ` +${members.length - 1}`;
       }
 
-      obj.division = dictionaries.divisions.getLabel(leader.oshDivision, {short: true});
-      obj.workplace = dictionaries.workplaces.getLabel(leader.oshWorkplace, {short: true});
-      obj.department = dictionaries.departments.getLabel(leader.oshDepartment, {short: true});
+      obj.division = dictionaries.divisions.getLabel(leader.oshDivision, {long: false});
+      obj.workplace = dictionaries.workplaces.getLabel(leader.oshWorkplace, {long: false});
+      obj.department = dictionaries.departments.getLabel(leader.oshDepartment, {long: false});
 
       return obj;
     },

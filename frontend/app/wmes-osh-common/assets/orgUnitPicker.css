@@ -1,0 +1,20 @@
+.osh-orgUnitPicker-filter > .btn-group {
+  display: block;
+}
+.osh-orgUnitPicker-filter > .btn-group > .btn:first-child {
+  width: 235px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.osh-orgUnitPicker-filter > .btn-group > .btn:last-child {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+.osh-orgUnitPicker-dialog > .form-actions {
+  display: flex;
+}
+.osh-orgUnitPicker-deactivated {
+  margin-left: auto;
+}

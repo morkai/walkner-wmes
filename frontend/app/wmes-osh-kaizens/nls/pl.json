@@ -20,7 +20,7 @@
   "PROPERTY:building": "Budynek",
   "PROPERTY:location": "Obszar",
   "PROPERTY:station": "Stanowisko",
-  "PROPERTY:locationPath": "Lokalizacja",
+  "PROPERTY:locationPath": "Miejsce usprawnienia",
   "PROPERTY:kind": "Rodzaj",
   "PROPERTY:kaizenCategory": "Kategoria",
   "PROPERTY:subject": "Temat",
@@ -35,6 +35,7 @@
   "PROPERTY:attachments.after": "Zdjęcia po",
   "PROPERTY:relations": "Powiązania",
 
+  "filter:user": "Użytkownik",
   "filter:user:mine": "Moje zgłoszenia",
   "filter:user:mine:title": "Znajdujesz się na liście uczestników zgłoszenia",
   "filter:user:unseen": "Nieprzeczytane zgłoszenia",

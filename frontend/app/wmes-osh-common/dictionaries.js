@@ -97,6 +97,14 @@ define([
     action: Action,
     observation: Observation
   };
+  const ORG_UNITS = [
+    'division',
+    'workplace',
+    'department',
+    'building',
+    'location',
+    'station'
+  ];
 
   let req = null;
   let releaseTimer = null;
@@ -110,6 +118,7 @@ define([
     PREFIX_TO_TYPE,
     TYPE_TO_MODULE,
     TYPE_TO_MODEL,
+    ORG_UNITS,
     statuses: {
       nearMiss: [],
       kaizen: [],
@@ -145,7 +154,7 @@ define([
 
       if (dictionaries.loaded)
       {
-        return null;
+        return $.Deferred().resolve();
       }
 
       if (req !== null)
@@ -192,6 +201,11 @@ define([
     },
     getLabel: function(dictionary, id, options)
     {
+      if (id == null)
+      {
+        return '';
+      }
+
       if (dictionary === 'priority')
       {
         return t('wmes-osh-common', `priority:${id}`);
@@ -262,7 +276,10 @@ define([
 
       page.on('beforeLoad', (page, requests) =>
       {
-        requests.push(this.load());
+        requests.push({
+          priority: true,
+          promise: this.load()
+        });
       });
 
       page.on('afterRender', () =>

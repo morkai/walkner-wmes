@@ -1,0 +1,94 @@
+<form class="well filter-form osh-report-filter" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix,
+    labels: ['createdAt', 'eventDate', 'startedAt', 'implementedAt', 'plannedAt', 'finishedAt']
+      .filter(value => t.has(`PROPERTY:${value}`))
+      .map(value => ({
+        text: t(`PROPERTY:${value}`),
+        ranges: true,
+        value
+      })),
+    required: [true, false]
+  }) %>
+  <div class="form-group">
+    <label><%- t('reports', 'filter:interval') %></label>
+    <div id="<%- id('interval') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['year', 'quarter', 'month', 'week', 'day', 'none'].forEach(interval => { %>
+        <label class="btn btn-default" title="<%- t('reports', `filter:interval:title:${interval}`) %>" data-interval="<%- interval %>">
+          <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', `filter:interval:${interval}`) %>
+        </label>
+      <% }) %>
+    </div>
+  </div>
+  <%- helpers.formGroup({
+    name: 'status',
+    type: 'select',
+    label: 'PROPERTY:',
+    expandable: true,
+    options: statuses,
+    groupClassName: 'hidden',
+    groupAttrs: {'data-filter': 'status'}
+  }) %>
+  <div class="form-group hidden" style="min-width: 280px" data-filter="user">
+    <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
+    <input id="<%- id('user') %>" name="user" type="text">
+  </div>
+  <div id="<%- id('locationPath') %>" class="form-group hidden" data-filter="locationPath"></div>
+  <% if (kinds.length) { %>
+    <%- helpers.formGroup({
+      name: 'kind',
+      type: 'select',
+      label: 'PROPERTY:',
+      expandable: true,
+      options: kinds,
+      groupClassName: 'hidden',
+      groupAttrs: {'data-filter': 'kind'}
+    }) %>
+  <% } %>
+  <% if (observationKinds.length) { %>
+    <%- helpers.formGroup({
+      name: 'observationKind',
+      type: 'select',
+      label: 'PROPERTY:',
+      expandable: true,
+      options: observationKinds,
+      groupClassName: 'hidden',
+      groupAttrs: {'data-filter': 'observationKind'}
+    }) %>
+  <% } %>
+  <%  ['activityKind', 'eventCategory', 'reasonCategory', 'kaizenCategory'].forEach(filter => { %>
+    <% if (filterList.includes(filter)) { %>
+      <%- helpers.formGroup({
+        name: filter,
+        type: 'select2',
+        label: 'PROPERTY:',
+        groupClassName: 'hidden',
+        groupAttrs: {'data-filter': filter}
+      }) %>
+    <% } %>
+  <% }) %>
+  <% if (priorities.length) { %>
+    <%- helpers.formGroup({
+      name: 'priority',
+      type: 'select',
+      label: 'PROPERTY:',
+      expandable: true,
+      options: priorities,
+      groupClassName: 'hidden',
+      groupAttrs: {'data-filter': 'priority'}
+    }) %>
+  <% } %>
+  <% if (type === 'observation') { %>
+    <div class="form-group" style="min-width: 280px">
+      <div style="display: flex">
+        <input id="<%- id('obsType') %>" name="obsType" type="hidden" value="any">
+        <input id="<%- id('obsFilter') %>" name="obsFilter" type="hidden" value="any">
+        <abbr id="<%- id('clearObs') %>" class="filter-clear-label"></abbr>
+      </div>
+      <input id="<%- id('obsCategory') %>" name="obsCategory" type="text">
+    </div>
+  <% } %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>

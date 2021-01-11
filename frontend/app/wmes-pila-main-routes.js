@@ -35,7 +35,8 @@ define([
   './wmes-osh-nearMisses/routes',
   './wmes-osh-kaizens/routes',
   './wmes-osh-actions/routes',
-  './wmes-osh-observations/routes'
+  './wmes-osh-observations/routes',
+  './wmes-osh-reports/routes'
 ], function()
 {
   'use strict';

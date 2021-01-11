@@ -1,0 +1,65 @@
+<div class="table-responsive is-colored">
+  <table class="table table-bordered table-hover osh-report-observers-orgUnits">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
+      <th class="is-min"><%- t('observers:employees') %></th>
+      <th class="is-min"><%- t('observers:observers') %></th>
+      <th class="is-min text-center" title="<%- t('observers:observersPercent') %>">%</th>
+      <th class="is-min"><%- t('observers:cards:title') %></th>
+      <th class="is-min"><%- t('observers:observations:title') %></th>
+      <th class="is-min"><%- t('observers:safe:title') %></th>
+      <th class="is-min"><%- t('observers:risky:title') %></th>
+      <th class="is-min text-center" title="<%- t('observers:safePercent') %>">%</th>
+      <th class="is-min"><%- t('observers:easy:title') %></th>
+      <th class="is-min"><%- t('observers:hard:title') %></th>
+      <th class="is-min text-center" title="<%- t('observers:easyPercent') %>">%</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% rows.forEach(row => { %>
+      <tr>
+        <% if (row.type === 'division') { %>
+          <td class="is-min" rowspan="<%- row.children %>"><%= row.division %></td>
+          <td class="is-min"></td>
+          <td class="is-min"></td>
+        <% } else if (row.type === 'workplace') {  %>
+          <td class="is-min" rowspan="<%- row.children %>"><%= row.workplace %></td>
+          <td class="is-min"></td>
+        <% } else if (row.type === 'department') { %>
+          <td class="is-min"><%= row.department %></td>
+        <% } else { %>
+          <td class="is-min text-right" colspan="3"><%- t('observers:total') %></td>
+        <% } %>
+        <td class="is-min is-number"><%- row.employees.toLocaleString() %></td>
+        <td class="is-min is-number"><%- row.observers.toLocaleString() %></td>
+        <td class="is-min is-number <%- row.invalidObservers ? 'danger' : '' %>">
+          <% if (row.observersPercent >= 0) { %>
+          <%- row.observersPercent %>%
+          <% } %>
+        </td>
+        <td class="is-min is-number"><%- row.metrics[0].toLocaleString() %></td>
+        <td class="is-min is-number"><%- row.metrics[1].toLocaleString() %></td>
+        <td class="is-min is-number"><%- row.metrics[3].toLocaleString() %></td>
+        <td class="is-min is-number"><%- (row.metrics[4] + row.metrics[7]).toLocaleString() %></td>
+        <td class="is-min is-number">
+          <% if (row.safePercent >= 0) { %>
+          <%- row.safePercent %>%
+          <% } %>
+        </td>
+        <td class="is-min is-number"><%- (row.metrics[5] + row.metrics[8]).toLocaleString() %></td>
+        <td class="is-min is-number"><%- (row.metrics[6] + row.metrics[9]).toLocaleString() %></td>
+        <td class="is-min is-number">
+          <% if (row.easyPercent >= 0) { %>
+          <%- row.easyPercent %>%
+          <% } %>
+        </td>
+        <td></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

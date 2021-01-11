@@ -1,3 +1,4 @@
+<% if (filters.length) { %>
 <div class="btn-group">
   <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('core', 'filter:submit') %></span></button>
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('core', 'filter:filters') %>"><span class="caret"></span></button>
@@ -17,3 +18,6 @@
     <% }) %>
   </ul>
 </div>
+<% } else { %>
+<button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('core', 'filter:submit') %></span></button>
+<% } %>

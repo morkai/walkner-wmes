@@ -1,0 +1,13 @@
+<form class="osh-orgUnitPicker-dialog">
+  <% orgUnits.forEach(orgUnit => { %>
+  <div class="form-group">
+    <label class="radio-inline"><input type="radio" name="orgUnitType" value="<%- orgUnit.type %>"> <%- orgUnit.label %></label>
+    <input id="<%- id(orgUnit.type) %>" class="osh-orgUnitPicker-orgUnits" name="<%- orgUnit.type %>" type="text" autocomplete="new-password">
+  </div>
+  <% }) %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('wmes-osh-common', 'orgUnitPicker:dialog:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+    <button id="<%- id('deactivated') %>" type="button" class="btn btn-default osh-orgUnitPicker-deactivated <%- deactivated ? 'active' : '' %>"><%- t('wmes-osh-common', 'orgUnitPicker:dialog:deactivated') %></button>
+  </div>
+</form>

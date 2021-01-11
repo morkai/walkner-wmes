@@ -47,6 +47,13 @@ define([
     {
       var value = $el.val();
       var option = options.options.find(function(option) { return option.value === value; });
+
+      if (!option)
+      {
+        option = options.options[0];
+        $el.val(option.value);
+      }
+
       var label = option.selectedLabel || option.optionLabel;
 
       $dropdownRadio.find('.dropdownRadio-selectedLabel').text(label);

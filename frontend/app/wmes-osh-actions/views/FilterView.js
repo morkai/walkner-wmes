@@ -10,6 +10,7 @@ define([
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/views/OrgUnitPickerFilterView',
   'app/wmes-osh-actions/templates/filter',
   'app/core/util/ExpandableSelect'
 ], function(
@@ -22,6 +23,7 @@ define([
   idAndLabel,
   setUpUserSelect2,
   dictionaries,
+  OrgUnitPickerFilterView,
   template
 ) {
   'use strict';
@@ -30,11 +32,7 @@ define([
 
     filterList: [
       'createdAt',
-      'workplace',
-      'department',
-      'building',
-      'location',
-      'station',
+      'locationPath',
       'kind',
       'activityKind',
       'limit'
@@ -113,6 +111,16 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.setView('#-locationPath', new OrgUnitPickerFilterView({
+        filterView: this,
+        emptyLabel: this.t('PROPERTY:locationPath')
+      }));
+    },
+
     getTemplateData: function()
     {
       return {
@@ -138,11 +146,6 @@ define([
 
       [
         'status',
-        'workplace',
-        'department',
-        'building',
-        'location',
-        'station',
         'kind',
         'activityKind'
       ].forEach(prop =>
@@ -208,11 +211,6 @@ define([
 
       this.setUpUserType();
       this.toggleUserSelect2();
-      this.setUpWorkplaceSelect2();
-      this.setUpDepartmentSelect2();
-      this.setUpBuildingSelect2();
-      this.setUpLocationSelect2();
-      this.setUpStationSelect2();
       this.setUpActivityKindSelect2();
     },
 
@@ -255,116 +253,6 @@ define([
           text: currentUser.getLabel()
         });
       }
-    },
-
-    setUpWorkplaceSelect2: function()
-    {
-      this.$id('workplace').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.workplaces
-          .filter(i => i.get('active'))
-          .map(i => ({
-            id: i.id,
-            text: i.getLabel({long: true}),
-            model: i
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpDepartmentSelect2: function()
-    {
-      this.$id('department').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.workplaces
-          .filter(i => i.get('active'))
-          .map(workplace => ({
-            text: workplace.getLabel({long: true}),
-            children: dictionaries.departments
-              .filter(department => department.get('active') && department.get('workplace') === workplace.id)
-              .map(department => ({
-                id: department.id,
-                text: department.getLabel({long: true}),
-                model: department
-              }))
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpBuildingSelect2: function()
-    {
-      this.$id('building').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.buildings
-          .filter(i => i.get('active'))
-          .map(i => ({
-            id: i.id,
-            text: i.getLabel({long: true}),
-            model: i
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpLocationSelect2: function()
-    {
-      this.$id('location').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data: dictionaries.locations
-          .filter(i => i.get('active'))
-          .map(i => ({
-            id: i.id,
-            text: i.getLabel({long: true}),
-            model: i
-          })),
-        formatSelection: ({model}, $el, e) => e(model.getLabel())
-      });
-    },
-
-    setUpStationSelect2: function()
-    {
-      const data = [];
-
-      dictionaries.locations.forEach(location =>
-      {
-        if (!location.get('active'))
-        {
-          return;
-        }
-
-        const stations = dictionaries.stations.getByLocation(location.id).filter(s => s.get('active'));
-
-        if (!stations.length)
-        {
-          return;
-        }
-
-        data.push({
-          text: location.getLabel({long: true}),
-          children: stations.map(station => ({
-            id: station.id,
-            text: station.getLabel({long: true}),
-            model: station
-          }))
-        });
-      });
-
-      this.$id('station').select2({
-        width: '250px',
-        multiple: true,
-        placeholder: ' ',
-        data,
-        formatSelection: ({model}, $el, e) => e(model.getLabel({path: true}))
-      });
     },
 
     setUpActivityKindSelect2: function()

@@ -2,6 +2,7 @@
 @import "./attachments.css";
 @import "./history.css";
 @import "./form.css";
+@import "./orgUnitPicker.css";
 
 .osh-unseen {
   color: #E00!important;

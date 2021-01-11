@@ -38,6 +38,7 @@ define([
           workplaces.set(d.workplace, {
             _id: d.workplace,
             label: dictionaries.getLabel('workplaces', d.workplace),
+            division: dictionaries.workplaces.get(d.workplace).get('division'),
             departments: []
           });
         }

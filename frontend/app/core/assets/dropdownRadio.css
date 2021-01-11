@@ -10,3 +10,6 @@
 .dropdownRadio > .dropdown-menu {
   margin-top: 0;
 }
+.dropdownRadio + .dropdownRadio {
+  margin-left: 15px;
+}

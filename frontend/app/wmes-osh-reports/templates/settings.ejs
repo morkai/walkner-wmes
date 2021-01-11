@@ -1,0 +1,21 @@
+<form class="settings reports-settings">
+  <div class="list-group">
+    <% [
+      'observers'
+    ].forEach(function(tab) { %>
+    <a class="list-group-item" href="#osh/reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t(`settings:tab:${tab}`) %></a>
+    <% }) %>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="observers">
+      <div class="form-group">
+        <label for="<%- id('obsPerDept') %>"><%- t('settings:obsPerDept') %></label>
+        <input id="<%- id('obsPerDept') %>" class="form-control" name="osh.obsPerDept" type="number" min="0" max="100" step="1">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('minObsCards') %>"><%- t('settings:minObsCards') %></label>
+        <input id="<%- id('minObsCards') %>" class="form-control" name="osh.minObsCards" type="number" min="0" max="1000" step="1">
+      </div>
+    </div>
+  </div>
+</form>

@@ -67,7 +67,7 @@ define([
 
       Entry.TIME_PROPS.forEach(prop =>
       {
-        obj[prop] = obj[prop] ? time.format(obj[prop], 'L') : '';
+        obj[prop] = obj[prop] ? time.format(obj[prop], 'L, LT') : '';
       });
 
       Entry.DICT_PROPS.forEach(prop =>

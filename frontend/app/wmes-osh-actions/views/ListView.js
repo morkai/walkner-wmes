@@ -37,7 +37,8 @@ define([
         },
         {
           id: 'locationPath',
-          className: 'is-overflow w300'
+          className: 'is-overflow w300',
+          thClassName: 'is-filter'
         },
         {
           id: 'kind',

@@ -28,6 +28,13 @@ define([
       return time.utc.format(this.id, 'MMMM YYYY');
     },
 
+    parse: function(res)
+    {
+      res._id = time.utc.format(res._id, 'YYYY-MM-DD');
+
+      return res;
+    },
+
     serialize: function()
     {
       const obj = this.toJSON();

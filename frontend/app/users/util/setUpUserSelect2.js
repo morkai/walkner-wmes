@@ -103,11 +103,11 @@ define([
 
         if (oshWorkplace)
         {
-          workplace = oshWorkplace.getLabel({short: true});
+          workplace = oshWorkplace.getLabel({long: false});
 
           if (oshDepartment)
           {
-            department = oshDepartment.getLabel({short: true});
+            department = oshDepartment.getLabel({long: false});
           }
         }
       }

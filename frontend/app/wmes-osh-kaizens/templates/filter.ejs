@@ -20,41 +20,7 @@
     <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
     <input id="<%- id('user') %>" name="user" type="text">
   </div>
-  <%- helpers.formGroup({
-    name: 'workplace',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'workplace'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'department',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'department'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'building',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'building'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'location',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'location'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'station',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'station'}
-  }) %>
+  <div id="<%- id('locationPath') %>" class="form-group hidden" data-filter="locationPath"></div>
   <%- helpers.formGroup({
     name: 'kind',
     type: 'select',

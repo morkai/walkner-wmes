@@ -90,9 +90,16 @@ define([
       this.$el.prop('size', 1);
       this.$el.removeClass(this.options.isExpandedClassName);
 
-      if (this.$el[0].selectedOptions.length)
+      if (this.$el[0].selectedIndex !== -1)
       {
-        this.$el[0].selectedOptions[0].scrollIntoView();
+        var scrollTop = 0;
+
+        for (var i = 0, l = this.$el[0].selectedIndex; i < l; ++i)
+        {
+          scrollTop += this.$el[0].options[i].offsetHeight;
+        }
+
+        this.$el[0].scrollTop = scrollTop;
       }
     },
 

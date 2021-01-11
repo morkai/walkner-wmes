@@ -354,7 +354,7 @@ function(
   {
     if (this.nlsDomain)
     {
-      return this.nlsDomain;
+      return _.result(this, 'nlsDomain');
     }
 
     var model = this.getDefaultModel();

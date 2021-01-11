@@ -1,0 +1,37 @@
+<div class="osh-report">
+  <div id="<%- id('filter') %>" class="filter-container"></div>
+  <% ['count', 'duration', 'orgUnit', 'status', 'observationKind', 'company', 'creator'].forEach(metric => { %>
+    <% if (metric === 'orgUnit') { %>
+      <h3>
+        <span><%- t.has(`count:title:orgUnits:${type}`) ? t(`count:title:orgUnits:${type}`) : t(`count:title:orgUnits`) %></span>
+        <% orgUnits.forEach(orgUnit => { %>
+          <a href="javascript:void(0)" data-group="orgUnit" data-key="<%- orgUnit %>"><%- t('wmes-osh-common', `orgUnit:${orgUnit}`) %></a>
+        <% }) %>
+      </h3>
+      <% orgUnits.forEach(orgUnit => { %>
+        <div id="<%- id(orgUnit) %>" data-group="orgUnit" data-key="<%- orgUnit %>" class="hidden"></div>
+      <% }) %>
+    <% } else { %>
+      <h3><span><%- t.has(`count:title:${metric}:${type}`) ? t(`count:title:${metric}:${type}`) : t(`count:title:${metric}`) %></span></h3>
+      <div id="<%- id(metric) %>" data-group="generic" data-key="<%- metric %>"></div>
+    <% } %>
+  <% }) %>
+  <h3>
+    <span><%- t(`count:title:observation`) %></span>
+    <% ['observation', 'safe', 'risky', 'easy', 'hard'].forEach(metric => { %>
+      <a href="javascript:void(0)" data-group="observation" data-key="<%- metric %>"><%- t(`count:title:observation:${metric}`) %></a>
+    <% }) %>
+  </h3>
+  <% ['observation', 'safe', 'risky', 'easy', 'hard'].forEach(metric => { %>
+    <div id="<%- id(metric) %>" class="hidden" data-group="observation" data-key="<%- metric %>"></div>
+  <% }) %>
+  <h3>
+    <span><%- t(`count:title:observationCategory`) %></span>
+    <% ['observationCategory', 'safeCategory', 'riskyCategory', 'easyCategory', 'hardCategory'].forEach(metric => { %>
+      <a href="javascript:void(0)" data-group="observationCategory" data-key="<%- metric %>"><%- t(`count:title:observationCategory:${metric}`) %></a>
+    <% }) %>
+  </h3>
+  <% ['observationCategory', 'safeCategory', 'riskyCategory', 'easyCategory', 'hardCategory'].forEach(metric => { %>
+    <div id="<%- id(metric) %>" class="hidden" data-group="observationCategory" data-key="<%- metric %>"></div>
+  <% }) %>
+</div>

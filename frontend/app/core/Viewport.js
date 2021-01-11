@@ -202,6 +202,8 @@ define([
     {
       var requests = [];
 
+      page.trigger('beforeLoad', page, requests);
+
       for (var i = 0; i < arguments.length; ++i)
       {
         var request = arguments[i];
@@ -216,9 +218,39 @@ define([
         }
       }
 
-      page.trigger('beforeLoad', page, requests);
+      var priorityRequests = [];
+      var normalRequests = [];
 
-      return $.when.apply($, _.map(requests, page.promised, page));
+      requests.forEach(function(request)
+      {
+        if (!request)
+        {
+          return;
+        }
+
+        if (request.priority && request.promise && request.promise.then)
+        {
+          priorityRequests.push(page.promised(request.promise));
+        }
+        else if (request.priority && request.then)
+        {
+          priorityRequests.push(page.promised(request));
+        }
+        else if (request.then)
+        {
+          normalRequests.push(page.promised(request));
+        }
+      });
+
+      if (priorityRequests.length)
+      {
+        return $.when.apply($, priorityRequests).then(function()
+        {
+          return $.when.apply($, normalRequests);
+        });
+      }
+
+      return $.when.apply($, normalRequests);
     }
 
     function onPageLoadSuccess()

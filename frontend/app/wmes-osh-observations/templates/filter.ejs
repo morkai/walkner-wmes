@@ -20,41 +20,7 @@
     <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
     <input id="<%- id('user') %>" name="user" type="text">
   </div>
-  <%- helpers.formGroup({
-    name: 'workplace',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'workplace'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'department',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'department'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'building',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'building'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'location',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'location'}
-  }) %>
-  <%- helpers.formGroup({
-    name: 'station',
-    type: 'select2',
-    label: 'PROPERTY:',
-    groupClassName: 'hidden',
-    groupAttrs: {'data-filter': 'station'}
-  }) %>
+  <div id="<%- id('locationPath') %>" class="form-group hidden" data-filter="locationPath"></div>
   <%- helpers.formGroup({
     name: 'observationKind',
     type: 'select',
@@ -62,8 +28,16 @@
     groupClassName: 'hidden',
     groupAttrs: {'data-filter': 'observationKind'},
     expandable: true,
-    options: kinds
+    options: observationKinds
   }) %>
+  <div class="form-group" style="min-width: 280px">
+    <div style="display: flex">
+      <input id="<%- id('obsType') %>" name="obsType" type="hidden" value="any">
+      <input id="<%- id('obsFilter') %>" name="obsFilter" type="hidden" value="any">
+      <abbr id="<%- id('clearObs') %>" class="filter-clear-label"></abbr>
+    </div>
+    <input id="<%- id('obsCategory') %>" name="obsCategory" type="text">
+  </div>
   <%- renderLimit({hidden: true}) %>
   <div class="form-group filter-actions">
     <%- renderButton() %>

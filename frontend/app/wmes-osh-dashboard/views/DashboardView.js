@@ -82,7 +82,7 @@ define([
         paginate: false,
         rqlQuery: 'select(rid,status,subject)&sort(-updatedAt)&limit(11)'
           + `&users.user.id=${user.data._id}`
-          + '&status=in=(new,inProgress,paused)'
+          + '&status=in=(new,inProgress)'
       });
 
       this.kaizenStats = new Model(null, {
@@ -93,7 +93,7 @@ define([
         paginate: false,
         rqlQuery: 'select(rid,status,subject)&sort(-updatedAt)&limit(11)'
           + `&users.user.id=${user.data._id}`
-          + '&status=in=(new,inProgress,verification,paused)'
+          + '&status=in=(new,inProgress,verification)'
       });
     },
 
@@ -111,7 +111,7 @@ define([
         buttonLabel: this.t('addButton:nearMiss'),
         browseUrl: '#osh/nearMisses',
         sortProperty: 'createdAt',
-        openStatuses: 'new,inProgress,paused'
+        openStatuses: 'new,inProgress'
       });
 
       this.nearMissListView = new NearMissListView({
@@ -143,7 +143,7 @@ define([
         buttonLabel: this.t('addButton:kaizen'),
         browseUrl: '#osh/kaizens',
         sortProperty: 'createdAt',
-        openStatuses: 'new,inProgress,verification,paused'
+        openStatuses: 'new,inProgress,verification'
       });
 
       this.kaizenListView = new KaizenListView({

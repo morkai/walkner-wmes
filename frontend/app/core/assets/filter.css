@@ -135,6 +135,34 @@ input[type=checkbox].filter-inLabel {
 .filter-form .no-label {
   align-self: flex-end;
 }
+.filter-clear-select2 {
+  position: absolute;
+  top: 1px;
+  right: 9px;
+  font-size: 12px;
+  line-height: 32px;
+  font-family: FontAwesome;
+  color: #777;
+}
+.filter-clear-select2-clear:before {
+  content: "\f12d";
+}
+.filter-clear-select2-clear:hover {
+  color: hotpink;
+  cursor: pointer;
+}
+.filter-clear-label {
+  margin-left: 15px;
+  font-family: FontAwesome;
+  color: #777;
+}
+.filter-clear-label:before {
+  content: "\f12d";
+}
+.filter-clear-label:hover {
+  color: hotpink;
+  cursor: pointer;
+}
 @media (max-width: 767px) {
   .filter-container > .well {
     align-items: flex-start;

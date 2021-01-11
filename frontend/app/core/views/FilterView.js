@@ -63,6 +63,7 @@ define([
       var view = this;
 
       return _.assign(View.prototype.serialize.apply(view, arguments), {
+        filterList: _.result(this, 'filterList'),
         renderLimit: function(templateData)
         {
           return view.renderPartialHtml(filterLimitTemplate, _.assign({
@@ -74,7 +75,7 @@ define([
         renderButton: function(templateData)
         {
           return view.renderPartialHtml(filterButtonTemplate, _.assign({
-            filters: view.filterList
+            filters: _.result(view, 'filterList')
           }, templateData));
         }
       });
@@ -85,9 +86,9 @@ define([
       return buttonGroup.toggle(this.$id(groupName));
     },
 
-    getButtonGroupValue: function(groupName)
+    getButtonGroupValue: function(groupName, defaultValue)
     {
-      return buttonGroup.getValue(this.$id(groupName));
+      return buttonGroup.getValue(this.$id(groupName)) || defaultValue;
     },
 
     afterRender: function()
@@ -96,7 +97,7 @@ define([
 
       js2form(this.el, this.formData);
 
-      if (this.filterList.length)
+      if (_.result(this, 'filterList').length)
       {
         this.$id('limit').parent().attr('data-filter', 'limit');
       }
@@ -132,7 +133,7 @@ define([
     {
       var view = this;
 
-      view.filterList.forEach(function(filter)
+      _.result(view, 'filterList').forEach(function(filter)
       {
         view.$('.form-group[data-filter="' + filter + '"]').toggleClass('hidden', !view.filterHasValue(filter));
       });
@@ -209,7 +210,7 @@ define([
       }
 
       var propertyName = typeof term.args[0] === 'string' ? term.args[0] : null;
-      var termToForm = this.termToForm[propertyName];
+      var termToForm = this.termToForm['@' + term.name] || this.termToForm[propertyName];
 
       if (!termToForm)
       {
