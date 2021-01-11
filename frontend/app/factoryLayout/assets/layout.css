@@ -155,6 +155,16 @@
 .is-heff-unplanned .factoryLayout-prodLine-bg {
   fill: url(/#factoryLayout-prodLine-bg-working-nok);
 }
+.is-working.is-eff-mid .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-working-mid);
+}
+.is-working.is-eff-mid .factoryLayout-prodLine-name {
+  fill: #000;
+  text-shadow: 0 1px 2px #AAA;
+}
+.is-working.is-eff-low .factoryLayout-prodLine-bg {
+  fill: url(/#factoryLayout-prodLine-bg-working-low);
+}
 .is-downtime .factoryLayout-prodLine-bg,
 .is-heff-under .factoryLayout-prodLine-bg,
 .is-heff-underRatio .factoryLayout-prodLine-bg {
@@ -222,10 +232,17 @@
 .factoryLayout-legend-item[data-state="noPlan"] {
   background: linear-gradient(to bottom, #555, #000);
 }
+.factoryLayout-legend-item[data-state="low"],
 .factoryLayout-legend-item[data-state="nok"],
 .factoryLayout-legend-item[data-state="unplanned"] {
   background: linear-gradient(to bottom, #FFC864, #F0AD4E);
 }
+.factoryLayout-legend-item[data-state="mid"] {
+  background: linear-gradient(to bottom, #FFFF00, #FFEE00);
+  color: #333;
+  text-shadow: none;
+}
+.factoryLayout-legend-item[data-state="high"],
 .factoryLayout-legend-item[data-state="ok"],
 .factoryLayout-legend-item[data-state="over"] {
   background: linear-gradient(to bottom, #82DC82, #5CB85C);

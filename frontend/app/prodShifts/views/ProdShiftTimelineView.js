@@ -324,6 +324,8 @@ define([
       {
         this.highlightItem(this.highlightedItem);
       }
+
+      this.trigger('chartRendered');
     },
 
     canManage: function()
@@ -439,7 +441,6 @@ define([
           starting_time: startingTime,
           ending_time: endingTime || -1,
           ended: !isNaN(endingTime),
-          taktTimeOk: prodShiftOrder.isTaktTimeOk(),
           data: prodShiftOrder.toJSON(),
           model: prodShiftOrder,
           text: prodShiftOrder.get('orderId')
@@ -640,9 +641,9 @@ define([
         {
           var className = 'timeline-item timeline-item-' + item.type;
 
-          if (item.type === 'working' && !item.taktTimeOk)
+          if (item.type === 'working')
           {
-            className += ' is-tt-nok';
+            className += ' ' + item.model.getEfficiencyClassName({prodDowntimes: view.prodDowntimes});
           }
 
           if (item.type === 'downtime' && item.model.isBreak())

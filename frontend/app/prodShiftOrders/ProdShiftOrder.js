@@ -414,6 +414,23 @@ define([
       return time.toString(Math.round((endTime - startTime) / 1000), compact);
     },
 
+    getEfficiencyClassName: function(options)
+    {
+      var eff = this.getEfficiency(options);
+
+      if (eff >= 1)
+      {
+        return 'is-eff-high';
+      }
+
+      if (eff >= 0.9)
+      {
+        return 'is-eff-mid';
+      }
+
+      return 'is-eff-low';
+    },
+
     getEfficiency: function(options)
     {
       return this.constructor.getEfficiency(this.attributes, options);

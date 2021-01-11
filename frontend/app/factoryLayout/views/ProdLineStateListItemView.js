@@ -125,10 +125,7 @@ define([
         classNames.push('is-extended');
       }
 
-      if (!this.model.isTaktTimeOk())
-      {
-        classNames.push('is-tt-nok');
-      }
+      classNames.push(this.model.getEfficiencyClassName());
 
       var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.getProdLineId()));
       var prodFlow = workCenter ? orgUnits.getParent(workCenter) : null;
@@ -280,6 +277,8 @@ define([
 
       this.setView('.factoryLayout-timeline-container', this.timelineView).render();
 
+      this.listenTo(this.timelineView, 'chartRendered', this.onTimelineChartRendered);
+
       var hasProdShift = !!this.model.get('prodShift');
 
       if (hasProdShift)
@@ -367,7 +366,19 @@ define([
 
     toggleTaktTime: function()
     {
-      this.$el.toggleClass('is-tt-nok', !this.model.isTaktTimeOk());
+      var effClassName = this.model.getEfficiencyClassName();
+
+      if (this.$el.hasClass(effClassName))
+      {
+        return;
+      }
+
+      this.$el.removeClass('is-eff-low is-eff-mid is-eff-high');
+
+      if (effClassName)
+      {
+        this.$el.addClass(effClassName);
+      }
     },
 
     toggleVisibility: function()
@@ -458,6 +469,11 @@ define([
     onMetricsChanged: function()
     {
       this.$('[role=quantitiesDone]').html(this.serializeQuantitiesDone());
+    },
+
+    onTimelineChartRendered: function()
+    {
+      this.toggleTaktTime();
     }
 
   });

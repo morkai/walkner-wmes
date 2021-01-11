@@ -4,7 +4,7 @@
       <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:heff:' + state + ':title') %>"><%- t('legend:heff:' + state) %></div>
     <% }) %>
   <% } else { %>
-    <% ['off', 'idle', 'nok', 'ok', 'downtime', 'break'].forEach(function(state) { %>
+    <% ['off', 'idle', 'low', 'mid', 'high', 'downtime', 'break'].forEach(function(state) { %>
       <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:layout:' + state + ':title') %>"><%- t('legend:layout:' + state) %></div>
     <% }) %>
   <% } %>

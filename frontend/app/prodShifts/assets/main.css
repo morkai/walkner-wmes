@@ -49,10 +49,16 @@
   fill: #47A447;
   cursor: pointer;
 }
-.prodShifts-timeline .timeline-item-working.is-tt-nok {
+.prodShifts-timeline .timeline-item-working.is-eff-mid {
+  fill: #ff0;
+}
+.prodShifts-timeline .timeline-item-working.is-eff-mid:hover {
+  fill: #fe0;
+}
+.prodShifts-timeline .timeline-item-working.is-eff-low {
   fill: #F0AD4E;
 }
-.prodShifts-timeline .timeline-item-working.is-tt-nok:hover {
+.prodShifts-timeline .timeline-item-working.is-eff-low:hover {
   fill: #ED9C28;
 }
 .prodShifts-timeline .timeline-item-working.is-highlighted {

@@ -89,6 +89,25 @@ define([
       return downtime && !downtime.get('finishedAt') ? downtime : null;
     },
 
+    getEfficiencyClassName: function()
+    {
+      var prodShiftOrders = this.get('prodShiftOrders');
+
+      if (!prodShiftOrders || !prodShiftOrders.length)
+      {
+        return null;
+      }
+
+      var currentPso = prodShiftOrders.last();
+
+      if (currentPso.get('finishedAt'))
+      {
+        return null;
+      }
+
+      return currentPso.getEfficiencyClassName({prodDowntimes: this.get('prodDowntimes')});
+    },
+
     isTaktTimeOk: function()
     {
       var prodShiftOrders = this.get('prodShiftOrders');
@@ -98,17 +117,17 @@ define([
         return true;
       }
 
-      var currentProdShiftOrder = prodShiftOrders.last();
+      var currentPso = prodShiftOrders.last();
 
-      if (currentProdShiftOrder.get('finishedAt')
+      if (currentPso.get('finishedAt')
         || !this.settings
         || !this.settings.production.isTaktTimeEnabled(this.id))
       {
         return true;
       }
 
-      var actualTaktTime = currentProdShiftOrder.get('avgTaktTime') / 1000;
-      var sapTaktTime = currentProdShiftOrder.getSapTaktTime();
+      var actualTaktTime = currentPso.get('avgTaktTime') / 1000;
+      var sapTaktTime = currentPso.getSapTaktTime();
 
       return !actualTaktTime || actualTaktTime <= sapTaktTime;
     },

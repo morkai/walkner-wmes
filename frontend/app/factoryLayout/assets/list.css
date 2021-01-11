@@ -129,11 +129,17 @@
 .factoryLayout-prodLineList > .is-working:hover {
   background: #8feb8f;
 }
-.factoryLayout-prodLineList > .is-working.is-tt-nok {
+.factoryLayout-prodLineList > .is-working.is-eff-low {
+  background: #ffe081;
+}
+.factoryLayout-prodLineList > .is-working.is-eff-low:hover {
+  background: #ffd65a;
+}
+.factoryLayout-prodLineList > .is-working.is-eff-mid {
   background: #fffa9b;
 }
-.factoryLayout-prodLineList > .is-working.is-tt-nok:hover {
-  background: #ffe081;
+.factoryLayout-prodLineList > .is-working.is-eff-mid:hover {
+  background: #fff772;
 }
 .factoryLayout-prodLineList > .is-downtime {
   background: #ffa09c;
@@ -144,7 +150,7 @@
 .factoryLayout-prodLineList > .is-break {
   background: #e5cce5;
 }
-.factoryLayout-prodLineList > .is-downtime:hover {
+.factoryLayout-prodLineList > .is-break:hover {
   background: #d8b2d8;
 }
 .factoryLayout-prodLineList > .is-extended {

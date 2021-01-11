@@ -170,7 +170,7 @@ define([
           this.listenTo(model.settings.production, 'change', this.onProductionSettingsChange);
         });
 
-        this.timers.updateHeffMetrics = setInterval(this.updateHeffMetrics.bind(this), 20000);
+        this.timers.updateMetrics = setInterval(this.updateMetrics.bind(this), 20000);
       }
     },
 
@@ -415,9 +415,20 @@ define([
         }
       }
 
-      prodLineOuterContainer.classed('is-offline', prodLineState && !prodLineState.get('online'));
-      prodLineOuterContainer.classed('is-extended', prodLineState && prodLineState.get('extended'));
-      prodLineOuterContainer.classed('is-tt-nok', prodLineState && !prodLineState.isTaktTimeOk());
+      prodLineOuterContainer.classed({
+        'is-offline': prodLineState && !prodLineState.get('online'),
+        'is-extended': prodLineState && prodLineState.get('extended'),
+        'is-eff-high': false,
+        'is-eff-mid': false,
+        'is-eff-low': false
+      });
+
+      var effClassName = prodLineState && prodLineState.getEfficiencyClassName();
+
+      if (effClassName)
+      {
+        prodLineOuterContainer.classed(effClassName, true);
+      }
 
       var prodLineInnerContainer = prodLineOuterContainer.append('g').attr({
         class: 'factoryLayout-prodLine-inner'
@@ -740,7 +751,8 @@ define([
       if (!prodLineOuterContainer.empty())
       {
         prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
-        prodLineOuterContainer.classed('is-tt-nok', !prodLineState.isTaktTimeOk());
+
+        this.updateTaktTime(prodLineState);
       }
     },
 
@@ -816,7 +828,23 @@ define([
 
       if (!prodLineOuterContainer.empty())
       {
-        prodLineOuterContainer.classed('is-tt-nok', !prodLineState.isTaktTimeOk());
+        var effClassName = prodLineState.getEfficiencyClassName();
+
+        if (prodLineOuterContainer.classed(effClassName))
+        {
+          return;
+        }
+
+        prodLineOuterContainer.classed({
+          'is-eff-high': false,
+          'is-eff-mid': false,
+          'is-eff-low': false
+        });
+
+        if (effClassName)
+        {
+          prodLineOuterContainer.classed(effClassName, true);
+        }
       }
     },
 
@@ -859,19 +887,21 @@ define([
       }
     },
 
-    updateHeffMetrics: function()
+    updateMetrics: function()
     {
       var view = this;
 
-      if (!view.heff)
-      {
-        return;
-      }
-
       view.model.prodLineStates.forEach(function(prodLineState)
       {
-        prodLineState.recalcHeff();
-        view.updateMetricValue(prodLineState, 'plannedQuantityDone');
+        if (view.heff)
+        {
+          prodLineState.recalcHeff();
+          view.updateMetricValue(prodLineState, 'plannedQuantityDone');
+        }
+        else
+        {
+          view.updateTaktTime(prodLineState);
+        }
       });
     },
 
