@@ -217,14 +217,18 @@ function(
   {
     var view = this;
 
-    view.$('.popover').each(function()
+    view.$('[aria-describedby]').each(function()
     {
-      view.$('[aria-describedby="' + this.id + '"]').popover('destroy');
-    });
+      var describedBy = this.getAttribute('aria-describedby');
 
-    view.$('.tooltip').each(function()
-    {
-      view.$('[aria-describedby="' + this.id + '"]').tooltip('destroy');
+      if (/^popover/.test(describedBy))
+      {
+        view.$(this).popover('destroy');
+      }
+      else if (/^tooltip/.test(describedBy))
+      {
+        view.$(this).tooltip('destroy');
+      }
     });
   };
 
