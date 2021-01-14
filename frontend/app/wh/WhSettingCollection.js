@@ -72,7 +72,7 @@ define([
 
       if (/(ignorePsStatus|psPickupStatus|Funcs)$/.test(id))
       {
-        return !Array.isArray(newValue) ? [] : newValue.filter(function(v) { return /^[a-z\-]{1,30}$/.test(v); });
+        return !Array.isArray(newValue) ? [] : newValue.filter(function(v) { return /^[a-z\-]{1,30}$/i.test(v); });
       }
 
       if (/lineGroups$/.test(id))
