@@ -283,6 +283,7 @@ define([
 
     updateStats: function()
     {
+      var usedOrders = {};
       var stats = {
         sets: {},
         orders: {},
@@ -292,13 +293,20 @@ define([
 
       this.setCarts.forEach(function(setCart)
       {
-        stats.sets[setCart.get('date') + setCart.get('set')] = 1;
+        var setKey = setCart.get('date') + setCart.get('set');
+
+        stats.sets[setKey] = 1;
 
         setCart.get('orders').forEach(function(order)
         {
           stats.orders[order.sapOrder] = 1;
-          stats.qty += order.qty;
-          stats.time += Date.parse(order.finishTime) - Date.parse(order.startTime);
+
+          if (!usedOrders[order.whOrder])
+          {
+            usedOrders[order.whOrder] = 1;
+            stats.qty += order.qty;
+            stats.time += Date.parse(order.finishTime) - Date.parse(order.startTime);
+          }
         });
       });
 
