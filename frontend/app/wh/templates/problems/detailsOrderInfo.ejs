@@ -1,42 +1,42 @@
 <div class="wh-problems-column">
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:order') %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:order') %></div>
     <div class="wh-problems-prop-value"><%= whOrder.order %></div>
   </div>
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:line') %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:line') %></div>
     <div class="wh-problems-prop-value"><%= whOrder.line %></div>
   </div>
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:qty') %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:qty') %></div>
     <div class="wh-problems-prop-value"><%= whOrder.qty %>/<%= whOrder.qtyTodo %></div>
   </div>
 </div>
 <div class="wh-problems-column">
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:nc12') %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:nc12') %></div>
     <div class="wh-problems-prop-value"><%= whOrder.nc12 %></div>
   </div>
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:mrp') %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:mrp') %></div>
     <div class="wh-problems-prop-value"><%= whOrder.mrp %></div>
   </div>
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:planStatus') %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:planStatus') %></div>
     <div class="wh-problems-prop-value"><%- whOrder.planStatusIcons %></div>
   </div>
 </div>
 <div class="wh-problems-column">
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:name') %></div>
-    <div class="wh-problems-prop-value"><%= whOrder.name %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:name') %></div>
+    <div class="wh-problems-prop-value" style="max-width: none"><%= whOrder.name %></div>
   </div>
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:startTime') %></div>
-    <div class="wh-problems-prop-value"><%= whOrder.startDate %> <%= whOrder.startTime %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:orderTime') %></div>
+    <div class="wh-problems-prop-value"><%- whOrder.startDate %> <%- whOrder.startTime %></div>
   </div>
   <div class="wh-problems-prop">
-    <div class="wh-problems-prop-name"><%- helpers.t('prop:finishTime') %></div>
-    <div class="wh-problems-prop-value"><%= whOrder.finishDate %> <%= whOrder.finishTime %></div>
+    <div class="wh-problems-prop-name"><%- t('prop:problemAt') %></div>
+    <div class="wh-problems-prop-value"><%- whOrder.problemDate %> <%- whOrder.problemTime %></div>
   </div>
 </div>

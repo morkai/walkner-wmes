@@ -66,6 +66,8 @@
     "prop:qtyTodo": "Quantity todo",
     "prop:startTime": "Start",
     "prop:finishTime": "Finish",
+    "prop:orderTime": "Order start time",
+    "prop:problemAt": "Problem start time",
     "prop:time": "Time",
     "prop:comment": "Comment",
     "prop:problem": "Problem",

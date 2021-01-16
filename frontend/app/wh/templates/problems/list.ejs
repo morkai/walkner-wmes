@@ -1,6 +1,6 @@
 <div class="wh-problems-list <%- items.length ? '' : 'is-empty' %>">
   <div class="message message-inline message-success">
-    <p><i class="fa fa-thumbs-up"></i> <%- helpers.t('problem:empty') %></p>
+    <p><i class="fa fa-thumbs-up"></i> <%- t('problem:empty') %></p>
   </div>
   <% items.forEach(function(item) { %>
   <%- renderItem({item: item}) %>

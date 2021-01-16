@@ -65,6 +65,8 @@
   "prop:qtyTodo": "Ilość do zrobienia",
   "prop:startTime": "Początek",
   "prop:finishTime": "Koniec",
+  "prop:orderTime": "Początek zlecenia",
+  "prop:problemAt": "Początek problemu",
   "prop:time": "Czas",
   "prop:comment": "Komentarz",
   "prop:problem": "Problem",

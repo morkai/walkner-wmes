@@ -82,6 +82,7 @@ define([
       var sapOrder = plan && plan.sapOrders.get(obj.order) || null;
       var startTime = Date.parse(obj.startTime);
       var finishTime = Date.parse(obj.finishTime);
+      var problemAt = Date.parse(obj.problemAt);
 
       obj.no = i + 1;
       obj.shift = shiftUtil.getShiftNo(startTime);
@@ -104,6 +105,17 @@ define([
         obj.qtyTodo = '0';
         obj.planStatus = 'unplanned';
         obj.planStatusIcons = '?';
+      }
+
+      if (problemAt)
+      {
+        obj.problemDate = time.format(problemAt, 'LL');
+        obj.problemTime = time.format(problemAt, 'HH:mm:ss');
+      }
+      else
+      {
+        obj.problemDate = '';
+        obj.problemTime = '';
       }
 
       obj.startDate = time.utc.format(startTime, 'LL');

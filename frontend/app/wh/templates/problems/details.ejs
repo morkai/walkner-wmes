@@ -1,17 +1,15 @@
 <div class="wh-problems-details">
   <div class="wh-problems-details-details">
-    <div id="<%- idPrefix %>-orderInfo" class="wh-problems-row <%- whOrder.status === 'cancelled' ? 'is-cancelled' : '' %>">
+    <div id="<%- id('orderInfo') %>" class="wh-problems-row <%- whOrder.status === 'cancelled' ? 'is-cancelled' : '' %>">
       <%- renderOrderInfo({
-        helpers: helpers,
         whOrder: whOrder
       }) %>
     </div>
-    <div id="<%- idPrefix %>-funcs" class="wh-problems-row">
+    <div id="<%- id('funcs') %>" class="wh-problems-row">
       <%- renderFuncs({
-        helpers: helpers,
         funcs: funcs
       }) %>
     </div>
   </div>
-  <div id="<%- idPrefix %>-chat" class="wh-problems-chat-container"></div>
+  <div id="<%- id('chat') %>" class="wh-problems-chat-container"></div>
 </div>

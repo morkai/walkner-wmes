@@ -109,8 +109,8 @@ define([
     getTemplateData: function()
     {
       return {
-        renderOrderInfo: orderInfoTemplate,
-        renderFuncs: funcsTemplate,
+        renderOrderInfo: this.renderPartialHtml.bind(this, orderInfoTemplate),
+        renderFuncs: this.renderPartialHtml.bind(this, funcsTemplate),
         whOrder: this.model.serialize(this.plan, 0, this.whOrders.getFilters(this.plan)),
         funcs: this.model.serializeProblemFuncs()
       };
@@ -368,14 +368,14 @@ define([
 
     renderOrderInfo: function()
     {
-      this.$id('orderInfo').html(orderInfoTemplate(this.serialize()));
+      this.$id('orderInfo').html(this.renderPartialHtml(orderInfoTemplate, this.serialize()));
     },
 
     renderFuncs: function()
     {
       this.hideEditor();
 
-      this.$id('funcs').html(funcsTemplate(this.serialize()));
+      this.$id('funcs').html(this.renderPartialHtml(funcsTemplate, this.serialize()));
     },
 
     onOrderRemoved: function()

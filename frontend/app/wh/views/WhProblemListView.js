@@ -56,7 +56,7 @@ define([
     getTemplateData: function()
     {
       return {
-        renderItem: itemTemplate,
+        renderItem: this.renderPartialHtml.bind(this, itemTemplate),
         items: this.serializeItems()
       };
     },
@@ -94,6 +94,8 @@ define([
         urls.pickup = '#wh/pickup/' + date + '?order=' + whOrder.id;
       }
 
+      var problemAt = whOrder.get('problemAt');
+
       return {
         _id: whOrder.id,
         order: whOrder.get('order'),
@@ -101,7 +103,7 @@ define([
         qty: whOrder.get('qty').toLocaleString(),
         date: time.utc.format(whOrder.get('date'), 'LL'),
         startTime: time.utc.format(whOrder.get('startTime'), 'L HH:mm:ss'),
-        finishTime: time.utc.format(whOrder.get('finishTime'), 'L HH:mm:ss'),
+        problemAt: problemAt ? time.utc.format(problemAt, 'L HH:mm:ss') : '',
         funcs: whOrder.serializeProblemFuncs(),
         urls: urls
       };
@@ -138,7 +140,7 @@ define([
 
     onOrderAdded: function(whOrder)
     {
-      this.$el.append(itemTemplate({
+      this.$el.append(this.renderPartialHtml(itemTemplate, {
         item: this.serializeItem(whOrder)
       }));
       this.toggleEmpty();
@@ -156,7 +158,7 @@ define([
 
       if ($item.length)
       {
-        $item.replaceWith(itemTemplate({
+        $item.replaceWith(this.renderPartialHtml(itemTemplate, {
           item: this.serializeItem(whOrder)
         }));
       }
