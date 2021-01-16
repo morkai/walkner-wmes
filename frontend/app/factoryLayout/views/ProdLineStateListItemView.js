@@ -125,7 +125,7 @@ define([
         classNames.push('is-extended');
       }
 
-      classNames.push(this.model.getEfficiencyClassName());
+      classNames.push(this.model.getShiftEfficiencyClassName());
 
       var workCenter = orgUnits.getParent(orgUnits.getByTypeAndId('prodLine', this.model.getProdLineId()));
       var prodFlow = workCenter ? orgUnits.getParent(workCenter) : null;
@@ -366,7 +366,7 @@ define([
 
     toggleTaktTime: function()
     {
-      var effClassName = this.model.getEfficiencyClassName();
+      var effClassName = this.model.getShiftEfficiencyClassName();
 
       if (this.$el.hasClass(effClassName))
       {

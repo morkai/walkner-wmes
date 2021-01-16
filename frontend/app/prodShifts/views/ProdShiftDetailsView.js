@@ -5,12 +5,14 @@ define([
   'app/core/views/DetailsView',
   'app/data/downtimeReasons',
   'app/prodShiftOrders/ProdShiftOrder',
+  'app/prodShifts/ProdShift',
   'app/prodShifts/templates/details'
 ], function(
   _,
   DetailsView,
   downtimeReasons,
   ProdShiftOrder,
+  ProdShift,
   detailsTemplate
 ) {
   'use strict';
@@ -71,58 +73,7 @@ define([
 
     calcEfficiency: function()
     {
-      if (!this.prodShiftOrders || !this.prodDowntimes)
-      {
-        return -1;
-      }
-
-      var effNum = 0;
-      var effDen = 0;
-      var psoToBreaks = {};
-      var now = Date.now();
-
-      this.prodDowntimes.forEach(function(dt)
-      {
-        var reason = downtimeReasons.get(dt.get('reason'));
-
-        if (!reason || reason.get('type') !== 'break')
-        {
-          return;
-        }
-
-        var pso = dt.get('prodShiftOrder');
-
-        if (!pso)
-        {
-          return;
-        }
-
-        if (!psoToBreaks[pso._id])
-        {
-          psoToBreaks[pso._id] = 0;
-        }
-
-        var startedAt = Date.parse(dt.get('startedAt'));
-        var finishedAt = Date.parse(dt.get('finishedAt')) || now;
-
-        psoToBreaks[pso._id] += finishedAt - startedAt;
-      });
-
-      this.prodShiftOrders.forEach(function(pso)
-      {
-        var workDuration = pso.get('workDuration');
-        var taktTimeCoeff = ProdShiftOrder.getTaktTimeCoeff(pso.attributes);
-
-        if (!workDuration && !pso.get('finishedAt'))
-        {
-          workDuration = (now - Date.parse(pso.get('startedAt')) - (psoToBreaks[pso.id] || 0)) / 3600000;
-        }
-
-        effNum += pso.get('laborTime') * taktTimeCoeff / 100 * pso.get('quantityDone');
-        effDen += workDuration * pso.get('workerCount');
-      });
-
-      return Math.min(999, Math.round(effNum / effDen * 100));
+      return ProdShift.calcEfficiency(this.prodShiftOrders, this.prodDowntimes);
     }
 
   });

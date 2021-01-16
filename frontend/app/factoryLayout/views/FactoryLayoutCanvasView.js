@@ -423,7 +423,7 @@ define([
         'is-eff-low': false
       });
 
-      var effClassName = prodLineState && prodLineState.getEfficiencyClassName();
+      var effClassName = prodLineState && prodLineState.getOrderEfficiencyClassName();
 
       if (effClassName)
       {
@@ -828,7 +828,7 @@ define([
 
       if (!prodLineOuterContainer.empty())
       {
-        var effClassName = prodLineState.getEfficiencyClassName();
+        var effClassName = prodLineState.getOrderEfficiencyClassName();
 
         if (prodLineOuterContainer.classed(effClassName))
         {

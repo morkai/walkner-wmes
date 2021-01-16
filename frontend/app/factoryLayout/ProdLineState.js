@@ -89,7 +89,7 @@ define([
       return downtime && !downtime.get('finishedAt') ? downtime : null;
     },
 
-    getEfficiencyClassName: function()
+    getOrderEfficiencyClassName: function()
     {
       var prodShiftOrders = this.get('prodShiftOrders');
 
@@ -106,6 +106,36 @@ define([
       }
 
       return currentPso.getEfficiencyClassName({prodDowntimes: this.get('prodDowntimes')});
+    },
+
+    getShiftEfficiencyClassName: function()
+    {
+      var prodShiftOrders = this.get('prodShiftOrders');
+
+      if (!prodShiftOrders || prodShiftOrders.length === 0)
+      {
+        return null;
+      }
+
+      var prodDowntimes = this.get('prodDowntimes');
+      var eff = ProdShift.calcEfficiency(prodShiftOrders, prodDowntimes);
+
+      if (eff === -1)
+      {
+        return null;
+      }
+
+      if (eff >= 100)
+      {
+        return 'is-eff-high';
+      }
+
+      if (eff >= 90)
+      {
+        return 'is-eff-mid';
+      }
+
+      return 'is-eff-low';
     },
 
     isTaktTimeOk: function()
