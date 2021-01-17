@@ -5,8 +5,8 @@
   "version": "0.156.0",
   "updater": {
     "wmes": {
-      "backend": 636,
-      "frontend": 791,
+      "backend": 637,
+      "frontend": 792,
       "reports": 138,
       "attachments": 3,
       "importer-sap": 68,
@@ -16,14 +16,14 @@
       "operator": 101,
       "docs": 57,
       "heff": 52,
-      "planning": 95,
+      "planning": 96,
       "ps-queue": 58,
       "ps-load": 19,
-      "wh-pickup": 74,
-      "wh-problems": 47,
-      "wh-delivery-components": 44,
-      "wh-delivery-packaging": 44,
-      "wh-delivery-ps": 14,
+      "wh-pickup": 75,
+      "wh-problems": 48,
+      "wh-delivery-components": 45,
+      "wh-delivery-packaging": 45,
+      "wh-delivery-ps": 15,
       "isa": 7,
       "luma2": 13,
       "trw": 19,
@@ -38,9 +38,9 @@
       "importer": 2
     },
     "pila": {
-      "backend": 12,
-      "frontend": 12,
-      "reports": 2
+      "backend": 15,
+      "frontend": 14,
+      "reports": 5
     }
   },
   "description": "Wannabe MES application in Node.js.",

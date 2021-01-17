@@ -1,0 +1,1 @@
+define(["app/wmes-osh-reports/templates/count/nearMissPage","app/wmes-osh-reports/templates/count/kaizenPage","app/wmes-osh-reports/templates/count/actionPage","app/wmes-osh-reports/templates/count/observationPage"],function(e,s,t,a){"use strict";return{nearMiss:e,kaizen:s,action:t,observation:a}});

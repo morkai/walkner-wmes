@@ -1,1 +1,1 @@
-define(["app/settings/SettingCollection","./Setting"],function(e,t){"use strict";return e.extend({model:t,idPrefix:"osh.",topicSuffix:"osh.**",prepareValue:function(e,t){},prepareFormValue:function(e,t){return t}})});
+define(["app/settings/SettingCollection","./Setting"],function(e,t){"use strict";return e.extend({model:t,idPrefix:"osh.",topicSuffix:"osh.**",prepareValue:function(e,t){return/(obsPerDept|minEngagement)/.test(e)?this.prepareNumericValue(t,0,100,0):/minObsCards/.test(e)?this.prepareNumericValue(t,0,1e3,0):void 0},prepareFormValue:function(e,t){return t}})});

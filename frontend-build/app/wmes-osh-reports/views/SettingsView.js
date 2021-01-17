@@ -1,0 +1,1 @@
+define(["app/settings/views/SettingsView","app/wmes-osh-reports/templates/settings"],function(e,t){"use strict";return e.extend({template:t,nlsDomain:"wmes-osh-reports",clientUrl:"#osh/reports;settings"})});

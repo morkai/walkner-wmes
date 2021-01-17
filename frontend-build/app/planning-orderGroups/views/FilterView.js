@@ -1,0 +1,1 @@
+define(["app/core/views/FilterView","app/planning-orderGroups/templates/filter"],function(e,r){"use strict";return e.extend({template:r,termToForm:{search:function(e,r,t){t[e]=r.args[1]}},serializeFormToQuery:function(e){var r=this.$id("search").val().trim();r.length&&e.push({name:"eq",args:["search",r]})}})});

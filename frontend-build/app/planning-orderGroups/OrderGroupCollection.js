@@ -1,0 +1,1 @@
+define(["../core/Collection","./OrderGroup"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)&sort(name)",initialize:function(e,t){t&&t.sortByName&&(this.comparator=this.sortByName)},sortByName:function(e,t){return"000000000000000000000000"===e.id?-1:"000000000000000000000000"===t.id?1:e.get("name").localeCompare(t.get("name"))}})});
