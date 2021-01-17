@@ -47,10 +47,7 @@ define([
         clipboard.copy(function(clipboardData)
         {
           clipboardData.setData('text/plain', creator.ip);
-
-          clipboard.showTooltip(view, e.currentTarget, e.pageX, e.pageY, {
-            title: view.t('ipCopied', {ip: creator.ip})
-          });
+          clipboard.showTooltip({e: e, text: view.t('ipCopied', {ip: creator.ip})});
         });
       }
 

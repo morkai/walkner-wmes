@@ -884,9 +884,6 @@ define([
     handleCopyOrdersAction: function(e, options)
     {
       var page = this;
-      var el = e.currentTarget;
-      var x = e.pageX;
-      var y = e.pageY;
       var filterProperty = options.filterProperty;
       var filterValue = options.filterValue;
       var drilling = options.drilling;
@@ -946,19 +943,13 @@ define([
         });
 
         clipboardData.setData('text/plain', text.join('\r\n'));
-
-        clipboard.showTooltip(page, el, x, y, {
-          title: page.t('menu:copyOrders:success')
-        });
+        clipboard.showTooltip({e: e, text: page.t('menu:copyOrders:success')});
       });
     },
 
     handleCopyChildOrdersAction: function(e, options)
     {
       var page = this;
-      var el = e.currentTarget;
-      var x = e.pageX;
-      var y = e.pageY;
       var filterProperty = options.filterProperty;
       var filterValue = options.filterValue;
       var drilling = options.drilling;
@@ -1016,10 +1007,7 @@ define([
         });
 
         clipboardData.setData('text/plain', text.join('\r\n'));
-
-        clipboard.showTooltip(page, el, x, y, {
-          title: page.t('menu:copyChildOrders:success')
-        });
+        clipboard.showTooltip({e: e, text: page.t('menu:copyChildOrders:success')});
       });
     },
 

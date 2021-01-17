@@ -39,6 +39,8 @@ define([
 
     template: lineOrdersListTemplate,
 
+    modelProperty: 'plan',
+
     events: {
       'mouseenter tbody > tr': function(e)
       {
@@ -160,12 +162,11 @@ define([
       view.listenTo(view.plan.sapOrders, 'change:whDropZone change:whTime', view.onWhDropZoneChanged);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var whMode = this.options.mode === 'wh';
 
       return {
-        idPrefix: this.idPrefix,
         expanded: this.expanded,
         orders: this.serializeOrders(),
         hiddenColumns: {
@@ -266,7 +267,7 @@ define([
 
     formatIcon: function(icon, title)
     {
-      return '<span class="planning-mrp-list-property" title="' + _.escape(t('planning', title)) + '">'
+      return '<span class="planning-mrp-list-property" title="' + _.escape(this.t(title)) + '">'
         + '<i class="fa ' + icon + '"></i>'
         + '</span>';
     },
@@ -288,7 +289,7 @@ define([
       {
         menu.push({
           icon: 'fa-file-text-o',
-          label: t('planning', 'orders:menu:shiftOrder'),
+          label: this.t('orders:menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, orderNo)
         });
       }
@@ -300,7 +301,7 @@ define([
 
       menu.push({
         icon: 'fa-clipboard',
-        label: t('planning', 'lineOrders:menu:copy'),
+        label: this.t('lineOrders:menu:copy'),
         handler: this.handleCopyAction.bind(this, e.currentTarget, e.pageY, e.pageX)
       });
 
@@ -308,7 +309,7 @@ define([
       {
         menu.push({
           icon: 'fa-level-down',
-          label: t('planning', 'orders:menu:dropZone'),
+          label: this.t('orders:menu:dropZone'),
           handler: this.handleDropZoneAction.bind(this, orderNo)
         });
       }
@@ -353,7 +354,7 @@ define([
           'lines',
           'comment'
         ];
-        var text = [columns.map(function(p) { return t('planning', 'lineOrders:list:' + p); }).join('\t')];
+        var text = [columns.map(function(p) { return view.t('lineOrders:list:' + p); }).join('\t')];
 
         view.serializeOrders().forEach(function(order)
         {
@@ -378,25 +379,7 @@ define([
         });
 
         clipboardData.setData('text/plain', text.join('\r\n'));
-
-        var $btn = view.$(el).tooltip({
-          container: view.el,
-          trigger: 'manual',
-          placement: 'bottom',
-          title: t('planning', 'lineOrders:menu:copy:success')
-        });
-
-        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
-          left: x + 'px',
-          top: y + 'px'
-        });
-
-        if (view.timers.hideTooltip)
-        {
-          clearTimeout(view.timers.hideTooltip);
-        }
-
-        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
+        clipboard.showTooltip({x: x, y: y, text: view.t('lineOrders:menu:copy:success')});
       });
     },
 
@@ -408,7 +391,7 @@ define([
         order: this.plan.orders.get(orderNo)
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:dropZone:title'));
+      viewport.showDialog(dialogView, this.t('orders:menu:dropZone:title'));
     },
 
     onOrderHighlight: function(message)
@@ -454,7 +437,7 @@ define([
 
         $order
           .find('.planning-mrp-list-property-psStatus')
-          .attr('title', t('planning', 'orders:psStatus:' + psStatus))
+          .attr('title', this.t('orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
       }
     },
@@ -470,7 +453,7 @@ define([
         $order
           .toggleClass('success', this.options.mode === 'wh' && whStatus === 'done')
           .find('.planning-mrp-list-property-whStatus')
-          .attr('title', t('planning', 'orders:whStatus:' + whStatus))
+          .attr('title', this.t('orders:whStatus:' + whStatus))
           .attr('data-wh-status', whStatus);
       }
     },

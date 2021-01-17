@@ -1,0 +1,15 @@
+<div class="panel panel-primary planning-orderGroups-details">
+  <div class="panel-heading"><%- panelTitle %></div>
+  <div class="panel-details">
+    <%- helpers.props(model, [
+      'active',
+      'name',
+      {id: 'description', valueClassName: 'text-lines'},
+      '!mrp',
+      '!productInclude',
+      '!productExclude',
+      '!bomInclude',
+      '!bomExclude'
+    ]) %>
+  </div>
+</div>

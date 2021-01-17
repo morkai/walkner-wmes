@@ -1,0 +1,10 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group" data-filter="search">
+    <label for="<%- id('search') %>"><%- t('PROPERTY:search') %></label>
+    <input id="<%- id('search') %>" name="search" class="form-control" type="text" maxlength="50" style="width: 300px">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>

@@ -7,6 +7,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/idAndLabel',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/planning/templates/lineSettingsDialog'
 ], function(
@@ -16,6 +17,7 @@ define([
   t,
   viewport,
   View,
+  idAndLabel,
   setUpMrpSelect2,
   template
 ) {
@@ -34,6 +36,14 @@ define([
         this.submitForm();
 
         return false;
+      },
+
+      'change #-orderGroupPriority': function()
+      {
+        if (viewport.currentDialog)
+        {
+          viewport.$dialog.modal('adjustBackdrop');
+        }
       }
 
     },
@@ -63,9 +73,11 @@ define([
       var mrpLineSettings = this.line.mrpSettings(this.mrp.id);
 
       return {
+        version: this.plan.settings.getVersion(),
         mrp: this.mrp.getLabel(),
         line: this.line.getLabel(),
         mrpPriority: lineSettings.get('mrpPriority').join(','),
+        orderGroupPriority: (lineSettings.get('orderGroupPriority') || []).join(','),
         activeTime: lineSettings.get('activeTime')
           .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
           .join(', '),
@@ -77,6 +89,7 @@ define([
     afterRender: function()
     {
       this.setUpMrpPriority();
+      this.setUpOrderGroupPriority();
       this.setUpOrderPriority();
     },
 
@@ -104,28 +117,54 @@ define([
       });
     },
 
-    setUpOrderPriority: function()
+    setUpOrderGroupPriority: function()
     {
-      var $orderPriority = this.$id('orderPriority').select2({
+      var view = this;
+      var $input = view.$id('orderGroupPriority').select2({
         allowClear: true,
         multiple: true,
-        data: [
-          {id: 'small', text: this.t('orderPriority:small')},
-          {id: 'easy', text: this.t('orderPriority:easy')},
-          {id: 'hard', text: this.t('orderPriority:hard')}
-        ]
+        data: view.orderGroups.map(idAndLabel)
       });
 
-      this.sortables.push(new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
+      view.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
         onStart: function()
         {
-          $orderPriority.select2('onSortStart');
+          $input.select2('onSortStart');
         },
         onEnd: function()
         {
-          $orderPriority.select2('onSortEnd').select2('focus');
+          $input.select2('onSortEnd').select2('focus');
+        }
+      }));
+    },
+
+    setUpOrderPriority: function()
+    {
+      var view = this;
+      var $input = view.$id('orderPriority').select2({
+        allowClear: true,
+        multiple: true,
+        data: view.plan.settings.getAvailableOrderPriorities().map(function(id)
+        {
+          return {
+            id: id,
+            text: view.t('orderPriority:' + id)
+          };
+        })
+      });
+
+      view.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
+        draggable: '.select2-search-choice',
+        filter: '.select2-search-choice-close',
+        onStart: function()
+        {
+          $input.select2('onSortStart');
+        },
+        onEnd: function()
+        {
+          $input.select2('onSortEnd').select2('focus');
         }
       }));
     },
@@ -141,18 +180,25 @@ define([
 
       lineSettings.set({
         mrpPriority: view.$id('mrpPriority').val().split(','),
-        activeTime: view.$id('activeTime').val().split(',').map(function(activeTime)
-        {
-          var parts = activeTime.trim().split('-');
+        orderGroupPriority: (view.$id('orderGroupPriority').val() || '')
+          .split(',')
+          .filter(function(v) { return !!v; }),
+        activeTime: view.$id('activeTime')
+          .val()
+          .split(',')
+          .map(function(activeTime)
+          {
+            var parts = activeTime.trim().split('-');
 
-          return {
-            from: parts[0],
-            to: parts[1]
-          };
-        }).filter(function(activeTime)
-        {
-          return !!activeTime.from && !!activeTime.to;
-        })
+            return {
+              from: parts[0],
+              to: parts[1]
+            };
+          })
+          .filter(function(activeTime)
+          {
+            return !!activeTime.from && !!activeTime.to;
+          })
       });
 
       var newMrpPriority = lineSettings.get('mrpPriority');

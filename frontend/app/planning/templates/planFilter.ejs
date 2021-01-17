@@ -4,14 +4,14 @@
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
   </div>
   <% if (divisions.length) { %>
-  <div class="form-group">
-    <label class="control-label"><%- t('filter:division') %></label>
-    <div id="<%- id('division') %>" class="btn-group filter-btn-group" data-toggle="buttons">
-      <% divisions.forEach(function(id) { %>
-      <label class="btn btn-default <%- id === division ? 'active' : '' %>"><input type="radio" name="division" value="<%- id %>" <%- id === division ? 'checked' : '' %>> <%= id %></label>
-      <% }) %>
+    <div class="form-group">
+      <label class="control-label"><%- t('filter:division') %></label>
+      <div id="<%- id('division') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+        <% divisions.forEach(function(id) { %>
+        <label class="btn btn-default <%- id === division ? 'active' : '' %>"><input type="radio" name="division" value="<%- id %>" <%- id === division ? 'checked' : '' %>> <%= id %></label>
+        <% }) %>
+      </div>
     </div>
-  </div>
   <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('filter:mrps:1') %></label>
@@ -20,31 +20,29 @@
   <% if (showToggles) { %>
   <div class="form-group filter-actions">
     <div class="btn-group">
-      <button id="<%- idPrefix %>-lineOrdersList" type="button" class="btn btn-default <%- lineOrdersList ? 'active' : '' %>">
+      <button id="<%- idPrefix %>-lineOrdersList" type="button" class="btn btn-default <%- lineOrdersList ? 'active' : '' %>" title="<%- t('filter:lineOrdersList') %>">
         <i class="fa fa-list-ol"></i>
-        <span><%- t('filter:lineOrdersList') %></span>
       </button>
-      <button id="<%- idPrefix %>-useDarkerTheme" type="button" class="btn btn-default <%- useDarkerTheme ? 'active' : '' %>">
+      <button id="<%- idPrefix %>-useDarkerTheme" type="button" class="btn btn-default <%- useDarkerTheme ? 'active' : '' %>" title="<%- t('filter:useDarkerTheme') %>">
         <i class="fa fa-adjust"></i>
-        <span><%- t('filter:useDarkerTheme') %></span>
       </button>
     </div>
   </div>
   <% } %>
   <div class="form-group filter-actions">
-    <div id="<%- idPrefix %>-copyOrderList" class="btn-group" role="group">
+    <div id="<%- id('copyOrderList') %>" class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-clipboard"></i><span><%- t('filter:copyOrderList') %></span></button>
       <ul class="dropdown-menu dropdown-menu-right">
         <% [0, 1, 2, 3].forEach(function(shiftNo) { %>
-        <li><a role="copyOrderList" data-shift="<%- shiftNo %>" href="javascript:void(0)"><%- t('toolbar:copyOrderList:' + shiftNo) %></a></li>
+          <li><a role="copyOrderList" data-shift="<%- shiftNo %>" href="javascript:void(0)"><%- t('toolbar:copyOrderList:' + shiftNo) %></a></li>
         <% }) %>
       </ul>
     </div>
     <div class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i><span><%- t('filter:export') %></span></button>
       <ul class="dropdown-menu dropdown-menu-right">
-        <li><a id="<%- idPrefix %>-exportStats" href="javascript:void(0)"><%- t('filter:export:stats') %></a></li>
-        <li><a id="<%- idPrefix %>-exportTransport" href="javascript:void(0)"><%- t('filter:export:transport') %></a></li>
+        <li><a id="<%- id('exportStats') %>" href="javascript:void(0)"><%- t('filter:export:stats') %></a></li>
+        <li><a id="<%- id('exportTransport') %>" href="javascript:void(0)"><%- t('filter:export:transport') %></a></li>
       </ul>
     </div>
   </div>
@@ -56,21 +54,23 @@
       <tr class="planning-mrp-stats-bd">
         <th></th>
         <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
-        <th style="padding: 0 7px; text-align: center"><%- t('filter:stats:' + subgroup) %></th>
+          <% if (version > 1 && subgroup === 'late') return %>
+          <th style="padding: 0 7px; text-align: center"><%- t('filter:stats:' + subgroup) %></th>
         <% }) %>
         <th colspan="2" style="min-width: 141px"><%- t('filter:stats:execution') %></th>
       </tr>
       <% ['manHours', 'quantity', 'orders'].forEach(function(group, i) { %>
-      <tr class="planning-mrp-stats-bd">
-        <th><%- t('filter:stats:' + group) %></th>
-        <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
-        <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('filter:stats:tooltip:' + subgroup) %>">0</td>
-        <% }) %>
-        <% if (i === 0) { %>
-        <td rowspan="3" data-group="execution" data-subgroup="percent" title="<%- t('toolbar:stats:tooltip:execution:percent') %>">0</td>
-        <% } %>
-        <td data-group="execution.<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" title="<%- t('toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>">0</td>
-      </tr>
+        <tr class="planning-mrp-stats-bd">
+          <th><%- t('filter:stats:' + group) %></th>
+          <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
+            <% if (version > 1 && subgroup === 'late') return %>
+            <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('filter:stats:tooltip:' + subgroup) %>">0</td>
+          <% }) %>
+          <% if (i === 0) { %>
+            <td rowspan="3" data-group="execution" data-subgroup="percent" title="<%- t('toolbar:stats:tooltip:execution:percent') %>">0</td>
+          <% } %>
+          <td data-group="execution.<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" title="<%- t('toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>">0</td>
+        </tr>
       <% }) %>
       </tbody>
     </table>

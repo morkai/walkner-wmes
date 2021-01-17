@@ -1,0 +1,35 @@
+.planning-orderGroups-tester-groups {
+  display: flex;
+  overflow: auto;
+}
+.planning-orderGroups-tester-group {
+  margin-left: 40px;
+  max-width: 375px;
+}
+.planning-orderGroups-tester-group:first-child {
+  margin-left: 0;
+}
+.planning-orderGroups-tester-group h3 {
+  margin-top: 0;
+}
+.planning-orderGroups-tester-orders {
+  width: 100%;
+}
+.planning-orderGroups-tester-orders tbody:hover td {
+  background: #ffffd6;
+}
+.planning-orderGroups-tester-order td {
+  white-space: nowrap;
+  line-height: 1.6;
+}
+.planning-orderGroups-tester-order tr:first-child td {
+  padding-top: 4px;
+  border-top: 1px solid #CCC;
+}
+.planning-orderGroups-tester-order tr:last-child td {
+  padding-bottom: 4px;
+}
+.planning-orderGroups-tester-nc12 {
+  padding-left: 10px;
+  padding-right: 10px;
+}

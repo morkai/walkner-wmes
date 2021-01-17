@@ -1,0 +1,25 @@
+{
+  "BREADCRUMB:base": "Plany dzienne",
+  "BREADCRUMB:browse": "Grupy zleceń",
+
+  "PROPERTY:search": "Szukaj wg frazy",
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:mrp": "MRP",
+  "PROPERTY:name": "Nazwa grupy",
+  "PROPERTY:description": "Opis grupy",
+  "PROPERTY:productInclude": "Wyrób zawiera",
+  "PROPERTY:productExclude": "Wyrób nie zawiera",
+  "PROPERTY:bomInclude": "Zawiera komponent",
+  "PROPERTY:bomExclude": "Nie zawiera komponentu",
+
+  "FORM:help:productInclude": "W każdej linii podaj ciągi znaków jakie muszą wystąpić w nazwie, opisie lub 12NC wyrobu.<br>Oddzielne frazy, które muszą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Wyrób musi pasować do warunków z przynajmniej jednej linii.",
+  "FORM:help:productExclude": "W każdej linii podaj ciągi znaków jakie nie mogą wystąpić w nazwie, opisie lub 12NC wyrobu.<br>Oddzielne frazy, które nie mogą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Wyrób nie może pasować do żadnego z warunków.",
+  "FORM:help:bomInclude": "W każdej linii podaj komponenty jakie muszą wystąpić w BOM zlecenia.<br>Komponenty, które muszą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Komponenty zlecenia muszą pasować do warunków z przynajmniej jednej linii.<br>Jako komponent można podać 4-cyfrowy nr pozycji, 12-cyfrowy kod komponentu (12NC) lub ciąg znaków występujący w nazwie.",
+  "FORM:help:bomExclude": "W każdej linii podaj komponenty jakie nie mogą wystąpić w BOM zlecenia.<br>Komponenty, które nie mogą wystąpić wraz z innymi, podaj w tej samej linii oddzielając je od siebie średnikiem.<br>Komponenty zlecenia nie mogą pasować do żadnego z warunków.<br>Jako komponent można podać 4-cyfrowy nr pozycji, 12-cyfrowy kod komponentu (12NC) lub ciąg znaków występujący w nazwie.",
+
+  "tester:pageAction": "Tester",
+  "tester:breadcrumb": "Tester",
+  "tester:date": "Data",
+  "tester:mrp": "MRP",
+  "tester:refresh": "Odśwież"
+}

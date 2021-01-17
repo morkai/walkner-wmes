@@ -165,10 +165,7 @@ define([
         clipboard.copy(function(clipboardData)
         {
           clipboardData.setData('text/plain', selectedFile.id);
-
-          clipboard.showTooltip(view, e.currentTarget, e.pageX, e.pageY, {
-            title: view.t('files:msg:nc15:copied')
-          });
+          clipboard.showTooltip({e: e, text: view.t('files:msg:nc15:copied')});
         });
 
         return false;

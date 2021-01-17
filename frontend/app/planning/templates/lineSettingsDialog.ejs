@@ -1,42 +1,49 @@
 <form>
   <div class="form-group">
-    <label class="control-label"><%- t('planning', 'lines:menu:settings:line') %></label>
+    <label class="control-label"><%- t('lines:menu:settings:line') %></label>
     <p class="form-control-static"><%= line %></p>
   </div>
   <div class="form-group has-required-select2">
-    <label for="<%- idPrefix %>-mrpPriority" class="control-label"><%- t('planning', 'settings:mrpPriority') %></label>
-    <input id="<%- idPrefix %>-mrpPriority" name="mrpPriority" type="text" autocomplete="new-password" value="<%- mrpPriority %>" required>
-    <p class="help-block"><%- t('planning', 'settings:mrpPriority:help') %></p>
+    <label for="<%- id('mrpPriority') %>" class="control-label"><%- t('settings:mrpPriority') %></label>
+    <input id="<%- id('mrpPriority') %>" name="mrpPriority" type="text" value="<%- mrpPriority %>" required>
+    <p class="help-block"><%- t('settings:mrpPriority:help') %></p>
+  </div>
+  <% if (version > 1) { %>
+  <div class="form-group settings-select2-long">
+    <label for="<%- id('orderGroupPriority') %>" class="control-label"><%- t('settings:orderGroupPriority') %></label>
+    <input id="<%- id('orderGroupPriority') %>" name="orderGroupPriority" type="text" value="<%- orderGroupPriority %>">
+    <p class="help-block"><%- t('settings:orderGroupPriority:help') %></p>
+  </div>
+  <% } %>
+  <div class="form-group">
+    <label for="<%- id('activeTime') %>" class="control-label"><%- t('settings:activeTime') %></label>
+    <input id="<%- id('activeTime') %>" name="activeTime" class="form-control" type="text" value="<%- activeTime %>" placeholder="06:00-06:00" pattern="^[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}(\s*,\s*[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2})*$">
+    <p class="help-block"><%- t('settings:activeTime:help') %></p>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-activeTime" class="control-label"><%- t('planning', 'settings:activeTime') %></label>
-    <input id="<%- idPrefix %>-activeTime" name="activeTime" class="form-control" type="text" autocomplete="new-password" value="<%- activeTime %>" placeholder="06:00-06:00" pattern="^[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}(,\s*[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2})*$">
-    <p class="help-block"><%- t('planning', 'settings:activeTime:help') %></p>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-workerCount1" class="control-label"><%- t('planning', 'settings:workerCount') %></label>
+    <label for="<%- id('workerCount1') %>" class="control-label"><%- t('settings:workerCount') %></label>
     <div class="planning-lineSettings-workerCount">
       <% [1, 2, 3].forEach(function(shiftNo) { %>
-      <label for="<%- idPrefix %>-workerCount<%- shiftNo %>" class="planning-lineSettings-workerCount-label"><%- t('planning', 'settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
-      <input id="<%- idPrefix %>-workerCount<%- shiftNo %>" name="workerCount<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- workerCount[shiftNo - 1] %>" required min="0" max="20" step="0.01">
+      <label for="<%- id('workerCount' + shiftNo) %>" class="planning-lineSettings-workerCount-label"><%- t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
+      <input id="<%- id('workerCount' + shiftNo) %>" name="workerCount<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- workerCount[shiftNo - 1] %>" required min="0" max="20" step="0.01">
       <% }) %>
     </div>
   </div>
   <div class="form-group has-required-select2">
-    <label for="<%- idPrefix %>-orderPriority" class="control-label"><%- t('planning', 'settings:orderPriority') %></label>
-    <input id="<%- idPrefix %>-orderPriority" name="orderPriority" type="text" autocomplete="new-password" value="<%- orderPriority %>" required>
-    <p class="help-block"><%- t('planning', 'settings:orderPriority:help') %></p>
+    <label for="<%- id('orderPriority') %>" class="control-label"><%- t('settings:orderPriority') %></label>
+    <input id="<%- id('orderPriority') %>" name="orderPriority" type="text" value="<%- orderPriority %>" required>
+    <p class="help-block"><%- t('settings:orderPriority' + (version === 1 ? '1' : '2') + ':help') %></p>
   </div>
   <div class="checkbox">
     <label>
-      <input id="<%- idPrefix %>-workerCount" type="checkbox" value="1">
-      <%- t('planning', 'lines:menu:settings:applyToAllMrps', {line: line, mrp: mrp}) %>
+      <input id="<%- id('workerCount') %>" type="checkbox" value="1">
+      <%- t('lines:menu:settings:applyToAllMrps', {line: line, mrp: mrp}) %>
     </label>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
-      <span><%- t('planning', 'lines:menu:settings:submit') %></span>
+      <span><%- t('lines:menu:settings:submit') %></span>
     </button>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>

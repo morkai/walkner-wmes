@@ -1,39 +1,51 @@
 <div class="btn-toolbar planning-mrp-toolbar">
   <% if (stats) { %>
-  <div class="btn-group">
-    <table class="planning-mrp-stats">
-      <tbody>
-      <% ['manHours', 'quantity', 'orders'].forEach(function(group, i) { %>
-      <tr class="planning-mrp-stats-bd">
-        <th><%- t('planning', 'toolbar:stats:' + group) %></th>
-        <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
-        <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" data-value="<%- stats[group][subgroup] %>" title="<%- t('planning', 'toolbar:stats:tooltip:' + subgroup) %>"><%- stats[group][subgroup].toLocaleString() %></td>
+    <div class="btn-group">
+      <table class="planning-mrp-stats">
+        <tbody>
+        <% ['manHours', 'quantity', 'orders'].forEach(function(group, i) { %>
+          <tr class="planning-mrp-stats-bd">
+            <th><%- t('planning', 'toolbar:stats:' + group) %></th>
+            <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
+              <% if (version > 1 && subgroup === 'late') return %>
+              <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" data-value="<%- stats[group][subgroup] %>" title="<%- t('planning', 'toolbar:stats:tooltip:' + subgroup) %>"><%- stats[group][subgroup].toLocaleString() %></td>
+            <% }) %>
+            <% if (i === 0) { %>
+              <td rowspan="3" data-group="execution" data-subgroup="percent" data-plan="<%- stats.execution.plan %>" data-done="<%- stats.execution.done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>"><%- stats.execution.percent.toLocaleString() %></td>
+            <% } %>
+            <td data-group="execution<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" data-plan="<%- stats.execution[i + 1].plan %>" data-done="<%- stats.execution[i + 1].done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>"><%- stats.execution[i + 1].percent.toLocaleString() %></td>
+          </tr>
         <% }) %>
-        <% if (i === 0) { %>
-          <td rowspan="3" data-group="execution" data-subgroup="percent" data-plan="<%- stats.execution.plan %>" data-done="<%- stats.execution.done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>"><%- stats.execution.percent.toLocaleString() %></td>
-        <% } %>
-        <td data-group="execution<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" data-plan="<%- stats.execution[i + 1].plan %>" data-done="<%- stats.execution[i + 1].done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>"><%- stats.execution[i + 1].percent.toLocaleString() %></td>
-      </tr>
-      <% }) %>
-      </tbody>
-    </table>
-  </div>
+        </tbody>
+      </table>
+    </div>
   <% } %>
   <div class="btn-group">
-    <div id="<%- idPrefix %>-copyOrderList" class="btn-group" role="group">
+    <div id="<%- id('copyOrderList') %>" class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:copyOrderList') %>"><i class="fa fa-clipboard"></i></button>
       <ul class="dropdown-menu dropdown-menu-right">
         <% [0, 1, 2, 3].forEach(function(shiftNo) { %>
-        <li><a role="copyOrderList" data-shift="<%- shiftNo %>" href="javascript:void(0)"><%- t('planning', 'toolbar:copyOrderList:' + shiftNo) %></a></li>
+          <li><a role="copyOrderList" data-shift="<%- shiftNo %>" href="javascript:void(0)"><%- t('planning', 'toolbar:copyOrderList:' + shiftNo) %></a></li>
         <% }) %>
       </ul>
     </div>
-    <div id="<%- idPrefix %>-printLines" class="btn-group" role="group">
+    <div id="<%- id('printLines') %>" class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:printPlan') %>" <%- lines.length ? '' : 'disabled' %>><i class="fa fa-print"></i></button>
       <ul class="dropdown-menu dropdown-menu-right">
-        <% include toolbarPrintLineList.ejs %>
+        <% if (lines.length > 1) { %>
+          <li><a role="printLines" data-line="__ALL__" href="javascript:void(0)"><%= t('planning', 'toolbar:printPlan:all') %></a></li>
+        <% } %>
+        <% lines.forEach(function(line) { %>
+          <li><a role="printLines" data-line="<%= line %>" href="javascript:void(0)"><%= line %></a></li>
+        <% }) %>
+        <li class="divider"></li>
+        <li>
+          <a id="<%- id('showTimes') %>" class="planning-mrp-toolbar-showTimes" href="javascript:void(0)">
+            <span><%- t('toolbar:showTimes') %></span><span class="fa fa-check"></span>
+          </a>
+        </li>
       </ul>
     </div>
-    <button id="<%- idPrefix %>-toggleLock" class="btn btn-default <%- locked ? 'active' : '' %>" <%- canLock ? '' : 'disabled' %> title="<%- t('planning', 'toolbar:toggleLock:' + locked) %>"><i class="fa fa-lock"></i></button>
+    <button id="<%- id('toggleLock') %>" class="btn btn-default <%- locked ? 'active' : '' %>" <%- canLock ? '' : 'disabled' %> title="<%- t('planning', 'toolbar:toggleLock:' + locked) %>"><i class="fa fa-lock"></i></button>
   </div>
 </div>

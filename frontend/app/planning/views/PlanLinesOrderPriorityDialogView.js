@@ -23,6 +23,8 @@ define([
 
     template: template,
 
+    modelProperty: 'plan',
+
     events: {
 
       'submit': function()
@@ -81,17 +83,21 @@ define([
 
     setUpOrderPriority: function($orderPriority)
     {
+      var view = this;
+
       $orderPriority.select2({
         allowClear: true,
         multiple: true,
-        data: [
-          {id: 'small', text: t('planning', 'orderPriority:small')},
-          {id: 'easy', text: t('planning', 'orderPriority:easy')},
-          {id: 'hard', text: t('planning', 'orderPriority:hard')}
-        ]
+        data: view.plan.settings.getAvailableOrderPriorities().map(function(id)
+        {
+          return {
+            id: id,
+            text: view.t('orderPriority:' + id)
+          };
+        })
       });
 
-      this.sortables.push(new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
+      view.sortables.push(new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
         onStart: function()
@@ -147,7 +153,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'lines:menu:orderPriority:failure')
+          text: view.t('lines:menu:orderPriority:failure')
         });
 
         view.plan.settings.trigger('errored');

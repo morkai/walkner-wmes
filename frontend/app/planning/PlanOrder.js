@@ -11,6 +11,8 @@ define([
 
   var ICONS = {
     small: 'fa-star-o',
+    medium: 'fa-star-half-full',
+    big: 'fa-star',
     easy: 'fa-star-half-full',
     hard: 'fa-star',
     unclassified: 'fa-question-mark',

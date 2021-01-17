@@ -46,15 +46,26 @@ define([
     serializeDetails: function()
     {
       var obj = this.serialize();
+      var componentNames = obj.componentNames || {};
 
       ['nameInclude', 'nameExclude', 'bomInclude', 'bomExclude'].forEach(function(prop)
       {
         obj[prop] = '<ul>'
           + obj[prop].map(function(words)
           {
-            return '<li>'
-              + words.map(function(word) { return '<code class="text-mono">' + _.escape(word) + '</code>'; }).join(' ')
-              + '</li>';
+            words = words.map(function(word)
+            {
+              var result = '<code class="text-mono">' + _.escape(word) + '</code>';
+
+              if (/^[0-9]{12}$/.test(word) && componentNames[word])
+              {
+                result += ' <small>' + _.escape(componentNames[word]) + '</small>';
+              }
+
+              return result;
+            });
+
+            return '<li>' + words.join(' ') + '</li>';
           }).join('')
           + '</ul>';
       });

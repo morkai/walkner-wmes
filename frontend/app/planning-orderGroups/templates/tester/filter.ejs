@@ -1,0 +1,13 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('date') %>"><%- t('tester:date') %></label>
+    <input id="<%- id('date') %>" name="date" class="form-control" type="date" required>
+  </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- id('mrp') %>"><%- t('tester:mrp') %></label>
+    <input id="<%- id('mrp') %>" name="mrp" type="text" required>
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i><span><%- t('tester:refresh') %></span></button>
+  </div>
+</form>

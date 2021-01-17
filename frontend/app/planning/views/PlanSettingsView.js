@@ -183,6 +183,13 @@ define([
       this.sortables = [];
     },
 
+    getTemplateData: function()
+    {
+      return {
+        version: this.model.getVersion()
+      };
+    },
+
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
@@ -253,6 +260,11 @@ define([
 
     setUpComponentsSelect2: function($input)
     {
+      if (!$input.length)
+      {
+        return;
+      }
+
       $input.select2({
         width: '100%',
         placeholder: '12NC...',
@@ -294,11 +306,10 @@ define([
     {
       var view = this;
       var $line = view.$id('line');
-      var $mrpPriority = view.$id('mrpPriority');
 
       $line.select2({
         width: '100%',
-        placeholder: t('planning', 'settings:line:placeholder'),
+        placeholder: view.t('settings:line:placeholder'),
         allowClear: true,
         data: this.lines,
         matcher: idAndTextMatcher,
@@ -319,29 +330,6 @@ define([
         }
       });
 
-      setUpMrpSelect2($mrpPriority, {
-        width: '100%',
-        placeholder: t('planning', 'settings:mrpPriority:placeholder')
-      });
-
-      var choicesEl = $mrpPriority.select2('container').find('.select2-choices')[0];
-
-      this.sortables.push(new Sortable(choicesEl, {
-        draggable: '.select2-search-choice',
-        filter: '.select2-search-choice-close',
-        onStart: function()
-        {
-          $mrpPriority.select2('onSortStart');
-        },
-        onEnd: function(e)
-        {
-          $mrpPriority.select2('onSortEnd').select2('focus');
-
-          view.saveMrpPriority();
-          view.selectMrp($(e.target).data('select2-data').id, $line.val() || null);
-        }
-      }));
-
       $line.on('change', function(e, added)
       {
         if (added === undefined)
@@ -352,13 +340,47 @@ define([
         view.selectLine(added ? added.id : null);
       });
 
-      $mrpPriority.on('change', function(e)
+      view.$id('activeTime').prop('disabled', true);
+
+      view.setUpMrpPriority();
+      view.setUpOrderGroupPriority();
+    },
+
+    setUpMrpPriority: function()
+    {
+      var view = this;
+      var $priority = view.$id('mrpPriority');
+
+      setUpMrpSelect2($priority, {
+        width: '100%',
+        placeholder: view.t('settings:mrpPriority:placeholder')
+      });
+
+      var choicesEl = $priority.select2('container').find('.select2-choices')[0];
+
+      view.sortables.push(new Sortable(choicesEl, {
+        draggable: '.select2-search-choice',
+        filter: '.select2-search-choice-close',
+        onStart: function()
+        {
+          $priority.select2('onSortStart');
+        },
+        onEnd: function(e)
+        {
+          $priority.select2('onSortEnd').select2('focus');
+
+          view.saveMrpPriority();
+          view.selectMrp($(e.target).data('select2-data').id, view.$id('line').val() || null);
+        }
+      }));
+
+      $priority.on('change', function(e)
       {
         view.saveMrpPriority();
 
         if (e.added)
         {
-          view.selectMrp(e.added.id, $line.val() || null);
+          view.selectMrp(e.added.id, view.$id('line').val() || null);
         }
         else if (e.removed)
         {
@@ -366,8 +388,57 @@ define([
         }
       });
 
-      $mrpPriority.select2('enable', false);
-      view.$id('activeTime').prop('disabled', true);
+      $priority.select2('enable', false);
+    },
+
+    setUpOrderGroupPriority: function()
+    {
+      var view = this;
+      var $priority = view.$id('orderGroupPriority');
+
+      if (!$priority.length)
+      {
+        return;
+      }
+
+      $priority.select2({
+        width: '100%',
+        allowClear: true,
+        multiple: true,
+        placeholder: view.t('settings:orderGroupPriority:placeholder'),
+        data: this.orderGroups.map(function(group)
+        {
+          return {
+            id: group.id,
+            text: group.getLabel()
+          };
+        })
+      });
+
+      var choicesEl = $priority.select2('container').find('.select2-choices')[0];
+
+      view.sortables.push(new Sortable(choicesEl, {
+        draggable: '.select2-search-choice',
+        filter: '.select2-search-choice-close',
+        onStart: function()
+        {
+          console.log('onSortStart');
+          $priority.select2('onSortStart');
+        },
+        onEnd: function()
+        {
+          $priority.select2('onSortEnd').select2('focus');
+
+          view.saveOrderGroupPriority();
+        }
+      }));
+
+      $priority.on('change', function()
+      {
+        view.saveOrderGroupPriority();
+      });
+
+      $priority.select2('enable', false);
     },
 
     setUpMrpSelect2: function()
@@ -391,7 +462,7 @@ define([
 
       view.$id('mrp').select2({
         width: '100%',
-        placeholder: t('planning', 'settings:mrp:placeholder'),
+        placeholder: view.t('settings:mrp:placeholder'),
         allowClear: true,
         data: Object.keys(mrps).map(function(mrpId)
         {
@@ -453,7 +524,7 @@ define([
 
       var $mrpLine = this.$id('mrpLine').select2({
         width: '100%',
-        placeholder: t('planning', 'settings:mrpLine:placeholder'),
+        placeholder: this.t('settings:mrpLine:placeholder'),
         allowClear: true,
         data: data,
         matcher: idAndTextMatcher,
@@ -480,14 +551,17 @@ define([
     setUpOrderPrioritySelect2: function()
     {
       var view = this;
+
       var $orderPriority = view.$id('orderPriority').select2({
         allowClear: true,
         multiple: true,
-        data: [
-          {id: 'small', text: t('planning', 'orderPriority:small')},
-          {id: 'easy', text: t('planning', 'orderPriority:easy')},
-          {id: 'hard', text: t('planning', 'orderPriority:hard')}
-        ]
+        data: view.model.getAvailableOrderPriorities().map(function(id)
+        {
+          return {
+            id: id,
+            text: view.t('orderPriority:' + id)
+          };
+        })
       });
 
       var choicesEl = $orderPriority.select2('container').find('.select2-choices')[0];
@@ -519,6 +593,7 @@ define([
       var disabled = !lineId;
       var activeTime = '';
       var $mrpPriority = view.$id('mrpPriority');
+      var $orderGroupPriority = view.$id('orderGroupPriority');
 
       view.$id('line').select2('val', lineId || '');
 
@@ -532,24 +607,39 @@ define([
           line = view.model.lines.add({_id: selectedLine}).get(selectedLine);
         }
 
-        var lineMrpPriority = line ? line.get('mrpPriority') : [];
+        var mrpPriority = line ? line.get('mrpPriority') : [];
 
         $mrpPriority
           .select2('enable', true)
-          .select2('data', lineMrpPriority.map(function(mrp)
+          .select2('data', mrpPriority.map(function(id)
           {
             return {
-              id: mrp,
-              text: mrp
+              id: id,
+              text: id
             };
           }));
 
+        if ($orderGroupPriority.length)
+        {
+          var orderGroupPriority = line ? line.get('orderGroupPriority') : [];
+
+          $orderGroupPriority
+            .select2('enable', true)
+            .select2('data', (orderGroupPriority || []).map(function(id)
+            {
+              var group = view.orderGroups.get(id);
+
+              return {
+                id: id,
+                text: group ? group.getLabel() : id
+              };
+            }));
+        }
+
         var selectedMrp = view.$id('mrp').select2('data');
 
-        if (line.get('mrpPriority').length)
+        if (mrpPriority.length)
         {
-          var mrpPriority = line.get('mrpPriority');
-
           selectedMrp = selectedMrp && _.includes(mrpPriority, selectedMrp.id)
             ? selectedMrp.id
             : mrpPriority[0];
@@ -566,6 +656,10 @@ define([
       else
       {
         $mrpPriority
+          .select2('enable', false)
+          .select2('val', '');
+
+        $orderGroupPriority
           .select2('enable', false)
           .select2('val', '');
 
@@ -606,6 +700,7 @@ define([
 
       [
         'extraOrderSeconds',
+        'smallOrderQuantity',
         'bigOrderQuantity',
         'hardOrderManHours',
         'splitOrderQuantity',
@@ -676,27 +771,53 @@ define([
         .prop('disabled', disabled);
     },
 
-    saveMrpPriority: function()
+    saveLine: function(changes)
     {
       var selectedLine = this.$id('line').val();
-      var mrpPriority = this.$id('mrpPriority').val().split(',').filter(function(mrpId) { return mrpId.length; });
       var lines = this.model.lines;
       var line = lines.get(selectedLine);
 
       if (line)
       {
-        line.set('mrpPriority', mrpPriority);
+        line.set(changes);
       }
       else
       {
         lines.add({
           _id: selectedLine,
-          mrpPriority: mrpPriority,
+          mrpPriority: this.$id('mrpPriority')
+            .val()
+            .split(',')
+            .filter(function(id) { return id.length; }),
+          orderGroupPriority: this.$id('orderGroupPriority')
+            .val()
+            .split(',')
+            .filter(function(id) { return id.length; }),
           activeTime: this.parseActiveTime(this.$id('activeTime'))
         });
       }
+    },
+
+    saveMrpPriority: function()
+    {
+      this.saveLine({
+        mrpPriority: this.$id('mrpPriority')
+          .val()
+          .split(',')
+          .filter(function(id) { return id.length; })
+      });
 
       this.setUpMrpSelect2();
+    },
+
+    saveOrderGroupPriority: function()
+    {
+      this.saveLine({
+        orderGroupPriority: this.$id('orderGroupPriority')
+          .val()
+          .split(',')
+          .filter(function(id) { return id.length; })
+      });
     },
 
     saveOrderPriority: function()
@@ -958,6 +1079,7 @@ define([
         case 'lateHour':
         case 'etoPilotHour':
         case 'extraOrderSeconds':
+        case 'smallOrderQuantity':
         case 'bigOrderQuantity':
         case 'splitOrderQuantity':
         case 'maxSplitLineCount':
@@ -1029,7 +1151,7 @@ define([
       viewport.msg.show({
         type: 'success',
         time: 2500,
-        text: t('planning', 'settings:msg:success')
+        text: this.t('settings:msg:success')
       });
     },
 
@@ -1042,7 +1164,7 @@ define([
 
     getFailureText: function()
     {
-      return t('planning', 'settings:msg:failure');
+      return this.t('settings:msg:failure');
     },
 
     formatSchedulingRate: function(schedulingRate)

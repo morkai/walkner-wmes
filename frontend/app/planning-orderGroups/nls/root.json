@@ -1,0 +1,23 @@
+{
+  "root": {
+    "BREADCRUMB:base": "Daily plans",
+    "BREADCRUMB:browse": "Order groups",
+
+    "PROPERTY:search": "Search by phrase",
+    "PROPERTY:active": "Active?",
+    "PROPERTY:mrp": "MRP",
+    "PROPERTY:name": "Group name",
+    "PROPERTY:description": "Group description",
+    "PROPERTY:productInclude": "Product (include)",
+    "PROPERTY:productExclude": "Product (exclude)",
+    "PROPERTY:bomInclude": "Component (include)",
+    "PROPERTY:bomExclude": "Component (exclude)",
+
+    "tester:pageAction": "Tester",
+    "tester:breadcrumb": "Tester",
+    "tester:date": "Date",
+    "tester:mrp": "MRP",
+    "tester:refresh": "Refresh"
+  },
+  "pl": true
+}

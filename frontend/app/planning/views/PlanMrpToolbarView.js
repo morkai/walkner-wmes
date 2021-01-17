@@ -17,7 +17,6 @@ define([
   './ToggleMrpLockDialogView',
   './PlanExecutionView',
   'app/planning/templates/toolbar',
-  'app/planning/templates/toolbarPrintLineList',
   'app/planning/templates/printPage',
   'app/planning/templates/orderStatusIcons'
 ], function(
@@ -37,7 +36,6 @@ define([
   ToggleMrpLockDialogView,
   PlanExecutionView,
   toolbarTemplate,
-  toolbarPrintLineListTemplate,
   printPageTemplate,
   orderStatusIconsTemplate
 ) {
@@ -181,6 +179,7 @@ define([
     getTemplateData: function()
     {
       return {
+        version: this.plan.settings.getVersion(),
         lines: this.mrp.lines.map(function(line) { return line.id; }),
         stats: this.options.stats === false ? null : this.mrp.getStats(),
         canLock: this.plan.canLockMrps(),
@@ -226,22 +225,10 @@ define([
 
         clipboardData.setData('text/plain', orderList.join('\r\n'));
         clipboardData.setData('text/html', '<ul><li>' + orderList.join('</li><li>') + '</li></ul>');
-
-        var $btn = view.$id('copyOrderList').tooltip({
-          container: view.el,
-          trigger: 'manual',
-          placement: 'left',
-          title: view.t('toolbar:copyOrderList:success')
+        clipboard.showTooltip({
+          target: view.$id('copyOrderList')[0],
+          text: view.t('toolbar:copyOrderList:success')
         });
-
-        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success');
-
-        if (view.timers.hideTooltip)
-        {
-          clearTimeout(view.timers.hideTooltip);
-        }
-
-        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
       });
     },
 

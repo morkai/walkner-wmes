@@ -59,7 +59,7 @@ define([
       },
       'click a[role="copyOrderList"]': function(e)
       {
-        this.copyOrderList(+e.currentTarget.dataset.shift);
+        this.copyOrderList(+e.currentTarget.dataset.shift, e.pageX, e.pageY);
       },
       'click #-exportStats': function()
       {
@@ -121,6 +121,7 @@ define([
 
       return {
         date: plan.id,
+        version: plan.settings.getVersion(),
         divisions: Object.keys(displayOptions.get('activeMrps')).sort(),
         division: displayOptions.get('division'),
         mrps: displayOptions.get('mrps'),
@@ -144,7 +145,7 @@ define([
       });
     },
 
-    copyOrderList: function(shiftNo)
+    copyOrderList: function(shiftNo, x, y)
     {
       var view = this;
       var mrps = {};
@@ -162,22 +163,10 @@ define([
 
         clipboardData.setData('text/plain', orderList.join('\r\n'));
         clipboardData.setData('text/html', '<ul><li>' + orderList.join('</li><li>') + '</li></ul>');
-
-        var $btn = view.$id('copyOrderList').tooltip({
-          container: view.el,
-          trigger: 'manual',
-          placement: 'bottom',
-          title: view.t('toolbar:copyOrderList:success')
+        clipboard.showTooltip({
+          target: view.$id('copyOrderList')[0],
+          text: view.t('toolbar:copyOrderList:success')
         });
-
-        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success');
-
-        if (view.timers.hideTooltip)
-        {
-          clearTimeout(view.timers.hideTooltip);
-        }
-
-        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
       });
     },
 

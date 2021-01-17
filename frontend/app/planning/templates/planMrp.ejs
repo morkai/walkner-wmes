@@ -1,5 +1,5 @@
 <div class="planning-mrp <%- lockReason ? 'is-locked' : '' %>" data-id="<%= mrp._id %>">
-  <div id="<%- idPrefix %>-toolbar"></div>
+  <div id="<%- id('toolbar') %>"></div>
   <div class="planning-mrp-hd">
     <span class="planning-mrp-hd-id" title="<%= lockReason %>">
       <i class="fa fa-lock"></i>
@@ -7,12 +7,14 @@
     </span>
     <span class="planning-mrp-hd-name"><%= mrp.description %></span>
   </div>
-  <div id="<%- idPrefix %>-messages" class="planning-mrp-messages"></div>
-  <div id="<%- idPrefix %>-lines" class="planning-mrp-bd"></div>
-  <div id="<%- idPrefix %>-orders" class="planning-mrp-bd"></div>
-  <div id="<%- idPrefix %>-lateOrders" class="planning-mrp-bd"></div>
-  <div id="<%- idPrefix %>-lineOrders" class="planning-mrp-bd"></div>
-  <div id="<%- idPrefix %>-timeline" class="planning-mrp-timeline">
+  <div id="<%- id('messages') %>" class="planning-mrp-messages"></div>
+  <div id="<%- id('lines') %>" class="planning-mrp-bd"></div>
+  <div id="<%- id('orders') %>" class="planning-mrp-bd"></div>
+  <% if (version === 1) { %>
+    <div id="<%- id('lateOrders') %>" class="planning-mrp-bd"></div>
+  <% } %>
+  <div id="<%- id('lineOrders') %>" class="planning-mrp-bd"></div>
+  <div id="<%- id('timeline') %>" class="planning-mrp-timeline">
     <div class="planning-mrp-timeline-h">1</div>
     <div class="planning-mrp-timeline-h">2</div>
     <div class="planning-mrp-timeline-h">3</div>
@@ -21,7 +23,7 @@
     <div class="planning-mrp-timeline-h">6</div>
     <div class="planning-mrp-timeline-h">7</div>
     <div class="planning-mrp-timeline-h">8</div>
-    <div id="<%- idPrefix %>-time" class="planning-mrp-timeline-time hidden">00:00:00</div>
+    <div id="<%- id('time') %>" class="planning-mrp-timeline-time hidden">00:00:00</div>
   </div>
-  <div id="<%- idPrefix %>-crosshair" class="planning-mrp-crosshair"></div>
+  <div id="<%- id('crosshair') %>" class="planning-mrp-crosshair"></div>
 </div>

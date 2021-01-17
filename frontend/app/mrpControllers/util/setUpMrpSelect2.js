@@ -246,24 +246,23 @@ define([
       ownMrps.attach(options.view, $input);
     }
 
-    $input.select2(
-      'data',
-      $input
-        .val()
-        .split(',')
-        .filter(function(mrp) { return mrp.length; })
-        .map(function(mrp)
+    var selected = $input
+      .val()
+      .split(',')
+      .filter(function(mrp) { return mrp.length; })
+      .map(function(mrp)
+      {
+        var item = {id: mrp, text: mrp};
+
+        if (options.itemDecorator)
         {
-          var item = {id: mrp, text: mrp};
+          item = options.itemDecorator(item, true);
+        }
 
-          if (options.itemDecorator)
-          {
-            item = options.itemDecorator(item, true);
-          }
+        return item;
+      });
 
-          return item;
-        })
-    );
+    $input.select2('data', selected.length && options.multiple === false ? selected[0] : selected);
 
     return $input;
   };

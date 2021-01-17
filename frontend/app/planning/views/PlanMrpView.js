@@ -122,6 +122,7 @@ define([
         mrp: view.mrp
       }));
       view.setView('#-lines', new PlanMrpLinesView({
+        orderGroups: view.orderGroups,
         plan: view.plan,
         mrp: view.mrp
       }));
@@ -129,11 +130,15 @@ define([
         plan: view.plan,
         mrp: view.mrp
       }));
-      view.setView('#-lateOrders', new PlanMrpLateOrdersView({
-        delayReasons: view.delayReasons,
-        plan: view.plan,
-        mrp: view.mrp
-      }));
+
+      if (view.plan.settings.getVersion() === 1)
+      {
+        view.setView('#-lateOrders', new PlanMrpLateOrdersView({
+          delayReasons: view.delayReasons,
+          plan: view.plan,
+          mrp: view.mrp
+        }));
+      }
     },
 
     destroy: function()
@@ -149,6 +154,7 @@ define([
     getTemplateData: function()
     {
       return {
+        version: this.plan.settings.getVersion(),
         lockReason: this.serializeMrpLockReason(),
         mrp: {
           _id: this.mrp.id,

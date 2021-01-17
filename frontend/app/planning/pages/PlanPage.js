@@ -13,6 +13,7 @@ define([
   'app/factoryLayout/productionState',
   'app/paintShop/views/PaintShopDatePickerView',
   'app/wh-lines/WhLineCollection',
+  'app/planning-orderGroups/OrderGroupCollection',
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
@@ -36,6 +37,7 @@ define([
   productionState,
   PaintShopDatePickerView,
   WhLineCollection,
+  OrderGroupCollection,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -111,7 +113,7 @@ define([
         {
           template: function()
           {
-            return planSettingsPageActionTemplate({
+            return page.renderPartialHtml(planSettingsPageActionTemplate, {
               id: page.plan.id,
               editable: page.plan.isEditable()
             });
@@ -291,21 +293,30 @@ define([
         activeMrps: true
       });
 
-      plan.whLines = bindLoadingMessage(new WhLineCollection(), page);
+      plan.whLines = new WhLineCollection(null, {
+        paginate: false
+      });
 
-      page.delayReasons = new DelayReasonCollection();
+      page.delayReasons = new DelayReasonCollection(null, {
+        rqlQuery: 'sort(name)&limit(0)',
+        paginate: false
+      });
 
-      var nlsPrefix = 'MSG:LOADING_FAILURE:';
-      var nlsDomain = plan.getNlsDomain();
+      page.orderGroups = new OrderGroupCollection(null, {
+        rqlQuery: 'select(name)&sort(name)&limit(0)',
+        paginate: false,
+        sortByName: true
+      });
 
-      bindLoadingMessage(plan, page, nlsPrefix + 'plan', nlsDomain);
-      bindLoadingMessage(plan.settings, page, nlsPrefix + 'settings', nlsDomain);
-      bindLoadingMessage(plan.workingLines, page, nlsPrefix + 'workingLines', nlsDomain);
-      bindLoadingMessage(plan.lateOrders, page, nlsPrefix + 'lateOrders', nlsDomain);
-      bindLoadingMessage(plan.sapOrders, page, nlsPrefix + 'sapOrders', nlsDomain);
-      bindLoadingMessage(plan.shiftOrders, page, nlsPrefix + 'shiftOrders', nlsDomain);
-      bindLoadingMessage(page.delayReasons, page, nlsPrefix + 'delayReasons', nlsDomain);
-      bindLoadingMessage(productionState, page, nlsPrefix + 'productionState', nlsDomain);
+      bindLoadingMessage(productionState, page);
+      bindLoadingMessage(page.delayReasons, page);
+      bindLoadingMessage(page.orderGroups, page);
+      bindLoadingMessage(plan, page);
+      bindLoadingMessage(plan.settings, page);
+      bindLoadingMessage(plan.workingLines, page);
+      bindLoadingMessage(plan.lateOrders, page);
+      bindLoadingMessage(plan.sapOrders, page);
+      bindLoadingMessage(plan.shiftOrders, page);
 
       window.plan = plan;
     },
@@ -364,11 +375,12 @@ define([
       var load1 = $.when(
         page.promised(productionState.load(forceReloadProdState)),
         page.promised(page.delayReasons.fetch({reset: true})),
+        page.promised(page.orderGroups.fetch({reset: true})),
         page.promised(plan.settings.fetch()),
         page.promised(plan.workingLines.fetch({reset: true})),
         page.promised(plan.shiftOrders.fetch({reset: true})),
         page.promised(plan.sapOrders.fetch({reset: true})),
-        page.promised(plan.lateOrders.fetch({reset: true})),
+        plan.settings.getVersion() === 1 ? page.promised(plan.lateOrders.fetch({reset: true})) : null,
         page.promised(plan.whLines.fetch({reset: true}))
       );
 
@@ -411,17 +423,20 @@ define([
       page.promised(plan.settings.set('_id', plan.id).fetch()).then(
         function()
         {
+          var fetchOptions = {reset: true, reload: true};
           var forceReloadProdState = reloadProdState;
 
           reloadProdState = false;
 
           var promise = $.when(
             productionState.load(forceReloadProdState),
-            plan.workingLines.fetch({reset: true, reload: true}),
-            plan.shiftOrders.fetch({reset: true, reload: true}),
-            plan.sapOrders.fetch({reset: true, reload: true}),
-            plan.lateOrders.fetch({reset: true, reload: true}),
-            all ? plan.whLines.fetch({reset: true, reload: true}) : null,
+            all ? page.delayReasons.fetch(fetchOptions) : null,
+            all ? page.orderGroups.fetch(fetchOptions) : null,
+            all ? plan.whLines.fetch(fetchOptions) : null,
+            plan.workingLines.fetch(fetchOptions),
+            plan.shiftOrders.fetch(fetchOptions),
+            plan.sapOrders.fetch(fetchOptions),
+            plan.settings.getVersion() === 1 ? plan.lateOrders.fetch(fetchOptions) : null,
             plan.fetch()
           );
 
@@ -466,6 +481,7 @@ define([
       {
         var mrpView = new PlanMrpView({
           delayReasons: page.delayReasons,
+          orderGroups: page.orderGroups,
           prodLineStates: productionState.prodLineStates,
           plan: page.plan,
           mrp: mrp
@@ -495,7 +511,7 @@ define([
         this.timers.reloadOrders = null;
       }
 
-      if (!onlySap)
+      if (!onlySap && this.plan.settings.getVersion() === 1)
       {
         this.promised(this.plan.lateOrders.fetch({reset: true}));
       }

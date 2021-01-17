@@ -1,0 +1,40 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input id="<%- id('active') %>" type="checkbox" name="active" value="true">
+            <%- t('PROPERTY:active') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
+        <input id="<%- id('name') %>" class="form-control" type="text" name="name" required maxlength="200">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('description') %>" class="control-label"><%- t('PROPERTY:description') %></label>
+        <textarea id="<%- id('description') %>" class="form-control" type="text" name="description" rows="5"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('mrp') %>" class="control-label"><%- t('PROPERTY:mrp') %></label>
+        <input id="<%- id('mrp') %>" type="text" name="mrp">
+      </div>
+      <% ['productInclude', 'productExclude', 'bomInclude', 'bomExclude'].forEach(function(prop) { %>
+      <div class="form-group">
+        <label for="<%- id(prop) %>" class="control-label"><%- t('PROPERTY:' + prop) %></label>
+        <% if (t.has('FORM:help:' + prop)) { %>
+        <p class="help-block"><%- t('FORM:help:' + prop) %></p>
+        <% } %>
+        <textarea id="<%- id(prop) %>" class="form-control text-mono" rows="7" name="<%- prop %>"></textarea>
+      </div>
+      <% }) %>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

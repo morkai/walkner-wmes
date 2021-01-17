@@ -1,0 +1,27 @@
+<div class="planning-orderGroups-tester-groups">
+  <% groups.forEach(function(group) { %>
+    <div class="planning-orderGroups-tester-group">
+      <h3><a href="#planning/orderGroups/<%- group._id %>" target="_blank"><%= group.label %></a></h3>
+      <table class="planning-orderGroups-tester-orders">
+        <% group.orders.forEach(function(order) { %>
+        <tbody class="planning-orderGroups-tester-order">
+        <tr>
+          <td class="is-min"><a href="#orders/<%- order._id %>" target="_blank"><%- order._id %></a></td>
+          <td class="is-min planning-orderGroups-tester-nc12"><%- order.nc12 %></td>
+          <td class="is-min text-right"><%- order.qty.toLocaleString() %></td>
+          <td>&nbsp;PCE</td>
+        </tr>
+        <tr>
+          <td colspan="4"><%= order.name %></td>
+        </tr>
+        <% if (order.description && order.description !== order.name) { %>
+        <tr>
+          <td colspan="4"><%= order.description %></td>
+        </tr>
+        <% } %>
+        </tbody>
+        <% }) %>
+      </table>
+    </div>
+  <% }) %>
+</div>

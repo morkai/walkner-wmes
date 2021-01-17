@@ -82,6 +82,7 @@ define([
   './pscs/routes',
   './mor/routes',
   './planning/routes',
+  './planning-orderGroups/routes',
   './wh/routes',
   './wh-downtimes/routes',
   './wh-setCarts/routes',

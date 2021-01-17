@@ -1,0 +1,31 @@
+.resultTip {
+  z-index: 9999999;
+  display: inline-block;
+  position: absolute;
+  top: -999px;
+  left: -999px;
+  margin: 0;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #000;
+  background-color: #FFF;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+  white-space: nowrap;
+}
+.resultTip.default {
+  background-color: #ddd;
+}
+.resultTip.info {
+  background-color: #B8E2FB;
+}
+.resultTip.warning {
+  background-color: #F0C36D;
+}
+.resultTip.success {
+  background-color: #BBDF8D;
+}
+.resultTip.error {
+  background-color: #F8ACAC;
+}

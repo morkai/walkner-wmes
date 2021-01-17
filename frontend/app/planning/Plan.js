@@ -3,11 +3,11 @@
 define([
   'underscore',
   'jquery',
-  '../time',
-  '../user',
-  '../socket',
-  '../core/Model',
-  '../data/orgUnits',
+  'app/time',
+  'app/user',
+  'app/socket',
+  'app/core/Model',
+  'app/data/orgUnits',
   './util/shift',
   './changeHandlers',
   './PlanOrderCollection',
@@ -59,6 +59,7 @@ define([
       options = _.defaults({}, options, {
         displayOptions: null,
         settings: null,
+        whLines: null,
         sapOrders: null,
         minMaxDates: false
       });
@@ -67,6 +68,7 @@ define([
         + '&activeMrps=' + (options.activeMrps ? 1 : 0);
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
+      this.whLines = options.whLines;
 
       this.workingLines = new PlanWorkingLineCollection(null, {
         plan: this,

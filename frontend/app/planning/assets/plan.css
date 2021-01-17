@@ -15,6 +15,7 @@
 }
 .planning-mrp-toolbar {
   float: right;
+  margin-left: 5px;
 }
 .planning-mrp:first-child .planning-mrp-toolbar {
   margin-top: -5px;

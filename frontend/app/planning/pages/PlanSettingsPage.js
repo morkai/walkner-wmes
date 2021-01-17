@@ -1,12 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/core/pages/EditFormPage',
+  'app/planning-orderGroups/OrderGroupCollection',
   'app/planning/views/PlanSettingsView'
 ], function(
-  t,
   EditFormPage,
+  OrderGroupCollection,
   PlanSettingsView
 ) {
   'use strict';
@@ -20,7 +20,7 @@ define([
     {
       return [
         {
-          label: t.bound('planning', 'BREADCRUMB:base'),
+          label: this.t('BREADCRUMB:base'),
           href: '#planning/plans'
         },
         {
@@ -28,26 +28,40 @@ define([
           href: '#planning/plans/' + this.model.id
         },
         {
-          label: t.bound('planning', 'BREADCRUMB:settings')
+          label: this.t('BREADCRUMB:settings')
         }
       ];
     },
 
     getFormViewOptions: function()
     {
-      var model = this.model;
-      var nlsDomain = model.getNlsDomain();
-
       return {
         editMode: true,
-        model: model,
+        model: this.model,
         formMethod: 'PUT',
-        formAction: model.url(),
-        formActionText: t(nlsDomain, 'settings:submit'),
-        failureText: t(nlsDomain, 'settings:editFailure'),
-        panelTitleText: t(nlsDomain, 'settings:title'),
-        back: this.options.back
+        formAction: this.model.url(),
+        formActionText: this.t('settings:submit'),
+        failureText: this.t('settings:editFailure'),
+        panelTitleText: this.t('settings:title'),
+        back: this.options.back,
+        orderGroups: this.orderGroups
       };
+    },
+
+    defineModels: function()
+    {
+      EditFormPage.prototype.defineModels.apply(this, arguments);
+
+      this.orderGroups = new OrderGroupCollection([], {rqlQuery: 'sort(name)&limit(0)'});
+      this.orderGroups.comparator = function(a, b)
+      {
+        return a.get('name').localeCompare(b.get('name'));
+      };
+    },
+
+    load: function(when)
+    {
+      return when(this.orderGroups.fetch(), this.model.fetch());
     }
 
   });

@@ -12,6 +12,8 @@ define([
   var KIND_WEIGHT = {
     unclassified: 0,
     small: 1,
+    medium: 2,
+    big: 3,
     easy: 2,
     hard: 3
   };

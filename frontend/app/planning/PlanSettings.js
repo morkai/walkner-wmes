@@ -19,14 +19,18 @@ define([
 ) {
   'use strict';
 
+  var VERSION_2_DATE = window.ENV === 'production'
+    ? time.utc.getMoment('2030-01-01').valueOf()
+    : time.utc.getMoment('2021-01-17').valueOf(); // time.getMoment().utc(true).valueOf();
+
   var PlanLineSettings = Model.extend({
 
     defaults: function()
     {
       return {
         mrpPriority: [],
-        activeFrom: '',
-        activeTo: ''
+        orderGroupPriority: [],
+        activeTime: []
       };
     }
 
@@ -47,6 +51,7 @@ define([
         limitSmallOrders: false,
         extraOrderSeconds: 0,
         extraShiftSeconds: [0, 0, 0],
+        smallOrderQuantity: 0,
         bigOrderQuantity: 0,
         splitOrderQuantity: 0,
         maxSplitLineCount: 0,
@@ -89,7 +94,7 @@ define([
     {
       return {
         workerCount: [0, 0, 0],
-        orderPriority: ['small', 'easy', 'hard']
+        orderPriority: []
       };
     }
 
@@ -228,6 +233,27 @@ define([
     getLabel: function()
     {
       return time.utc.format(this.id, 'LL');
+    },
+
+    getVersion: function()
+    {
+      return time.utc.getMoment(this.id, 'YYYY-MM-DD').isSameOrAfter(VERSION_2_DATE) ? 2 : 1;
+    },
+
+    getAvailableOrderPriorities: function()
+    {
+      var orderPriorities = ['small'];
+
+      if (this.getVersion() === 1)
+      {
+        orderPriorities.push('easy', 'hard');
+      }
+      else
+      {
+        orderPriorities.push('medium', 'big');
+      }
+
+      return orderPriorities;
     },
 
     getDefinedMrpIds: function()

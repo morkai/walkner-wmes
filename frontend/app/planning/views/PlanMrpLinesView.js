@@ -17,6 +17,7 @@ define([
   './PlanLinesMrpPriorityDialogView',
   './PlanLinesWorkerCountDialogView',
   './PlanLinesOrderPriorityDialogView',
+  './PlanLinesOrderGroupPriorityDialogView',
   './PlanLineFreezeOrdersDialogView',
   'app/planning/templates/lines',
   'app/planning/templates/linePopover',
@@ -38,6 +39,7 @@ define([
   PlanLinesMrpPriorityDialogView,
   PlanLinesWorkerCountDialogView,
   PlanLinesOrderPriorityDialogView,
+  PlanLinesOrderGroupPriorityDialogView,
   PlanLineFreezeOrdersDialogView,
   linesTemplate,
   linePopoverTemplate,
@@ -76,8 +78,8 @@ define([
     initialize: function()
     {
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
-      this.listenTo(this.mrp.lines, 'change:frozenOrders', this.onFrozenOrdersChanged);
       this.listenTo(this.plan.whLines, 'add remove change:redirLine', this.onWhLineChanged);
+      this.listenTo(this.mrp.lines, 'change:frozenOrders', this.onFrozenOrdersChanged);
     },
 
     destroy: function()
@@ -238,6 +240,7 @@ define([
       if (!whLine)
       {
         return null;
+        this.listenTo(this.plan.whLines, 'add remove change:redirLine', this.onWhLineChanged);
       }
 
       var redirLine = this.plan.whLines.get(whLine.get('redirLine'));
@@ -299,6 +302,11 @@ define([
           icon: 'fa-star-half-o',
           label: this.t('lines:menu:orderPriority'),
           handler: this.handleOrderPriorityAction.bind(this)
+        },
+        {
+          icon: 'fa-columns',
+          label: this.t('lines:menu:orderGroupPriority'),
+          handler: this.handleOrderGroupPriorityAction.bind(this)
         }
       ]);
     },
@@ -399,9 +407,21 @@ define([
       viewport.showDialog(dialogView, this.t('lines:menu:orderPriority:title'));
     },
 
+    handleOrderGroupPriorityAction: function()
+    {
+      var dialogView = new PlanLinesOrderGroupPriorityDialogView({
+        orderGroups: this.orderGroups,
+        plan: this.plan,
+        mrp: this.mrp
+      });
+
+      viewport.showDialog(dialogView, this.t('lines:menu:orderGroupPriority:title'));
+    },
+
     handleSettingsAction: function(line)
     {
       var dialogView = new PlanLineSettingsDialogView({
+        orderGroups: this.orderGroups,
         plan: this.plan,
         mrp: this.mrp,
         line: line

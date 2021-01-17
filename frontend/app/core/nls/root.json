@@ -501,7 +501,9 @@
     "lang:pl": "Polish (pl)",
     "lang:en": "English (en)",
 
-    "labelCopySuffix": "{label} (copy)"
+    "labelCopySuffix": "{label} (copy)",
+
+    "resultTips:copied": "Copied!"
   },
   "pl": true
 }

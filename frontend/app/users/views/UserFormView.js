@@ -306,11 +306,7 @@ define([
       clipboard.copy(function(clipboardData)
       {
         clipboardData.setData('text/plain', view.serializePrivileges());
-
-        clipboard.showTooltip(view, e.currentTarget, -1, -1, {
-          title: view.t('FORM:copyPrivileges:success'),
-          placement: 'left'
-        });
+        clipboard.showTooltip({e: e, text: view.t('FORM:copyPrivileges:success')});
       });
     },
 
