@@ -88,13 +88,13 @@ define([
 
         if (prevShiftOverlap < 0 && workingTimes.prevAt[shiftNo])
         {
-          fromTime = time.utc.getMoment(workingTimes.prevAt[shiftNo]).local(true).valueOf()
+          fromTime = time.utc.getMoment(workingTimes.prevAt[shiftNo]).valueOf()
             + prevShiftOverlap;
         }
 
         if (nextShiftOverlap > 0 && workingTimes.nextAt[shiftNo])
         {
-          toTime = time.utc.getMoment(workingTimes.nextAt[shiftNo]).local(true).valueOf()
+          toTime = time.utc.getMoment(workingTimes.nextAt[shiftNo]).valueOf()
             + nextShiftOverlap;
         }
       }
