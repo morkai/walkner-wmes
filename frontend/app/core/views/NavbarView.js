@@ -592,14 +592,21 @@ define([
       return [''];
     }
 
-    var href = aEl.getAttribute('href');
+    var navPath = liEl.dataset.navPath;
 
-    if (!href || (href.charAt(0) !== '/' && href.charAt(0) !== '#'))
+    if (!navPath)
     {
-      return [''];
+      var href = aEl.getAttribute('href');
+
+      if (!href || (href.charAt(0) !== '/' && href.charAt(0) !== '#'))
+      {
+        return [''];
+      }
+
+      navPath = href.substring(1);
     }
 
-    var matches = href.substring(1).match(/^([a-zA-Z0-9\/\-_]+)/);
+    var matches = navPath.match(/^([a-zA-Z0-9\/\-_]+)/);
 
     if (!matches)
     {

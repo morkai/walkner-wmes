@@ -118,7 +118,6 @@ define([
               editable: page.plan.isEditable()
             });
           },
-          privileges: 'PLANNING:MANAGE',
           afterRender: function($action)
           {
             $action.find('[data-action="openSettings"]').on('click', function(e)
@@ -137,6 +136,11 @@ define([
 
             $action.find('[data-action="copySettings"]').on('click', function()
             {
+              if (this.parentNode.classList.contains('disabled'))
+              {
+                return;
+              }
+
               var dialogView = new CopySettingsDialogView({
                 model: page.plan
               });

@@ -21,12 +21,12 @@ define([
 
   var nls = 'i18n!app/nls/planning-orderGroups';
   var model = 'app/planning-orderGroups/OrderGroup';
-  var canView = user.auth('PLANNING:VIEW');
-  var canManage = canView;
+  var canView = user.auth('PLANNING:VIEW', 'FN:process-engineer');
+  var canManage = user.auth('PLANNING:MANAGE', 'FN:process-engineer');
 
   function baseBreadcrumb()
   {
-    return [
+    return !user.isAllowedTo('PLANNING:VIEW') ? [] : [
       {href: '#planning/plans', label: this.t('BREADCRUMB:base')}
     ];
   }

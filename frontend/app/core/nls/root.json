@@ -205,6 +205,7 @@
     "NAVBAR:compRel:entries": "Component releases",
     "NAVBAR:orderBomMatchers": "Component checking",
     "NAVBAR:componentLabels": "Component labels",
+    "NAVBAR:orderGroups": "Order groups",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",

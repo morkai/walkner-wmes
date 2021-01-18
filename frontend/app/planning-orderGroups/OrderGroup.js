@@ -102,7 +102,7 @@ define([
 
       manage: function()
       {
-        return user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER');
+        return user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER', 'FN:process-engineer');
       }
 
     }

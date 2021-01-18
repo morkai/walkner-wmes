@@ -1,12 +1,12 @@
 <div class="btn-group">
-  <a href="#planning/settings/<%- id %>" class="btn btn-default <%- editable ? '' : 'disabled' %>" data-action="openSettings">
+  <a href="#planning/settings/<%- id %>" class="btn btn-default <%- editable && user.isAllowedTo('PLANNING:MANAGE') ? '' : 'disabled' %>" data-action="openSettings">
     <i class="fa fa-cogs"></i><span><%- t('PAGE_ACTION:settings') %></span>
   </a>
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
-    <li><a href="javascript:void(0)" data-action="copySettings"><%- t('PAGE_ACTION:settings:copy') %></a></li>
-    <li><a href="#planning/orderGroups"><%- t('PAGE_ACTION:settings:orderGroups') %></a></li>
+    <li class="<%- user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER') ? '' : 'disabled' %>"><a href="javascript:void(0)" data-action="copySettings"><%- t('PAGE_ACTION:settings:copy') %></a></li>
+    <li class="<%- user.isAllowedTo('PLANNING:VIEW', 'FN:process-engineer') ? '' : 'disabled' %>"><a href="#planning/orderGroups"><%- t('PAGE_ACTION:settings:orderGroups') %></a></li>
   </ul>
 </div>
