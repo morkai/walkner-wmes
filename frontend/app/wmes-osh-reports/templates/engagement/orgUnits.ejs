@@ -1,0 +1,53 @@
+<div class="table-responsive is-colored">
+  <table class="table table-bordered table-hover osh-report-observers-orgUnits">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
+      <th class="is-min"><%- t('engagement:employed') %></th>
+      <th class="is-min"><%- t('engagement:engaged') %></th>
+      <th class="is-min text-center" title="<%- t('engagement:engagedPercent') %>">%</th>
+      <th class="is-min"><%- t('engagement:nearMisses:title') %></th>
+      <th class="is-min"><%- t('engagement:kaizens:title') %></th>
+      <th class="is-min"><%- t('engagement:actions:title') %></th>
+      <th class="is-min"><%- t('engagement:observations:title') %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% rows.forEach(row => { %>
+      <tr>
+        <% if (row.type === 'division') { %>
+          <td class="is-min" rowspan="<%- row.children %>"><%= row.division %></td>
+          <td class="is-min"></td>
+          <td class="is-min"></td>
+        <% } else if (row.type === 'workplace') {  %>
+          <td class="is-min" rowspan="<%- row.children %>"><%= row.workplace %></td>
+          <td class="is-min"></td>
+        <% } else if (row.type === 'department') { %>
+          <td class="is-min"><%= row.department %></td>
+        <% } else if (row.type === 'unknown') { %>
+          <td class="is-min">?</td>
+          <td class="is-min">?</td>
+          <td class="is-min">?</td>
+        <% } else { %>
+          <td class="is-min text-right" colspan="3"><%- t('engagement:total') %></td>
+        <% } %>
+        <td class="is-min is-number"><%- n(row.employed) %></td>
+        <td class="is-min is-number"><%- n(row.engaged) %></td>
+        <td class="is-min is-number <%- row.engagedInvalid ? 'danger' : '' %>">
+          <% if (row.engagedPercent >= 0) { %>
+          <%- n(row.engagedPercent) %>%
+          <% } %>
+        </td>
+        <td class="is-min is-number"><%- n(row.metrics[0]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[1]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[2]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[3]) %></td>
+        <td></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

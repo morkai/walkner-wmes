@@ -64,6 +64,7 @@
   "filter:obsFilter:risky": "Ryzykowne",
   "filter:obsFilter:easy": "Łatwe",
   "filter:obsFilter:hard": "Trudne",
+  "filter:obsFilter:todo": "Do realizacji",
   "filter:obsCategory": "Kategorie...",
 
   "details:general": "Podstawowe informacje",

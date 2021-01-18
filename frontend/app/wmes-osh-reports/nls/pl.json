@@ -3,9 +3,13 @@
 
   "settings:pageAction": "Ustawienia",
   "settings:breadcrumb": "Ustawienia",
+  "settings:tab:engagement": "Zaangażowanie",
   "settings:tab:observers": "Obserwatorzy",
   "settings:obsPerDept": "Min. stosunek ilości obserwatorów do zatrudnienia [%]",
   "settings:minObsCards": "Min. ilość kart na obserwatora na miesiąc",
+  "settings:minEngagement": "Min. stosunek zaangażowanych do zatrudnionych [%]",
+
+  "filter:orgUnit": "Jednostka organizacyjna",
 
   "unspecified": "Nieokreślone",
 
@@ -130,7 +134,7 @@
   "observers:breadcrumb": "Obserwatorzy",
   "observers:title:orgUnits": "Jednostki organizacyjne",
   "observers:title:users": "Obserwatorzy",
-  "observers:employees": "Zatrudnienie",
+  "observers:employees": "Zatrudnieni",
   "observers:observers": "Obserwatorzy",
   "observers:observersPercent": "Obserwatorzy / Zatrudnienie [%]",
   "observers:safePercent": "Ryzykowne / Bezpieczne [%]",
@@ -148,5 +152,23 @@
   "observers:easy:header": "Ł",
   "observers:easy:title": "Łatwe",
   "observers:hard:header": "T",
-  "observers:hard:title": "Trudne"
+  "observers:hard:title": "Trudne",
+
+  "engagement:breadcrumb": "Zaangażowanie",
+  "engagement:title:orgUnits": "Jednostki organizacyjne",
+  "engagement:title:users": "Pracownicy",
+  "engagement:title:brigades": "Brygady",
+  "engagement:employed": "Zatrudnieni",
+  "engagement:engaged": "Zaangażowani",
+  "engagement:engagedPercent": "Zaangażowani / Zatrudnieni [%]",
+  "engagement:employee": "Pracownik",
+  "engagement:total": "Suma:",
+  "engagement:nearMisses:header": "Z",
+  "engagement:nearMisses:title": "ZPW",
+  "engagement:kaizens:header": "K",
+  "engagement:kaizens:title": "Kaizeny",
+  "engagement:actions:header": "A",
+  "engagement:actions:title": "Akcje",
+  "engagement:observations:header": "O",
+  "engagement:observations:title": "Obserwacje"
 }

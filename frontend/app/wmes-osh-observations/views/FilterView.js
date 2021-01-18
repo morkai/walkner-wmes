@@ -291,7 +291,7 @@ define([
 
       dropdownRadio(this.$id('obsFilter'), {
         label: this.t('filter:obsFilter:any'),
-        options: ['any', 'safe', 'risky', 'easy', 'hard'].map(value =>
+        options: ['any', 'safe', 'risky', 'easy', 'hard', 'todo'].map(value =>
         {
           return {
             value,

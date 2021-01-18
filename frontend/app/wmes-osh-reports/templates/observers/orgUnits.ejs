@@ -31,30 +31,34 @@
           <td class="is-min"></td>
         <% } else if (row.type === 'department') { %>
           <td class="is-min"><%= row.department %></td>
+        <% } else if (row.type === 'unknown') { %>
+          <td class="is-min">?</td>
+          <td class="is-min">?</td>
+          <td class="is-min">?</td>
         <% } else { %>
           <td class="is-min text-right" colspan="3"><%- t('observers:total') %></td>
         <% } %>
-        <td class="is-min is-number"><%- row.employees.toLocaleString() %></td>
-        <td class="is-min is-number"><%- row.observers.toLocaleString() %></td>
-        <td class="is-min is-number <%- row.invalidObservers ? 'danger' : '' %>">
+        <td class="is-min is-number"><%- n(row.employees) %></td>
+        <td class="is-min is-number"><%- n(row.observers) %></td>
+        <td class="is-min is-number <%- row.observersInvalid ? 'danger' : '' %>">
           <% if (row.observersPercent >= 0) { %>
-          <%- row.observersPercent %>%
+          <%- n(row.observersPercent) %>%
           <% } %>
         </td>
-        <td class="is-min is-number"><%- row.metrics[0].toLocaleString() %></td>
-        <td class="is-min is-number"><%- row.metrics[1].toLocaleString() %></td>
-        <td class="is-min is-number"><%- row.metrics[3].toLocaleString() %></td>
-        <td class="is-min is-number"><%- (row.metrics[4] + row.metrics[7]).toLocaleString() %></td>
+        <td class="is-min is-number"><%- n(row.metrics[0]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[1]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[3]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[4] + row.metrics[7]) %></td>
         <td class="is-min is-number">
           <% if (row.safePercent >= 0) { %>
-          <%- row.safePercent %>%
+          <%- n(row.safePercent) %>%
           <% } %>
         </td>
-        <td class="is-min is-number"><%- (row.metrics[5] + row.metrics[8]).toLocaleString() %></td>
-        <td class="is-min is-number"><%- (row.metrics[6] + row.metrics[9]).toLocaleString() %></td>
+        <td class="is-min is-number"><%- n(row.metrics[5] + row.metrics[8]) %></td>
+        <td class="is-min is-number"><%- n(row.metrics[6] + row.metrics[9]) %></td>
         <td class="is-min is-number">
           <% if (row.easyPercent >= 0) { %>
-          <%- row.easyPercent %>%
+          <%- n(row.easyPercent) %>%
           <% } %>
         </td>
         <td></td>

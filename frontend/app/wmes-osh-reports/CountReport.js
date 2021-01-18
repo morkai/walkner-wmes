@@ -249,7 +249,7 @@ define([
         };
       });
 
-      _.forEach(report.groups, group =>
+      report.groups.forEach(group =>
       {
         let x;
 
@@ -282,6 +282,21 @@ define([
           this.createSeriesFromRows(metric, attrs, group);
         });
       });
+
+      if (!report.groups.length)
+      {
+        this.metrics.forEach(metric =>
+        {
+          if (USER_METRICS[metric])
+          {
+            attrs[metric] = {categories: [], series: []};
+          }
+          else
+          {
+            attrs[metric] = {rows: [], series: {}};
+          }
+        });
+      }
 
       return attrs;
     },

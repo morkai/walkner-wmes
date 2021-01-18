@@ -6,8 +6,10 @@ define([
   'app/user',
   './CountReport',
   './ObserversReport',
+  './EngagementReport',
   './pages/CountReportPage',
   './pages/ObserversReportPage',
+  './pages/EngagementReportPage',
   'i18n!app/nls/reports',
   'i18n!app/nls/wmes-osh-reports'
 ], function(
@@ -16,8 +18,10 @@ define([
   user,
   CountReport,
   ObserversReport,
+  EngagementReport,
   CountReportPage,
-  ObserversReportPage
+  ObserversReportPage,
+  EngagementReportPage
 ) {
   'use strict';
 
@@ -35,6 +39,15 @@ define([
   {
     viewport.showPage(new ObserversReportPage({
       model: new ObserversReport({}, {
+        rqlQuery: req.rql
+      })
+    }));
+  });
+
+  router.map('/osh/reports/engagement', req =>
+  {
+    viewport.showPage(new EngagementReportPage({
+      model: new EngagementReport({}, {
         rqlQuery: req.rql
       })
     }));

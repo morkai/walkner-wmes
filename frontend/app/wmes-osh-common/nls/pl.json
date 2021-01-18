@@ -35,6 +35,7 @@
   "navbar:entries:open": "Otwarte",
   "navbar:entries:mine": "Moje",
   "navbar:entries:unseen": "Nieprzeczytane",
+  "navbar:entries:todo": "Do realizacji",
   "navbar:search:nearMiss": "ZPW",
   "navbar:search:kaizen": "kaizen",
   "navbar:search:action": "akcja",

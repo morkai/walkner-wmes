@@ -136,7 +136,6 @@ define([
         return;
       }
 
-      const relation = this.model.getRelation();
       const type = observation.easy ? 'kaizen' : 'nearMiss';
       let dialogView = null;
 

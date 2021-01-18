@@ -5,7 +5,7 @@ define([
   'app/core/View',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-departments/Department',
-  'app/wmes-osh-reports/templates/observers/orgUnits',
+  'app/wmes-osh-reports/templates/engagement/orgUnits',
   'jquery.stickytableheaders'
 ], function(
   $,
@@ -61,16 +61,14 @@ define([
         {
           if (!divisions[division.id])
           {
-            const divisionRow = this.createRow('division', division, null, null, d);
+            const divisionRow = this.createRow('division', division);
 
             divisions[division.id] = divisionRow;
 
             rows.push(divisionRow);
           }
-          else
-          {
-            this.incRow(divisions[division.id], d);
-          }
+
+          this.incRow(divisions[division.id], d);
 
           divisions[division.id].children += 1;
         }
@@ -79,7 +77,7 @@ define([
         {
           if (!workplaces[workplace.id])
           {
-            const workplaceRow = this.createRow('workplace', division, workplace, null, d);
+            const workplaceRow = this.createRow('workplace', division, workplace);
 
             workplaces[workplace.id] = workplaceRow;
 
@@ -90,10 +88,8 @@ define([
               divisions[division.id].children += 1;
             }
           }
-          else
-          {
-            this.incRow(workplaces[workplace.id], d);
-          }
+
+          this.incRow(workplaces[workplace.id], d);
 
           workplaces[workplace.id].children += 1;
         }
@@ -121,28 +117,34 @@ define([
       return rows;
     },
 
-    createRow: function(type, division, workplace, department, d = {})
+    createRow: function(type, division, workplace, department, d)
     {
+      if (!d)
+      {
+        d = {
+          employed: 0,
+          engaged: 0,
+          metrics: [0, 0, 0, 0]
+        };
+      }
+
       return {
         type,
         children: 1,
         division: division ? division.getLabel({long: false}) : '',
         workplace: workplace ? workplace.getLabel({long: false}) : '',
-        department: department ? department.getLabel() : '',
-        employees: d.employees || 0,
-        observers: d.observers || 0,
-        observersPercent: 0,
-        observersInvalid: false,
-        safePercent: 0,
-        easyPercent: 0,
-        metrics: d.metrics || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        department: department ? department.getLabel({long: true}) : '',
+        employed: d.employed,
+        engaged: d.engaged,
+        engagedPercent: 0,
+        metrics: d.metrics
       };
     },
 
     incRow: function(row, d)
     {
-      row.employees += d.employees;
-      row.observers += d.observers;
+      row.employed += d.employed;
+      row.engaged += d.engaged;
 
       d.metrics.forEach((value, i) =>
       {
@@ -152,12 +154,16 @@ define([
 
     summarizeRow: function(row)
     {
-      const {obsPerDept} = this.model.get('settings');
+      const {minEngagement} = this.model.get('settings');
 
-      row.observersPercent = Math.round(row.observers / row.employees * 100);
-      row.observersInvalid = row.observersPercent >= 0 && row.observersPercent < obsPerDept;
-      row.safePercent = Math.round((row.metrics[4] + row.metrics[7]) / row.metrics[3] * 100);
-      row.easyPercent = Math.round((row.metrics[6] + row.metrics[9]) / (row.metrics[5] + row.metrics[8]) * 100);
+      row.engagedPercent = Math.round(row.engaged / row.employed * 100);
+
+      if (!isFinite(row.engagedPercent))
+      {
+        row.engagedPercent = -1;
+      }
+
+      row.engagedInvalid = row.engagedPercent >= 0 && row.engagedPercent < minEngagement;
 
       return row;
     }

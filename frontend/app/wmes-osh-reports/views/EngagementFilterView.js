@@ -5,7 +5,7 @@ define([
   'app/core/util/forms/dateTimeRange',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/views/OrgUnitPickerFilterView',
-  'app/wmes-osh-reports/templates/observers/filter',
+  'app/wmes-osh-reports/templates/engagement/filter',
   'app/core/util/ExpandableSelect'
 ], function(
   FilterView,
@@ -19,8 +19,6 @@ define([
   return FilterView.extend({
 
     template,
-
-    nlsDomain: 'wmes-osh-observations',
 
     events: Object.assign({
 
@@ -47,9 +45,9 @@ define([
         filterView: this,
         emptyLabel: this.t('wmes-osh-reports', 'filter:orgUnit'),
         orgUnitTerms: {
-          'creator.oshDivision': 'division',
-          'creator.oshWorkplace': 'workplace',
-          'creator.oshDepartment': 'department'
+          'oshDivision': 'division',
+          'oshWorkplace': 'workplace',
+          'oshDepartment': 'department'
         },
         orgUnitTypes: ['division', 'workplace', 'department']
       }));
