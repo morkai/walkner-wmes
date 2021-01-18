@@ -15,11 +15,13 @@
         <p class="help-block"><%- t('settings:freezeHour:help') %></p>
         <input id="<%- id('freezeHour') %>" name="freezeHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
       </div>
+      <% if (version === 1) { %>
       <div class="form-group">
         <label for="<%- id('lateHour') %>"><%- t('settings:lateHour') %></label>
         <p class="help-block"><%- t('settings:lateHour:help') %></p>
         <input id="<%- id('lateHour') %>" name="lateHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
       </div>
+      <% } %>
       <div class="form-group">
         <label for="<%- id('etoPilotHour') %>"><%- t('settings:etoPilotHour') %></label>
         <p class="help-block"><%- t('settings:etoPilotHour:help') %></p>
