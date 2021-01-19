@@ -29,7 +29,6 @@ define([
     {
       const workplaces = new Map();
       const departments = new Set();
-      let i = 0;
 
       (this.model.get('departments') || []).forEach(d =>
       {
@@ -44,7 +43,6 @@ define([
         }
 
         workplaces.get(d.workplace).departments.push({
-          i: i++,
           _id: d.department,
           label: dictionaries.getLabel('departments', d.department),
           count: d.count
@@ -73,14 +71,13 @@ define([
         }
 
         workplaces.get(workplaceId).departments.push({
-          i: i++,
           _id: department.id,
           label: department.getLabel(),
           count: 0
         });
       });
 
-      this.departments = [];
+      this.departments = {};
 
       workplaces.forEach(workplace =>
       {
@@ -90,12 +87,12 @@ define([
 
         workplace.departments.forEach(department =>
         {
-          this.departments.push({
+          this.departments[`d${department._id}`] = {
             division: workplace.division,
             workplace: workplace._id,
             department: department._id,
             count: department.count
-          });
+          };
         });
       });
 
@@ -114,6 +111,8 @@ define([
       };
     },
 
+    checkValidity: () => true,
+
     serializeForm: function(formData)
     {
       if (!this.options.editMode)
@@ -122,6 +121,16 @@ define([
       }
 
       delete formData.month;
+
+      formData.departments = Object.values(formData.departments || {});
+
+      formData.departments.forEach(d =>
+      {
+        d.division = +d.division;
+        d.workplace = +d.workplace;
+        d.department = +d.department;
+        d.count = parseInt(d.count, 10) || 0;
+      });
 
       return formData;
     },

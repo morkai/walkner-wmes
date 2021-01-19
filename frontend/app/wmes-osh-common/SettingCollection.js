@@ -19,7 +19,7 @@ define([
 
     prepareValue: function(id, newValue) // eslint-disable-line no-unused-vars
     {
-      if (/(obsPerDept|minEngagement)/.test(id))
+      if (/(obs.*?PerDep|minEngagement|SafeObs)/.test(id))
       {
         return this.prepareNumericValue(newValue, 0, 100, 0);
       }

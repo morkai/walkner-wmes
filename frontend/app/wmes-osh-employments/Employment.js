@@ -79,6 +79,13 @@ define([
 
       obj.workplaces = Array.from(workplaces.values());
 
+      obj.workplaces.sort((a, b) => a.label.localeCompare(b.label));
+
+      obj.workplaces.forEach(workplace =>
+      {
+        workplace.departments.sort((a, b) => a.label.localeCompare(b.label));
+      });
+
       return obj;
     }
 

@@ -36,7 +36,7 @@
         <% } %>
         <td class="is-min is-number"><%- n(row.employed) %></td>
         <td class="is-min is-number"><%- n(row.engaged) %></td>
-        <td class="is-min is-number <%- row.engagedInvalid ? 'danger' : '' %>">
+        <td class="is-min is-number <%- row.engagedInvalid ? 'is-invalid' : '' %>">
           <% if (row.engagedPercent >= 0) { %>
           <%- n(row.engagedPercent) %>%
           <% } %>

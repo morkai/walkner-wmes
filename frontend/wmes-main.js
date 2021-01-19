@@ -174,6 +174,8 @@
         });
       });
 
+      window.navbar = navbarView;
+
       return navbarView;
     }
 

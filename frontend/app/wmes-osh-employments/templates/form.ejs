@@ -25,25 +25,25 @@
           <th></th>
         </tr>
         </thead>
-        <tbody>
         <% workplaces.forEach(workplace => { %>
-          <% workplace.departments.forEach((department, departmentI) => { %>
-          <tr>
-            <% if (!departmentI) { %>
-            <td class="is-min" rowspan="<%- workplace.departments.length %>"><%= workplace.label %></td>
-            <% } %>
-            <td class="is-min"><%= department.label %></td>
-            <td class="is-min">
-              <input name="departments[<%- department.i %>].division" value="<%- workplace.division %>" type="hidden">
-              <input name="departments[<%- department.i %>].workplace" value="<%- workplace._id %>" type="hidden">
-              <input name="departments[<%- department.i %>].department" value="<%- department._id %>" type="hidden">
-              <input name="departments[<%- department.i %>].count" value="<%- department.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
-            </td>
-            <td></td>
-          </tr>
-          <% }) %>
+          <tbody>
+            <% workplace.departments.forEach((department, departmentI) => { %>
+            <tr>
+              <% if (!departmentI) { %>
+              <td class="is-min" rowspan="<%- workplace.departments.length %>"><%= workplace.label %></td>
+              <% } %>
+              <td class="is-min"><%= department.label %></td>
+              <td class="is-min">
+                <input name="departments.d<%- department._id %>.division" value="<%- workplace.division %>" type="hidden">
+                <input name="departments.d<%- department._id %>.workplace" value="<%- workplace._id %>" type="hidden">
+                <input name="departments.d<%- department._id %>.department" value="<%- department._id %>" type="hidden">
+                <input name="departments.d<%- department._id %>.count" value="<%- department.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              </td>
+              <td></td>
+            </tr>
+            <% }) %>
+          </tbody>
         <% }) %>
-        </tbody>
       </table>
     </div>
     <div class="panel-footer">

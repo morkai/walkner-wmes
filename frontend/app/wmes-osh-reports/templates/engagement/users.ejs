@@ -25,15 +25,14 @@
       <tr data-i="<%- i %>" data-id="<%- user.id %>">
         <td><%- user.info %></td>
         <% months.forEach(month => { %>
-          <% let invalid = !user.months[month] ? 'danger' : '' %>
           <% let metrics = user.months[month] || empty %>
-          <td class="osh-report-engagement-metric <%- invalid %>" data-month="<%- month %>" data-metric="nearMisses"><%- metrics[0].toLocaleString() %></td>
-          <td class="osh-report-engagement-separator <%- invalid %>">/</td>
-          <td class="osh-report-engagement-metric <%- invalid %>" data-month="<%- month %>" data-metric="kaizens"><%- metrics[1].toLocaleString() %></td>
-          <td class="osh-report-engagement-separator <%- invalid %>">/</td>
-          <td class="osh-report-engagement-metric <%- invalid %>" data-month="<%- month %>" data-metric="actions"><%- metrics[2].toLocaleString() %></td>
-          <td class="osh-report-engagement-separator <%- invalid %>">/</td>
-          <td class="osh-report-engagement-metric <%- invalid %>" data-month="<%- month %>" data-metric="observations"><%- metrics[3].toLocaleString() %></td>
+          <td class="osh-report-engagement-metric <%- metrics[0] ? '' : 'is-invalid' %>" data-month="<%- month %>" data-metric="nearMisses"><%- metrics[0].toLocaleString() %></td>
+          <td class="osh-report-engagement-separator">/</td>
+          <td class="osh-report-engagement-metric <%- metrics[1] ? '' : 'is-invalid' %>" data-month="<%- month %>" data-metric="kaizens"><%- metrics[1].toLocaleString() %></td>
+          <td class="osh-report-engagement-separator">/</td>
+          <td class="osh-report-engagement-metric <%- metrics[2] ? '' : 'is-invalid' %>" data-month="<%- month %>" data-metric="actions"><%- metrics[2].toLocaleString() %></td>
+          <td class="osh-report-engagement-separator">/</td>
+          <td class="osh-report-engagement-metric <%- metrics[3] ? '' : 'is-invalid' %>" data-month="<%- month %>" data-metric="observations"><%- metrics[3].toLocaleString() %></td>
         <% }) %>
         <td></td>
       </tr>

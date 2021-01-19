@@ -134,7 +134,10 @@ define([
         observersPercent: 0,
         observersInvalid: false,
         safePercent: 0,
+        safeInvalid: false,
         easyPercent: 0,
+        cardsPercent: 0,
+        cardsInvalid: false,
         metrics: d.metrics || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       };
     },
@@ -152,11 +155,19 @@ define([
 
     summarizeRow: function(row)
     {
-      const {obsPerDept} = this.model.get('settings');
+      const {
+        minSafeObs,
+        maxSafeObs,
+        observersPerDepartment,
+        obsCardsPerDepartment
+      } = this.model.get('settings');
 
       row.observersPercent = Math.round(row.observers / row.employees * 100);
-      row.observersInvalid = row.observersPercent >= 0 && row.observersPercent < obsPerDept;
-      row.safePercent = Math.round((row.metrics[4] + row.metrics[7]) / row.metrics[3] * 100);
+      row.observersInvalid = row.observersPercent >= 0 && row.observersPercent < observersPerDepartment;
+      row.cardsPercent = Math.round(row.metrics[0] / row.employees * 100);
+      row.cardsInvalid = row.cardsPercent >= 0 && row.cardsPercent < obsCardsPerDepartment;
+      row.safePercent = Math.round(row.metrics[3] / row.metrics[1] * 100);
+      row.safeInvalid = row.safePercent < minSafeObs || row.safePercent > maxSafeObs;
       row.easyPercent = Math.round((row.metrics[6] + row.metrics[9]) / (row.metrics[5] + row.metrics[8]) * 100);
 
       return row;

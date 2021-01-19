@@ -10,8 +10,8 @@
         <th></th>
       </tr>
       </thead>
-      <tbody>
-        <% model.workplaces.forEach(workplace => { %>
+      <% model.workplaces.forEach(workplace => { %>
+        <tbody>
           <% workplace.departments.forEach((department, i) => { %>
             <tr>
               <% if (i === 0) { %>
@@ -22,8 +22,8 @@
               <td></td>
             </tr>
           <% }) %>
-        <% }) %>
-      </tbody>
+        </tbody>
+      <% }) %>
     </table>
   </div>
 </div>

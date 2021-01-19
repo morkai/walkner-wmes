@@ -30,18 +30,17 @@
         <td><%- user.info %></td>
         <% months.forEach(month => { %>
           <% let metrics = user.months[month] || empty %>
-          <% let invalid = metrics[0] < settings.minObsCards ? 'danger' : '' %>
-          <td class="osh-report-observers-metric <%- invalid %>" data-month="<%- month %>" data-metric="cards"><%- metrics[0].toLocaleString() %></td>
-          <td class="osh-report-observers-separator <%- invalid %>">/</td>
-          <td class="osh-report-observers-metric <%- invalid %>" data-month="<%- month %>" data-metric="observations"><%- metrics[1].toLocaleString() %></td>
-          <td class="osh-report-observers-separator <%- invalid %>">/</td>
-          <td class="osh-report-observers-metric <%- invalid %>" data-month="<%- month %>" data-metric="safe"><%- metrics[3].toLocaleString() %></td>
-          <td class="osh-report-observers-separator <%- invalid %>">/</td>
-          <td class="osh-report-observers-metric <%- invalid %>" data-month="<%- month %>" data-metric="risky"><%- (metrics[4] + metrics[7]).toLocaleString() %></td>
-          <td class="osh-report-observers-separator <%- invalid %>">/</td>
-          <td class="osh-report-observers-metric <%- invalid %>" data-month="<%- month %>" data-metric="easy"><%- (metrics[5] + metrics[8]).toLocaleString() %></td>
-          <td class="osh-report-observers-separator <%- invalid %>">/</td>
-          <td class="osh-report-observers-metric <%- invalid %>" data-month="<%- month %>" data-metric="hard"><%- (metrics[6] + metrics[9]).toLocaleString() %></td>
+          <td class="osh-report-observers-metric <%- metrics[0] < settings.minObsCards ? 'is-invalid' : '' %>" data-month="<%- month %>" data-metric="cards"><%- metrics[0].toLocaleString() %></td>
+          <td class="osh-report-observers-separator">/</td>
+          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="observations"><%- metrics[1].toLocaleString() %></td>
+          <td class="osh-report-observers-separator">/</td>
+          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="safe"><%- metrics[3].toLocaleString() %></td>
+          <td class="osh-report-observers-separator">/</td>
+          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="risky"><%- (metrics[4] + metrics[7]).toLocaleString() %></td>
+          <td class="osh-report-observers-separator">/</td>
+          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="easy"><%- (metrics[5] + metrics[8]).toLocaleString() %></td>
+          <td class="osh-report-observers-separator">/</td>
+          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="hard"><%- (metrics[6] + metrics[9]).toLocaleString() %></td>
         <% }) %>
         <td></td>
       </tr>

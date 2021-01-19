@@ -60,6 +60,10 @@
   max-height: 225px;
 }
 
+.osh-report .is-invalid {
+  color: #E00;
+}
+
 .is-print .osh-report {
   width: 715px;
   margin: 0 auto;
