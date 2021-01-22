@@ -9,7 +9,10 @@
 		defaults = {
 			fixedOffset: 0,
 			leftOffset: 0,
-			scrollableArea: window
+			resizableArea: window,
+			scrollableArea: window,
+			scrollableAreaX: undefined,
+			scrollableAreaY: undefined
 		};
 
 	function Plugin (el, options) {
@@ -45,7 +48,9 @@
 				// remove padding on <table> to fix issue #7
 				$this.css('padding', 0);
 
-				base.$scrollableArea = $(base.options.scrollableArea);
+				base.$resizableArea = $(base.options.resizableArea);
+				base.$scrollableAreaX = $(base.options.scrollableAreaX || base.options.scrollableArea);
+				base.$scrollableAreaY = $(base.options.scrollableAreaY || base.options.scrollableArea);
 
 				base.$originalHeader = $('thead:first', this);
 				base.$clonedHeader = base.$originalHeader.clone();
@@ -93,89 +98,99 @@
 		};
 
 		base.bind = function(){
-			base.$scrollableArea.on('scroll.' + name, base.toggleHeaders);
-			if (!base.isWindowScrolling()) {
-				$(window).on('scroll.' + name + base.id, base.setPositionValues);
-				$(window).on('resize.' + name + base.id, base.toggleHeaders);
-			}
-			base.$scrollableArea.on('resize.' + name, base.toggleHeaders);
-			base.$scrollableArea.on('resize.' + name, base.updateWidth);
+			base.$scrollableAreaX.on('scroll.' + name + base.id, function()
+			{
+				base.setPositionValues();
+			});
+
+			base.$scrollableAreaY.on('scroll.' + name + base.id, function()
+			{
+				base.setPositionValues();
+				base.toggleHeaders();
+			});
+
+			base.$resizableArea.on('resize.' + name + base.id, function()
+			{
+				base.toggleHeaders();
+				base.updateWidth();
+			});
 		};
 
 		base.unbind = function(){
-			// unbind window events by specifying handle so we don't remove too much
-			base.$scrollableArea.off('.' + name, base.toggleHeaders);
-			if (!base.isWindowScrolling()) {
-				$(window).off('.' + name + base.id, base.setPositionValues);
-				$(window).off('.' + name + base.id, base.toggleHeaders);
-			}
-			base.$scrollableArea.off('.' + name, base.updateWidth);
-			base.$el.off('.' + name);
-			base.$el.find('*').off('.' + name);
+			base.$resizableArea.off('.' + name + base.id);
+			base.$scrollableAreaX.off('.' + name + base.id);
+			base.$scrollableAreaY.off('.' + name + base.id);
 		};
 
 		base.toggleHeaders = function () {
-			if (base.$el) {
-				base.$el.each(function () {
-					var $this = $(this),
-						newLeft,
-						newTopOffset = base.isWindowScrolling() ? (
-									isNaN(base.options.fixedOffset) ?
-									base.options.fixedOffset.outerHeight() :
-									base.options.fixedOffset
-								) :
-								base.$scrollableArea.offset().top + (!isNaN(base.options.fixedOffset) ? base.options.fixedOffset : 0),
-						offset = $this.offset(),
-
-						scrollTop = base.$scrollableArea.scrollTop() + newTopOffset,
-						scrollLeft = base.$scrollableArea.scrollLeft(),
-
-						scrolledPastTop = base.isWindowScrolling() ?
-								scrollTop > offset.top :
-								newTopOffset > offset.top,
-						notScrolledPastBottom = (base.isWindowScrolling() ? scrollTop : 0) <
-								(offset.top + $this.height() - base.$clonedHeader.height() - (base.isWindowScrolling() ? 0 : newTopOffset));
-
-					if (scrolledPastTop && notScrolledPastBottom) {
-						newLeft = offset.left - scrollLeft + base.options.leftOffset;
-						base.$originalHeader.css({
-							'position': 'fixed',
-							'margin-top': 0,
-							'left': newLeft,
-							'z-index': 1 // #18: opacity bug
-						});
-						base.isSticky = true;
-						base.leftOffset = newLeft;
-						base.topOffset = newTopOffset;
-						base.$clonedHeader.css('display', '');
-						base.setPositionValues();
-						// make sure the width is correct: the user might have resized the browser while in static mode
-						base.updateWidth();
-					} else if (base.isSticky) {
-						base.$originalHeader.css('position', 'static');
-						base.$clonedHeader.css('display', 'none');
-						base.isSticky = false;
-						base.resetWidth($("td,th", base.$clonedHeader), $("td,th", base.$originalHeader));
-					}
-				});
+			if (!base.$el) {
+				return;
 			}
+			base.$el.each(function () {
+				var $this = $(this);
+				var newLeft;
+				var newTopOffset = isNaN(base.options.fixedOffset)
+					? (base.options.fixedOffset.outerHeight() || 0)
+					: base.options.fixedOffset;
+
+				if (!base.isWindowScrollingY())
+				{
+					newTopOffset += base.$scrollableAreaY.offset().top;
+				}
+
+				var offset = $this.offset();
+
+				var scrollTop = base.$scrollableAreaY.scrollTop() + newTopOffset;
+				var scrollLeft = base.$scrollableAreaX.scrollLeft();
+
+				var scrolledPastTop = base.isWindowScrollingY() ?
+							scrollTop > offset.top :
+							newTopOffset > offset.top;
+
+				var notScrolledPastBottom = (base.isWindowScrollingY() ? scrollTop : 0) <
+							(offset.top + $this.height() - base.$clonedHeader.height() - (base.isWindowScrollingY() ? 0 : newTopOffset));
+
+				if (scrolledPastTop && notScrolledPastBottom) {
+					newLeft = offset.left - scrollLeft + base.options.leftOffset;
+					base.$originalHeader.css({
+						'position': 'fixed',
+						'margin-top': 0,
+						'left': newLeft,
+						'z-index': 1 // #18: opacity bug
+					});
+					base.isSticky = true;
+					base.leftOffset = newLeft;
+					base.topOffset = newTopOffset;
+					base.$clonedHeader.css('display', '');
+					base.setPositionValues();
+					// make sure the width is correct: the user might have resized the browser while in static mode
+					base.updateWidth();
+				} else if (base.isSticky) {
+					base.$originalHeader.css('position', 'static');
+					base.$clonedHeader.css('display', 'none');
+					base.isSticky = false;
+					base.resetWidth($("td,th", base.$clonedHeader), $("td,th", base.$originalHeader));
+				}
+			});
 		};
 
-		base.isWindowScrolling = function() {
-			return base.$scrollableArea[0] === window;
+		base.isWindowScrollingX = function() {
+			return base.$scrollableAreaX[0] === window;
+		};
+
+		base.isWindowScrollingY = function() {
+			return base.$scrollableAreaY[0] === window;
 		};
 
 		base.setPositionValues = function () {
-			var winScrollTop = $(window).scrollTop(),
-				winScrollLeft = $(window).scrollLeft();
-			if (!base.isSticky ||
-					winScrollTop < 0 || winScrollTop + $(window).height() > $(document).height() ||
-					winScrollLeft < 0 || winScrollLeft + $(window).width() > $(document).width()) {
+			var winScrollTop = base.$scrollableAreaY.scrollTop(),
+				winScrollLeft = base.$scrollableAreaX.scrollLeft();
+			if (!base.isSticky) {
 				return;
 			}
 			base.$originalHeader.css({
-				'top': base.topOffset - (base.isWindowScrolling() ? 0 : winScrollTop),
-				'left': base.leftOffset - (base.isWindowScrolling() ? 0 : winScrollLeft)
+				'top': (base.topOffset - (base.isWindowScrollingY() ? 0 : winScrollTop)) + 'px',
+				'left': (base.leftOffset - (base.isWindowScrollingX() ? 0 : winScrollLeft)) + 'px'
 			});
 		};
 

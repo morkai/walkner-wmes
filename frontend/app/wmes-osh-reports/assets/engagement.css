@@ -1,3 +1,6 @@
+.osh-report-engagement-group {
+  border-left-width: 2px!important;
+}
 .osh-report-engagement-users th,
 .osh-report-engagement-users td {
   white-space: nowrap;

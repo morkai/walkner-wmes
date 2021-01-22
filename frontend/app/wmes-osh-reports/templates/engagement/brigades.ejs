@@ -1,0 +1,44 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-hover osh-report-engagement-users">
+    <thead>
+    <tr>
+      <th rowspan="2"><%- t('engagement:leader') %></th>
+      <% months.forEach(month => { %>
+        <th class="osh-report-engagement-group" colspan="7"><%- time.utc.format(month, 'MMMM YYYY') %></th>
+      <% }) %>
+      <th rowspan="2"></th>
+    </tr>
+    <tr>
+      <% months.forEach(month => { %>
+        <th class="osh-report-engagement-metric osh-report-engagement-group" title="<%- t('engagement:members:title') %>"><%- t('engagement:members:header') %></th>
+        <th class="osh-report-engagement-metric" title="<%- t('engagement:active:title') %>"><%- t('engagement:active:header') %></th>
+        <th class="osh-report-engagement-metric" title="<%- t('engagement:activePercent:title') %>"><%- t('engagement:activePercent:header') %></th>
+        <th class="osh-report-engagement-metric" title="<%- t('engagement:nearMisses:title') %>"><%- t('engagement:nearMisses:header') %></th>
+        <th class="osh-report-engagement-metric" title="<%- t('engagement:kaizens:title') %>"><%- t('engagement:kaizens:header') %></th>
+        <th class="osh-report-engagement-metric" title="<%- t('engagement:actions:title') %>"><%- t('engagement:actions:header') %></th>
+        <th class="osh-report-engagement-metric" title="<%- t('engagement:observations:title') %>"><%- t('engagement:observations:header') %></th>
+      <% }) %>
+    </tr>
+    </thead>
+    <tbody>
+    <% brigades.forEach((brigade, i) => { %>
+      <tr>
+        <td><%- brigade.info %></td>
+        <% months.forEach(m => { %>
+          <% let month = brigade.months[m] || empty %>
+          <td class="osh-report-engagement-metric osh-report-engagement-group"><%- month.members.length.toLocaleString() %></td>
+          <td class="osh-report-engagement-metric"><%- month.active.toLocaleString() %></td>
+          <td class="osh-report-engagement-metric <%- month.active < month.members.length ? '' : 'is-invalid' %>">
+            <%- month.members.length ? `${Math.round(month.active / month.members.length * 100).toLocaleString()}%` : '' %>
+          </td>
+          <td class="osh-report-engagement-metric <%- month.metrics[0] ? '' : 'is-invalid' %>"><%- month.metrics[0].toLocaleString() %></td>
+          <td class="osh-report-engagement-metric <%- month.metrics[1] ? '' : 'is-invalid' %>"><%- month.metrics[1].toLocaleString() %></td>
+          <td class="osh-report-engagement-metric <%- month.metrics[2] ? '' : 'is-invalid' %>"><%- month.metrics[2].toLocaleString() %></td>
+          <td class="osh-report-engagement-metric <%- month.metrics[3] ? '' : 'is-invalid' %>"><%- month.metrics[3].toLocaleString() %></td>
+        <% }) %>
+        <td></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

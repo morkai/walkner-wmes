@@ -25,8 +25,10 @@ define([
     {
       return {
         settings: {},
+        userLabels: {},
         months: [],
         orgUnits: [],
+        brigades: [],
         users: []
       };
     },
@@ -59,8 +61,10 @@ define([
     {
       return {
         settings: report.settings,
+        userLabels: report.userLabels,
         months: report.months,
         orgUnits: report.orgUnits,
+        brigades: report.brigades,
         users: report.users
       };
     }

@@ -1,11 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/time',
   'app/core/View',
   'app/core/templates/userInfo',
-  'app/wmes-osh-reports/templates/observers/users'
+  'app/wmes-osh-reports/templates/observers/users',
+  'jquery.stickytableheaders'
 ], function(
+  $,
   time,
   View,
   userInfoTemplate,
@@ -20,6 +23,9 @@ define([
     initialize: function()
     {
       this.listenTo(this.model, `change:users`, this.render);
+
+      this.setUpTooltips();
+      this.setUpStickyTable();
     },
 
     getTemplateData: function()
@@ -37,26 +43,35 @@ define([
       };
     },
 
-    afterRender: function()
+    setUpTooltips: function()
     {
-      const view = this;
+      this.on('afterRender', () =>
+      {
+        this.$el.tooltip({
+          container: document.body,
+          selector: 'th[title]'
+        });
+      });
 
-      view.$el.tooltip({
-        container: view.$el.parent(),
-        selector: '[data-metric]',
-        html: true,
-        title: function()
-        {
-          const html = [view.t(`observers:${this.dataset.metric}:title`)];
+      this.on('beforeRender remove', () =>
+      {
+        this.$el.popover('destroy');
+      });
+    },
 
-          if (this.tagName === 'TD')
-          {
-            html.unshift(time.format(+this.dataset.month, 'MMMM YYYY'));
-            html.unshift(view.model.get('users')[this.parentNode.dataset.i].label);
-          }
+    setUpStickyTable: function()
+    {
+      this.on('afterRender', () =>
+      {
+        this.$('.table').stickyTableHeaders({
+          fixedOffset: $('.navbar-fixed-top'),
+          scrollableAreaX: this.$el
+        });
+      });
 
-          return html.join('<br>');
-        }
+      this.on('beforeRender remove', () =>
+      {
+        this.$('.table').stickyTableHeaders('destroy');
       });
     }
 

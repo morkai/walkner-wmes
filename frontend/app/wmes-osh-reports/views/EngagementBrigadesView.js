@@ -5,7 +5,7 @@ define([
   'app/time',
   'app/core/View',
   'app/core/templates/userInfo',
-  'app/wmes-osh-reports/templates/engagement/users',
+  'app/wmes-osh-reports/templates/engagement/brigades',
   'jquery.stickytableheaders'
 ], function(
   $,
@@ -22,7 +22,7 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.model, `change:users`, this.render);
+      this.listenTo(this.model, `change:brigades`, this.render);
 
       this.setUpTooltips();
       this.setUpStickyTable();
@@ -35,14 +35,18 @@ define([
       return {
         settings: this.model.get('settings'),
         months: this.model.get('months'),
-        users: this.model.get('users').map(u =>
+        brigades: this.model.get('brigades').map(b =>
         {
-          u.label = userLabels[u.id];
-          u.info = userInfoTemplate(u);
+          b.label = userLabels[b.id];
+          b.info = userInfoTemplate(b);
 
-          return u;
+          return b;
         }),
-        empty: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        empty: {
+          members: [],
+          active: 0,
+          metrics: [0, 0, 0, 0]
+        }
       };
     },
 

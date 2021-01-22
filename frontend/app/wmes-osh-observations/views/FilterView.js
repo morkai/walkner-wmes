@@ -31,7 +31,7 @@ define([
   return FilterView.extend({
 
     filterList: [
-      'createdAt',
+      'date',
       'locationPath',
       'observationKind',
       'limit'

@@ -5,6 +5,7 @@ define([
   'app/wmes-osh-common/dictionaries',
   '../views/EngagementFilterView',
   '../views/EngagementOrgUnitsView',
+  '../views/EngagementBrigadesView',
   '../views/EngagementUsersView',
   'app/wmes-osh-reports/templates/engagement/page'
 ], function(
@@ -12,6 +13,7 @@ define([
   dictionaries,
   EngagementFilterView,
   EngagementOrgUnitsView,
+  EngagementBrigadesView,
   EngagementUsersView,
   template
 ) {
@@ -51,6 +53,10 @@ define([
         model: this.model
       });
 
+      this.brigadesView = new EngagementBrigadesView({
+        model: this.model
+      });
+
       this.usersView = new EngagementUsersView({
         model: this.model
       });
@@ -59,6 +65,7 @@ define([
 
       this.setView('#-filter', this.filterView);
       this.setView('#-orgUnits', this.orgUnitsView);
+      this.setView('#-brigades', this.brigadesView);
       this.setView('#-users', this.usersView);
     },
 

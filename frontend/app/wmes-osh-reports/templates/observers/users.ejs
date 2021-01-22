@@ -1,46 +1,36 @@
-<div class="table-responsive is-colored">
+<div class="table-responsive">
   <table class="table table-bordered table-hover osh-report-observers-users">
     <thead>
     <tr>
       <th rowspan="2"><%- t('observers:observer') %></th>
       <% months.forEach(month => { %>
-        <th colspan="11"><%- time.format(month, 'MMMM YYYY') %></th>
+        <th class="osh-report-engagement-group" colspan="6"><%- time.format(month, 'MMMM YYYY') %></th>
       <% }) %>
       <th rowspan="2"></th>
     </tr>
     <tr>
       <% months.forEach(month => { %>
-        <th class="osh-report-observers-metric" data-metric="cards"><%- t('observers:cards:header') %></th>
-        <th class="osh-report-observers-separator">/</th>
-        <th class="osh-report-observers-metric" data-metric="observations"><%- t('observers:observations:header') %></th>
-        <th class="osh-report-observers-separator">/</th>
-        <th class="osh-report-observers-metric" data-metric="safe"><%- t('observers:safe:header') %></th>
-        <th class="osh-report-observers-separator">/</th>
-        <th class="osh-report-observers-metric" data-metric="risky"><%- t('observers:risky:header') %></th>
-        <th class="osh-report-observers-separator">/</th>
-        <th class="osh-report-observers-metric" data-metric="easy"><%- t('observers:easy:header') %></th>
-        <th class="osh-report-observers-separator">/</th>
-        <th class="osh-report-observers-metric" data-metric="hard"><%- t('observers:hard:header') %></th>
+        <th class="osh-report-observers-metric osh-report-observers-group" title="<%- t('observers:cards:title') %>"><%- t('observers:cards:header') %></th>
+        <th class="osh-report-observers-metric" title="<%- t('observers:observations:title') %>"><%- t('observers:observations:header') %></th>
+        <th class="osh-report-observers-metric" title="<%- t('observers:safe:title') %>"><%- t('observers:safe:header') %></th>
+        <th class="osh-report-observers-metric" title="<%- t('observers:risky:title') %>"><%- t('observers:risky:header') %></th>
+        <th class="osh-report-observers-metric" title="<%- t('observers:easy:title') %>"><%- t('observers:easy:header') %></th>
+        <th class="osh-report-observers-metric" title="<%- t('observers:hard:title') %>"><%- t('observers:hard:header') %></th>
       <% }) %>
     </tr>
     </thead>
     <tbody>
     <% users.forEach((user, i) => { %>
-      <tr data-i="<%- i %>" data-id="<%- user.id %>">
+      <tr>
         <td><%- user.info %></td>
         <% months.forEach(month => { %>
           <% let metrics = user.months[month] || empty %>
-          <td class="osh-report-observers-metric <%- metrics[0] < settings.minObsCards ? 'is-invalid' : '' %>" data-month="<%- month %>" data-metric="cards"><%- metrics[0].toLocaleString() %></td>
-          <td class="osh-report-observers-separator">/</td>
-          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="observations"><%- metrics[1].toLocaleString() %></td>
-          <td class="osh-report-observers-separator">/</td>
-          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="safe"><%- metrics[3].toLocaleString() %></td>
-          <td class="osh-report-observers-separator">/</td>
-          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="risky"><%- (metrics[4] + metrics[7]).toLocaleString() %></td>
-          <td class="osh-report-observers-separator">/</td>
-          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="easy"><%- (metrics[5] + metrics[8]).toLocaleString() %></td>
-          <td class="osh-report-observers-separator">/</td>
-          <td class="osh-report-observers-metric" data-month="<%- month %>" data-metric="hard"><%- (metrics[6] + metrics[9]).toLocaleString() %></td>
+          <td class="osh-report-observers-metric osh-report-observers-group <%- metrics[0] < settings.minObsCards ? 'is-invalid' : '' %>"><%- metrics[0].toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- metrics[1].toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- metrics[3].toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- (metrics[4] + metrics[7]).toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- (metrics[5] + metrics[8]).toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- (metrics[6] + metrics[9]).toLocaleString() %></td>
         <% }) %>
         <td></td>
       </tr>

@@ -165,6 +165,7 @@
   "engagement:employed": "Zatrudnieni",
   "engagement:engaged": "Zaangażowani",
   "engagement:engagedPercent": "Zaangażowani / Zatrudnieni [%]",
+  "engagement:leader": "Lider",
   "engagement:employee": "Pracownik",
   "engagement:total": "Suma:",
   "engagement:nearMisses:header": "Z",
@@ -174,5 +175,11 @@
   "engagement:actions:header": "A",
   "engagement:actions:title": "Akcje",
   "engagement:observations:header": "O",
-  "engagement:observations:title": "Obserwacje"
+  "engagement:observations:title": "Obserwacje",
+  "engagement:members:header": "W",
+  "engagement:members:title": "Wszyscy",
+  "engagement:active:header": "A",
+  "engagement:active:title": "Aktywni",
+  "engagement:activePercent:header": "%",
+  "engagement:activePercent:title": "Aktywni / Wszyscy [%]"
 }

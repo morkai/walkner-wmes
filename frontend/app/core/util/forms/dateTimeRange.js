@@ -41,7 +41,9 @@ define([
       return;
     }
 
-    $(document).on('click', '.dateTimeRange-is-input > .dropdown-toggle', toggleInput);
+    $(document)
+      .on('click', '.dateTimeRange-is-input > .dropdown-toggle', toggleInput)
+      .on('keyup', '.dateTimeRange-field > .form-control', handleKeyDown);
 
     eventsBound = true;
   }
@@ -63,6 +65,16 @@ define([
         $(inputEl).prop('checked', true).trigger('change');
       }
     });
+  }
+
+  function handleKeyDown(e)
+  {
+    if (e.key === 'Escape')
+    {
+      e.currentTarget.value = '';
+
+      return false;
+    }
   }
 
   function prepareDropdown(label)

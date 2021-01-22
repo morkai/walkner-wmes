@@ -23,11 +23,9 @@ define([
     initialize: function()
     {
       this.listenTo(this.model, `change:orgUnits`, this.render);
-    },
 
-    destroy: function()
-    {
-      this.$('.table').stickyTableHeaders('destroy');
+      this.setUpTooltips();
+      this.setUpStickyTable();
     },
 
     getTemplateData: function()
@@ -38,9 +36,36 @@ define([
       };
     },
 
-    afterRender: function()
+    setUpTooltips: function()
     {
-      this.$('.table').stickyTableHeaders({fixedOffset: $('.navbar-fixed-top')});
+      this.on('afterRender', () =>
+      {
+        this.$el.tooltip({
+          container: document.body,
+          selector: 'th[title]'
+        });
+      });
+
+      this.on('beforeRender remove', () =>
+      {
+        this.$el.popover('destroy');
+      });
+    },
+
+    setUpStickyTable: function()
+    {
+      this.on('afterRender', () =>
+      {
+        this.$('.table').stickyTableHeaders({
+          fixedOffset: $('.navbar-fixed-top'),
+          scrollableAreaX: this.$el
+        });
+      });
+
+      this.on('beforeRender remove', () =>
+      {
+        this.$('.table').stickyTableHeaders('destroy');
+      });
     },
 
     serializeRows: function()
