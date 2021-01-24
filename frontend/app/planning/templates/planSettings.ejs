@@ -10,42 +10,42 @@
         </label>
         <p class="help-block"><%- t('settings:forceWorkDay:help') %></p>
       </div>
-      <div class="form-group">
-        <label for="<%- id('freezeHour') %>"><%- t('settings:freezeHour') %></label>
-        <p class="help-block"><%- t('settings:freezeHour:help') %></p>
-        <input id="<%- id('freezeHour') %>" name="freezeHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
-      </div>
       <% if (version === 1) { %>
-      <div class="form-group">
-        <label for="<%- id('lateHour') %>"><%- t('settings:lateHour') %></label>
-        <p class="help-block"><%- t('settings:lateHour:help') %></p>
-        <input id="<%- id('lateHour') %>" name="lateHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
-      </div>
-      <% } %>
-      <div class="form-group">
-        <label for="<%- id('etoPilotHour') %>"><%- t('settings:etoPilotHour') %></label>
-        <p class="help-block"><%- t('settings:etoPilotHour:help') %></p>
-        <input id="<%- id('etoPilotHour') %>" name="etoPilotHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
-      </div>
-      <% if (version === 1) { %>
-      <div class="form-group">
-        <label for="<%- id('schedulingRate') %>"><%- t('settings:schedulingRate') %></label>
-        <p class="help-block"><%- t('settings:schedulingRate:help') %></p>
-        <textarea id="<%- id('schedulingRate') %>" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
-      </div>
+        <div class="form-group">
+          <label for="<%- id('freezeHour') %>"><%- t('settings:freezeHour') %></label>
+          <p class="help-block"><%- t('settings:freezeHour:help') %></p>
+          <input id="<%- id('freezeHour') %>" name="freezeHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('lateHour') %>"><%- t('settings:lateHour') %></label>
+          <p class="help-block"><%- t('settings:lateHour:help') %></p>
+          <input id="<%- id('lateHour') %>" name="lateHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('etoPilotHour') %>"><%- t('settings:etoPilotHour') %></label>
+          <p class="help-block"><%- t('settings:etoPilotHour:help') %></p>
+          <input id="<%- id('etoPilotHour') %>" name="etoPilotHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('schedulingRate') %>"><%- t('settings:schedulingRate') %></label>
+          <p class="help-block"><%- t('settings:schedulingRate:help') %></p>
+          <textarea id="<%- id('schedulingRate') %>" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
+        </div>
       <% } %>
       <div class="form-group">
         <label for="<%- id('ignoredWorkCenters') %>"><%- t('settings:ignoredWorkCenters') %></label>
         <p class="help-block"><%- t('settings:ignoredWorkCenters:help') %></p>
         <input id="<%- id('ignoredWorkCenters') %>" name="ignoredWorkCenters" class="form-control text-mono" data-object="plan">
       </div>
-      <% ['requiredStatuses', 'ignoredStatuses', 'completedStatuses'].forEach(function(prop) { %>
-      <div class="form-group">
-        <label for="<%- id(prop) %>"><%- t('settings:' + prop) %></label>
-        <p class="help-block"><%- t('settings:' + prop + ':help') %></p>
-        <input id="<%- id(prop) %>" name="<%- prop %>" type="text" data-object="plan">
-      </div>
-      <% }) %>
+      <% if (version === 1) { %>
+        <% ['requiredStatuses', 'ignoredStatuses', 'completedStatuses'].forEach(function(prop) { %>
+          <div class="form-group">
+            <label for="<%- id(prop) %>"><%- t('settings:' + prop) %></label>
+            <p class="help-block"><%- t('settings:' + prop + ':help') %></p>
+            <input id="<%- id(prop) %>" name="<%- prop %>" type="text" data-object="plan">
+          </div>
+        <% }) %>
+      <% } %>
       <% if (version === 1) { %>
       <div class="checkbox">
         <label class="control-label">
@@ -74,11 +74,11 @@
         </div>
       </div>
       <% if (version > 1) { %>
-      <div class="form-group">
-        <label for="<%- id('extraCapacity') %>"><%- t('settings:extraCapacity') %></label>
-        <p class="help-block"><%- t('settings:extraCapacity:help') %></p>
-        <input id="<%- id('extraCapacity') %>" name="extraCapacity" class="form-control" type="text" placeholder="0" pattern="^[0-9]{1,3}%?$" data-object="line" style="width: 100px">
-      </div>
+        <div class="form-group">
+          <label for="<%- id('extraCapacity') %>"><%- t('settings:extraCapacity') %></label>
+          <p class="help-block"><%- t('settings:extraCapacity:help') %></p>
+          <input id="<%- id('extraCapacity') %>" name="extraCapacity" class="form-control" type="text" placeholder="0" pattern="^[0-9]{1,3}%?$" data-object="line" style="width: 100px">
+        </div>
       <% } %>
       <div class="form-group">
         <label for="<%- id('mrpPriority') %>"><%- t('settings:mrpPriority') %></label>
@@ -99,11 +99,11 @@
         <input id="<%- id('mrp') %>" type="text">
       </div>
       <% if (version > 1) { %>
-      <div class="form-group">
-        <label for="<%- id('linePriority') %>"><%- t('settings:linePriority') %></label>
-        <p class="help-block"><%- t('settings:linePriority:help') %></p>
-        <input id="<%- id('linePriority') %>" name="linePriority" type="text" data-object="mrp">
-      </div>
+        <div class="form-group">
+          <label for="<%- id('linePriority') %>"><%- t('settings:linePriority') %></label>
+          <p class="help-block"><%- t('settings:linePriority:help') %></p>
+          <input id="<%- id('linePriority') %>" name="linePriority" type="text" data-object="mrp">
+        </div>
       <% } %>
       <div class="checkbox">
         <label class="control-label">
@@ -135,26 +135,26 @@
       </div>
       <div class="row">
         <% if (version === 1) { %>
-        <div class="col-md-3 form-group">
-          <label for="<%- id('bigOrderQuantity') %>"><%- t('settings:bigOrderQuantity') %></label>
-          <input id="<%- id('bigOrderQuantity') %>" name="bigOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-          <p class="help-block"><%- t('settings:bigOrderQuantity1:help') %></p>
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- id('hardOrderManHours') %>"><%- t('settings:hardOrderManHours') %></label>
-          <input id="<%- id('hardOrderManHours') %>" name="hardOrderManHours" class="form-control" type="number" min="0" max="9999" step="0.001" data-object="mrp">
-          <p class="help-block"><%- t('settings:hardOrderManHours:help') %></p>
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- id('splitOrderQuantity') %>"><%- t('settings:splitOrderQuantity') %></label>
-          <input id="<%- id('splitOrderQuantity') %>" name="splitOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-          <p class="help-block"><%- t('settings:splitOrderQuantity:help') %></p>
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- id('maxSplitLineCount') %>"><%- t('settings:maxSplitLineCount') %></label>
-          <input id="<%- id('maxSplitLineCount') %>" name="maxSplitLineCount" class="form-control" type="number" min="0" max="99" step="1" data-object="mrp">
-          <p class="help-block"><%- t('settings:maxSplitLineCount:help') %></p>
-        </div>
+          <div class="col-md-3 form-group">
+            <label for="<%- id('bigOrderQuantity') %>"><%- t('settings:bigOrderQuantity') %></label>
+            <input id="<%- id('bigOrderQuantity') %>" name="bigOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
+            <p class="help-block"><%- t('settings:bigOrderQuantity1:help') %></p>
+          </div>
+          <div class="col-md-3 form-group">
+            <label for="<%- id('hardOrderManHours') %>"><%- t('settings:hardOrderManHours') %></label>
+            <input id="<%- id('hardOrderManHours') %>" name="hardOrderManHours" class="form-control" type="number" min="0" max="9999" step="0.001" data-object="mrp">
+            <p class="help-block"><%- t('settings:hardOrderManHours:help') %></p>
+          </div>
+          <div class="col-md-3 form-group">
+            <label for="<%- id('splitOrderQuantity') %>"><%- t('settings:splitOrderQuantity') %></label>
+            <input id="<%- id('splitOrderQuantity') %>" name="splitOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
+            <p class="help-block"><%- t('settings:splitOrderQuantity:help') %></p>
+          </div>
+          <div class="col-md-3 form-group">
+            <label for="<%- id('maxSplitLineCount') %>"><%- t('settings:maxSplitLineCount') %></label>
+            <input id="<%- id('maxSplitLineCount') %>" name="maxSplitLineCount" class="form-control" type="number" min="0" max="99" step="1" data-object="mrp">
+            <p class="help-block"><%- t('settings:maxSplitLineCount:help') %></p>
+          </div>
         <% } else { %>
           <div class="col-md-3 form-group">
             <label for="<%- id('smallOrderQuantity') %>"><%- t('settings:smallOrderQuantity') %></label>
@@ -169,13 +169,13 @@
         <% } %>
       </div>
       <% if (version === 1) { %>
-      <div class="form-group">
-        <label for="<%- id('hardComponents') %>"><%- t('settings:hardComponents') %></label>
-        <p class="help-block"><%- t('settings:hardComponents:help') %></p>
-        <input id="<%- id('hardComponents') %>" name="hardComponents" type="text" data-object="mrp">
-        <p class="help-block"><%- t('settings:hardBigComponents:help') %></p>
-        <input id="<%- id('hardBigComponents') %>" name="hardBigComponents" type="text" data-object="mrp">
-      </div>
+        <div class="form-group">
+          <label for="<%- id('hardComponents') %>"><%- t('settings:hardComponents') %></label>
+          <p class="help-block"><%- t('settings:hardComponents:help') %></p>
+          <input id="<%- id('hardComponents') %>" name="hardComponents" type="text" data-object="mrp">
+          <p class="help-block"><%- t('settings:hardBigComponents:help') %></p>
+          <input id="<%- id('hardBigComponents') %>" name="hardBigComponents" type="text" data-object="mrp">
+        </div>
       <% } %>
       <div class="form-group">
         <label><%- t('settings:groups') %></label>

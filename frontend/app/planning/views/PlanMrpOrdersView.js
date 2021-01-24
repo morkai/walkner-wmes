@@ -425,7 +425,8 @@ define([
         {
           icon: 'fa-exclamation',
           label: this.t('orders:menu:' + (planOrder.get('urgent') ? 'unurgent' : 'urgent')),
-          handler: this.handleUrgentAction.bind(this, planOrder)
+          handler: this.handleUrgentAction.bind(this, planOrder),
+          visible: version === 1
         },
         {
           icon: 'fa-ban',

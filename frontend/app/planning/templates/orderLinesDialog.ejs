@@ -1,4 +1,4 @@
-<form>
+<form autocomplete="off">
   <div class="form-group">
     <label class="control-label"><%- t('orders:_id') %></label>
     <p class="form-control-static"><%- orderNo %></p>
@@ -11,19 +11,21 @@
     <label class="control-label"><%- t('orders:kind') %></label>
     <p class="form-control-static"><%- t('orderPriority:' + kind) %></p>
   </div>
+  <% if (version === 1) { %>
   <div class="checkbox">
     <label class="control-label">
-      <input id="<%- idPrefix %>-urgent" type="checkbox" value="1" <%- urgent ? 'checked' : '' %>>
+      <input id="<%- id('urgent') %>" type="checkbox" value="1" <%- urgent ? 'checked' : '' %>>
       <%- t('orders:menu:lines:urgent') %>
     </label>
     <p class="help-block"><%- t('orders:menu:lines:urgent:help') %></p>
   </div>
+  <% } %>
   <div class="form-group">
     <label class="control-label"><%- t('orders:lines') %></label>
-    <input id="<%- idPrefix %>-lines" name="lines" type="text" autocomplete="new-password" value="">
+    <input id="<%- id('lines') %>" name="lines" type="text" value="">
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
       <span><%- t('orders:menu:lines:submit') %></span>
     </button>

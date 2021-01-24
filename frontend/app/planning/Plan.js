@@ -237,6 +237,11 @@ define([
 
     canFreezeOrders: function()
     {
+      if (this.settings.getVersion() > 1)
+      {
+        return false;
+      }
+
       if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
       {
         return true;
@@ -255,22 +260,15 @@ define([
       return this.lines.some(function(line) { return line.getFrozenOrderCount() > 0; });
     },
 
+    // TODO Remove
     canChangeDropZone: function()
     {
-      return false && user.isAllowedTo(
-        'ORDERS:MANAGE',
-        'PLANNING:PLANNER', 'PLANNING:WHMAN',
-        'FN:master', 'FN:leader'
-      );
+      return false;
     },
 
     canChangeWhDropZone: function()
     {
-      return false && user.isAllowedTo(
-        'ORDERS:MANAGE',
-        'PLANNING:PLANNER',
-        'FN:master', 'FN:leader'
-      );
+      return false;
     },
 
     canChangeWhStatus: function()

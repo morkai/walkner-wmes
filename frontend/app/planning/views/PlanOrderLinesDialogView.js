@@ -40,14 +40,11 @@ define([
         }
 
         var availableLines = this.serializeLines()
-          .filter(function(item) { return !item.disabled; })
-          .map(function(item) { return item.id; });
+          .filter(item => !item.disabled)
+          .map(item => item.id);
         var selectedLines = this.$id('lines').select2('data');
 
-        this.$id('lines').select2('data', selectedLines.filter(function(item)
-        {
-          return _.includes(availableLines, item.id);
-        }));
+        this.$id('lines').select2('data', selectedLines.filter(item => _.includes(availableLines, item.id)));
       }
 
     },
@@ -57,6 +54,7 @@ define([
       var order = this.order;
 
       return {
+        version: this.plan.settings.getVersion(),
         orderNo: order.id,
         mrp: order.get('mrp'),
         kind: order.get('kind'),
@@ -68,10 +66,10 @@ define([
     {
       this.setUpLinesSelect2();
 
-      this.$id('lines').select2('data', (this.order.get('lines') || []).map(function(id)
+      this.$id('lines').select2('data', (this.order.get('lines') || []).map(id =>
       {
         return {
-          id: id,
+          id,
           text: id
         };
       }));
@@ -90,47 +88,55 @@ define([
     serializeLines: function()
     {
       var kind = this.order.get('kind');
-      var urgent = this.$id('urgent').prop('checked');
+      var urgent = !!this.$id('urgent').prop('checked');
+
+      if (this.plan.settings.getVersion() > 1)
+      {
+        urgent = true;
+      }
 
       return this.plan.settings.mrps.get(this.order.get('mrp')).lines
-        .map(function(mrpLineSettings)
+        .map(mrpLineSettings =>
         {
           return {
             id: mrpLineSettings.id,
             text: mrpLineSettings.id,
             disabled: !urgent && !_.includes(mrpLineSettings.get('orderPriority'), kind)
           };
-        });
+        })
+        .sort((a, b) => a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true}));
     },
 
     submitForm: function()
     {
-      var view = this;
-      var $submit = view.$id('submit').prop('disabled', true);
+      var $submit = this.$id('submit').prop('disabled', true);
       var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
 
-      var req = view.ajax({
+      viewport.msg.saving();
+
+      var req = this.ajax({
         method: 'PATCH',
-        url: '/planning/plans/' + view.plan.id + '/orders/' + view.order.id,
+        url: '/planning/plans/' + this.plan.id + '/orders/' + this.order.id,
         data: JSON.stringify({
-          urgent: this.$id('urgent').prop('checked'),
-          lines: this.$id('lines').val().split(',').filter(function(v) { return v.length > 0; })
+          urgent: !!this.$id('urgent').prop('checked'),
+          lines: this.$id('lines').val().split(',').filter(v => !!v.length)
         })
       });
 
-      req.done(viewport.closeDialog);
-      req.fail(function()
+      req.done(() =>
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
+
+      req.fail(() =>
       {
         $spinner.addClass('hidden');
         $submit.prop('disabled', false);
 
-        viewport.msg.show({
-          type: 'error',
-          time: 3000,
-          text: view.t('orders:menu:lines:failure')
-        });
+        viewport.msg.savingFailed();
 
-        view.plan.settings.trigger('errored');
+        this.plan.settings.trigger('errored');
       });
     },
 
