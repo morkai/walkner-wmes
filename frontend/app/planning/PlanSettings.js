@@ -59,7 +59,8 @@ define([
         hardBigComponents: [],
         hardComponents: [],
         lines: [],
-        groups: []
+        groups: [],
+        linePriority: []
       };
     },
 

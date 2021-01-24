@@ -38,10 +38,7 @@ define([
 
       'change input': function()
       {
-        if (viewport.currentDialog)
-        {
-          viewport.$dialog.modal('adjustBackdrop');
-        }
+        viewport.adjustDialogBackdrop();
       },
 
       'click a[data-action="copy"]': function(e)
@@ -87,7 +84,7 @@ define([
       var view = this;
 
       return {
-        lines: view.mrp.lines.map(function(line)
+        lines: view.mrp.getSortedLines().map(function(line)
         {
           return {
             _id: line.id,

@@ -1,13 +1,31 @@
 <form>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-line" class="control-label"><%- t('planning', 'lines:menu:mrpPriority:line') %></label>
-    <input id="<%- idPrefix %>-line" type="text" autocomplete="new-password" placeholder="<%- t('planning', 'lines:menu:mrpPriority:line:placeholder') %>">
-  </div>
-  <div id="<%- idPrefix %>-lines"></div>
+  <table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+      <th class="is-min text-center">#</th>
+      <th><%- t('lines:menu:mrpPriority:line') %></th>
+      <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+    </tr>
+    </thead>
+    <tbody id="<%- id('lines') %>">
+    <tr>
+      <td class="is-min text-right"></td>
+      <td></td>
+      <td class="actions">
+        <div class="actions-group">
+          <button data-action="up" class="btn btn-default" type="button"><i class="fa fa-arrow-up"></i></button>
+          <button data-action="down" class="btn btn-default" type="button"><i class="fa fa-arrow-down"></i></button>
+          <button data-action="remove" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <input id="<%- id('line') %>" type="text" placeholder="<%- t('lines:menu:mrpPriority:line:placeholder') %>">
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
-      <span><%- t('planning', 'lines:menu:mrpPriority:submit') %></span>
+      <span><%- t('lines:menu:mrpPriority:submit') %></span>
     </button>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>

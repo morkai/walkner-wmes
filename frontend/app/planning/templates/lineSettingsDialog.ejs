@@ -21,6 +21,11 @@
     <p class="help-block"><%- t('settings:activeTime:help') %></p>
   </div>
   <div class="form-group">
+    <label for="<%- id('extraCapacity') %>" class="control-label"><%- t('settings:extraCapacity') %></label>
+    <input id="<%- id('extraCapacity') %>" name="extraCapacity" class="form-control" type="text" value="<%- extraCapacity %>" placeholder="0" pattern="^[0-9]{1,3}%?$">
+    <p class="help-block"><%- t('settings:extraCapacity:help') %></p>
+  </div>
+  <div class="form-group">
     <label for="<%- id('workerCount1') %>" class="control-label"><%- t('settings:workerCount') %></label>
     <div class="planning-lineSettings-workerCount">
       <% [1, 2, 3].forEach(function(shiftNo) { %>

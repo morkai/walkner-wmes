@@ -40,10 +40,7 @@ define([
           .removeClass('fa-chevron-down fa-chevron-right')
           .addClass($table.hasClass('hidden') ? 'fa-chevron-right' : 'fa-chevron-down');
 
-        if (viewport.$dialog)
-        {
-          viewport.$dialog.modal('adjustBackdrop');
-        }
+        viewport.adjustDialogBackdrop();
       },
       'click td[data-action="setStartTime"]': function(e)
       {

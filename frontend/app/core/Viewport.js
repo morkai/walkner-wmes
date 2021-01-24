@@ -406,6 +406,14 @@ define([
     this.closeDialog();
   };
 
+  Viewport.prototype.adjustDialogBackdrop = function()
+  {
+    if (this.currentDialog)
+    {
+      this.$dialog.modal('adjustBackdrop');
+    }
+  };
+
   Viewport.prototype.setLayout = function(layoutName)
   {
     if (layoutName === this.currentLayoutName)

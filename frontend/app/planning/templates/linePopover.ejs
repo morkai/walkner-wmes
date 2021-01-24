@@ -8,10 +8,15 @@
     <th><%- t('lines:prodFlow') %></th>
     <td><span class="planning-mrp-popover-value"><%= line.prodFlow %></span></td>
   </tr>
-  <% if (line.activeTime !== '06:00-06:00') { %>
+  <% if (line.activeTime !== '06:00-06:00' || line.extraCapacity !== '0') { %>
   <tr>
     <th><%- t('lines:activeTime') %></th>
-    <td><%= line.activeTime %></td>
+    <td>
+      <%= line.activeTime %>
+      <% if (line.extraCapacity !== '0') { %>
+      +<%= line.extraCapacity %>
+      <% } %>
+    </td>
   </tr>
   <% } %>
   <tr>

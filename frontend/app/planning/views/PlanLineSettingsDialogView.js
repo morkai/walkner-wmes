@@ -40,10 +40,7 @@ define([
 
       'change #-orderGroupPriority': function()
       {
-        if (viewport.currentDialog)
-        {
-          viewport.$dialog.modal('adjustBackdrop');
-        }
+        viewport.adjustDialogBackdrop();
       }
 
     },
@@ -82,7 +79,8 @@ define([
           .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
           .join(', '),
         workerCount: mrpLineSettings.get('workerCount'),
-        orderPriority: mrpLineSettings.get('orderPriority').join(',')
+        orderPriority: mrpLineSettings.get('orderPriority').join(','),
+        extraCapacity: lineSettings.get('extraCapacity') || '0'
       };
     },
 
@@ -177,16 +175,20 @@ define([
 
       var settings = view.plan.settings;
       var lineSettings = view.line.settings;
+      var extraCapacity = this.$id('extraCapacity').val().trim() || '0';
+
+      if (extraCapacity === '0%')
+      {
+        extraCapacity = '0';
+      }
 
       lineSettings.set({
         mrpPriority: view.$id('mrpPriority').val().split(','),
-        orderGroupPriority: (view.$id('orderGroupPriority').val() || '')
-          .split(',')
-          .filter(function(v) { return !!v; }),
+        orderGroupPriority: (view.$id('orderGroupPriority').val() || '').split(',').filter(v => !!v),
         activeTime: view.$id('activeTime')
           .val()
           .split(',')
-          .map(function(activeTime)
+          .map(activeTime =>
           {
             var parts = activeTime.trim().split('-');
 
@@ -195,21 +197,16 @@ define([
               to: parts[1]
             };
           })
-          .filter(function(activeTime)
-          {
-            return !!activeTime.from && !!activeTime.to;
-          })
+          .filter(activeTime => !!activeTime.from && !!activeTime.to),
+        extraCapacity
       });
 
       var newMrpPriority = lineSettings.get('mrpPriority');
       var orderPriority = view.$id('orderPriority').val().split(',');
       var applyToAllMrps = view.$id('applyToAllMrps').prop('checked');
-      var workerCount = [1, 2, 3].map(function(shiftNo)
-      {
-        return Math.max(0, +view.$id('workerCount' + shiftNo).val() || 0);
-      });
+      var workerCount = [1, 2, 3].map(shiftNo => Math.max(0, +view.$id(`workerCount${shiftNo}`).val() || 0));
 
-      newMrpPriority.forEach(function(mrpId)
+      newMrpPriority.forEach(mrpId =>
       {
         var mrpSettings = settings.mrps.get(mrpId);
 
@@ -234,19 +231,22 @@ define([
         }
       });
 
+      viewport.msg.saving();
+
       var req = view.plan.settings.save();
 
-      req.done(viewport.closeDialog);
-      req.fail(function()
+      req.done(() =>
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
+
+      req.fail(() =>
       {
         $spinner.addClass('hidden');
         $submit.prop('disabled', false);
 
-        viewport.msg.show({
-          type: 'error',
-          time: 3000,
-          text: view.t('lines:menu:remove:failure')
-        });
+        viewport.msg.savingFailed();
 
         view.plan.settings.trigger('errored');
       });

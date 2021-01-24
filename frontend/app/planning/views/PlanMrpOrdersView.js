@@ -51,6 +51,8 @@ define([
 
     template: ordersTemplate,
 
+    modelProperty: 'plan',
+
     events: {
       'mouseenter .is-order': function(e)
       {
@@ -152,9 +154,9 @@ define([
     getTemplateData: function()
     {
       return {
-        showEditButton: this.isEditable(),
-        actionLabel: t('planning', 'orders:add'),
-        hdLabel: t('planning', 'orders:hd'),
+        showEditButton: this.isEditable() && this.plan.settings.getVersion() === 1,
+        actionLabel: this.t('orders:add'),
+        hdLabel: this.t('orders:hd'),
         orders: this.serializeOrders(),
         icons: true
       };
@@ -365,7 +367,7 @@ define([
         }
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:add:title'));
+      viewport.showDialog(dialogView, this.t('orders:add:title'));
     },
 
     isEditable: function()
@@ -385,6 +387,7 @@ define([
 
     showMenu: function(e)
     {
+      var version = this.plan.settings.getVersion();
       var planOrder = this.mrp.orders.get(this.$(e.currentTarget).attr('data-id'));
       var menu = [
         contextMenu.actions.sapOrder(planOrder.id)
@@ -396,7 +399,7 @@ define([
       {
         menu.push({
           icon: 'fa-file-text-o',
-          label: t('planning', 'orders:menu:shiftOrder'),
+          label: this.t('orders:menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, planOrder)
         });
       }
@@ -410,30 +413,32 @@ define([
       {
         menu.push({
           icon: 'fa-sort-numeric-desc',
-          label: t('planning', 'orders:menu:quantity'),
-          handler: this.handleQuantityAction.bind(this, planOrder)
+          label: this.t('orders:menu:quantity'),
+          handler: this.handleQuantityAction.bind(this, planOrder),
+          visible: version === 1
         },
         {
           icon: 'fa-thumb-tack',
-          label: t('planning', 'orders:menu:lines'),
+          label: this.t('orders:menu:lines'),
           handler: this.handleLinesAction.bind(this, planOrder)
         },
         {
           icon: 'fa-exclamation',
-          label: t('planning', 'orders:menu:' + (planOrder.get('urgent') ? 'unurgent' : 'urgent')),
+          label: this.t('orders:menu:' + (planOrder.get('urgent') ? 'unurgent' : 'urgent')),
           handler: this.handleUrgentAction.bind(this, planOrder)
         },
         {
           icon: 'fa-ban',
-          label: t('planning', 'orders:menu:' + (planOrder.get('ignored') ? 'unignore' : 'ignore')),
-          handler: this.handleIgnoreAction.bind(this, planOrder)
+          label: this.t('orders:menu:' + (planOrder.get('ignored') ? 'unignore' : 'ignore')),
+          handler: this.handleIgnoreAction.bind(this, planOrder),
+          visible: version === 1
         });
 
         if (planOrder.get('source') === 'added')
         {
           menu.push({
             icon: 'fa-times',
-            label: t('planning', 'orders:menu:remove'),
+            label: this.t('orders:menu:remove'),
             handler: this.handleRemoveAction.bind(this, planOrder)
           });
         }
@@ -443,7 +448,7 @@ define([
       {
         menu.push({
           icon: 'fa-level-down',
-          label: t('planning', 'orders:menu:dropZone'),
+          label: this.t('orders:menu:dropZone'),
           handler: this.handleDropZoneAction.bind(this, planOrder)
         });
       }
@@ -476,7 +481,7 @@ define([
         order: planOrder
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:quantity:title'));
+      viewport.showDialog(dialogView, this.t('orders:menu:quantity:title'));
     },
 
     handleLinesAction: function(planOrder)
@@ -487,7 +492,7 @@ define([
         order: planOrder
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:lines:title'));
+      viewport.showDialog(dialogView, this.t('orders:menu:lines:title'));
     },
 
     handleUrgentAction: function(planOrder)
@@ -521,7 +526,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('planning', 'orders:menu:urgent:failure')
+            text: view.t('orders:menu:urgent:failure')
           });
 
           view.plan.settings.trigger('errored');
@@ -530,7 +535,7 @@ define([
         });
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:urgent:title'));
+      viewport.showDialog(dialogView, view.t('orders:menu:urgent:title'));
     },
 
     handleIgnoreAction: function(planOrder)
@@ -563,7 +568,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('planning', 'orders:menu:ignore:failure')
+            text: view.t('orders:menu:ignore:failure')
           });
 
           view.plan.settings.trigger('errored');
@@ -572,7 +577,7 @@ define([
         });
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:ignore:title'));
+      viewport.showDialog(dialogView, view.t('orders:menu:ignore:title'));
     },
 
     handleRemoveAction: function(planOrder)
@@ -601,7 +606,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('planning', 'orders:menu:remove:failure')
+            text: view.t('orders:menu:remove:failure')
           });
 
           view.plan.settings.trigger('errored');
@@ -610,7 +615,7 @@ define([
         });
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:remove:title'));
+      viewport.showDialog(dialogView, view.t('orders:menu:remove:title'));
     },
 
     handleDropZoneAction: function(planOrder)
@@ -621,7 +626,7 @@ define([
         order: planOrder
       });
 
-      viewport.showDialog(dialogView, t('planning', 'orders:menu:dropZone:title'));
+      viewport.showDialog(dialogView, this.t('orders:menu:dropZone:title'));
     },
 
     onOrdersChanged: function()
@@ -707,7 +712,7 @@ define([
 
         $order
           .find('.planning-mrp-list-property-psStatus')
-          .attr('title', t('planning', 'orders:psStatus:' + psStatus))
+          .attr('title', this.t('orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
       }
     },
@@ -722,7 +727,7 @@ define([
 
         $order
           .find('.planning-mrp-list-property-whStatus')
-          .attr('title', t('planning', 'orders:whStatus:' + whStatus))
+          .attr('title', this.t('orders:whStatus:' + whStatus))
           .attr('data-wh-status', whStatus);
       }
     },

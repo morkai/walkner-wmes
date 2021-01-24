@@ -59,7 +59,7 @@ define([
 
       return {
         idPrefix: view.idPrefix,
-        lines: view.mrp.lines.map(function(line)
+        lines: view.mrp.getSortedLines().map(function(line)
         {
           var lineMrpSettings = line.mrpSettings(view.mrp.id);
 

@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'Sortable',
   'app/i18n',
   'app/user',
   'app/viewport',
@@ -13,6 +14,7 @@ define([
 ], function(
   _,
   $,
+  Sortable,
   t,
   user,
   viewport,
@@ -27,7 +29,7 @@ define([
 
     modelProperty: 'plan',
 
-    template: template,
+    template,
 
     events: {
 
@@ -40,43 +42,97 @@ define([
 
       'change #-line': function(e)
       {
-        this.removeEmptyLines();
         this.addLine(e.added.id);
+
         this.$id('line').select2('val', '');
-        this.toggleSubmit();
+
+        viewport.adjustDialogBackdrop();
       },
 
-      'change input[data-line-id]': function()
+      'click .btn[data-action="remove"]': function(e)
       {
-        this.toggleSubmit();
+        var $tr = this.$(e.target).closest('tr');
+
+        this.removedLines[$tr[0].dataset.id] = true;
+
+        $tr.fadeOut('fast', () =>
+        {
+          $tr.remove();
+          this.recountLines();
+          viewport.adjustDialogBackdrop();
+        });
+      },
+
+      'click .btn[data-action="down"]': function(e)
+      {
+        var $tr = this.$(e.target).closest('tr');
+        var $next = $tr.next();
+
+        if ($next.length)
+        {
+          $tr.insertAfter($next);
+        }
+        else
+        {
+          $tr.insertBefore($tr.parent()[0].firstElementChild);
+        }
+
+        this.recountLines();
+
+        e.currentTarget.focus();
+      },
+
+      'click .btn[data-action="up"]': function(e)
+      {
+        var $tr = this.$(e.target).closest('tr');
+        var $prev = $tr.prev();
+
+        if ($prev.length)
+        {
+          $tr.insertBefore($prev);
+        }
+        else
+        {
+          $tr.insertAfter($tr.parent()[0].lastElementChild);
+        }
+
+        this.recountLines();
+
+        e.currentTarget.focus();
       }
 
     },
 
     initialize: function()
     {
+      this.removedLines = {};
+
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
+    },
+
+    destroy: function()
+    {
+      if (this.sortable)
+      {
+        this.sortable.destroy();
+      }
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        mrp: this.mrp.id
+      };
     },
 
     afterRender: function()
     {
+      this.mrp.getSortedLines().forEach(mrpLine => this.addLine(mrpLine.id));
+
       this.setUpLineSelect2();
+      this.setUpSortable();
 
-      this.mrp.lines.forEach(function(mrpLine) { this.addLine(mrpLine.id); }, this);
-
-      this.toggleSubmit();
-    },
-
-    toggleSubmit: function()
-    {
-      var hasAnyMrp = false;
-
-      this.$('input[data-line-id]').each(function()
-      {
-        hasAnyMrp = hasAnyMrp || this.value.length;
-      });
-
-      this.$id('submit').prop('disabled', !hasAnyMrp);
+      viewport.adjustDialogBackdrop();
     },
 
     setUpLineSelect2: function()
@@ -84,8 +140,8 @@ define([
       var view = this;
       var maxLineLength = 0;
       var lines = orgUnits.getAllByType('prodLine')
-        .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
-        .map(function(prodLine)
+        .filter(prodLine => !prodLine.get('deactivatedAt'))
+        .map(prodLine =>
         {
           if (prodLine.id.length > maxLineLength)
           {
@@ -101,23 +157,23 @@ define([
             locked: disabled
           };
         })
-        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
+        .sort((a, b) => a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true}));
 
       view.$id('line').select2({
         allowClear: true,
         data: lines,
-        matcher: function(term, text, item)
+        matcher: (term, text, item) =>
         {
           term = term.toUpperCase();
 
           return item.id.toUpperCase().indexOf(term) >= 0
             || item.text.toUpperCase().indexOf(term) >= 0;
         },
-        formatSelection: function(item)
+        formatSelection: (item) =>
         {
           return _.escape(item.id) + ': ' + _.escape(item.text);
         },
-        formatResult: function(item)
+        formatResult: (item) =>
         {
           var id = item.id;
 
@@ -139,122 +195,127 @@ define([
       });
     },
 
-    removeEmptyLines: function()
+    setUpSortable: function()
     {
-      this.$('input[data-line-id]').each(function()
+      if (this.sortable)
       {
-        if (this.value === '')
+        this.sortable.destroy();
+      }
+
+      this.sortable = new Sortable(this.$id('lines')[0], {
+        draggable: 'tr',
+        filter: '.actions',
+        ghostClass: 'planning-sortable-ghost',
+        onEnd: () =>
         {
-          $(this).select2('destroy').parent().remove();
+          this.recountLines();
         }
       });
     },
 
     addLine: function(lineId)
     {
-      var view = this;
+      delete this.removedLines[lineId];
 
-      if (view.$id(lineId).select2('focus').length)
+      var $lines = this.$id('lines');
+
+      if ($lines.find('tr[data-id="' + lineId + '"]').length)
       {
         return;
       }
 
-      var lineSettings = view.plan.settings.lines.get(lineId);
-      var mrpPriority = lineSettings ? lineSettings.get('mrpPriority').concat([]) : [];
-
-      if (!_.includes(mrpPriority, view.mrp.id))
+      if (!this.$rowTemplate)
       {
-        mrpPriority.push(view.mrp.id);
+        this.$rowTemplate = $lines.children().first().detach();
       }
 
-      var id = view.idPrefix + '-' + lineId;
-      var $group = $('<div class="form-group"></div>');
-      var $label = $('<label></label>').attr('for', id).text(lineId);
-      var $input = $('<input type="text" autocomplete="new-password">')
-        .attr('id', id)
-        .attr('data-line-id', lineId)
-        .val(mrpPriority.join(','));
+      var $row = this.$rowTemplate.clone().attr('data-id', lineId);
 
-      $group.append($label).append($input).appendTo(view.$id('lines'));
+      $row[0].children[0].textContent = ($lines[0].childElementCount + 1) + '.';
+      $row[0].children[1].textContent = lineId;
 
-      view.setUpMrpPriority($input, true);
+      $lines.append($row);
     },
 
-    setUpMrpPriority: function($input, focus)
+    recountLines: function()
     {
-      var view = this;
-      var lineId = $input.attr('data-line-id');
-
-      setUpMrpSelect2($input, {
-        view: view,
-        sortable: true,
-        width: '100%',
-        placeholder: view.t('settings:mrpPriority:placeholder'),
-        itemDecorator: function(item)
-        {
-          item.disabled = view.plan.settings.isMrpLocked(item.id);
-          item.locked = item.disabled;
-
-          if (item.locked)
-          {
-            item.icon = {id: 'fa-lock', color: '#e00'};
-          }
-
-          return item;
-        }
+      this.$id('lines').children().each((i, tr) =>
+      {
+        tr.children[0].textContent = (i + 1) + '.';
       });
-
-      if (view.plan.settings.isLineLocked(lineId))
-      {
-        $input.select2('readonly', true);
-      }
-      else if (focus)
-      {
-        $input.select2('focus');
-      }
     },
 
     submitForm: function()
     {
-      var view = this;
-      var $submit = view.$id('submit').prop('disabled', true);
-      var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
-      var settings = view.plan.settings;
+      viewport.msg.saving();
 
-      view.$('input[data-line-id]').each(function()
+      var $submit = this.$id('submit').prop('disabled', true);
+      var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
+      var settings = this.plan.settings;
+      var linePriority = [];
+
+      this.$('tr[data-id]').each((i, tr) =>
       {
-        var lineId = this.dataset.lineId;
+        var lineId = tr.dataset.id;
         var lineSettings = settings.lines.get(lineId);
-        var mrpPriority = this.value.length ? this.value.split(',') : [];
+
+        linePriority.push(lineId);
 
         if (lineSettings)
         {
-          lineSettings.set('mrpPriority', mrpPriority);
+          var mrpPriority = lineSettings.get('mrpPriority');
+
+          if (!mrpPriority.includes(this.mrp.id))
+          {
+            lineSettings.set('mrpPriority', mrpPriority.concat([this.mrp.id]));
+          }
         }
-        else if (mrpPriority.length)
+        else
         {
           settings.lines.add({
             _id: lineId,
-            mrpPriority: mrpPriority
+            mrpPriority: [this.mrp.id]
           });
         }
       });
 
+      Object.keys(this.removedLines).forEach(lineId =>
+      {
+        var lineSettings = settings.lines.get(lineId);
+
+        if (!lineSettings)
+        {
+          return;
+        }
+
+        var mrpPriority = lineSettings.get('mrpPriority');
+
+        if (!mrpPriority.includes(this.mrp.id))
+        {
+          return;
+        }
+
+        lineSettings.set('mrpPriority', mrpPriority.filter(mrp => mrp !== this.mrp.id));
+      });
+
+      settings.mrps.get(this.mrp.id).set('linePriority', linePriority);
+
       var req = settings.save();
 
-      req.done(viewport.closeDialog);
-      req.fail(function()
+      req.done(() =>
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
+
+      req.fail(() =>
       {
         $spinner.addClass('hidden');
         $submit.prop('disabled', false);
 
-        viewport.msg.show({
-          type: 'error',
-          time: 3000,
-          text: view.t('lines:menu:mrpPriority:failure')
-        });
+        viewport.msg.savingFailed();
 
-        view.plan.settings.trigger('errored');
+        this.plan.settings.trigger('errored');
       });
     },
 

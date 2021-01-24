@@ -26,6 +26,12 @@ define([
     getNextStartTime: function(planLine)
     {
       var shiftData = planLine.get('shiftData');
+
+      if (!shiftData)
+      {
+        return [0, 0, 0, 0];
+      }
+
       var workingLine = this.get(planLine.id);
 
       return shiftData.map(function(data, shiftNo)
@@ -50,6 +56,12 @@ define([
     getPrevFinishTime: function(planLine)
     {
       var shiftData = planLine.get('shiftData');
+
+      if (!shiftData)
+      {
+        return [0, 0, 0, 0];
+      }
+
       var workingLine = this.get(planLine.id);
 
       return shiftData.map(function(data, shiftNo)

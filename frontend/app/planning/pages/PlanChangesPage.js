@@ -8,6 +8,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/templates/userInfo',
   'app/orderStatuses/util/renderOrderStatusLabel',
+  'app/planning-orderGroups/OrderGroupCollection',
   'app/planning/templates/change',
   'app/planning/templates/orderPopover'
 ], function(
@@ -18,6 +19,7 @@ define([
   bindLoadingMessage,
   renderUserInfo,
   renderOrderStatusLabel,
+  OrderGroupCollection,
   changeTemplate,
   orderPopoverTemplate
 ) {
@@ -31,7 +33,7 @@ define([
     {
       return [
         {
-          label: t.bound('planning', 'BREADCRUMB:base'),
+          label: this.t('BREADCRUMB:base'),
           href: '#planning/plans'
         },
         {
@@ -39,7 +41,7 @@ define([
           href: '#planning/plans/' + this.collection.getDate('YYYY-MM-DD')
         },
         {
-          label: t.bound('planning', 'BREADCRUMB:changes')
+          label: this.t('BREADCRUMB:changes')
         }
       ];
     },
@@ -105,6 +107,7 @@ define([
           trigger: 'hover',
           html: true,
           placement: 'top',
+          className: 'planning-mrp-popover',
           content: orderPopoverTemplate({
             order: {
               _id: order.id,
@@ -120,11 +123,7 @@ define([
               laborTime: order.operation && order.operation.laborTime || 0,
               lines: order.lines || []
             }
-          }),
-          template: '<div class="popover planning-mrp-popover">'
-          + '<div class="arrow"></div>'
-          + '<div class="popover-content"></div>'
-          + '</div>'
+          })
         }).popover('show');
       },
 
@@ -138,12 +137,12 @@ define([
         var changes = view.collection.get(changeId).get('data').changedOrders[changeI].changes;
         var content = '<table>';
 
-        Object.keys(changes).forEach(function(property)
+        Object.keys(changes).forEach(property =>
         {
           var oldValue = view.formatValue(property, changes[property][0]);
           var newValue = view.formatValue(property, changes[property][1]);
 
-          content += '<tr><th>' + t('planning', 'orders:' + property) + '</th>'
+          content += '<tr><th>' + this.t('orders:' + property) + '</th>'
             + '<td>' + oldValue
             + ' <i class="fa fa-arrow-right"></i> '
             + (property === 'statuses' || property === 'operation' ? '<br>' : '')
@@ -157,11 +156,8 @@ define([
           trigger: 'hover',
           html: true,
           placement: 'top',
-          content: content,
-          template: '<div class="popover planning-mrp-popover">'
-          + '<div class="arrow"></div>'
-          + '<div class="popover-content"></div>'
-          + '</div>'
+          className: 'planning-mrp-popover',
+          content: content
         }).popover('show');
       }
 
@@ -172,13 +168,17 @@ define([
       this.expanded = {};
 
       this.collection = bindLoadingMessage(this.collection, this);
+      this.orderGroups = bindLoadingMessage(new OrderGroupCollection(null, {rqlQuery: 'limit(0)'}), this);
 
       this.listenTo(this.collection, 'add', this.renderChange);
     },
 
     load: function(when)
     {
-      return when(this.collection.fetch({reset: true}));
+      return when(
+        this.orderGroups.fetch({reset: true}),
+        this.collection.fetch({reset: true})
+      );
     },
 
     afterRender: function()
@@ -190,19 +190,19 @@ define([
     {
       var data = change.get('data');
       var what = Object.keys(data)
-        .map(function(type)
+        .map(type =>
         {
           return {
-            type: type,
-            label: t('planning', 'changes:what:' + type, {count: data[type].length})
+            type,
+            label: this.t('changes:what:' + type, {count: data[type].length})
           };
         });
       var templateData = {
         id: change.id,
-        hd: t('planning', 'changes:hd', {
+        hd: this.t('changes:hd', {
           when: time.format(change.get('date'), 'LL LTS'),
-          who: renderUserInfo({userInfo: change.get('user') || {label: 'System'}}),
-          what: what.map(function(d) { return d.label; }).join(', ')
+          who: renderUserInfo(change.get('user') || {label: 'System'}),
+          what: what.map(d => d.label).join(', ')
         }),
         what: what
       };
@@ -242,7 +242,7 @@ define([
 
     renderOrders: function(type, $bd, orders)
     {
-      var html = orders.map(function(order, i)
+      var html = orders.map((order, i) =>
       {
         return '<a class="label label-default planning-change-' + type + '" href="#orders/' + order._id + '"'
           + ' target="_blank" data-i="' + i + '">'
@@ -255,14 +255,14 @@ define([
 
     renderRemovedOrders: function($bd, removedOrders)
     {
-      var html = removedOrders.map(function(removedOrder)
+      var html = removedOrders.map(removedOrder =>
       {
         var label = removedOrder.reason === 'REQUIRED_STATUS'
           ? 'success'
           : removedOrder.reason === 'IGNORED_STATUS'
             ? 'danger'
             : 'default';
-        var title = t('planning', 'changes:removedOrders:' + removedOrder.reason, removedOrder.data);
+        var title = this.t(`changes:removedOrders:${removedOrder.reason}`, removedOrder.data);
 
         return '<a class="label label-' + label + '" title="' + title + '" '
           + 'href="#orders/' + removedOrder._id + '" target="_blank">'
@@ -291,7 +291,7 @@ define([
         case 'change':
           html.push(
             '<li><i class="fa fa-minus planning-change-icon"></i> ',
-            t('planning', 'settings:' + change.property) + ': ',
+            this.t('settings:' + change.property) + ': ',
             this.formatValue(change.property, change.oldValue),
             ' <i class="fa fa-arrow-right"></i> ',
             this.formatValue(change.property, change.newValue),
@@ -304,10 +304,10 @@ define([
         case 'mrpLines:change':
           html.push(
             '<li><i class="fa fa-minus planning-change-icon"></i> ',
-            t('planning', 'changes:settings:' + change.type, {
+            this.t('changes:settings:' + change.type, {
               mrp: change.mrp && change.mrp._id || change.mrp,
               line: change.line && change.line._id || change.line,
-              property: t('planning', 'settings:' + change.property)
+              property: this.t('settings:' + change.property)
             }),
             this.formatValue(change.property, change.oldValue),
             ' <i class="fa fa-arrow-right"></i> ',
@@ -319,7 +319,7 @@ define([
         default:
           html.push(
             '<li><i class="fa fa-minus planning-change-icon"></i> ',
-            t('planning', 'changes:settings:' + change.type, {
+            this.t('changes:settings:' + change.type, {
               mrp: change.mrp && change.mrp._id || change.mrp,
               line: change.line && change.line._id || change.line
             }),
@@ -343,19 +343,19 @@ define([
 
       if (typeof value === 'boolean')
       {
-        return t('core', 'BOOL:' + value);
+        return t('core', `BOOL:${value}`);
       }
 
       switch (property)
       {
         case 'kind':
-          return t('planning', 'orderPriority:' + value);
+          return this.t(`orderPriority:${value}`);
 
         case 'source':
-          return t('planning', 'orders:source:' + value);
+          return this.t(`orders:source:${value}`);
 
         case 'orderPriority':
-          return value.map(function(v) { return t('planning', 'orderPriority:' + v); }).join(', ');
+          return value.map(v => this.t(`orderPriority:${v}`)).join('; ');
 
         case 'statuses':
         case 'ignoredStatuses':
@@ -366,11 +366,12 @@ define([
         case 'lines':
         case 'extraShiftSeconds':
         case 'mrpPriority':
-          return value.length === 0 ? '-' : value.join(', ');
+        case 'linePriority':
+          return value.length === 0 ? '-' : value.join('; ');
 
         case 'workerCount':
           return Array.isArray(value)
-            ? value.map(function(v) { return v.toLocaleString(); }).join('; ')
+            ? value.map(v => v.toLocaleString()).join('; ')
             : value.toLocaleString();
 
         case 'operation':
@@ -381,8 +382,18 @@ define([
 
         case 'activeTime':
           return value.length === 0 ? '06:00-06:00' : value
-            .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+            .map(activeTime => `${activeTime.from}-${activeTime.to}`)
             .join(', ');
+
+        case 'orderGroupPriority':
+          return value
+            .map(id =>
+            {
+              var orderGroup = this.orderGroups.get(id);
+
+              return orderGroup ? orderGroup.getLabel() : id;
+            })
+            .join('; ');
 
         default:
           return String(value);

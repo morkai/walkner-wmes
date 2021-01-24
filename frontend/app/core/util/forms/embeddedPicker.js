@@ -97,10 +97,7 @@ define([
         $picker.find('.form-embeddedPicker-options')[0].scrollTop = 0;
       }
 
-      if (viewport.currentDialog)
-      {
-        viewport.$dialog.modal('adjustBackdrop');
-      }
+      viewport.adjustDialogBackdrop();
     });
 
     $picker.find('.form-embeddedPicker-filter').on('input', function()
@@ -114,10 +111,7 @@ define([
       $picker.find('.form-embeddedPicker-selected').html(e.currentTarget.innerHTML);
       $picker.removeClass('form-embeddedPicker-selecting');
 
-      if (viewport.currentDialog)
-      {
-        viewport.$dialog.modal('adjustBackdrop');
-      }
+      viewport.adjustDialogBackdrop();
     });
 
     $picker.insertAfter($el);
@@ -130,9 +124,6 @@ define([
 
     $selected.css('width', $selected.outerWidth() + 'px');
 
-    if (viewport.currentDialog)
-    {
-      viewport.$dialog.modal('adjustBackdrop');
-    }
+    viewport.adjustDialogBackdrop();
   };
 });

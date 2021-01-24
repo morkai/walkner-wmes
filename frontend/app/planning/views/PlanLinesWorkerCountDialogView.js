@@ -32,13 +32,12 @@ define([
 
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var view = this;
 
       return {
-        idPrefix: view.idPrefix,
-        lines: view.mrp.lines.map(function(line)
+        lines: view.mrp.getSortedLines().map(function(line)
         {
           var lineMrpSettings = line.mrpSettings(view.mrp.id);
 
@@ -52,6 +51,8 @@ define([
 
     submitForm: function()
     {
+      viewport.msg.saving();
+
       var view = this;
       var $submit = view.$id('submit').prop('disabled', true);
       var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
@@ -74,25 +75,28 @@ define([
           return;
         }
 
-        mrpLineSettings.set('workerCount', view.$(this).find('[data-shift-no]').map(function()
-        {
-          return Math.max(0, +parseFloat(this.value).toFixed(2) || 0);
-        }).get());
+        var workerCount = view.$(this)
+          .find('[data-shift-no]')
+          .map(function() { return Math.max(0, +parseFloat(this.value).toFixed(2) || 0); })
+          .get();
+
+        mrpLineSettings.set('workerCount', workerCount);
       });
 
       var req = settings.save();
 
-      req.done(viewport.closeDialog);
-      req.fail(function()
+      req.done(() =>
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
+
+      req.fail(() =>
       {
         $spinner.addClass('hidden');
         $submit.prop('disabled', false);
 
-        viewport.msg.show({
-          type: 'error',
-          time: 3000,
-          text: t('planning', 'lines:menu:workerCount:failure')
-        });
+        viewport.msg.savingFailed();
 
         view.plan.settings.trigger('errored');
       });

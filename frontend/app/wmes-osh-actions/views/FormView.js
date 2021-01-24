@@ -1166,10 +1166,7 @@ define([
         .closest('.row')
         .toggleClass('hidden', !features.participants);
 
-      if (viewport.$dialog)
-      {
-        viewport.$dialog.modal('adjustBackdrop');
-      }
+      viewport.adjustDialogBackdrop();
     },
 
     toggleRootCausesFeature: function(features)

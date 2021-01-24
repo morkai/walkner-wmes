@@ -44,6 +44,27 @@ define([
       });
 
       return mrpToLines;
+    },
+
+    getSortedByPriority: function(linePriority)
+    {
+      return Array.prototype.slice.call(this.models).sort((a, b) =>
+      {
+        var aPriority = linePriority.indexOf(a.id);
+        var bPriority = linePriority.indexOf(b.id);
+
+        if (aPriority === -1)
+        {
+          aPriority = Number.MAX_SAFE_INTEGER;
+        }
+
+        if (bPriority === -1)
+        {
+          bPriority = Number.MAX_SAFE_INTEGER;
+        }
+
+        return aPriority - bPriority;
+      });
     }
 
   });

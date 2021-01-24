@@ -410,7 +410,7 @@ define([
     {
       if (e.keyCode === 16)
       {
-        this.el.classList.add('unselectable');
+        this.el.classList.add('is-unselectable');
       }
     },
 
@@ -418,7 +418,7 @@ define([
     {
       if (e.keyCode === 16)
       {
-        this.el.classList.remove('unselectable');
+        this.el.classList.remove('is-unselectable');
       }
     },
 

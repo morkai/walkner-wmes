@@ -207,6 +207,11 @@ define([
       });
 
       return stats;
+    },
+
+    getSortedLines: function()
+    {
+      return this.lines.getSortedByPriority(this.settings.get('linePriority') || []);
     }
 
   });

@@ -498,6 +498,8 @@
 		destroy: function () {
 			var el = this.el, options = this.options;
 
+			if (!this.el) return;
+
 			_customEvents.forEach(function (name) {
 				_off(el, name.substr(2).toLowerCase(), options[name]);
 			});

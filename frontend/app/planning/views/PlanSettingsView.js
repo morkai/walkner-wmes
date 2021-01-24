@@ -203,6 +203,7 @@ define([
       this.setUpLineSelect2();
       this.setUpMrpSelect2();
       this.setUpMrpLineSelect2();
+      this.setUpLinePrioritySelect2();
       this.setUpOrderPrioritySelect2();
       this.selectMrp(null);
 
@@ -341,6 +342,7 @@ define([
       });
 
       view.$id('activeTime').prop('disabled', true);
+      view.$id('extraCapacity').prop('disabled', true);
 
       view.setUpMrpPriority();
       view.setUpOrderGroupPriority();
@@ -548,6 +550,74 @@ define([
       $mrpLine.select2('enable', data.length > 0);
     },
 
+    setUpLinePrioritySelect2: function()
+    {
+      var data = [];
+      var selectedMrp = this.$id('mrp').val();
+
+      if (selectedMrp)
+      {
+        var mrpSettings = this.model.mrps.get(selectedMrp);
+        var lines = [].concat(mrpSettings.get('linePriority') || []);
+
+        this.model.lines.forEach(lineSettings =>
+        {
+          if (!lines.includes(lineSettings.id)
+            && lineSettings.get('mrpPriority').includes(selectedMrp))
+          {
+            lines.push(lineSettings.id);
+          }
+        });
+
+        lines.forEach(line =>
+        {
+          data.push({
+            id: line,
+            text: line,
+            locked: true
+          });
+        });
+      }
+
+      var $linePriority = this.$id('linePriority').select2({
+        allowClear: false,
+        multiple: true,
+        dropdownCssClass: 'hidden',
+        data: data.concat([]).sort((a, b) => a.id.localeCompare(b.id, undefined, {
+          numeric: true,
+          ignorePunctuation: true
+        }))
+      });
+
+      if ($linePriority.data('sortable'))
+      {
+        $linePriority.data('sortable').destroy();
+      }
+
+      var choicesEl = $linePriority.select2('container').find('.select2-choices')[0];
+      var sortable = new Sortable(choicesEl, {
+        draggable: '.select2-search-choice',
+        onStart: () =>
+        {
+          $linePriority.select2('onSortStart');
+        },
+        onEnd: () =>
+        {
+          $linePriority.select2('onSortEnd');
+
+          this.saveLinePriority();
+        }
+      });
+
+      $linePriority.data('sortable', sortable);
+
+      this.sortables.push(sortable);
+
+      $linePriority
+        .select2('data', data)
+        .select2('enable', !!selectedMrp.length);
+    },
+
     setUpOrderPrioritySelect2: function()
     {
       var view = this;
@@ -555,7 +625,7 @@ define([
       var $orderPriority = view.$id('orderPriority').select2({
         allowClear: true,
         multiple: true,
-        data: view.model.getAvailableOrderPriorities().map(function(id)
+        data: view.model.getAvailableOrderPriorities().map(id =>
         {
           return {
             id: id,
@@ -581,7 +651,7 @@ define([
         }
       }));
 
-      $orderPriority.on('change', function()
+      $orderPriority.on('change', () =>
       {
         view.saveOrderPriority();
       });
@@ -592,6 +662,7 @@ define([
       var view = this;
       var disabled = !lineId;
       var activeTime = '';
+      var extraCapacity = '';
       var $mrpPriority = view.$id('mrpPriority');
       var $orderGroupPriority = view.$id('orderGroupPriority');
 
@@ -611,10 +682,10 @@ define([
 
         $mrpPriority
           .select2('enable', true)
-          .select2('data', mrpPriority.map(function(id)
+          .select2('data', mrpPriority.map(id =>
           {
             return {
-              id: id,
+              id,
               text: id
             };
           }));
@@ -625,12 +696,12 @@ define([
 
           $orderGroupPriority
             .select2('enable', true)
-            .select2('data', (orderGroupPriority || []).map(function(id)
+            .select2('data', (orderGroupPriority || []).map(id =>
             {
               var group = view.orderGroups.get(id);
 
               return {
-                id: id,
+                id,
                 text: group ? group.getLabel() : id
               };
             }));
@@ -644,6 +715,7 @@ define([
             ? selectedMrp.id
             : mrpPriority[0];
           activeTime = view.buildActiveTime(line.get('activeTime'));
+          extraCapacity = line ? (line.get('extraCapacity') || '') : '';
         }
         else
         {
@@ -669,6 +741,10 @@ define([
       view.$id('activeTime')
         .val(activeTime)
         .prop('disabled', disabled);
+
+      view.$id('extraCapacity')
+        .val(extraCapacity)
+        .prop('disabled', disabled);
     },
 
     selectMrp: function(mrpId, lineId)
@@ -687,7 +763,7 @@ define([
         mrp = mrps.add({_id: mrpId}).get(mrpId);
       }
 
-      (mrp ? mrp.get('extraShiftSeconds') : [0, 0, 0]).forEach(function(v, i)
+      (mrp ? mrp.get('extraShiftSeconds') : [0, 0, 0]).forEach((v, i) =>
       {
         view.$id('extraShiftSeconds-' + (i + 1))
           .val(disabled ? '' : v)
@@ -705,7 +781,7 @@ define([
         'hardOrderManHours',
         'splitOrderQuantity',
         'maxSplitLineCount'
-      ].forEach(function(prop)
+      ].forEach(prop =>
       {
         view.$id(prop)
           .val(disabled ? '' : mrp.get(prop))
@@ -715,7 +791,7 @@ define([
       [
         'hardComponents',
         'hardBigComponents'
-      ].forEach(function(prop)
+      ].forEach(prop =>
       {
         var data = [];
 
@@ -741,6 +817,7 @@ define([
 
       view.$id('addGroup').prop('disabled', disabled);
 
+      view.setUpLinePrioritySelect2();
       view.setUpMrpLineSelect2();
       view.selectMrpLine(mrp, lineId, disabled);
     },
@@ -788,12 +865,13 @@ define([
           mrpPriority: this.$id('mrpPriority')
             .val()
             .split(',')
-            .filter(function(id) { return id.length; }),
+            .filter(id => !!id.length),
           orderGroupPriority: this.$id('orderGroupPriority')
             .val()
             .split(',')
-            .filter(function(id) { return id.length; }),
-          activeTime: this.parseActiveTime(this.$id('activeTime'))
+            .filter(id => !!id.length),
+          activeTime: this.parseActiveTime(this.$id('activeTime')),
+          extraCapacity: this.parseExtraCapacity(this.$id('extraCapacity'))
         });
       }
     },
@@ -804,7 +882,7 @@ define([
         mrpPriority: this.$id('mrpPriority')
           .val()
           .split(',')
-          .filter(function(id) { return id.length; })
+          .filter(id => !!id.length)
       });
 
       this.setUpMrpSelect2();
@@ -816,7 +894,7 @@ define([
         orderGroupPriority: this.$id('orderGroupPriority')
           .val()
           .split(',')
-          .filter(function(id) { return id.length; })
+          .filter(id => !!id.length)
       });
     },
 
@@ -828,16 +906,23 @@ define([
       mrpLine.set('orderPriority', _.pluck(this.$id('orderPriority').select2('data'), 'id'));
     },
 
+    saveLinePriority: function()
+    {
+      var mrp = this.model.mrps.get(this.$id('mrp').val());
+
+      mrp.set('linePriority', _.pluck(this.$id('linePriority').select2('data'), 'id'));
+    },
+
     buildActiveTime: function(activeTimes)
     {
       return (activeTimes || [])
-        .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+        .map(activeTime => activeTime.from + '-' + activeTime.to)
         .join(', ');
     },
 
     parseActiveTime: function($property)
     {
-      var activeTimes = $property.val().split(',').map(function(activeTime)
+      var activeTimes = $property.val().split(',').map(activeTime =>
       {
         var parts = activeTime.trim().split('-');
 
@@ -845,10 +930,7 @@ define([
           from: parseTime(parts[0]),
           to: parseTime(parts[1])
         };
-      }).filter(function(activeTime)
-      {
-        return !!activeTime.from && !!activeTime.to;
-      });
+      }).filter(activeTime => !!activeTime.from && !!activeTime.to);
 
       $property.val(this.buildActiveTime(activeTimes));
 
@@ -872,6 +954,20 @@ define([
 
         return '';
       }
+    },
+
+    parseExtraCapacity: function($property)
+    {
+      var value = ($property.val() || '').trim();
+
+      if (!/^[0-9]{1,3}%?$/.test(value))
+      {
+        value = '0';
+      }
+
+      $property.val(value);
+
+      return value;
     },
 
     serializeToForm: function()
@@ -902,8 +998,8 @@ define([
       var view = this;
       var $groups = view.$id('groups');
 
-      $groups.append(groupTemplate({
-        group: _.assign({no: $groups.children().length + 1}, group)
+      $groups.append(this.renderPartialHtml(groupTemplate, {
+        group: Object.assign({no: $groups.children().length + 1}, group)
       }));
 
       var $group = $groups.children().last();
@@ -914,8 +1010,8 @@ define([
         multiple: true,
         data: this.lines,
         matcher: idAndTextMatcher,
-        formatSelection: function(item) { return _.escape(item.id); },
-        formatResult: function(item)
+        formatSelection: item => _.escape(item.id),
+        formatResult: item =>
         {
           var id = item.id;
 
@@ -924,7 +1020,11 @@ define([
             id += ' ';
           }
 
-          return '<small><span class="text-mono">' + id.replace(/ /g, '&nbsp;') + '</span>: ' + item.text + '</small>';
+          return '<small><span class="text-mono">'
+            + id.replace(/ /g, '&nbsp;')
+            + '</span>: '
+            + item.text
+            + '</small>';
         }
       });
 
@@ -932,7 +1032,7 @@ define([
 
       view.setUpComponentsSelect2($components);
 
-      $components.select2('data', group.components.map(function(c)
+      $components.select2('data', group.components.map(c =>
       {
         return {
           id: c,
@@ -1030,6 +1130,7 @@ define([
         case 'hardComponents':
         case 'hardBigComponents':
         case 'orderPriority':
+        case 'linePriority':
           v = $property.val().split(',').filter(function(v) { return v.length > 0; });
           break;
 
@@ -1104,6 +1205,10 @@ define([
 
         case 'activeTime':
           v = this.parseActiveTime($property);
+          break;
+
+        case 'extraCapacity':
+          v = this.parseExtraCapacity($property);
           break;
 
         default:

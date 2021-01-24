@@ -95,7 +95,7 @@ define([
 
       return {
         showEditButton: view.isEditable(),
-        lines: view.mrp.lines.map(function(line)
+        lines: view.mrp.getSortedLines().map(function(line)
         {
           return {
             _id: line.id,
@@ -104,9 +104,6 @@ define([
             customTimes: view.serializeActiveTime(line, false),
             frozenOrders: line.getFrozenOrderCount()
           };
-        }).sort(function(a, b)
-        {
-          return a._id.localeCompare(b._id, undefined, {numeric: true, ignorePunctuation: true});
         })
       };
     },
@@ -194,6 +191,7 @@ define([
           prodFlow: prodFlow,
           prodLine: prodLine,
           activeTime: view.serializeActiveTime(line, true),
+          extraCapacity: line.settings ? line.settings.get('extraCapacity') : '0',
           workerCount: view.serializeWorkerCount(line),
           mrpPriority: line.settings ? line.settings.get('mrpPriority').join(', ') : '?',
           orderPriority: !lineMrpSettings
@@ -240,7 +238,6 @@ define([
       if (!whLine)
       {
         return null;
-        this.listenTo(this.plan.whLines, 'add remove change:redirLine', this.onWhLineChanged);
       }
 
       var redirLine = this.plan.whLines.get(whLine.get('redirLine'));
@@ -384,7 +381,7 @@ define([
         mrp: this.mrp
       });
 
-      viewport.showDialog(dialogView, this.t('lines:menu:mrpPriority:title'));
+      viewport.showDialog(dialogView, this.t('lines:menu:mrpPriority:title', {mrp: this.mrp.id}));
     },
 
     handleWorkerCountAction: function()
