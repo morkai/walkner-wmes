@@ -2775,6 +2775,8 @@ app/wmes-osh-reports/templates/engagement/filter.js
 app/wmes-osh-reports/views/EngagementFilterView.js
 app/wmes-osh-reports/templates/engagement/orgUnits.js
 app/wmes-osh-reports/views/EngagementOrgUnitsView.js
+app/wmes-osh-reports/templates/engagement/brigades.js
+app/wmes-osh-reports/views/EngagementBrigadesView.js
 app/wmes-osh-reports/templates/engagement/users.js
 app/wmes-osh-reports/views/EngagementUsersView.js
 app/wmes-osh-reports/templates/engagement/page.js

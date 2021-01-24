@@ -5,8 +5,8 @@
   "version": "0.156.0",
   "updater": {
     "wmes": {
-      "backend": 638,
-      "frontend": 793,
+      "backend": 639,
+      "frontend": 794,
       "reports": 138,
       "attachments": 3,
       "importer-sap": 68,
@@ -38,9 +38,10 @@
       "importer": 2
     },
     "pila": {
-      "backend": 15,
-      "frontend": 14,
-      "reports": 5
+      "backend": 17,
+      "frontend": 18,
+      "reports": 7,
+      "watchdog": 1
     }
   },
   "description": "Wannabe MES application in Node.js.",
@@ -61,7 +62,7 @@
   },
   "main": "./backend/main",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "axon": "^2.0.3",
     "bcrypt": "5.0.0",
     "body-parser": "^1.19.0",
