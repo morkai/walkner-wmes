@@ -110,6 +110,7 @@ exports.modules = [
   'wmes-clients',
   'wmes-dummyPaint',
   'wmes-compRel',
+  'wmes-gft-frontend',
   'h5-currencyRates',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
