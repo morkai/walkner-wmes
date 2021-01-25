@@ -117,21 +117,27 @@ define([
 
     setUpOrderGroupPriority: function()
     {
-      var view = this;
-      var $input = view.$id('orderGroupPriority').select2({
+      var $input = this.$id('orderGroupPriority');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
+      $input.select2({
         allowClear: true,
         multiple: true,
-        data: view.orderGroups.map(idAndLabel)
+        data: this.orderGroups.map(idAndLabel)
       });
 
-      view.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
+      this.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
-        onStart: function()
+        onStart: () =>
         {
           $input.select2('onSortStart');
         },
-        onEnd: function()
+        onEnd: () =>
         {
           $input.select2('onSortEnd').select2('focus');
         }

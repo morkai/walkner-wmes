@@ -396,9 +396,9 @@ define([
         return;
       }
 
-      var $tip = $(this.popover.el).data('bs.popover').$tip;
+      var popover = $(this.popover.el).data('bs.popover');
 
-      if (!$tip)
+      if (!popover || !popover.$tip)
       {
         return;
       }
@@ -408,7 +408,7 @@ define([
         this.canManage() && this.popover.item.ended
       );
 
-      $tip.find('.popover-content').html(html);
+      popover.$tip.find('.popover-content').html(html);
     },
 
     serializeDatum: function()
