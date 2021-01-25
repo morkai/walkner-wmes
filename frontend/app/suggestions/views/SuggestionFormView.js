@@ -532,17 +532,7 @@ define([
       }
       else
       {
-        formData.coordSections = this.$id('coordSections').select2('data').map(function(item)
-        {
-          return {
-            _id: item.id,
-            name: item.text,
-            status: 'pending',
-            user: null,
-            time: null,
-            comment: ''
-          };
-        });
+        formData.coordSections = [];
       }
 
       if (formData.status === 'kom')
