@@ -27,10 +27,12 @@
         <%- t('files:components') %>
         <i class="fa fa-question-circle"></i>
       </span>
-      <a id="<%- id('components-addByName-toggle') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('files:components:addByName') %></a>
+      <a id="<%- id('components-addByName-toggle') %>" href="javascript:void(0)" style="margin-left: auto" title="<%- t('files:components:addByName') %>">
+        <i class="fa fa-plus"></i>
+      </a>
     </label>
     <input id="<%- id('components') %>" name="components" type="text">
-    <div id="<%- id('components-addByName') %>" class="hidden" style="position: absolute; top: 0; right: 0; width: 200px; display: flex; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)">
+    <div id="<%- id('components-addByName') %>" class="hidden" style="position: absolute; top: 0; right: 0; width: 275px; display: flex; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)">
       <input type="text" class="form-control" placeholder="<%- t('files:components:addByName:placeholder') %>" style="flex: 1 1 auto">
       <button type="button" class="btn btn-default" style="flex: 0; margin-left: -1px"><i class="fa fa-plus"></i></button>
     </div>

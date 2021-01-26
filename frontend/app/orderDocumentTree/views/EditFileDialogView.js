@@ -73,6 +73,16 @@ define([
         }
       },
 
+      'focusin #-components-addByName': function()
+      {
+        clearTimeout(this.timers.hideAddByName);
+      },
+
+      'focusout #-components-addByName': function()
+      {
+        this.timers.hideAddByName = setTimeout(this.toggleAddByName.bind(this, false), 1);
+      },
+
       'change #-stations': function(e)
       {
         e.target.value = e.target.value.split(/[^0-9]+/)
@@ -271,7 +281,7 @@ define([
         {
           var html = ['<span class="text-mono">', _.escape(padString.start(item.id, 12, '0')), '</span>'];
 
-          if (item.text)
+          if (item.text && item.text !== item.id)
           {
             html.push('<span class="text-small">:', _.escape(item.text) + '</span>');
           }
@@ -319,20 +329,27 @@ define([
 
       var $components = this.$id('components');
       var data = $components.select2('data');
-      var lastNoCode = 0;
+      var id = name;
 
-      data.forEach(function(item)
+      if (!/^[0-9]{12}$/.test(id))
       {
-        if (!/^0{10,}/.test(item.id))
-        {
-          return;
-        }
+        var lastNoCode = 0;
 
-        lastNoCode = Math.max(+item.id, lastNoCode);
-      });
+        data.forEach(function(item)
+        {
+          if (!/^0{10,}/.test(item.id))
+          {
+            return;
+          }
+
+          lastNoCode = Math.max(+item.id, lastNoCode);
+        });
+
+        id = padString.start((lastNoCode + 1).toString(), 12, '0');
+      }
 
       data.push({
-        id: padString.start((lastNoCode + 1).toString(), 12, '0'),
+        id: id,
         text: name
       });
 
