@@ -2,6 +2,7 @@
 
 define([
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
   '../views/EngagementFilterView',
   '../views/EngagementOrgUnitsView',
@@ -10,6 +11,7 @@ define([
   'app/wmes-osh-reports/templates/engagement/page'
 ], function(
   View,
+  bindLoadingMessage,
   dictionaries,
   EngagementFilterView,
   EngagementOrgUnitsView,
@@ -45,6 +47,8 @@ define([
 
     initialize: function()
     {
+      this.model = bindLoadingMessage(this.model, this);
+
       this.filterView = new EngagementFilterView({
         model: this.model
       });

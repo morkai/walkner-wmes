@@ -2,6 +2,7 @@
 
 define([
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
   '../views/ObserversFilterView',
   '../views/ObserversOrgUnitsView',
@@ -9,6 +10,7 @@ define([
   'app/wmes-osh-reports/templates/observers/page'
 ], function(
   View,
+  bindLoadingMessage,
   dictionaries,
   ObserversFilterView,
   ObserversOrgUnitsView,
@@ -43,6 +45,8 @@ define([
 
     initialize: function()
     {
+      this.model = bindLoadingMessage(this.model, this);
+
       this.filterView = new ObserversFilterView({
         model: this.model
       });

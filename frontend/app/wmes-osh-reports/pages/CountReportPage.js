@@ -3,6 +3,7 @@
 define([
   'app/i18n',
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
   '../CountReport',
   '../views/CountReportFilterView',
@@ -12,6 +13,7 @@ define([
 ], function(
   t,
   View,
+  bindLoadingMessage,
   dictionaries,
   CountReport,
   CountReportFilterView,
@@ -55,6 +57,8 @@ define([
 
     initialize: function()
     {
+      this.model = bindLoadingMessage(this.model, this);
+
       this.filterView = new CountReportFilterView({
         model: this.model
       });
