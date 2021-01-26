@@ -193,6 +193,8 @@
   "PRIVILEGE:TRW:VIEW": "TRW: przeglądanie",
   "PRIVILEGE:TRW:MANAGE": "TRW: zarządzanie",
   "PRIVILEGE:TRW:PROGRAM": "TRW: programowanie",
+  "PRIVILEGE:GFT:VIEW": "GearFlex: przeglądanie",
+  "PRIVILEGE:GFT:MANAGE": "GearFlex: zarządzanie",
   "PRIVILEGE:LUCA:VIEW": "Luca: przeglądanie",
   "PRIVILEGE:LUCA:MANAGE": "Luca: zarządzanie",
   "PRIVILEGE:WMES:CLIENTS:VIEW": "Klienci WMES: przeglądanie",

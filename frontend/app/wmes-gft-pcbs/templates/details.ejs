@@ -1,0 +1,13 @@
+<div class="panel panel-primary">
+  <div class="panel-heading"><%- panelTitle %></div>
+  <div class="panel-details">
+    <%- helpers.props(model, [
+      'code',
+      'name',
+      'quantity',
+      {id: 'productFamily', valueClassName: 'text-fixed'},
+      {id: 'lampColor', valueClassName: 'text-fixed'},
+      {id: 'ledCount', valueClassName: 'text-fixed'}
+    ]) %>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{
+  "BREADCRUMB:base": "GearFlex",
+  "BREADCRUMB:browse": "Płytki",
+
+  "PROPERTY:code": "12NC",
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:quantity": "Ilość płytek",
+  "PROPERTY:productFamily": "Rodzina",
+  "PROPERTY:lampColor": "Kolor",
+  "PROPERTY:ledCount": "Ilość LED",
+
+  "import:title": "Importowanie płytek",
+  "import:failure": "Importowanie nie powiodło się.",
+  "import:success": "Zaimportowano {count} płytek.",
+  "import:file": "Plik",
+  "import:submit": "Importuj"
+}

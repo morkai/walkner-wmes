@@ -116,6 +116,7 @@ define([
   './wmes-trw-tests/routes',
   './wmes-snf-programs/routes',
   './wmes-snf-tests/routes',
+  './wmes-gft-pcbs/routes',
   './wmes-luca-events/routes',
   './wmes-drilling/routes',
   './wmes-wiring/routes',

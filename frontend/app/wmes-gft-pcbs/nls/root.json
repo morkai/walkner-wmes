@@ -1,0 +1,14 @@
+{
+  "root": {
+    "BREADCRUMB:base": "GearFlex",
+    "BREADCRUMB:browse": "PCBs",
+
+    "PROPERTY:code": "12NC",
+    "PROPERTY:name": "Name",
+    "PROPERTY:quantity": "Quantity",
+    "PROPERTY:productFamily": "Product family",
+    "PROPERTY:lampColor": "Lamp color",
+    "PROPERTY:ledCount": "Number of LEDs"
+  },
+  "pl": true
+}

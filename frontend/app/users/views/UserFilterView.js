@@ -32,7 +32,7 @@ define([
     termToForm: {
       'personnelId': function(propertyName, term, formData)
       {
-        formData[propertyName] = this.unescapeRegExp(term.args[1]);
+        formData[propertyName] = this.unescapeRegExp(term.args[1]).replace(/^\^/, '');
       },
       'prodFunction': function(propertyName, term, formData)
       {

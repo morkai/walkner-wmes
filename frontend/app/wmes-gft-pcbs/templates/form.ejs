@@ -1,0 +1,35 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- id('code') %>" class="control-label is-required"><%- t('PROPERTY:code') %></label>
+        <input id="<%- id('code') %>" class="form-control text-fixed" type="text" name="code" maxlength="12" required pattern="^[0-9]{12}$" <%- editMode ? 'disabled' : '' %>>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
+        <input id="<%- id('name') %>" class="form-control" type="text" name="name" maxlength="100" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('quantity') %>" class="control-label is-required"><%- t('PROPERTY:quantity') %></label>
+        <input id="<%- id('quantity') %>" class="form-control" type="number" name="quantity" required min="1" max="10" <%- editMode ? 'disabled' : '' %>>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('productFamily') %>" class="control-label is-required"><%- t('PROPERTY:productFamily') %></label>
+        <input id="<%- id('productFamily') %>" class="form-control text-fixed" type="text" name="productFamily" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('lampColor') %>" class="control-label is-required"><%- t('PROPERTY:lampColor') %></label>
+        <input id="<%- id('lampColor') %>" class="form-control text-fixed" type="text" name="lampColor" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('ledCount') %>" class="control-label is-required"><%- t('PROPERTY:ledCount') %></label>
+        <input id="<%- id('ledCount') %>" class="form-control text-fixed" type="text" name="ledCount" required>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

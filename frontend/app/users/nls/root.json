@@ -192,6 +192,8 @@
     "PRIVILEGE:TRW:VIEW": "TRW: view",
     "PRIVILEGE:TRW:MANAGE": "TRW: manage",
     "PRIVILEGE:TRW:PROGRAM": "TRW: programming",
+    "PRIVILEGE:GFT:VIEW": "GearFlex: view",
+    "PRIVILEGE:GFT:MANAGE": "GearFlex: manage",
     "PRIVILEGE:LUCA:VIEW": "Luca: view",
     "PRIVILEGE:LUCA:MANAGE": "Luca: manage",
     "PRIVILEGE:WMES:CLIENTS:VIEW": "WMES clients: view",
