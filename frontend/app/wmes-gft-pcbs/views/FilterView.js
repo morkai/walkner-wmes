@@ -25,7 +25,7 @@ define([
           .val()
           .toUpperCase()
           .split(/[^A-Z0-9]+/)
-          .filter(v => /^[A-Z0-9]+$/.test(v));
+          .filter(v => v === 'ANY' || /^[A-Z0-9]+$/.test(v));
 
         this.$id('productFamily').val(values.join(' '));
       },
