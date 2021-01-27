@@ -35,6 +35,7 @@
     "PROPERTY:inspector": "Inspector",
     "PROPERTY:inspectedAt": "Inspection date",
     "PROPERTY:nokOwner": "NOK owner - shift leader",
+    "PROPERTY:inspectorLeader": "Inspector/Leader",
     "PROPERTY:leader": "Team leader/whman",
     "PROPERTY:leader:prod": "Team leader",
     "PROPERTY:leader:wh": "Warehouseman",
@@ -74,6 +75,7 @@
     "PROPERTY:serialNumbers": "Serial number",
     "PROPERTY:comment": "Comment",
     "PROPERTY:ok": "Result",
+    "PROPERTY:notes": "Notes",
 
     "PROPERTY:kpi": "KPI",
     "PROPERTY:site": "Fabryka",
@@ -124,6 +126,7 @@
     "FORM:ERROR:upload": "Failed to upload the attachments.",
     "FORM:ERROR:orderNo": "Enter a valid order.",
     "FORM:ERROR:nc12": "Enter a valid component 12NC.",
+    "FORM:ERROR:inspector": "Select an inspector or a leader.",
     "FORM:okFile:new": "New OK file",
     "FORM:okFile:current": "Current OK file",
     "FORM:nokFile:new": "New NOK file",

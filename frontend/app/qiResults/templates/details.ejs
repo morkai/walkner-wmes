@@ -52,7 +52,8 @@
             'qtyInspected',
             {id: 'qtyNokInspected', visible: !model.ok},
             {id: 'qtyToFix', visible: !model.ok},
-            {id: 'qtyNok', visible: !model.ok}
+            {id: 'qtyNok', visible: !model.ok},
+            {id: 'notes', visible: model.ok, valueClassName: 'text-lines'}
           ]) %>
         </div>
       </div>
@@ -79,6 +80,7 @@
           <%- helpers.props(model, [
             'errorCategory',
             'faultCode',
+            {id: 'notes', visible: !model.ok, valueClassName: 'text-lines'},
             {id: 'faultDescription', valueClassName: 'text-lines'},
             {id: 'problem', valueClassName: 'text-lines'},
             {id: 'immediateActions', valueClassName: 'text-lines'}

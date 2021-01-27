@@ -220,7 +220,7 @@ define([
 
     $counter
       .toggleClass('success', counter.actual >= counter.required)
-      .toggleClass('hidden', !counter.required || !_.includes(user.data.privileges, 'QI:INSPECTOR'));
+      .toggleClass('hidden', !counter.required || !user.isAllowedTo('QI:INSPECTOR', 'FN:leader', 'FN:prod_whman'));
 
     $counter.find('.qi-counter-actual').text(counter.actual);
 

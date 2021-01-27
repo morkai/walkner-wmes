@@ -75,7 +75,7 @@ define([
         {id: 'line', tdClassName: 'is-min', thClassName: 'is-filter'},
         {id: 'kind', thClassName: 'is-filter'},
         {id: 'inspectedAt', tdClassName: 'is-min', thClassName: 'is-filter'},
-        {id: 'inspector', thClassName: 'is-filter'}
+        {id: 'inspectorLeader', thClassName: 'is-filter'}
       ];
 
       if (hasAnyNokResult)

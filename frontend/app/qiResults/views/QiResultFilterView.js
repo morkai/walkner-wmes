@@ -47,7 +47,8 @@ define([
     filterMap: {
       orderNo: 'order',
       nc12: 'order',
-      correctiveAction: 'status'
+      correctiveAction: 'status',
+      inspectorLeader: 'inspector'
     },
 
     template: template,

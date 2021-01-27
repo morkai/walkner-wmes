@@ -24,7 +24,7 @@ define([
   var css = 'css!app/qiResults/assets/main';
   var nls = 'i18n!app/nls/qiResults';
   var canView = user.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager', 'FN:prod_whman');
-  var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
+  var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE', 'FN:leader', 'FN:prod_whman');
   var canEdit = user.auth('USER');
 
   router.map('/qi/reports/count', canView, function(req)
@@ -169,14 +169,24 @@ define([
       ],
       function(QiResult, QiResultAddFormPage)
       {
+        var inspector = null;
+        var leader = null;
+
+        if (user.isAllowedTo('QI:INSPECTOR'))
+        {
+          inspector = user.getInfo();
+        }
+        else if (user.isAllowedTo('FN:leader', 'FN:prod_whman'))
+        {
+          leader = user.getInfo();
+        }
+
         return new QiResultAddFormPage({
           model: new QiResult({
             source: localStorage.getItem('WMES_QI_SOURCE') || 'prod',
             ok: req.queryString === 'ok',
-            inspector: {
-              id: user.data._id,
-              label: user.getLabel()
-            },
+            inspector: inspector,
+            leader: leader,
             inspectedAt: time.format(new Date(), 'YYYY-MM-DD'),
             qtyInspected: 1,
             qtyToFix: 0,

@@ -34,6 +34,7 @@
   "PROPERTY:inspector": "Inspektor",
   "PROPERTY:inspectedAt": "Data inspekcji",
   "PROPERTY:nokOwner": "Właściciel niezgodności - mistrz",
+  "PROPERTY:inspectorLeader": "Inspektor/Lider",
   "PROPERTY:leader": "Lider/magazynier",
   "PROPERTY:leader:prod": "Lider",
   "PROPERTY:leader:wh": "Magazynier",
@@ -73,6 +74,7 @@
   "PROPERTY:serialNumbers": "Numer seryjny",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:ok": "Wynik",
+  "PROPERTY:notes": "Uwagi",
 
   "PROPERTY:kpi": "KPI",
   "PROPERTY:site": "Fabryka",
@@ -124,6 +126,7 @@
   "FORM:ERROR:upload": "Nie udało się załadować załączników.",
   "FORM:ERROR:orderNo": "Wybierz prawidłowe zlecenie.",
   "FORM:ERROR:nc12": "Wybierz prawidłowy komponent.",
+  "FORM:ERROR:inspector": "Wybierz inspektora lub lidera.",
   "FORM:okFile:new": "Nowe zdjęcie OK",
   "FORM:okFile:current": "Aktualne zdjęcie OK",
   "FORM:nokFile:new": "Nowe zdjęcie NOK",

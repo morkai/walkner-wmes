@@ -36,7 +36,10 @@ define([
         pageActions.export(layout, page, page.collection, false),
         {
           template: function() { return page.renderPartialHtml(addPageActionsTemplate); },
-          privileges: function() { return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE'); }
+          privileges: function()
+          {
+            return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE', 'FN:leader', 'FN:prod_whman');
+          }
         },
         {
           label: page.t('PAGE_ACTION:settings'),

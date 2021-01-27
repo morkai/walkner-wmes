@@ -128,7 +128,8 @@ input[type="month"] {
 .form-group.has-required-select2 {
   position: relative;
 }
-.form-group.has-required-select2 > input[tabindex="-1"] {
+.form-group.has-required-select2 > input[tabindex="-1"],
+.form-group.has-required-select2 > select[tabindex="-1"] {
   position: absolute;
   display: block!important;
   top: 25px!important;

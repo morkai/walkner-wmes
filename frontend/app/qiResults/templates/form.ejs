@@ -100,8 +100,9 @@
           <input id="<%- idPrefix %>-inspectedAt" name="inspectedAt" class="form-control" type="date" min="<%- inspectedAtMin %>" max="<%- inspectedAtMax %>" data-role="inspector">
         </div>
         <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-inspector" class="control-label is-required"><%- t('PROPERTY:inspector') %></label>
-          <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
+          <label for="<%- idPrefix %>-inspector" class="control-label"><%- t('PROPERTY:inspector') %></label>
+          <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" data-role="inspector">
+            <option></option>
             <% inspectors.forEach(function(inspector) { %>
               <option value="<%- inspector.id %>"><%= inspector.text %></option>
             <% }) %>
@@ -145,6 +146,10 @@
           <label for="<%- idPrefix %>-serialNumbers" class="control-label"><%- t('PROPERTY:serialNumbers') %></label>
           <input id="<%- idPrefix %>-serialNumbers" name="serialNumbers" class="form-control" type="text" autocomplete="new-password" data-role="inspector">
         </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('notes') %>" class="control-label"><%- t('PROPERTY:notes') %></label>
+        <textarea id="<%- id('notes') %>" name="notes" class="form-control" rows="3" data-role="inspector"></textarea>
       </div>
       <% if (!model.ok) { %>
       <div class="row">

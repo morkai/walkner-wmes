@@ -83,7 +83,7 @@ define([
           || this.isCorrector();
       }
 
-      return this.isInspector();
+      return this.isInspector() || this.isCreator();
     },
 
     canDelete: function()
@@ -109,7 +109,8 @@ define([
       if (editMode)
       {
         return user.isAllowedTo('QI:RESULTS:MANAGE')
-          || this.isInspector();
+          || this.isInspector()
+          || this.isLeader();
       }
 
       return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
@@ -173,16 +174,16 @@ define([
       var obj = this.toJSON();
 
       obj.createdAt = time.format(obj.createdAt, 'LLLL');
-      obj.creator = renderUserInfo({userInfo: obj.creator});
+      obj.creator = renderUserInfo(obj.creator);
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');
-      obj.updater = renderUserInfo({userInfo: obj.updater});
+      obj.updater = renderUserInfo(obj.updater);
       obj.inspectedAtTime = Date.parse(obj.inspectedAt);
       obj.inspectedAt = time.format(obj.inspectedAtTime, options.dateFormat || 'L');
-      obj.inspector = renderUserInfo({userInfo: obj.inspector});
-      obj.nokOwner = renderUserInfo({userInfo: obj.nokOwner});
-      obj.leader = renderUserInfo({userInfo: obj.leader});
-      obj.coach = renderUserInfo({userInfo: obj.coach});
-      obj.operator = renderUserInfo({userInfo: obj.operator});
+      obj.inspector = renderUserInfo(obj.inspector);
+      obj.nokOwner = renderUserInfo(obj.nokOwner);
+      obj.leader = renderUserInfo(obj.leader);
+      obj.coach = renderUserInfo(obj.coach);
+      obj.operator = renderUserInfo(obj.operator);
       obj.kind = dictionaries.getLabel('kind', obj.kind);
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';
       obj.qtyInspected = obj.qtyInspected.toLocaleString();
@@ -236,6 +237,8 @@ define([
           options && options.today || time.getMoment().startOf('day').hours(6).valueOf()
         );
       }
+
+      row.inspectorLeader = row.inspector || row.leader;
 
       return row;
     },

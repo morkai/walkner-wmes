@@ -52,6 +52,7 @@ define([
         this.setUpLeaderSelect2();
         this.toggleSourceFields();
         this.toggleRequireOrder();
+        this.toggleRequireInspector();
         this.clearOrderFields();
         this.clearComponentFields();
       },
@@ -78,6 +79,14 @@ define([
       {
         this.updateDivision();
         this.toggleRequireOrder();
+      },
+      'change #-inspector': function()
+      {
+        this.toggleRequireInspector();
+      },
+      'change #-leader': function()
+      {
+        this.toggleRequireInspector();
       },
       'click #-addAction': 'addEmptyAction',
       'click [name="removeAction"]': function(e)
@@ -603,6 +612,7 @@ define([
       this.toggleRoleFields();
       this.toggleSourceFields();
       this.toggleRequireOrder();
+      this.toggleRequireInspector();
 
       if (this.getSource() === 'wh')
       {
@@ -628,7 +638,10 @@ define([
 
       this.$id('inspector')
         .removeClass('form-control')
-        .select2()
+        .select2({
+          placeholder: ' ',
+          allowClear: true
+        })
         .closest('.form-group')
         .addClass('has-required-select2');
     },
@@ -750,10 +763,10 @@ define([
     toggleRoleFields: function()
     {
       var manager = user.isAllowedTo('QI:RESULTS:MANAGE');
-      var inspector = this.model.isInspector();
       var specialist = user.isAllowedTo('QI:SPECIALIST');
       var nokOwner = this.model.isNokOwner();
       var leader = this.model.isLeader();
+      var inspector = this.model.isInspector() || leader;
 
       this.$('[data-role]').each(function()
       {
@@ -1048,6 +1061,20 @@ define([
       var kindsDivision = kind.get('division');
 
       $division.val(kindsDivision || ordersDivision);
+    },
+
+    toggleRequireInspector: function()
+    {
+      var $inspector = this.$id('inspector');
+      var $leader = this.$id('leader');
+      var error = '';
+
+      if (!$inspector.val().length && !$leader.val().length)
+      {
+        error = this.t('FORM:ERROR:inspector');
+      }
+
+      $inspector[0].setCustomValidity(error);
     },
 
     toggleRequireOrder: function()
