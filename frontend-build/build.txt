@@ -2270,6 +2270,7 @@ app/wmes-snf-programs/Program.js
 app/wmes-snf-programs/ProgramCollection.js
 app/wmes-snf-programs/routes.js
 app/wmes-snf-tests/routes.js
+app/wmes-gft-pcbs/routes.js
 app/wmes-luca-events/routes.js
 app/wmes-drilling/routes.js
 app/wmes-wiring/routes.js
@@ -2736,6 +2737,7 @@ app/nls/pl/wmes-osh-observations.js
 i18n!app/nls/wmes-osh-observations
 app/wmes-osh-observations/routes.js
 app/data/colorFactory.js
+app/wmes-osh-reports/util/createDefaultFilter.js
 app/wmes-osh-reports/CountReport.js
 app/wmes-osh-reports/ObserversReport.js
 app/wmes-osh-reports/EngagementReport.js
