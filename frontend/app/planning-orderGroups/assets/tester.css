@@ -1,21 +1,32 @@
 .planning-orderGroups-tester-groups {
   display: flex;
   overflow: auto;
+  padding: 0 15px;
+  border: 1px solid #e3e3e3;
 }
 .planning-orderGroups-tester-group {
   margin-left: 40px;
   max-width: 375px;
+  position: relative;
 }
 .planning-orderGroups-tester-group:first-child {
   margin-left: 0;
 }
 .planning-orderGroups-tester-group h3 {
+  position: fixed;
   margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #FFF;
+  border-bottom: 1px solid #CCC;
 }
 .planning-orderGroups-tester-orders {
+  margin-top: 46px;
   width: 100%;
 }
-.planning-orderGroups-tester-orders tbody:hover td {
+.planning-orderGroups-tester-highlighted td,
+.planning-orderGroups-tester-order:hover td {
   background: #ffffd6;
 }
 .planning-orderGroups-tester-order td {
@@ -29,7 +40,22 @@
 .planning-orderGroups-tester-order tr:last-child td {
   padding-bottom: 4px;
 }
+.planning-orderGroups-tester-group tbody:last-child td {
+  height: 6px;
+  background: #fff!important;
+}
 .planning-orderGroups-tester-nc12 {
   padding-left: 10px;
   padding-right: 10px;
+}
+td.planning-orderGroups-tester-color {
+  text-align: right;
+  padding-left: 10px;
+}
+span.planning-orderGroups-tester-color {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 16px;
+  vertical-align: middle;
 }

@@ -11,23 +11,40 @@ define([
 ) {
   'use strict';
 
+  const CSS = 'planning-orderGroups-tester';
+
   return View.extend({
 
-    template: template,
+    template,
+
+    events: {
+
+      [`mouseover .${CSS}-multi`]: function(e)
+      {
+        this.$(`.${CSS}-highlighted`).removeClass(`${CSS}-highlighted`);
+        this.$(`.${CSS}-multi[data-id="${e.currentTarget.dataset.id}"]`).addClass(`${CSS}-highlighted`);
+      },
+
+      [`mouseout .${CSS}-multi`]: function()
+      {
+        this.$(`.${CSS}-highlighted`).removeClass(`${CSS}-highlighted`);
+      }
+
+    },
 
     initialize: function()
     {
-      this.once('afterRender', function()
+      this.once('afterRender', () =>
       {
         this.listenTo(this.model, 'change:groups', this.render);
       });
 
-      $(window).on('resize.' + this.idPrefix, this.resize.bind(this));
+      $(window).on(`resize.${this.idPrefix}`, this.resize.bind(this));
     },
 
     destroy: function()
     {
-      $(window).off('.' + this.idPrefix);
+      $(window).off(`.${this.idPrefix}`);
     },
 
     getTemplateData: function()
@@ -39,18 +56,15 @@ define([
 
     serializeGroups: function()
     {
-      return this.model.get('groups').map(function(group)
+      return this.model.get('groups').map(group =>
       {
         return {
           _id: group.orderGroup.id,
           label: group.orderGroup.getLabel(),
           noMatchGroup: group.orderGroup.isNoMatchGroup(),
-          orders: group.sapOrders.map(function(sapOrder)
-          {
-            return sapOrder.attributes;
-          })
+          orders: group.sapOrders
         };
-      }).sort(function(a, b)
+      }).sort((a, b) =>
       {
         if (a.noMatchGroup)
         {
@@ -73,13 +87,18 @@ define([
 
     resize: function()
     {
-      var height = window.innerHeight
+      const height = window.innerHeight
         - $('.hd').outerHeight()
         - $('.ft').outerHeight()
         - $('.filter-container').outerHeight()
         - 60;
 
-      this.el.style.height = height + 'px';
+      this.el.style.height = `${height}px`;
+
+      this.$(`.${CSS}-group`).each((i, groupEl) =>
+      {
+        groupEl.querySelector('h3').style.width = groupEl.getBoundingClientRect().width + 'px';
+      });
     }
 
   });

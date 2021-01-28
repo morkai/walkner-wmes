@@ -4,23 +4,33 @@
       <h3><a href="#planning/orderGroups/<%- group._id %>" target="_blank"><%= group.label %></a></h3>
       <table class="planning-orderGroups-tester-orders">
         <% group.orders.forEach(function(order) { %>
-        <tbody class="planning-orderGroups-tester-order">
+        <tbody class="planning-orderGroups-tester-order <%- order.color ? 'planning-orderGroups-tester-multi' : '' %>" data-id="<%- order._id %>">
         <tr>
           <td class="is-min"><a href="#orders/<%- order._id %>" target="_blank"><%- order._id %></a></td>
           <td class="is-min planning-orderGroups-tester-nc12"><%- order.nc12 %></td>
           <td class="is-min text-right"><%- order.qty.toLocaleString() %></td>
-          <td>&nbsp;PCE</td>
+          <td class="is-min">&nbsp;PCE</td>
+          <td class="planning-orderGroups-tester-color">
+            <% if (order.color) { %>
+              <span class="planning-orderGroups-tester-color" style="background: <%- order.color %>"></span>
+            <% } %>
+          </td>
         </tr>
         <tr>
-          <td colspan="4"><%= order.name %></td>
+          <td colspan="5"><%= order.name %></td>
         </tr>
         <% if (order.description && order.description !== order.name) { %>
         <tr>
-          <td colspan="4"><%= order.description %></td>
+          <td colspan="5"><%= order.description %></td>
         </tr>
         <% } %>
         </tbody>
         <% }) %>
+        <tbody>
+        <tr>
+          <td colspan="5"></td>
+        </tr>
+        </tbody>
       </table>
     </div>
   <% }) %>

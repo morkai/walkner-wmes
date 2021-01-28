@@ -960,7 +960,7 @@ define([
     {
       var value = ($property.val() || '').trim();
 
-      if (!/^[0-9]{1,3}%?$/.test(value))
+      if (!/^[0-9]{1,3}%?$/.test(value) || value === '0%')
       {
         value = '0';
       }

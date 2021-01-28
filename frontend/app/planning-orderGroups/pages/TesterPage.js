@@ -5,6 +5,7 @@ define([
   'app/time',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/data/colorFactory',
   'app/planning/PlanSettings',
   'app/orders/OrderCollection',
   '../OrderGroupCollection',
@@ -16,6 +17,7 @@ define([
   time,
   View,
   bindLoadingMessage,
+  colorFactory,
   PlanSettings,
   OrderCollection,
   OrderGroupCollection,
@@ -118,12 +120,16 @@ define([
 
     matchGroups: function()
     {
-      var page = this;
-      var groups = {};
+      const groups = {};
+      const colorGroup = 'planOrderGroup' + Date.now();
 
-      page.sapOrders.forEach(function(sapOrder)
+      this.sapOrders.forEach(sapOrder =>
       {
-        page.matchSapOrder(sapOrder).forEach(function(match)
+        sapOrder = sapOrder.attributes;
+
+        const matches = this.matchSapOrder(sapOrder);
+
+        matches.forEach(match =>
         {
           if (!groups[match.orderGroup.id])
           {
@@ -135,35 +141,36 @@ define([
 
           groups[match.orderGroup.id].sapOrders.push(sapOrder);
         });
+
+        sapOrder.color = matches.length > 1 ? colorFactory.getColor(colorGroup, sapOrder._id) : '';
       });
 
-      page.model.set({
+      this.model.set({
         groups: Object.values(groups)
       });
     },
 
     matchSapOrder: function(sapOrder)
     {
-      var page = this;
-      var result = [];
-      var mrp = sapOrder.get('mrp');
-      var product = ((sapOrder.get('nc12') || '')
-        + ' ' + (sapOrder.get('name') || '')
-        + ' ' + (sapOrder.get('description') || '')).trim().toUpperCase();
-      var bom = [];
+      const result = [];
+      const mrp = sapOrder.mrp;
+      const product = ((sapOrder.nc12 || '')
+        + ' ' + (sapOrder.name || '')
+        + ' ' + (sapOrder.description || '')).trim().toUpperCase();
+      const bom = [];
 
-      (sapOrder.get('bom') || []).forEach(function(component)
+      (sapOrder.bom || []).forEach(component =>
       {
-        var line = (component.get('item') || '')
+        const line = (component.get('item') || '')
           + ' ' + (component.get('nc12') || '')
           + ' ' + (component.get('name') || '');
 
         bom.push(line.trim().toUpperCase());
       });
 
-      var noMatchGroup = null;
+      let noMatchGroup = null;
 
-      page.orderGroups.forEach(function(orderGroup)
+      this.orderGroups.forEach(orderGroup =>
       {
         if (orderGroup.isNoMatchGroup())
         {
@@ -172,11 +179,11 @@ define([
           return;
         }
 
-        if (page.matchOrderGroup(orderGroup, mrp, product, bom))
+        if (this.matchOrderGroup(orderGroup, mrp, product, bom))
         {
           result.push({
-            orderGroup: orderGroup,
-            sapOrder: sapOrder
+            orderGroup,
+            sapOrder
           });
         }
       });
@@ -185,7 +192,7 @@ define([
       {
         result.push({
           orderGroup: noMatchGroup,
-          sapOrder: sapOrder
+          sapOrder
         });
       }
 
