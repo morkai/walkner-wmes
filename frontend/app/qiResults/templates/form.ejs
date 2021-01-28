@@ -2,7 +2,7 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body <%- !editMode && model.ok ? 'has-lastElementRow' : '' %>">
+    <div class="panel-body">
       <div class="form-group">
         <div id="<%- idPrefix %>-source" class="btn-group" data-toggle="buttons">
           <% ['prod', 'wh'].forEach(function(source) { %>

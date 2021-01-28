@@ -217,10 +217,12 @@ define([
     }
 
     var counter = dictionaries.counter;
+    var inspector = user.data.privileges.indexOf('QI:INSPECTOR') !== -1;
+    var leader = user.data.prodFunction === 'leader' || user.data.prodFunction === 'prod_whman';
 
     $counter
       .toggleClass('success', counter.actual >= counter.required)
-      .toggleClass('hidden', !counter.required || !user.isAllowedTo('QI:INSPECTOR', 'FN:leader', 'FN:prod_whman'));
+      .toggleClass('hidden', !counter.required || (!inspector && !leader));
 
     $counter.find('.qi-counter-actual').text(counter.actual);
 
