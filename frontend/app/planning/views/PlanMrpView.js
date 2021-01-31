@@ -127,6 +127,7 @@ define([
         mrp: view.mrp
       }));
       view.setView('#-orders', new PlanMrpOrdersView({
+        orderGroups: view.orderGroups,
         plan: view.plan,
         mrp: view.mrp
       }));
@@ -235,6 +236,7 @@ define([
         .forEach(function(line)
         {
           view.insertView('#-lineOrders', new PlanMrpLineOrdersView({
+            orderGroups: view.orderGroups,
             plan: view.plan,
             mrp: view.mrp,
             line: line,

@@ -159,18 +159,19 @@ define([
 
     initialize: function()
     {
-      var view = this;
+      FormView.prototype.initialize.apply(this, arguments);
 
-      FormView.prototype.initialize.apply(view, arguments);
+      this.sortables = [];
+      this.maxLineLength = 0;
+      this.lines = [];
 
-      view.sortables = [];
-      view.maxLineLength = 0;
-      view.lines = [];
+      this.stopListening(this.model, 'change');
 
-      view.stopListening(view.model, 'change');
-
-      view.listenTo(view.model, 'change', _.after(2, view.onSettingChange.bind(view)));
-      view.listenTo(view.model, 'changed', view.onSettingsChanged);
+      this.once('afterRender', () =>
+      {
+        this.listenTo(this.model, 'change', this.onSettingChange);
+        this.listenTo(this.model, 'changed', this.onSettingsChanged);
+      });
     },
 
     destroy: function()
@@ -195,6 +196,7 @@ define([
       FormView.prototype.afterRender.call(this);
 
       this.cacheLines();
+      this.setUpHelpPopovers();
       this.setUpOrderStatusSelect2('requiredStatuses');
       this.setUpOrderStatusSelect2('ignoredStatuses');
       this.setUpOrderStatusSelect2('completedStatuses');
@@ -213,26 +215,46 @@ define([
       }
     },
 
+    setUpHelpPopovers: function()
+    {
+      const view = this;
+
+      view.$('label[data-help]').popover({
+        trigger: 'hover',
+        className: 'planning-settings-helpPopover',
+        html: true,
+        content: function()
+        {
+          const key = `settings:${this.dataset.help || this.control.name}:help`;
+
+          if (view.t.has(key))
+          {
+            return view.t(key);
+          }
+
+          return '';
+        }
+      });
+    },
+
     cacheLines: function()
     {
-      var view = this;
-
-      view.lines = orgUnits.getAllByType('prodLine')
-        .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
-        .map(function(prodLine)
+      this.lines = orgUnits.getAllByType('prodLine')
+        .filter(prodLine => !prodLine.get('deactivatedAt'))
+        .map(prodLine =>
         {
-          if (prodLine.id.length > view.maxLineLength)
+          if (prodLine.id.length > this.maxLineLength)
           {
-            view.maxLineLength = prodLine.id.length;
+            this.maxLineLength = prodLine.id.length;
           }
 
           return {
             id: prodLine.id,
             text: _.escape(prodLine.get('description')),
-            disabled: view.model.isLineLocked(prodLine.id)
+            disabled: this.model.isLineLocked(prodLine.id)
           };
         })
-        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
+        .sort((a, b) => a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true}));
     },
 
     setUpOrderStatusSelect2: function(id)
@@ -240,7 +262,7 @@ define([
       this.$id(id).select2({
         allowClear: true,
         multiple: true,
-        data: orderStatuses.map(function(status)
+        data: orderStatuses.map(status =>
         {
           return {
             id: status.id,
@@ -248,14 +270,8 @@ define([
           };
         }),
         matcher: idAndTextMatcher,
-        formatSelection: function(item)
-        {
-          return item.id;
-        },
-        formatResult: function(item)
-        {
-          return renderOrderStatusLabel(item.id) + ' ' + _.escape(item.text);
-        }
+        formatSelection: item => item.id,
+        formatResult: item => `${renderOrderStatusLabel(item.id)} ${_.escape(item.text)}`
       });
     },
 
@@ -275,7 +291,7 @@ define([
         formatNoMatches: null,
         minimumResultsForSearch: 1,
         dropdownCssClass: 'hidden',
-        tokenizer: function(input, selection, selectCallback)
+        tokenizer: (input, selection, selectCallback) =>
         {
           var result = input;
           var options = {};
@@ -343,6 +359,11 @@ define([
 
       view.$id('activeTime').prop('disabled', true);
       view.$id('extraCapacity').prop('disabled', true);
+
+      if (view.model.getVersion() > 1)
+      {
+        view.$('input[name="workerCount"]').prop('disabled', true);
+      }
 
       view.setUpMrpPriority();
       view.setUpOrderGroupPriority();
@@ -552,6 +573,13 @@ define([
 
     setUpLinePrioritySelect2: function()
     {
+      var $linePriority = this.$id('linePriority');
+
+      if (!$linePriority.length)
+      {
+        return;
+      }
+
       var data = [];
       var selectedMrp = this.$id('mrp').val();
 
@@ -579,7 +607,7 @@ define([
         });
       }
 
-      var $linePriority = this.$id('linePriority').select2({
+      $linePriority.select2({
         allowClear: false,
         multiple: true,
         dropdownCssClass: 'hidden',
@@ -620,65 +648,68 @@ define([
 
     setUpOrderPrioritySelect2: function()
     {
-      var view = this;
-
-      var $orderPriority = view.$id('orderPriority').select2({
+      const $orderPriority = this.$id('orderPriority').select2({
         allowClear: true,
         multiple: true,
-        data: view.model.getAvailableOrderPriorities().map(id =>
+        placeholder: this.t('settings:orderPriority:placeholder'),
+        data: this.model.getAvailableOrderPriorities().map(id =>
         {
           return {
-            id: id,
-            text: view.t('orderPriority:' + id)
+            id,
+            text: this.t(`orderPriority:${id}`)
           };
         })
       });
 
-      var choicesEl = $orderPriority.select2('container').find('.select2-choices')[0];
+      const choicesEl = $orderPriority.select2('container').find('.select2-choices')[0];
 
-      view.sortables.push(new Sortable(choicesEl, {
+      this.sortables.push(new Sortable(choicesEl, {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
-        onStart: function()
+        onStart: () =>
         {
           $orderPriority.select2('onSortStart');
         },
-        onEnd: function()
+        onEnd: () =>
         {
           $orderPriority.select2('onSortEnd').select2('focus');
 
-          view.saveOrderPriority();
+          this.saveOrderPriority();
         }
       }));
 
       $orderPriority.on('change', () =>
       {
-        view.saveOrderPriority();
+        this.saveOrderPriority();
       });
+
+      $orderPriority.select2('enable', false);
     },
 
     selectLine: function(lineId)
     {
-      var view = this;
-      var disabled = !lineId;
-      var activeTime = '';
-      var extraCapacity = '';
-      var $mrpPriority = view.$id('mrpPriority');
-      var $orderGroupPriority = view.$id('orderGroupPriority');
+      const version = this.model.getVersion();
+      const disabled = !lineId;
+      const $mrpPriority = this.$id('mrpPriority');
+      const $orderPriority = this.$id('orderPriority');
+      const $orderGroupPriority = this.$id('orderGroupPriority');
+      let activeTime = '';
+      let extraCapacity = '';
+      let workerCount = [0, 0, 0];
 
-      view.$id('line').select2('val', lineId || '');
+      this.$id('line').select2('val', lineId || '');
 
       if (!disabled)
       {
-        var selectedLine = lineId;
-        var line = view.model.lines.get(selectedLine);
+        let selectedLine = lineId;
+        let line = this.model.lines.get(selectedLine);
 
         if (!line)
         {
-          line = view.model.lines.add({_id: selectedLine}).get(selectedLine);
+          line = this.model.lines.add({_id: selectedLine}).get(selectedLine);
         }
 
-        var mrpPriority = line ? line.get('mrpPriority') : [];
+        const mrpPriority = line.get('mrpPriority');
 
         $mrpPriority
           .select2('enable', true)
@@ -690,32 +721,47 @@ define([
             };
           }));
 
-        if ($orderGroupPriority.length)
+        if (version > 1)
         {
-          var orderGroupPriority = line ? line.get('orderGroupPriority') : [];
+          const orderPriority = line.get('orderPriority') || [];
+
+          $orderPriority
+            .select2('enable', true)
+            .select2('data', orderPriority.map(id =>
+            {
+              return {
+                id,
+                text: this.t(`orderPriority:${id}`)
+              };
+            }));
+
+          const orderGroupPriority = line.get('orderGroupPriority') || [];
 
           $orderGroupPriority
             .select2('enable', true)
-            .select2('data', (orderGroupPriority || []).map(id =>
+            .select2('data', orderGroupPriority.map(id =>
             {
-              var group = view.orderGroups.get(id);
+              const group = this.orderGroups.get(id);
 
               return {
                 id,
                 text: group ? group.getLabel() : id
               };
             }));
+
+          extraCapacity = line.get('extraCapacity') || '';
+          workerCount = line.get('workerCount') || workerCount;
         }
 
-        var selectedMrp = view.$id('mrp').select2('data');
+        activeTime = this.buildActiveTime(line.get('activeTime'));
+
+        let selectedMrp = this.$id('mrp').select2('data');
 
         if (mrpPriority.length)
         {
           selectedMrp = selectedMrp && _.includes(mrpPriority, selectedMrp.id)
             ? selectedMrp.id
             : mrpPriority[0];
-          activeTime = view.buildActiveTime(line.get('activeTime'));
-          extraCapacity = line ? (line.get('extraCapacity') || '') : '';
         }
         else
         {
@@ -723,7 +769,7 @@ define([
           selectedLine = null;
         }
 
-        view.selectMrp(selectedMrp, selectedLine);
+        this.selectMrp(selectedMrp, selectedLine);
       }
       else
       {
@@ -731,20 +777,36 @@ define([
           .select2('enable', false)
           .select2('val', '');
 
-        $orderGroupPriority
-          .select2('enable', false)
-          .select2('val', '');
+        if (version > 1)
+        {
+          $orderPriority
+            .select2('enable', false)
+            .select2('val', '');
 
-        view.selectMrp(null, null);
+          $orderGroupPriority
+            .select2('enable', false)
+            .select2('val', '');
+        }
+
+        this.selectMrp(null, null);
       }
 
-      view.$id('activeTime')
+      this.$id('activeTime')
         .val(activeTime)
         .prop('disabled', disabled);
 
-      view.$id('extraCapacity')
+      this.$id('extraCapacity')
         .val(extraCapacity)
         .prop('disabled', disabled);
+
+      if (version > 1)
+      {
+        this.$('input[name="workerCount"]').each((i, el) =>
+        {
+          el.value = workerCount[i];
+          el.disabled = disabled;
+        });
+      }
     },
 
     selectMrp: function(mrpId, lineId)
@@ -824,35 +886,39 @@ define([
 
     selectMrpLine: function(mrp, lineId, disabled)
     {
-      var view = this;
-      var line = mrp ? mrp.lines.get(lineId) : null;
+      if (this.model.getVersion() === 2)
+      {
+        return;
+      }
 
-      view.$id('mrpLine').select2('val', lineId || '').select2('enable', !disabled);
+      let line = mrp ? mrp.lines.get(lineId) : null;
 
-      disabled = disabled || !view.$id('mrpLine').select2('data');
+      this.$id('mrpLine').select2('val', lineId || '').select2('enable', !disabled);
+
+      disabled = disabled || !this.$id('mrpLine').select2('data');
 
       if (!disabled && !line)
       {
         line = mrp.lines.add({_id: lineId}).get(lineId);
       }
 
-      view.$('input[name="workerCount"]').each(function()
+      this.$('input[name="workerCount"]').each((i, el) =>
       {
-        view.$(this)
-          .val(disabled ? '' : line.get('workerCount')[this.dataset.index])
+        this.$(el)
+          .val(disabled ? '' : line.get('workerCount')[el.dataset.index])
           .prop('disabled', disabled);
       });
 
-      view.$id('orderPriority')
+      this.$id('orderPriority')
         .select2('val', disabled ? [] : line.get('orderPriority'))
         .prop('disabled', disabled);
     },
 
     saveLine: function(changes)
     {
-      var selectedLine = this.$id('line').val();
-      var lines = this.model.lines;
-      var line = lines.get(selectedLine);
+      const selectedLine = this.$id('line').val();
+      const lines = this.model.lines;
+      const line = lines.get(selectedLine);
 
       if (line)
       {
@@ -860,29 +926,28 @@ define([
       }
       else
       {
-        lines.add({
+        const attrs = {
           _id: selectedLine,
-          mrpPriority: this.$id('mrpPriority')
-            .val()
-            .split(',')
-            .filter(id => !!id.length),
-          orderGroupPriority: this.$id('orderGroupPriority')
-            .val()
-            .split(',')
-            .filter(id => !!id.length),
+          mrpPriority: _.pluck(this.$id('mrpPriority').select2('data'), 'id'),
+          orderGroupPriority: _.pluck(this.$id('orderGroupPriority').select2('data'), 'id'),
           activeTime: this.parseActiveTime(this.$id('activeTime')),
           extraCapacity: this.parseExtraCapacity(this.$id('extraCapacity'))
-        });
+        };
+
+        if (this.model.getVersion() > 1)
+        {
+          attrs.orderPriority = _.pluck(this.$id('orderPriority').select2('data'), 'id');
+          attrs.workerCount = this.$('input[name="workerCount"]').map((i, el) => +el.value || 0).get();
+        }
+
+        lines.add(attrs);
       }
     },
 
     saveMrpPriority: function()
     {
       this.saveLine({
-        mrpPriority: this.$id('mrpPriority')
-          .val()
-          .split(',')
-          .filter(id => !!id.length)
+        mrpPriority: _.pluck(this.$id('mrpPriority').select2('data'), 'id')
       });
 
       this.setUpMrpSelect2();
@@ -891,19 +956,25 @@ define([
     saveOrderGroupPriority: function()
     {
       this.saveLine({
-        orderGroupPriority: this.$id('orderGroupPriority')
-          .val()
-          .split(',')
-          .filter(id => !!id.length)
+        orderGroupPriority: _.pluck(this.$id('orderGroupPriority').select2('data'), 'id')
       });
     },
 
     saveOrderPriority: function()
     {
-      var mrp = this.model.mrps.get(this.$id('mrp').val());
-      var mrpLine = mrp.lines.get(this.$id('mrpLine').val());
+      const orderPriority = _.pluck(this.$id('orderPriority').select2('data'), 'id');
 
-      mrpLine.set('orderPriority', _.pluck(this.$id('orderPriority').select2('data'), 'id'));
+      if (this.model.getVersion() === 1)
+      {
+        const mrp = this.model.mrps.get(this.$id('mrp').val());
+        const mrpLine = mrp.lines.get(this.$id('mrpLine').val());
+
+        mrpLine.set('orderPriority', orderPriority);
+      }
+      else
+      {
+        this.saveLine({orderPriority});
+      }
     },
 
     saveLinePriority: function()
@@ -940,7 +1011,7 @@ define([
       {
         var parts = input.split(':');
         var hh = +parts[0];
-        var mm = +parts[1];
+        var mm = +parts[1] || 0;
 
         if (hh >= 0 && hh <= 24 && mm >= 0 && mm <= 59)
         {

@@ -41,6 +41,31 @@ define([
       'change #-orderGroupPriority': function()
       {
         viewport.adjustDialogBackdrop();
+      },
+
+      'change #-activeTime': function()
+      {
+        const $activeTime = this.$id('activeTime');
+        const value = $activeTime
+          .val()
+          .trim()
+          .split(/[\s,]+/)
+          .map(word =>
+          {
+            const parts = word.trim().split('-');
+            const from = parts[0].split(':');
+            const to = (parts[1] || '0').split(':');
+            const fromH = (parseInt(from[0], 10) || 0).toString().padStart(2, '0');
+            const fromM = (parseInt(from[1], 10) || 0).toString().padStart(2, '0');
+            const toH = (parseInt(to[0], 10) || 0).toString().padStart(2, '0');
+            const toM = (parseInt(to[1], 10) || 0).toString().padStart(2, '0');
+
+            return `${fromH}:${fromM}-${toH}:${toM}`;
+          })
+          .filter(v => v !== '00:00-00:00' && v !== '06:00-06:00')
+          .join(', ');
+
+        $activeTime.val(value);
       }
 
     },
@@ -66,20 +91,21 @@ define([
 
     getTemplateData: function()
     {
-      var lineSettings = this.line.settings;
-      var mrpLineSettings = this.line.mrpSettings(this.mrp.id);
+      const version = this.plan.settings.getVersion();
+      const lineSettings = this.line.settings;
+      const mrpLineSettings = this.line.mrpSettings(this.mrp.id);
 
       return {
-        version: this.plan.settings.getVersion(),
+        version,
         mrp: this.mrp.getLabel(),
         line: this.line.getLabel(),
         mrpPriority: lineSettings.get('mrpPriority').join(','),
         orderGroupPriority: (lineSettings.get('orderGroupPriority') || []).join(','),
         activeTime: lineSettings.get('activeTime')
-          .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+          .map(activeTime => `${activeTime.from}-${activeTime.to}`)
           .join(', '),
-        workerCount: mrpLineSettings.get('workerCount'),
-        orderPriority: mrpLineSettings.get('orderPriority').join(','),
+        workerCount: (version === 1 ? mrpLineSettings : lineSettings).get('workerCount'),
+        orderPriority: (version === 1 ? mrpLineSettings : lineSettings).get('orderPriority').join(','),
         extraCapacity: lineSettings.get('extraCapacity') || '0'
       };
     },
@@ -93,16 +119,14 @@ define([
 
     setUpMrpPriority: function()
     {
-      var view = this;
-
-      setUpMrpSelect2(view.$id('mrpPriority'), {
-        view: view,
+      setUpMrpSelect2(this.$id('mrpPriority'), {
+        view: this,
         sortable: true,
         width: '100%',
-        placeholder: view.t('settings:mrpPriority:placeholder'),
-        itemDecorator: function(item)
+        placeholder: this.t('settings:mrpPriority:placeholder'),
+        itemDecorator: item =>
         {
-          item.disabled = view.plan.settings.isMrpLocked(item.id);
+          item.disabled = this.plan.settings.isMrpLocked(item.id);
           item.locked = item.disabled;
 
           if (item.locked)
@@ -146,27 +170,26 @@ define([
 
     setUpOrderPriority: function()
     {
-      var view = this;
-      var $input = view.$id('orderPriority').select2({
+      var $input = this.$id('orderPriority').select2({
         allowClear: true,
         multiple: true,
-        data: view.plan.settings.getAvailableOrderPriorities().map(function(id)
+        data: this.plan.settings.getAvailableOrderPriorities().map(id =>
         {
           return {
             id: id,
-            text: view.t('orderPriority:' + id)
+            text: this.t(`orderPriority:${id}`)
           };
         })
       });
 
-      view.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
+      this.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
-        onStart: function()
+        onStart: () =>
         {
           $input.select2('onSortStart');
         },
-        onEnd: function()
+        onEnd: () =>
         {
           $input.select2('onSortEnd').select2('focus');
         }
@@ -175,71 +198,76 @@ define([
 
     submitForm: function()
     {
-      var view = this;
-      var $submit = view.$id('submit').prop('disabled', true);
-      var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
+      const $submit = this.$id('submit').prop('disabled', true);
+      const $spinner = $submit.find('.fa-spinner').removeClass('hidden');
 
-      var settings = view.plan.settings;
-      var lineSettings = view.line.settings;
-      var extraCapacity = this.$id('extraCapacity').val().trim() || '0';
+      const settings = this.plan.settings;
+      const lineSettings = this.line.settings;
+      const version = settings.getVersion();
 
-      if (extraCapacity === '0%')
+      const mrpPriority = this.$id('mrpPriority').val().split(',');
+      const orderPriority = this.$id('orderPriority').val().split(',');
+      const workerCount = [1, 2, 3].map(shiftNo => Math.max(0, +this.$id(`workerCount${shiftNo}`).val() || 0));
+      let extraCapacity = this.$id('extraCapacity').val().trim();
+
+      if (!extraCapacity || extraCapacity === '0' || extraCapacity === '0%')
       {
         extraCapacity = '0';
       }
 
       lineSettings.set({
-        mrpPriority: view.$id('mrpPriority').val().split(','),
-        orderGroupPriority: (view.$id('orderGroupPriority').val() || '').split(',').filter(v => !!v),
-        activeTime: view.$id('activeTime')
-          .val()
-          .split(',')
-          .map(activeTime =>
-          {
-            var parts = activeTime.trim().split('-');
+        mrpPriority,
+        orderGroupPriority: (this.$id('orderGroupPriority').val() || '').split(',').filter(v => !!v),
+        activeTime: this.$id('activeTime').val().split(',').map(activeTime =>
+        {
+          const parts = activeTime.trim().split('-');
 
-            return {
-              from: parts[0],
-              to: parts[1]
-            };
-          })
-          .filter(activeTime => !!activeTime.from && !!activeTime.to),
+          return {
+            from: parts[0],
+            to: parts[1]
+          };
+        }).filter(v => !!v.to),
         extraCapacity
       });
 
-      var newMrpPriority = lineSettings.get('mrpPriority');
-      var orderPriority = view.$id('orderPriority').val().split(',');
-      var applyToAllMrps = view.$id('applyToAllMrps').prop('checked');
-      var workerCount = [1, 2, 3].map(shiftNo => Math.max(0, +view.$id(`workerCount${shiftNo}`).val() || 0));
-
-      newMrpPriority.forEach(mrpId =>
+      if (version > 1)
       {
-        var mrpSettings = settings.mrps.get(mrpId);
+        lineSettings.set({
+          workerCount,
+          orderPriority
+        });
+      }
+
+      const applyToAllMrps = !!this.$id('applyToAllMrps').prop('checked');
+
+      mrpPriority.forEach(mrpId =>
+      {
+        let mrpSettings = settings.mrps.get(mrpId);
 
         if (!mrpSettings)
         {
           mrpSettings = settings.mrps.add({_id: mrpId}).get(mrpId);
         }
 
-        var mrpLineSettings = mrpSettings.lines.get(view.line.id);
+        let mrpLineSettings = mrpSettings.lines.get(this.line.id);
 
         if (!mrpLineSettings)
         {
-          mrpLineSettings = mrpSettings.lines.add({_id: view.line.id}).get(view.line.id);
+          mrpLineSettings = mrpSettings.lines.add({_id: this.line.id}).get(this.line.id);
         }
 
-        if (applyToAllMrps || mrpLineSettings.id === view.line.id)
+        if (applyToAllMrps || mrpLineSettings.id === this.line.id)
         {
           mrpLineSettings.set({
-            workerCount: workerCount,
-            orderPriority: orderPriority
+            workerCount: version === 1 ? workerCount : [0, 0, 0],
+            orderPriority: version === 1 ? orderPriority : []
           });
         }
       });
 
       viewport.msg.saving();
 
-      var req = view.plan.settings.save();
+      const req = this.plan.settings.save();
 
       req.done(() =>
       {
@@ -254,7 +282,7 @@ define([
 
         viewport.msg.savingFailed();
 
-        view.plan.settings.trigger('errored');
+        this.plan.settings.trigger('errored');
       });
     },
 

@@ -29,8 +29,10 @@ define([
     {
       return {
         mrpPriority: [],
+        orderPriority: [],
         orderGroupPriority: [],
-        activeTime: []
+        activeTime: [],
+        workerCount: [0, 0, 0]
       };
     }
 

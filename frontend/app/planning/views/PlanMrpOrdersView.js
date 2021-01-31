@@ -420,7 +420,8 @@ define([
         {
           icon: 'fa-thumb-tack',
           label: this.t('orders:menu:lines'),
-          handler: this.handleLinesAction.bind(this, planOrder)
+          handler: this.handleLinesAction.bind(this, planOrder),
+          visible: version === 1
         },
         {
           icon: 'fa-exclamation',

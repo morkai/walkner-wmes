@@ -174,7 +174,6 @@ define([
       var lineUnits = orgUnits.getAllForProdLine(lineId);
       var prodFlow = orgUnits.getByTypeAndId('prodFlow', lineUnits.prodFlow);
       var prodLine = orgUnits.getByTypeAndId('prodLine', lineUnits.prodLine);
-      var lineMrpSettings = line.mrpSettings(this.mrp.id);
 
       prodFlow = prodFlow ? prodFlow.get('name') : '';
       prodLine = prodLine ? prodLine.get('description') : '';
@@ -193,16 +192,28 @@ define([
           activeTime: view.serializeActiveTime(line, true),
           extraCapacity: line.settings ? line.settings.get('extraCapacity') : '0',
           workerCount: view.serializeWorkerCount(line),
-          mrpPriority: line.settings ? line.settings.get('mrpPriority').join(', ') : '?',
-          orderPriority: !lineMrpSettings
-            ? '?'
-            : lineMrpSettings.get('orderPriority')
-              .map(function(v) { return view.t('orderPriority:' + v); })
-              .join(', '),
+          mrpPriority: line.settings ? line.settings.get('mrpPriority').join('; ') : '?',
+          orderPriority: this.serializeOrderPriority(line),
           redirLine: view.serializeRedirLine(line),
           whLine: view.serializeWhLine(line)
         }
       });
+    },
+
+    serializeOrderPriority: function(line)
+    {
+      let orderPriority;
+
+      if (this.plan.settings.getVersion() === 1)
+      {
+        orderPriority = line.mrpSettings(this.mrp.id).get('orderPriority');
+      }
+      else
+      {
+        orderPriority = line.settings.get('orderPriority');
+      }
+
+      return orderPriority.map(v => this.t(`orderPriority:${v}`)).join('; ');
     },
 
     serializeActiveTime: function(line, force)
@@ -252,21 +263,33 @@ define([
 
     serializeWorkerCount: function(line)
     {
-      var lineMrpSettings = line.mrpSettings(this.mrp.id);
+      var workerCount = [0, 0, 0];
 
-      if (!lineMrpSettings)
+      if (this.plan.settings.getVersion() === 1)
+      {
+        var lineMrpSettings = line.mrpSettings(this.mrp.id);
+
+        if (lineMrpSettings)
+        {
+          workerCount = lineMrpSettings.get('workerCount');
+        }
+      }
+      else
+      {
+        workerCount = line.settings.get('workerCount');
+      }
+
+      if (!Array.isArray(workerCount))
       {
         return '?';
       }
-
-      var workerCount = lineMrpSettings.get('workerCount');
 
       if (workerCount[0] === workerCount[1] && workerCount[0] === workerCount[2])
       {
         return workerCount[0].toLocaleString();
       }
 
-      return workerCount.map(function(v) { return v.toLocaleString(); }).join('; ');
+      return workerCount.map(v => v.toLocaleString()).join('; ');
     },
 
     hideMenu: function()
@@ -303,7 +326,8 @@ define([
         {
           icon: 'fa-columns',
           label: this.t('lines:menu:orderGroupPriority'),
-          handler: this.handleOrderGroupPriorityAction.bind(this)
+          handler: this.handleOrderGroupPriorityAction.bind(this),
+          visible: this.plan.settings.getVersion() > 1
         }
       ]);
     },

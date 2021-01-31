@@ -53,19 +53,18 @@ define([
       this.sortables = [];
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      var view = this;
+      const version = this.plan.settings.getVersion();
 
       return {
-        idPrefix: view.idPrefix,
-        lines: view.mrp.getSortedLines().map(function(line)
+        lines: this.mrp.getSortedLines().map(line =>
         {
-          var lineMrpSettings = line.mrpSettings(view.mrp.id);
+          const settings = (version === 1 ? line.mrpSettings(this.mrp.id) : line.settings);
 
           return {
             _id: line.id,
-            orderPriority: lineMrpSettings ? lineMrpSettings.get('orderPriority').join(',') : ''
+            orderPriority: settings ? settings.get('orderPriority').join(',') : ''
           };
         })
       };
@@ -73,38 +72,34 @@ define([
 
     afterRender: function()
     {
-      var view = this;
-
-      view.$('input[data-line-id]').each(function()
+      this.$('input[data-line-id]').each((i, el) =>
       {
-        view.setUpOrderPriority(view.$(this));
+        this.setUpOrderPriority(this.$(el));
       });
     },
 
     setUpOrderPriority: function($orderPriority)
     {
-      var view = this;
-
       $orderPriority.select2({
         allowClear: true,
         multiple: true,
-        data: view.plan.settings.getAvailableOrderPriorities().map(function(id)
+        data: this.plan.settings.getAvailableOrderPriorities().map(id =>
         {
           return {
             id: id,
-            text: view.t('orderPriority:' + id)
+            text: this.t(`orderPriority:${id}`)
           };
         })
       });
 
-      view.sortables.push(new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
+      this.sortables.push(new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
-        onStart: function()
+        onStart: () =>
         {
           $orderPriority.select2('onSortStart');
         },
-        onEnd: function()
+        onEnd: () =>
         {
           $orderPriority.select2('onSortEnd').select2('focus');
         }
@@ -113,50 +108,51 @@ define([
 
     submitForm: function()
     {
-      var view = this;
-      var $submit = view.$id('submit').prop('disabled', true);
-      var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
+      const $submit = this.$id('submit').prop('disabled', true);
+      const $spinner = $submit.find('.fa-spinner').removeClass('hidden');
 
-      var settings = view.plan.settings;
+      const settings = this.plan.settings;
+      const version = settings.getVersion();
 
-      view.$('input[data-line-id]').each(function()
+      this.$('input[data-line-id]').each((i, el) =>
       {
-        var line = view.mrp.lines.get(this.dataset.lineId);
+        const line = this.mrp.lines.get(el.dataset.lineId);
 
         if (!line)
         {
           return;
         }
 
-        var mrpLineSettings = line.mrpSettings(view.mrp.id);
-        var orderPriority = this.value;
+        const lineSettings = version === 1 ? line.mrpSettings(this.mrp.id) : line.settings;
 
-        if (!mrpLineSettings || !orderPriority.length)
+        if (!lineSettings)
         {
           return;
         }
 
-        if (mrpLineSettings)
-        {
-          mrpLineSettings.set('orderPriority', orderPriority.split(','));
-        }
+        const orderPriority = el.value.split(',').filter(v => !!v);
+
+        lineSettings.set('orderPriority', orderPriority);
       });
+
+      viewport.msg.saving();
 
       var req = settings.save();
 
-      req.done(viewport.closeDialog);
-      req.fail(function()
+      req.done(() =>
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
+
+      req.fail(() =>
       {
         $spinner.addClass('hidden');
         $submit.prop('disabled', false);
 
-        viewport.msg.show({
-          type: 'error',
-          time: 3000,
-          text: view.t('lines:menu:orderPriority:failure')
-        });
+        viewport.msg.savingFailed();
 
-        view.plan.settings.trigger('errored');
+        this.plan.settings.trigger('errored');
       });
     },
 

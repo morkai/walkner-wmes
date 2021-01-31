@@ -34,16 +34,16 @@ define([
 
     getTemplateData: function()
     {
-      var view = this;
+      const version = this.plan.settings.getVersion();
 
       return {
-        lines: view.mrp.getSortedLines().map(function(line)
+        lines: this.mrp.getSortedLines().map(line =>
         {
-          var lineMrpSettings = line.mrpSettings(view.mrp.id);
+          const settings = (version === 1 ? line.mrpSettings(this.mrp.id) : line.settings);
 
           return {
             _id: line.id,
-            workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : [0, 0, 0]
+            workerCount: settings ? settings.get('workerCount') : [0, 0, 0]
           };
         })
       };
@@ -51,39 +51,39 @@ define([
 
     submitForm: function()
     {
-      viewport.msg.saving();
+      const $submit = this.$id('submit').prop('disabled', true);
+      const $spinner = $submit.find('.fa-spinner').removeClass('hidden');
 
-      var view = this;
-      var $submit = view.$id('submit').prop('disabled', true);
-      var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
+      const settings = this.plan.settings;
+      const version = settings.getVersion();
 
-      var settings = view.plan.settings;
-
-      view.$('[data-line-id]').each(function()
+      this.$('[data-line-id]').each((i, el) =>
       {
-        var line = view.mrp.lines.get(this.dataset.lineId);
+        const line = this.mrp.lines.get(el.dataset.lineId);
 
         if (!line)
         {
           return;
         }
 
-        var mrpLineSettings = line.mrpSettings(view.mrp.id);
+        const lineSettings = version === 1 ? line.mrpSettings(this.mrp.id) : line.settings;
 
-        if (!mrpLineSettings)
+        if (!lineSettings)
         {
           return;
         }
 
-        var workerCount = view.$(this)
+        var workerCount = this.$(el)
           .find('[data-shift-no]')
-          .map(function() { return Math.max(0, +parseFloat(this.value).toFixed(2) || 0); })
+          .map((i, el) => Math.max(0, +parseFloat(el.value).toFixed(2) || 0))
           .get();
 
-        mrpLineSettings.set('workerCount', workerCount);
+        lineSettings.set('workerCount', workerCount);
       });
 
-      var req = settings.save();
+      viewport.msg.saving();
+
+      const req = settings.save();
 
       req.done(() =>
       {
@@ -98,7 +98,7 @@ define([
 
         viewport.msg.savingFailed();
 
-        view.plan.settings.trigger('errored');
+        this.plan.settings.trigger('errored');
       });
     },
 

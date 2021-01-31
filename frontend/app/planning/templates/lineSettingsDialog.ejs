@@ -6,7 +6,7 @@
   <div class="form-group has-required-select2">
     <label for="<%- id('mrpPriority') %>" class="control-label"><%- t('settings:mrpPriority') %></label>
     <input id="<%- id('mrpPriority') %>" name="mrpPriority" type="text" value="<%- mrpPriority %>" required>
-    <p class="help-block"><%- t('settings:mrpPriority:help') %></p>
+    <p class="help-block"><%- t(`settings:mrpPriority${version}:help`) %></p>
   </div>
   <% if (version > 1) { %>
   <div class="form-group settings-select2-long">
@@ -30,7 +30,7 @@
     <div class="planning-lineSettings-workerCount">
       <% [1, 2, 3].forEach(function(shiftNo) { %>
       <label for="<%- id('workerCount' + shiftNo) %>" class="planning-lineSettings-workerCount-label"><%- t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
-      <input id="<%- id('workerCount' + shiftNo) %>" name="workerCount<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- workerCount[shiftNo - 1] %>" required min="0" max="20" step="0.01">
+      <input id="<%- id('workerCount' + shiftNo) %>" name="workerCount<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- workerCount[shiftNo - 1] %>" min="0" max="20" step="0.01">
       <% }) %>
     </div>
   </div>
@@ -39,12 +39,14 @@
     <input id="<%- id('orderPriority') %>" name="orderPriority" type="text" value="<%- orderPriority %>" required>
     <p class="help-block"><%- t('settings:orderPriority' + (version === 1 ? '1' : '2') + ':help') %></p>
   </div>
-  <div class="checkbox">
-    <label>
-      <input id="<%- id('workerCount') %>" type="checkbox" value="1">
-      <%- t('lines:menu:settings:applyToAllMrps', {line: line, mrp: mrp}) %>
-    </label>
-  </div>
+  <% if (version === 1) { %>
+    <div class="checkbox">
+      <label>
+        <input id="<%- id('workerCount') %>" type="checkbox" value="1">
+        <%- t('lines:menu:settings:applyToAllMrps', {line: line, mrp: mrp}) %>
+      </label>
+    </div>
+  <% } %>
   <div class="form-actions">
     <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>

@@ -97,7 +97,11 @@ define([
 
       this.$(`.${CSS}-group`).each((i, groupEl) =>
       {
-        groupEl.querySelector('h3').style.width = groupEl.getBoundingClientRect().width + 'px';
+        const h3 = groupEl.querySelector('h3');
+        const table = groupEl.querySelector('table');
+
+        h3.style.width = groupEl.getBoundingClientRect().width + 'px';
+        table.style.marginTop = (h3.getBoundingClientRect().height - 1) + 'px';
       });
     }
 

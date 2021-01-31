@@ -3,168 +3,165 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
+      <h3><%- t('settings:common') %></h3>
       <div class="checkbox" style="margin-top: 0">
-        <label class="control-label">
+        <label class="control-label" data-help>
           <input id="<%- id('forceWorkDay') %>" name="forceWorkDay" type="checkbox" value="true" data-object="plan">
           <%- t('settings:forceWorkDay') %>
         </label>
-        <p class="help-block"><%- t('settings:forceWorkDay:help') %></p>
       </div>
       <% if (version === 1) { %>
         <div class="form-group">
-          <label for="<%- id('freezeHour') %>"><%- t('settings:freezeHour') %></label>
-          <p class="help-block"><%- t('settings:freezeHour:help') %></p>
+          <label for="<%- id('freezeHour') %>" data-help><%- t('settings:freezeHour') %></label>
           <input id="<%- id('freezeHour') %>" name="freezeHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
         </div>
         <div class="form-group">
-          <label for="<%- id('lateHour') %>"><%- t('settings:lateHour') %></label>
-          <p class="help-block"><%- t('settings:lateHour:help') %></p>
+          <label for="<%- id('lateHour') %>" data-help><%- t('settings:lateHour') %></label>
           <input id="<%- id('lateHour') %>" name="lateHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
         </div>
         <div class="form-group">
-          <label for="<%- id('etoPilotHour') %>"><%- t('settings:etoPilotHour') %></label>
-          <p class="help-block"><%- t('settings:etoPilotHour:help') %></p>
+          <label for="<%- id('etoPilotHour') %>" data-help><%- t('settings:etoPilotHour') %></label>
           <input id="<%- id('etoPilotHour') %>" name="etoPilotHour" class="form-control" type="text" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
         </div>
         <div class="form-group">
-          <label for="<%- id('schedulingRate') %>"><%- t('settings:schedulingRate') %></label>
-          <p class="help-block"><%- t('settings:schedulingRate:help') %></p>
+          <label for="<%- id('schedulingRate') %>" data-help><%- t('settings:schedulingRate') %></label>
           <textarea id="<%- id('schedulingRate') %>" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
         </div>
       <% } %>
       <div class="form-group">
-        <label for="<%- id('ignoredWorkCenters') %>"><%- t('settings:ignoredWorkCenters') %></label>
-        <p class="help-block"><%- t('settings:ignoredWorkCenters:help') %></p>
+        <label for="<%- id('ignoredWorkCenters') %>" data-help><%- t('settings:ignoredWorkCenters') %></label>
         <input id="<%- id('ignoredWorkCenters') %>" name="ignoredWorkCenters" class="form-control text-mono" data-object="plan">
       </div>
       <% if (version === 1) { %>
         <% ['requiredStatuses', 'ignoredStatuses', 'completedStatuses'].forEach(function(prop) { %>
           <div class="form-group">
-            <label for="<%- id(prop) %>"><%- t('settings:' + prop) %></label>
-            <p class="help-block"><%- t('settings:' + prop + ':help') %></p>
+            <label for="<%- id(prop) %>" data-help><%- t('settings:' + prop) %></label>
             <input id="<%- id(prop) %>" name="<%- prop %>" type="text" data-object="plan">
           </div>
         <% }) %>
       <% } %>
       <% if (version === 1) { %>
       <div class="checkbox">
-        <label class="control-label">
+        <label class="control-label" data-help>
           <input id="<%- id('ignoreCompleted') %>" name="ignoreCompleted" type="checkbox" value="true" data-object="plan">
           <%- t('settings:ignoreCompleted') %>
         </label>
-        <p class="help-block"><%- t('settings:ignoreCompleted:help') %></p>
       </div>
       <div class="checkbox">
-        <label class="control-label">
+        <label class="control-label" data-help>
           <input id="<%- id('useRemainingQuantity') %>" name="useRemainingQuantity" type="checkbox" value="true" data-object="plan">
           <%- t('settings:useRemainingQuantity') %>
         </label>
-        <p class="help-block"><%- t('settings:useRemainingQuantity:help') %></p>
       </div>
       <% } %>
       <hr>
       <div class="form-group">
-        <label for="<%- id('line') %>"><%- t('settings:line') %></label>
+        <h3><label for="<%- id('line') %>"><%- t('settings:line') %></label></h3>
         <input id="<%- id('line') %>" type="text">
       </div>
-      <div class="row">
-        <div class="col-md-3 form-group">
+      <div class="form-row">
+        <% if (version > 1) { %>
+          <div class="form-group">
+            <label for="<%- id('workerCount') %>"><%- t('settings:workerCount') %></label>
+            <div class="planning-lineSettings-workerCount">
+              <% [1, 2, 3].forEach(function(shiftNo) { %>
+                <label for="<%- id('workerCount-' + shiftNo) %>" class="planning-lineSettings-workerCount-label"><%- t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
+                <input id="<%- id('workerCount-' + shiftNo) %>" name="workerCount" class="form-control planning-lineSettings-workerCount-input" type="number" min="0" max="20" step="0.01" data-object="line" data-index="<%- shiftNo - 1 %>">
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+        <div class="form-group" style="margin-bottom: 15px">
           <label for="<%- id('activeTime') %>"><%- t('settings:activeTime') %></label>
           <input id="<%- id('activeTime') %>" name="activeTime" class="form-control" type="text" placeholder="06:00-06:00" pattern="^[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}(,\s*[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2})*$" data-object="line">
         </div>
+        <% if (version > 1) { %>
+          <div class="form-group">
+            <label for="<%- id('extraCapacity') %>" data-help><%- t('settings:extraCapacity') %></label>
+            <input id="<%- id('extraCapacity') %>" name="extraCapacity" class="form-control" type="text" placeholder="0" pattern="^[0-9]{1,3}%?$" data-object="line" style="width: 100px">
+          </div>
+        <% } %>
       </div>
       <% if (version > 1) { %>
         <div class="form-group">
-          <label for="<%- id('extraCapacity') %>"><%- t('settings:extraCapacity') %></label>
-          <p class="help-block"><%- t('settings:extraCapacity:help') %></p>
-          <input id="<%- id('extraCapacity') %>" name="extraCapacity" class="form-control" type="text" placeholder="0" pattern="^[0-9]{1,3}%?$" data-object="line" style="width: 100px">
+          <label for="<%- id('orderPriority') %>" data-help="orderPriority2"><%- t('settings:orderPriority') %></label>
+          <input id="<%- id('orderPriority') %>" name="orderPriority" type="text">
         </div>
       <% } %>
       <div class="form-group">
-        <label for="<%- id('mrpPriority') %>"><%- t('settings:mrpPriority') %></label>
-        <p class="help-block"><%- t('settings:mrpPriority:help') %></p>
-        <input id="<%- id('mrpPriority') %>" type="text">
+        <label for="<%- id('mrpPriority') %>" data-help="mrpPriority2"><%- t('settings:mrpPriority') %></label>
+        <input id="<%- id('mrpPriority') %>" name="mrpPriority" type="text">
       </div>
       <% if (version > 1) { %>
         <div class="form-group">
-          <label for="<%- id('orderGroupPriority') %>"><%- t('settings:orderGroupPriority') %></label>
-          <p class="help-block"><%- t('settings:orderGroupPriority:help') %></p>
-          <input id="<%- id('orderGroupPriority') %>" type="text">
+          <label for="<%- id('orderGroupPriority') %>" data-help><%- t('settings:orderGroupPriority') %></label>
+          <input id="<%- id('orderGroupPriority') %>" name="orderGroupPriority" type="text">
         </div>
       <% } %>
       <hr>
       <div class="form-group">
-        <label for="<%- id('mrp') %>"><%- t('settings:mrp') %></label>
-        <p class="help-block"><%- t('settings:mrp:help') %></p>
+        <h3><label for="<%- id('mrp') %>"><%- t('settings:mrp') %></label></h3>
         <input id="<%- id('mrp') %>" type="text">
       </div>
       <% if (version > 1) { %>
         <div class="form-group">
-          <label for="<%- id('linePriority') %>"><%- t('settings:linePriority') %></label>
-          <p class="help-block"><%- t('settings:linePriority:help') %></p>
+          <label for="<%- id('linePriority') %>" data-help><%- t('settings:linePriority') %></label>
           <input id="<%- id('linePriority') %>" name="linePriority" type="text" data-object="mrp">
         </div>
       <% } %>
-      <div class="checkbox">
-        <label class="control-label">
-          <input id="<%- id('limitSmallOrders') %>" name="limitSmallOrders" type="checkbox" value="true" data-object="mrp">
-          <%- t('settings:limitSmallOrders') %>
-        </label>
-        <p class="help-block"><%- t('settings:limitSmallOrders:help') %></p>
-      </div>
-      <br>
+      <% if (version === 1) { %>
+        <div class="checkbox">
+          <label class="control-label" data-help>
+            <input id="<%- id('limitSmallOrders') %>" name="limitSmallOrders" type="checkbox" value="true" data-object="mrp">
+            <%- t('settings:limitSmallOrders') %>
+          </label>
+        </div>
+        <br>
+      <% } %>
       <div class="row">
         <div class="col-md-3 form-group">
-          <label for="<%- id('extraOrderSeconds') %>"><%- t('settings:extraOrderSeconds') %></label>
+          <label for="<%- id('extraOrderSeconds') %>" data-help><%- t('settings:extraOrderSeconds') %></label>
           <input id="<%- id('extraOrderSeconds') %>" name="extraOrderSeconds" class="form-control" type="number" min="0" max="600" step="1" data-object="mrp">
-          <p class="help-block"><%- t('settings:extraOrderSeconds:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- id('extraShiftSeconds-1') %>"><%- t('settings:extraShiftSeconds:1') %></label>
+          <label for="<%- id('extraShiftSeconds-1') %>" data-help><%- t('settings:extraShiftSeconds:1') %></label>
           <input id="<%- id('extraShiftSeconds-1') %>" name="extraShiftSeconds" class="form-control" type="number" min="0" max="3600" step="1" data-object="mrp">
-          <p class="help-block"><%- t('settings:extraShiftSeconds:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- id('extraShiftSeconds-2') %>"><%- t('settings:extraShiftSeconds:2') %></label>
+          <label for="<%- id('extraShiftSeconds-2') %>" data-help><%- t('settings:extraShiftSeconds:2') %></label>
           <input id="<%- id('extraShiftSeconds-2') %>" name="extraShiftSeconds" class="form-control" type="number" min="0" max="3600" step="1" data-object="mrp">
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- id('extraShiftSeconds-3') %>"><%- t('settings:extraShiftSeconds:3') %></label>
+          <label for="<%- id('extraShiftSeconds-3') %>" data-help><%- t('settings:extraShiftSeconds:3') %></label>
           <input id="<%- id('extraShiftSeconds-3') %>" name="extraShiftSeconds" class="form-control" type="number" min="0" max="3600" step="1" data-object="mrp">
         </div>
       </div>
       <div class="row">
         <% if (version === 1) { %>
           <div class="col-md-3 form-group">
-            <label for="<%- id('bigOrderQuantity') %>"><%- t('settings:bigOrderQuantity') %></label>
+            <label for="<%- id('bigOrderQuantity') %>" data-help="bigOrderQuantity1"><%- t('settings:bigOrderQuantity') %></label>
             <input id="<%- id('bigOrderQuantity') %>" name="bigOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-            <p class="help-block"><%- t('settings:bigOrderQuantity1:help') %></p>
           </div>
           <div class="col-md-3 form-group">
-            <label for="<%- id('hardOrderManHours') %>"><%- t('settings:hardOrderManHours') %></label>
+            <label for="<%- id('hardOrderManHours') %>" data-help><%- t('settings:hardOrderManHours') %></label>
             <input id="<%- id('hardOrderManHours') %>" name="hardOrderManHours" class="form-control" type="number" min="0" max="9999" step="0.001" data-object="mrp">
-            <p class="help-block"><%- t('settings:hardOrderManHours:help') %></p>
           </div>
           <div class="col-md-3 form-group">
-            <label for="<%- id('splitOrderQuantity') %>"><%- t('settings:splitOrderQuantity') %></label>
+            <label for="<%- id('splitOrderQuantity') %>" data-help><%- t('settings:splitOrderQuantity') %></label>
             <input id="<%- id('splitOrderQuantity') %>" name="splitOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-            <p class="help-block"><%- t('settings:splitOrderQuantity:help') %></p>
           </div>
           <div class="col-md-3 form-group">
-            <label for="<%- id('maxSplitLineCount') %>"><%- t('settings:maxSplitLineCount') %></label>
+            <label for="<%- id('maxSplitLineCount') %>" data-help><%- t('settings:maxSplitLineCount') %></label>
             <input id="<%- id('maxSplitLineCount') %>" name="maxSplitLineCount" class="form-control" type="number" min="0" max="99" step="1" data-object="mrp">
-            <p class="help-block"><%- t('settings:maxSplitLineCount:help') %></p>
           </div>
         <% } else { %>
           <div class="col-md-3 form-group">
-            <label for="<%- id('smallOrderQuantity') %>"><%- t('settings:smallOrderQuantity') %></label>
+            <label for="<%- id('smallOrderQuantity') %>" data-help><%- t('settings:smallOrderQuantity') %></label>
             <input id="<%- id('smallOrderQuantity') %>" name="smallOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-            <p class="help-block"><%- t('settings:smallOrderQuantity:help') %></p>
           </div>
           <div class="col-md-3 form-group">
-            <label for="<%- id('bigOrderQuantity') %>"><%- t('settings:bigOrderQuantity') %></label>
+            <label for="<%- id('bigOrderQuantity') %>" data-help="bigOrderQuantity2"><%- t('settings:bigOrderQuantity') %></label>
             <input id="<%- id('bigOrderQuantity') %>" name="bigOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-            <p class="help-block"><%- t('settings:bigOrderQuantity2:help') %></p>
           </div>
         <% } %>
       </div>
@@ -196,28 +193,28 @@
           <span><%- t('settings:groups:add') %></span>
         </button>
       </div>
-      <hr>
-      <div class="form-group">
-        <label for="<%- id('mrpLine') %>"><%- t('settings:mrpLine') %></label>
-        <p class="help-block"><%- t('settings:mrpLine:help') %></p>
-        <input id="<%- id('mrpLine') %>" type="text">
-      </div>
-      <div class="row">
-        <div class="col-md-3 form-group">
-          <label for="<%- id('workerCount') %>"><%- t('settings:workerCount') %></label>
-          <div class="planning-lineSettings-workerCount">
-            <% [1, 2, 3].forEach(function(shiftNo) { %>
-            <label for="<%- id('workerCount-' + shiftNo) %>" class="planning-lineSettings-workerCount-label"><%- t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
-            <input id="<%- id('workerCount-' + shiftNo) %>" name="workerCount" class="form-control planning-lineSettings-workerCount-input" type="number" min="0" max="20" step="0.01" data-object="mrpLine" data-index="<%- shiftNo - 1 %>">
-            <% }) %>
+      <% if (version === 1) { %>
+        <hr>
+        <div class="form-group">
+          <h3><label for="<%- id('mrpLine') %>"><%- t('settings:mrpLine') %></label></h3>
+          <input id="<%- id('mrpLine') %>" type="text">
+        </div>
+        <div class="row">
+          <div class="col-md-3 form-group">
+            <label for="<%- id('workerCount') %>"><%- t('settings:workerCount') %></label>
+            <div class="planning-lineSettings-workerCount">
+              <% [1, 2, 3].forEach(function(shiftNo) { %>
+              <label for="<%- id('workerCount-' + shiftNo) %>" class="planning-lineSettings-workerCount-label"><%- t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
+              <input id="<%- id('workerCount-' + shiftNo) %>" name="workerCount" class="form-control planning-lineSettings-workerCount-input" type="number" min="0" max="20" step="0.01" data-object="mrpLine" data-index="<%- shiftNo - 1 %>">
+              <% }) %>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="<%- id('orderPriority') %>"><%- t('settings:orderPriority') %></label>
-        <p class="help-block"><%- t('settings:orderPriority' + (version === 1 ? '1' : '2') + ':help') %></p>
-        <input id="<%- id('orderPriority') %>" type="text">
-      </div>
+        <div class="form-group">
+          <label for="<%- id('orderPriority') %>" data-help="orderPriority1"><%- t('settings:orderPriority') %></label>
+          <input id="<%- id('orderPriority') %>" type="text">
+        </div>
+      <% } %>
     </div>
     <div class="panel-footer">
       <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- formActionText %></button>

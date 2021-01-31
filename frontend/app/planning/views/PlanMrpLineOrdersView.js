@@ -13,7 +13,8 @@ define([
   'app/planning/templates/lineOrderPopover',
   'app/planning/templates/lineOrderDowntimePopover',
   'app/planning/templates/lineOrderShiftPopover',
-  'app/planning/templates/lineOrderLinePopover'
+  'app/planning/templates/lineOrderLinePopover',
+  'app/planning/templates/orderStatusIcons'
 ], function(
   _,
   $,
@@ -27,13 +28,16 @@ define([
   lineOrderPopoverTemplate,
   lineOrderDowntimePopoverTemplate,
   lineOrderShiftPopoverTemplate,
-  lineOrderLinePopoverTemplate
+  lineOrderLinePopoverTemplate,
+  orderStatusIconsTemplate
 ) {
   'use strict';
 
   return View.extend({
 
     template: lineOrdersTemplate,
+
+    modelProperty: 'plan',
 
     events: {
       'mouseenter .is-lineOrder': function(e)
@@ -310,9 +314,19 @@ define([
         });
       });
 
-      return shifts.filter(function(shift)
+      return shifts.filter(shift =>
       {
-        return shift && shift.orders.length > 0;
+        if (shift.no === 0)
+        {
+          return false;
+        }
+
+        if (shift.orders.length > 0)
+        {
+          return true;
+        }
+
+        return !!shifts[shift.no + 1] && shifts[shift.no + 1].orders.length > 0;
       });
     },
 
@@ -371,8 +385,9 @@ define([
       var quantityDone = this.plan.isProdStateUsed()
         ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, lineOrder)
         : -1;
+      var orderGroup = this.orderGroups.get(lineOrder.get('group'));
 
-      return lineOrderPopoverTemplate({
+      return this.renderPartialHtml(lineOrderPopoverTemplate, {
         lineOrder: {
           _id: lineOrder.id,
           orderNo: orderNo,
@@ -385,7 +400,9 @@ define([
           startAt: startAt,
           finishAt: finishAt,
           duration: (finishAt - startAt) / 1000,
-          comment: sapOrder ? sapOrder.getCommentWithIcon() : ''
+          comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
+          statusIcons: orderStatusIconsTemplate(this.plan, orderNo, {sapStatuses: false}),
+          group: orderGroup ? orderGroup.getLabel() : ''
         }
       });
     },

@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'select2',
   'Sortable',
   'app/viewport',
   'app/core/View',
@@ -11,6 +12,7 @@ define([
   'app/planning/templates/linesOrderGroupPriorityDialog'
 ], function(
   _,
+  select2,
   Sortable,
   viewport,
   View,
@@ -106,28 +108,86 @@ define([
 
     setUpOrderGroupPriority: function($orderGroupPriority)
     {
-      var view = this;
-      var sortable = $orderGroupPriority.data('sortable');
+      const mrpPriority = this.mrp.lines.get($orderGroupPriority[0].dataset.lineId).settings.get('mrpPriority');
+      const data = this.orderGroups.map(g =>
+      {
+        const mrps = g.get('mrp') || [];
+
+        return {
+          id: g.id,
+          text: g.getLabel(),
+          mrps,
+          search: (g.getLabel() + ' ' + mrps.join(' ')).trim().toUpperCase(),
+          hasLineMrps: _.intersection(mrps, mrpPriority).length > 0,
+          model: g
+        };
+      });
+
+      data.sort((a, b) =>
+      {
+        if (a.model.isNoMatchGroup())
+        {
+          return -1;
+        }
+
+        if (b.model.isNoMatchGroup())
+        {
+          return 1;
+        }
+
+        if (a.hasLineMrps === b.hasLineMrps)
+        {
+          return a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true});
+        }
+
+        if (a.hasLineMrps)
+        {
+          return -1;
+        }
+
+        return 1;
+      });
+
+      $orderGroupPriority.select2({
+        allowClear: true,
+        multiple: true,
+        data,
+        matcher: (term, text, item) => item.search.includes(term.toUpperCase()),
+        formatResult: (item, $container, query, e) =>
+        {
+          const html = [];
+
+          select2.util.markMatch(item.text, query.term, html, e);
+
+          if (item.mrps.length)
+          {
+            item.mrps.forEach(mrp =>
+            {
+              html.push(' &nbsp;<span class="label label-default">');
+              select2.util.markMatch(mrp, query.term, html, e);
+              html.push('</span>');
+            });
+          }
+
+          return html.join('');
+        }
+      });
+
+      let sortable = $orderGroupPriority.data('sortable');
 
       if (sortable)
       {
         sortable.destroy();
       }
 
-      $orderGroupPriority.select2({
-        allowClear: true,
-        multiple: true,
-        data: view.orderGroups.map(idAndLabel)
-      });
-
       sortable = new Sortable($orderGroupPriority.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
-        onStart: function()
+        onStart: () =>
         {
           $orderGroupPriority.select2('onSortStart');
         },
-        onEnd: function()
+        onEnd: () =>
         {
           $orderGroupPriority.select2('onSortEnd').select2('focus');
         }

@@ -1,50 +1,54 @@
 <table>
   <tbody>
   <tr>
-    <th><%- t('planning', 'lineOrders:orderNo') %></th>
-    <td><%= lineOrder.orderNo %></td>
+    <th colspan="2"><%- lineOrder.orderNo %> <%- lineOrder.statusIcons %></th>
   </tr>
+  <% if (lineOrder.group) { %>
+    <tr>
+      <td colspan="2" style="max-width: 200px;"><%- lineOrder.group %></td>
+    </tr>
+  <% } %>
   <tr>
-    <th><%- t('planning', 'lineOrders:qty:planned') %></th>
+    <th><%- t('lineOrders:qty:planned') %></th>
     <td><%- lineOrder.quantityPlanned.toLocaleString() %></td>
   </tr>
   <% if (lineOrder.quantityDone >= 0) { %>
-  <tr>
-    <th><%- t('planning', 'lineOrders:qty:done') %></th>
-    <td><%- lineOrder.quantityDone.toLocaleString() %></td>
-  </tr>
+    <tr>
+      <th><%- t('lineOrders:qty:done') %></th>
+      <td><%- lineOrder.quantityDone.toLocaleString() %></td>
+    </tr>
   <% } %>
   <% if (lineOrder.quantityRemaining) { %>
-  <tr>
-    <th><%- t('planning', 'lineOrders:qty:remaining') %></th>
-    <td><%- lineOrder.quantityRemaining.toLocaleString() %></td>
-  </tr>
+    <tr>
+      <th><%- t('lineOrders:qty:remaining') %></th>
+      <td><%- lineOrder.quantityRemaining.toLocaleString() %></td>
+    </tr>
   <% } %>
   <tr>
-    <th><%- t('planning', 'lineOrders:qty:total') %></th>
+    <th><%- t('lineOrders:qty:total') %></th>
     <td><%- lineOrder.quantityTotal.toLocaleString() %></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lineOrders:pceTime') %></th>
+    <th><%- t('lineOrders:pceTime') %></th>
     <td><%- time.toString(lineOrder.pceTime) %></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lineOrders:manHours') %></th>
+    <th><%- t('lineOrders:manHours') %></th>
     <td><%- lineOrder.manHours.toLocaleString() %></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lineOrders:time') %></th>
-    <td><%= time.utc.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.utc.format(lineOrder.finishAt, 'HH:mm:ss') %></td>
+    <th><%- t('lineOrders:time') %></th>
+    <td style="white-space: nowrap"><%= time.utc.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.utc.format(lineOrder.finishAt, 'HH:mm:ss') %></td>
   </tr>
   <tr>
-    <th><%- t('planning', 'lineOrders:duration') %></th>
+    <th><%- t('lineOrders:duration') %></th>
     <td><%- time.toString(lineOrder.duration) %></td>
   </tr>
   <% if (lineOrder.comment) { %>
-  <tr>
-    <th style="vertical-align: top"><%- t('planning', 'lineOrders:comment') %></th>
-    <td style="vertical-align: top; max-width: 200px;"><%- lineOrder.comment %></td>
-  </tr>
+    <tr>
+      <th style="vertical-align: top"><%- t('lineOrders:comment') %></th>
+      <td style="vertical-align: top; max-width: 200px;"><%- lineOrder.comment %></td>
+    </tr>
   <% } %>
   </tbody>
 </table>
