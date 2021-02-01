@@ -81,7 +81,7 @@ define([
       const series = this.serializeChartSeries();
       const xAxis = {};
 
-      if (this.model.get('interval') === 'none')
+      if (this.model.getInterval() === 'none')
       {
         xAxis.type = 'category';
         xAxis.categories = this.serializeCategories();
@@ -181,7 +181,7 @@ define([
     {
       const {rows, series} = this.model.get(this.options.metric) || {rows: [], series: {}};
 
-      if (this.model.get('interval') === 'none')
+      if (this.model.getInterval() === 'none')
       {
         const s = {
           id: this.options.metric,

@@ -33,7 +33,6 @@ define([
     nearMiss: [
       'status',
       'user',
-      'locationPath',
       'kind',
       'eventCategory',
       'reasonCategory',
@@ -42,21 +41,18 @@ define([
     kaizen: [
       'status',
       'user',
-      'locationPath',
       'kind',
       'kaizenCategory'
     ],
     action: [
       'status',
       'user',
-      'locationPath',
       'kind',
       'activityKind'
     ],
     observation: [
       'status',
       'user',
-      'locationPath',
       'observationKind'
     ]
   };

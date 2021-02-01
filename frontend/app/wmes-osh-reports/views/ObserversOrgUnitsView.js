@@ -5,6 +5,7 @@ define([
   'app/core/View',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-departments/Department',
+  'app/wmes-osh-reports/util/formatPercent',
   'app/wmes-osh-reports/templates/observers/orgUnits',
   'jquery.stickytableheaders'
 ], function(
@@ -12,6 +13,7 @@ define([
   View,
   dictionaries,
   Department,
+  formatPercent,
   template
 ) {
   'use strict';
@@ -158,6 +160,7 @@ define([
         observers: d.observers || 0,
         observersPercent: 0,
         observersInvalid: false,
+        minObservers: division ? division.get('minObservers') : 0,
         safePercent: 0,
         safeInvalid: false,
         easyPercent: 0,
@@ -183,17 +186,19 @@ define([
       const {
         minSafeObs,
         maxSafeObs,
-        observersPerDepartment,
-        obsCardsPerDepartment
+        obsCardsPerDepartment,
+        observersPerDepartment
       } = this.model.get('settings');
 
-      row.observersPercent = Math.round(row.observers / row.employees * 100);
-      row.observersInvalid = row.observersPercent >= 0 && row.observersPercent < observersPerDepartment;
-      row.cardsPercent = Math.round(row.metrics[0] / row.employees * 100);
+      const minObservers = row.minObservers || observersPerDepartment;
+
+      row.observersPercent = formatPercent(row.observers / row.employees);
+      row.observersInvalid = row.observersPercent >= 0 && row.observersPercent < minObservers;
+      row.cardsPercent = formatPercent(row.metrics[0] / row.employees);
       row.cardsInvalid = row.cardsPercent >= 0 && row.cardsPercent < obsCardsPerDepartment;
-      row.safePercent = Math.round(row.metrics[3] / row.metrics[1] * 100);
+      row.safePercent = formatPercent(row.metrics[3] / row.metrics[1]);
       row.safeInvalid = row.safePercent < minSafeObs || row.safePercent > maxSafeObs;
-      row.easyPercent = Math.round((row.metrics[6] + row.metrics[9]) / (row.metrics[5] + row.metrics[8]) * 100);
+      row.easyPercent = formatPercent((row.metrics[6] + row.metrics[9]) / (row.metrics[5] + row.metrics[8]));
 
       return row;
     }

@@ -47,9 +47,9 @@ define([
         filterView: this,
         emptyLabel: this.t('wmes-osh-reports', 'filter:orgUnit'),
         orgUnitTerms: {
-          'creator.oshDivision': 'division',
-          'creator.oshWorkplace': 'workplace',
-          'creator.oshDepartment': 'department'
+          'oshDivision': 'division',
+          'oshWorkplace': 'workplace',
+          'oshDepartment': 'department'
         },
         orgUnitTypes: ['division', 'workplace', 'department']
       }));

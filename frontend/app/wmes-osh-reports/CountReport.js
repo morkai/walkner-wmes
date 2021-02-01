@@ -7,7 +7,8 @@ define([
   'app/time',
   'app/core/Model',
   'app/data/colorFactory',
-  'app/wmes-osh-common/dictionaries'
+  'app/wmes-osh-common/dictionaries',
+  './util/createDefaultFilter'
 ], function(
   _,
   rql,
@@ -15,15 +16,18 @@ define([
   time,
   Model,
   colorFactory,
-  dictionaries
+  dictionaries,
+  createDefaultFilter
 ) {
   'use strict';
 
   const COLORS = {
+    total: '#ddd',
     entry: '#666',
     observation: '#666',
     new: '#999',
     inProgress: '#0af',
+    open: '#e00',
     verification: '#aa00ff',
     finished: '#00af00',
     paused: '#fa0',
@@ -33,6 +37,7 @@ define([
     nearMiss: [
       'count',
       'duration',
+      'finished',
       'status',
       'kind',
       'eventCategory',
@@ -43,6 +48,7 @@ define([
     kaizen: [
       'count',
       'duration',
+      'finished',
       'status',
       'kind',
       'kaizenCategory',
@@ -52,6 +58,7 @@ define([
     action: [
       'count',
       'duration',
+      'finished',
       'status',
       'kind',
       'activityKind',
@@ -62,6 +69,7 @@ define([
     observation: [
       'count',
       'duration',
+      'finished',
       'status',
       'observationKind',
       'company',
@@ -120,9 +128,10 @@ define([
 
     initialize: function(attrs, options)
     {
-      this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : rql.parse(
-        `interval=day&createdAt>=${time.getMoment().startOf('day').subtract(7, 'days').valueOf()}`
-      );
+      this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : createDefaultFilter({
+        dateProperty: 'createdAt',
+        interval: 'day'
+      });
 
       this.type = options.type;
 
@@ -169,6 +178,43 @@ define([
             }
           }
         },
+        finished: {
+          rows: [
+            {
+              id: 'open',
+              abs: totals.count - totals.finished,
+              rel: (totals.count - totals.finished) / totals.count,
+              color: COLORS.open,
+              label: t(this.nlsDomain, 'series:open')
+            },
+            {
+              id: 'finished',
+              abs: totals.finished,
+              rel: totals.finished / totals.count,
+              color: COLORS.finished,
+              label: t(this.nlsDomain, 'series:finished')
+            },
+            {
+              id: 'total',
+              abs: totals.count,
+              rel: 1,
+              color: COLORS.total,
+              label: t(this.nlsDomain, 'series:total')
+            }
+          ],
+          series: {
+            open: {
+              data: [],
+              color: COLORS.open,
+              stacking: 'percent'
+            },
+            finished: {
+              data: [],
+              color: COLORS.finished,
+              stacking: 'percent'
+            }
+          }
+        },
         duration: {
           rows: [
             {
@@ -176,7 +222,7 @@ define([
               abs: totals.duration[2],
               rel: 1,
               color: COLORS.entry,
-              label: entryLabel
+              label: t(this.nlsDomain, 'series:duration')
             }
           ],
           series: {
@@ -265,16 +311,32 @@ define([
           x = group.key;
         }
 
-        attrs.duration.series.entry.data.push({x, y: group.duration && group.duration[2] ? group.duration[2] : null});
+        attrs.duration.series.entry.data.push({
+          x,
+          y: group.duration && group.duration[2] ? group.duration[2] : null
+        });
+
+        attrs.finished.series.open.data.push({
+          x,
+          y: (group.count - group.finished) || 0
+        });
+
+        attrs.finished.series.finished.data.push({
+          x,
+          y: group.finished || 0
+        });
 
         countMetrics.forEach(metric =>
         {
-          Object.values(attrs[metric].series)[0].data.push({x, y: group[metric] || null});
+          Object.values(attrs[metric].series)[0].data.push({
+            x,
+            y: group[metric] === 0 ? 0 : (group[metric] || null)
+          });
         });
 
         this.metrics.forEach(metric =>
         {
-          if (!totals[metric])
+          if (totals[metric] == null)
           {
             return;
           }
@@ -367,9 +429,24 @@ define([
 
     createSeriesFromRows: function(metric, attrs, group)
     {
-      const series = attrs[metric].series;
+      if (!attrs[metric])
+      {
+        attrs[metric] = {rows: [], series: {}};
+      }
 
-      _.forEach(attrs[metric].rows, row =>
+      const {rows, series} = attrs[metric];
+
+      if (!Array.isArray(rows))
+      {
+        return;
+      }
+
+      if (rows.length && series[rows[0].id] && series[rows[0].id].data.length)
+      {
+        return;
+      }
+
+      _.forEach(rows, row =>
       {
         if (row.id === 'total')
         {
@@ -390,6 +467,13 @@ define([
           y: group[metric] ? (group[metric][row.id] || null) : null
         });
       });
+    },
+
+    getInterval: function()
+    {
+      const term = this.rqlQuery.selector.args.find(term => term.name === 'eq' && term.args[0] === 'interval');
+
+      return term ? term.args[1] : 'none';
     }
 
   }, {

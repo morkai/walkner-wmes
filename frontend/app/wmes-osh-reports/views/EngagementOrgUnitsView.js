@@ -5,6 +5,7 @@ define([
   'app/core/View',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-departments/Department',
+  'app/wmes-osh-reports/util/formatPercent',
   'app/wmes-osh-reports/templates/engagement/orgUnits',
   'jquery.stickytableheaders'
 ], function(
@@ -12,6 +13,7 @@ define([
   View,
   dictionaries,
   Department,
+  formatPercent,
   template
 ) {
   'use strict';
@@ -181,13 +183,7 @@ define([
     {
       const {minEngagement} = this.model.get('settings');
 
-      row.engagedPercent = Math.round(row.engaged / row.employed * 100);
-
-      if (!isFinite(row.engagedPercent))
-      {
-        row.engagedPercent = -1;
-      }
-
+      row.engagedPercent = formatPercent(row.engaged / row.employed);
       row.engagedInvalid = row.engagedPercent >= 0 && row.engagedPercent < minEngagement;
 
       return row;

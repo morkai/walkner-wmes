@@ -5,6 +5,7 @@ define([
   'app/time',
   'app/core/View',
   'app/core/templates/userInfo',
+  'app/wmes-osh-reports/util/formatPercent',
   'app/wmes-osh-reports/templates/observers/users',
   'jquery.stickytableheaders'
 ], function(
@@ -12,6 +13,7 @@ define([
   time,
   View,
   userInfoTemplate,
+  formatPercent,
   template
 ) {
   'use strict';
@@ -30,16 +32,35 @@ define([
 
     getTemplateData: function()
     {
+      const settings = this.model.get('settings');
+      const months = this.model.get('months');
+      const empty = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
       return {
-        settings: this.model.get('settings'),
-        months: this.model.get('months'),
+        months,
         users: this.model.get('users').map(u =>
         {
-          u.info = userInfoTemplate(u);
+          return {
+            label: userInfoTemplate(u),
+            months: months.map(month =>
+            {
+              const metrics = u.months[month] || empty;
+              const safePercent = formatPercent(metrics[3] / metrics[1]);
 
-          return u;
-        }),
-        empty: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+              return {
+                cards: metrics[0],
+                cardsInvalid: metrics[0] < settings.minObsCards,
+                observations: metrics[1],
+                safe: metrics[3],
+                safePercent,
+                safeInvalid: safePercent < settings.minSafeObs || safePercent > settings.maxSafeObs,
+                risky: metrics[4] + metrics[7],
+                easy: metrics[5] + metrics[8],
+                hard: metrics[6] + metrics[9]
+              };
+            })
+          };
+        })
       };
     },
 

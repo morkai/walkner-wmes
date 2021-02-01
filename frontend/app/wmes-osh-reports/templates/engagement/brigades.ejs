@@ -29,7 +29,7 @@
           <td class="osh-report-engagement-metric osh-report-engagement-group"><%- month.members.length.toLocaleString() %></td>
           <td class="osh-report-engagement-metric"><%- month.active.toLocaleString() %></td>
           <td class="osh-report-engagement-metric <%- month.active < month.members.length ? '' : 'is-invalid' %>">
-            <%- month.members.length ? `${Math.round(month.active / month.members.length * 100).toLocaleString()}%` : '' %>
+            <%- month.members.length ? `${Math.round(month.active / month.members.length * 100).toLocaleString()}%` : '0%' %>
           </td>
           <td class="osh-report-engagement-metric <%- month.metrics[0] ? '' : 'is-invalid' %>"><%- month.metrics[0].toLocaleString() %></td>
           <td class="osh-report-engagement-metric <%- month.metrics[1] ? '' : 'is-invalid' %>"><%- month.metrics[1].toLocaleString() %></td>

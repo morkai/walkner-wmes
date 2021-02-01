@@ -4,7 +4,7 @@
     <tr>
       <th rowspan="2"><%- t('observers:observer') %></th>
       <% months.forEach(month => { %>
-        <th class="osh-report-engagement-group" colspan="6"><%- time.format(month, 'MMMM YYYY') %></th>
+        <th class="osh-report-engagement-group" colspan="7"><%- time.format(month, 'MMMM YYYY') %></th>
       <% }) %>
       <th rowspan="2"></th>
     </tr>
@@ -13,6 +13,7 @@
         <th class="osh-report-observers-metric osh-report-observers-group" title="<%- t('observers:cards:title') %>"><%- t('observers:cards:header') %></th>
         <th class="osh-report-observers-metric" title="<%- t('observers:observations:title') %>"><%- t('observers:observations:header') %></th>
         <th class="osh-report-observers-metric" title="<%- t('observers:safe:title') %>"><%- t('observers:safe:header') %></th>
+        <th class="osh-report-observers-metric" title="<%- t('observers:safePercent') %>">%</th>
         <th class="osh-report-observers-metric" title="<%- t('observers:risky:title') %>"><%- t('observers:risky:header') %></th>
         <th class="osh-report-observers-metric" title="<%- t('observers:easy:title') %>"><%- t('observers:easy:header') %></th>
         <th class="osh-report-observers-metric" title="<%- t('observers:hard:title') %>"><%- t('observers:hard:header') %></th>
@@ -22,15 +23,17 @@
     <tbody>
     <% users.forEach((user, i) => { %>
       <tr>
-        <td><%- user.info %></td>
-        <% months.forEach(month => { %>
-          <% let metrics = user.months[month] || empty %>
-          <td class="osh-report-observers-metric osh-report-observers-group <%- metrics[0] < settings.minObsCards ? 'is-invalid' : '' %>"><%- metrics[0].toLocaleString() %></td>
-          <td class="osh-report-observers-metric"><%- metrics[1].toLocaleString() %></td>
-          <td class="osh-report-observers-metric"><%- metrics[3].toLocaleString() %></td>
-          <td class="osh-report-observers-metric"><%- (metrics[4] + metrics[7]).toLocaleString() %></td>
-          <td class="osh-report-observers-metric"><%- (metrics[5] + metrics[8]).toLocaleString() %></td>
-          <td class="osh-report-observers-metric"><%- (metrics[6] + metrics[9]).toLocaleString() %></td>
+        <td><%- user.label %></td>
+        <% user.months.forEach(metrics => { %>
+          <td class="osh-report-observers-metric osh-report-observers-group <%- metrics.cardsInvalid ? 'is-invalid' : '' %>">
+            <%- metrics.cards.toLocaleString() %>
+          </td>
+          <td class="osh-report-observers-metric"><%- metrics.observations.toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- metrics.safe.toLocaleString() %></td>
+          <td class="osh-report-observers-metric <%- metrics.safeInvalid ? 'is-invalid' : '' %>"><%- metrics.safePercent %>%</td>
+          <td class="osh-report-observers-metric"><%- metrics.risky.toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- metrics.easy.toLocaleString() %></td>
+          <td class="osh-report-observers-metric"><%- metrics.hard.toLocaleString() %></td>
         <% }) %>
         <td></td>
       </tr>

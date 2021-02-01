@@ -1,6 +1,6 @@
 <div class="osh-report">
   <div id="<%- id('filter') %>" class="filter-container"></div>
-  <% ['count', 'duration', 'orgUnit', 'status', 'kind', 'eventCategory', 'reasonCategory', 'priority', 'creator'].forEach(metric => { %>
+  <% ['count', 'duration', 'finished', 'orgUnit', 'status', 'kind', 'eventCategory', 'reasonCategory', 'priority', 'creator'].forEach(metric => { %>
     <% if (metric === 'orgUnit') { %>
       <h3>
         <span><%- t.has(`count:title:orgUnits:${type}`) ? t(`count:title:orgUnits:${type}`) : t(`count:title:orgUnits`) %></span>

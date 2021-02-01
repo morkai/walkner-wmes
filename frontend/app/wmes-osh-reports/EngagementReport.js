@@ -5,13 +5,15 @@ define([
   'h5.rql/index',
   'app/i18n',
   'app/time',
-  'app/core/Model'
+  'app/core/Model',
+  './util/createDefaultFilter'
 ], function(
   _,
   rql,
   t,
   time,
-  Model
+  Model,
+  createDefaultFilter
 ) {
   'use strict';
 
@@ -35,9 +37,9 @@ define([
 
     initialize: function(attrs, options)
     {
-      this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : rql.parse(
-        `date>=${time.getMoment().startOf('month').subtract(3, 'months').valueOf()}`
-      );
+      this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : createDefaultFilter({
+        orgUnitProperty: ''
+      });
     },
 
     fetch: function(options)
