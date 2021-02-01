@@ -120,13 +120,15 @@ define([
         invalidOnly: this.invalidOnly,
         valid: this.model.get('valid'),
         orders: this.model.serializeOrders(),
-        canManage: Entry.can.releaseOrder(this.model)
+        canRelease: Entry.can.releaseOrder(this.model),
+        canRemove: Entry.can.removeOrder(this.model)
       };
     },
 
     toggleButtons: function()
     {
-      this.$('.can-manage').toggleClass('hidden', !Entry.can.releaseOrder(this.model));
+      this.$('.can-release').toggleClass('hidden', !Entry.can.releaseOrder(this.model));
+      this.$('.can-remove').toggleClass('hidden', !Entry.can.removeOrder(this.model));
     },
 
     toggleValid: function()

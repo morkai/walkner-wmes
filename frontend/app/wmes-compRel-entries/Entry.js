@@ -805,6 +805,11 @@ define([
           && ((this.can || this).manage() || currentUser.isAllowedTo('FN:production-planner'));
       },
 
+      removeOrder: function()
+      {
+        return (this.can || this).manage() || currentUser.isAllowedTo('FN:production-planner');
+      },
+
       uploadAttachments: function()
       {
         return true;
