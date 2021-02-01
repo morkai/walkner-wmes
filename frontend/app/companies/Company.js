@@ -33,11 +33,6 @@ define([
     {
       var obj = this.toJSON();
 
-      if (!obj.name)
-      {
-        obj.name = obj._id;
-      }
-
       obj.color = colorLabel(obj.color);
 
       return obj;

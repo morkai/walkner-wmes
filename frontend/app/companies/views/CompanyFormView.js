@@ -40,11 +40,31 @@ define([
       this.$id('color').parent().colorpicker();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(FormView.prototype.serialize.call(this), {
+      return {
         renderColorPicker: colorPickerTemplate
-      });
+      };
+    },
+
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.syncPatterns = (formData.syncPatterns || []).join('\n');
+
+      return formData;
+    },
+
+    serializeForm: function(formData)
+    {
+      formData.syncPatterns = (formData.syncPatterns || '')
+        .trim()
+        .split('\n')
+        .map(function(line) { return line.trim(); })
+        .filter(function(line) { return !!line.length; });
+
+      return formData;
     },
 
     updateColorPicker: function(e)

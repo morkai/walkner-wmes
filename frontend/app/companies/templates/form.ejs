@@ -3,19 +3,33 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div class="form-group">
-        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('companies', 'PROPERTY:_id') %></label>
-        <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="50" pattern="^[a-zA-Z][a-zA-Z0-9_-]*$">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('companies', 'PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-shortName" class="control-label is-required"><%- t('companies', 'PROPERTY:shortName') %></label>
-        <input id="<%- idPrefix %>-shortName" class="form-control" type="text" autocomplete="new-password" name="shortName" required maxlength="100">
-      </div>
+      <%- helpers.formGroup({
+        name: '_id',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 50,
+        pattern: '^[a-zA-Z][a-zA-Z0-9_-]*$'
+      }) %>
+      <%- helpers.formGroup({
+        name: 'name',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 100
+      }) %>
+      <%- helpers.formGroup({
+        name: 'shortName',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 50
+      }) %>
       <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: t('companies', 'PROPERTY:color'), value: model.color}) %>
+      <%- helpers.formGroup({
+        name: 'syncPatterns',
+        type: 'textarea',
+        label: 'PROPERTY:',
+        rows: 5,
+        inputClassName: 'text-fixed'
+      }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

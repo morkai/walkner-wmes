@@ -5,7 +5,8 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:shortName": "Short name",
-    "PROPERTY:color": "Color"
+    "PROPERTY:color": "Color",
+    "PROPERTY:syncPatterns": "Sync patterns"
   },
   "pl": true
 }

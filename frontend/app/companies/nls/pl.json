@@ -4,5 +4,6 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:shortName": "Krótka nazwa",
-  "PROPERTY:color": "Kolor"
+  "PROPERTY:color": "Kolor",
+  "PROPERTY:syncPatterns": "Wzorce synchronizacji"
 }

@@ -1,6 +1,20 @@
 <div class="panel panel-primary">
   <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <%- helpers.props(model, ['_id', 'name', 'shortName', '!color']) %>
+    <%- helpers.props(model, [
+      '_id',
+      'name',
+      'shortName',
+      '!color',
+      {id: '!syncPatterns', value: v =>
+      {
+        if (!v || !v.length)
+        {
+          return '';
+        }
+
+        return '<pre>' + _.escape(v.join('\n')) + '</pre>';
+      }}
+    ]) %>
   </div>
 </div>
