@@ -19,7 +19,7 @@ define([
   $,
   t,
   time,
-  user,
+  currentUser,
   socket,
   Model,
   autolinker,
@@ -233,7 +233,7 @@ define([
       var createdAt = entry.get('createdAt');
       var createdAtMoment = time.getMoment(createdAt);
       var creator = entry.get('creator');
-      var self = creator.id === user.data._id;
+      var self = creator.id === currentUser.data._id;
       var chat = [{
         user: {
           id: creator.id,
@@ -372,7 +372,7 @@ define([
         return prev;
       }
 
-      var self = change.user.id === user.data._id;
+      var self = change.user.id === currentUser.data._id;
       var message = {
         user: {
           id: change.user.id,
@@ -406,7 +406,7 @@ define([
         preview: type === 'image',
         label: attachment.name,
         menu: this.constructor.can.manage()
-          || (attachment.user && attachment.user.id === user.data._id)
+          || (attachment.user && attachment.user.id === currentUser.data._id)
       };
     },
 
@@ -463,7 +463,7 @@ define([
       var entry = this;
       var change = {
         date: new Date(),
-        user: user.getInfo(),
+        user: currentUser.getInfo(),
         data: {},
         comment: ''
       };
@@ -725,17 +725,17 @@ define([
 
       view: function()
       {
-        return user.isAllowedTo('PROD_DATA:VIEW', 'COMP_REL:VIEW');
+        return currentUser.isAllowedTo('PROD_DATA:VIEW', 'COMP_REL:VIEW');
       },
 
       add: function()
       {
-        return user.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:MANAGE', 'COMP_REL:ADD', 'FN:logistic-buyer');
+        return currentUser.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:MANAGE', 'COMP_REL:ADD', 'FN:logistic-buyer');
       },
 
       manage: function()
       {
-        return user.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:MANAGE');
+        return currentUser.isAllowedTo('PROD_DATA:MANAGE', 'COMP_REL:MANAGE');
       },
 
       edit: function(model)
@@ -754,7 +754,7 @@ define([
           return false;
         }
 
-        return creator.id === user.data._id;
+        return creator.id === currentUser.data._id;
       },
 
       delete: function(model)
@@ -779,11 +779,6 @@ define([
           return true;
         }
 
-        if (model.get('status') === 'accepted')
-        {
-          return false;
-        }
-
         var func = model.getFunc(funcId);
 
         if (!func)
@@ -791,18 +786,23 @@ define([
           return false;
         }
 
-        return func.users.some(function(u) { return u.id === user.data._id; });
+        if (model.get('status') === 'accepted')
+        {
+          return !!func.acceptedBy && func.acceptedBy.id === currentUser.data._id;
+        }
+
+        return func.users.some(function(u) { return u.id === currentUser.data._id; });
       },
 
       addUser: function(model)
       {
-        return user.isAllowedTo('FN:logistic-buyer') || (this.can || this).accept(model);
+        return currentUser.isAllowedTo('FN:logistic-buyer') || (this.can || this).accept(model);
       },
 
       releaseOrder: function(model)
       {
         return model.get('status') === 'accepted'
-          && ((this.can || this).manage() || user.isAllowedTo('FN:production-planner'));
+          && ((this.can || this).manage() || currentUser.isAllowedTo('FN:production-planner'));
       },
 
       uploadAttachments: function()
@@ -812,7 +812,7 @@ define([
 
       changeReason: function()
       {
-        return (this.can || this).manage() || user.isAllowedTo('FN:logistic-buyer');
+        return (this.can || this).manage() || currentUser.isAllowedTo('FN:logistic-buyer');
       }
 
     }

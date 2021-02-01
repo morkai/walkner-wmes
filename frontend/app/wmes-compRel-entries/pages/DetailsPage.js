@@ -78,16 +78,16 @@ define([
           {
             $('.btn', this).blur();
 
-            var $func = page.funcsView.$('.compRel-details-func[data-status="pending"]').first();
+            var $accept = page.funcsView.$(
+              '.compRel-details-func[data-status="pending"] .compRel-details-accept'
+            ).first();
 
-            if ($func.length)
+            if (!$accept.length)
             {
-              $func.find('.compRel-details-accept').click();
+              $accept = page.funcsView.$('.compRel-details-accept').first();
             }
-            else
-            {
-              page.funcsView.$('.compRel-details-accept').first().click();
-            }
+
+            $accept.click();
           }
         });
       }
