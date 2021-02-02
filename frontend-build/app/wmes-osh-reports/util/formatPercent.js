@@ -1,0 +1,1 @@
+define([],function(){"use strict";return i=>i&&isFinite(i)?Math.round(100*i):0});
