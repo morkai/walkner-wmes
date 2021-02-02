@@ -164,6 +164,7 @@ define([
         employed: d.employed,
         engaged: d.engaged,
         engagedPercent: 0,
+        minEngagement: division ? division.get('minEngagement') : 0,
         metrics: d.metrics
       };
     },
@@ -184,7 +185,7 @@ define([
       const {minEngagement} = this.model.get('settings');
 
       row.engagedPercent = formatPercent(row.engaged / row.employed);
-      row.engagedInvalid = row.engagedPercent >= 0 && row.engagedPercent < minEngagement;
+      row.engagedInvalid = row.engagedPercent >= 0 && row.engagedPercent < (row.minEngagement || minEngagement);
 
       return row;
     }

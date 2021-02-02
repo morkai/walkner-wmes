@@ -4,9 +4,9 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
-  '../views/ObserversFilterView',
-  '../views/ObserversOrgUnitsView',
-  '../views/ObserversUsersView',
+  '../views/observers/FilterView',
+  '../views/observers/OrgUnitsView',
+  '../views/observers/UsersView',
   'app/wmes-osh-reports/templates/observers/page'
 ], function(
   View,

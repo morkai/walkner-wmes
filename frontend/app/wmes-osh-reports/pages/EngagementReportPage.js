@@ -4,19 +4,19 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
-  '../views/EngagementFilterView',
-  '../views/EngagementOrgUnitsView',
-  '../views/EngagementBrigadesView',
-  '../views/EngagementUsersView',
+  '../views/engagement/FilterView',
+  '../views/engagement/OrgUnitsView',
+  '../views/engagement/BrigadesView',
+  '../views/engagement/UsersView',
   'app/wmes-osh-reports/templates/engagement/page'
 ], function(
   View,
   bindLoadingMessage,
   dictionaries,
-  EngagementFilterView,
-  EngagementOrgUnitsView,
-  EngagementBrigadesView,
-  EngagementUsersView,
+  FilterView,
+  OrgUnitsView,
+  BrigadesView,
+  UsersView,
   template
 ) {
   'use strict';
@@ -49,19 +49,19 @@ define([
     {
       this.model = bindLoadingMessage(this.model, this);
 
-      this.filterView = new EngagementFilterView({
+      this.filterView = new FilterView({
         model: this.model
       });
 
-      this.orgUnitsView = new EngagementOrgUnitsView({
+      this.orgUnitsView = new OrgUnitsView({
         model: this.model
       });
 
-      this.brigadesView = new EngagementBrigadesView({
+      this.brigadesView = new BrigadesView({
         model: this.model
       });
 
-      this.usersView = new EngagementUsersView({
+      this.usersView = new UsersView({
         model: this.model
       });
 

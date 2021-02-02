@@ -240,8 +240,25 @@ define([
         rectEl.setAttribute('x', oldX);
       }
 
+      let absDecimals = this.options.absDecimals;
+
+      if (absDecimals === true)
+      {
+        absDecimals = this.options.valueDecimals;
+      }
+
+      let absUnit = this.options.absUnit;
+
+      if (absUnit === true)
+      {
+        absUnit = this.options.unit;
+      }
+
       this.$id('table').html(this.renderPartialHtml(tableTemplate, {
-        rows: rows
+        rows,
+        relColumn: this.options.relColumn !== false,
+        absUnit: absUnit || '',
+        absDecimals: Math.pow(10, absDecimals || 0)
       }));
     },
 

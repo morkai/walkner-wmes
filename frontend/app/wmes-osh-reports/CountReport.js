@@ -161,6 +161,7 @@ define([
       const entryLabel = t(this.nlsDomain, 'series:entry');
       const observation = this.type === 'observation';
       const attrs = {
+        interval: report.options.interval,
         count: {
           rows: [
             {
@@ -295,6 +296,8 @@ define([
         };
       });
 
+      var dynamicMetrics = {};
+
       report.groups.forEach(group =>
       {
         let x;
@@ -336,12 +339,12 @@ define([
 
         this.metrics.forEach(metric =>
         {
-          if (totals[metric] == null)
+          if (dynamicMetrics[metric] || _.isEmpty(attrs[metric].series))
           {
-            return;
-          }
+            dynamicMetrics[metric] = true;
 
-          this.createSeriesFromRows(metric, attrs, group);
+            this.createSeriesFromRows(metric, attrs, group);
+          }
         });
       });
 
@@ -441,12 +444,8 @@ define([
         return;
       }
 
-      if (rows.length && series[rows[0].id] && series[rows[0].id].data.length)
-      {
-        return;
-      }
 
-      _.forEach(rows, row =>
+      _.forEach(rows, (row, i) =>
       {
         if (row.id === 'total')
         {
@@ -456,6 +455,7 @@ define([
         if (!series[row.id])
         {
           series[row.id] = {
+            index: i,
             name: row.label,
             data: [],
             color: row.color

@@ -1,0 +1,14 @@
+<div class="osh-report">
+  <div id="<%- id('filter') %>" class="filter-container"></div>
+  <% metrics.forEach(metric => { %>
+    <h3>
+      <span><%- t(`metrics:title:${metric}`) %></span>
+      <% groups.forEach(group => { %>
+        <a href="javascript:void(0)" data-metric="<%- metric %>" data-group="<%- group %>"><%- t(`metrics:title:group:${group}`) %></a>
+      <% }) %>
+    </h3>
+    <% groups.forEach(group => { %>
+      <div id="<%- id(`${metric}-${group}`) %>" class="hidden" data-metric="<%- metric %>" data-group="<%- group %>"></div>
+    <% }) %>
+  <% }) %>
+</div>

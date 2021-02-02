@@ -6,9 +6,9 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
   '../CountReport',
-  '../views/CountReportFilterView',
-  '../views/CountPerUserChartView',
   '../views/TableAndChartView',
+  '../views/count/FilterView',
+  '../views/count/CountPerUserChartView',
   'app/wmes-osh-reports/templates/count/pages'
 ], function(
   t,
@@ -16,9 +16,9 @@ define([
   bindLoadingMessage,
   dictionaries,
   CountReport,
-  CountReportFilterView,
-  CountPerUserChartView,
   TableAndChartView,
+  FilterView,
+  CountPerUserChartView,
   pageTemplates
 ) {
   'use strict';
@@ -59,7 +59,7 @@ define([
     {
       this.model = bindLoadingMessage(this.model, this);
 
-      this.filterView = new CountReportFilterView({
+      this.filterView = new FilterView({
         model: this.model
       });
 

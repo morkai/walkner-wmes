@@ -79,6 +79,28 @@ define([
     createChart: function()
     {
       const series = this.serializeChartSeries();
+      const unit = this.options.yAxisUnit || this.options.unit || '';
+      let valueDecimals = this.options.valueDecimals >= 0 ? this.options.valueDecimals : 0;
+
+      if (this.options.metric === 'duration')
+      {
+        valueDecimals = 1;
+      }
+
+      let dataLabelsDecimals = valueDecimals;
+
+      if (unit && dataLabelsDecimals === 2)
+      {
+        if (series[0].data.length > 52)
+        {
+          dataLabelsDecimals = 0;
+        }
+        else if (series[0].data.length > 39)
+        {
+          dataLabelsDecimals = 1;
+        }
+      }
+
       const xAxis = {};
 
       if (this.model.getInterval() === 'none')
@@ -121,12 +143,16 @@ define([
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false,
-          opposite: true
+          allowDecimals: this.options.allowDecimals === true,
+          opposite: true,
+          labels: {
+            format: '{value}' + unit
+          }
         },
         tooltip: {
           shared: true,
-          valueDecimals: this.options.metric === 'duration' ? 1 : 0,
+          valueDecimals,
+          valueSuffix: unit,
           headerFormatter: xAxis.type === 'datetime' ? formatTooltipHeader.bind(this) : undefined
         },
         legend: {
@@ -135,10 +161,12 @@ define([
         plotOptions: {
           column: {
             borderWidth: 0,
+            stacking: series.length > this.options.stackingLimit ? 'normal' : null,
             dataLabels: {
               enabled: series.length
                 ? (series.length * series[0].data.length <= (series[0].data.length === 1 ? 40 : 35))
-                : false
+                : false,
+              format: '{y:.' + dataLabelsDecimals + 'f}'
             }
           }
         },
@@ -154,8 +182,25 @@ define([
 
     updateTable: function()
     {
+      let absDecimals = this.options.absDecimals;
+
+      if (absDecimals === true)
+      {
+        absDecimals = this.options.valueDecimals;
+      }
+
+      let absUnit = this.options.absUnit;
+
+      if (absUnit === true)
+      {
+        absUnit = this.options.unit;
+      }
+
       this.$id('table').html(this.renderPartialHtml(tableTemplate, {
-        rows: (this.model.get(this.options.metric) || {rows: []}).rows
+        rows: (this.model.get(this.options.metric) || {rows: []}).rows,
+        relColumn: this.options.relColumn !== false,
+        absUnit: absUnit || '',
+        absDecimals: Math.pow(10, absDecimals || 0)
       }));
     },
 

@@ -7,9 +7,11 @@ define([
   './CountReport',
   './ObserversReport',
   './EngagementReport',
+  './MetricsReport',
   './pages/CountReportPage',
   './pages/ObserversReportPage',
   './pages/EngagementReportPage',
+  './pages/MetricsReportPage',
   'i18n!app/nls/reports',
   'i18n!app/nls/wmes-osh-reports'
 ], function(
@@ -19,13 +21,18 @@ define([
   CountReport,
   ObserversReport,
   EngagementReport,
+  MetricsReport,
   CountReportPage,
   ObserversReportPage,
-  EngagementReportPage
+  EngagementReportPage,
+  MetricsReportPage
 ) {
   'use strict';
 
-  router.map('/osh/reports/count/:type', req =>
+  const canView = user.auth('USER');
+  const canManage = user.auth('OSH:DICTIONARIES:MANAGE');
+
+  router.map('/osh/reports/count/:type', canView, req =>
   {
     viewport.showPage(new CountReportPage({
       model: new CountReport({}, {
@@ -35,7 +42,7 @@ define([
     }));
   });
 
-  router.map('/osh/reports/observers', req =>
+  router.map('/osh/reports/observers', canView, req =>
   {
     viewport.showPage(new ObserversReportPage({
       model: new ObserversReport({}, {
@@ -44,7 +51,7 @@ define([
     }));
   });
 
-  router.map('/osh/reports/engagement', req =>
+  router.map('/osh/reports/engagement', canView, req =>
   {
     viewport.showPage(new EngagementReportPage({
       model: new EngagementReport({}, {
@@ -53,7 +60,16 @@ define([
     }));
   });
 
-  router.map('/osh/reports;settings', user.auth('OSH:DICTIONARIES:MANAGE'), req =>
+  router.map('/osh/reports/metrics', canView, req =>
+  {
+    viewport.showPage(new MetricsReportPage({
+      model: new MetricsReport({}, {
+        rqlQuery: req.rql
+      })
+    }));
+  });
+
+  router.map('/osh/reports;settings', canManage, req =>
   {
     viewport.loadPage(['app/wmes-osh-reports/pages/SettingsPage'], SettingsPage =>
     {
