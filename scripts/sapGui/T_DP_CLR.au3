@@ -21,7 +21,7 @@ EndIf
 
 If $CmdLine[0] > 0 Then
   For $i = 1 To $CmdLine[0] Step 1
-    If Not StringRegExp($CmdLine[$i], "^[0-9]{12}$") Then
+    If Not StringRegExp($CmdLine[$i], "^[0-9A-Z]{7,12}$") Then
       LogError("INVALID_12NC", 1)
     EndIf
   Next
@@ -80,6 +80,10 @@ For $i = 1 To $CmdLine[0] Step 1
   $table = $session.FindById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell")
   $rowCount = $table.RowCount() - 1
   $component = ""
+
+  If StringLen($nc12) = 12 And $rowCount > 100 Then
+    $rowCount = 100
+  EndIf
 
   For $r = 0 To $rowCount Step 1
     $del = $table.GetCellValue($r, $delCol)

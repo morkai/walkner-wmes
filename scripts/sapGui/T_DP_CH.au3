@@ -73,10 +73,10 @@ For $orderI = 1 To $CmdLine[0] Step 1
         $btn.Press()
 
         If Not IsObj($session.FindById($itemTblId)) And $sbar.Text <> "" Then
-          $error = "ERROR=STATUS_BAR=" & $sbar.Text
+          $error = "ERROR=STATUS_BAR=VA03: " & $sbar.Text
         EndIf
       Else
-        $error = "ERROR=STATUS_BAR=" & $sbar.Text
+        $error = "ERROR=STATUS_BAR=VA03: " & $sbar.Text
       EndIf
     EndIf
   EndIf
@@ -157,18 +157,44 @@ For $orderI = 1 To $CmdLine[0] Step 1
     EndIf
 
     ; Execute Item details: Configuration
-    $ctrlId = "wnd[0]/usr/tabsTAXI_TABSTRIP_OVERVIEW/tabpT\02/ssubSUBSCREEN_BODY:SAPMV45A:4401/subSUBSCREEN_TC:SAPMV45A:4900/subSUBSCREEN_BUTTONS:SAPMV45A:4050/btnBT_POCO"
-    $ctrl = $session.FindById($ctrlId)
-    AssertControl($ctrl, $ctrlId)
-    $ctrl.Press()
+    For $i = 1 To 3 Step 1
+      LogDebug("EXECUTE_CONFIGURATION=" & $i)
+      $ctrlId = "wnd[0]/usr/tabsTAXI_TABSTRIP_OVERVIEW/tabpT\02/ssubSUBSCREEN_BODY:SAPMV45A:4401/subSUBSCREEN_TC:SAPMV45A:4900/subSUBSCREEN_BUTTONS:SAPMV45A:4050/btnBT_POCO"
+      $ctrl = $session.FindById($ctrlId)
+      AssertControl($ctrl, $ctrlId)
+      $ctrl.Press()
 
-    ; Close any modal
-    $modal = $session.FindById("wnd[1]")
+      ; Close any modal
+      $modal = $session.FindById("wnd[1]")
 
-    If IsObj($modal) Then
-      LogDebug("CLOSING_MODAL=" & ReadAllText($modal, " "))
-      $modal.Close()
-    EndIf
+      If IsObj($modal) Then
+        LogDebug("CLOSING_MODAL=" & ReadAllText($modal, " "))
+        If $modal.Text = "Conflict" Then
+          $continue = $session.FindById("wnd[1]/tbar[0]/btn[0]")
+          If IsObj($continue) Then
+            LogDebug("SKIP_CONFLICT")
+            $continue.Press()
+          Else
+            $modal.Close()
+          EndIf
+        Else
+          $modal.Close()
+        EndIf
+      EndIf
+
+      ; Check for constraint restriction
+      $sbar = $session.FindById("wnd[0]/sbar")
+
+      If Not IsObj($sbar) Or Not StringInStr($sbar.Text, "constraint restriction") Then
+        ExitLoop
+      EndIf
+
+      If $i = 3 Then
+        LogDebug("ERROR=STATUS_BAR=VA03: " & $sbar.Text)
+      Else
+        LogDebug("SKIP_CONSTRAINT_RESTRICTION=" & $sbar.Text)
+      EndIf
+    Next
 
     ; Find all characteristics
     $configTblId = $configTblId1
@@ -240,29 +266,36 @@ For $orderI = 1 To $CmdLine[0] Step 1
     WEnd
 
     ; Back to item overview
-    LogDebug("BACK_TO_ITEM_OVERVIEW")
-    $ctrlId = "wnd[0]/tbar[0]/btn[15]"
-    $ctrl = $session.FindById($ctrlId)
-    AssertControl($ctrl, $ctrlId)
-    $ctrl.Press()
+    For $i = 1 To 3 Step 1
+      LogDebug("BACK_TO_ITEM_OVERVIEW=" & $i)
+      $ctrlId = "wnd[0]/tbar[0]/btn[15]"
+      $ctrl = $session.FindById($ctrlId)
+      AssertControl($ctrl, $ctrlId)
+      $ctrl.Press()
 
-    ; Close possible modal
-    $modal = $session.FindById("wnd[1]")
+      ; Close possible modal
+      $modal = $session.FindById("wnd[1]")
 
-    If IsObj($modal) Then
-      LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
+      If IsObj($modal) Then
+        LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
 
-      If $modal.Text = "Exit Configuration" Then
-        $ctrl = $session.FindById("wnd[1]/usr/btnSPOP-OPTION1")
-        If IsObj($ctrl) Then
-          $ctrl.Press()
+        If $modal.Text = "Exit Configuration" Then
+          $ctrl = $session.FindById("wnd[1]/usr/btnSPOP-OPTION1")
+          If IsObj($ctrl) Then
+            $ctrl.Press()
+          Else
+            $modal.Close()
+          EndIf
         Else
           $modal.Close()
         EndIf
-      Else
-        $modal.Close()
       EndIf
-    EndIf
+
+      $btn = $session.FindById($configTblId)
+      If Not IsObj($btn) Then
+        ExitLoop
+      EndIf
+    Next
   Next
 
   ; Stay on the initial screen
