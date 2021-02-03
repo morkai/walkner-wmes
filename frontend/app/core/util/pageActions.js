@@ -157,6 +157,7 @@ define([
     add: function(collection, privilege)
     {
       return {
+        id: 'add',
         label: i18n(collection, 'PAGE_ACTION:add'),
         icon: 'plus',
         href: collection.genClientUrl('add'),
@@ -166,6 +167,7 @@ define([
     edit: function(model, privilege)
     {
       return {
+        id: 'edit',
         label: i18n(model, 'PAGE_ACTION:edit'),
         icon: 'edit',
         href: model.genClientUrl('edit'),
@@ -180,6 +182,7 @@ define([
       }
 
       return {
+        id: 'delete',
         label: i18n(model, 'PAGE_ACTION:delete'),
         icon: 'times',
         href: model.genClientUrl('delete'),
@@ -261,6 +264,7 @@ define([
       });
 
       return {
+        id: 'export',
         template: template,
         privileges: resolvePrivileges('view', options.collection, options.privilege, 'VIEW'),
         callback: options.callback,
@@ -336,6 +340,7 @@ define([
       }, options);
 
       return {
+        id: 'jump',
         template: function()
         {
           return jumpActionTemplate({

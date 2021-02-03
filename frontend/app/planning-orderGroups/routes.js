@@ -38,20 +38,17 @@ define([
         'app/core/pages/FilteredListPage',
         'app/planning-orderGroups/OrderGroupCollection',
         'app/planning-orderGroups/views/FilterView',
+        'app/planning-orderGroups/views/ListView',
         nls
       ],
-      function(FilteredListPage, Collection, FilterView)
+      function(FilteredListPage, Collection, FilterView, ListView)
       {
         return new FilteredListPage({
           FilterView: FilterView,
+          ListView: ListView,
           pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           collection: new Collection(null, {rqlQuery: req.rql}),
-          columns: [
-            {id: 'active', className: 'is-min'},
-            {id: 'name'},
-            {id: 'mrp', className: 'is-min'}
-          ],
           actions: function()
           {
             var actions = FilteredListPage.prototype.actions.apply(this, arguments);
@@ -97,23 +94,40 @@ define([
       [
         'app/core/pages/DetailsPage',
         model,
-        'app/planning-orderGroups/views/DetailsView',
+        'app/planning-orderGroups/templates/details',
         'css!app/planning-orderGroups/assets/details',
         nls
       ],
-      function(DetailsPage, Model, DetailsView)
+      function(DetailsPage, Model, detailsTemplate)
       {
         return new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           model: new Model({_id: req.params.id}),
-          DetailsView: DetailsView
+          detailsTemplate,
+          actions: function()
+          {
+            const actions = DetailsPage.prototype.actions.apply(this, arguments);
+            const editI = actions.findIndex(a => a.id === 'edit');
+
+            if (editI !== -1)
+            {
+              actions.splice(editI + 1, 0, {
+                id: 'copy',
+                icon: 'copy',
+                label: this.t('PAGE:ACTION:copy'),
+                href: `#planning/orderGroups;add?copy=${this.model.id}`
+              });
+            }
+
+            return actions;
+          }
         });
       }
     );
   });
 
-  router.map('/planning/orderGroups;add', canManage, function()
+  router.map('/planning/orderGroups;add', canManage, function(req)
   {
     viewport.loadPage(
       [
@@ -124,11 +138,24 @@ define([
       ],
       function(AddFormPage, Model, FormView)
       {
+        const model = new Model({_id: req.query.copy});
+
+        if (model.id)
+        {
+          model.once('sync', () =>
+          {
+            model.set({
+              _id: undefined,
+              name: model.get('name') + ' ' + t('planning-orderGroups', 'FORM:copySuffix')
+            });
+          });
+        }
+
         return new AddFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           FormView: FormView,
-          model: new Model()
+          model: model
         });
       }
     );

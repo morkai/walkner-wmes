@@ -100,6 +100,13 @@ define([
         - this.$id(`headers`).outerHeight()
         - 60;
 
+      const $headers = this.$(`.${CN}-header`);
+
+      this.$(`.${CN}-group`).each((i, el) =>
+      {
+        $headers[i].style.width = el.clientWidth + 'px';
+      });
+
       this.$id(`groups`)[0].style.height = `${height}px`;
 
       this.scrollHeaders();

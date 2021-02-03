@@ -13,6 +13,11 @@
     "PROPERTY:bomInclude": "Component (include)",
     "PROPERTY:bomExclude": "Component (exclude)",
 
+    "LIST:ACTION:copy": "Copy",
+    "PAGE:ACTION:copy": "Copy",
+
+    "FORM:copySuffix": "(copy)",
+
     "tester:pageAction": "Tester",
     "tester:breadcrumb": "Tester",
     "tester:date": "Date",

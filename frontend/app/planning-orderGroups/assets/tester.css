@@ -14,7 +14,7 @@
 .planning-orderGroups-tester-group {
   flex: 0 0 auto;
   margin-left: 30px;
-  width: 375px;
+  max-width: 375px;
 }
 .planning-orderGroups-tester-header:first-child,
 .planning-orderGroups-tester-group:first-child {

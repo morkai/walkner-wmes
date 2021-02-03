@@ -25,10 +25,10 @@ define([
 
       formData.mrp = (formData.mrp || []).join(',');
 
-      ['productInclude', 'productExclude', 'bomInclude', 'bomExclude'].forEach(function(prop)
+      ['productInclude', 'productExclude', 'bomInclude', 'bomExclude'].forEach(prop =>
       {
         formData[prop] = (formData[prop] || [])
-          .map(function(words) { return words.join('; '); })
+          .map(words => words.join('; '))
           .join('\n');
       });
 
@@ -48,22 +48,13 @@ define([
       {
         formData[prop] = (formData[prop] || '')
           .split('\n')
-          .map(function(line)
+          .map(line =>
           {
             return _.uniq(line.split(/; */)
-              .map(function(word)
-              {
-                return word.trim().replace(/\s+/g, ' ').toUpperCase();
-              })
-              .filter(function(word)
-              {
-                return word.length > 0;
-              }));
+              .map(word => word.trim().replace(/\s+/g, ' ').toUpperCase())
+              .filter(word => word.length > 0));
           })
-          .filter(function(words)
-          {
-            return words.length > 0;
-          });
+          .filter(words => words.length > 0);
       });
 
       return formData;
@@ -79,6 +70,7 @@ define([
 
       if (this.model.id === '000000000000000000000000')
       {
+        this.$id('mrp').select2('enable', false);
         this.$('textarea.text-mono').prop('disabled', true);
       }
     }
