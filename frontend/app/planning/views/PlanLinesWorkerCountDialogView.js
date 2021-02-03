@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/resultTips',
   'app/planning/templates/linesWorkerCountDialog'
 ], function(
   _,
@@ -13,13 +14,16 @@ define([
   t,
   viewport,
   View,
+  resultTips,
   template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: template,
+    template,
+
+    modelProperty: 'plan',
 
     events: {
 
@@ -28,8 +32,38 @@ define([
         this.submitForm();
 
         return false;
+      },
+
+      'blur input[type="number"]': function(e)
+      {
+        if (e.target.value === '0')
+        {
+          e.target.value = '';
+        }
+      },
+
+      'click a[data-action="copy"]': function(e)
+      {
+        this.copyData = this.$(e.target).closest('.form-group').find('input').map((i, el) => el.value).get();
+
+        resultTips.showCopied({e: e});
+      },
+
+      'click a[data-action="paste"]': function(e)
+      {
+        this.$(e.target).closest('.form-group').find('input').each((i, el) => el.value = this.copyData[i]);
+      },
+
+      'click a[data-action="zero"]': function(e)
+      {
+        this.$(e.target).closest('.form-group').find('input').each((i, el) => el.value = '');
       }
 
+    },
+
+    initialize: function()
+    {
+      this.copyData = ['', '', ''];
     },
 
     getTemplateData: function()
@@ -43,7 +77,7 @@ define([
 
           return {
             _id: line.id,
-            workerCount: settings ? settings.get('workerCount') : [0, 0, 0]
+            workerCount: settings ? settings.get('workerCount') : ['', '', '']
           };
         })
       };
@@ -73,7 +107,7 @@ define([
           return;
         }
 
-        var workerCount = this.$(el)
+        const workerCount = this.$(el)
           .find('[data-shift-no]')
           .map((i, el) => Math.max(0, +parseFloat(el.value).toFixed(2) || 0))
           .get();

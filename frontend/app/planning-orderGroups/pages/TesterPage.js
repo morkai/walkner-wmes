@@ -161,9 +161,9 @@ define([
 
       (sapOrder.bom || []).forEach(component =>
       {
-        const line = (component.get('item') || '')
-          + ' ' + (component.get('nc12') || '')
-          + ' ' + (component.get('name') || '');
+        const line = 'ITEM ' + (component.get('item') || '0000')
+          + ' 12NC ' + (component.get('nc12') || '000000000000')
+          + ' NAME ' + (component.get('name') || '?');
 
         bom.push(line.trim().toUpperCase());
       });
@@ -229,20 +229,7 @@ define([
 
     matchAnyWord: function(words, value)
     {
-      if (words.length === 1)
-      {
-        return value.includes(words[0]);
-      }
-
-      for (var i = 0; i < words.length; ++i)
-      {
-        if (value.includes(words[i]))
-        {
-          return true;
-        }
-      }
-
-      return false;
+      return words.filter(word => value.includes(word));
     },
 
     matchMrp: function(mrps, mrp)
@@ -257,15 +244,7 @@ define([
         return true;
       }
 
-      for (var i = 0; i < patterns.length; ++i)
-      {
-        if (this.matchAllWords(patterns[i], product))
-        {
-          return true;
-        }
-      }
-
-      return false;
+      return patterns.some(pattern => this.matchAllWords(pattern, product));
     },
 
     matchProductExclude: function(patterns, product)
@@ -275,15 +254,7 @@ define([
         return true;
       }
 
-      for (var i = 0; i < patterns.length; ++i)
-      {
-        if (this.matchAllWords(patterns[i], product))
-        {
-          return false;
-        }
-      }
-
-      return true;
+      return patterns.every(pattern => !this.matchAllWords(pattern, product));
     },
 
     matchBomInclude: function(patterns, bom)
@@ -293,20 +264,17 @@ define([
         return true;
       }
 
-      for (var patternI = 0; patternI < patterns.length; ++patternI)
+      for (let patternI = 0; patternI < patterns.length; ++patternI)
       {
-        var requiredComponents = patterns[patternI];
-        var actualComponents = [];
+        const required = patterns[patternI];
+        const actual = new Set();
 
-        for (var bomI = 0; bomI < bom.length; ++bomI)
+        for (let bomI = 0; bomI < bom.length; ++bomI)
         {
-          if (this.matchAnyWord(requiredComponents, bom[bomI]))
-          {
-            actualComponents.push(bom[bomI]);
-          }
+          this.matchAnyWord(required, bom[bomI]).forEach(word => actual.add(word));
         }
 
-        if (actualComponents.length >= requiredComponents.length)
+        if (actual.size === required.length)
         {
           return true;
         }
@@ -322,20 +290,17 @@ define([
         return true;
       }
 
-      for (var patternI = 0; patternI < patterns.length; ++patternI)
+      for (let patternI = 0; patternI < patterns.length; ++patternI)
       {
-        var requiredComponents = patterns[patternI];
-        var actualComponents = [];
+        const required = patterns[patternI];
+        const actual = new Set();
 
-        for (var bomI = 0; bomI < bom.length; ++bomI)
+        for (let bomI = 0; bomI < bom.length; ++bomI)
         {
-          if (this.matchAnyWord(requiredComponents, bom[bomI]))
-          {
-            actualComponents.push(bom[bomI]);
-          }
+          this.matchAnyWord(required, bom[bomI]).forEach(word => actual.add(word));
         }
 
-        if (actualComponents.length >= requiredComponents.length)
+        if (actual.size === required.length)
         {
           return false;
         }

@@ -8,7 +8,6 @@ define([
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/core/util/resultTips',
-  'app/data/clipboard',
   'app/planning/templates/linesOrderGroupPriorityDialog'
 ], function(
   _,
@@ -18,7 +17,6 @@ define([
   View,
   idAndLabel,
   resultTips,
-  clipboard,
   template
 ) {
   'use strict';
@@ -59,7 +57,6 @@ define([
 
     initialize: function()
     {
-      this.sortables = [];
       this.copyData = [];
     },
 
@@ -70,14 +67,12 @@ define([
 
     destroySortables: function()
     {
-      var view = this;
-
-      view.$('input[data-line-id]').each(function()
+      this.$('input[data-line-id]').each((i, el) =>
       {
-        var el = view.$(this);
+        const $el = this.$(el);
 
-        el.data('sortable').destroy();
-        el.removeData('sortable');
+        $el.data('sortable').destroy();
+        $el.removeData('sortable');
       });
     },
 
@@ -98,11 +93,9 @@ define([
 
     afterRender: function()
     {
-      var view = this;
-
-      view.$('input[data-line-id]').each(function()
+      this.$('input[data-line-id]').each((i, el) =>
       {
-        view.setUpOrderGroupPriority(view.$(this));
+        this.setUpOrderGroupPriority(this.$(el));
       });
     },
 
@@ -198,44 +191,42 @@ define([
 
     submitForm: function()
     {
-      var view = this;
-      var $submit = view.$id('submit').prop('disabled', true);
-      var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
+      const $submit = this.$id('submit').prop('disabled', true);
+      const $spinner = $submit.find('.fa-spinner').removeClass('hidden');
+      const settings = this.plan.settings;
 
-      var settings = view.plan.settings;
-
-      view.$('input[data-line-id]').each(function()
+      this.$('input[data-line-id]').each((i, el) =>
       {
-        var line = view.mrp.lines.get(this.dataset.lineId);
+        const lineSettings = settings.lines.get(el.dataset.lineId);
 
-        if (!line)
+        if (!lineSettings)
         {
           return;
         }
 
-        var orderGroupPriority = this.value;
+        const newValue = el.value.split(',').filter(v => !!v.length);
 
-        if (orderGroupPriority.length)
-        {
-          line.settings.set('orderGroupPriority', orderGroupPriority.split(','));
-        }
+        lineSettings.set('orderGroupPriority', newValue);
       });
 
-      var req = settings.save();
+      viewport.msg.saving();
 
-      req.done(viewport.closeDialog);
-      req.fail(function()
+      const req = settings.save();
+
+      req.done(() =>
+      {
+        viewport.msg.saved();
+        viewport.closeDialog();
+      });
+
+      req.fail(() =>
       {
         $spinner.addClass('hidden');
         $submit.prop('disabled', false);
 
-        viewport.msg.show({
-          type: 'error',
-          time: 3000,
-          text: view.t('lines:menu:orderGroupPriority:failure')
-        });
+        viewport.msg.savingFailed();
 
-        view.plan.settings.trigger('errored');
+        this.plan.settings.trigger('errored');
       });
     },
 

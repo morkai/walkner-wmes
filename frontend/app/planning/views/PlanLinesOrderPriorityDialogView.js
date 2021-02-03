@@ -4,17 +4,17 @@ define([
   'underscore',
   'jquery',
   'Sortable',
-  'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/resultTips',
   'app/planning/templates/linesOrderPriorityDialog'
 ], function(
   _,
   $,
   Sortable,
-  t,
   viewport,
   View,
+  resultTips,
   template
 ) {
   'use strict';
@@ -32,13 +32,25 @@ define([
         this.submitForm();
 
         return false;
+      },
+
+      'click a[data-action="copy"]': function(e)
+      {
+        this.copyData = this.$(e.target).closest('.form-group').find('input').select2('data');
+
+        resultTips.showCopied({e: e});
+      },
+
+      'click a[data-action="paste"]': function(e)
+      {
+        this.$(e.target).closest('.form-group').find('input').select2('data', this.copyData).trigger('change');
       }
 
     },
 
     initialize: function()
     {
-      this.sortables = [];
+      this.copyData = [];
     },
 
     destroy: function()
@@ -48,9 +60,13 @@ define([
 
     destroySortables: function()
     {
-      _.invoke(this.sortables, 'destroy');
+      this.$('input[data-line-id]').each((i, el) =>
+      {
+        const $el = this.$(el);
 
-      this.sortables = [];
+        $el.data('sortable').destroy();
+        $el.removeData('sortable');
+      });
     },
 
     getTemplateData: function()
@@ -92,7 +108,14 @@ define([
         })
       });
 
-      this.sortables.push(new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
+      let sortable = $orderPriority.data('sortable');
+
+      if (sortable)
+      {
+        sortable.destroy();
+      }
+
+      sortable = new Sortable($orderPriority.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
         onStart: () =>
@@ -103,14 +126,15 @@ define([
         {
           $orderPriority.select2('onSortEnd').select2('focus');
         }
-      }));
+      });
+
+      $orderPriority.data('sortable', sortable);
     },
 
     submitForm: function()
     {
       const $submit = this.$id('submit').prop('disabled', true);
       const $spinner = $submit.find('.fa-spinner').removeClass('hidden');
-
       const settings = this.plan.settings;
       const version = settings.getVersion();
 
@@ -130,14 +154,14 @@ define([
           return;
         }
 
-        const orderPriority = el.value.split(',').filter(v => !!v);
+        const newValue = el.value.split(',').filter(v => !!v);
 
-        lineSettings.set('orderPriority', orderPriority);
+        lineSettings.set('orderPriority', newValue);
       });
 
       viewport.msg.saving();
 
-      var req = settings.save();
+      const req = settings.save();
 
       req.done(() =>
       {

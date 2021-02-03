@@ -1,19 +1,26 @@
-<form>
-  <% lines.forEach(function(line, i) { %>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-line-<%- i %>-1" class="control-label"><%= line._id %></label>
-    <div class="planning-lineSettings-workerCount" data-line-id="<%= line._id %>">
-      <% [1, 2, 3].forEach(function(shiftNo) { %>
-      <label for="<%- idPrefix %>-line-<%- i %>-<%- shiftNo %>" class="planning-lineSettings-workerCount-label"><%- t('planning', 'settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
-      <input id="<%- idPrefix %>-line-<%- i %>-<%- shiftNo %>" data-shift-no="<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- line.workerCount[shiftNo - 1] %>" required min="0" max="20" step="0.01">
-      <% }) %>
+<form autocomplete="off">
+  <% lines.forEach((line, i) => { %>
+    <div class="form-group">
+      <label for="<%- id(`line-${i}-1`) %>" class="control-label"><%= line._id %></label>
+      <div class="planning-lineSettings-workerCount" data-line-id="<%= line._id %>">
+        <% [1, 2, 3].forEach(shiftNo => { %>
+          <label for="<%- id(`line-${i}-${shiftNo}`) %>" class="planning-lineSettings-workerCount-label">
+            <%- t('settings:workerCount:shift', {shiftNo: t('core', `SHIFT:${shiftNo}`)}) %>
+          </label>
+          <input id="<%- id(`line-${i}-${shiftNo}`) %>" data-shift-no="<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- line.workerCount[shiftNo - 1] || '' %>" placeholder="0" min="0" max="20" step="0.01">
+        <% }) %>
+        <div>
+          <a href="javascript:void(0)" data-action="copy" title="<%- t('lines:menu:workerCount:copy') %>"><i class="fa fa-copy"></i></a>
+          <a href="javascript:void(0)" data-action="paste" style="margin: 0 7px" title="<%- t('lines:menu:workerCount:paste') %>"><i class="fa fa-paste"></i></a>
+          <a href="javascript:void(0)" data-action="zero" title="<%- t('lines:menu:workerCount:zero') %>"><i class="fa fa-eraser"></i></a>
+        </div>
+      </div>
     </div>
-  </div>
   <% }) %>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
-      <span><%- t('planning', 'lines:menu:workerCount:submit') %></span>
+      <span><%- t('lines:menu:workerCount:submit') %></span>
     </button>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>

@@ -216,7 +216,7 @@ define([
 
     isEditable: function()
     {
-      return (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      return (window.ENV !== 'production' && user.isAllowedTo('SUPER'))
         || (!this.isFrozen() && this.settings.isEditable());
     },
 
@@ -242,7 +242,7 @@ define([
         return false;
       }
 
-      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      if (window.ENV !== 'production' && user.isAllowedTo('SUPER'))
       {
         return true;
       }

@@ -3,31 +3,35 @@
 define([
   'jquery',
   'app/core/View',
+  'app/core/util/scrollbarSize',
   'app/planning-orderGroups/templates/tester/groups'
 ], function(
   $,
   View,
+  scrollbarSize,
   template
 ) {
   'use strict';
 
-  const CSS = 'planning-orderGroups-tester';
+  const CN = 'planning-orderGroups-tester';
 
   return View.extend({
 
     template,
 
+    classPrefix: CN,
+
     events: {
 
-      [`mouseover .${CSS}-multi`]: function(e)
+      [`mouseover .${CN}-multi`]: function(e)
       {
-        this.$(`.${CSS}-highlighted`).removeClass(`${CSS}-highlighted`);
-        this.$(`.${CSS}-multi[data-id="${e.currentTarget.dataset.id}"]`).addClass(`${CSS}-highlighted`);
+        this.$(`.${CN}-highlighted`).removeClass(`${CN}-highlighted`);
+        this.$(`.${CN}-multi[data-id="${e.currentTarget.dataset.id}"]`).addClass(`${CN}-highlighted`);
       },
 
-      [`mouseout .${CSS}-multi`]: function()
+      [`mouseout .${CN}-multi`]: function()
       {
-        this.$(`.${CSS}-highlighted`).removeClass(`${CSS}-highlighted`);
+        this.$(`.${CN}-highlighted`).removeClass(`${CN}-highlighted`);
       }
 
     },
@@ -82,6 +86,8 @@ define([
 
     afterRender: function()
     {
+      this.$id(`groups`).on('scroll', this.scrollHeaders.bind(this));
+
       this.resize();
     },
 
@@ -91,18 +97,20 @@ define([
         - $('.hd').outerHeight()
         - $('.ft').outerHeight()
         - $('.filter-container').outerHeight()
+        - this.$id(`headers`).outerHeight()
         - 60;
 
-      this.el.style.height = `${height}px`;
+      this.$id(`groups`)[0].style.height = `${height}px`;
 
-      this.$(`.${CSS}-group`).each((i, groupEl) =>
-      {
-        const h3 = groupEl.querySelector('h3');
-        const table = groupEl.querySelector('table');
+      this.scrollHeaders();
+    },
 
-        h3.style.width = groupEl.getBoundingClientRect().width + 'px';
-        table.style.marginTop = (h3.getBoundingClientRect().height - 1) + 'px';
-      });
+    scrollHeaders: function()
+    {
+      const $headers = this.$id('headers');
+      const $groups = this.$id('groups');
+
+      $headers[0].style.marginLeft = `${$groups[0].scrollLeft * -1}px`;
     }
 
   });

@@ -1,28 +1,30 @@
+.planning-orderGroups-tester-headers,
 .planning-orderGroups-tester-groups {
   display: flex;
   overflow: auto;
   padding: 0 15px;
   border: 1px solid #e3e3e3;
 }
-.planning-orderGroups-tester-group {
-  margin-left: 40px;
-  max-width: 375px;
-  position: relative;
+.planning-orderGroups-tester-headers {
+  align-items: flex-end;
+  overflow: hidden;
+  border: none;
 }
+.planning-orderGroups-tester-header,
+.planning-orderGroups-tester-group {
+  flex: 0 0 auto;
+  margin-left: 30px;
+  width: 375px;
+}
+.planning-orderGroups-tester-header:first-child,
 .planning-orderGroups-tester-group:first-child {
   margin-left: 0;
 }
-.planning-orderGroups-tester-group h3 {
-  position: fixed;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 10px;
+.planning-orderGroups-tester-header h3 {
+  margin: 0;
   padding-bottom: 10px;
-  background: #FFF;
-  border-bottom: 1px solid #CCC;
 }
 .planning-orderGroups-tester-orders {
-  margin-top: 46px;
   width: 100%;
 }
 .planning-orderGroups-tester-highlighted td,
@@ -37,12 +39,11 @@
   padding-top: 4px;
   border-top: 1px solid #CCC;
 }
+.planning-orderGroups-tester-order:first-child tr td {
+  border-top: none;
+}
 .planning-orderGroups-tester-order tr:last-child td {
   padding-bottom: 4px;
-}
-.planning-orderGroups-tester-group tbody:last-child td {
-  height: 6px;
-  background: #fff!important;
 }
 .planning-orderGroups-tester-nc12 {
   padding-left: 10px;

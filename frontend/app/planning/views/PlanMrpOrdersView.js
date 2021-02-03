@@ -372,7 +372,7 @@ define([
 
     isEditable: function()
     {
-      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      if (window.ENV !== 'production' && user.isAllowedTo('SUPER'))
       {
         return true;
       }

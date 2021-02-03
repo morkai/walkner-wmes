@@ -275,7 +275,7 @@ define([
     isEditable: function()
     {
       return (time.getMoment(this.id).hours(6).diff(Date.now()) > 300000)
-        || (window.ENV === 'development' && user.isAllowedTo('SUPER'));
+        || (window.ENV !== 'production' && user.isAllowedTo('SUPER'));
     },
 
     applyChanges: function(changes)

@@ -21,7 +21,7 @@ define([
 
   return View.extend({
 
-    template: template,
+    template,
 
     events: {
 
@@ -30,13 +30,18 @@ define([
         this.submitForm();
 
         return false;
+      },
+
+      'click #-allMrps': function()
+      {
+        this.$id('mrps').select2('data', this.$id('mrps').data('select2').opts.data);
       }
 
     },
 
     initialize: function()
     {
-      var today = time.getMoment();
+      const today = time.getMoment();
 
       if (today.hours() < 6)
       {
@@ -45,16 +50,37 @@ define([
 
       today.startOf('day');
 
+      const currentPlanTime = time.utc.getMoment(today.format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf();
+
       this.plans = new PlanSettingsCollection(null, {
-        rqlQuery: 'select(_id)&sort(_id)&_id>'
-          + time.utc.getMoment(today.format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
+        rqlQuery: `select(_id)&sort(_id)&_id>${currentPlanTime}`
       });
     },
 
     getTemplateData: function()
     {
+      const what = {
+        mrpSettings: false,
+        lineGroups: false,
+        mrpPriority: false,
+        workerCount: true,
+        activeTime: true
+      };
+
+      if (this.model.settings.getVersion() > 1)
+      {
+        Object.assign(what, {
+          extraCapacity: true,
+          linePriority: true,
+          orderGroupPriority: true
+        });
+      }
+
+      what.orderPriority = true;
+
       return {
-        source: this.model.getMoment().format('LL')
+        source: this.model.getMoment().format('LL'),
+        what
       };
     },
 
@@ -66,40 +92,39 @@ define([
 
     loadTargetPlans: function()
     {
-      var view = this;
-
       viewport.msg.loading();
 
-      view.$id('submit').prop('disabled', true);
-      view.$id('target').select2({data: []}).select2('enable', false);
+      const $submit = this.$id('submit').prop('disabled', true);
+      const $target = this.$id('target').select2({data: []}).select2('enable', false);
 
-      var req = view.plans.fetch();
+      const req = this.plans.fetch();
 
-      req.done(function(res)
+      req.done(res =>
       {
         viewport.msg.loaded();
 
-        view.$id('target').select2({
+        $target.select2({
           width: '100%',
-          placeholder: view.t('copySettings:target:all'),
+          placeholder: this.t('copySettings:target:placeholder'),
           allowClear: true,
           multiple: true,
-          data: (res.collection || []).map(function(plan)
-          {
-            return {
-              id: time.format(plan._id, 'YYYY-MM-DD'),
-              text: time.format(plan._id, 'LL')
-            };
-          }).filter(function(item)
-          {
-            return item.id !== view.model.id;
-          })
-        }).select2('enable', true);
+          data: (res.collection || [])
+            .map(plan =>
+            {
+              return {
+                id: time.format(plan._id, 'YYYY-MM-DD'),
+                text: time.format(plan._id, 'LL')
+              };
+            })
+            .filter(item => item.id !== this.model.id)
+        });
 
-        view.$id('submit').prop('disabled', false);
+        $target.select2('enable', true);
+
+        $submit.prop('disabled', false);
       });
 
-      req.fail(function()
+      req.fail(() =>
       {
         viewport.msg.loadingFailed();
       });
@@ -109,19 +134,16 @@ define([
     {
       this.$id('mrps').select2({
         width: '100%',
-        placeholder: this.t('copySettings:mrps:all'),
+        placeholder: this.t('copySettings:mrps:placeholder'),
         allowClear: true,
         multiple: true,
-        data: this.model.settings.mrps.map(function(mrp)
+        data: this.model.settings.mrps.map(mrp =>
         {
           return {
             id: mrp.id,
             text: mrp.id
           };
-        }).sort(function(a, b)
-        {
-          return a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true});
-        })
+        }).sort((a, b) => a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true}))
       });
 
       this.$('input[name="filter"][value="in"]').prop('checked', true);
@@ -129,37 +151,30 @@ define([
 
     submitForm: function()
     {
-      var view = this;
+      const version = this.model.settings.getVersion();
+      const what = {};
+      const mrps = this.$id('mrps').select2('val');
+      let targetPlans = this.$id('target').select2('val');
 
-      var targetPlans = view.$id('target').select2('val');
-      var filter = view.$('input[name="filter"]:checked').val();
-      var mrps = view.$id('mrps').select2('val');
-      var what = {};
-
-      view.$('input[name="what[]"]').each(function()
+      this.$('input[name="what[]"]').each(function(i, el)
       {
-        if (this.checked)
+        if (el.checked)
         {
-          what[this.value] = true;
+          what[el.value] = true;
         }
       });
 
       if (targetPlans.length === 0)
       {
-        targetPlans = view.$id('target').data('select2').opts.data.map(function(item) { return item.id; });
-      }
-
-      if (mrps.length === 0)
-      {
-        mrps = view.$id('mrps').data('select2').opts.data.map(function(item) { return item.id; });
+        targetPlans = this.$id('target').data('select2').opts.data.map(item => item.id);
       }
 
       if (targetPlans.length === 0)
       {
         viewport.msg.show({
           type: 'warning',
-          time: 3000,
-          text: view.t('copySettings:target:empty')
+          time: 2500,
+          text: this.t('copySettings:target:empty')
         });
 
         return;
@@ -169,82 +184,80 @@ define([
       {
         viewport.msg.show({
           type: 'warning',
-          time: 3000,
-          text: view.t('copySettings:what:empty')
+          time: 2500,
+          text: this.t('copySettings:what:empty')
         });
 
         return;
       }
 
-      var data = {
+      const data = {
         mrps: {},
         lines: {},
         mrpLines: {}
       };
 
-      if (filter === 'in')
+      mrps.forEach(mrp =>
       {
-        mrps.forEach(function(mrp)
-        {
-          data.mrps[mrp] = true;
-        });
-      }
-      else
-      {
-        view.model.settings.mrps.forEach(function(mrpSettings)
-        {
-          if (mrps.indexOf(mrpSettings.id) === -1)
-          {
-            data.mrps[mrpSettings.id] = true;
-          }
-        });
-      }
+        const mrpSettings = this.model.settings.mrps.get(mrp);
 
-      mrps = Object.keys(data.mrps);
+        data.mrps[mrp] = mrpSettings.pick([
+          what.linePriority && version > 1 ? 'linePriority' : null,
+          what.lineGroups ? 'groups' : null
+        ].concat(!what.mrpSettings ? [] : [
+          'limitSmallOrders',
+          'extraOrderSeconds',
+          'extraShiftSeconds',
+          'smallOrderQuantity',
+          'bigOrderQuantity',
+          'splitOrderQuantity',
+          'maxSplitLineCount',
+          'hardOrderManHours',
+          'hardBigComponents',
+          'hardComponents'
+        ]));
+      });
 
-      if (mrps.length === 0)
-      {
-        viewport.msg.show({
-          type: 'warning',
-          time: 3000,
-          text: view.t('copySettings:mrps:empty')
-        });
-
-        return;
-      }
-
-      view.model.settings.lines.forEach(function(lineSettings)
+      this.model.settings.lines.forEach(lineSettings =>
       {
         if (_.intersection(lineSettings.get('mrpPriority'), mrps).length)
         {
           data.lines[lineSettings.id] = lineSettings.pick([
-            what.activeTime ? 'activeTime' : null
+            what.mrpPriority ? 'mrpPriority' : null,
+            what.orderPriority && version > 1 ? 'orderPriority' : null,
+            what.orderGroupPriority && version > 1 ? 'orderGroupPriority' : null,
+            what.workerCount && version > 1 ? 'workerCount' : null,
+            what.activeTime ? 'activeTime' : null,
+            what.extraCapacity && version > 1 ? 'extraCapacity' : null
           ]);
         }
       });
 
-      view.model.settings.mrps.forEach(function(mrpSettings)
+      if (version === 1)
       {
-        if (!data.mrps[mrpSettings.id])
+        this.model.settings.mrps.forEach(mrpSettings =>
         {
-          return;
-        }
-
-        mrpSettings.lines.forEach(function(mrpLineSettings)
-        {
-          if (!data.lines[mrpLineSettings.id])
+          if (!data.mrps[mrpSettings.id])
           {
             return;
           }
 
-          data.mrpLines[mrpSettings.id + ':' + mrpLineSettings.id] = mrpLineSettings.pick([
-            what.workerCount ? 'workerCount' : null,
-            what.orderPriority ? 'orderPriority' : null
-          ]);
-        });
-      });
+          mrpSettings.lines.forEach(mrpLineSettings =>
+          {
+            if (!data.lines[mrpLineSettings.id])
+            {
+              return;
+            }
 
-      view.$id('submit')
+            data.mrpLines[mrpSettings.id + ':' + mrpLineSettings.id] = mrpLineSettings.pick([
+              what.workerCount ? 'workerCount' : null,
+              what.orderPriority ? 'orderPriority' : null
+            ]);
+          });
+        });
+      }
+
+      this.$id('submit')
         .prop('disabled', true)
         .find('.fa-spinner')
         .removeClass('hidden');
@@ -254,8 +267,7 @@ define([
 
     copyNext: function(targetPlans, data)
     {
-      var view = this;
-      var targetPlan = targetPlans.shift();
+      const targetPlan = targetPlans.shift();
 
       if (!targetPlan)
       {
@@ -264,25 +276,27 @@ define([
         return;
       }
 
-      view.fetchSettings(targetPlan, function(targetSettings)
+      this.fetchSettings(targetPlan, targetSettings =>
       {
-        targetSettings.lines.forEach(function(lineSettings)
+        targetSettings.lines.forEach(lineSettings =>
         {
-          _.assign(lineSettings, data.lines[lineSettings._id]);
+          Object.assign(lineSettings, data.lines[lineSettings._id]);
         });
 
-        targetSettings.mrps.forEach(function(mrpSettings)
+        targetSettings.mrps.forEach(mrpSettings =>
         {
-          mrpSettings.lines.forEach(function(mrpLineSettings)
+          Object.assign(mrpSettings, data.mrps[mrpSettings._id]);
+
+          mrpSettings.lines.forEach(mrpLineSettings =>
           {
-            _.assign(mrpLineSettings, data.mrpLines[mrpSettings._id + ':' + mrpLineSettings._id]);
+            Object.assign(mrpLineSettings, data.mrpLines[mrpSettings._id + ':' + mrpLineSettings._id]);
           });
         });
 
-        view.saveSettings(
+        this.saveSettings(
           targetPlan,
           targetSettings,
-          view.copyNext.bind(view, targetPlans, data)
+          this.copyNext.bind(this, targetPlans, data)
         );
       });
     },
@@ -291,12 +305,11 @@ define([
     {
       viewport.msg.loading();
 
-      var view = this;
-      var req = view.ajax({
-        url: '/planning/settings/' + targetPlan
+      const req = this.ajax({
+        url: `/planning/settings/${targetPlan}`
       });
 
-      req.done(function(targetSettings)
+      req.done(targetSettings =>
       {
         viewport.msg.loaded();
         done(targetSettings);
@@ -305,7 +318,7 @@ define([
       req.fail(function()
       {
         viewport.msg.loadingFailed();
-        view.fail();
+        this.fail();
       });
     },
 
@@ -313,14 +326,13 @@ define([
     {
       viewport.msg.saving();
 
-      var view = this;
-      var req = view.ajax({
+      const req = this.ajax({
         method: 'PUT',
-        url: '/planning/settings/' + targetPlan,
+        url: `/planning/settings/${targetPlan}`,
         data: JSON.stringify(targetSettings)
       });
 
-      req.done(function()
+      req.done(() =>
       {
         viewport.msg.saved();
         done();
@@ -329,7 +341,7 @@ define([
       req.fail(function()
       {
         viewport.msg.savingFailed();
-        view.fail();
+        this.fail();
       });
     },
 

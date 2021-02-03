@@ -1,14 +1,14 @@
 <form>
-  <% lines.forEach(function(line, i) { %>
+  <% lines.forEach((line, i) => { %>
     <div class="form-group settings-select2-long">
       <div style="display: flex">
-        <label for="<%- id('line-' + i) %>" class="control-label"><%= line._id %></label>
+        <label for="<%- id(`line-${i}`) %>" class="control-label"><%= line._id %></label>
         <div style="margin-left: auto">
           <a href="javascript:void(0)" data-action="copy" style="margin-right: 5px" title="<%- t('lines:menu:orderGroupPriority:copy') %>"><i class="fa fa-copy"></i></a>
           <a href="javascript:void(0)" data-action="paste" title="<%- t('lines:menu:orderGroupPriority:paste') %>"><i class="fa fa-paste"></i></a>
         </div>
       </div>
-      <input id="<%- id('line-' + i) %>" data-line-id="<%= line._id %>" value="<%- line.orderGroupPriority %>">
+      <input id="<%- id(`line-${i}`) %>" data-line-id="<%= line._id %>" value="<%- line.orderGroupPriority %>">
     </div>
   <% }) %>
   <div class="form-actions">

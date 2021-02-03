@@ -247,7 +247,8 @@ function(
       idPrefix: this.idPrefix,
       helpers: helpers,
       t: helpers.t,
-      id: helpers.id
+      id: helpers.id,
+      cn: helpers.cn
     };
   };
 
@@ -259,12 +260,17 @@ function(
   View.prototype.getTemplateHelpers = function()
   {
     var idPrefix = this.idPrefix;
+    var classPrefix = this.classPrefix;
 
     return {
       t: this.t,
       id: function()
       {
         return idPrefix + '-' + Array.prototype.slice.call(arguments).join('-');
+      },
+      cn: function()
+      {
+        return (classPrefix ? (classPrefix + '-') : '') + Array.prototype.slice.call(arguments).join('-');
       },
       props: this.props.bind(this),
       formGroup: formGroup.bind(null, this)
