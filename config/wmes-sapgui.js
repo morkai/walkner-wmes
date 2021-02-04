@@ -8,8 +8,6 @@ exports.modules = [
   {id: 'h5-express', name: 'express'},
   'directoryWatcher',
   'sapGui',
-  {id: 'sapGui/exporter', name: 'sapGui/exporter:walkner-pos'},
-  {id: 'sapGui/exporter', name: 'sapGui/exporter:philips-wmes'},
   'httpServer'
 ];
 
@@ -20,18 +18,6 @@ exports.directoryWatcher = {
 exports.sapGui = {
   jobs: [],
   outputPath: exports.directoryWatcher.path
-};
-
-exports['sapGui/exporter:walkner-pos'] = {
-  maxConcurrentUploads: 1,
-  secretKey: '',
-  filters: []
-};
-
-exports['sapGui/exporter:philips-wmes'] = {
-  maxConcurrentUploads: 1,
-  secretKey: '',
-  filters: []
 };
 
 exports.httpServer = {
