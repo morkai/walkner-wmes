@@ -735,7 +735,10 @@ define([
               placement: 'auto bottom',
               html: true,
               title: view.t('filters:help:title:' + filter.type),
-              content: view.t('filters:help:content:' + filter.type)
+              content: view.t('filters:help:content:' + filter.type),
+              css: {
+                maxWidth: '375px'
+              }
             });
           }
         });

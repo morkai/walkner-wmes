@@ -77,6 +77,10 @@ define([
   var COLUMNS = {
     _id: {
       width: 7,
+      prepareFilter: function(input)
+      {
+        return input.split(/[^0-9]+/).filter(function(v) { return v.length > 0; }).join('; ');
+      },
       renderValue: function(value)
       {
         if (/[a-z]$/.test(value))
@@ -92,6 +96,10 @@ define([
     },
     nc12: {
       width: 13,
+      prepareFilter: function(input)
+      {
+        return input.split(/[^0-9]+/).filter(function(v) { return v.length === 12; }).join('; ');
+      },
       renderValue: function(value, column, arrayIndex, entry)
       {
         if (!entry.description)
@@ -153,7 +161,11 @@ define([
     storageBin: {
       width: 10,
       rotated: true,
-      tdClassName: invalidTdClassName
+      tdClassName: invalidTdClassName,
+      prepareFilter: function(input)
+      {
+        return input.split(/[;, ]+/).filter(function(v) { return v.length > 0; }).join('; ');
+      }
     },
     markerColor: {
       width: 3,
@@ -184,7 +196,11 @@ define([
     },
     newStorageBin: {
       width: 10,
-      rotated: true
+      rotated: true,
+      prepareFilter: function(input)
+      {
+        return input.split(/[;, ]+/).filter(function(v) { return v.length > 0; }).join('; ');
+      }
     },
     newMarkerColor: {
       width: 3,
@@ -219,6 +235,10 @@ define([
       tdClassName: function(value, column, arrayIndex, entry)
       {
         return value.length === 0 && entry.storageType !== 100 ? 'kanban-is-invalid' : '';
+      },
+      prepareFilter: function(input)
+      {
+        return input.split(/[^0-9]+/).filter(function(v) { return v.length > 0; }).join('; ');
       },
       renderValue: function(value)
       {
@@ -282,7 +302,11 @@ define([
     },
     unit: {
       type: 'string',
-      width: 4
+      width: 4,
+      prepareFilter: function(input)
+      {
+        return input.split(/[;, ]+/).filter(function(v) { return v.length > 0; }).join('; ');
+      }
     },
     kind: {
       width: 3,
@@ -966,20 +990,31 @@ define([
         }
         else
         {
-          var words = transliterate(code)
-            .replace(/[^A-Za-z0-9 ]+/g, '')
+          var or = transliterate(code)
+            .replace(/[,;]+/g, '|')
+            .replace(/\s+/g, ' ')
+            .replace(/[^A-Za-z0-9 |]+/g, '')
             .toUpperCase()
-            .split(' ')
-            .filter(function(word) { return word.length > 0; });
+            .split('|')
+            .map(function(item)
+            {
+              return item.split(' ').filter(function(word) { return word.length > 0; });
+            })
+            .filter(function(and) { return and.length > 0; })
+            .map(function(and)
+            {
+              return '(' + and
+                .map(function(word) { return '$.indexOf(' + JSON.stringify(word) + ') !== -1'; })
+                .join(' && ') + ')';
+            })
+            .join(' || ');
 
-          if (!words.length)
+          if (!or.length)
           {
             return textFilter;
           }
 
-          code = '$ = String($).replace(/[^A-Za-z0-9]+/g, "").toUpperCase(); return ' + words
-            .map(function(word) { return '$.indexOf(' + JSON.stringify(word) + ') !== -1'; })
-            .join(' && ');
+          code = '$ = String($).replace(/[^A-Za-z0-9]+/g, "").toUpperCase(); return ' + or;
         }
 
         try

@@ -131,6 +131,13 @@ define([
         {
           var newData = $data.val().trim();
 
+          if (cell.column.prepareFilter)
+          {
+            newData = cell.column.prepareFilter(newData, cell);
+
+            $data.val(newData);
+          }
+
           if (newData === '')
           {
             return view.handleFilterValue(cell.columnId);
