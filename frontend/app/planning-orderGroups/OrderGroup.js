@@ -103,6 +103,16 @@ define([
       manage: function()
       {
         return user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER', 'FN:process-engineer');
+      },
+
+      edit: function(model)
+      {
+        return !model.isNoMatchGroup() && (this.can || this).manage();
+      },
+
+      delete: function(model)
+      {
+        return (this.can || this).edit(model);
       }
 
     }
