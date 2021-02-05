@@ -657,9 +657,7 @@ exports.mor = {
   statePath: `${DATA_PATH}/mor.json`
 };
 
-exports.planning = {
-  generator: false
-};
+exports.planning = {};
 
 exports.paintShop = {
   generator: false,
