@@ -1,1 +1,0 @@
-define(["app/core/views/DetailsView","app/planning-orderGroups/templates/details"],function(e,t){"use strict";return e.extend({template:t})});
