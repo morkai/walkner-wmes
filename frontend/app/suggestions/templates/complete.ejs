@@ -8,16 +8,34 @@
     <label for="<%- id('kaizenEffect') %>" class="control-label is-required"><%- t('PROPERTY:kaizenEffect') %></label>
     <textarea id="<%- id('kaizenEffect') %>" name="kaizenEffect" class="form-control" rows="3" required></textarea>
   </div>
-  <div class="message message-inline message-warning" style="margin-bottom: 15px">
-    <p><%- t('FORM:MSG:attachmentEdit') %></p>
-  </div>
   <div class="row">
-    <% ['scan', 'before', 'after'].forEach(function(attachment) { %>
-    <div class="col-md-4 form-group">
-      <label for="<%- id('attachments-' + attachment) %>" class="control-label"><%- t('attachments:' + attachment + ':new') %></label>
-      <input id="<%- id('attachments-' + attachment) %>" class="form-control" type="file" data-name="<%- attachment %>">
-    </div>
-    <% }) %>
+    <%- helpers.formGroup({
+      name: 'attachments.before',
+      type: 'file',
+      label: 'FORM:attachments:before',
+      accept: '.png,.jpeg,.jpg,.webp',
+      multiple: true,
+      groupClassName: 'col-lg-4',
+      inputAttrs: {'data-max': 3}
+    }) %>
+    <%- helpers.formGroup({
+      name: 'attachments.after',
+      type: 'file',
+      label: 'FORM:attachments:after',
+      accept: '.png,.jpeg,.jpg,.webp',
+      multiple: true,
+      groupClassName: 'col-lg-4',
+      inputAttrs: {'data-max': 3}
+    }) %>
+    <%- helpers.formGroup({
+      name: 'attachments.other',
+      type: 'file',
+      label: 'FORM:attachments:other',
+      accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.webp,.mp4,.rar,.zip,.7z',
+      multiple: true,
+      groupClassName: 'col-lg-4',
+      inputAttrs: {'data-max': 3}
+    }) %>
   </div>
   <div class="form-group">
     <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>

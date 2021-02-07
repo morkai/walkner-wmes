@@ -12,7 +12,7 @@ define([
   _,
   t,
   time,
-  user,
+  currentUser,
   Model,
   kaizenDictionaries,
   renderUserInfo
@@ -186,28 +186,43 @@ define([
       return obj;
     },
 
+    getAttachmentKinds: function()
+    {
+      return ['before', 'after', 'other'];
+    },
+
+    getAttachmentUrl: function(attachment)
+    {
+      return `${this.urlRoot}/${this.id}/attachments/${attachment._id}/${attachment.file}?`;
+    },
+
+    isParticipant: function()
+    {
+      return this.attributes.observer && this.attributes.observer.role !== 'viewer';
+    },
+
     isCreator: function()
     {
-      return this.attributes.creator && this.attributes.creator.id === user.data._id;
+      return this.attributes.creator && this.attributes.creator.id === currentUser.data._id;
     },
 
     isConfirmer: function()
     {
-      return this.attributes.confirmer && this.attributes.confirmer.id === user.data._id;
+      return this.attributes.confirmer && this.attributes.confirmer.id === currentUser.data._id;
     },
 
     isPossibleConfirmer: function()
     {
       var section = kaizenDictionaries.sections.get(this.get('section'));
 
-      return !!section && section.get('confirmers').some(function(u) { return u.id === user.data._id; });
+      return !!section && section.get('confirmers').some(function(u) { return u.id === currentUser.data._id; });
     },
 
     isSuggestionOwner: function()
     {
       return _.some(this.get('suggestionOwners'), function(owner)
       {
-        return owner.id === user.data._id;
+        return owner.id === currentUser.data._id;
       });
     },
 
@@ -215,7 +230,7 @@ define([
     {
       return _.some(this.get('kaizenOwners'), function(owner)
       {
-        return owner.id === user.data._id;
+        return owner.id === currentUser.data._id;
       });
     },
 
@@ -230,7 +245,7 @@ define([
       {
         return _.some(coordSection.users, function(coordinator)
         {
-          return coordinator.id === user.data._id;
+          return coordinator.id === currentUser.data._id;
         });
       });
     },
@@ -242,7 +257,7 @@ define([
 
     canManage: function()
     {
-      return user.isAllowedTo(this.privilegePrefix + ':MANAGE');
+      return currentUser.isAllowedTo(this.privilegePrefix + ':MANAGE');
     },
 
     canKom: function()
@@ -313,7 +328,7 @@ define([
 
     canEdit: function()
     {
-      if (!user.isLoggedIn())
+      if (!currentUser.isLoggedIn())
       {
         return false;
       }
@@ -380,12 +395,12 @@ define([
     prepareObserver: function()
     {
       var observers = this.get('observers') || [];
-      var observer = _.find(observers, function(observer) { return observer.user.id === user.data._id; });
+      var observer = _.find(observers, function(observer) { return observer.user.id === currentUser.data._id; });
 
       this.attributes.observer = observer || {
         user: {
-          id: user.data._id,
-          label: user.getLabel()
+          id: currentUser.data._id,
+          label: currentUser.getLabel()
         },
         role: 'viewer',
         lastSeenAt: null,
@@ -439,7 +454,7 @@ define([
 
       manage: function()
       {
-        return user.isAllowedTo('SUGGESTIONS:MANAGE');
+        return currentUser.isAllowedTo('SUGGESTIONS:MANAGE');
       },
 
       coordinate: function(model)
@@ -471,7 +486,42 @@ define([
           return false;
         }
 
-        return coordSection.users.some(function(u) { return u.id === user.data._id; });
+        return coordSection.users.some(function(u) { return u.id === currentUser.data._id; });
+      },
+
+      editAttachment: function(model)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.get('status') === 'finished')
+        {
+          return false;
+        }
+
+        return model.isParticipant();
+      },
+
+      deleteAttachment: function(model, attachment)
+      {
+        if ((this.can || this).manage())
+        {
+          return true;
+        }
+
+        if (model.get('status') === 'finished')
+        {
+          return false;
+        }
+
+        if (model.isCoordinator())
+        {
+          return true;
+        }
+
+        return attachment.user.id === currentUser.data._id;
       }
 
     }

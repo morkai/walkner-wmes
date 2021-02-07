@@ -1,0 +1,155 @@
+.suggestions-attachments-panel {
+  margin-bottom: 30px;
+}
+.suggestions-attachments-empty {
+  display: none;
+}
+.suggestions-attachments-panel .panel-body {
+  overflow-x: auto;
+  padding: 0;
+  text-align: center;
+}
+.suggestions-attachments-panel[data-attachment-count="0"] .panel-body {
+  text-align: left;
+}
+.suggestions-attachments-panel .panel-body > p {
+  padding: 15px;
+}
+.suggestions-attachments {
+  margin: 0 auto;
+  padding: 0;
+  display: inline-flex;
+}
+.suggestions-attachments-bordered .suggestions-attachments {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+.suggestions-attachment {
+  margin: 0;
+  border-right: 1px solid #ddd;
+}
+.suggestions-attachment:last-child {
+  border-right: none;
+}
+.suggestions-attachment:hover {
+ cursor: pointer;
+}
+.suggestions-attachment-icon {
+  display: block;
+  width: 384px;
+  height: 216px;
+  line-height: 216px;
+  font-size: 140px;
+  text-align: center;
+  user-select: none;
+}
+.suggestions-attachment-img {
+  display: block;
+  width: 384px;
+  height: 216px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #000;
+  user-select: none;
+}
+.suggestions-attachment-name {
+  padding: 7px;
+  width: 384px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.suggestions-attachment:hover .suggestions-attachment-name {
+  background-color: #ffffd6;
+}
+.suggestions-attachment-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.suggestions-attachment-preview-img {
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.suggestions-attachment-preview-name {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  background: #000;
+  color: #fff;
+  padding: 15px;
+  line-height: 1;
+  text-align: center;
+}
+.suggestions-attachment-preview-prev,
+.suggestions-attachment-preview-next {
+  color: #fff;
+  text-shadow: 1px 1px 3px #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  font-size: 56px;
+  cursor: pointer;
+}
+.suggestions-attachment-preview-next {
+  left: unset;
+  right: 0;
+}
+.suggestions-attachment-preview-prev > .fa,
+.suggestions-attachment-preview-next > .fa {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 30px;
+  margin-top: -28px;
+}
+.suggestions-attachment-preview-next > .fa {
+  left: unset;
+  right: 30px;
+}
+.suggestions-attachment-preview-prev:hover > .fa,
+.suggestions-attachment-preview-next:hover > .fa {
+  display: block;
+  color: #ffffa6;
+}
+.suggestions-attachment-preview-close {
+  color: #fff;
+  text-shadow: 1px 1px 3px #000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 30px;
+  font-size: 56px;
+  cursor: pointer;
+}
+.suggestions-attachment-preview-close:hover {
+  color: #ffffa6;
+}
+@media (max-width: 1920px) {
+  .col-lg-6 .suggestions-attachments-panel[data-attachment-count="1"] .suggestions-attachments {
+    display: block;
+  }
+  .col-lg-6 .suggestions-attachments-panel[data-attachment-count="1"] .suggestions-attachment-img {
+    width: 100%;
+  }
+  .col-lg-6 .suggestions-attachments-panel[data-attachment-count="1"] .suggestions-attachment-name {
+    width: 100%;
+    white-space: normal;
+    overflow: unset;
+    text-overflow: unset;
+  }
+}

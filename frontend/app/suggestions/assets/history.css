@@ -36,6 +36,9 @@
 .suggestions-history-changes:last-child > tbody > tr:last-child > td {
   padding-bottom: 0;
 }
+.suggestions-history-changes > tbody > tr > td.suggestions-history-oldValue:empty {
+  padding-right: 0;
+}
 .suggestions-history-changes .fa-arrow-right {
   padding: 0 5px;
 }

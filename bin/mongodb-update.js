@@ -3,46 +3,130 @@
 
 'use strict';
 
-db.plansettings.find({}).forEach(settings =>
+var TRANSLITERATION_MAP = {
+  'Ę': 'E', 'ę': 'e',
+  'Ó': 'O', 'ó': 'o',
+  'Ą': 'A', 'ą': 'a',
+  'Ś': 'S', 'ś': 's',
+  'Ł': 'L', 'ł': 'l',
+  'Ż': 'Z', 'ż': 'z',
+  'Ź': 'Z', 'ź': 'z',
+  'Ć': 'C', 'ć': 'c',
+  'Ń': 'N', 'ń': 'n'
+};
+var TRANSLITERATION_RE = new RegExp(Object.keys(TRANSLITERATION_MAP).join('|'), 'g');
+
+function transliterate(value)
 {
-  settings.lines.forEach(line =>
+  return String(value).replace(TRANSLITERATION_RE, function(m) { return TRANSLITERATION_MAP[m]; });
+}
+
+function transliterateFileName(name)
+{
+  return transliterate(name)
+    .replace(/[^a-zA-Z0-9_\-.]+/g, '_')
+    .replace(/_+/g, '_');
+}
+
+
+const descToKind = {
+  scan: 'other',
+  before: 'before',
+  after: 'after'
+};
+
+db.suggestions.find({}).forEach(s =>
+{
+  const changes = {
+    scan: null,
+    before: null,
+    after: null
+  };
+
+  s.changes.forEach(c =>
   {
-    if (!line.workerCount)
+    if (!c.data.attachments)
     {
-      line.workerCount = [0, 0, 0];
+      return;
     }
 
-    if (!line.orderPriority)
-    {
-      line.orderPriority = ['small', 'medium', 'big'];
-    }
+    const data = [null, {added: [], edited: [], deleted: []}];
+    const old = {};
 
-    if (!line.orderGroupPriority)
+    c.data.attachments[0].forEach(a =>
     {
-      line.orderGroupPriority = [];
-    }
+      a.date = null;
+      a.user = null;
+      a.file = transliterateFileName(a.name);
+      a.kind = descToKind[a.description];
+      a.meta = {};
+
+      delete a.path;
+      delete a.description;
+
+      changes[a.description] = a;
+
+      old[a._id] = a;
+    });
+
+    c.data.attachments[1].forEach(a =>
+    {
+      a.date = c.date;
+      a.user = c.user;
+      a.file = transliterateFileName(a.name);
+      a.kind = descToKind[a.description];
+      a.meta = {};
+
+      delete a.path;
+      delete a.description;
+
+      changes[a.description] = a;
+
+      if (old[a._id])
+      {
+        data[1].edited.push({
+          ...a,
+          old: old[a._id]
+        });
+
+        delete old[a._id];
+      }
+      else
+      {
+        data[1].added.push(a);
+      }
+    });
+
+    Object.values(old).forEach(a => data[1].deleted.push(a));
+
+    c.data.attachments = data;
   });
 
-  settings.mrps.forEach(mrp =>
+  s.attachments.forEach(a =>
   {
-    if (!mrp.linePriority)
+    const c = changes[a.description];
+
+    if (c)
     {
-      mrp.linePriority = [];
+      a.date = c.date;
+      a.user = c.user;
+    }
+    else
+    {
+      a.date = s.createdAt;
+      a.user = s.creator;
     }
 
-    if (!mrp.smallOrderQuantity)
-    {
-      mrp.smallOrderQuantity = 0;
-    }
+    a.file = transliterateFileName(a.name);
+    a.kind = descToKind[a.description];
+    a.meta = {};
 
-    if (!mrp.bigOrderQuantity)
-    {
-      mrp.bigOrderQuantity = 0;
-    }
+    delete a.path;
+    delete a.description;
   });
 
-  db.plansettings.updateOne({_id: settings._id}, {$set: {
-    lines: settings.lines,
-    mrps: settings.mrps
+  db.suggestions.updateOne({_id: s._id}, {$set: {
+    attachments: s.attachments,
+    changes: s.changes
   }});
 });

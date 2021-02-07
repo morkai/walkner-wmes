@@ -99,13 +99,15 @@ define([
       var uploadFormData = new FormData();
       var files = 0;
 
-      this.$('input[type="file"]').each(function()
+      view.$('input[type="file"]').each(function()
       {
-        if (this.files.length)
-        {
-          uploadFormData.append(this.dataset.name, this.files[0]);
+        var name = this.name.replace('attachments.', '');
 
-          ++files;
+        for (let i = 0; i < this.files.length; ++i)
+        {
+          uploadFormData.append(name, this.files[i]);
+
+          files += 1;
         }
       });
 
@@ -124,7 +126,9 @@ define([
 
       uploadReq.done(function(attachments)
       {
-        formData.attachments = attachments;
+        formData.attachments = {
+          added: attachments
+        };
 
         FormView.prototype.submitRequest.call(view, $submitEl, formData);
       });

@@ -141,8 +141,18 @@ define([
       {
         changes = _.map(change.data, function(values, property)
         {
+          var label = view.t('PROPERTY:' + property);
+
+          if (values[0] === null && values[1] && (values[1].added || values[1].edited || values[1].deleted))
+          {
+            return {
+              label,
+              values: view.serializeItemValues(property, values[1], changeIndex)
+            };
+          }
+
           return {
-            label: view.t('PROPERTY:' + property),
+            label: label,
             oldValue: view.serializeItemValue(property, values[0], true, changeIndex),
             newValue: view.serializeItemValue(property, values[1], false, changeIndex)
           };
@@ -161,6 +171,38 @@ define([
         changes: changes,
         comment: comment
       };
+    },
+
+    serializeItemValues: function(property, {added, edited, deleted}, changeIndex)
+    {
+      var view = this;
+      var values = [];
+
+      (deleted || []).forEach(function(value)
+      {
+        values.push({
+          oldValue: view.serializeItemValue(property, value, true, changeIndex),
+          newValue: '-'
+        });
+      });
+
+      (added || []).forEach(function(value)
+      {
+        values.push({
+          oldValue: '-',
+          newValue: view.serializeItemValue(property, value, false, changeIndex)
+        });
+      });
+
+      (edited || []).forEach(function(value)
+      {
+        values.push({
+          oldValue: view.serializeItemValue(property, Object.assign({}, value, value.old), true, changeIndex),
+          newValue: view.serializeItemValue(property, value, false, changeIndex)
+        });
+      });
+
+      return values;
     },
 
     serializeItemValue: function(property, value, isOld, changeIndex)
@@ -214,13 +256,25 @@ define([
           };
 
         case 'attachments':
-          return value.map(function(attachment)
+        {
+          const a = `<a href="${this.model.getAttachmentUrl(value)}&change=${changeIndex}" target="_blank">`;
+          let kind = '';
+
+          if (value.kind && this.t.has(`history:attachmentKind:${value.kind}`))
           {
-            return '<a href="/suggestions/' + this.model.id + '/attachments/' + attachment._id
-              + '?download=1&change=' + (isOld ? -changeIndex : changeIndex) + '" title="'
-              + _.escape(attachment.name) + '">'
-              + this.t('attachments:' + attachment.description) + '</a>';
-          }, this).join('; ');
+            kind = ' (' + this.t(`history:attachmentKind:${value.kind}`) + ')';
+          }
+
+          if (value.name.length <= 43)
+          {
+            return `${a}${_.escape(value.name)}</a>${kind}`;
+          }
+
+          return {
+            more: value.name,
+            toString: () => `${a}${_.escape(value.name).substr(0, 40)}...</a>${kind}`
+          };
+        }
 
         case 'subscribers':
           return value.join('; ');

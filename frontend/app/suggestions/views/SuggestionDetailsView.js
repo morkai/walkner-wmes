@@ -23,14 +23,8 @@ define([
 
     template: template,
 
-    currentTab: null,
-
-    events: _.assign({
-      'click a[data-toggle="tab"]': function(e)
-      {
-        this.currentTab = e.currentTarget.dataset.tab;
-      },
-      'click .suggestions-details-coordSection-coordinate': function(e)
+    events: Object.assign({
+      'click .js-coordinate': function(e)
       {
         var $coordSection = this.$(e.target).closest('.suggestions-details-coordSection');
 
@@ -128,13 +122,11 @@ define([
       });
 
       this.toggleOverflowX();
-
-      this.$('a[data-tab="' + (this.currentTab || this.options.initialTab) + '"]').click();
     },
 
     toggleOverflowX: function()
     {
-      this.$('.suggestions-details-coordSections').css(
+      this.$id('coordSections').css(
         'overflow-x',
         (this.$el.outerWidth() + 50) < window.innerWidth ? 'visible' : ''
       );

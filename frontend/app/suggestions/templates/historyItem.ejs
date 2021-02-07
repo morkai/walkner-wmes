@@ -5,13 +5,25 @@
   <table class="table table-condensed suggestions-history-changes">
     <tbody>
       <% item.changes.forEach(function(change) { %>
-      <tr>
-        <td class="is-min"><%- change.label %>:</td>
-        <td class="is-min"><span class="<%- change.oldValue.more ? 'has-more' : '' %>" data-content="<%= change.oldValue.more %>"><%- change.oldValue %></span></td>
-        <td class="is-min"><i class="fa fa-arrow-right"></i></td>
-        <td><span class="<%- change.newValue.more ? 'has-more' : '' %>" data-content="<%= change.newValue.more %>"><%- change.newValue %></span></td>
-        <td></td>
-      </tr>
+        <% if (change.values) { %>
+          <% change.values.forEach(function(value, i) { %>
+            <tr>
+              <td class="is-min"><%- i === 0 ? `${change.label}:` : '' %></td>
+              <td class="is-min suggestions-history-oldValue"><% if (value.oldValue !== null) { %><span class="<%- value.oldValue.more ? 'has-more' : '' %>" data-content="<%= value.oldValue.more %>"><%- value.oldValue %></span><% } %></td>
+              <td class="is-min"><i class="fa <%- value.icon || 'fa-arrow-right' %>"></i></td>
+              <td><span class="<%- value.newValue.more ? 'has-more' : '' %>" data-content="<%= value.newValue.more %>"><%- value.newValue %></span></td>
+              <td></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td class="is-min"><%- change.label %>:</td>
+            <td class="is-min suggestions-history-oldValue"><span class="<%- change.oldValue.more ? 'has-more' : '' %>" data-content="<%= change.oldValue.more %>"><%- change.oldValue %></span></td>
+            <td class="is-min"><i class="fa fa-arrow-right"></i></td>
+            <td><span class="<%- change.newValue.more ? 'has-more' : '' %>" data-content="<%= change.newValue.more %>"><%- change.newValue %></span></td>
+            <td></td>
+          </tr>
+        <% } %>
       <% }) %>
     </tbody>
   </table>

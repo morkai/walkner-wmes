@@ -1,0 +1,25 @@
+<div class="panel panel-default suggestions-attachments-panel <%- hideEmpty && !attachments.length ? 'suggestions-attachments-empty' : '' %>" data-attachment-count="<%- attachments.length %>">
+  <div class="panel-heading <%- unseen ? 'suggestions-unseen' : '' %>">
+    <%- panelTitle %>
+  </div>
+  <div class="panel-body">
+    <% if (!attachments.length) { %>
+      <p><em><%- t('attachments:empty') %></em></p>
+    <% } else { %>
+      <div class="suggestions-attachments">
+        <% attachments.forEach(attachment => { %>
+        <div class="suggestions-attachment" data-id="<%- attachment._id %>" title="<%= attachment.name %>">
+          <% if (attachment.image) { %>
+          <a class="suggestions-attachment-img" href="<%- attachment.url %>" style="background-image: url('<%- attachment.url %>?min=1')"></a>
+          <% } else { %>
+          <a class="suggestions-attachment-icon" href="<%- attachment.url %>" target="_blank">
+            <i class="fa <%- attachment.icon %>"></i>
+          </a>
+          <% } %>
+          <div class="suggestions-attachment-name"><%= attachment.name %></div>
+        </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>

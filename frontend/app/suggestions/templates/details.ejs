@@ -88,11 +88,11 @@
       <p><%- t('coordSections:noData') %></p>
     </div>
     <% } else { %>
-    <div class="panel-body suggestions-details-coordSections">
+    <div id="<%- id('coordSections') %>" class="panel-body suggestions-details-coordSections">
       <% model.coordSections.forEach(function(coordSection) { %>
       <div class="suggestions-details-coordSection" data-section="<%- coordSection._id %>" data-status="<%- coordSection.status %>">
         <% if (coordSection.canCoordinate) { %>
-        <button class="btn btn-default suggestions-details-coordSection-coordinate" type="button" title="<%- t('PAGE_ACTION:coordinate') %>"><i class="fa fa-gavel"></i></button>
+        <button class="btn btn-default suggestions-details-coordSection-coordinate js-coordinate" type="button" title="<%- t('PAGE_ACTION:coordinate') %>"><i class="fa fa-gavel"></i></button>
         <% } %>
         <div class="form-group">
           <label class="control-label"><%- t('PROPERTY:coordSections:name') %></label>
@@ -132,66 +132,5 @@
       <% }) %>
     </div>
     <% } %>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading"><%- t('PANEL:TITLE:attachments') %></div>
-    <table class="table table-bordered table-condensed table-hover suggestions-details-attachments">
-      <thead>
-      <tr>
-        <th class="is-min"><%- t('PROPERTY:attachments:description') %></th>
-        <th><%- t('PROPERTY:attachments:file') %></th>
-        <% if (model.attachments.length) { %>
-        <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
-        <% } %>
-      </tr>
-      </thead>
-      <tbody>
-      <% if (!model.attachments.length) { %>
-        <tr>
-          <td colspan="2"><%- t('attachments:noData') %></td>
-        </tr>
-      <% } %>
-      <% model.attachments.forEach(function(attachment) { %>
-        <tr>
-          <td class="is-min"><%= t.has('suggestions', 'attachments:' + attachment.description) ? t('attachments:' + attachment.description) : attachment.description %></td>
-          <td><%= attachment.name %></td>
-          <% if (model.attachments.length) { %>
-          <td class="actions">
-            <div class="actions-group">
-              <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>" target="_blank" title="<%- t('attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
-              <a class="btn btn-default" href="/suggestions/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- t('attachments:actions:download') %>"><i class="fa fa-download"></i></a>
-            </div>
-          </td>
-          <% } %>
-        </tr>
-      <% }) %>
-      </tbody>
-    </table>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading"><%- t('PANEL:TITLE:observers') %></div>
-    <table class="table table-bordered table-condensed table-hover suggestions-details-observers">
-      <thead>
-      <tr>
-        <th class="is-min"><%- t('PROPERTY:observers:name') %></th>
-        <th class="is-min"><%- t('PROPERTY:observers:role') %></th>
-        <th><%- t('PROPERTY:observers:lastSeenAt') %></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% if (!model.observers.length) { %>
-        <tr>
-          <td colspan="3"><%- t('observers:noData') %></td>
-        </tr>
-      <% } %>
-      <% model.observers.forEach(function(observer) { %>
-        <tr>
-          <td class="is-min"><span class="userInfo" data-user-id="<%- observer.user.id %>"><span class="userInfo-label"><%= observer.user.label %></span></span></td>
-          <td class="is-min"><%= t('role:' + observer.role) %></td>
-          <td><%= observer.lastSeenAt ? time.format(observer.lastSeenAt, 'LLLL') : '-' %></td>
-        </tr>
-      <% }) %>
-      </tbody>
-    </table>
   </div>
 </div>
