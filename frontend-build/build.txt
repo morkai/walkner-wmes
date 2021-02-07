@@ -734,6 +734,10 @@ app/subdivisions/assets/main.css
 ----------------
 app/subdivisions/assets/main.css
 
+app/suggestions/assets/attachments.css
+----------------
+app/suggestions/assets/attachments.css
+
 app/suggestions/assets/details.css
 ----------------
 app/suggestions/assets/details.css
@@ -759,6 +763,7 @@ app/suggestions/assets/main.css
 app/suggestions/assets/./list.css
 app/suggestions/assets/./form.css
 app/suggestions/assets/./details.css
+app/suggestions/assets/./attachments.css
 app/suggestions/assets/./history.css
 app/suggestions/assets/./report.css
 app/suggestions/assets/./help.css
