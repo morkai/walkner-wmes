@@ -41,6 +41,11 @@ For $i = 1 To $CmdLine[0] Step 1
 
   LogDebug("NC12=" & $nc12)
 
+  If StringLen($nc12) <> 12 Then
+    LogDebug("IGNORE_CFG_NC12")
+    ContinueLoop
+  EndIf
+
   $session.FindById("wnd[0]/usr/ctxtRC29L-MATNR").Text = $nc12 ; Material
   $session.FindById("wnd[0]/usr/ctxtRC29L-WERKS").Text = $plant ; Plant
   $session.FindById("wnd[0]/usr/txtRC29L-STLAL").Text = "" ; Alternative BOM

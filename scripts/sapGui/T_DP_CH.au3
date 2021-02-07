@@ -310,8 +310,27 @@ For $orderI = 1 To $CmdLine[0] Step 1
   $ctrl = $session.FindById($ctrlId)
   AssertControl($ctrl, $ctrlId)
   $ctrl.Press()
+
+  ; Close any modals
+  While True
+    $modal = $session.FindById("wnd[1]")
+
+    If Not IsObj($modal) Then
+      ExitLoop
+    EndIf
+
+    LogDebug("CLOSING_MODAL=" & ReadAllText($modal, " "))
+    $modal.Close()
+  WEnd
+
+  ; Still on item overview: go back to the initial screen again
+  If StringInStr($session.FindById("wnd[0]").Text, "Display Project Order") Then
+    $ctrlId = "wnd[0]/tbar[0]/btn[12]"
+    $ctrl = $session.FindById($ctrlId)
+    AssertControl($ctrl, $ctrlId)
+    $ctrl.Press()
+  EndIf
 Next
 
 LogDebug("ENDING_TRANSACTION")
-
 CloseSession()
