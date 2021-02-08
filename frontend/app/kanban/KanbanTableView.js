@@ -98,7 +98,7 @@ define([
       width: 13,
       prepareFilter: function(input)
       {
-        return input.split(/[^0-9]+/).filter(function(v) { return v.length === 12; }).join('; ');
+        return input.split(/[^0-9]+/).filter(function(v) { return v.length > 0; }).join('; ');
       },
       renderValue: function(value, column, arrayIndex, entry)
       {
