@@ -17,7 +17,7 @@ define([
 ) {
   'use strict';
 
-  const METRICS = ['ipr', 'ips', 'ipc', 'entries', 'users', 'fte'];
+  const METRICS = ['ipr', 'ips', 'ipp', 'entries', 'users', 'fte'];
   const GROUPS = ['total', 'division', 'workplace', 'department'];
   const METRIC_OPTIONS = {
     ipr: {
@@ -32,7 +32,7 @@ define([
       absUnit: true,
       relColumn: false
     },
-    ipc: {
+    ipp: {
       valueDecimals: 1,
       unit: '%',
       absUnit: true,

@@ -29,12 +29,6 @@ define([
     action: '#31b0d5',
     observation: '#ec971f'
   };
-  const METRIC_TOTALS = {
-
-  };
-  const DICT_METRICS = {
-
-  };
   const ORG_UNITS = ['division', 'workplace', 'department'];
 
   return Model.extend({
@@ -92,7 +86,7 @@ define([
     {
       const {totals} = report;
 
-      ['ipr', 'ips', 'ipc'].forEach(metric =>
+      ['ipr', 'ips', 'ipp'].forEach(metric =>
       {
         const row = {
           id: 'total',
@@ -375,7 +369,7 @@ define([
       {
         attrs[`${metric}-${orgUnitType}`] = {
           rows: Object.keys(totals.byOrgUnit[orgUnitType])
-            .filter(orgUnitId => totals.byOrgUnit[orgUnitType][orgUnitId].userCount > 0)
+            .filter(orgUnitId => totals.byOrgUnit[orgUnitType][orgUnitId].fte.total > 0)
             .map(orgUnitId =>
             {
               const orgUnitTotals = totals.byOrgUnit[orgUnitType][orgUnitId];
@@ -395,7 +389,7 @@ define([
 
       report.groups.forEach(g =>
       {
-        attrs[`${metric}-total`].series.total.data.push({x: g.key, y: g.userCount});
+        attrs[`${metric}-total`].series.total.data.push({x: g.key, y: g.fte.total});
 
         ORG_UNITS.forEach(orgUnitType =>
         {
