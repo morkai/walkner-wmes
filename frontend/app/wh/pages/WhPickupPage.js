@@ -122,7 +122,7 @@ define([
       ];
     },
 
-    actions: function(layout)
+    actions: function()
     {
       var page = this;
       var forceLine = {

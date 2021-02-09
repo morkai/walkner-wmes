@@ -100,7 +100,7 @@ define([
       view.$id('finish').prop('disabled', true);
       view.$id('addCarts').prop('disabled', true).find('.fa-spinner').removeClass('hidden');
 
-      view.req = view.promised(
+      var req = view.req = view.promised(
         WhOrderCollection.act(
           null,
           'startDelivery',
@@ -113,7 +113,7 @@ define([
 
       view.req.fail(function()
       {
-        view.trigger('failure', view.req);
+        view.trigger('failure', req);
       });
 
       view.req.done(function(res)

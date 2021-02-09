@@ -202,16 +202,11 @@ define([
 
     serializeOrderPriority: function(line)
     {
-      let orderPriority;
+      const settings = this.plan.settings.getVersion() === 1
+        ? line.mrpSettings(this.mrp.id)
+        : line.settings;
 
-      if (this.plan.settings.getVersion() === 1)
-      {
-        orderPriority = line.mrpSettings(this.mrp.id).get('orderPriority');
-      }
-      else
-      {
-        orderPriority = line.settings.get('orderPriority');
-      }
+      const orderPriority = settings ? settings.get('orderPriority') : [];
 
       return orderPriority.map(v => this.t(`orderPriority:${v}`)).join('; ');
     },

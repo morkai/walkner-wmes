@@ -211,7 +211,7 @@ define([
 
     getSortedLines: function()
     {
-      return this.lines.getSortedByPriority(this.settings.get('linePriority') || []);
+      return this.lines.getSortedByPriority(this.settings && this.settings.get('linePriority') || []);
     }
 
   });

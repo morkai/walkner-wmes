@@ -25,7 +25,7 @@ define([
 
     getNextStartTime: function(planLine)
     {
-      var shiftData = planLine.get('shiftData');
+      var shiftData = planLine ? planLine.get('shiftData') : null;
 
       if (!shiftData)
       {
@@ -55,7 +55,7 @@ define([
 
     getPrevFinishTime: function(planLine)
     {
-      var shiftData = planLine.get('shiftData');
+      var shiftData = planLine ? planLine.get('shiftData') : null;
 
       if (!shiftData)
       {
