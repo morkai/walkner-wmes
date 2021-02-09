@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'select2',
   'Sortable',
   'app/i18n',
   'app/viewport',
@@ -13,6 +14,7 @@ define([
 ], function(
   _,
   $,
+  select2,
   Sortable,
   t,
   viewport,
@@ -66,6 +68,18 @@ define([
           .join(', ');
 
         $activeTime.val(value);
+      },
+
+      'blur input[name^="workerCount"]': function(e)
+      {
+        let v = parseInt(e.target.value, 10);
+
+        if (!v || v <= 0)
+        {
+          v = '';
+        }
+
+        e.target.value = v;
       }
 
     },
@@ -141,31 +155,101 @@ define([
 
     setUpOrderGroupPriority: function()
     {
-      var $input = this.$id('orderGroupPriority');
+      const $orderGroupPriority = this.$id('orderGroupPriority');
 
-      if (!$input.length)
+      if (!$orderGroupPriority.length)
       {
         return;
       }
 
-      $input.select2({
-        allowClear: true,
-        multiple: true,
-        data: this.orderGroups.map(idAndLabel)
+      const mrpPriority = this.$id('mrpPriority').select2('val');
+      const data = this.orderGroups.map(g =>
+      {
+        const mrps = g.get('mrp') || [];
+
+        return {
+          id: g.id,
+          text: g.getLabel(),
+          mrps,
+          search: (g.getLabel() + ' ' + mrps.join(' ')).trim().toUpperCase(),
+          hasLineMrps: _.intersection(mrps, mrpPriority).length > 0,
+          model: g
+        };
       });
 
-      this.sortables.push(new Sortable($input.select2('container').find('.select2-choices')[0], {
+      data.sort((a, b) =>
+      {
+        if (a.model.isNoMatchGroup())
+        {
+          return -1;
+        }
+
+        if (b.model.isNoMatchGroup())
+        {
+          return 1;
+        }
+
+        if (a.hasLineMrps === b.hasLineMrps)
+        {
+          return a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true});
+        }
+
+        if (a.hasLineMrps)
+        {
+          return -1;
+        }
+
+        return 1;
+      });
+
+      $orderGroupPriority.select2({
+        allowClear: true,
+        multiple: true,
+        data,
+        matcher: (term, text, item) => item.search.includes(term.toUpperCase()),
+        formatResult: (item, $container, query, e) =>
+        {
+          const html = [];
+
+          select2.util.markMatch(item.text, query.term, html, e);
+
+          if (item.mrps.length)
+          {
+            item.mrps.forEach(mrp =>
+            {
+              const label = mrpPriority.includes(mrp) ? 'success' : 'default';
+
+              html.push(` &nbsp;<span class="label label-${label}">`);
+              select2.util.markMatch(mrp, query.term, html, e);
+              html.push('</span>');
+            });
+          }
+
+          return html.join('');
+        }
+      });
+
+      let sortable = $orderGroupPriority.data('sortable');
+
+      if (sortable)
+      {
+        sortable.destroy();
+      }
+
+      sortable = new Sortable($orderGroupPriority.select2('container').find('.select2-choices')[0], {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',
         onStart: () =>
         {
-          $input.select2('onSortStart');
+          $orderGroupPriority.select2('onSortStart');
         },
         onEnd: () =>
         {
-          $input.select2('onSortEnd').select2('focus');
+          $orderGroupPriority.select2('onSortEnd').select2('focus');
         }
-      }));
+      });
+
+      $orderGroupPriority.data('sortable', sortable);
     },
 
     setUpOrderPriority: function()

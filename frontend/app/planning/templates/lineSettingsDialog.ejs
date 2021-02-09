@@ -28,9 +28,9 @@
   <div class="form-group">
     <label for="<%- id('workerCount1') %>" class="control-label"><%- t('settings:workerCount') %></label>
     <div class="planning-lineSettings-workerCount">
-      <% [1, 2, 3].forEach(function(shiftNo) { %>
+      <% [1, 2, 3].forEach(shiftNo => { %>
       <label for="<%- id('workerCount' + shiftNo) %>" class="planning-lineSettings-workerCount-label"><%- t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
-      <input id="<%- id('workerCount' + shiftNo) %>" name="workerCount<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- workerCount[shiftNo - 1] %>" min="0" max="20" step="0.01">
+      <input id="<%- id('workerCount' + shiftNo) %>" name="workerCount<%- shiftNo %>" class="form-control planning-lineSettings-workerCount-input" type="number" value="<%- workerCount[shiftNo - 1] || '' %>" placeholder="0" min="0" max="20" step="0.01">
       <% }) %>
     </div>
   </div>

@@ -156,7 +156,9 @@ define([
           {
             item.mrps.forEach(mrp =>
             {
-              html.push(' &nbsp;<span class="label label-default">');
+              const label = mrpPriority.includes(mrp) ? 'success' : 'default';
+
+              html.push(` &nbsp;<span class="label label-${label}">`);
               select2.util.markMatch(mrp, query.term, html, e);
               html.push('</span>');
             });
