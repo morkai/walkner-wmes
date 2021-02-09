@@ -21,7 +21,8 @@ define([
 
     events: Object.assign({
 
-      'change #-month': 'loadExisting'
+      'change #-month': 'loadExisting',
+      'change #-blur': 'loadExistingNow'
 
     }, FormView.prototype.events),
 
@@ -106,7 +107,7 @@ define([
     serializeToForm: function()
     {
       return {
-        month: this.options.editMode ? time.utc.format(this.id, 'YYYY-MM') : (this.month || ''),
+        month: this.options.editMode ? time.utc.format(this.model.id, 'YYYY-MM') : (this.month || ''),
         departments: this.departments
       };
     },
@@ -137,6 +138,14 @@ define([
 
     loadExisting: function()
     {
+      clearTimeout(this.timers.loadExisting);
+      this.timers.loadExisting = setTimeout(this.loadExistingNow.bind(this), 333);
+    },
+
+    loadExistingNow: function()
+    {
+      clearTimeout(this.timers.loadExisting);
+
       const date = this.$id('month').val();
 
       if (!date)
