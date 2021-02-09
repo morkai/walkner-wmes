@@ -20,8 +20,8 @@ define([
   'use strict';
 
   var VERSION_2_DATE = window.ENV === 'production'
-    ? time.utc.getMoment('2030-01-01').valueOf()
-    : time.utc.getMoment('2021-01-17').valueOf(); // time.getMoment().utc(true).valueOf();
+    ? time.utc.getMoment('2021-02-12').valueOf()
+    : time.utc.getMoment('2021-01-17').valueOf();
 
   var PlanLineSettings = Model.extend({
 

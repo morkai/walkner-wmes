@@ -88,7 +88,7 @@ exports.orders = {
 };
 
 const newGeneratorDate = process.env.NODE_ENV === 'production'
-  ? new Date('2031-02-05T00:00:00Z')
+  ? new Date('2021-02-12T00:00:00Z')
   : new Date('2021-02-05T00:00:00Z');
 
 exports.planning = {
@@ -96,11 +96,11 @@ exports.planning = {
   generators: [
     {
       module: require('../backend/node_modules/planning/generator.v1'),
-      accept: moment => moment.isSameOrBefore(newGeneratorDate)
+      accept: moment => moment.isBefore(newGeneratorDate)
     },
     {
       module: require('../backend/node_modules/planning/generator.v2'),
-      accept: moment => moment.isAfter(newGeneratorDate)
+      accept: moment => moment.isSameOrAfter(newGeneratorDate)
     }
   ]
 };
