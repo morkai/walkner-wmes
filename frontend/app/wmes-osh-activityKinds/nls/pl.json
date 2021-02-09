@@ -8,15 +8,17 @@
   "PROPERTY:description": "Opis",
   "PROPERTY:allowedTypes": "Dozwolony ze zgłoszeń",
   "PROPERTY:participants": "Uczestnicy",
+  "PROPERTY:rootCauses": "Przyczyny źródłowe",
   "PROPERTY:resolution": "Rozwiązanie",
 
   "resolution:none": "Brak działań",
   "resolution:implementers": "Realizacja",
-  "resolution:rootCauses": "Przyczyny źródłowe",
+  "resolution:resolutions": "Wdrożone rozwiązania",
 
   "FORM:help:allowedTypes": "Określa czy dany rodzaj aktywności może zostać wybrany przez zwykłego użytkownika podczas tworzenia akcji z poziomu wybranych typów zgłoszeń.",
   "FORM:help:participants": "Określa czy pole Uczestnicy ma być dostępne.",
+  "FORM:help:rootCauses": "Określa czy Analiza przyczyn źródłowych ma być dostępna.",
   "FORM:help:resolution:none": "Nowe zgłoszenie Akcji zostanie zapisane od razu ze statusem Zakończone.",
   "FORM:help:resolution:implementers": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Nowe. Akcja zostanie zakończona po zaakceptowaniu, realizacji oraz weryfikacji. Pola Uczestnicy oraz Planowany termin realizacji są dostępne.",
-  "FORM:help:resolution:rootCauses": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Realizacja. Akcja zostanie zakończona jak wszystkie przypisane do niej zgłoszenia zostaną zakończone. Pola Analiza przyczyn źrodłowych są dostępne."
+  "FORM:help:resolution:resolutions": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Realizacja. Do akcji trzeba przypisać inne akcje i/lub kaizeny. Akcja zostanie zakończona jak wszystkie przypisane do niej zgłoszenia zostaną zakończone."
 }

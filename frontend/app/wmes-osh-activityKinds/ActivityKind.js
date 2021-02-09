@@ -56,6 +56,7 @@ define([
       obj.allowedTypes = obj.allowedTypes.map(type => t('wmes-osh-common', `type:${type}`)).join(', ');
       obj.resolution = t(this.nlsDomain, `resolution:${obj.resolution}`);
       obj.participants = t('core', `BOOL:${obj.participants}`);
+      obj.rootCauses = t('core', `BOOL:${obj.rootCauses}`);
 
       return obj;
     },

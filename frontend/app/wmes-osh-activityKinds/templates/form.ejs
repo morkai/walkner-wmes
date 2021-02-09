@@ -44,7 +44,7 @@
       </div>
       <div class="form-group">
         <label class="control-label"><%- t('PROPERTY:resolution') %></label>
-        <% ['none', 'implementers', 'rootCauses'].forEach(resolution => { %>
+        <% ['none', 'implementers', 'resolutions'].forEach(resolution => { %>
           <div class="radio">
             <label>
               <input type="radio" name="resolution" value="<%- resolution %>">
@@ -61,6 +61,13 @@
         </label>
       </div>
       <p class="help-block"><%- t(`FORM:help:participants`) %></p>
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="rootCauses" value="true">
+          <%- t(`PROPERTY:rootCauses`) %>
+        </label>
+      </div>
+      <p class="help-block"><%- t(`FORM:help:rootCauses`) %></p>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

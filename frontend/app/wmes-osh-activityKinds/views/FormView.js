@@ -58,7 +58,8 @@ define([
         formData.description = '';
       }
 
-      formData.implementers = !!formData.implementers;
+      formData.participants = !!formData.participants;
+      formData.rootCauses = !!formData.rootCauses;
 
       if (!formData.allowedTypes)
       {

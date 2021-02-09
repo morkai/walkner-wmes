@@ -425,7 +425,6 @@ define([
 
       if (features.rootCauses)
       {
-        formData.status = 'inProgress';
         formData.rootCauses.forEach(rootCause =>
         {
           rootCause.category = +rootCause.category;
@@ -441,6 +440,18 @@ define([
           }
         });
 
+        formData.reason = '';
+        formData.suggestion = '';
+      }
+      else
+      {
+        formData.rootCauses = null;
+      }
+
+      if (features.resolutions)
+      {
+        formData.status = 'inProgress';
+
         if (!formData.resolutions)
         {
           formData.resolutions = [];
@@ -451,13 +462,10 @@ define([
           resolution._id = +resolution._id;
         });
 
-        formData.reason = '';
-        formData.suggestion = '';
         formData.solution = '';
       }
       else
       {
-        formData.rootCauses = null;
         formData.resolutions = null;
       }
 
@@ -1130,23 +1138,24 @@ define([
     {
       const activityKind = dictionaries.activityKinds.get(+this.$id('activityKind').val());
       const features = {
-        participants: false,
         resolution: 'none',
+        participants: false,
         rootCauses: false,
-        implementers: false
+        implementers: false,
+        resolutions: false
       };
 
       if (activityKind)
       {
         Object.assign(features, activityKind.pick([
           'participants',
+          'rootCauses',
           'resolution'
         ]));
       }
 
-      features.rootCauses = features.resolution === 'rootCauses';
       features.implementers = features.resolution === 'implementers';
-      features.resolution = features.resolution !== 'none';
+      features.resolutions = features.resolution === 'resolutions';
 
       return features;
     },
@@ -1156,17 +1165,21 @@ define([
       const features = this.getActivityFeatures();
 
       this.toggleRootCausesFeature(features);
+      this.toggleResolutionsFeature(features);
       this.toggleImplementersFeature(features);
-      this.toggleRootCausesFeature(features);
+      this.toggleParticipantsFeature(features);
 
+      viewport.adjustDialogBackdrop();
+    },
+
+    toggleParticipantsFeature: function(features)
+    {
       this.$id('participants')
         .prop('required', features.participants)
         .closest('.form-group')
         .toggleClass('has-required-select2', features.participants)
         .closest('.row')
         .toggleClass('hidden', !features.participants);
-
-      viewport.adjustDialogBackdrop();
     },
 
     toggleRootCausesFeature: function(features)
@@ -1187,17 +1200,20 @@ define([
         .closest('.form-group')
         .toggleClass('hidden', features.rootCauses);
 
+      this.checkWhyValidity();
+    },
+
+    toggleResolutionsFeature: function(features)
+    {
       this.$id('solution')
         .closest('.form-group')
-        .toggleClass('hidden', features.rootCauses);
+        .toggleClass('hidden', features.resolutions);
 
       this.$id('resolutionsGroup')
-        .toggleClass('hidden', !features.rootCauses);
+        .toggleClass('hidden', !features.resolutions);
 
       this.$id('addResolution')
         .prop('disabled', viewport.currentDialog === this);
-
-      this.checkWhyValidity();
     },
 
     toggleImplementersFeature: function(features)
