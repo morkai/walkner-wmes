@@ -270,22 +270,32 @@ define([
 
       this.metrics.forEach(metric =>
       {
-        if (attrs[metric] || !totals[metric])
+        if (attrs[metric])
         {
           return;
         }
 
         if (USER_METRICS[metric])
         {
-          attrs[metric] = {
-            categories: totals[metric].map(total => report.users[total[0]] || total[0]),
-            series: [{
-              id: 'count',
-              name: entryLabel,
-              color: COLORS.entry,
-              data: totals[metric].map(total => total[1])
-            }]
-          };
+          if (totals[metric])
+          {
+            attrs[metric] = {
+              categories: totals[metric].map(total => report.users[total[0]] || total[0]),
+              series: [{
+                id: 'count',
+                name: entryLabel,
+                color: COLORS.entry,
+                data: totals[metric].map(total => total[1])
+              }]
+            };
+          }
+          else
+          {
+            attrs[metric] = {
+              categories: [],
+              series: []
+            };
+          }
 
           return;
         }
@@ -339,7 +349,7 @@ define([
 
         this.metrics.forEach(metric =>
         {
-          if (dynamicMetrics[metric] || _.isEmpty(attrs[metric].series))
+          if (dynamicMetrics[metric] || !attrs[metric] || _.isEmpty(attrs[metric].series))
           {
             dynamicMetrics[metric] = true;
 
@@ -369,7 +379,7 @@ define([
     prepareRows: function(metric, report)
     {
       const totalCount = report.totals[METRIC_TOTALS[metric] || 'count'];
-      const metricTotals = [].concat(report.totals[metric]);
+      const metricTotals = [].concat(report.totals[metric] || []);
 
       const total = {
         id: 'total',
@@ -443,7 +453,6 @@ define([
       {
         return;
       }
-
 
       _.forEach(rows, (row, i) =>
       {
