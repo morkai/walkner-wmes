@@ -87,7 +87,7 @@ exports.orders = {
   }
 };
 
-const newGeneratorDate = process.env.NODE_ENV === 'production'
+const newGeneratorDate = process.env.NODE_ENV !== 'testing'
   ? new Date('2021-02-12T00:00:00Z')
   : new Date('2021-02-05T00:00:00Z');
 

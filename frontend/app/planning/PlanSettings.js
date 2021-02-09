@@ -19,7 +19,7 @@ define([
 ) {
   'use strict';
 
-  var VERSION_2_DATE = window.ENV === 'production'
+  var VERSION_2_DATE = window.ENV !== 'testing'
     ? time.utc.getMoment('2021-02-12').valueOf()
     : time.utc.getMoment('2021-01-17').valueOf();
 
