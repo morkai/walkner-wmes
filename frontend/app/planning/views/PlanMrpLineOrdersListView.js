@@ -66,11 +66,6 @@ define([
       },
       'dblclick tr': function(e)
       {
-        if (this.options.mode === 'wh')
-        {
-          return;
-        }
-
         window.getSelection().removeAllRanges();
 
         var trEl = e.currentTarget;
@@ -142,37 +137,36 @@ define([
       'click .planning-mrp-lineOrders-dropZone': function(e)
       {
         this.handleDropZoneAction(this.$(e.target).closest('tr').attr('data-id'));
+      },
+      'click th[data-id="startTime"]': function()
+      {
+        this.reorder('startTime');
+      },
+      'click th[data-id="lines"]': function()
+      {
+        this.reorder('lines');
       }
     },
 
     initialize: function()
     {
-      var view = this;
+      this.expanded = false;
 
-      view.expanded = this.options.mode === 'wh';
+      this.listenTo(this.mrp.lines, 'reset added changed removed', this.renderIfNotLoading);
 
-      view.listenTo(view.mrp.lines, 'reset added changed removed', view.renderIfNotLoading);
+      this.listenTo(this.mrp.orders, 'highlight', this.onOrderHighlight);
 
-      view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
-
-      view.listenTo(view.plan.sapOrders, 'change:comments', view.onCommentChange);
-      view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
-      view.listenTo(view.plan.sapOrders, 'change:psStatus', view.onPsStatusChanged);
-      view.listenTo(view.plan.sapOrders, 'change:whStatus', view.onWhStatusChanged);
-      view.listenTo(view.plan.sapOrders, 'change:whDropZone change:whTime', view.onWhDropZoneChanged);
+      this.listenTo(this.plan.sapOrders, 'change:comments', this.onCommentChange);
+      this.listenTo(this.plan.sapOrders, 'reset', this.onSapOrdersReset);
+      this.listenTo(this.plan.sapOrders, 'change:psStatus', this.onPsStatusChanged);
     },
 
     getTemplateData: function()
     {
-      var whMode = this.options.mode === 'wh';
-
       return {
+        version: this.plan.settings.getVersion(),
         expanded: this.expanded,
-        orders: this.serializeOrders(),
-        hiddenColumns: {
-          finishTime: whMode,
-          lines: whMode
-        }
+        orders: this.serializeOrders()
       };
     },
 
@@ -186,20 +180,17 @@ define([
 
     serializeOrders: function()
     {
-      var view = this;
-      var sapOrders = view.plan.sapOrders;
-      var mrp = view.mrp;
-      var map = {};
-      var whMode = view.options.mode === 'wh';
+      const sapOrders = this.plan.sapOrders;
+      const map = {};
 
-      mrp.lines.forEach(function(line)
+      this.mrp.lines.forEach(line =>
       {
-        line.orders.forEach(function(lineOrder)
+        line.orders.forEach(lineOrder =>
         {
-          var orderNo = lineOrder.get('orderNo');
-          var planOrder = view.plan.orders.get(orderNo);
-          var sapOrder = sapOrders.get(orderNo);
-          var item = map[orderNo];
+          const orderNo = lineOrder.get('orderNo');
+          const planOrder = this.plan.orders.get(orderNo);
+          const sapOrder = sapOrders.get(orderNo);
+          let item = map[orderNo];
 
           if (!item)
           {
@@ -215,24 +206,34 @@ define([
               comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
               comments: sapOrder ? sapOrder.get('comments') : [],
               status: planOrder ? planOrder.getStatus() : 'missing',
-              statuses: view.serializeOrderStatuses(orderNo),
-              dropZone: sapOrder ? sapOrder.getDropZone() : '',
-              rowClassName: whMode && sapOrder
-                ? (sapOrder.get('whStatus') === 'done' ? 'success' : '')
-                : ''
+              statuses: this.serializeOrderStatuses(orderNo),
+              orderGroup: '',
+              rowClassName: ''
             };
+          }
+
+          if (!item.orderGroup)
+          {
+            const orderGroupId = lineOrder.get('group');
+
+            if (orderGroupId)
+            {
+              const orderGroup = this.orderGroups.get(orderGroupId);
+
+              item.orderGroup = orderGroup ? orderGroup.getLabel() : orderGroupId;
+            }
           }
 
           item.qtyPlan += lineOrder.get('quantity');
 
-          var startTime = Date.parse(lineOrder.get('startAt'));
+          const startTime = Date.parse(lineOrder.get('startAt'));
 
           if (startTime < item.startTime)
           {
             item.startTime = startTime;
           }
 
-          var finishTime = Date.parse(lineOrder.get('finishAt'));
+          const finishTime = Date.parse(lineOrder.get('finishAt'));
 
           if (finishTime > item.finishTime)
           {
@@ -248,16 +249,42 @@ define([
         });
       });
 
-      return _.values(map).sort(function(a, b) { return a.startTime - b.startTime; }).map(function(order, i)
+      const orders = _.values(map);
+
+      orders.forEach(order =>
       {
-        order.no = i + 1;
         order.shift = shiftUtil.getShiftNo(order.startTime);
+        order.lineSort = Object.keys(order.lines).join(' ');
+        order.lines = _.map(order.lines, (qty, line) => `${line} (${qty})`).join('; ');
+      });
+
+      const orderByTime = this.plan.displayOptions.get('lineOrdersSort') === 'startTime';
+
+      orders.sort((a, b) =>
+      {
+        if (orderByTime)
+        {
+          return a.startTime - b.startTime;
+        }
+
+        let cmp = a.lineSort.localeCompare(b.lineSort, undefined, {numeric: true});
+
+        if (cmp === 0)
+        {
+          cmp = a.startTime - b.startTime;
+        }
+
+        return cmp;
+      });
+
+      orders.forEach((order, i) =>
+      {
         order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
         order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
-        order.lines = _.map(order.lines, function(qty, line) { return line + ' (' + qty + ')'; }).join('; ');
-
-        return order;
+        order.no = i + 1;
       });
+
+      return orders;
     },
 
     serializeOrderStatuses: function(orderNo)
@@ -270,6 +297,12 @@ define([
       return '<span class="planning-mrp-list-property" title="' + _.escape(this.t(title)) + '">'
         + '<i class="fa ' + icon + '"></i>'
         + '</span>';
+    },
+
+    reorder: function(orderBy)
+    {
+      this.plan.displayOptions.set('lineOrdersSort', orderBy);
+      this.render();
     },
 
     hideMenu: function()
@@ -304,15 +337,6 @@ define([
         label: this.t('lineOrders:menu:copy'),
         handler: this.handleCopyAction.bind(this, e.currentTarget, e.pageY, e.pageX)
       });
-
-      if (this.plan.canChangeDropZone())
-      {
-        menu.push({
-          icon: 'fa-level-down',
-          label: this.t('orders:menu:dropZone'),
-          handler: this.handleDropZoneAction.bind(this, orderNo)
-        });
-      }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
@@ -350,7 +374,6 @@ define([
           'qtyTodo',
           'startTime',
           'finishTime',
-          'dropZone',
           'lines',
           'comment'
         ];
@@ -368,7 +391,6 @@ define([
             order.qtyTodo,
             order.startTime,
             order.finishTime,
-            order.dropZone,
             order.lines,
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
@@ -381,17 +403,6 @@ define([
         clipboardData.setData('text/plain', text.join('\r\n'));
         clipboard.showTooltip({x: x, y: y, text: view.t('lineOrders:menu:copy:success')});
       });
-    },
-
-    handleDropZoneAction: function(orderNo)
-    {
-      var dialogView = new PlanOrderDropZoneDialogView({
-        plan: this.plan,
-        mrp: this.mrp,
-        order: this.plan.orders.get(orderNo)
-      });
-
-      viewport.showDialog(dialogView, this.t('orders:menu:dropZone:title'));
     },
 
     onOrderHighlight: function(message)
@@ -439,32 +450,6 @@ define([
           .find('.planning-mrp-list-property-psStatus')
           .attr('title', this.t('orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
-      }
-    },
-
-    onWhStatusChanged: function(sapOrder)
-    {
-      var $order = this.$('tr[data-id="' + sapOrder.id + '"]');
-
-      if ($order.length)
-      {
-        var whStatus = this.plan.sapOrders.getWhStatus(sapOrder.id);
-
-        $order
-          .toggleClass('success', this.options.mode === 'wh' && whStatus === 'done')
-          .find('.planning-mrp-list-property-whStatus')
-          .attr('title', this.t('orders:whStatus:' + whStatus))
-          .attr('data-wh-status', whStatus);
-      }
-    },
-
-    onWhDropZoneChanged: function(sapOrder)
-    {
-      var $order = this.$('tr[data-id="' + sapOrder.id + '"]');
-
-      if ($order.length)
-      {
-        $order.find('.planning-mrp-lineOrders-dropZone').html(sapOrder.getDropZone());
       }
     }
 

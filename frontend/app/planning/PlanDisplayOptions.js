@@ -33,6 +33,7 @@ define([
         useDarkerTheme: false,
         wrapLists: true,
         lineOrdersList: false,
+        lineOrdersSort: 'startTime',
         from: '06:00',
         to: '06:00',
         activeMrps: {}

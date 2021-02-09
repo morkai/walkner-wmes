@@ -333,6 +333,7 @@
   "lineOrders:list:dropZone": "Drop zone",
   "lineOrders:list:whStatus": "Etap",
   "lineOrders:list:comment": "Ostatni komentarz",
+  "lineOrders:list:orderGroup": "Grupa zleceń",
   "lineOrders:menu:copy": "Kopiuj listę zleceń",
   "lineOrders:menu:copy:success": "Lista zleceń została skopiowana do schowka.",
 

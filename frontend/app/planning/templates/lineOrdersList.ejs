@@ -2,15 +2,17 @@
   <table class="planning-mrp-lineOrders-table">
     <thead>
       <tr>
-        <% ['no', 'shift', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'dropZone', 'lines'].forEach(function(prop) { %>
-        <% if (hiddenColumns[prop]) return %>
-        <th class="is-min"><%- t('planning', 'lineOrders:list:' + prop) %></th>
+        <% ['no', 'shift', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'lines'].forEach(prop => { %>
+        <th class="is-min" data-id="<%- prop %>"><%- t(`lineOrders:list:${prop}`) %></th>
         <% }) %>
-        <th><%- t('planning', 'lineOrders:list:comment') %></th>
+        <% if (version > 1) { %>
+        <th class="is-min"><%- t(`lineOrders:list:orderGroup`) %></th>
+        <% } %>
+        <th><%- t('lineOrders:list:comment') %></th>
       </tr>
     </thead>
     <tbody>
-      <% orders.forEach(function(order, i) { %>
+      <% orders.forEach((order, i) => { %>
       <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>">
         <td class="is-min text-right"><%- order.no %>.</td>
         <td class="is-min"><%- t('core', 'SHIFT:' + order.shift) %></td>
@@ -22,16 +24,14 @@
           <% if (order.qtyPlan === order.qtyTodo) { %>
           <%- order.qtyPlan.toLocaleString() %>
           <% } else { %>
-          <%- t('planning', 'lineOrders:list:qty:value', {plan: order.qtyPlan, todo: order.qtyTodo}) %>
+          <%- t('lineOrders:list:qty:value', {plan: order.qtyPlan, todo: order.qtyTodo}) %>
           <% } %>
         </td>
         <td class="is-min text-right"><%- order.startTime %></td>
-        <% if (!hiddenColumns.finishTime) { %>
         <td class="is-min text-right"><%- order.finishTime %></td>
-        <% } %>
-        <td class="is-min planning-mrp-lineOrders-dropZone"><%- order.dropZone %></td>
-        <% if (!hiddenColumns.lines) { %>
         <td class="is-min"><%= order.lines %></td>
+        <% if (version > 1) { %>
+        <td class="is-min"><%= order.orderGroup %></td>
         <% } %>
         <td class="planning-mrp-lineOrders-comment"><%- order.comment %></td>
       </tr>

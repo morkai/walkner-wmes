@@ -334,6 +334,7 @@
     "lineOrders:list:dropZone": "Drop zone",
     "lineOrders:list:whStatus": "Stage",
     "lineOrders:list:comment": "Last comment",
+    "lineOrders:list:orderGroup": "Order group",
     "lineOrders:menu:copy": "Copy order list",
     "lineOrders:menu:copy:success": "Order list copied to clipboard.",
 

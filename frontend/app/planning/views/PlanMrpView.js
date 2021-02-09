@@ -248,6 +248,7 @@ define([
     renderLineOrdersList: function()
     {
       this.setView('#-lineOrders', new PlanMrpLineOrdersListView({
+        orderGroups: this.orderGroups,
         plan: this.plan,
         mrp: this.mrp,
         mode: 'plan'
