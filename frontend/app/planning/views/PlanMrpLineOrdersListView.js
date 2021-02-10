@@ -375,6 +375,7 @@ define([
           'startTime',
           'finishTime',
           'lines',
+          'orderGroup',
           'comment'
         ];
         var text = [columns.map(function(p) { return view.t('lineOrders:list:' + p); }).join('\t')];
@@ -392,6 +393,7 @@ define([
             order.startTime,
             order.finishTime,
             order.lines,
+            order.orderGroup,
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
               .join('\r\n--\r\n') + '"'
