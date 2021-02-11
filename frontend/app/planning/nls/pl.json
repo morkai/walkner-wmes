@@ -408,6 +408,8 @@
   "settings:lateHour:help": "Godzina, od której rozplanowywane są ręcznie dodane pilne zlecenia (opóźnione).",
   "settings:etoPilotHour": "Godzina rozpoczęcia ETO pilotów",
   "settings:etoPilotHour:help": "Godzina, od której rozplanowywane są zlecenia z priorytetem <em>E</em> - ETO pilot.",
+  "settings:minIncompleteDuration": "Min. czas ostatniego zlecenia [min]",
+  "settings:minIncompleteDuration:help": "Zlecenie nie trafi na linię, jeżeli byłoby ostatnie, nie mieściłoby się w całości oraz czas trwania części jaka się mieści na linii jest poniżej podanej ilości minut.",
   "settings:schedulingRate": "Szybkość planowania",
   "settings:schedulingRate:help": "Współczynnik zmieniający czas wykonania jednej sztuki danego zlecenia: <code>OrderLaborTime / 100 / LineWorkerCount * 3600 * SchedulingRate</code>",
   "settings:requiredStatuses": "Wymagane statusy",

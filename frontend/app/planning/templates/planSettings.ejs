@@ -39,20 +39,24 @@
             <input id="<%- id(prop) %>" name="<%- prop %>" type="text" data-object="plan">
           </div>
         <% }) %>
+        <div class="checkbox">
+          <label class="control-label" data-help>
+            <input id="<%- id('ignoreCompleted') %>" name="ignoreCompleted" type="checkbox" value="true" data-object="plan">
+            <%- t('settings:ignoreCompleted') %>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="control-label" data-help>
+            <input id="<%- id('useRemainingQuantity') %>" name="useRemainingQuantity" type="checkbox" value="true" data-object="plan">
+            <%- t('settings:useRemainingQuantity') %>
+          </label>
+        </div>
       <% } %>
-      <% if (version === 1) { %>
-      <div class="checkbox">
-        <label class="control-label" data-help>
-          <input id="<%- id('ignoreCompleted') %>" name="ignoreCompleted" type="checkbox" value="true" data-object="plan">
-          <%- t('settings:ignoreCompleted') %>
-        </label>
-      </div>
-      <div class="checkbox">
-        <label class="control-label" data-help>
-          <input id="<%- id('useRemainingQuantity') %>" name="useRemainingQuantity" type="checkbox" value="true" data-object="plan">
-          <%- t('settings:useRemainingQuantity') %>
-        </label>
-      </div>
+      <% if (version > 1) { %>
+        <div class="form-group">
+          <label for="<%- id('minIncompleteDuration') %>" data-help><%- t('settings:minIncompleteDuration') %></label>
+          <input id="<%- id('minIncompleteDuration') %>" name="minIncompleteDuration" class="form-control" type="number" required min="0" max="1440" data-object="plan" style="width: 100px">
+        </div>
       <% } %>
       <hr>
       <div class="form-group">

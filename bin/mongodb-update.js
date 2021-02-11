@@ -3,51 +3,7 @@
 
 'use strict';
 
-db.plansettings.find({}).forEach(settings =>
-{
-  settings.lines.forEach(line =>
-  {
-    if (!line.workerCount)
-    {
-      line.workerCount = [0, 0, 0];
-    }
-
-    if (!line.orderPriority)
-    {
-      line.orderPriority = ['small', 'medium', 'big'];
-    }
-
-    if (!line.orderGroupPriority)
-    {
-      line.orderGroupPriority = [];
-    }
-
-    if (!line.extraCapacity)
-    {
-      line.extraCapacity = '0';
-    }
-  });
-
-  settings.mrps.forEach(mrp =>
-  {
-    if (!mrp.linePriority)
-    {
-      mrp.linePriority = [];
-    }
-
-    if (!mrp.smallOrderQuantity)
-    {
-      mrp.smallOrderQuantity = 10;
-    }
-
-    if (!mrp.bigOrderQuantity)
-    {
-      mrp.bigOrderQuantity = 40;
-    }
-  });
-
-  db.plansettings.updateOne({_id: settings._id}, {$set: {
-    lines: settings.lines,
-    mrps: settings.mrps
-  }});
-});
+db.plansettings.updateMany(
+  {minIncompleteDuration: {$exists: false}},
+  {$set: {minIncompleteDuration: 0}}
+);

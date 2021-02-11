@@ -409,6 +409,8 @@
     "settings:lateHour:help": "Hour from which the manually added, urgent orders (late) can be planned.",
     "settings:etoPilotHour": "ETO pilot start hour",
     "settings:etoPilotHour:help": "Hour from which orders with the <em>E</em> priority (ETO pilot) can be planned.",
+    "settings:minIncompleteDuration": "Min. duration of last order [min]",
+    "settings:minIncompleteDuration:help": "Order will not be planned on line if it would be the last order, incomplete and the duration of the part that fits is shorter than the specified number of minutes.",
     "settings:schedulingRate": "Scheduling rate",
     "settings:schedulingRate:help": "Coefficient that changes the time required to do a single PCE: <code>OrderLaborTime / 100 / LineWorkerCount * 3600 * SchedulingRate</code>",
     "settings:requiredStatuses": "Required statuses",
