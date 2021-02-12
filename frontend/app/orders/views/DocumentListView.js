@@ -106,7 +106,7 @@ define([
         documents: this.model.get('documents').toJSON(),
         canView: !window.IS_EMBEDDED
           && loadedModules.isLoaded('orderDocuments')
-          && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW'),
+          && user.isAllowedTo('LOCAL', 'USER', 'DOCUMENTS:VIEW'),
         canManage: user.isAllowedTo('ORDERS:MANAGE')
       };
     },
