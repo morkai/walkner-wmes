@@ -244,7 +244,15 @@ define([
         return true;
       }
 
-      return patterns.some(pattern => this.matchAllWords(pattern, product));
+      for (let i = 0; i < patterns.length; ++i)
+      {
+        if (this.matchAllWords(patterns[i], product))
+        {
+          return true;
+        }
+      }
+
+      return false;
     },
 
     matchProductExclude: function(patterns, product)
@@ -254,7 +262,15 @@ define([
         return true;
       }
 
-      return patterns.every(pattern => !this.matchAllWords(pattern, product));
+      for (let i = 0; i < patterns.length; ++i)
+      {
+        if (this.matchAllWords(patterns[i], product))
+        {
+          return false;
+        }
+      }
+
+      return true;
     },
 
     matchBomInclude: function(patterns, bom)
