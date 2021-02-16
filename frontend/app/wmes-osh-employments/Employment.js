@@ -48,9 +48,20 @@ define([
     {
       const obj = this.serialize();
 
-      obj.count = 0;
+      obj.internal = 0;
+      obj.external = 0;
+      obj.absent = 0;
+      obj.total = 0;
+      obj.observers = 0;
 
-      obj.departments.forEach(({count}) => obj.count += count);
+      obj.departments.forEach(d =>
+      {
+        obj.internal += d.internal;
+        obj.external += d.external;
+        obj.absent += d.absent;
+        obj.total += d.total;
+        obj.observers += d.observers;
+      });
 
       return obj;
     },
@@ -73,7 +84,11 @@ define([
 
         workplaces.get(d.workplace).departments.push({
           label: dictionaries.getLabel('departments', d.department),
-          count: d.count
+          internal: d.internal,
+          external: d.external,
+          absent: d.absent,
+          total: d.total,
+          observers: d.observers
         });
       });
 

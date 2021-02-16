@@ -3,7 +3,20 @@
 
 'use strict';
 
-db.plansettings.updateMany(
-  {minIncompleteDuration: {$exists: false}},
-  {$set: {minIncompleteDuration: 0}}
-);
+db.oshemployments.find({}).forEach(doc =>
+{
+  doc.departments.forEach(d =>
+  {
+    if (d.count === undefined) return;
+
+    d.internal = d.count;
+    d.external = 0;
+    d.absent = 0;
+    d.total = d.count;
+    d.observers = 0;
+
+    delete d.count;
+  });
+
+  db.oshemployments.replaceOne({_id: doc._id}, doc);
+});

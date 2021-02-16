@@ -16,28 +16,44 @@
         },
         disabled: editMode
       }) %>
+      <div class="form-group">
+        <input id="<%- id('enableRecount') %>" type="checkbox">
+        <button id="<%- id('doRecount') %>" class="btn btn-default" type="button" disabled>
+          <%- t('FORM:recount') %>
+        </button>
+      </div>
       <table class="table" style="margin-bottom: 0">
         <thead>
         <tr>
           <th class="is-min"><%- t('PROPERTY:workplace') %></th>
           <th class="is-min"><%- t('PROPERTY:department') %></th>
-          <th class="is-min"><%- t('PROPERTY:count') %></th>
+          <th class="is-min"><%- t('PROPERTY:internal') %></th>
+          <th class="is-min"><%- t('PROPERTY:external') %></th>
+          <th class="is-min"><%- t('PROPERTY:absent') %></th>
+          <th class="is-min"><%- t('PROPERTY:observers') %></th>
           <th></th>
         </tr>
         </thead>
         <% workplaces.forEach(workplace => { %>
           <tbody>
             <% workplace.departments.forEach((department, departmentI) => { %>
-            <tr>
-              <% if (!departmentI) { %>
-              <td class="is-min" rowspan="<%- workplace.departments.length %>"><%= workplace.label %></td>
-              <% } %>
+            <tr data-id="<%- department._id %>">
+              <td class="is-min"><%= workplace.label %></td>
               <td class="is-min"><%= department.label %></td>
               <td class="is-min">
                 <input name="departments.d<%- department._id %>.division" value="<%- workplace.division %>" type="hidden">
                 <input name="departments.d<%- department._id %>.workplace" value="<%- workplace._id %>" type="hidden">
                 <input name="departments.d<%- department._id %>.department" value="<%- department._id %>" type="hidden">
-                <input name="departments.d<%- department._id %>.count" value="<%- department.count %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+                <input name="departments.d<%- department._id %>.internal" value="<%- department.internal %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              </td>
+              <td class="is-min">
+                <input name="departments.d<%- department._id %>.external" value="<%- department.external %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              </td>
+              <td class="is-min">
+                <input name="departments.d<%- department._id %>.absent" value="<%- department.absent %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              </td>
+              <td class="is-min">
+                <input name="departments.d<%- department._id %>.observers" value="<%- department.observers %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
               </td>
               <td></td>
             </tr>

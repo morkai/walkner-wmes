@@ -1,12 +1,16 @@
 <div>
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitle %></div>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
       <thead>
       <tr>
         <th class="is-min"><%- t('PROPERTY:workplace') %></th>
         <th class="is-min"><%- t('PROPERTY:department') %></th>
-        <th class="is-min"><%- t('PROPERTY:count') %></th>
+        <th class="is-min"><%- t('PROPERTY:internal') %></th>
+        <th class="is-min"><%- t('PROPERTY:external') %></th>
+        <th class="is-min"><%- t('PROPERTY:absent') %></th>
+        <th class="is-min"><%- t('PROPERTY:total') %></th>
+        <th class="is-min"><%- t('PROPERTY:observers') %></th>
         <th></th>
       </tr>
       </thead>
@@ -18,7 +22,11 @@
                 <td class="is-min" rowspan="<%- workplace.departments.length %>"><%- workplace.label %></td>
               <% } %>
               <td class="is-min"><%- department.label %></td>
-              <td class="is-min is-number"><%- department.count.toLocaleString() %></td>
+              <td class="is-min is-number"><%- department.internal.toLocaleString() %></td>
+              <td class="is-min is-number"><%- department.external.toLocaleString() %></td>
+              <td class="is-min is-number"><%- department.absent.toLocaleString() %></td>
+              <td class="is-min is-number"><%- department.total.toLocaleString() %></td>
+              <td class="is-min is-number"><%- department.observers.toLocaleString() %></td>
               <td></td>
             </tr>
           <% }) %>

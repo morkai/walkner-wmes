@@ -39,7 +39,11 @@ define([
       collection: new EmploymentCollection(null, {rqlQuery: req.rql}),
       columns: [
         {id: 'month', className: 'is-min'},
-        {id: 'count', className: 'is-min is-number'},
+        {id: 'internal', className: 'is-min is-number'},
+        {id: 'external', className: 'is-min is-number'},
+        {id: 'absent', className: 'is-min is-number'},
+        {id: 'total', className: 'is-min is-number'},
+        {id: 'observers', className: 'is-min is-number'},
         '-'
       ]
     })));

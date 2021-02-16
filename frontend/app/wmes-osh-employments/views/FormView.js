@@ -22,7 +22,14 @@ define([
     events: Object.assign({
 
       'change #-month': 'loadExisting',
-      'change #-blur': 'loadExistingNow'
+      'change #-blur': 'loadExistingNow',
+
+      'change #-enableRecount': function(e)
+      {
+        this.$id('doRecount').prop('disabled', !e.target.checked);
+      },
+
+      'click #-doRecount': 'recount'
 
     }, FormView.prototype.events),
 
@@ -46,7 +53,11 @@ define([
         workplaces.get(d.workplace).departments.push({
           _id: d.department,
           label: dictionaries.getLabel('departments', d.department),
-          count: d.count
+          internal: d.internal,
+          external: d.external,
+          absent: d.absent,
+          total: d.total,
+          observers: d.observers
         });
 
         departments.add(d.department);
@@ -74,7 +85,11 @@ define([
         workplaces.get(workplaceId).departments.push({
           _id: department.id,
           label: department.getLabel(),
-          count: 0
+          internal: 0,
+          external: 0,
+          absent: 0,
+          total: 0,
+          observers: 0
         });
       });
 
@@ -92,7 +107,11 @@ define([
             division: workplace.division,
             workplace: workplace._id,
             department: department._id,
-            count: department.count
+            internal: department.internal,
+            external: department.external,
+            absent: department.absent,
+            total: department.total,
+            observers: department.observers
           };
         });
       });
@@ -130,10 +149,19 @@ define([
         d.division = +d.division;
         d.workplace = +d.workplace;
         d.department = +d.department;
-        d.count = parseInt(d.count, 10) || 0;
+        d.internal = parseInt(d.internal, 10) || 0;
+        d.external = parseInt(d.external, 10) || 0;
+        d.absent = parseInt(d.absent, 10) || 0;
+        d.total = d.internal + d.external - d.absent;
+        d.observers = parseInt(d.observers, 10) || 0;
       });
 
       return formData;
+    },
+
+    afterRender: function()
+    {
+      FormView.prototype.afterRender.apply(this, arguments);
     },
 
     loadExisting: function()
@@ -186,6 +214,42 @@ define([
 
         this.model.set(data, {silent: true});
         this.render();
+      });
+    },
+
+    recount: function()
+    {
+      viewport.msg.loading();
+
+      this.$id('enableRecount').prop('disabled', true);
+      this.$id('doRecount').prop('disabled', true);
+
+      const req = this.ajax({
+        url: '/osh/employments;recount'
+      });
+
+      req.fail(() =>
+      {
+        viewport.msg.loadingFailed();
+      });
+
+      req.done(res =>
+      {
+        viewport.msg.loaded();
+
+        this.$('tr[data-id]').each((i, tr) =>
+        {
+          const data = res[tr.dataset.id] || {internal: 0, observers: 0};
+
+          tr.querySelector('input[name$="internal"]').value = data.internal;
+          tr.querySelector('input[name$="observers"]').value = data.observers;
+        });
+      });
+
+      req.always(() =>
+      {
+        this.$id('enableRecount').prop('disabled', false);
+        this.$id('doRecount').prop('disabled', false);
       });
     }
 
