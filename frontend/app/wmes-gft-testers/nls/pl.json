@@ -1,0 +1,16 @@
+{
+  "BREADCRUMB:base": "GearFlex",
+  "BREADCRUMB:browse": "Testery",
+
+  "PROPERTY:active": "Aktywny?",
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:line": "Linia",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:host": "Adres sterownika",
+  "PROPERTY:port": "Port sterownika",
+  "PROPERTY:program": "Program",
+  "PROPERTY:program.leds": "Ilość LED",
+  "PROPERTY:program.outputs": "Port",
+
+  "LIST:line": "{line}, st. {station}"
+}

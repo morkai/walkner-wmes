@@ -1,0 +1,17 @@
+.gft-testers-form-program-leds > th {
+  padding: 0!important;
+  line-height: 1!important;
+  vertical-align: top!important;
+}
+.gft-testers-form-program-leds .form-control {
+  width: 40px;
+  vertical-align: top;
+  text-align: center;
+  border-color: #fff;
+  background: transparent;
+  box-shadow: none;
+}
+.gft-testers-form-program-leds .form-control:focus {
+  border: 1px solid #66afe9;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}

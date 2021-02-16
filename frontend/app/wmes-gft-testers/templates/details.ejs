@@ -1,0 +1,49 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'active',
+        'name',
+        'line',
+        'station',
+        {id: 'host', valueClassName: 'text-fixed'},
+        {id: 'port', valueClassName: 'text-fixed'}
+      ]) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PROPERTY:program') %></div>
+    <div class="table-responsive">
+      <table id="<%- id('program') %>" class="table table-bordered">
+        <thead>
+        <tr>
+          <th class="is-min" rowspan="2"><%- t('PROPERTY:program.outputs') %></th>
+          <th id="<%- id('ledsHd') %>" class="is-min" colspan="<%- model.program.length + 1 %>"><%- t('PROPERTY:program.leds') %></th>
+        </tr>
+        <tr id="<%- id('leds') %>">
+          <% model.program.forEach((item, i) => { %>
+            <th class="is-min text-center" style="width: 45px"><%- item.leds %></th>
+          <% }) %>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody class="text-center">
+        <% for (let p = 1; p <= 16; ++p) { %>
+          <tr>
+            <td class="is-min"><strong><%= p %></strong></td>
+            <% model.program.forEach((item, i) => { %>
+              <td class="is-min">
+                <% if (item.outputs.includes(p)) { %>
+                  <i class="fa fa-check"></i>
+                <% } %>
+              </td>
+            <% }) %>
+            <td></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<form method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="checkbox">
+        <label class="control-label">
+          <input type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
+      </div>
+      <%- helpers.formGroup({
+        id: 'name',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 100
+      }) %>
+      <div class="row">
+        <%- helpers.formGroup({
+          id: 'line',
+          type: 'select2',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-9'
+        }) %>
+        <%- helpers.formGroup({
+          id: 'station',
+          type: 'number',
+          label: 'PROPERTY:',
+          required: true,
+          min: 0, max: 20,
+          groupClassName: 'col-md-3'
+        }) %>
+      </div>
+      <div class="row">
+        <%- helpers.formGroup({
+          id: 'host',
+          label: 'PROPERTY:',
+          required: true,
+          groupClassName: 'col-md-9'
+        }) %>
+        <%- helpers.formGroup({
+          id: 'port',
+          type: 'number',
+          label: 'PROPERTY:',
+          required: true,
+          min: 01, max: 65535,
+          groupClassName: 'col-md-3'
+        }) %>
+      </div>
+      <label class="control-label"><%- t('PROPERTY:program') %></label>
+      <div class="table-responsive" style="margin-bottom: 0">
+        <table id="<%- id('program') %>" class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="is-min" rowspan="2"><%- t('PROPERTY:program.outputs') %></th>
+              <th id="<%- id('ledsHd') %>" class="is-min" colspan="<%- program.length + 1 %>"><%- t('PROPERTY:program.leds') %></th>
+            </tr>
+            <tr id="<%- id('leds') %>" class="gft-testers-form-program-leds">
+              <% program.forEach((item, i) => { %>
+                <th class="is-min"><input type="number" name="program[<%- i %>].leds" value="<%- item.leds %>" class="form-control no-controls"></th>
+              <% }) %>
+              <th style="padding: 0"><button id="<%- id('addLeds') %>" class="btn btn-link" type="button"><i class="fa fa-plus"></i></button></th>
+            </tr>
+          </thead>
+          <tbody id="<%- id('outputs') %>" class="text-center">
+          <% for (let p = 1; p <= 16; ++p) { %>
+            <tr>
+              <td class="is-min"><strong><%= p %></strong></td>
+              <% program.forEach((item, i) => { %>
+                <td class="is-min"><input type="checkbox" name="program[<%- i %>].outputs[]" value="<%- p %>" <%- item.outputs.includes(p) ? 'checked' : '' %>></td>
+              <% }) %>
+              <td></td>
+            </tr>
+          <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

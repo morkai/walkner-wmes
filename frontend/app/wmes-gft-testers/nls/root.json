@@ -1,0 +1,19 @@
+{
+  "root": {
+    "BREADCRUMB:base": "GearFlex",
+    "BREADCRUMB:browse": "Testers",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:name": "Name",
+    "PROPERTY:line": "Line",
+    "PROPERTY:station": "Workstation",
+    "PROPERTY:host": "Controller host",
+    "PROPERTY:port": "Controller port",
+    "PROPERTY:program": "Program",
+    "PROPERTY:program.leds": "Number of LEDs",
+    "PROPERTY:program.outputs": "Port",
+
+    "LIST:line": "{line}, st. {station}"
+  },
+  "pl": true
+}
