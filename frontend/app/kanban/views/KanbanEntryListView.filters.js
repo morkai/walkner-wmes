@@ -232,6 +232,7 @@ define([
       });
     },
     _id: 'text',
+    storingPosition: 'text',
     kanbanQtyUser: 'numeric',
     componentQty: 'numeric',
     kanbanId: 'text',
