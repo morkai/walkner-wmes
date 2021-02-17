@@ -55,5 +55,7 @@
 
   "settings:tab:notifier": "Powiadamianie",
   "settings:notifier:daysBefore": "Odstęp powiadomień",
-  "settings:notifier:daysBefore:help": "Ilość dni przed kolejną datą kalibracji, na podstawie których określane są urządzenia, do których mają zostać wysłane powiadomienia o zbliżającej się kalibracji. Powiadomienia wysyłane są codziennie o 05:30. Można zdefiniować listę dni."
+  "settings:notifier:daysBefore:help": "Ilość dni przed kolejną datą kalibracji, na podstawie których określane są urządzenia, do których mają zostać wysłane powiadomienia o zbliżającej się kalibracji. Powiadomienia wysyłane są codziennie o 05:30. Można zdefiniować listę dni.",
+  "settings:notifier:globalUsers": "Powiadamiani użytkownicy",
+  "settings:notifier:globalUsers:help": "Użytkownicy znajdujący się na liście dostaną powiadomienie o każdej zbliżającej się kalibracji."
 }

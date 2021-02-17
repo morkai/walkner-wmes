@@ -5,9 +5,14 @@
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="notifier">
       <div class="form-group">
-        <label for="<%- idPrefix %>-notifier-daysBefore"><%- helpers.t('settings:notifier:daysBefore') %></label>
-        <p class="help-block"><%- helpers.t('settings:notifier:daysBefore:help') %></p>
-        <input id="<%- idPrefix %>-notifier-daysBefore" class="form-control" name="toolcal.notifier.daysBefore" type="text" autocomplete="off" data-change-delay="0">
+        <label for="<%- id('notifier-daysBefore') %>"><%- t('settings:notifier:daysBefore') %></label>
+        <p class="help-block"><%- t('settings:notifier:daysBefore:help') %></p>
+        <input id="<%- id('notifier-daysBefore') %>" class="form-control" name="toolcal.notifier.daysBefore" type="text" autocomplete="off" data-change-delay="0">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('notifier-globalUsers') %>"><%- t('settings:notifier:globalUsers') %></label>
+        <p class="help-block"><%- t('settings:notifier:globalUsers:help') %></p>
+        <input id="<%- id('notifier-globalUsers') %>" name="toolcal.notifier.globalUsers" type="text" autocomplete="off">
       </div>
     </div>
   </div>

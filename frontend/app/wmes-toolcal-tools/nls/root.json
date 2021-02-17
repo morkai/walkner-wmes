@@ -56,7 +56,9 @@
 
     "settings:tab:notifier": "Notifications",
     "settings:notifier:daysBefore": "Notification interval",
-    "settings:notifier:daysBefore:help": "Number of days before the next calibration date used to determine the tools for which notifications about incoming calibration are to be sent. Notifications are sent everyday at 05:30. A list of days can be defined."
+    "settings:notifier:daysBefore:help": "Number of days before the next calibration date used to determine the tools for which notifications about incoming calibration are to be sent. Notifications are sent everyday at 05:30. A list of days can be defined.",
+    "settings:notifier:globalUsers": "Notified users",
+    "settings:notifier:globalUsers:help": "Users on the list will receive a notification about every upcoming calibration."
   },
   "pl": true
 }

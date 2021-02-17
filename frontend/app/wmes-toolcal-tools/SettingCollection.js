@@ -34,6 +34,11 @@ define([
           .filter(function(v) { return v > 0; })
           .sort(function(a, b) { return b - a; }), true);
       }
+
+      if (/globalUsers$/.test(id) && Array.isArray(newValue))
+      {
+        return newValue;
+      }
     },
 
     prepareFormValue: function(id, value)
