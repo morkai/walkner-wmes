@@ -53,6 +53,8 @@
     "column:workCenter": "WorkCenter",
     "column:line": "Line",
     "column:family": "Family",
+    "column:storingPosition": "Used in",
+    "column:storingPosition:title": "Storing position",
     "column:kanbanQtyUser": "Kanban count<br>per line",
     "column:kanbanQtyUser:title": "Kanban count per line",
     "column:componentQty": "Component quantity<br>in kanban",

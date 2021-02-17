@@ -216,6 +216,10 @@ tr:hover > .kanban-is-invalid,
   width: 90px;
   text-align: left;
 }
+.kanban-td[data-column-id="storingPosition"] {
+  width: 90px;
+  text-align: left;
+}
 .kanban-td[data-column-id="storageType"] {
   width: 35px;
 }

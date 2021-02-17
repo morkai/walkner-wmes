@@ -52,6 +52,8 @@
   "column:workCenter": "WorkCenter",
   "column:line": "Linia",
   "column:family": "Rodzina",
+  "column:storingPosition": "Używane w",
+  "column:storingPosition:title": "Miejsce przechowywania",
   "column:kanbanQtyUser": "Liczba kanbanów na<br>linię montażową",
   "column:kanbanQtyUser:title": "Liczba kanbanów na linię montażową",
   "column:componentQty": "Liczba komponentów<br>w kanbanie",

@@ -136,7 +136,12 @@ define([
       }
     },
     family: {
-      width: 10
+      width: 10,
+      expand: 125
+    },
+    storingPosition: {
+      width: 12,
+      expand: 125
     },
     storageType: {
       type: 'integer',
@@ -351,7 +356,7 @@ define([
       },
       renderValue: function(value)
       {
-        return value.toLocaleString();
+        return value === 0 ? '' : value.toLocaleString();
       },
       editorValue: function(value)
       {

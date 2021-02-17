@@ -1810,7 +1810,7 @@ define([
       var windowWidth = window.innerWidth - 15 - this.SCROLLBAR_HEIGHT;
       var windowHeight = window.innerHeight - 15 - this.SCROLLBAR_HEIGHT;
 
-      if (innerRect.left + innerRect.width < windowWidth && innerRect.width <= tdRect.width)
+      if (innerRect.left + innerRect.width < windowWidth && innerRect.width <= (tdRect.width - 8))
       {
         return;
       }
