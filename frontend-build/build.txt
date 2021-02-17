@@ -1011,6 +1011,10 @@ app/wmes-fap-entries/assets/report.css
 ----------------
 app/wmes-fap-entries/assets/report.css
 
+app/wmes-gft-testers/assets/form.css
+----------------
+app/wmes-gft-testers/assets/form.css
+
 app/wmes-osh-actions/assets/details.css
 ----------------
 app/wmes-osh-actions/assets/details.css
@@ -2276,6 +2280,7 @@ app/wmes-snf-programs/ProgramCollection.js
 app/wmes-snf-programs/routes.js
 app/wmes-snf-tests/routes.js
 app/wmes-gft-pcbs/routes.js
+app/wmes-gft-testers/routes.js
 app/wmes-luca-events/routes.js
 app/wmes-drilling/routes.js
 app/wmes-wiring/routes.js
