@@ -58,7 +58,7 @@ define([
 
       this.on('beforeRender remove', () =>
       {
-        this.$el.popover('destroy');
+        this.$el.tooltip('destroy');
       });
     },
 
