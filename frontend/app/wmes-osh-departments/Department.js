@@ -5,13 +5,13 @@ define([
   'underscore',
   'app/i18n',
   'app/core/Model',
-  'app/core/templates/userInfo'
+  'app/wmes-osh-common/templates/coordinators/details'
 ], function(
   require,
   _,
   t,
   Model,
-  userInfoTemplate
+  coordinatorsTemplate
 ) {
   'use strict';
 
@@ -73,22 +73,6 @@ define([
 
       obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {path: true, link: true});
 
-      const coordinators = obj.coordinators;
-
-      if (coordinators.length)
-      {
-        obj.coordinators = userInfoTemplate(coordinators[0]);
-
-        if (coordinators.length > 1)
-        {
-          obj.coordinators += ` +${coordinators.length - 1}`;
-        }
-      }
-      else
-      {
-        obj.coordinators = '';
-      }
-
       return obj;
     },
 
@@ -98,7 +82,7 @@ define([
       const obj = this.serialize();
 
       obj.workplace = dictionaries.workplaces.getLabel(obj.workplace, {long: true, link: true});
-      obj.coordinators = obj.coordinators.map(userInfo => userInfoTemplate({userInfo}));
+      obj.coordinators = coordinatorsTemplate(obj.coordinators);
 
       return obj;
     },

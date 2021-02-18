@@ -1,0 +1,22 @@
+<table class="table table-bordered table-condensed" style="background-color: #FFF">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('wmes-osh-common', 'coordinators:types') %></th>
+    <% if (kinds) { %>
+      <th class="is-min"><%- t('wmes-osh-common', 'coordinators:kinds') %></th>
+    <% } %>
+    <th><%- t('wmes-osh-common', 'coordinators:users') %></th>
+  </tr>
+  </thead>
+  <tbody>
+    <% coordinators.forEach(coordinator => { %>
+      <tr>
+        <td class="is-min"><%- coordinator.types.join('; ') %></td>
+        <% if (kinds) { %>
+          <td class="is-min"><%- coordinator.kinds.join('; ') %></td>
+        <% } %>
+        <td><%- coordinator.users.join('; ') %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

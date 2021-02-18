@@ -4,12 +4,14 @@ define([
   'require',
   'underscore',
   'app/i18n',
-  'app/core/Model'
+  'app/core/Model',
+  'app/wmes-osh-common/templates/coordinators/details'
 ], function(
   require,
   _,
   t,
-  Model
+  Model,
+  coordinatorsTemplate
 ) {
   'use strict';
 
@@ -31,7 +33,8 @@ define([
     {
       return {
         active: true,
-        buildings: []
+        buildings: [],
+        coordinators: []
       };
     },
 
@@ -49,7 +52,7 @@ define([
 
     serialize: function()
     {
-      var obj = this.toJSON();
+      const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
 
@@ -58,8 +61,8 @@ define([
 
     serializeRow: function()
     {
-      var dictionaries = require('app/wmes-osh-common/dictionaries');
-      var obj = this.serialize();
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
 
       obj.buildings = dictionaries.buildings.getLabels(obj.buildings).join('; ');
 
@@ -68,10 +71,11 @@ define([
 
     serializeDetails: function()
     {
-      var dictionaries = require('app/wmes-osh-common/dictionaries');
-      var obj = this.serialize();
+      const dictionaries = require('app/wmes-osh-common/dictionaries');
+      const obj = this.serialize();
 
       obj.buildings = dictionaries.buildings.getLabels(obj.buildings, {long: true, link: true});
+      obj.coordinators = coordinatorsTemplate(obj.coordinators);
 
       return obj;
     },

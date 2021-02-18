@@ -7,20 +7,7 @@
         '!workplace',
         'shortName',
         'longName',
-        {id: '!coordinators', value: users =>
-        {
-          if (!users.length)
-          {
-            return '';
-          }
-
-          if (users.length === 1)
-          {
-            return users[0];
-          }
-
-          return `<ul><li>${users.join('<li>')}</ul>`;
-        }},
+        '!coordinators',
         {id: '!syncPatterns', value: v => `<pre>${v}</pre>`}
       ]) %>
     </div>

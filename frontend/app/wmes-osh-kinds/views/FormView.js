@@ -4,11 +4,13 @@ define([
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/views/CoordinatorsFormView',
   'app/wmes-osh-kinds/templates/form'
 ], function(
   FormView,
   setUpUserSelect2,
   dictionaries,
+  CoordinatorsFormView,
   template
 ) {
   'use strict';
@@ -17,27 +19,23 @@ define([
 
     template,
 
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.coordinatorsView = new CoordinatorsFormView({
+        kinds: false,
+        model: this.model
+      });
+
+      this.setView('#-coordinators', this.coordinatorsView);
+    },
+
     getTemplateData: function()
     {
       return {
         types: dictionaries.kindTypes
       };
-    },
-
-    afterRender: function()
-    {
-      FormView.prototype.afterRender.apply(this, arguments);
-
-      this.setUpCoordinatorsSelect2();
-    },
-
-    setUpCoordinatorsSelect2: function()
-    {
-      setUpUserSelect2(this.$id('coordinators'), {
-        multiple: true,
-        allowClear: true,
-        currentUserInfo: this.model.get('coordinators')
-      });
     },
 
     serializeForm: function(formData)
@@ -47,7 +45,7 @@ define([
         formData.description = '';
       }
 
-      formData.coordinators = setUpUserSelect2.getUserInfo(this.$id('coordinators'));
+      formData.coordinators = this.coordinatorsView.serializeForm();
 
       return formData;
     }

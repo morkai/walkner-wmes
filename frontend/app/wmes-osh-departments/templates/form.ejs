@@ -27,11 +27,10 @@
         required: true,
         maxLength: 200
       }) %>
-      <%- helpers.formGroup({
-        name: 'coordinators',
-        type: 'select2',
-        label: 'PROPERTY:'
-      }) %>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:coordinators') %></label>
+        <div id="<%- id('coordinators') %>"></div>
+      </div>
       <%- helpers.formGroup({
         name: 'syncPatterns',
         type: 'textarea', rows: 4,

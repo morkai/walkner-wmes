@@ -144,5 +144,11 @@
   "orgUnitPicker:filter:any": "Dowolne",
   "orgUnitPicker:dialog:title": "Jednostki organizacyjne",
   "orgUnitPicker:dialog:submit": "Wybierz",
-  "orgUnitPicker:dialog:deactivated": "Dezaktywowane"
+  "orgUnitPicker:dialog:deactivated": "Dezaktywowane",
+
+  "coordinators:types": "Typy zgłoszeń",
+  "coordinators:kinds": "Rodzaje zgłoszeń",
+  "coordinators:users": "Użytkownicy",
+  "coordinators:add": "Dodaj koordynatorów",
+  "coordinators:all": "Wszystkie"
 }

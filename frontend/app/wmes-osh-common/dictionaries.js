@@ -127,6 +127,7 @@ define([
     },
     priorities: [],
     kindTypes: [],
+    entryTypes: Object.keys(TYPE_TO_PREFIX),
     settings: new SettingCollection(),
     companies: new CompanyCollection(),
     divisions: new DivisionCollection(),

@@ -4,12 +4,12 @@ define([
   'underscore',
   'app/i18n',
   'app/core/Model',
-  'app/core/templates/userInfo'
+  'app/wmes-osh-common/templates/coordinators/details'
 ], function(
   _,
   t,
   Model,
-  userInfoTemplate
+  coordinatorsTemplate
 ) {
   'use strict';
 
@@ -31,7 +31,8 @@ define([
     {
       return {
         active: true,
-        type: 'other'
+        type: 'other',
+        coordinators: []
       };
     },
 
@@ -49,11 +50,19 @@ define([
 
     serialize: function()
     {
-      var obj = this.toJSON();
+      const obj = this.toJSON();
 
       obj.active = t('core', `BOOL:${obj.active}`);
       obj.type = t('wmes-osh-common', `kind:${obj.type}`);
-      obj.coordinators = obj.coordinators.map(userInfo => userInfoTemplate({userInfo}));
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      const obj = this.serialize();
+
+      obj.coordinators = coordinatorsTemplate(obj.coordinators, {kinds: false});
 
       return obj;
     }

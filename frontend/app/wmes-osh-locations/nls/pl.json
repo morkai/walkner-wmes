@@ -4,5 +4,6 @@
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
-  "PROPERTY:buildings": "Budynki"
+  "PROPERTY:buildings": "Budynki",
+  "PROPERTY:coordinators": "Koordynatorzy"
 }
