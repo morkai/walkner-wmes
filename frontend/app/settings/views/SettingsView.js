@@ -4,15 +4,21 @@ define([
   'underscore',
   'js2form',
   'app/viewport',
+  'app/user',
   'app/core/View',
   'app/core/templates/colorPicker',
+  '../SettingChangeCollection',
+  './ChangesView',
   'bootstrap-colorpicker'
 ], function(
   _,
   js2form,
   viewport,
+  currentUser,
   View,
-  colorPickerTemplate
+  colorPickerTemplate,
+  SettingChangeCollection,
+  ChangesView
 ) {
   'use strict';
 
@@ -82,6 +88,18 @@ define([
         }
 
         this.scheduleUpdateSetting(e.target, delay);
+      },
+      'click label': function(e)
+      {
+        if (e.ctrlKey
+          && e.currentTarget.control
+          && e.currentTarget.control.name
+          && currentUser.isAllowedTo('SUPER'))
+        {
+          this.showSettingChanges(e.currentTarget.control.name);
+
+          return false;
+        }
       }
     },
 
@@ -438,6 +456,17 @@ define([
 
         viewport.msg.saved();
       });
+    },
+
+    showSettingChanges: function(id)
+    {
+      var dialogView = new ChangesView({
+        collection: new SettingChangeCollection(null, {
+          rqlQuery: 'limit(20)&sort(-time)&setting=' + encodeURIComponent(id)
+        })
+      });
+
+      viewport.showDialog(dialogView, id);
     }
 
   });

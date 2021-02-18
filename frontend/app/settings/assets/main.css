@@ -78,3 +78,12 @@
   display: inline-block;
   white-space: pre;
 }
+.settings-change {
+  margin-bottom: 15px;
+}
+.settings-change:last-child {
+  margin-bottom: 0;
+}
+.settings-change > pre {
+  max-height: 200px;
+}

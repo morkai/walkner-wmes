@@ -1,0 +1,15 @@
+<div>
+  <% if (!loaded) { %>
+    <i class="fa fa-spinner"></i>
+  <% } %>
+  <% changes.forEach(function(change) { %>
+    <div class="settings-change">
+      <%= change.user.label %> @ <%= time.format(change.time, 'LL, LTS') %>
+      <% if (typeof change.value === 'object' && change.value) { %>
+        <pre><%= JSON.stringify(change.value, null, 2) %></pre>
+      <% } else { %>
+        <pre><%= change.value %></pre>
+      <% } %>
+    </div>
+  <% }) %>
+</div>

@@ -3,20 +3,14 @@
 
 'use strict';
 
-db.oshemployments.find({}).forEach(doc =>
+var now = new Date();
+
+db.settings.find({}).forEach(s =>
 {
-  doc.departments.forEach(d =>
-  {
-    if (d.count === undefined) return;
-
-    d.internal = d.count;
-    d.external = 0;
-    d.absent = 0;
-    d.total = d.count;
-    d.observers = 0;
-
-    delete d.count;
+  db.settingchanges.insertOne({
+    setting: s._id,
+    time: s.updatedAt || now,
+    user: s.user || {id: null, label: 'System'},
+    value: s.value
   });
-
-  db.oshemployments.replaceOne({_id: doc._id}, doc);
 });
