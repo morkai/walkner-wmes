@@ -14,6 +14,7 @@ define([
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-kaizens/views/FormView',
   '../Action',
+  './ParticipantFinderView',
   'app/wmes-osh-actions/templates/form/form',
   'app/wmes-osh-actions/templates/form/resolutionRow'
 ], function(
@@ -30,6 +31,7 @@ define([
   Kaizen,
   KaizenFormView,
   Action,
+  ParticipantFinderView,
   template,
   resolutionRowTemplate
 ) {
@@ -265,6 +267,11 @@ define([
       'click #-addActionResolution': function()
       {
         this.showAddResolutionDialog('action');
+      },
+
+      'click #-showParticipantFinder': function()
+      {
+        this.showParticipantFinderDialog();
       }
 
     }, FormView.prototype.events),
@@ -1527,6 +1534,40 @@ define([
 
         viewport.closeDialog();
       };
+    },
+
+    showParticipantFinderDialog: function()
+    {
+      const dialogView = new ParticipantFinderView();
+
+      viewport.showDialog(dialogView, this.t('participantFinder:title'));
+
+      this.listenToOnce(dialogView, 'users', newUsers =>
+      {
+        viewport.closeDialog();
+
+        if (newUsers.length === 0)
+        {
+          return;
+        }
+
+        const $participants = this.$id('participants');
+        const users = new Map();
+
+        $participants.select2('data').forEach(user =>
+        {
+          users.set(user.id, user);
+        });
+
+        newUsers.forEach(user =>
+        {
+          users.set(user.id, {id: user.id, text: user.label});
+        });
+
+        const data = Array.from(users.values()).sort((a, b) => a.text.localeCompare(b.text));
+
+        $participants.select2('data', data);
+      });
     }
 
   });

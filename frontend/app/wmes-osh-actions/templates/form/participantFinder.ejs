@@ -1,0 +1,29 @@
+<form autocomplete="off">
+  <div class="form-group">
+    <div style="margin-bottom: 4px">
+      <label class="radio-inline control-label">
+        <input type="radio" name="source" value="brigade"> <%- t('participantFinder:brigade') %>
+      </label>
+      <label class="radio-inline control-label">
+        <input type="radio" name="source" value="department"> <%- t('participantFinder:department') %>
+      </label>
+    </div>
+    <div id="<%- id('brigadeContainer') %>"><input id="<%- id('brigade') %>" type="text"></div>
+    <div id="<%- id('departmentContainer') %>" class="hidden"><input id="<%- id('department') %>" type="text"></div>
+  </div>
+  <div id="<%- id('users') %>" class="form-group">
+    <div style="display: flex; margin-bottom: -10px">
+      <label class="control-label"><%- t('participantFinder:users') %></label>
+      <a id="<%- id('selectAll') %>" href="javascript:void(0)" style="margin-left: 10px"><%- t('participantFinder:selectAll') %></a>
+      <a id="<%- id('unselectAll') %>" href="javascript:void(0)" style="margin-left: 10px"><%- t('participantFinder:unselectAll') %></a>
+      <a id="<%- id('remove') %>" href="javascript:void(0)" style="margin-left: 10px"><%- t('participantFinder:remove') %></a>
+    </div>
+    <p id="<%- id('noUsers') %>" style="margin-top: 10px">-</p>
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-default" type="submit">
+      <i class="fa fa-plus"></i><span><%- t('participantFinder:submit') %></span>
+    </button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

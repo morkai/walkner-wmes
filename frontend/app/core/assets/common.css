@@ -342,17 +342,25 @@ fieldset[disabled] .btn-secondary.active {
 
 @keyframes yellow-fade {
   0% { background: yellow; }
-  100% { background: none; }
+  100% { background: #e4e4e4; }
 }
 @keyframes green-fade {
   0% { background: #0F0; }
   100% { background: none; }
+}
+@keyframes select2-highlight {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 .highlight {
   animation: yellow-fade 1s ease-out 1;
 }
 .highlight.highlight-success {
   animation: green-fade 1s ease-out 1;
+}
+.highlight.select2-search-choice {
+  animation: select2-highlight 0.3s ease-out 3;
 }
 
 .btn-default.zeroclipboard-is-hover {

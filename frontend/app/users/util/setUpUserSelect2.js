@@ -55,7 +55,7 @@ define([
       ? (user.lastName + ' ' + user.firstName).trim()
       : (user.name || user.login || user._id);
 
-    var text = textFormatter(user, user.name, query);
+    var text = textFormatter ? textFormatter(user, user.name, query) : user.name;
     var header = _.escape(text);
     var description = '';
 
@@ -486,6 +486,7 @@ define([
     return $input;
   }
 
+  setUpUserSelect2.userToData = userToData;
   setUpUserSelect2.defaultRqlQueryProvider = createDefaultRqlQuery;
   setUpUserSelect2.filterDuplicates = filterDuplicates;
   setUpUserSelect2.transliterate = function(value)

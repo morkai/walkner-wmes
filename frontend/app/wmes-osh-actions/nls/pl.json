@@ -82,5 +82,18 @@
   "resolutions:unlink": "Odłącz zgłoszenie",
   "resolutions:error:failure": "Sprawdzanie zgłoszenia nie powiodło się.",
   "resolutions:error:notFound": "Zgłoszenie nie istnieje.",
-  "resolutions:error:finished": "Zgłoszenie jest już zakończone."
+  "resolutions:error:finished": "Zgłoszenie jest już zakończone.",
+
+  "participantFinder:action": "dodaj grupę",
+  "participantFinder:title": "Dodawanie grupy użytkowników",
+  "participantFinder:submit": "Dodaj do listy uczestników",
+  "participantFinder:brigade": "Brygada",
+  "participantFinder:department": "Wydział",
+  "participantFinder:department:placeholder": "Wybierz wydział...",
+  "participantFinder:users": "Użytkownicy",
+  "participantFinder:unselectAll": "odznacz wszystkich",
+  "participantFinder:selectAll": "zaznacz",
+  "participantFinder:remove": "usuń odznaczonych",
+  "participantFinder:noBrigade": "Nie znaleziono brygady dla danego lidera.",
+  "participantFinder:noDepartment": "Nie znaleziono użytkowników w wybranym wydziale."
 }
