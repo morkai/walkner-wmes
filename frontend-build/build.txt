@@ -2475,6 +2475,8 @@ app/wmes-osh-divisions/DivisionCollection.js
 app/core/templates/userInfo.js
 app/wmes-osh-workplaces/Workplace.js
 app/wmes-osh-workplaces/WorkplaceCollection.js
+app/wmes-osh-common/templates/coordinators/table.js
+app/wmes-osh-common/templates/coordinators/details.js
 app/wmes-osh-departments/Department.js
 app/wmes-osh-departments/DepartmentCollection.js
 app/wmes-osh-buildings/Building.js
@@ -2692,6 +2694,8 @@ app/wmes-osh-common/util/userInfoDecorator.js
 app/wmes-osh-kaizens/templates/form.js
 app/wmes-osh-kaizens/views/FormView.js
 app/wmes-osh-common/Resolution.js
+app/wmes-osh-actions/templates/form/participantFinder.js
+app/wmes-osh-actions/views/ParticipantFinderView.js
 app/wmes-osh-actions/templates/form/form.js
 app/wmes-osh-actions/templates/form/resolutionRow.js
 app/wmes-osh-actions/views/FormView.js

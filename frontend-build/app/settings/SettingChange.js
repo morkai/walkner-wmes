@@ -1,0 +1,1 @@
+define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/settings/changes",clientUrlRoot:"#settings/changes",topicPrefix:"settings.changes",privilegePrefix:"SETTINGS",nlsDomain:"core"})});
