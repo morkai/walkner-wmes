@@ -125,7 +125,7 @@ exports['xiconf/importer/orders'] = {
 };
 
 exports['orders/importer/orders'] = {
-  filterRe: /^(ORDERS(?:_OPERATIONS)?)\.txt$/,
+  filterRe: /^(ORDERS(?:_OPERATIONS|_STATUSES)?)\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR,
   orderDocumentsFilePathPattern: `${IMPORT_INPUT_DIR}/{timestamp}@ORDERS_DOCUMENTS.txt`
 };
