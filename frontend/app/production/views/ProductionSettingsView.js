@@ -275,7 +275,7 @@ define([
     {
       var $textarea = this.$id('taktTime-coeffs');
 
-      $textarea.prop('rows', $textarea.val().split('\n').length + 5);
+      $textarea.prop('rows', ($textarea.val() || '').split('\n').length + 5);
     },
 
     setUpAutoDowntimeGroups: function()

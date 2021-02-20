@@ -468,7 +468,16 @@ define([
       view.$rows.children().each(function(modelIndex)
       {
         var model = builder.at(modelIndex);
-        var entry = view.model.entries.get(model.get('ccn')).serialize(view.model);
+        var entry = view.model.entries.get(model.get('ccn'));
+
+        if (!entry)
+        {
+          lineErrors.push(view.t('builder:error:noEntry'));
+
+          return;
+        }
+
+        entry = entry.serialize(view.model);
 
         if (!entry.kind)
         {

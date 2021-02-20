@@ -375,7 +375,7 @@ define([
             : value.toLocaleString();
 
         case 'operation':
-          return value.no + '. ' + value.name + ' - ' + value.laborTime.toLocaleString();
+          return value.no + '. ' + value.name + ' - ' + (value.laborTime || 0).toLocaleString();
 
         case 'groups':
           return value.length;

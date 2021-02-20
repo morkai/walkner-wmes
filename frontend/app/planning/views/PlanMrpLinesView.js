@@ -262,7 +262,7 @@ define([
 
       if (this.plan.settings.getVersion() === 1)
       {
-        var lineMrpSettings = line.mrpSettings(this.mrp.id);
+        var lineMrpSettings = line.mrpSettings && line.mrpSettings(this.mrp.id);
 
         if (lineMrpSettings)
         {
@@ -271,7 +271,7 @@ define([
       }
       else
       {
-        workerCount = line.settings.get('workerCount');
+        workerCount = line.settings && line.settings.get('workerCount') || null;
       }
 
       if (!Array.isArray(workerCount))

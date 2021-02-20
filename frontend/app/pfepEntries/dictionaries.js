@@ -201,7 +201,7 @@ define([
 
     if (!maps.packTypes[prep(entry.packType)])
     {
-      dictionaries.packTypes.push(entry.packType).sort();
+      dictionaries.packTypes.push(entry.packType);
       dictionaries.packTypes.sort();
 
       broker.publish('pfep.dictionaries.updated', {dictionary: 'packTypes'});
@@ -209,7 +209,7 @@ define([
 
     if (!maps.units[prep(entry.unit)])
     {
-      dictionaries.units.push(entry.unit).sort();
+      dictionaries.units.push(entry.unit);
       dictionaries.units.sort();
 
       broker.publish('pfep.dictionaries.updated', {dictionary: 'units'});
