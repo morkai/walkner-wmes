@@ -49,11 +49,11 @@
     </div>
     <div class="panel-body" data-tab="pickup">
       <div class="form-group">
-        <label class="control-label"><%- t('settings:wh.planning.ignorePsStatus') %></label>
+        <label class="control-label" data-setting="wh.planning.ignorePsStatus"><%- t('settings:wh.planning.ignorePsStatus') %></label>
         <span class="help-block" style="margin-bottom: 0"><%- t('settings:wh.planning.ignorePsStatus:help') %></span>
         <div class="checkbox" style="margin-top: 5px">
           <label>
-            <input type="checkbox" disabled>
+            <input id="<%- id('ignorePsStatus-unknown') %>" type="checkbox" disabled>
             <%- t('planning', 'orders:psStatus:unknown') %>
           </label>
         </div>
@@ -67,7 +67,7 @@
         <% }) %>
       </div>
       <div class="form-group">
-        <label class="control-label"><%- t('settings:wh.planning.psPickupStatus') %></label>
+        <label class="control-label" data-setting="wh.planning.psPickupStatus"><%- t('settings:wh.planning.psPickupStatus') %></label>
         <span class="help-block" style="display: block; margin-bottom: -5px"><%- t('settings:wh.planning.psPickupStatus:help') %></span>
         <% ['new', 'aside', 'started', 'startedMsp', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
         <div class="checkbox">
@@ -79,7 +79,7 @@
         <% }) %>
       </div>
       <div class="form-group">
-        <label class="control-label"><%- t('settings:wh.planning.psPickupReadyFuncs') %></label>
+        <label class="control-label" data-setting="wh.planning.psPickupReadyFuncs"><%- t('settings:wh.planning.psPickupReadyFuncs') %></label>
         <span class="help-block" style="display: block; margin-bottom: -5px"><%- t('settings:wh.planning.psPickupReadyFuncs:help') %></span>
         <% ['fmx', 'kitter', 'platformer', 'packer'].forEach(function(func) { %>
           <div class="checkbox">
@@ -114,7 +114,7 @@
         type: 'number', min: 1, max: 600
       }) %>
       <div class="checkbox">
-        <label class="control-label">
+        <label class="control-label" data-setting="wh.planning.pendingOnly">
           <input name="wh.planning.pendingOnly" type="checkbox" value="true">
           <%- t('settings:wh.planning.pendingOnly') %>
         </label>
@@ -158,7 +158,7 @@
     </div>
     <div class="panel-body" data-tab="delivery">
       <div class="form-group">
-        <label for="<%- id('wh-planning-deliveryFuncs') %>" style="display: block; margin-bottom: -5px"><%- t('settings:wh.planning.deliveryFuncs') %></label>
+        <label for="<%- id('wh-planning-deliveryFuncs') %>" data-setting="wh.planning.deliveryFuncs" style="display: block; margin-bottom: -5px"><%- t('settings:wh.planning.deliveryFuncs') %></label>
         <% ['fmx', 'kitter', 'platformer', 'packer', 'painter', 'dist-components', 'dist-packaging'].forEach(function(func) { %>
         <div class="checkbox">
           <label>

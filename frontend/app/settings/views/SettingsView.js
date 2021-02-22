@@ -91,12 +91,17 @@ define([
       },
       'click label': function(e)
       {
-        if (e.ctrlKey
-          && e.currentTarget.control
-          && e.currentTarget.control.name
-          && currentUser.isAllowedTo('SUPER'))
+        if (!e.ctrlKey || !currentUser.isAllowedTo('SUPER'))
         {
-          this.showSettingChanges(e.currentTarget.control.name);
+          return;
+        }
+
+        var el = e.currentTarget;
+        var id = el.dataset.setting || (e.currentTarget.control && e.currentTarget.control.name);
+
+        if (id)
+        {
+          this.showSettingChanges(id);
 
           return false;
         }
@@ -460,6 +465,8 @@ define([
 
     showSettingChanges: function(id)
     {
+      id = id.replace('[]', '');
+
       var dialogView = new ChangesView({
         collection: new SettingChangeCollection(null, {
           rqlQuery: 'limit(20)&sort(-time)&setting=' + encodeURIComponent(id)
