@@ -52,13 +52,17 @@ For $orderI = 1 To $CmdLine[0] Step 1
   AssertControl($ctrl, $itemOverviewId)
   $ctrl.Press()
 
-  ; Close a possible modal
-  $modal = $session.FindById("wnd[1]")
+  ; Close any possible modal
+  While True
+    $modal = $session.FindById("wnd[1]")
 
-  If IsObj($modal) Then
-    LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
-    $modal.Close()
-  EndIf
+    If IsObj($modal) Then
+      LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
+      $modal.Close()
+    Else
+      ExitLoop
+    EndIf
+  WEnd
 
   ; Check the status bar
   $error = ""
