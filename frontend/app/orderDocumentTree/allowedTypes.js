@@ -14,6 +14,7 @@ define([
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
-    'video/mp4': 'mp4'
+    'video/mp4': 'mp4',
+    'image/jpeg': 'jpg'
   };
 });

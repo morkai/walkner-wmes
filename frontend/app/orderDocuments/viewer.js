@@ -68,7 +68,12 @@ var viewer = new Viewer(document.getElementById('images'), {
   switchable: false,
   view: function(e)
   {
-    document.getElementById('jumpForm').classList.add('hidden');
+    var jumpFormEl = document.getElementById('jumpForm');
+
+    if (jumpFormEl)
+    {
+      jumpFormEl.classList.add('hidden');
+    }
 
     if (NC15)
     {
@@ -106,6 +111,14 @@ window.addEventListener('touchstart', function(e)
 window.addEventListener('load', function()
 {
   viewer.show();
+
+  if (Array.isArray(window.HIDDEN_BUTTONS))
+  {
+    window.HIDDEN_BUTTONS.forEach(function(id)
+    {
+      document.getElementById(id).classList.add('hidden');
+    });
+  }
 
   var firstEl = document.getElementById('first');
   var jumpEl = document.getElementById('jump');
