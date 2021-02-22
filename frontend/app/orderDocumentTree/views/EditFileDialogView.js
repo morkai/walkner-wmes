@@ -9,6 +9,7 @@ define([
   'app/core/views/FormView',
   'app/core/util/padString',
   'app/core/util/fileIcons',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/orderDocumentTree/allowedTypes',
   'app/orderDocumentTree/util/pasteDateEvents',
   'app/orderDocumentTree/templates/editFileDialog'
@@ -21,6 +22,7 @@ define([
   FormView,
   padString,
   fileIcons,
+  setUpMrpSelect2,
   allowedTypes,
   pasteDateEvents,
   template
@@ -167,6 +169,7 @@ define([
     {
       var formData = this.model.toJSON();
 
+      formData.mrps = formData.mrps.join(',');
       formData.components = '';
 
       formData.stations = formData.stations.join(', ');
@@ -185,6 +188,11 @@ define([
 
     serializeForm: function(formData)
     {
+      formData.mrps = this.$id('mrps').select2('data').map(function(item)
+      {
+        return item.id;
+      });
+
       formData.components = this.$id('components').select2('data').map(function(item)
       {
         return {
@@ -234,6 +242,29 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
+      this.setUpMrpsSelect2();
+      this.setUpComponentsSelect2();
+    },
+
+    setUpMrpsSelect2: function()
+    {
+      var view = this;
+
+      setUpMrpSelect2(view.$id('mrps'), {
+        view: this,
+        width: '100%',
+        extra: function(data)
+        {
+          return [{
+            id: 'ANY',
+            text: view.t('files:mrps:any')
+          }].concat(data);
+        }
+      });
+    },
+
+    setUpComponentsSelect2: function()
+    {
       var noCodeCount = 0;
 
       this.$id('components').select2({

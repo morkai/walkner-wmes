@@ -21,6 +21,15 @@
     </div>
     <% }) %>
   </div>
+  <div class="form-group">
+    <label for="<%- id('mrps') %>" class="control-label">
+      <span title="<%- t('files:mrps:help') %>">
+        <%- t('files:mrps') %>
+        <i class="fa fa-question-circle"></i>
+      </span>
+    </label>
+    <input id="<%- id('mrps') %>" name="mrps" type="text">
+  </div>
   <div class="form-group" style="position: relative">
     <label for="<%- id('components') %>" class="control-label" style="display: flex">
       <span title="<%- t('files:components:help') %>">

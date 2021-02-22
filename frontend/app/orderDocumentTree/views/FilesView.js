@@ -671,6 +671,7 @@ define([
         name: _.escape(selectedFile.getLabel()),
         folders: this.serializePreviewFolders(),
         files: this.serializePreviewFiles(),
+        mrps: this.serializePreviewMrps(),
         components: this.serializePreviewComponents(),
         stations: selectedFile.get('stations').join(', '),
         updatedAt: this.serializePreviewUpdatedAt()
@@ -773,6 +774,25 @@ define([
       }
 
       return '';
+    },
+
+    serializePreviewMrps: function()
+    {
+      var view = this;
+      var selectedFile = view.model.getSelectedFile();
+      var mrps = selectedFile.get('mrps') || [];
+
+      if (mrps.length === 0)
+      {
+        return '';
+      }
+
+      if (mrps.includes('ANY'))
+      {
+        return view.t('files:mrps:any');
+      }
+
+      return mrps.filter(function(v) { return v !== 'ANY'; }).join('; ');
     },
 
     serializePreviewComponents: function()

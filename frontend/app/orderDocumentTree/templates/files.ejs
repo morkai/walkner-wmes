@@ -6,7 +6,7 @@
   </div>
   <div id="<%- idPrefix %>-files" class="orderDocumentTree-files-items">
     <% if (files.length === 0 && folders.length === 0) { %>
-    <p><%- helpers.t('files:' + (searchPhrase ? 'noResults' : 'empty')) %></p>
+    <p><%- t('files:' + (searchPhrase ? 'noResults' : 'empty')) %></p>
     <% } %>
     <% files.forEach(function(file) { %>
     <% include ./filesFile.ejs %>
@@ -19,23 +19,23 @@
       <button id="<%- idPrefix %>-subFile" class="btn btn-default" disabled><i class="fa"></i></button>
       <% } %>
       <% if (user.isAllowedTo('DOCUMENTS:MANAGE')) { %>
-      <button id="<%- idPrefix %>-recoverFile" class="btn btn-default" data-action="recoverFile" title="<%- helpers.t('files:recover') %>"><i class="fa fa-undo"></i></button>
-      <button id="<%- idPrefix %>-editFile" class="btn btn-default" data-action="editFile" title="<%- helpers.t('files:edit') %>"><i class="fa fa-edit"></i></button>
-      <button id="<%- idPrefix %>-removeFile" class="btn btn-default" data-action="removeFile" title="<%- helpers.t('files:remove') %>"><i class="fa fa-trash-o"></i></button>
+      <button id="<%- idPrefix %>-recoverFile" class="btn btn-default" data-action="recoverFile" title="<%- t('files:recover') %>"><i class="fa fa-undo"></i></button>
+      <button id="<%- idPrefix %>-editFile" class="btn btn-default" data-action="editFile" title="<%- t('files:edit') %>"><i class="fa fa-edit"></i></button>
+      <button id="<%- idPrefix %>-removeFile" class="btn btn-default" data-action="removeFile" title="<%- t('files:remove') %>"><i class="fa fa-trash-o"></i></button>
       <% } %>
     </div>
     <dl class="orderDocumentTree-files-preview-props">
-      <% ['nc15', 'name', 'folders', 'files', 'components', 'stations'].forEach(function(prop) { %>
-      <dt><%- helpers.t('files:' + prop) %></dt>
+      <% ['nc15', 'name', 'folders', 'files', 'mrps', 'components', 'stations'].forEach(function(prop) { %>
+      <dt><%- t('files:' + prop) %></dt>
       <dd data-prop="<%- prop %>"></dd>
       <% }) %>
       <% if (user.isAllowedTo('DOCUMENTS:VIEW')) { %>
-      <dt><a id="<%- idPrefix %>-showChanges" href="javascript:void(0)"><%- helpers.t('files:updatedAt') %></a></dt>
+      <dt><a id="<%- idPrefix %>-showChanges" href="javascript:void(0)"><%- t('files:updatedAt') %></a></dt>
       <% } else { %>
-      <dt><%- helpers.t('files:updatedAt') %></dt>
+      <dt><%- t('files:updatedAt') %></dt>
       <% } %>
       <dd data-prop="updatedAt"></dd>
     </dl>
-    <i id="<%- idPrefix %>-closePreview" class="fa fa-remove" title="<%- helpers.t('files:close') %>"></i>
+    <i id="<%- idPrefix %>-closePreview" class="fa fa-remove" title="<%- t('files:close') %>"></i>
   </div>
 </div>

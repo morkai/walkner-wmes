@@ -90,6 +90,11 @@ define([
       return options.itemDecorator(_.clone(item), false);
     });
 
+    if (options.extra)
+    {
+      data = options.extra(data);
+    }
+
     if (options.filter)
     {
       data = data.filter(options.filter);
