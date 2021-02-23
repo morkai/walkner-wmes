@@ -8,7 +8,8 @@ define([
   'app/data/loadedModules',
   './AddDocumentFormView',
   'app/orders/templates/documentList',
-  'app/orders/templates/removeDocumentDialog'
+  'app/orders/templates/removeDocumentDialog',
+  'app/orders/templates/reloadDocumentsDialog'
 ], function(
   user,
   viewport,
@@ -17,7 +18,8 @@ define([
   loadedModules,
   AddDocumentFormView,
   template,
-  removeDocumentDialogTemplate
+  removeDocumentDialogTemplate,
+  reloadDocumentsDialogTemplate
 ) {
   'use strict';
 
@@ -63,6 +65,23 @@ define([
 
         return false;
       },
+      'click #-reload': function()
+      {
+        var dialogView = new DialogView({
+          template: reloadDocumentsDialogTemplate,
+          nlsDomain: this.model.getNlsDomain()
+        });
+
+        viewport.showDialog(dialogView, this.t('documents:reload:title'));
+
+        this.listenTo(dialogView, 'answered', function(answer)
+        {
+          if (answer === 'yes')
+          {
+            this.reloadDocuments();
+          }
+        });
+      },
       'click #-add': function()
       {
         var dialogView = new AddDocumentFormView({
@@ -107,7 +126,7 @@ define([
         canView: !window.IS_EMBEDDED
           && loadedModules.isLoaded('orderDocuments')
           && user.isAllowedTo('LOCAL', 'USER', 'DOCUMENTS:VIEW'),
-        canManage: user.isAllowedTo('ORDERS:MANAGE')
+        canManage: !window.IS_EMBEDDED && user.isAllowedTo('ORDERS:MANAGE')
       };
     },
 
@@ -277,10 +296,19 @@ define([
       });
     },
 
+    reloadDocuments: function()
+    {
+      this.$id('reload').prop('disabled', true);
+
+      this.ajax({
+        url: '/orderDocuments;fix-missing-docs?order=' + this.model.id
+      });
+    },
+
     onChange: function()
     {
       var oldState = this.$el.hasClass('hidden');
-      var newState = this.model.get('documents').length === 0;
+      var newState = !user.isAllowedTo('ORDERS:MANAGE') && this.model.get('documents').length === 0;
 
       this.render();
 

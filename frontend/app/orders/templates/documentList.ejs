@@ -1,8 +1,9 @@
-<div class="panel panel-default orders-documents <%- documents.length ? '' : 'hidden' %> is-with-actions">
+<div class="panel panel-default orders-documents <%- documents.length || canManage ? '' : 'hidden' %> is-with-actions">
   <div class="panel-heading">
     <div class="panel-heading-title"><%- t('PANEL:TITLE:documents') %></div>
     <div class="panel-heading-actions">
       <% if (canManage) { %>
+      <button id="<%- id('reload') %>" class="btn btn-default" type="button" title="<%- t('documents:reload:tooltip') %>"><i class="fa fa-refresh"></i></button>
       <button id="<%- id('add') %>" class="btn btn-default" type="button" title="<%- t('documents:add:tooltip') %>"><i class="fa fa-plus"></i></button>
       <% } %>
     </div>

@@ -214,5 +214,10 @@
   "documents:remove:title": "Usuwanie dokumentu ze zlecenia",
   "documents:remove:yes": "Usuń dokument",
   "documents:remove:no": "Anuluj",
-  "documents:remove:message": "Czy na pewno chcesz usunąć wybrany dokument ze zlecenia?"
+  "documents:remove:message": "Czy na pewno chcesz usunąć wybrany dokument ze zlecenia?",
+  "documents:reload:tooltip": "Załaduj dokumenty z SAP",
+  "documents:reload:title": "Ładowanie dokumentów z SAP",
+  "documents:reload:yes": "Uruchom zadanie",
+  "documents:reload:no": "Anuluj",
+  "documents:reload:message": "Czy chcesz uruchomić zrzut listy dokumentów dla tego zlecenia? Sukces nie jest gwarantowany."
 }
