@@ -137,10 +137,11 @@ define([
     getLineOrderExecution: function(lineId, lineOrder, workingTimes)
     {
       const key = lineId + lineOrder.id;
+      const cache = this.cache.execution;
 
-      if (this.cache.execution[key])
+      if (cache[key])
       {
-        return this.cache.execution[key];
+        return cache[key];
       }
 
       if (!workingTimes)
@@ -150,7 +151,7 @@ define([
 
       const orderNo = lineOrder.get('orderNo');
       const planOrder = this.plan.orders.get(orderNo);
-      const execution = this.cache.execution[key] = {
+      const execution = cache[key] = {
         quantityDoneOnLine: 0,
         quantityDoneOnDay: 0,
         quantityDoneOnShift: 0,
@@ -171,6 +172,7 @@ define([
         return execution;
       }
 
+      const qtyPlan = lineOrder.get('quantity');
       const timeWindow = 4 * 3600 * 1000;
       const utcStartAt = Date.parse(lineOrder.get('startAt'));
       const localStartAt = time.utc.getMoment(utcStartAt).local(true).valueOf();
@@ -198,8 +200,6 @@ define([
         }
       }
 
-      let plannedQuantityDoneSum = 0;
-
       shiftOrders.forEach(o =>
       {
         execution.quantityDoneOnLine += o.quantityDone;
@@ -214,31 +214,16 @@ define([
           execution.quantityDoneOnShift += o.quantityDone;
         }
 
-        if (o.startedAt >= fromTime && o.startedAt <= toTime || o.continuation)
+        if (!cache[o.pso.id]
+          && execution.plannedQuantityDone < qtyPlan
+          && (o.startedAt >= fromTime && o.startedAt <= toTime || o.continuation))
         {
+          cache[o.pso.id] = true;
+
           execution.plannedQuantityDone += o.quantityDone;
-          execution.plannedQuantitiesDone.push(o.quantityDone);
-
-          if (o.continuation)
-          {
-            plannedQuantityDoneSum += o.quantityDone;
-          }
-          else
-          {
-            if (plannedQuantityDoneSum && _.last(execution.plannedQuantitiesDone) !== plannedQuantityDoneSum)
-            {
-              execution.plannedQuantitiesDone.push(plannedQuantityDoneSum);
-            }
-
-            plannedQuantityDoneSum = o.quantityDone;
-          }
+          execution.plannedQuantitiesDone.push(o.quantityDone, execution.plannedQuantityDone);
         }
       });
-
-      if (plannedQuantityDoneSum && _.last(execution.plannedQuantitiesDone) !== plannedQuantityDoneSum)
-      {
-        execution.plannedQuantitiesDone.push(plannedQuantityDoneSum);
-      }
 
       return execution;
     },

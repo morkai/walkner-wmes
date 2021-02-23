@@ -17,11 +17,13 @@
   width: 25px;
 }
 .planning-execution-orderNo {
-  width: 72px;
+  width: 85px;
 }
 .planning-execution-line {
-  width: 72px;
+  width: 85px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .planning-execution-quantity {
   margin-left: 15px;
