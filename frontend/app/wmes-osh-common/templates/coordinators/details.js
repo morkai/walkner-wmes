@@ -23,7 +23,7 @@ define([
     const dictionaries = require('app/wmes-osh-common/dictionaries');
 
     return tableTemplate({
-      kinds: options && options.kinds !== false,
+      kinds: !options || options.kinds !== false,
       coordinators: coordinators.map(c => ({
         types: c.types.length === 0
           ? [t('wmes-osh-common', `coordinators:all`)]
