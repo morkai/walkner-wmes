@@ -106,9 +106,12 @@ define([
       },
       'contextmenu .list-item[data-id]': function(e)
       {
-        e.preventDefault();
+        if (e.currentTarget.querySelector('.actions'))
+        {
+          e.preventDefault();
 
-        this.showContextMenu(e.currentTarget.dataset.id, e.pageY, e.pageX);
+          this.showContextMenu(e.currentTarget.dataset.id, e.pageY, e.pageX);
+        }
       }
     },
 
@@ -548,8 +551,8 @@ define([
       try
       {
         var row = view.serializeRow(model);
-        var actions = view.serializeActions()(row);
-        var menu = actions
+        var actions = view.serializeActions();
+        var menu = (actions ? actions(row) : [])
           .filter(function(action)
           {
             return !!action
