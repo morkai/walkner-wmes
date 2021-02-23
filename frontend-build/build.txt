@@ -2094,6 +2094,7 @@ app/orders/templates/addDocumentForm.js
 app/orders/views/AddDocumentFormView.js
 app/orders/templates/documentList.js
 app/orders/templates/removeDocumentDialog.js
+app/orders/templates/reloadDocumentsDialog.js
 app/orders/views/DocumentListView.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
@@ -3054,6 +3055,7 @@ app/orders/templates/addDocumentForm.js
 app/orders/views/AddDocumentFormView.js
 app/orders/templates/documentList.js
 app/orders/templates/removeDocumentDialog.js
+app/orders/templates/reloadDocumentsDialog.js
 app/orders/views/DocumentListView.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
