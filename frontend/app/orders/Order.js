@@ -31,6 +31,7 @@ define([
   ];
   var TIME_PROPS = [
     'sapCreatedAt',
+    'salesOrderDate',
     'createdAt',
     'updatedAt'
   ];

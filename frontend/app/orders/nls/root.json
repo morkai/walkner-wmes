@@ -49,6 +49,7 @@
     "PROPERTY:leadingOrder": "Leading order",
     "PROPERTY:salesOrder": "Sales order",
     "PROPERTY:salesOrderItem": "Sales order item",
+    "PROPERTY:salesOrderDate": "Sales order date",
     "PROPERTY:priority": "Priority",
     "PROPERTY:description": "Description",
     "PROPERTY:soldToParty": "Sold-to party",

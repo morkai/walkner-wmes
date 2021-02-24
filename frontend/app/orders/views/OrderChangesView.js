@@ -276,6 +276,7 @@ define([
           return time.format(value, 'LL');
 
         case 'sapCreatedAt':
+        case 'salesOrderDate':
           return time.format(value, 'LLL');
 
         case 'whTime':

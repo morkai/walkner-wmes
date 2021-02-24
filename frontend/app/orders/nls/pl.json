@@ -48,6 +48,7 @@
   "PROPERTY:leadingOrder": "Zlecenie nadrzędne",
   "PROPERTY:salesOrder": "Zlecenie sprzedaży",
   "PROPERTY:salesOrderItem": "Pozycja zlecenia sprzedaży",
+  "PROPERTY:salesOrderDate": "Czas zlecenia sprzedaży",
   "PROPERTY:priority": "Priorytet",
   "PROPERTY:description": "Opis",
   "PROPERTY:soldToParty": "Zleceniodawca",

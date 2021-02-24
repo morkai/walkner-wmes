@@ -30,7 +30,17 @@
 
           return '';
         }},
-        {id: 'salesOrder', value: (model.salesOrder || '-') + '/' + (model.salesOrderItem || '-')},
+        {id: 'salesOrder', value: function()
+        {
+          var value = (model.salesOrder || '-') + '/' + (model.salesOrderItem || '-');
+
+          if (model.salesOrderDateText)
+          {
+            value += ' @ ' + model.salesOrderDateText;
+          }
+
+          return value;
+        }},
         'soldToParty'
       ]) %>
     </div>
