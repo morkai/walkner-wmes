@@ -34,7 +34,8 @@ define([
     getTemplateData: function()
     {
       return {
-        types: dictionaries.kindTypes
+        types: dictionaries.kindTypes,
+        entryTypes: dictionaries.entryTypes.filter(t => t !== 'observation')
       };
     },
 
@@ -43,6 +44,11 @@ define([
       if (!formData.description)
       {
         formData.description = '';
+      }
+
+      if (!formData.entryTypes)
+      {
+        formData.entryTypes = [];
       }
 
       formData.coordinators = this.coordinatorsView.serializeForm();

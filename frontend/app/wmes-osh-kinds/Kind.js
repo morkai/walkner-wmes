@@ -54,6 +54,7 @@ define([
 
       obj.active = t('core', `BOOL:${obj.active}`);
       obj.type = t('wmes-osh-common', `kind:${obj.type}`);
+      obj.entryTypes = obj.entryTypes.map(type => t('wmes-osh-common', `type:${type}`)).join('; ');
 
       return obj;
     },

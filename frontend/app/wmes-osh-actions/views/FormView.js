@@ -294,7 +294,7 @@ define([
     {
       return {
         today: time.getMoment().format('YYYY-MM-DD'),
-        kinds: this.serializeKinds(),
+        kinds: dictionaries.kinds.serialize('action', this.model.get('kind')),
         can: {
           inProgress: Action.can.inProgress(this.model),
           verification: Action.can.verification(this.model),
@@ -305,38 +305,6 @@ define([
         relation: !!this.relation,
         rootCauses: this.serializeRootCauses()
       };
-    },
-
-    serializeKinds: function()
-    {
-      const kinds = {};
-
-      dictionaries.kinds.forEach(kind =>
-      {
-        if (!kind.get('active'))
-        {
-          return;
-        }
-
-        kinds[kind.id] = {
-          value: kind.id,
-          label: kind.getLabel({long: true}),
-          title: kind.get('description')
-        };
-      });
-
-      const current = dictionaries.kinds.get(this.model.get('kind'));
-
-      if (current && !kinds[current])
-      {
-        kinds[current.id] = {
-          value: current.id,
-          label: current.getLabel({long: true}),
-          title: current.get('description')
-        };
-      }
-
-      return Object.values(kinds).sort((a, b) => a.label.localeCompare(b.label));
     },
 
     serializeRootCauses: function()

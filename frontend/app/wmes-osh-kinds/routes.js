@@ -41,6 +41,7 @@ define([
       collection: dictionaries.kinds,
       columns: [
         {id: 'type', className: 'is-min'},
+        {id: 'entryTypes', className: 'is-min'},
         {id: 'shortName', className: 'is-min'},
         {id: 'longName'},
         {id: 'active', className: 'is-min'}

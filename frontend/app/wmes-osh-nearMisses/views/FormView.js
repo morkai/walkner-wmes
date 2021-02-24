@@ -342,11 +342,7 @@ define([
     {
       return {
         today: time.getMoment().format('YYYY-MM-DD'),
-        kinds: dictionaries.kinds.map(kind => ({
-          value: kind.id,
-          label: kind.getLabel({long: true}),
-          title: kind.get('description')
-        })).sort((a, b) => a.label.localeCompare(b.label)),
+        kinds: dictionaries.kinds.serialize('nearMiss', this.model.get('kind')),
         priorities: dictionaries.priorities.map(priority => ({
           value: priority,
           label: dictionaries.getLabel('priority', priority)

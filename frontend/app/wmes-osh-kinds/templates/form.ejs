@@ -20,6 +20,17 @@
         </div>
         <% }) %>
       </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:entryTypes') %></label>
+        <% entryTypes.forEach(type => { %>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="entryTypes[]" value="<%- type %>">
+            <%- t('wmes-osh-common', `type:${type}`) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
       <%- helpers.formGroup({
         name: 'shortName',
         label: 'PROPERTY:',

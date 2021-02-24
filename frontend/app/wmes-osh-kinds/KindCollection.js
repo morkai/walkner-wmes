@@ -11,7 +11,33 @@ define([
 
   return Collection.extend({
 
-    model: Kind
+    model: Kind,
+
+    serialize: function(entryType, current)
+    {
+      return this
+        .filter(kind =>
+        {
+          if (kind.id === current)
+          {
+            return true;
+          }
+
+          if (!kind.get('active'))
+          {
+            return false;
+          }
+
+          return !entryType || kind.get('entryTypes').includes(entryType);
+        })
+        .map(kind => ({
+          value: kind.id,
+          label: kind.getLabel({long: true}),
+          title: kind.get('description'),
+          model: kind
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    }
 
   });
 });

@@ -216,11 +216,7 @@ define([
     {
       return {
         today: time.getMoment().format('YYYY-MM-DD'),
-        kinds: dictionaries.kinds.map(kind => ({
-          value: kind.id,
-          label: kind.getLabel({long: true}),
-          title: kind.get('description')
-        })).sort((a, b) => a.label.localeCompare(b.label)),
+        kinds: dictionaries.kinds.serialize('kaizen', this.model.get('kind')),
         can: {
           inProgress: Kaizen.can.inProgress(this.model),
           verification: Kaizen.can.verification(this.model),
