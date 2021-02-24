@@ -77,7 +77,7 @@
   "FORM:placeholder:noEventCategory": "Wybierz kategorię zdarzenia...",
   "FORM:creator": "Osoba zgłaszająca",
   "FORM:eventTime:placeholder": "gg:mm",
-  "FORM:eventTime:title": "Godzina wystąpienia zdarzenia",
+  "FORM:eventTime:title": "Czas wystąpienia zdarzenia",
   "FORM:selfImplement": "Zgłaszam się jako realizator",
   "FORM:plannedAt": "Planowany termin zakończenia",
   "FORM:resolution:unspecified": "Powiązane zgłoszenie",

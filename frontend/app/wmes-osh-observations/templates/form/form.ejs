@@ -46,7 +46,7 @@
           <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
           <div class=" form-group-datetime">
             <input id="<%- id('date') %>" class="form-control" name="date" type="date" required min="<%- window.PRODUCTION_DATA_START_DATE || '2020-01-01' %>" max="<%- today %>">
-            <input id="<%- id('time') %>" class="form-control no-controls" name="time" type="number" min="0" max="23" placeholder="<%- t('FORM:time:placeholder') %>" title="<%- t('FORM:time:title') %>">
+            <input id="<%- id('time') %>" class="form-control" name="time" type="time" placeholder="<%- t('FORM:time:placeholder') %>" title="<%- t('FORM:time:title') %>">
           </div>
         </div>
         <%- helpers.formGroup({

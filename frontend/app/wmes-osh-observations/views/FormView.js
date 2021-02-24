@@ -185,6 +185,18 @@ define([
       'change input[name$="resolution.rid"]': function(e)
       {
         this.loadResolution(this.$(e.target).closest('tr'), false);
+      },
+
+      'change input[name="time"]': function()
+      {
+        const $time = this.$id('time');
+        const matches = $time.val().match(/([0-9]{1,2})(?::([0-9]{1,2}))/) || [null, '00', '00'];
+        const h = parseInt(matches[1], 10);
+        const m = parseInt(matches[2], 10);
+        const hh = h >= 0 && h < 24 ? h.toString().padStart(2, '0') : '00';
+        const mm = m >= 0 && m < 60 ? m.toString().padStart(2, '0') : '00';
+
+        $time.val(`${hh}:${mm}`);
       }
 
     }, FormView.prototype.events),
@@ -262,7 +274,7 @@ define([
         const date = time.utc.getMoment(formData.date);
 
         formData.date = date.format('YYYY-MM-DD');
-        formData.time = date.format('H');
+        formData.time = date.format('HH:mm');
         formData.easyConfirmed = (formData.behaviors || []).some(o => o.easy === true);
       }
       else
@@ -270,7 +282,7 @@ define([
         const now = time.getMoment();
 
         formData.date = now.format('YYYY-MM-DD');
-        formData.time = now.format('H');
+        formData.time = now.format('HH:mm');
         formData.easyConfirmed = false;
       }
 
@@ -309,7 +321,7 @@ define([
       formData.station = parseInt(this.$id('station').val(), 10) || null;
 
       formData.date = time.utc.getMoment(
-        `${formData.date} ${(formData.time || '00').padStart(2, '0')}:00:00`,
+        `${formData.date} ${formData.time || '00:00'}:00`,
         'YYYY-MM-DD HH:mm:ss'
       ).toISOString();
 
