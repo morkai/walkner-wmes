@@ -87,10 +87,7 @@ LogDebug("--to-date=" & $toDate)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSACTION")
-
-; Start transaction
-$session.StartTransaction("LT23")
+StartTransaction("LT23")
 
 SetVariant($session, $variant, $variantCreator)
 

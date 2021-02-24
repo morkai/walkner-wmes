@@ -195,3 +195,9 @@ EndFunc
 Func TrimString($str)
   Return StringStripWS($str, $STR_STRIPLEADING + $STR_STRIPTRAILING + $STR_STRIPSPACES)
 EndFunc
+
+Func StartTransaction($t)
+  LogDebug("STARTING_TRANSACTION")
+  $session.StartTransaction($t)
+  LogDebug("SESSION_READY")
+EndFunc

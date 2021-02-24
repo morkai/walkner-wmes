@@ -23,10 +23,7 @@ LogDebug($t)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("CO03")
+StartTransaction("CO03")
 
 For $orderI = 1 To $CmdLine[0] Step 1
   $order = $CmdLine[$orderI]

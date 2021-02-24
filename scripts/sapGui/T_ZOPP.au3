@@ -56,10 +56,7 @@ LogDebug("--p-org=" & $pOrg)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("ZOPP")
+StartTransaction("ZOPP")
 
 SetVariant($session, $variant, $variantCreator)
 

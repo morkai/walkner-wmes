@@ -58,10 +58,7 @@ LogDebug("--component-file=" & $componentFile)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("COOIS")
+StartTransaction("COOIS")
 
 ; Select Components
 $session.FindById("wnd[0]/usr/ssub%_SUBSCREEN_TOPBLOCK:PPIO_ENTRY:1100/cmbPPIO_ENTRY_SC1100-PPIO_LISTTYP").Key = "PPIOM000"

@@ -90,10 +90,7 @@ LogDebug("--deleted=" & $deleted)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("COOIS")
+StartTransaction("COOIS")
 
 SetVariant($session, $variant, $variantCreator)
 

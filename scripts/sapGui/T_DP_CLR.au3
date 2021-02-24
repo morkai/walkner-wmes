@@ -31,10 +31,7 @@ LogDebug($t)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("CS11")
+StartTransaction("CS11")
 
 For $i = 1 To $CmdLine[0] Step 1
   $nc12 = $CmdLine[$i]

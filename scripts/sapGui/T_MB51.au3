@@ -62,10 +62,7 @@ LogDebug("--to-date=" & $toDate)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("MB51")
+StartTransaction("MB51")
 
 $session.FindById("wnd[0]/tbar[1]/btn[17]").Press()
 $session.FindById("wnd[1]/usr/txtV-LOW").Text = $layout

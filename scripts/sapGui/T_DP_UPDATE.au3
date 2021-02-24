@@ -64,10 +64,7 @@ EndIf
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("CO02")
+StartTransaction("CO02")
 
 For $i = 1 To $items[0] Step 1
   $parts = StringSplit($items[$i], "/")

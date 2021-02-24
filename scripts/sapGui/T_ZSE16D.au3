@@ -77,10 +77,7 @@ Next
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("ZSE16D")
+StartTransaction("ZSE16D")
 
 ; Set variant
 If $variant <> "" Then

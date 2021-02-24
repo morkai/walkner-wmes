@@ -72,10 +72,7 @@ LogDebug("--to-date=" & $toDate)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("ZOIN")
+StartTransaction("ZOIN")
 
 ; Set Plant
 $session.FindById("wnd[0]/usr/ctxtP_WERKS").Text = $plant

@@ -40,10 +40,7 @@ LogDebug("--material=" & $material)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("MD04")
+StartTransaction("MD04")
 
 ; Set material 12NC
 $session.FindById("wnd[0]/usr/tabsTAB300/tabpF01/ssubINCLUDE300:SAPMM61R:0301/ctxtRM61R-MATNR").Text = $material

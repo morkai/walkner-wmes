@@ -67,10 +67,7 @@ LogDebug("--warehouse=" & $warehouse)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSACTION")
-
-; Start transaction
-$session.StartTransaction("LS41")
+StartTransaction("LS41")
 
 SetVariant($session, $variant, $variantCreator)
 

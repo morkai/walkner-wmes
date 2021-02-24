@@ -25,10 +25,7 @@ LogDebug($t)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction("VA03")
+StartTransaction("VA03")
 
 $itemOverviewId = "wnd[0]/tbar[1]/btn[6]"
 $itemTblId = "wnd[0]/usr/tabsTAXI_TABSTRIP_OVERVIEW/tabpT\02/ssubSUBSCREEN_BODY:SAPMV45A:4401/subSUBSCREEN_TC:SAPMV45A:4900/tblSAPMV45ATCTRL_U_ERF_AUFTRAG"

@@ -56,10 +56,7 @@ LogDebug("--variant-creator=" & $variantCreator)
 
 #include "_Logon.au3"
 
-LogDebug("STARTING_TRANSATION")
-
-; Start transaction
-$session.StartTransaction($transaction)
+StartTransaction($transaction)
 
 SetVariant($session, $variant, $variantCreator)
 
