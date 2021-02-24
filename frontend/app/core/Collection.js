@@ -130,7 +130,7 @@ define([
 
   Collection.prototype.getLabel = function(id, options)
   {
-    if (id == null)
+    if (!id)
     {
       return '';
     }
