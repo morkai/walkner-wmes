@@ -25,7 +25,17 @@ define([
 ) {
   'use strict';
 
-  var NOTIFICATIONS = ['fap_sms', 'fm24_sms', 'fm24_email'];
+  var NOTIFICATIONS = [];
+
+  if (loadedModules.isLoaded('wmes-fap'))
+  {
+    NOTIFICATIONS.push('fap_sms');
+  }
+
+  if (loadedModules.isLoaded('kaizen'))
+  {
+    NOTIFICATIONS.push('fm24_sms', 'fm24_email');
+  }
 
   function parseMobileTime(time)
   {

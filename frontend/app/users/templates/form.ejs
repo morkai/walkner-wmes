@@ -78,6 +78,7 @@
               <button id="<%- id('mobile-add') %>" class="btn btn-link" type="button"><i class="fa fa-plus"></i></button>
             </div>
           </div>
+          <% if (notifications.length) { %>
           <div class="form-group">
             <label class="control-label"><%- t('PROPERTY:notifications') %></label>
             <% notifications.forEach(function(pref) { %>
@@ -88,6 +89,7 @@
             </div>
             <% }) %>
           </div>
+          <% } %>
         </div>
         <% if (accountMode) { %>
         <div class="col-lg-3">
