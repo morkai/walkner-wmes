@@ -7,5 +7,6 @@
   "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:longName": "Długa nazwa",
   "PROPERTY:description": "Opis",
-  "PROPERTY:coordinators": "Koordynatorzy"
+  "PROPERTY:coordinators": "Koordynatorzy",
+  "PROPERTY:position": "Pozycja"
 }

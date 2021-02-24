@@ -49,6 +49,17 @@
         </table>
         <input id="<%- id('addCategory-workConditions') %>" type="text">
       </div>
+      <%- helpers.formGroup({
+        name: 'position',
+        type: 'number',
+        label: 'PROPERTY:',
+        required: true,
+        min: -9999999,
+        max: 9999999,
+        inputStyle: {
+          width: '100px'
+        }
+      }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

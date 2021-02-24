@@ -13,6 +13,8 @@ define([
 
     model: Kind,
 
+    comparator: (a, b) => a.get('position') - b.get('position'),
+
     serialize: function(entryType, current)
     {
       return this
@@ -36,7 +38,7 @@ define([
           title: kind.get('description'),
           model: kind
         }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        .sort((a, b) => a.model.get('position') - b.model.get('position'));
     }
 
   });

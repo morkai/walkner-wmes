@@ -8,6 +8,7 @@
   "PROPERTY:behaviors": "Zachowania",
   "PROPERTY:workConditions": "Warunki pracy",
   "PROPERTY:category": "Kategoria",
+  "PROPERTY:position": "Pozycja",
 
   "FORM:categories:up": "Przesuń wyżej",
   "FORM:categories:down": "Przesuń niżej",

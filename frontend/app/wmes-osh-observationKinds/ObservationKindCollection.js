@@ -11,7 +11,9 @@ define([
 
   return Collection.extend({
 
-    model: ObservationKind
+    model: ObservationKind,
+
+    comparator: (a, b) => a.get('position') - b.get('position')
 
   });
 });

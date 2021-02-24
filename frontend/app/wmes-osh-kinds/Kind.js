@@ -32,7 +32,8 @@ define([
       return {
         active: true,
         type: 'other',
-        coordinators: []
+        coordinators: [],
+        position: 0
       };
     },
 

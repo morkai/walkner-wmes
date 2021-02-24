@@ -53,6 +53,17 @@
         <label class="control-label"><%- t('PROPERTY:coordinators') %></label>
         <div id="<%- id('coordinators') %>"></div>
       </div>
+      <%- helpers.formGroup({
+        name: 'position',
+        type: 'number',
+        label: 'PROPERTY:',
+        required: true,
+        min: -9999999,
+        max: 9999999,
+        inputStyle: {
+          width: '100px'
+        }
+      }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

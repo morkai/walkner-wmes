@@ -247,7 +247,8 @@ define([
         kinds[kind.id] = {
           value: kind.id,
           label: kind.getLabel({long: true}),
-          title: kind.get('description')
+          title: kind.get('description'),
+          model: kind
         };
       });
 
@@ -258,11 +259,12 @@ define([
         kinds[current.id] = {
           value: current.id,
           label: current.getLabel({long: true}),
-          title: current.get('description')
+          title: current.get('description'),
+          model: current
         };
       }
 
-      return Object.values(kinds).sort((a, b) => a.label.localeCompare(b.label));
+      return Object.values(kinds).sort((a, b) => a.model.get('position') - b.model.get('position'));
     },
 
     serializeToForm: function()

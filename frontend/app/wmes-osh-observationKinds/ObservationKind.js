@@ -26,7 +26,8 @@ define([
     labelAttribute: 'shortName',
 
     defaults: {
-      active: true
+      active: true,
+      position: 0
     },
 
     getLabel: function({long} = {})

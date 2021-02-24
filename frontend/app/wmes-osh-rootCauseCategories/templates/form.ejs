@@ -10,17 +10,6 @@
         </label>
       </div>
       <%- helpers.formGroup({
-        name: 'position',
-        type: 'number',
-        label: 'PROPERTY:',
-        required: true,
-        min: -9999999,
-        max: 9999999,
-        inputStyle: {
-          width: '100px'
-        }
-      }) %>
-      <%- helpers.formGroup({
         name: 'shortName',
         label: 'PROPERTY:',
         required: true,
@@ -38,6 +27,17 @@
         label: 'PROPERTY:',
         rows: 10,
         inputClassName: 'text-mono'
+      }) %>
+      <%- helpers.formGroup({
+        name: 'position',
+        type: 'number',
+        label: 'PROPERTY:',
+        required: true,
+        min: -9999999,
+        max: 9999999,
+        inputStyle: {
+          width: '100px'
+        }
       }) %>
     </div>
     <div class="panel-footer">

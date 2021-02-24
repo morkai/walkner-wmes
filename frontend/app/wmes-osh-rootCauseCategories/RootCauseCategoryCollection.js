@@ -13,7 +13,7 @@ define([
 
     model: RootCauseCategory,
 
-    sort: (a, b) => a.get('position') - b.get('position')
+    comparator: (a, b) => a.get('position') - b.get('position')
 
   });
 });
