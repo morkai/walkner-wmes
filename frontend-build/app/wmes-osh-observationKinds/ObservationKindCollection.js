@@ -1,1 +1,1 @@
-define(["app/core/Collection","./ObservationKind"],function(e,n){"use strict";return e.extend({model:n})});
+define(["app/core/Collection","./ObservationKind"],function(e,o){"use strict";return e.extend({model:o,comparator:(e,o)=>e.get("position")-o.get("position")})});
