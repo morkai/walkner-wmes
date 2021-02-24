@@ -519,6 +519,11 @@ define([
     {
       const $input = this.$id('workplace');
 
+      if (!$input.val() && currentUser.data.oshWorkplace && !this.options.editMode)
+      {
+        $input.val(currentUser.data.oshWorkplace);
+      }
+
       let currentWorkplace = dictionaries.workplaces.get(+$input.val());
 
       if (currentWorkplace)
@@ -566,7 +571,11 @@ define([
     {
       const $input = this.$id('department');
 
-      const currentWorkplaceId = +this.$id('workplace').val();
+      if (!$input.val() && currentUser.data.oshDepartment && !this.options.editMode)
+      {
+        $input.val(currentUser.data.oshDepartment);
+      }
+
       let currentDepartment = dictionaries.departments.get(+$input.val());
 
       if (currentDepartment)
@@ -578,6 +587,7 @@ define([
         };
       }
 
+      const currentWorkplaceId = +this.$id('workplace').val();
       const map = {};
 
       dictionaries.departments.forEach(model =>
