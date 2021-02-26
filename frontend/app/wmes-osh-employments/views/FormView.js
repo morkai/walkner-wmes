@@ -239,9 +239,14 @@ define([
 
         this.$('tr[data-id]').each((i, tr) =>
         {
-          const data = res[tr.dataset.id] || {internal: 0, observers: 0};
+          const data = res[tr.dataset.id] || {
+            internal: 0,
+            external: 0,
+            observers: 0
+          };
 
           tr.querySelector('input[name$="internal"]').value = data.internal;
+          tr.querySelector('input[name$="external"]').value = data.external;
           tr.querySelector('input[name$="observers"]').value = data.observers;
         });
       });

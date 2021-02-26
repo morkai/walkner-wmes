@@ -10,5 +10,5 @@
   "PROPERTY:total": "Suma",
   "PROPERTY:observers": "Obserwatorzy",
 
-  "FORM:recount": "Przelicz zatrudnienie wewnętrzne oraz obserwatorów na podstawie aktualnej wersji bazy użytkowników"
+  "FORM:recount": "Przelicz zatrudnienie oraz obserwatorów na podstawie aktualnej wersji bazy użytkowników"
 }
