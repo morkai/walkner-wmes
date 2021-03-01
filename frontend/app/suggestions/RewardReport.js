@@ -103,7 +103,7 @@ define([
 
     fromQuery: function(query)
     {
-      if (!query.superior || !currentUser.isAllowedTo('SUGGESTIONS:MANAGE', 'KAIZEN:DICTIONARIES:MANAGE'))
+      if (query.superior == null || !currentUser.isAllowedTo('SUGGESTIONS:MANAGE', 'KAIZEN:DICTIONARIES:MANAGE'))
       {
         query.superior = currentUser.data._id;
       }
