@@ -46,7 +46,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.className = '';
+      obj.className = 'default';
 
       if (obj.status !== 'retired')
       {
