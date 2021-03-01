@@ -1,0 +1,1 @@
+define(["./wmes-gft-tester/routes"],function(){"use strict"});

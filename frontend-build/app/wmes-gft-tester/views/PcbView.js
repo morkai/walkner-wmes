@@ -1,0 +1,1 @@
+define(["app/core/View","app/wmes-gft-tester/templates/pcb"],function(e,t){"use strict";return e.extend({template:t,initialize:function(){this.listenTo(this.model.order,"change",this.render)},getTemplateData:function(){return{order:this.model.order.toJSON()}}})});
