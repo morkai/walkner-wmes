@@ -1,0 +1,97 @@
+<form class="osh-entries-form osh-accidents-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'subject',
+        label: 'PROPERTY:',
+        required: true,
+        maxLength: 150
+      }) %>
+      <div class="panel panel-default">
+        <div class="panel-heading"><%- t('FORM:subtitle') %></div>
+        <div class="panel-body has-lastElementRow">
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'workplace',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'department',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'building',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'location',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'station',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <div class="form-group">
+            <label for="<%- id('eventDate') %>" class="control-label is-required"><%- t('PROPERTY:eventDate') %></label>
+            <div class="form-group-datetime">
+              <input id="<%- id('eventDate') %>" class="form-control" name="eventDate" type="date" required min="<%- window.PRODUCTION_DATA_START_DATE || '2020-01-01' %>" max="<%- today %>">
+              <input id="<%- id('eventTime') %>" class="form-control" name="eventTime" type="time" placeholder="<%- t('FORM:eventTime:placeholder') %>" title="<%- t('FORM:eventTime:title') %>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 form-group">
+              <%- helpers.formGroup({
+                name: 'description',
+                type: 'textarea',
+                label: 'PROPERTY:',
+                rows: 5,
+                required: true
+              }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- helpers.formGroup({
+        name: 'attachments',
+        type: 'file',
+        label: 'PROPERTY:',
+        accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
+        multiple: true
+      }) %>
+      <% if (editMode) { %>
+        <%- helpers.formGroup({
+          name: 'comment',
+          type: 'textarea',
+          label: 'PROPERTY:',
+          rows: 3
+        }) %>
+      <% } %>
+    </div>
+    <div class="form-actions">
+      <button id="<%- id('save') %>" type="submit" class="btn btn-primary">
+        <% if (editMode) { %>
+          <i class="fa fa-save"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:edit') %></span>
+        <% } else { %>
+          <i class="fa fa-plus"></i><span><%- t('FORM:ACTION:add') %></span>
+        <% } %>
+      </button>
+    </div>
+  </div>
+</form>

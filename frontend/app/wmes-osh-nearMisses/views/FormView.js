@@ -1017,7 +1017,7 @@ define([
         data
       });
 
-      if (data.length === 1)
+      if (!this.options.editMode && data.length === 1)
       {
         $input.select2('data', data[0]);
       }

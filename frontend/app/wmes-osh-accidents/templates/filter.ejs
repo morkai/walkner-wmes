@@ -1,0 +1,15 @@
+<form class="well filter-form" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix,
+    property: 'eventDate',
+    labels: {
+      text: t(`PROPERTY:eventDate`),
+      ranges: true
+    }
+  }) %>
+  <div id="<%- id('locationPath') %>" class="form-group" data-filter="locationPath"></div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>

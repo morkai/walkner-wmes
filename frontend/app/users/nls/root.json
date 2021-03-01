@@ -213,6 +213,8 @@
     "PRIVILEGE:OSH:KAIZENS:MANAGE": "OSH > Kaizen: manage",
     "PRIVILEGE:OSH:ACTIONS:MANAGE": "OSH > Actions: manage",
     "PRIVILEGE:OSH:OBSERVATIONS:MANAGE": "OSH > Observations: manage",
+    "PRIVILEGE:OSH:ACCIDENTS:VIEW": "OSH > Accidents: view",
+    "PRIVILEGE:OSH:ACCIDENTS:MANAGE": "OSH > Accidents: manage",
     "PRIVILEGE:OSH:HR:VIEW": "OSH > HR: view",
     "PRIVILEGE:OSH:HR:MANAGE": "OSH > HR: manage",
     "PRIVILEGE:OSH:DICTIONARIES:VIEW": "OSH > Dictionaries: view",

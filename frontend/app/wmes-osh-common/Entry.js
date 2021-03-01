@@ -62,7 +62,7 @@ define([
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
 
-      obj.className = STATUS_TO_CLASS[this.get('status')];
+      obj.className = Entry.STATUS_TO_CLASS[this.get('status')];
       obj.plannedAt = obj.plannedAt ? time.utc.format(obj.plannedAt, 'L') : '';
 
       Entry.TIME_PROPS.forEach(prop =>
@@ -101,7 +101,17 @@ define([
         obj.className += ' osh-unseen';
       }
 
-      obj.locationPath = `${obj.workplace} \\ ${obj.department} \\ ${obj.building} \\ ${obj.location}`;
+      obj.locationPath = `${obj.workplace} \\ ${obj.department}`;
+
+      if (obj.building)
+      {
+        obj.locationPath += ` \\ ${obj.building}`;
+      }
+
+      if (obj.location)
+      {
+        obj.locationPath += ` \\ ${obj.location}`;
+      }
 
       if (obj.station)
       {

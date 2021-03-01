@@ -1,0 +1,35 @@
+{
+  "BREADCRUMB:browse": "Wypadki",
+
+  "PROPERTY:rid": "ID",
+  "PROPERTY:status": "Status",
+  "PROPERTY:createdAt": "Czas zgłoszenia",
+  "PROPERTY:creator": "Zgłaszający",
+  "PROPERTY:coordinators": "Koordynatorzy",
+  "PROPERTY:division": "Dywizja",
+  "PROPERTY:workplace": "Zakład",
+  "PROPERTY:department": "Wydział",
+  "PROPERTY:building": "Budynek",
+  "PROPERTY:location": "Obszar",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:locationPath": "Miejsce zdarzenia",
+  "PROPERTY:eventDate": "Czas zdarzenia",
+  "PROPERTY:subject": "Temat",
+  "PROPERTY:description": "Opis zdarzenia",
+  "PROPERTY:comment": "Komentarz",
+  "PROPERTY:attachments": "Załączniki",
+
+  "details:general": "Podstawowe informacje",
+  "details:users": "Użytkownicy",
+  "details:extra": "Dodatkowe informacje",
+  "details:eventDate:format": "LL, LT",
+
+  "FORM:subtitle": "Wypadek",
+  "FORM:ACTION:add": "Dodaj nowy wypadek",
+  "FORM:placeholder:noWorkplace": "Wybierz zakład...",
+  "FORM:placeholder:noDepartment": "Wybierz wydział...",
+  "FORM:placeholder:noBuilding": "Wybierz budynek...",
+  "FORM:placeholder:noLocation": "Wybierz obszar...",
+  "FORM:eventTime:placeholder": "gg:mm",
+  "FORM:eventTime:title": "Czas wystąpienia zdarzenia"
+}

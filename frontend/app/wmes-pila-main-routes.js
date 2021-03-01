@@ -36,6 +36,7 @@ define([
   './wmes-osh-kaizens/routes',
   './wmes-osh-actions/routes',
   './wmes-osh-observations/routes',
+  './wmes-osh-accidents/routes',
   './wmes-osh-reports/routes'
 ], function()
 {
