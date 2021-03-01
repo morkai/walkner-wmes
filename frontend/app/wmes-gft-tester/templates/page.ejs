@@ -1,0 +1,22 @@
+<div class="gft">
+  <div class="gft-hd">
+    <div id="<%- id('date') %>" class="gft-date"></div>
+    <div id="<%- id('shift') %>" class="gft-shift"></div>
+    <div class="gft-line">
+      <div><%- t('line') %></div>
+      <div><span id="<%- id('line') %>" style="cursor: pointer"></span></div>
+    </div>
+  </div>
+  <div id="<%- id('title') %>" class="gft-title"><%- t('title') %></div>
+  <div style="display: flex; margin-top: 30px">
+    <div style="flex: 1 1 60%; padding: 0 15px 0 30px">
+      <div id="<%- id('order') %>"></div>
+      <div id="<%- id('pcb') %>"></div>
+    </div>
+    <div style="flex: 1 1 40%; padding: 0 30px 0 15px">
+      <div id="<%- id('config') %>"></div>
+      <div id="<%- id('tester') %>"></div>
+    </div>
+  </div>
+  <div id="<%- id('vkb') %>"></div>
+</div>

@@ -371,9 +371,9 @@ define([
       this.renderPanelToggles();
     },
 
-    onQuantityDoneChanged: function(qtyDone)
+    onQuantityDoneChanged: function(changes)
     {
-      this.model.set('qtyDone', qtyDone);
+      this.model.set('qtyDone', changes.qtyDone);
     },
 
     onSynced: function()

@@ -1,0 +1,43 @@
+{
+  "root": {
+    "title": "GearFlex Tester",
+    "shift": "{shift}<br>shift",
+    "line": "Line:",
+    "station": "{line}, st. {station}",
+
+    "unlockDialog:title": "Activating GearFlex Tester",
+    "unlockDialog:prodLine": "Production line",
+    "unlockDialog:station": "Workstation number",
+    "unlockDialog:unlock": "Activate GearFlex Tester",
+
+    "orderPicker:title": "Setting order",
+    "orderPicker:submit": "Set order",
+    "orderPicker:orderNo": "Order number",
+    "orderPicker:recentOrders": "Recent orders",
+    "orderPicker:error:NOT_FOUND": "Order not found.",
+    "orderPicker:error:generic": "Failed to set order.",
+
+    "setOrder:set": "Set",
+    "setOrder:change": "Change",
+
+    "prop:orderNo": "Order no",
+    "prop:productCode": "Product code",
+    "prop:productName": "Product name",
+    "prop:commercialDesignation": "Product description",
+    "prop:orderQueue": "Order queue",
+    "prop:productFamily": "Family",
+    "prop:testPlatform": "Test platform",
+    "prop:ltuneCode": "LTUNE",
+    "prop:driverType": "Driver type",
+    "prop:numberOfLeds": "LEDs quantity",
+    "prop:lampColor": "Color",
+    "prop:pcbName": "PCB name",
+    "prop:pcbCode": "PCB code",
+    "prop:numberOfPcbs": "PCB quantity",
+    "prop:tester": "Tester",
+    "prop:program": "Program",
+    "prop:program:value": "{leds} LEDs per {channels} {channels, plural, one{channel} other{channels}}",
+    "prop:outputs": "Outputs"
+  },
+  "pl": true
+}

@@ -333,6 +333,15 @@ exports.updater = {
       template: manifestTemplates.main,
       frontendAppData: {},
       dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'gft',
+      path: '/gft/manifest.appcache',
+      mainJsFile: '/wmes-gft.js',
+      mainCssFile: '/assets/wmes-gft.css',
+      template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
     }
   ]
 };
@@ -535,7 +544,9 @@ exports['messenger/client:wmes-ct'] = Object.assign({}, ports['wmes-ct'], {
   broadcastTopics: [
     'ct.lines.*',
     'ct.downtimeReasonUpdated',
-    'ct.todos.saved'
+    'ct.todos.saved',
+    'gft.testers.added', 'gft.testers.edited', 'gft.testers.deleted',
+    'gft.newOrderStarted', 'gft.orderFinished', 'gft.workFinished', 'gft.stationsRequested'
   ]
 });
 
@@ -706,6 +717,10 @@ exports['wmes-luca-frontend'] = {
 };
 
 exports['wmes-ct-frontend'] = {
+  messengerClientId: 'messenger/client:wmes-ct'
+};
+
+exports['wmes-gft-frontend'] = {
   messengerClientId: 'messenger/client:wmes-ct'
 };
 

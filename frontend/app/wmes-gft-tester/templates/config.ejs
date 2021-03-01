@@ -1,0 +1,28 @@
+<div class="gft-section">
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:productFamily') %></div>
+    <div class="gft-prop-value"><%= order.productFamily || '-' %></div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:testPlatform') %></div>
+    <div class="gft-prop-value"><%= order.tester || '-' %></div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:ltuneCode') %></div>
+    <div class="gft-prop-value"><%= order.ltuneCode || '-' %></div>
+  </div>
+  <div class="gft-prop-row">
+    <div class="gft-prop">
+      <div class="gft-prop-name"><%- t('prop:driverType') %></div>
+      <div class="gft-prop-value"><%= order.driverType || '-' %></div>
+    </div>
+    <div class="gft-prop">
+      <div class="gft-prop-name"><%- t('prop:numberOfLeds') %></div>
+      <div class="gft-prop-value"><%= order.numberOfLeds || '-' %></div>
+    </div>
+    <div class="gft-prop">
+      <div class="gft-prop-name"><%- t('prop:lampColor') %></div>
+      <div class="gft-prop-value"><%= order.lampColor || '-' %></div>
+    </div>
+  </div>
+</div>

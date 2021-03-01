@@ -1,0 +1,40 @@
+{
+  "title": "Tester GearFlex",
+  "shift": "{shift}<br>zmiana",
+  "line": "Linia:",
+  "station": "{line}, st. {station}",
+
+  "unlockDialog:title": "Aktywacja Testera GearFlex",
+  "unlockDialog:prodLine": "Linia produkcyjna",
+  "unlockDialog:station": "Numer stanowiska pracy",
+  "unlockDialog:unlock": "Aktywuj Tester GearFlex",
+
+  "orderPicker:title": "Ustawianie zlecenia",
+  "orderPicker:submit": "Ustaw zlecenie",
+  "orderPicker:orderNo": "Numer zlecenia",
+  "orderPicker:recentOrders": "Ostatnie zlecenia z linii",
+  "orderPicker:error:NOT_FOUND": "Zlecenie nie istnieje.",
+  "orderPicker:error:generic": "Ustawianie zlecenia nie powiodło się.",
+
+  "setOrder:set": "Ustaw",
+  "setOrder:change": "Zmień",
+
+  "prop:orderNo": "Nr zlecenia",
+  "prop:productCode": "Kod wyrobu",
+  "prop:productName": "Nazwa wyrobu",
+  "prop:commercialDesignation": "Opis wyrobu",
+  "prop:orderQueue": "Kolejka zleceń",
+  "prop:productFamily": "Rodzina",
+  "prop:testPlatform": "Platforma testowa",
+  "prop:ltuneCode": "LTUNE",
+  "prop:driverType": "Typ drivera",
+  "prop:numberOfLeds": "Ilość LED",
+  "prop:lampColor": "Kolor",
+  "prop:pcbName": "Nazwa płytki",
+  "prop:pcbCode": "Kod płytki",
+  "prop:numberOfPcbs": "Ilość płytek",
+  "prop:tester": "Tester",
+  "prop:program": "Program",
+  "prop:program:value": "{channels} {channels, plural, one{kanał} few{kanały} other{kanałów}} po {leds} LED",
+  "prop:outputs": "Wyjścia"
+}

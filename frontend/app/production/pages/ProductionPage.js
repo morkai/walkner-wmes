@@ -778,7 +778,7 @@ define([
 
       this.qtyDoneSub = this.pubsub.subscribe(
         'orders.quantityDone.' + orderNo,
-        function(totalQuantityDone) { model.set({totalQuantityDone: totalQuantityDone}); }
+        function(changes) { model.set('totalQuantityDone', changes.qtyDone); }
       );
 
       this.ajax({url: '/orders?_id=' + orderNo + '&select(qtyDone)&limit(1)'}).done(function(res)

@@ -1,0 +1,43 @@
+<div class="gft-section">
+  <div class="gft-prop-row">
+    <div id="<%- id('setOrder') %>" class="gft-prop">
+      <div class="gft-prop-name">
+        <%- t('prop:orderNo') %>
+        <% if (order.error) { %>
+          <i class="fa fa-bug" style="color: #E00" title="<%= order.error %>"></i>
+        <% } %>
+      </div>
+      <div class="gft-prop-value <%- order.orderNo ? 'is-important' : '' %>">
+        <% if (order.orderNo) { %>
+          <%- order.orderNo.match(/[0-9]{3}/g).join(' ') %>
+        <% } else { %>
+          -
+        <% } %>
+        <% if (canManage) { %>
+          <button type="button"><%- t(`setOrder:${order.orderNo ? 'change' : 'set'}`) %></button>
+        <% } %>
+      </div>
+    </div>
+    <div class="gft-prop" style="margin-top: 0; margin-left: 30px">
+      <div class="gft-prop-name"><%- t('prop:productCode') %></div>
+      <div class="gft-prop-value"><%= order.productCode || '-' %></div>
+    </div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:productName') %></div>
+    <div class="gft-prop-value"><%= order.productName || '-' %></div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:commercialDesignation') %></div>
+    <div class="gft-prop-value"><%= order.commercialDesignation || '-' %></div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:orderQueue') %></div>
+    <div class="gft-prop-value">
+      <% if (!orderQueue.length) { %>
+        -
+      <% } %>
+      <% orderQueue.forEach(orderNo => { %><a href="javascript:void(0)" data-order="<%= orderNo %>" style="margin-right: 20px"><%= orderNo.match(/[0-9]{3}/g).join(' ') %> %></a><% }) %>
+    </div>
+  </div>
+</div>

@@ -29,7 +29,8 @@ module.exports = grunt =>
     {name: 'wmes-wh-delivery-packaging', include},
     {name: 'wmes-wh-delivery-ps', include},
     {name: 'wmes-isa', include},
-    {name: 'wmes-trw', include}
+    {name: 'wmes-trw', include},
+    {name: 'wmes-gft', include}
   ];
 
   grunt.initConfig({

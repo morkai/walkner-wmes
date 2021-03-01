@@ -11,8 +11,9 @@ exports.modules = [
   'events',
   'settings',
   'messenger/server',
+  'paintShop/loadMonitor',
   'wmes-ct-backend',
-  'paintShop/loadMonitor'
+  'wmes-gft-backend'
 ];
 
 exports.events = {
@@ -55,11 +56,16 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'events.saved',
     'ct.state.updated',
     'ct.pces.saved',
-    'paintShop.load.changed'
+    'paintShop.load.changed',
+    'gft.stations.updated.**'
   ]
 });
 
 exports['wmes-ct-backend'] = {
+
+};
+
+exports['wmes-gft-backend'] = {
 
 };
 

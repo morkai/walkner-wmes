@@ -1,0 +1,33 @@
+<div class="gft-section">
+  <div class="gft-prop">
+    <div class="gft-prop-name">
+        <%- t('prop:tester') %>
+        <% if (tester.name) { %>
+          <i class="fa fa-signal" style="color: <%- tester.connected ? '#00e696' : '#E00' %>"></i>
+        <% } %>
+    </div>
+    <div class="gft-prop-value"><%= tester.name || '-' %></div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:program') %></div>
+    <div class="gft-prop-value">
+      <% if (tester.program) { %>
+        <%- t('prop:program:value', tester.program) %>
+      <% } else { %>
+        -
+      <% } %>
+    </div>
+  </div>
+  <div class="gft-prop">
+    <div class="gft-prop-name"><%- t('prop:outputs') %></div>
+    <div class="gft-prop-value">
+      <% if (tester.outputs.length) { %>
+        <% tester.outputs.forEach(output => { %>
+          <span class="gft-output"><%= output %></span>
+        <% }) %>
+      <% } else { %>
+        -
+      <% } %>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,3 @@
-@import url(../../production/assets/modal.css);
-@import url(../../production/assets/taktTime.css);
-@import url(../../production/assets/bomChecker.css);
 @import url(./timeline.css);
 
 body[data-app-id="heff"] {

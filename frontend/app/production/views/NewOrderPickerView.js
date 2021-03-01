@@ -600,7 +600,7 @@ define([
 
       var statuses = orderInfo.statuses;
 
-      if (Array.isArray(statuses) && statuses.length)
+      if (Array.isArray(statuses) && statuses.length && window.ENV !== 'development')
       {
         if (_.intersection(statuses, ['TECO', 'DLT', 'DLFL']).length)
         {

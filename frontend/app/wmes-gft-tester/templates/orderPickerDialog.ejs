@@ -1,0 +1,22 @@
+<form class="gft-orderPicker" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('orderNo') %>" class="control-label is-required"><%- t('orderPicker:orderNo') %></label>
+    <br>
+    <input id="<%- id('orderNo') %>" name="orderNo" class="form-control" type="text" required pattern="^[0-9]{9}$" data-vkb="numeric">
+  </div>
+  <div class="production-form-btn-group" style="margin-top: 15px">
+    <label class="control-label"><%- t('orderPicker:recentOrders') %></label>
+    <div id="<%- id('list') %>" class="btn-group-vertical" style="max-height: 500px">
+      <p>
+        <i class="fa fa-spinner fa-spin"></i>
+      </p>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button id="<%- id('submit') %>" class="btn btn-lg btn-primary" type="submit">
+      <i class="fa fa-spinner fa-spin hidden"></i>
+      <%- t('orderPicker:submit') %>
+    </button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>
