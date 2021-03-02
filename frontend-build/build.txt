@@ -1016,6 +1016,15 @@ app/wmes-gft-testers/assets/form.css
 ----------------
 app/wmes-gft-testers/assets/form.css
 
+app/wmes-osh-accidents/assets/form.css
+----------------
+app/wmes-osh-accidents/assets/form.css
+
+app/wmes-osh-accidents/assets/main.css
+----------------
+app/wmes-osh-accidents/assets/./form.css
+app/wmes-osh-accidents/assets/main.css
+
 app/wmes-osh-actions/assets/details.css
 ----------------
 app/wmes-osh-actions/assets/details.css
@@ -1413,6 +1422,7 @@ assets/../app/wmes-osh-nearMisses/assets/main.css
 assets/../app/wmes-osh-kaizens/assets/main.css
 assets/../app/wmes-osh-actions/assets/main.css
 assets/../app/wmes-osh-observations/assets/main.css
+assets/../app/wmes-osh-accidents/assets/main.css
 assets/../app/wmes-osh-reports/assets/main.css
 assets/./wmes-loading.css
 assets/./signify.css
@@ -2765,6 +2775,20 @@ app/nls/wmes-osh-observations.js
 app/nls/pl/wmes-osh-observations.js
 i18n!app/nls/wmes-osh-observations
 app/wmes-osh-observations/routes.js
+app/wmes-osh-accidents/Accident.js
+app/wmes-osh-accidents/AccidentCollection.js
+app/wmes-osh-accidents/templates/details/page.js
+app/wmes-osh-accidents/templates/details/props.js
+app/wmes-osh-accidents/pages/DetailsPage.js
+app/wmes-osh-accidents/templates/filter.js
+app/wmes-osh-accidents/views/FilterView.js
+app/wmes-osh-accidents/views/ListView.js
+app/wmes-osh-accidents/templates/form.js
+app/wmes-osh-accidents/views/FormView.js
+app/nls/wmes-osh-accidents.js
+app/nls/pl/wmes-osh-accidents.js
+i18n!app/nls/wmes-osh-accidents
+app/wmes-osh-accidents/routes.js
 app/data/colorFactory.js
 app/wmes-osh-reports/util/createDefaultFilter.js
 app/wmes-osh-reports/CountReport.js

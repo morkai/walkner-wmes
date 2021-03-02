@@ -1,0 +1,1 @@
+define(["app/viewport","app/wmes-osh-common/views/ListView"],function(e,i){"use strict";return i.extend({serializeColumns:function(){return[{id:"rid",min:1,thClassName:"is-filter",tdClassName:"is-number"},{id:"eventDate",min:1,thClassName:"is-filter"},{id:"locationPath",className:"is-overflow w400",thClassName:"is-filter"},{id:"subject"}]}})});
