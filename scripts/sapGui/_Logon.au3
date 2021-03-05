@@ -80,7 +80,7 @@ If Not IsObj($session) Then
 
     If IsWinLocked($sapLogonWin) Then
       ControlClick("[REGEXPTITLE:^SAP Logon$; CLASS:#32770]", "", "Button3")
-      LogError("ERR_NO_CONNECTTION", $ERR_NO_CONNECTTION)
+      LogError("ERR_NO_CONNECTION", $ERR_NO_CONNECTION)
     EndIf
 
     WinWait("[REGEXPTITLE:^SAP$; CLASS:SAP_FRONTEND_SESSION]", "", $SAP_TIMEOUT_FRONTEND - ($SAP_TIMEOUT_FRONTEND / 10))
@@ -91,7 +91,7 @@ If Not IsObj($session) Then
   If Not WinExists($SAP_LOGIN_FORM_WINDOW_TITLE) Then
     If IsWinLocked($sapLogonWin) Then
       ControlClick("[REGEXPTITLE:^SAP Logon$; CLASS:#32770]", "", "Button3")
-      LogError("ERR_NO_CONNECTTION", $ERR_NO_CONNECTTION)
+      LogError("ERR_NO_CONNECTION", $ERR_NO_CONNECTION)
     EndIf
     LogError("ERR_NO_FRONTEND_WINDOW", $ERR_NO_FRONTEND_WINDOW)
   EndIf

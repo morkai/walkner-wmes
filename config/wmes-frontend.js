@@ -732,6 +732,10 @@ exports['wmes-compRel'] = {
 
 };
 
+exports['wmes-toolcal'] = {
+
+};
+
 exports['h5-currencyRates'] = {
   currencies: {pln: ['eur']}
 };

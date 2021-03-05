@@ -85,6 +85,7 @@ EndIf
 $session.FindById("wnd[0]/usr/cntlCUSTOM/shellcont/shell/shellcont/shell").pressToolbarButton("&NAVIGATION_PROFILE_TOOLBAR_EXPAND")
 $session.FindById("wnd[0]/usr/cntlCUSTOM/shellcont/shell/shellcont/shell").pressToolbarContextButton("&MB_EXPORT")
 $session.FindById("wnd[0]/usr/cntlCUSTOM/shellcont/shell/shellcont/shell").selectContextMenuItem("&PC")
+TryCloseModal()
 $session.FindById("wnd[1]/tbar[0]/btn[0]").Press()
 $session.FindById("wnd[1]/usr/ctxtDY_PATH").Text = $outputPath
 $session.FindById("wnd[1]/usr/ctxtDY_FILENAME").Text = $outputFile

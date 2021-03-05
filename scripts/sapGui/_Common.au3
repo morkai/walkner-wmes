@@ -44,6 +44,9 @@ EndFunc
 Func CloseSession()
   If IsObj($session) Then
     LogDebug("CLOSING_SESSION")
+
+    ; TODO check for abap runtime error
+
     $session.TestToolMode = 0
     $connection.CloseSession($session.Id)
   EndIf
@@ -200,4 +203,13 @@ Func StartTransaction($t)
   LogDebug("STARTING_TRANSACTION")
   $session.StartTransaction($t)
   LogDebug("SESSION_READY")
+EndFunc
+
+Func TryCloseModal()
+  $modal = $session.FindById("wnd[1]")
+
+  If IsObj($modal) Then
+    LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
+    $modal.Close()
+  EndIf
 EndFunc
