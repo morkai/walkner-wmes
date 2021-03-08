@@ -122,3 +122,6 @@ If Not $session.Busy Then
 EndIf
 
 Unlock()
+
+LogDebug("SESSION_READY")
+

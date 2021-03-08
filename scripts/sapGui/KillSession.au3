@@ -102,4 +102,4 @@ For $sessionI = 1 To ($connection.Children.Length - 1)
   EndIf
 Next
 
-LogDebug("DONE")
+LogDebug("SESSION_READY")

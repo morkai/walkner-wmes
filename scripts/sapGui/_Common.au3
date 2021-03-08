@@ -205,10 +205,10 @@ Func StartTransaction($t)
   LogDebug("SESSION_READY")
 EndFunc
 
-Func TryCloseModal()
+Func TryCloseModal($title = "")
   $modal = $session.FindById("wnd[1]")
 
-  If IsObj($modal) Then
+  If IsObj($modal) And ($title = "" Or Not StringInStr($modal.Text, $title)) Then
     LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
     $modal.Close()
   EndIf
