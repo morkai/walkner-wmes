@@ -1,5 +1,6 @@
 @import "./engagement.css";
 @import "./observers.css";
+@import "./metrics.css";
 
 .osh-report > h3 {
   clear: left;

@@ -19,7 +19,11 @@ function(
     var interval;
     var data;
 
-    if (view.interval)
+    if (ctx.interval)
+    {
+      interval = ctx.interval;
+    }
+    else if (view.interval)
     {
       interval = view.interval;
     }

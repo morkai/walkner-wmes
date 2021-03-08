@@ -1,12 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
   'app/wmes-osh-common/dictionaries',
-  'app/wmes-osh-employments/templates/form'
+  'app/wmes-osh-employments/templates/form',
+  'jquery.stickytableheaders'
 ], function(
+  $,
   time,
   viewport,
   FormView,
@@ -29,28 +32,77 @@ define([
         this.$id('doRecount').prop('disabled', !e.target.checked);
       },
 
-      'click #-doRecount': 'recount'
+      'click #-doRecount': 'recount',
+
+      'change input[type="number"]': function(e)
+      {
+        const $tr = this.$(e.target).closest('tr');
+        const divisionId = $tr[0].dataset.division;
+        const workplaceId = $tr[0].dataset.workplace;
+
+        clearTimeout(this.timers[`recount${workplaceId}`]);
+        this.timers[`recount${workplaceId}`] = setTimeout(() =>
+        {
+          this.recountWorkplace(workplaceId);
+          this.recountDivision(divisionId);
+        }, 333);
+      }
 
     }, FormView.prototype.events),
 
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.setUpStickyTable();
+    },
+
     getTemplateData: function()
     {
+      const divisions = new Map();
       const workplaces = new Map();
       const departments = new Set();
 
       (this.model.get('departments') || []).forEach(d =>
       {
-        if (!workplaces.has(d.workplace))
+        if (!divisions.has(d.division))
         {
-          workplaces.set(d.workplace, {
-            _id: d.workplace,
-            label: dictionaries.getLabel('workplaces', d.workplace),
-            division: dictionaries.workplaces.get(d.workplace).get('division'),
-            departments: []
+          divisions.set(d.division, {
+            key: `d${d.division}w0d0`,
+            _id: d.division,
+            label: dictionaries.getLabel('divisions', d.division),
+            workplaces: []
           });
         }
 
+        if (!d.workplace)
+        {
+          return;
+        }
+
+        const division = divisions.get(d.division);
+
+        if (!workplaces.has(d.workplace))
+        {
+          const workplace = {
+            key: `d${d.division}w${d.workplace}d0`,
+            _id: d.workplace,
+            label: dictionaries.getLabel('workplaces', d.workplace),
+            departments: []
+          };
+
+          workplaces.set(d.workplace, workplace);
+
+          division.workplaces.push(workplace);
+        }
+
+        if (!d.department)
+        {
+          return;
+        }
+
         workplaces.get(d.workplace).departments.push({
+          key: `d${d.division}w${d.workplace}d${d.department}`,
           _id: d.department,
           label: dictionaries.getLabel('departments', d.department),
           internal: d.internal,
@@ -71,18 +123,50 @@ define([
         }
 
         const workplaceId = department.get('workplace');
+        let divisionId = 0;
 
         if (!workplaces.has(workplaceId))
         {
-          workplaces.set(workplaceId, {
+          const workplaceModel = dictionaries.workplaces.get(workplaceId);
+
+          if (!workplaceModel)
+          {
+            return;
+          }
+
+          divisionId = workplaceModel.get('division');
+
+          const divisionModel = dictionaries.divisions.get(divisionId);
+
+          if (!divisionModel)
+          {
+            return;
+          }
+
+          const workplace = {
+            key: `d${divisionId}w${workplaceId}d0`,
             _id: workplaceId,
             label: dictionaries.getLabel('workplaces', workplaceId),
-            division: dictionaries.workplaces.get(workplaceId).get('division'),
             departments: []
-          });
+          };
+
+          workplaces.set(workplaceId, workplace);
+
+          if (!divisions.has(divisionId))
+          {
+            divisions.set(divisionId, {
+              key: `d${divisionId}w0d0`,
+              _id: divisionId,
+              label: dictionaries.getLabel('divisions', divisionId),
+              workplaces: []
+            });
+          }
+
+          divisions.get(divisionId).workplaces.push(workplace);
         }
 
         workplaces.get(workplaceId).departments.push({
+          key: `d${divisionId}w${workplaceId}d${department.id}`,
           _id: department.id,
           label: department.getLabel(),
           internal: 0,
@@ -95,29 +179,58 @@ define([
 
       this.departments = {};
 
-      workplaces.forEach(workplace =>
+      divisions.forEach(division =>
       {
-        workplace.departments.sort((a, b) => a.label.localeCompare(
+        division.workplaces.sort((a, b) => a.label.localeCompare(
           b.label, undefined, {numeric: true, ignorePunctuation: true}
         ));
 
-        workplace.departments.forEach(department =>
+        this.departments[division.key] = {
+          division: division._id,
+          workplace: 0,
+          department: 0,
+          internal: 0,
+          external: 0,
+          absent: 0,
+          total: 0,
+          observers: 0
+        };
+
+        division.workplaces.forEach(workplace =>
         {
-          this.departments[`d${department._id}`] = {
-            division: workplace.division,
+          workplace.departments.sort((a, b) => a.label.localeCompare(
+            b.label, undefined, {numeric: true, ignorePunctuation: true}
+          ));
+
+          this.departments[workplace.key] = {
+            division: division._id,
             workplace: workplace._id,
-            department: department._id,
-            internal: department.internal,
-            external: department.external,
-            absent: department.absent,
-            total: department.total,
-            observers: department.observers
+            department: 0,
+            internal: 0,
+            external: 0,
+            absent: 0,
+            total: 0,
+            observers: 0
           };
+
+          workplace.departments.forEach(department =>
+          {
+            this.departments[department.key] = {
+              division: division._id,
+              workplace: workplace._id,
+              department: department._id,
+              internal: department.internal,
+              external: department.external,
+              absent: department.absent,
+              total: department.total,
+              observers: department.observers
+            };
+          });
         });
       });
 
       return {
-        workplaces: Array.from(workplaces.values()).sort((a, b) => a.label.localeCompare(
+        divisions: Array.from(divisions.values()).sort((a, b) => a.label.localeCompare(
           b.label, undefined, {numeric: true, ignorePunctuation: true}
         ))
       };
@@ -162,6 +275,25 @@ define([
     afterRender: function()
     {
       FormView.prototype.afterRender.apply(this, arguments);
+
+      this.recountWorkplaces();
+      this.recountDivisions();
+    },
+
+    setUpStickyTable: function()
+    {
+      this.on('afterRender', () =>
+      {
+        this.$('.table').stickyTableHeaders({
+          fixedOffset: $('.navbar-fixed-top'),
+          scrollableAreaX: this.$el
+        });
+      });
+
+      this.on('beforeRender remove', () =>
+      {
+        this.$('.table').stickyTableHeaders('destroy');
+      });
     },
 
     loadExisting: function()
@@ -237,9 +369,9 @@ define([
       {
         viewport.msg.loaded();
 
-        this.$('tr[data-id]').each((i, tr) =>
+        this.$('.js-department').each((i, tr) =>
         {
-          const data = res[tr.dataset.id] || {
+          const data = res[tr.dataset.department] || {
             internal: 0,
             external: 0,
             observers: 0
@@ -249,12 +381,81 @@ define([
           tr.querySelector('input[name$="external"]').value = data.external;
           tr.querySelector('input[name$="observers"]').value = data.observers;
         });
+
+        this.recountWorkplaces();
+        this.recountDivisions();
       });
 
       req.always(() =>
       {
         this.$id('enableRecount').prop('disabled', false);
         this.$id('doRecount').prop('disabled', false);
+      });
+    },
+
+    recountDivisions: function()
+    {
+      this.$('.js-division').each((i, tr) =>
+      {
+        this.recountDivision(tr.dataset.division);
+      });
+    },
+
+    recountWorkplaces: function()
+    {
+      this.$('.js-workplace').each((i, tr) =>
+      {
+        this.recountWorkplace(tr.dataset.workplace);
+      });
+    },
+
+    recountDivision: function(division)
+    {
+      const $division = this.$(`.js-division[data-division="${division}"]`);
+      const data = {
+        internal: 0,
+        external: 0,
+        absent: 0,
+        observers: 0
+      };
+      const props = Object.keys(data);
+
+      this.$(`.js-workplace[data-division="${division}"]`).each((i, tr) =>
+      {
+        props.forEach(prop =>
+        {
+          data[prop] += parseInt(tr.querySelector(`input[name$="${prop}"]`).value, 10) || 0;
+        });
+      });
+
+      props.forEach(prop =>
+      {
+        $division.find(`input[name$="${prop}"]`).val(data[prop]);
+      });
+    },
+
+    recountWorkplace: function(workplace)
+    {
+      const $workplace = this.$(`.js-workplace[data-workplace="${workplace}"]`);
+      const data = {
+        internal: 0,
+        external: 0,
+        absent: 0,
+        observers: 0
+      };
+      const props = Object.keys(data);
+
+      this.$(`.js-department[data-workplace="${workplace}"]`).each((i, tr) =>
+      {
+        props.forEach(prop =>
+        {
+          data[prop] += parseInt(tr.querySelector(`input[name$="${prop}"]`).value, 10) || 0;
+        });
+      });
+
+      props.forEach(prop =>
+      {
+        $workplace.find(`input[name$="${prop}"]`).val(data[prop]);
       });
     }
 

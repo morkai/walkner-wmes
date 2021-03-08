@@ -1,11 +1,12 @@
 <div>
-  <div class="panel panel-primary">
+  <div class="panel panel-primary is-colored">
     <div class="panel-heading"><%- panelTitle %></div>
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-condensed table-hover">
       <thead>
       <tr>
-        <th class="is-min"><%- t('PROPERTY:workplace') %></th>
-        <th class="is-min"><%- t('PROPERTY:department') %></th>
+        <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+        <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+        <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
         <th class="is-min"><%- t('PROPERTY:internal') %></th>
         <th class="is-min"><%- t('PROPERTY:external') %></th>
         <th class="is-min"><%- t('PROPERTY:absent') %></th>
@@ -14,24 +15,25 @@
         <th></th>
       </tr>
       </thead>
-      <% model.workplaces.forEach(workplace => { %>
-        <tbody>
-          <% workplace.departments.forEach((department, i) => { %>
-            <tr>
-              <% if (i === 0) { %>
-                <td class="is-min" rowspan="<%- workplace.departments.length %>"><%- workplace.label %></td>
-              <% } %>
-              <td class="is-min"><%- department.label %></td>
-              <td class="is-min is-number"><%- department.internal.toLocaleString() %></td>
-              <td class="is-min is-number"><%- department.external.toLocaleString() %></td>
-              <td class="is-min is-number"><%- department.absent.toLocaleString() %></td>
-              <td class="is-min is-number"><%- department.total.toLocaleString() %></td>
-              <td class="is-min is-number"><%- department.observers.toLocaleString() %></td>
-              <td></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      <% }) %>
+      <tbody>
+        <% model.orgUnits.forEach((d, i) => { %>
+          <tr class="<%- d.department ? '' : d.workplace ? 'info' : 'secondary' %>">
+            <td class="is-min" colspan="<%- d.workplace ? 1 : 3 %>"><%- d.division %></td>
+            <% if (d.workplace) { %>
+              <td class="is-min" colspan="<%- d.department ? 1 : 2 %>"><%- d.workplace %></td>
+            <% } %>
+            <% if (d.department) { %>
+              <td class="is-min"><%- d.department %></td>
+            <% } %>
+            <td class="is-min is-number"><%- d.internal.toLocaleString() %></td>
+            <td class="is-min is-number"><%- d.external.toLocaleString() %></td>
+            <td class="is-min is-number"><%- d.absent.toLocaleString() %></td>
+            <td class="is-min is-number"><%- d.total.toLocaleString() %></td>
+            <td class="is-min is-number"><%- d.observers.toLocaleString() %></td>
+            <td></td>
+          </tr>
+        <% }) %>
+      </tbody>
     </table>
   </div>
 </div>

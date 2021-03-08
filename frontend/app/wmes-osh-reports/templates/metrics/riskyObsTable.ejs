@@ -1,0 +1,54 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:month') %></th>
+      <% months.forEach(month => { %>
+        <th class="text-center"><%- month %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:cards') %></th>
+      <% cards.forEach(v => { %>
+        <td class="text-center"><%- v %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:behaviors') %></th>
+      <% behaviors.forEach(v => { %>
+        <td class="text-center"><%- v %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:workConditions') %></th>
+      <% workConditions.forEach(v => { %>
+        <td class="text-center"><%- v %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:risky') %></th>
+      <% risky.forEach(v => { %>
+        <td class="text-center"><%- v %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:min') %></th>
+      <% min.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:max') %></th>
+      <% max.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:riskyObs:itm') %></th>
+      <% itm.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    </tbody>
+  </table>
+</div>

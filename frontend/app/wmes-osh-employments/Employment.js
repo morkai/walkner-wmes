@@ -70,35 +70,19 @@ define([
     {
       const dictionaries = require('app/wmes-osh-common/dictionaries');
       const obj = this.serialize();
-      const workplaces = new Map();
 
-      obj.departments.forEach(d =>
+      obj.orgUnits = obj.departments.map(d =>
       {
-        if (!workplaces.has(d.workplace))
-        {
-          workplaces.set(d.workplace, {
-            label: dictionaries.getLabel('workplaces', d.workplace),
-            departments: []
-          });
-        }
-
-        workplaces.get(d.workplace).departments.push({
-          label: dictionaries.getLabel('departments', d.department),
+        return {
+          division: dictionaries.getLabel('divisions', d.division),
+          workplace: d.workplace ? dictionaries.getLabel('workplaces', d.workplace) : '',
+          department: d.department ? dictionaries.getLabel('departments', d.department) : '',
           internal: d.internal,
           external: d.external,
           absent: d.absent,
           total: d.total,
           observers: d.observers
-        });
-      });
-
-      obj.workplaces = Array.from(workplaces.values());
-
-      obj.workplaces.sort((a, b) => a.label.localeCompare(b.label));
-
-      obj.workplaces.forEach(workplace =>
-      {
-        workplace.departments.sort((a, b) => a.label.localeCompare(b.label));
+        };
       });
 
       return obj;

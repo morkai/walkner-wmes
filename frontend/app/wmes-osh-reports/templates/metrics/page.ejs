@@ -1,14 +1,19 @@
 <div class="osh-report">
   <div id="<%- id('filter') %>" class="filter-container"></div>
-  <% metrics.forEach(metric => { %>
-    <h3>
-      <span><%- t(`metrics:title:${metric}`) %></span>
-      <% groups.forEach(group => { %>
-        <a href="javascript:void(0)" data-metric="<%- metric %>" data-group="<%- group %>"><%- t(`metrics:title:group:${group}`) %></a>
-      <% }) %>
-    </h3>
-    <% groups.forEach(group => { %>
-      <div id="<%- id(`${metric}-${group}`) %>" class="hidden" data-metric="<%- metric %>" data-group="<%- group %>"></div>
-    <% }) %>
-  <% }) %>
+  <h3><%- t(`metrics:yearlyAccidents:title`) %></h3>
+  <div id="<%- id('yearlyAccidents') %>"></div>
+  <h3><%- t(`metrics:trc:title`) %></h3>
+  <div id="<%- id('trc') %>"></div>
+  <h3><%- t(`metrics:ipr:title`) %></h3>
+  <div id="<%- id('ipr') %>"></div>
+  <h3><%- t(`metrics:ipp:title`) %></h3>
+  <div id="<%- id('ipp') %>"></div>
+  <h3><%- t(`metrics:obsPlan:title`) %></h3>
+  <div id="<%- id('obsPlan') %>"></div>
+  <h3><%- t(`metrics:contact:title`) %></h3>
+  <div id="<%- id('contact') %>"></div>
+  <h3><%- t(`metrics:riskyObs:title`) %></h3>
+  <div id="<%- id('riskyObs') %>"></div>
+  <h3><%- t(`metrics:observers:title`) %></h3>
+  <div id="<%- id('observers') %>"></div>
 </div>

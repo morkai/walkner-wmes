@@ -1,0 +1,36 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+    <tr>
+      <th class="is-min"><%- t('metrics:trc:month') %></th>
+      <% months.forEach(month => { %>
+        <th class="text-center"><%- month %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:trc:fte') %></th>
+      <% fte.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:trc:itm') %></th>
+      <% itm.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:trc:target') %></th>
+      <% target.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:trc:mat') %></th>
+      <% mat.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    </tbody>
+  </table>
+</div>

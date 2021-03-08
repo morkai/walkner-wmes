@@ -29,6 +29,7 @@ define([
       {
         const dialogView = new OrgUnitPickerDialogView({
           model: {
+            multiple: this.options.multiple !== false,
             resolveLabel: this.resolveLabel.bind(this),
             orgUnitTypes: this.options.orgUnitTypes,
             orgUnitType: this.model.type,
@@ -53,7 +54,6 @@ define([
 
           this.render();
           this.$id('showDialog').focus();
-
         });
         viewport.showDialog(dialogView, this.t('orgUnitPicker:dialog:title'));
       },

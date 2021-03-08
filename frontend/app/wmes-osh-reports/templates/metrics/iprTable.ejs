@@ -1,0 +1,60 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:month') %></th>
+      <% months.forEach(month => { %>
+        <th class="text-center"><%- month %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:fte') %></th>
+      <% fte.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:nearMisses') %></th>
+      <% nearMisses.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:kaizens') %></th>
+      <% kaizens.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:actions') %></th>
+      <% actions.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:observations') %></th>
+      <% observations.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:target') %></th>
+      <% target.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:itm') %></th>
+      <% itm.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipr:mat') %></th>
+      <% mat.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    </tbody>
+  </table>
+</div>

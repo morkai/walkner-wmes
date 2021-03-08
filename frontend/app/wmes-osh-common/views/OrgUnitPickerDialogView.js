@@ -38,7 +38,7 @@ define([
         const type = this.$('input[name="orgUnitType"]:checked').val();
         const ids = this.$id(type).select2('val');
 
-        this.trigger('picked', type, ids);
+        this.trigger('picked', type, Array.isArray(ids) ? ids : [ids]);
       },
       'change input[type="radio"]': function(e)
       {
@@ -94,7 +94,7 @@ define([
 
     onDialogShown: function()
     {
-      var orgUnitType = this.$('input[name="orgUnitType"]:checked').val();
+      const orgUnitType = this.$('input[name="orgUnitType"]:checked').val();
 
       if (!orgUnitType)
       {
@@ -136,7 +136,7 @@ define([
       }
 
       return this.$id(type).select2({
-        multiple: true,
+        multiple: this.model.multiple,
         data,
         formatSelection: (item) =>
         {

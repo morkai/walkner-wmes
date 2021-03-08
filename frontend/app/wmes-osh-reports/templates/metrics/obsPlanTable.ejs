@@ -1,0 +1,30 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+    <tr>
+      <th class="is-min"><%- t('metrics:obsPlan:month') %></th>
+      <% months.forEach(month => { %>
+        <th class="text-center"><%- month %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:obsPlan:plan') %></th>
+      <% plan.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:obsPlan:done') %></th>
+      <% done.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:obsPlan:percent') %></th>
+      <% percent.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    </tbody>
+  </table>
+</div>

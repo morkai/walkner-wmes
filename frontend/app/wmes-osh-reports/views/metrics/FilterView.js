@@ -1,15 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/time',
   'app/core/views/FilterView',
-  'app/core/util/forms/dateTimeRange',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/views/OrgUnitPickerFilterView',
   'app/wmes-osh-reports/templates/metrics/filter',
   'app/core/util/ExpandableSelect'
 ], function(
+  time,
   FilterView,
-  dateTimeRange,
   dictionaries,
   OrgUnitPickerFilterView,
   template
@@ -22,19 +22,20 @@ define([
 
     events: Object.assign({
 
-      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
-
     }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-
+        month: time.getMoment().format('YYYY-MM')
       };
     },
 
     termToForm: {
-      'date': dateTimeRange.rqlToForm
+      'month': (propertyName, term, formData) =>
+      {
+        formData.month = term.args[1];
+      }
     },
 
     initialize: function()
@@ -44,12 +45,8 @@ define([
       this.setView('#-orgUnit', new OrgUnitPickerFilterView({
         filterView: this,
         emptyLabel: this.t('wmes-osh-reports', 'filter:orgUnit'),
-        orgUnitTerms: {
-          'oshDivision': 'division',
-          'oshWorkplace': 'workplace',
-          'oshDepartment': 'department'
-        },
-        orgUnitTypes: ['division', 'workplace', 'department']
+        orgUnitTypes: ['division', 'workplace', 'department'],
+        multiple: false
       }));
     },
 
@@ -69,10 +66,8 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      dateTimeRange.formToRql(this, selector);
-
       [
-
+        'month'
       ].forEach(prop =>
       {
         const $prop = this.$id(prop);

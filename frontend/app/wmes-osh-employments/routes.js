@@ -85,7 +85,8 @@ define([
   {
     viewport.loadPage(
       [
-        'app/wmes-osh-employments/views/FormView'
+        'app/wmes-osh-employments/views/FormView',
+        'css!app/wmes-osh-employments/assets/form'
       ],
       (FormView) =>
       {

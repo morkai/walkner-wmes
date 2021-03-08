@@ -13,10 +13,34 @@ define([
 
   return (options = {}) =>
   {
-    const args = [
-      {name: 'ge', args: [options.dateProperty || 'date', time.getMoment().startOf('month').valueOf()]},
-      {name: 'lt', args: [options.dateProperty || 'date', time.getMoment().startOf('month').add(1, 'months').valueOf()]}
-    ];
+    const args = [];
+
+    if (options.dateProperty === 'month')
+    {
+      args.push({
+        name: 'eq',
+        args: ['month', time.getMoment().format('YYYY-MM')]
+      });
+    }
+    else
+    {
+      args.push(
+        {
+          name: 'ge',
+          args: [
+            options.dateProperty || 'date',
+            time.getMoment().startOf('month').valueOf()
+          ]
+        },
+        {
+          name: 'lt',
+          args: [
+            options.dateProperty || 'date',
+            time.getMoment().startOf('month').add(1, 'months').valueOf()
+          ]
+        }
+      );
+    }
 
     if (options.interval)
     {

@@ -1,0 +1,60 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:month') %></th>
+      <% months.forEach(month => { %>
+        <th class="text-center"><%- month %></th>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:totalFte') %></th>
+      <% totalFte.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:activeFte') %></th>
+      <% activeFte.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:totalObservers') %></th>
+      <% totalObservers.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:activeObservers') %></th>
+      <% activeObservers.forEach(v => { %>
+        <td class="text-center"><%- v.toLocaleString() %></td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:observersTarget') %></th>
+      <% observersTarget.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:observers') %></th>
+      <% observers.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:target') %></th>
+      <% target.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    <tr>
+      <th class="is-min"><%- t('metrics:ipp:itm') %></th>
+      <% itm.forEach(d => { %>
+        <td class="text-center"><%- d.y.toLocaleString() %>%</td>
+      <% }) %>
+    </tr>
+    </tbody>
+  </table>
+</div>

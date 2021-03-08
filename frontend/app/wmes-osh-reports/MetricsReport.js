@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/core/Model',
+  'app/core/templates/userInfo',
   'app/data/colorFactory',
   'app/wmes-osh-common/dictionaries',
   './util/createDefaultFilter'
@@ -15,21 +16,12 @@ define([
   t,
   time,
   Model,
+  userInfoTemplate,
   colorFactory,
   dictionaries,
   createDefaultFilter
 ) {
   'use strict';
-
-  const COLORS = {
-    total: '#ddd',
-    metric: '#2f7ed8',
-    nearMiss: '#d9534f',
-    kaizen: '#5cb85c',
-    action: '#31b0d5',
-    observation: '#ec971f'
-  };
-  const ORG_UNITS = ['division', 'workplace', 'department'];
 
   return Model.extend({
 
@@ -45,9 +37,8 @@ define([
     initialize: function(attrs, options)
     {
       this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : createDefaultFilter({
-        orgUnitProperty: '',
-        dateProperty: 'date',
-        interval: 'month'
+        orgUnitProperty: null,
+        dateProperty: 'month'
       });
     },
 
@@ -74,366 +65,446 @@ define([
         interval: report.options.interval
       };
 
-      this.parseIpMetrics(attrs, report);
-      this.parseEntriesMetrics(attrs, report);
-      this.parseUsersMetrics(attrs, report);
-      this.parseFteMetrics(attrs, report);
+      this.parseYearlyAccidents(attrs, report);
+      this.parseTrc(attrs, report);
+      this.parseIpr(attrs, report);
+      this.parseIpp(attrs, report);
+      this.parseObsPlan(attrs, report);
+      this.parseContact(attrs, report);
+      this.parseRiskyObs(attrs, report);
+      this.parseObservers(attrs, report);
 
       return attrs;
     },
 
-    parseIpMetrics: function(attrs, report)
+    parseYearlyAccidents: function(attrs, report)
     {
-      const {totals} = report;
-
-      ['ipr', 'ips', 'ipp'].forEach(metric =>
-      {
-        const row = {
+      attrs.yearlyAccidents = {
+        categories: [],
+        series: [{
           id: 'total',
-          abs: totals[metric],
-          rel: 1,
-          color: COLORS.metric,
-          label: t(this.nlsDomain, `metrics:series:${metric}`)
-        };
-
-        attrs[`${metric}-total`] = {
-          rows: [row],
-          series: {
-            total: {
-              name: row.label,
-              color: row.color,
-              data: []
-            }
-          }
-        };
-
-        ORG_UNITS.forEach(orgUnitType =>
-        {
-          attrs[`${metric}-${orgUnitType}`] = {
-            rows: Object.keys(totals.byOrgUnit[orgUnitType])
-              .filter(orgUnitId => totals.byOrgUnit[orgUnitType][orgUnitId][metric] > 0)
-              .map(orgUnitId =>
-              {
-                const orgUnitTotals = totals.byOrgUnit[orgUnitType][orgUnitId];
-
-                return {
-                  id: orgUnitId,
-                  abs: orgUnitTotals[metric],
-                  rel: null,
-                  color: colorFactory.getColor(`wmes-osh/${orgUnitType}`, orgUnitId),
-                  label: orgUnitId === '0' ? '?' : dictionaries.getLabel(orgUnitType, +orgUnitId)
-                };
-              })
-              .sort((a, b) => b.abs - a.abs),
-            series: {}
-          };
-        });
-
-        report.groups.forEach(g =>
-        {
-          attrs[`${metric}-total`].series.total.data.push({x: g.key, y: g[metric]});
-
-          ORG_UNITS.forEach(orgUnitType =>
-          {
-            const {rows, series} = attrs[`${metric}-${orgUnitType}`];
-
-            rows.forEach(row =>
-            {
-              if (!series[row.id])
-              {
-                series[row.id] = {
-                  name: row.label,
-                  color: row.color,
-                  data: []
-                };
-              }
-
-              const orgUnitData = g.byOrgUnit[orgUnitType][row.id];
-
-              series[row.id].data.push({
-                x: g.key,
-                y: orgUnitData ? (orgUnitData[metric] || null) : null
-              });
-            });
-          });
-        });
-      });
-    },
-
-    parseEntriesMetrics: function(attrs, report)
-    {
-      const metric = 'entries';
-      const {totals} = report;
-
-      attrs[`${metric}-total`] = {rows: [], series: {}};
-
-      ['nearMiss', 'kaizen', 'action', 'observation'].forEach(type =>
-      {
-        const row = {
-          id: type,
-          abs: totals[`${type}Count`],
-          rel: totals[`${type}Count`] / totals.entryCount,
-          color: COLORS[type],
-          label: t(this.nlsDomain, `series:${type}`)
-        };
-
-        attrs[`${metric}-total`].rows.push(row);
-
-        attrs[`${metric}-total`].series[row.id] = {
-          name: row.label,
-          color: row.color,
+          name: t(this.nlsDomain, 'metrics:yearlyAccidents:total'),
           data: []
-        };
-      });
+        }]
+      };
 
-      ORG_UNITS.forEach(orgUnitType =>
+      if (report.options.orgUnitId)
       {
-        attrs[`${metric}-${orgUnitType}`] = {
-          rows: Object.keys(totals.byOrgUnit[orgUnitType])
-            .filter(orgUnitId => totals.byOrgUnit[orgUnitType][orgUnitId].entryCount > 0)
-            .map(orgUnitId =>
-            {
-              const orgUnitTotals = totals.byOrgUnit[orgUnitType][orgUnitId];
+        attrs.yearlyAccidents.series.push({
+          id: 'orgUnit',
+          name: dictionaries.getLabel(report.options.orgUnitType, report.options.orgUnitId),
+          data: []
+        });
+      }
 
-              return {
-                id: orgUnitId,
-                abs: orgUnitTotals.entryCount,
-                rel: orgUnitTotals.entryCount / totals.entryCount,
-                color: colorFactory.getColor(`wmes-osh/${orgUnitType}`, orgUnitId),
-                label: orgUnitId === '0' ? '?' : dictionaries.getLabel(orgUnitType, +orgUnitId)
-              };
-            })
-            .sort((a, b) => b.abs - a.abs),
-          series: {}
-        };
-      });
-
-      report.groups.forEach(g =>
+      report.yearlyAccidents.forEach(d =>
       {
-        attrs[`${metric}-total`].rows.forEach(row =>
+        attrs.yearlyAccidents.categories.push(d.year);
+        attrs.yearlyAccidents.series[0].data.push(d.total);
+
+        if (report.options.orgUnitId)
         {
-          attrs[`${metric}-total`].series[row.id].data.push({x: g.key, y: g[`${row.id}Count`]});
-        });
-
-        ORG_UNITS.forEach(orgUnitType =>
-        {
-          const {rows, series} = attrs[`${metric}-${orgUnitType}`];
-
-          rows.forEach((row, i) =>
-          {
-            if (!series[row.id])
-            {
-              series[row.id] = {
-                index: i,
-                name: row.label,
-                color: row.color,
-                data: []
-              };
-            }
-
-            const orgUnitData = g.byOrgUnit[orgUnitType][row.id];
-
-            series[row.id].data.push({
-              x: g.key,
-              y: orgUnitData ? (orgUnitData.entryCount || null) : null
-            });
-          });
-        });
-      });
-
-      ORG_UNITS.concat('total').forEach(group =>
-      {
-        attrs[`${metric}-${group}`].rows.push({
-          id: 'total',
-          abs: totals.entryCount,
-          rel: 1,
-          color: COLORS.total,
-          label: t(this.nlsDomain, 'series:all')
-        });
+          attrs.yearlyAccidents.series[1].data.push(d.orgUnit);
+        }
       });
     },
 
-    parseUsersMetrics: function(attrs, report)
+    parseTrc: function(attrs, report)
     {
-      const metric = 'users';
-      const {totals} = report;
-
-      const totalRow = {
-        id: 'total',
-        abs: totals.userCount,
-        rel: 1,
-        color: COLORS.metric,
-        label: t(this.nlsDomain, 'series:users')
-      };
-
-      attrs[`${metric}-total`] = {
-        rows: [totalRow],
+      attrs.trc = {
+        months: [],
+        fte: [],
         series: {
-          total: {
-            name: totalRow.label,
-            color: totalRow.color,
-            data: []
+          itm: {
+            name: t(this.nlsDomain, 'metrics:trc:itm'),
+            data: [],
+            type: 'column',
+            color: '#d9534f',
+            tooltip: {
+              valueDecimals: 0
+            },
+            zIndex: 1
+          },
+          target: {
+            name: t(this.nlsDomain, 'metrics:trc:target'),
+            data: [],
+            color: '#ec971f',
+            yAxis: 1,
+            marker: {
+              enabled: false
+            },
+            zIndex: 2
+          },
+          mat: {
+            name: t(this.nlsDomain, 'metrics:trc:mat'),
+            data: [],
+            color: '#5cb85c',
+            yAxis: 1,
+            zIndex: 3
           }
         }
       };
 
-      ORG_UNITS.forEach(orgUnitType =>
-      {
-        attrs[`${metric}-${orgUnitType}`] = {
-          rows: Object.keys(totals.byOrgUnit[orgUnitType])
-            .filter(orgUnitId => totals.byOrgUnit[orgUnitType][orgUnitId].userCount > 0)
-            .map(orgUnitId =>
-            {
-              const orgUnitTotals = totals.byOrgUnit[orgUnitType][orgUnitId];
-
-              return {
-                id: orgUnitId,
-                abs: orgUnitTotals.userCount,
-                rel: orgUnitTotals.userCount / totals.userCount,
-                color: colorFactory.getColor(`wmes-osh/${orgUnitType}`, orgUnitId),
-                label: orgUnitId === '0' ? '?' : dictionaries.getLabel(orgUnitType, +orgUnitId)
-              };
-            })
-            .sort((a, b) => b.abs - a.abs),
-          series: {}
-        };
-      });
-
       report.groups.forEach(g =>
       {
-        attrs[`${metric}-total`].series.total.data.push({x: g.key, y: g.userCount});
-
-        ORG_UNITS.forEach(orgUnitType =>
-        {
-          const {rows, series} = attrs[`${metric}-${orgUnitType}`];
-
-          rows.forEach((row, i) =>
-          {
-            if (!series[row.id])
-            {
-              series[row.id] = {
-                index: i,
-                name: row.label,
-                color: row.color,
-                data: []
-              };
-            }
-
-            const orgUnitData = g.byOrgUnit[orgUnitType][row.id];
-
-            series[row.id].data.push({
-              x: g.key,
-              y: orgUnitData ? (orgUnitData.userCount || null) : null
-            });
-          });
-        });
-      });
-
-      ORG_UNITS.forEach(group =>
-      {
-        attrs[`${metric}-${group}`].rows.push({
-          id: 'total',
-          abs: totals.userCount,
-          rel: 1,
-          color: COLORS.total,
-          label: t(this.nlsDomain, 'series:all')
-        });
+        attrs.trc.months.push(g.key);
+        attrs.trc.fte.push(g.fte.itm);
+        attrs.trc.series.itm.data.push({x: g.key, y: g.trc.itm});
+        attrs.trc.series.target.data.push({x: g.key, y: g.trc.target});
+        attrs.trc.series.mat.data.push({x: g.key, y: g.trc.mat});
       });
     },
 
-    parseFteMetrics: function(attrs, report)
+    parseIpr: function(attrs, report)
     {
-      const metric = 'fte';
-      const {totals} = report;
-
-      const totalRow = {
-        id: 'total',
-        abs: totals.fte.total,
-        rel: 1,
-        color: COLORS.metric,
-        label: t(this.nlsDomain, 'series:fte')
-      };
-
-      attrs[`${metric}-total`] = {
-        rows: [totalRow],
+      attrs.ipr = {
+        months: [],
+        fte: [],
+        nearMisses: [],
+        kaizens: [],
+        actions: [],
+        observations: [],
         series: {
-          total: {
-            name: totalRow.label,
-            color: totalRow.color,
-            data: []
+          target: {
+            name: t(this.nlsDomain, 'metrics:ipr:target'),
+            data: [],
+            color: '#ec971f',
+            marker: {
+              enabled: false
+            },
+            zIndex: 2
+          },
+          itm: {
+            name: t(this.nlsDomain, 'metrics:ipr:itm'),
+            data: [],
+            type: 'column',
+            color: '#31b0d5',
+            zIndex: 1
+          },
+          mat: {
+            name: t(this.nlsDomain, 'metrics:ipr:mat'),
+            data: [],
+            color: '#5cb85c',
+            zIndex: 3
           }
         }
       };
 
-      ORG_UNITS.forEach(orgUnitType =>
-      {
-        attrs[`${metric}-${orgUnitType}`] = {
-          rows: Object.keys(totals.byOrgUnit[orgUnitType])
-            .filter(orgUnitId => totals.byOrgUnit[orgUnitType][orgUnitId].fte.total > 0)
-            .map(orgUnitId =>
-            {
-              const orgUnitTotals = totals.byOrgUnit[orgUnitType][orgUnitId];
-
-              return {
-                id: orgUnitId,
-                abs: orgUnitTotals.fte.total,
-                rel: orgUnitTotals.fte.total / totals.fte.total,
-                color: colorFactory.getColor(`wmes-osh/${orgUnitType}`, orgUnitId),
-                label: orgUnitId === '0' ? '?' : dictionaries.getLabel(orgUnitType, +orgUnitId)
-              };
-            })
-            .sort((a, b) => b.abs - a.abs),
-          series: {}
-        };
-      });
-
       report.groups.forEach(g =>
       {
-        attrs[`${metric}-total`].series.total.data.push({x: g.key, y: g.fte.total});
-
-        ORG_UNITS.forEach(orgUnitType =>
-        {
-          const {rows, series} = attrs[`${metric}-${orgUnitType}`];
-
-          rows.forEach((row, i) =>
-          {
-            if (!series[row.id])
-            {
-              series[row.id] = {
-                index: i,
-                name: row.label,
-                color: row.color,
-                data: []
-              };
-            }
-
-            const orgUnitData = g.byOrgUnit[orgUnitType][row.id];
-
-            series[row.id].data.push({
-              x: g.key,
-              y: orgUnitData ? (orgUnitData.fte.total || null) : null
-            });
-          });
-        });
-      });
-
-      ORG_UNITS.forEach(group =>
-      {
-        attrs[`${metric}-${group}`].rows.push({
-          id: 'total',
-          abs: totals.fte.total,
-          rel: 1,
-          color: COLORS.total,
-          label: t(this.nlsDomain, 'series:total')
-        });
+        attrs.ipr.months.push(g.key);
+        attrs.ipr.fte.push(g.fte.itm);
+        attrs.ipr.nearMisses.push(g.nearMissCount);
+        attrs.ipr.kaizens.push(g.kaizenCount);
+        attrs.ipr.actions.push(g.actionCount);
+        attrs.ipr.observations.push(g.obs.cards);
+        attrs.ipr.series.target.data.push({x: g.key, y: g.ipr.target});
+        attrs.ipr.series.itm.data.push({x: g.key, y: g.ipr.itm});
+        attrs.ipr.series.mat.data.push({x: g.key, y: g.ipr.mat});
       });
     },
 
-    getInterval: function()
+    parseIpp: function(attrs, report)
     {
-      const term = this.rqlQuery.selector.args.find(term => term.name === 'eq' && term.args[0] === 'interval');
+      attrs.ipp = {
+        months: [],
+        totalFte: [],
+        activeFte: [],
+        totalObservers: [],
+        activeObservers: [],
+        series: {
+          observers: {
+            name: t(this.nlsDomain, 'metrics:ipp:observers'),
+            data: [],
+            type: 'column',
+            color: '#31b0d5'
+          },
+          observersTarget: {
+            name: t(this.nlsDomain, 'metrics:ipp:observersTarget'),
+            data: [],
+            color: '#31b0d5',
+            marker: {
+              enabled: false
+            },
+            zIndex: 1
+          },
+          itm: {
+            name: t(this.nlsDomain, 'metrics:ipp:itm'),
+            data: [],
+            type: 'column',
+            color: '#5cb85c'
+          },
+          target: {
+            name: t(this.nlsDomain, 'metrics:ipp:target'),
+            data: [],
+            color: '#5cb85c',
+            marker: {
+              enabled: false
+            },
+            zIndex: 1
+          }
+        }
+      };
 
-      return term ? term.args[1] : 'month';
+      report.groups.forEach(g =>
+      {
+        attrs.ipp.months.push(g.key);
+        attrs.ipp.totalFte.push(g.fte.itm);
+        attrs.ipp.activeFte.push(g.userCount);
+        attrs.ipp.totalObservers.push(g.fte.observers);
+        attrs.ipp.activeObservers.push(g.obs.observerCount);
+        attrs.ipp.series.itm.data.push({x: g.key, y: g.ipp.itm});
+        attrs.ipp.series.target.data.push({x: g.key, y: g.ipp.target});
+        attrs.ipp.series.observers.data.push({x: g.key, y: g.ipp.observers});
+        attrs.ipp.series.observersTarget.data.push({x: g.key, y: g.ipp.observersTarget});
+      });
+    },
+
+    parseObsPlan: function(attrs, report)
+    {
+      attrs.obsPlan = {
+        months: [],
+        series: {
+          plan: {
+            name: t(this.nlsDomain, 'metrics:obsPlan:plan'),
+            data: [],
+            type: 'column',
+            color: '#ec971f',
+            tooltip: {
+              valueDecimals: 0
+            }
+          },
+          done: {
+            name: t(this.nlsDomain, 'metrics:obsPlan:done'),
+            data: [],
+            type: 'column',
+            color: '#d9534f',
+            tooltip: {
+              valueDecimals: 0
+            }
+          },
+          percent: {
+            name: t(this.nlsDomain, 'metrics:obsPlan:percent'),
+            data: [],
+            color: '#31b0d5',
+            yAxis: 1,
+            tooltip: {
+              valueDecimals: 1,
+              valueSuffix: '%'
+            }
+          }
+        }
+      };
+
+      report.groups.forEach(g =>
+      {
+        attrs.obsPlan.months.push(g.key);
+        attrs.obsPlan.series.plan.data.push({x: g.key, y: g.obs.plan});
+        attrs.obsPlan.series.done.data.push({
+          x: g.key,
+          y: g.obs.cards,
+          color: g.obs.cards >= g.obs.plan ? '#5cb85c' : '#d9534f'
+        });
+        attrs.obsPlan.series.percent.data.push({x: g.key, y: g.obs.cardsPercent});
+      });
+    },
+
+    parseContact: function(attrs, report)
+    {
+      attrs.contact = {
+        months: [],
+        fte: [],
+        cards: [],
+        series: {
+          itm: {
+            name: t(this.nlsDomain, 'metrics:contact:itm'),
+            data: [],
+            type: 'column',
+            color: '#31b0d5',
+            tooltip: {
+              valueDecimals: 3
+            }
+          },
+          trend: {
+            name: t(this.nlsDomain, 'metrics:contact:trend'),
+            data: [],
+            color: '#2f7ed8',
+            tooltip: {
+              valueDecimals: 3
+            },
+            marker: {
+              enabled: false
+            },
+            states: {
+              hover: {
+                lineWidth: 0
+              }
+            },
+            enableMouseTracking: false
+          },
+          target: {
+            name: t(this.nlsDomain, 'metrics:contact:target'),
+            data: [],
+            color: '#ec971f',
+            tooltip: {
+              valueDecimals: 3
+            },
+            marker: {
+              enabled: false
+            }
+          }
+        }
+      };
+
+      if (report.groups.length > 1)
+      {
+        const first = report.groups[0];
+        const last = report.groups[report.groups.length - 1];
+
+        attrs.contact.series.trend.data.push(
+          {x: first.key, y: first.contact.itm},
+          {x: last.key, y: last.contact.itm}
+        );
+      }
+
+      report.groups.forEach(g =>
+      {
+        attrs.contact.months.push(g.key);
+        attrs.contact.fte.push(g.fte.itm);
+        attrs.contact.cards.push(g.obs.cards);
+        attrs.contact.series.itm.data.push({
+          x: g.key,
+          y: g.contact.itm,
+          color: g.contact.itm >= g.contact.target ? '#5cb85c' : '#d9534f'
+        });
+        attrs.contact.series.target.data.push({x: g.key, y: g.contact.target});
+      });
+    },
+
+    parseRiskyObs: function(attrs, report)
+    {
+      attrs.riskyObs = {
+        months: [],
+        fte: [],
+        cards: [],
+        behaviors: [],
+        workConditions: [],
+        risky: [],
+        series: {
+          itm: {
+            name: t(this.nlsDomain, 'metrics:riskyObs:itm'),
+            data: [],
+            type: 'column',
+            color: '#31b0d5',
+            tooltip: {
+              valueDecimals: 1,
+              valueSuffix: '%'
+            }
+          },
+          min: {
+            name: t(this.nlsDomain, 'metrics:riskyObs:min'),
+            data: [],
+            color: '#ec971f',
+            tooltip: {
+              valueDecimals: 0,
+              valueSuffix: '%'
+            },
+            marker: {
+              enabled: false
+            }
+          },
+          max: {
+            name: t(this.nlsDomain, 'metrics:riskyObs:max'),
+            data: [],
+            color: '#ec971f',
+            tooltip: {
+              valueDecimals: 0,
+              valueSuffix: '%'
+            },
+            marker: {
+              enabled: false
+            }
+          }
+        }
+      };
+
+      report.groups.forEach(g =>
+      {
+        attrs.riskyObs.months.push(g.key);
+        attrs.riskyObs.cards.push(g.obs.cards);
+        attrs.riskyObs.behaviors.push(g.obs.behaviors);
+        attrs.riskyObs.workConditions.push(g.obs.workConditions);
+        attrs.riskyObs.risky.push(g.obs.risky);
+        attrs.riskyObs.series.itm.data.push({
+          x: g.key,
+          y: g.obs.riskyPercent,
+          color: g.obs.riskyPercent >= g.obs.minRisky && g.obs.riskyPercent <= g.obs.maxRisky ? '#5cb85c' : '#d9534f'
+        });
+        attrs.riskyObs.series.min.data.push({x: g.key, y: g.obs.minRisky});
+        attrs.riskyObs.series.max.data.push({x: g.key, y: g.obs.maxRisky});
+      });
+    },
+
+    parseObservers: function(attrs, report)
+    {
+      attrs.observers = {
+        users: [],
+        categories: [],
+        series: {
+          count: {
+            name: t(this.nlsDomain, 'metrics:observers:count'),
+            data: [],
+            type: 'column',
+            color: '#31b0d5'
+          },
+          target: {
+            name: t(this.nlsDomain, 'metrics:observers:target'),
+            data: [],
+            color: '#ec971f',
+            marker: {
+              enabled: false
+            }
+          }
+        }
+      };
+
+      if (!report.groups.length)
+      {
+        return;
+      }
+
+      const g = report.groups[report.groups.length - 1];
+
+      Object.keys(g.obs.observers).forEach(userId =>
+      {
+        attrs.observers.users.push({
+          label: report.users[userId],
+          userInfo: userInfoTemplate({id: userId, label: report.users[userId]}),
+          count: g.obs.observers[userId]
+        });
+      });
+
+      attrs.observers.users.sort((a, b) =>
+      {
+        let cmp = a.count - b.count;
+
+        if (!cmp)
+        {
+          cmp = a.label.localeCompare(b.label);
+        }
+
+        return cmp;
+      });
+
+      attrs.observers.users.forEach(user =>
+      {
+        attrs.observers.categories.push(user.label);
+        attrs.observers.series.count.data.push({
+          y: user.count,
+          color: user.count >= report.settings.minObsCards ? '#5cb85c' : '#d9534f'
+        });
+        attrs.observers.series.target.data.push(report.settings.minObsCards);
+      });
     }
 
   });

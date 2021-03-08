@@ -1,0 +1,22 @@
+<div class="table-responsive osh-report-metrics-observers">
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th class="is-min">#</th>
+      <th class="is-min"><%- t('metrics:observers:user') %></th>
+      <th class="is-min"><%- t('metrics:observers:count') %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% users.forEach((user, i) => { %>
+      <tr>
+        <td class="is-min text-right"><%- i + 1 %>.</td>
+        <td class="is-min"><%- user.label %></td>
+        <td class="is-min"><%- user.count.toLocaleString() %></td>
+        <td></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

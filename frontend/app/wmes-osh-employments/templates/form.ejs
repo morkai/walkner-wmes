@@ -1,4 +1,4 @@
-<form method="post" action="<%- formAction %>" autocomplete="off">
+<form class="osh-employments-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
@@ -22,45 +22,90 @@
           <%- t('FORM:recount') %>
         </button>
       </div>
-      <table class="table" style="margin-bottom: 0">
-        <thead>
-        <tr>
-          <th class="is-min"><%- t('PROPERTY:workplace') %></th>
-          <th class="is-min"><%- t('PROPERTY:department') %></th>
-          <th class="is-min"><%- t('PROPERTY:internal') %></th>
-          <th class="is-min"><%- t('PROPERTY:external') %></th>
-          <th class="is-min"><%- t('PROPERTY:absent') %></th>
-          <th class="is-min"><%- t('PROPERTY:observers') %></th>
-          <th></th>
-        </tr>
-        </thead>
-        <% workplaces.forEach(workplace => { %>
+      <div class="table-responsive is-colored osh-employments-form-table" style="margin-bottom: 0">
+        <table class="table table-bordered table-condensed table-hover">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
+            <th class="is-min"><%- t('PROPERTY:internal') %></th>
+            <th class="is-min"><%- t('PROPERTY:external') %></th>
+            <th class="is-min"><%- t('PROPERTY:absent') %></th>
+            <th class="is-min"><%- t('PROPERTY:observers') %></th>
+            <th></th>
+          </tr>
+          </thead>
           <tbody>
-            <% workplace.departments.forEach((department, departmentI) => { %>
-            <tr data-id="<%- department._id %>">
-              <td class="is-min"><%= workplace.label %></td>
-              <td class="is-min"><%= department.label %></td>
-              <td class="is-min">
-                <input name="departments.d<%- department._id %>.division" value="<%- workplace.division %>" type="hidden">
-                <input name="departments.d<%- department._id %>.workplace" value="<%- workplace._id %>" type="hidden">
-                <input name="departments.d<%- department._id %>.department" value="<%- department._id %>" type="hidden">
-                <input name="departments.d<%- department._id %>.internal" value="<%- department.internal %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+          <% divisions.forEach(division => { %>
+            <tr class="secondary js-division" data-division="<%- division._id %>" data-workplace="0" data-department="0">
+              <td class="is-min" colspan="3"><%= division.label %></td>
+              <td class="is-min osh-employments-form-input">
+                <input name="departments.<%- division.key %>.division" type="hidden">
+                <input name="departments.<%- division.key %>.workplace" type="hidden">
+                <input name="departments.<%- division.key %>.department" type="hidden">
+                <input name="departments.<%- division.key %>.internal" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
               </td>
-              <td class="is-min">
-                <input name="departments.d<%- department._id %>.external" value="<%- department.external %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              <td class="is-min osh-employments-form-input">
+                <input name="departments.<%- division.key %>.external" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
               </td>
-              <td class="is-min">
-                <input name="departments.d<%- department._id %>.absent" value="<%- department.absent %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              <td class="is-min osh-employments-form-input">
+                <input name="departments.<%- division.key %>.absent" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
               </td>
-              <td class="is-min">
-                <input name="departments.d<%- department._id %>.observers" value="<%- department.observers %>" type="number" min="0" max="99999" class="form-control" style="width: 100px">
+              <td class="is-min osh-employments-form-input">
+                <input name="departments.<%- division.key %>.observers" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
               </td>
               <td></td>
             </tr>
+            <% division.workplaces.forEach(workplace => { %>
+              <tr class="info js-workplace" data-division="<%- division._id %>" data-workplace="<%- workplace._id %>" data-department="0">
+                <td class="is-min"><%= division.label %></td>
+                <td class="is-min" colspan="2"><%= workplace.label %></td>
+                <td class="is-min osh-employments-form-input">
+                  <input name="departments.<%- workplace.key %>.division" type="hidden">
+                  <input name="departments.<%- workplace.key %>.workplace" type="hidden">
+                  <input name="departments.<%- workplace.key %>.department" type="hidden">
+                  <input name="departments.<%- workplace.key %>.internal" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-employments-form-input">
+                  <input name="departments.<%- workplace.key %>.external" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-employments-form-input">
+                  <input name="departments.<%- workplace.key %>.absent" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-employments-form-input">
+                  <input name="departments.<%- workplace.key %>.observers" type="number" readonly tabindex="-1" min="0" max="99999" class="form-control no-controls">
+                </td>
+                <td></td>
+              </tr>
+              <% workplace.departments.forEach((department, departmentI) => { %>
+                <tr class="js-department" data-division="<%- division._id %>" data-workplace="<%- workplace._id %>" data-department="<%- department._id %>">
+                  <td class="is-min"><%= division.label %></td>
+                  <td class="is-min"><%= workplace.label %></td>
+                  <td class="is-min"><%= department.label %></td>
+                  <td class="is-min osh-employments-form-input">
+                    <input name="departments.<%- department.key %>.division" type="hidden">
+                    <input name="departments.<%- department.key %>.workplace" type="hidden">
+                    <input name="departments.<%- department.key %>.department" type="hidden">
+                    <input name="departments.<%- department.key %>.internal" type="number" min="0" max="99999" class="form-control no-controls">
+                  </td>
+                  <td class="is-min osh-employments-form-input">
+                    <input name="departments.<%- department.key %>.external" type="number" min="0" max="99999" class="form-control no-controls">
+                  </td>
+                  <td class="is-min osh-employments-form-input">
+                    <input name="departments.<%- department.key %>.absent" type="number" min="0" max="99999" class="form-control no-controls">
+                  </td>
+                  <td class="is-min osh-employments-form-input">
+                    <input name="departments.<%- department.key %>.observers" type="number" min="0" max="99999" class="form-control no-controls">
+                  </td>
+                  <td></td>
+                </tr>
+              <% }) %>
             <% }) %>
+          <% }) %>
           </tbody>
-        <% }) %>
-      </table>
+        </table>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

@@ -4,62 +4,38 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/wmes-osh-common/dictionaries',
-  '../views/TableAndChartView',
   '../views/metrics/FilterView',
+  '../views/metrics/YearlyAccidentsChartView',
+  '../views/metrics/TrcView',
+  '../views/metrics/IprView',
+  '../views/metrics/IppView',
+  '../views/metrics/ObsPlanView',
+  '../views/metrics/ContactView',
+  '../views/metrics/RiskyObsView',
+  '../views/metrics/ObserversView',
   'app/wmes-osh-reports/templates/metrics/page'
 ], function(
   View,
   bindLoadingMessage,
   dictionaries,
-  TableAndChartView,
   FilterView,
+  YearlyAccidentsChartView,
+  TrcView,
+  IprView,
+  IppView,
+  ObsPlanView,
+  ContactView,
+  RiskyObsView,
+  ObserversView,
   template
 ) {
   'use strict';
-
-  const METRICS = ['ipr', 'ips', 'ipp', 'entries', 'users', 'fte'];
-  const GROUPS = ['total', 'division', 'workplace', 'department'];
-  const METRIC_OPTIONS = {
-    ipr: {
-      valueDecimals: 3,
-      allowDecimals: true,
-      absDecimals: true,
-      relColumn: false
-    },
-    ips: {
-      valueDecimals: 1,
-      unit: '%',
-      absUnit: true,
-      relColumn: false
-    },
-    ipp: {
-      valueDecimals: 1,
-      unit: '%',
-      absUnit: true,
-      relColumn: false
-    }
-  };
 
   return View.extend({
 
     layoutName: 'page',
 
     template,
-
-    events: {
-
-      'click a[data-group]': function(e)
-      {
-        const {metric, group: newGroup} = e.currentTarget.dataset;
-        const oldGroup = this.$(`a[data-metric="${metric}"].active`).removeClass('active').attr('data-group');
-
-        e.currentTarget.classList.add('active');
-
-        this.$id(`${metric}-${oldGroup}`).addClass('hidden');
-        this.$id(`${metric}-${newGroup}`).removeClass('hidden');
-      }
-
-    },
 
     breadcrumbs: function()
     {
@@ -83,29 +59,18 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new FilterView({
-        model: this.model
-      });
+      this.filterView = new FilterView({model: this.model});
 
       this.setView('#-filter', this.filterView);
 
-      METRICS.forEach(metric =>
-      {
-        GROUPS.forEach(group =>
-        {
-          const options = {
-            metric: `${metric}-${group}`,
-            model: this.model,
-            filename: this.t(`metrics:filename:${metric}`),
-            title: this.t(`metrics:title:${metric}`),
-            stackingLimit: 10
-          };
-
-          Object.assign(options, METRIC_OPTIONS[metric]);
-
-          this.setView(`#-${metric}-${group}`, new TableAndChartView(options));
-        });
-      });
+      this.setView('#-yearlyAccidents', new YearlyAccidentsChartView({model: this.model}));
+      this.setView('#-trc', new TrcView({model: this.model}));
+      this.setView('#-ipr', new IprView({model: this.model}));
+      this.setView('#-ipp', new IppView({model: this.model}));
+      this.setView('#-obsPlan', new ObsPlanView({model: this.model}));
+      this.setView('#-contact', new ContactView({model: this.model}));
+      this.setView('#-riskyObs', new RiskyObsView({model: this.model}));
+      this.setView('#-observers', new ObserversView({model: this.model}));
     },
 
     defineBindings: function()
@@ -116,33 +81,6 @@ define([
     load: function(when)
     {
       return when(dictionaries.load().done(() => this.model.fetch()));
-    },
-
-    getTemplateData: function()
-    {
-      return {
-        metrics: METRICS,
-        groups: GROUPS
-      };
-    },
-
-    afterRender: function()
-    {
-      const metrics = new Set();
-
-      this.$('a[data-metric]').each((i, el) =>
-      {
-        const metric = el.dataset.metric;
-
-        if (metrics.has(metric))
-        {
-          return;
-        }
-
-        metrics.add(metric);
-
-        el.click();
-      });
     },
 
     onFilterChanged: function(newRqlQuery)
