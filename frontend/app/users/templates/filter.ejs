@@ -12,37 +12,40 @@
     <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text">
   </div>
   <% if (companies.length) { %>
-  <div class="form-group">
-    <label for="<%- id('company') %>"><%- t('PROPERTY:company') %></label>
-    <select id="<%- id('company') %>" name="company">
-      <option></option>
-      <% companies.forEach(function(company) { %>
-      <option value="<%= company.id %>"><%= company.text %></option>
-      <% }) %>
-    </select>
-  </div>
+    <div class="form-group">
+      <label for="<%- id('company') %>"><%- t('PROPERTY:company') %></label>
+      <select id="<%- id('company') %>" name="company">
+        <option></option>
+        <% companies.forEach(function(company) { %>
+        <option value="<%= company.id %>"><%= company.text %></option>
+        <% }) %>
+      </select>
+    </div>
   <% } %>
   <% if (prodFunctions.length) { %>
-  <div class="form-group">
-    <label for="<%- id('prodFunction') %>"><%- t('PROPERTY:prodFunction') %></label>
-    <select id="<%- id('prodFunction') %>" name="prodFunction">
-      <option></option>
-      <% prodFunctions.forEach(function(prodFunction) { %>
-      <option value="<%= prodFunction.id %>"><%= prodFunction.text %></option>
-      <% }) %>
-    </select>
-  </div>
+    <div class="form-group">
+      <label for="<%- id('prodFunction') %>"><%- t('PROPERTY:prodFunction') %></label>
+      <select id="<%- id('prodFunction') %>" name="prodFunction">
+        <option></option>
+        <% prodFunctions.forEach(function(prodFunction) { %>
+        <option value="<%= prodFunction.id %>"><%= prodFunction.text %></option>
+        <% }) %>
+      </select>
+    </div>
   <% } %>
   <% if (privileges.length) { %>
-  <div class="form-group">
-    <label for="<%- id('privileges') %>"><%- t('PROPERTY:privileges') %></label>
-    <select id="<%- id('privileges') %>" name="privileges">
-      <option></option>
-      <% privileges.forEach(function(privilege) { %>
-      <option value="<%= privilege %>"><%- t('PRIVILEGE:' + privilege) %></option>
-      <% }) %>
-    </select>
-  </div>
+    <div class="form-group">
+      <label for="<%- id('privileges') %>"><%- t('PROPERTY:privileges') %></label>
+      <select id="<%- id('privileges') %>" name="privileges">
+        <option></option>
+        <% privileges.forEach(function(privilege) { %>
+        <option value="<%= privilege %>"><%- t('PRIVILEGE:' + privilege) %></option>
+        <% }) %>
+      </select>
+    </div>
+  <% } %>
+  <% if (orgUnit) { %>
+    <div id="<%- id('orgUnit') %>" class="form-group"></div>
   <% } %>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

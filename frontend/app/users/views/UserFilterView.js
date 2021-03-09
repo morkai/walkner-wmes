@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/user',
   'app/data/loadedModules',
@@ -12,6 +13,7 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/users/templates/filter'
 ], function(
+  require,
   _,
   user,
   loadedModules,
@@ -43,12 +45,34 @@ define([
       'searchName': 'personnelId'
     },
 
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      if (loadedModules.isLoaded('wmes-osh'))
+      {
+        const OrgUnitPickerFilterView = require('app/wmes-osh-common/views/OrgUnitPickerFilterView');
+
+        this.setView('#-orgUnit', new OrgUnitPickerFilterView({
+          filterView: this,
+          emptyLabel: this.t('PROPERTY:orgUnit'),
+          orgUnitTerms: {
+            'oshDivision': 'division',
+            'oshWorkplace': 'workplace',
+            'oshDepartment': 'department'
+          },
+          orgUnitTypes: ['division', 'workplace', 'department']
+        }));
+      }
+    },
+
     getTemplateData: function()
     {
       return {
         prodFunctions: loadedModules.isLoaded('prodFunctions') ? prodFunctions.map(idAndLabel) : [],
         companies: loadedModules.isLoaded('companies') ? companies.map(idAndLabel) : [],
-        privileges: !user.isAllowedTo('USERS:MANAGE') ? [] : privileges
+        privileges: !user.isAllowedTo('USERS:MANAGE') ? [] : privileges,
+        orgUnit: loadedModules.isLoaded('wmes-osh')
       };
     },
 
