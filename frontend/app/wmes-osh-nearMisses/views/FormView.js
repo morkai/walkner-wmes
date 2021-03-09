@@ -717,6 +717,13 @@ define([
         return;
       }
 
+      $input
+        .prop('required', true)
+        .closest('.form-group')
+        .addClass('has-required-select2')
+        .find('.control-label')
+        .addClass('is-required');
+
       const currentWorkplaceId = +this.$id('userWorkplace').val();
       let currentDepartment = dictionaries.departments.get(+$input.val());
 
