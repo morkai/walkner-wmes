@@ -51,10 +51,10 @@ define([
       if (!option)
       {
         option = options.options[0];
-        $el.val(option.value);
+        $el.val(option ? option.value : '');
       }
 
-      var label = option.selectedLabel || option.optionLabel;
+      var label = option ? (option.selectedLabel || option.optionLabel) : '?';
 
       $dropdownRadio.find('.dropdownRadio-selectedLabel').text(label);
     }

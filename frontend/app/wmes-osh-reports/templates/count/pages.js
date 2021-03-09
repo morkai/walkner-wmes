@@ -4,12 +4,14 @@ define([
   'app/wmes-osh-reports/templates/count/nearMissPage',
   'app/wmes-osh-reports/templates/count/kaizenPage',
   'app/wmes-osh-reports/templates/count/actionPage',
-  'app/wmes-osh-reports/templates/count/observationPage'
+  'app/wmes-osh-reports/templates/count/observationPage',
+  'app/wmes-osh-reports/templates/count/accidentPage'
 ], function(
   nearMissPageTemplate,
   kaizenPageTemplate,
   actionPageTemplate,
-  observationPageTemplate
+  observationPageTemplate,
+  accidentPageTemplate
 ) {
   'use strict';
 
@@ -17,6 +19,7 @@ define([
     nearMiss: nearMissPageTemplate,
     kaizen: kaizenPageTemplate,
     action: actionPageTemplate,
-    observation: observationPageTemplate
+    observation: observationPageTemplate,
+    accident: accidentPageTemplate
   };
 });

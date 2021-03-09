@@ -1,0 +1,19 @@
+<div class="osh-report">
+  <div id="<%- id('filter') %>" class="filter-container"></div>
+  <% ['count', 'orgUnit'].forEach(metric => { %>
+    <% if (metric === 'orgUnit') { %>
+      <h3>
+        <span><%- t.has(`count:title:orgUnits:${type}`) ? t(`count:title:orgUnits:${type}`) : t(`count:title:orgUnits`) %></span>
+        <% orgUnits.forEach(orgUnit => { %>
+          <a href="javascript:void(0)" data-group="orgUnit" data-key="<%- orgUnit %>"><%- t('wmes-osh-common', `orgUnit:${orgUnit}`) %></a>
+        <% }) %>
+      </h3>
+      <% orgUnits.forEach(orgUnit => { %>
+        <div id="<%- id(orgUnit) %>" data-group="orgUnit" data-key="<%- orgUnit %>" class="hidden"></div>
+      <% }) %>
+    <% } else { %>
+      <h3><span><%- t.has(`count:title:${metric}:${type}`) ? t(`count:title:${metric}:${type}`) : t(`count:title:${metric}`) %></span></h3>
+      <div id="<%- id(metric) %>" data-group="generic" data-key="<%- metric %>"></div>
+    <% } %>
+  <% }) %>
+</div>

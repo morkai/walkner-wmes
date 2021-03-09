@@ -42,6 +42,16 @@ define([
     }));
   });
 
+  router.map('/osh/reports/count/accident', user.auth('OSH:ACCIDENTS:VIEW'), req =>
+  {
+    viewport.showPage(new CountReportPage({
+      model: new CountReport({}, {
+        type: 'accident',
+        rqlQuery: req.rql
+      })
+    }));
+  });
+
   router.map('/osh/reports/observers', canView, req =>
   {
     viewport.showPage(new ObserversReportPage({

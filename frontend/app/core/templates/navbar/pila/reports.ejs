@@ -15,4 +15,5 @@
       ].forEach(report => { %>
     <li><a href="#osh/reports/<%- report %>"><%- t('wmes-osh-common', `navbar:reports:${report}`) %></a>
     <% }) %>
+    <li data-privilege="OSH:ACCIDENTS:VIEW"><a href="#osh/reports/count/accident"><%- t('wmes-osh-common', `navbar:reports:count/accident`) %></a>
   </ul>

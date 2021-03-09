@@ -35,6 +35,7 @@
   "count:kaizen:breadcrumb": "Ilość kaizenów",
   "count:action:breadcrumb": "Ilość akcji",
   "count:observation:breadcrumb": "Ilość obserwacji",
+  "count:accident:breadcrumb": "Ilość wypadków",
   "count:title:count": "Ilość zgłoszeń ogółem",
   "count:title:finished": "Zakończone zgłoszenia",
   "count:title:duration": "Średni czas trwania zgłoszeń [h]",

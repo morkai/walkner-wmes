@@ -26,7 +26,8 @@ define([
     nearMiss: 'wmes-osh-nearMisses',
     kaizen: 'wmes-osh-kaizens',
     action: 'wmes-osh-actions',
-    observation: 'wmes-osh-observations'
+    observation: 'wmes-osh-observations',
+    accident: 'wmes-osh-accidents'
   };
 
   const FILTER_LIST = {
@@ -54,7 +55,8 @@ define([
       'status',
       'user',
       'observationKind'
-    ]
+    ],
+    accident: []
   };
 
   return FilterView.extend({

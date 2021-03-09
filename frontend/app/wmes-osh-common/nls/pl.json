@@ -32,6 +32,7 @@
   "navbar:reports:count/kaizen": "Ilość kaizenów",
   "navbar:reports:count/action": "Ilość akcji",
   "navbar:reports:count/observation": "Ilość obserwacji",
+  "navbar:reports:count/accident": "Ilość wypadków",
   "navbar:entries:all": "Wszystkie",
   "navbar:entries:open": "Otwarte",
   "navbar:entries:mine": "Moje",

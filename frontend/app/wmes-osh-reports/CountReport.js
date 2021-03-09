@@ -84,6 +84,9 @@ define([
       'easyCategory',
       'hard',
       'hardCategory'
+    ].concat(dictionaries.ORG_UNITS),
+    accident: [
+      'count'
     ].concat(dictionaries.ORG_UNITS)
   };
   const METRIC_TOTALS = {
