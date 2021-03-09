@@ -1077,6 +1077,10 @@ app/wmes-osh-dashboard/assets/main.css
 ----------------
 app/wmes-osh-dashboard/assets/main.css
 
+app/wmes-osh-employments/assets/form.css
+----------------
+app/wmes-osh-employments/assets/form.css
+
 app/wmes-osh-kaizens/assets/details.css
 ----------------
 app/wmes-osh-kaizens/assets/details.css
@@ -1132,7 +1136,12 @@ app/wmes-osh-reports/assets/main.css
 ----------------
 app/wmes-osh-reports/assets/./engagement.css
 app/wmes-osh-reports/assets/./observers.css
+app/wmes-osh-reports/assets/./metrics.css
 app/wmes-osh-reports/assets/main.css
+
+app/wmes-osh-reports/assets/metrics.css
+----------------
+app/wmes-osh-reports/assets/metrics.css
 
 app/wmes-osh-reports/assets/observers.css
 ----------------
@@ -2816,6 +2825,7 @@ app/wmes-osh-reports/templates/count/nearMissPage.js
 app/wmes-osh-reports/templates/count/kaizenPage.js
 app/wmes-osh-reports/templates/count/actionPage.js
 app/wmes-osh-reports/templates/count/observationPage.js
+app/wmes-osh-reports/templates/count/accidentPage.js
 app/wmes-osh-reports/templates/count/pages.js
 app/wmes-osh-reports/pages/CountReportPage.js
 app/wmes-osh-reports/templates/observers/filter.js
@@ -2840,6 +2850,22 @@ app/wmes-osh-reports/templates/engagement/page.js
 app/wmes-osh-reports/pages/EngagementReportPage.js
 app/wmes-osh-reports/templates/metrics/filter.js
 app/wmes-osh-reports/views/metrics/FilterView.js
+app/wmes-osh-reports/views/metrics/YearlyAccidentsChartView.js
+app/wmes-osh-reports/templates/metrics/trcTable.js
+app/wmes-osh-reports/templates/metrics/tableAndChart.js
+app/wmes-osh-reports/views/metrics/TrcView.js
+app/wmes-osh-reports/templates/metrics/iprTable.js
+app/wmes-osh-reports/views/metrics/IprView.js
+app/wmes-osh-reports/templates/metrics/ippTable.js
+app/wmes-osh-reports/views/metrics/IppView.js
+app/wmes-osh-reports/templates/metrics/obsPlanTable.js
+app/wmes-osh-reports/views/metrics/ObsPlanView.js
+app/wmes-osh-reports/templates/metrics/contactTable.js
+app/wmes-osh-reports/views/metrics/ContactView.js
+app/wmes-osh-reports/templates/metrics/riskyObsTable.js
+app/wmes-osh-reports/views/metrics/RiskyObsView.js
+app/wmes-osh-reports/templates/metrics/observersTable.js
+app/wmes-osh-reports/views/metrics/ObserversView.js
 app/wmes-osh-reports/templates/metrics/page.js
 app/wmes-osh-reports/pages/MetricsReportPage.js
 app/nls/reports.js
