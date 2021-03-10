@@ -15,5 +15,7 @@ define([
       userInfo.oshWorkplace = userData.oshWorkplace;
       userInfo.oshDepartment = userData.oshDepartment || 0;
     }
+
+    return userInfo;
   };
 });

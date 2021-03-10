@@ -1032,7 +1032,7 @@ define([
         userInfoDecorators: [userInfoDecorator]
       });
 
-      const creator = this.model.get('creator') || currentUser.getInfo();
+      const creator = this.model.get('creator') || userInfoDecorator(currentUser.getInfo(), currentUser.data);
       const helper = (this.model.get('implementers') || []).find(u => u.id !== creator.id);
 
       const data = [{

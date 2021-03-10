@@ -486,7 +486,9 @@ define([
       }
       else
       {
-        formData.implementer = formData.selfImplement && !formData.anonymous ? currentUser.getInfo() : null;
+        formData.implementer = formData.selfImplement && !formData.anonymous
+          ? userInfoDecorator(currentUser.getInfo(), currentUser.data)
+          : null;
         formData.selfImplement = undefined;
       }
 
