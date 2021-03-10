@@ -1,6 +1,9 @@
 .osh-employments-form-table {
   margin-bottom: 0;
 }
+.osh-employments-form-table th {
+  min-width: 104px;
+}
 .osh-employments-form-table tbody > tr > td {
   padding-top: 0;
   padding-bottom: 0;
@@ -9,7 +12,7 @@
   padding: 0!important;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
 }
-tr[data-department="0"] > .osh-employments-form-input {
+.osh-employments-form-input.is-readonly {
   box-shadow: none;
 }
 .osh-employments-form-input .form-control[type="number"] {
@@ -24,4 +27,10 @@ tr[data-department="0"] > .osh-employments-form-input {
 }
 .osh-employments-form-input .form-control[type="number"]:focus {
   outline: 2px solid #0af;
+}
+.osh-employments-form-input .form-control:read-only {
+  cursor: default;
+}
+.osh-employments-form-observers {
+  cursor: pointer!important;
 }

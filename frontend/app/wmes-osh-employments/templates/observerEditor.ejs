@@ -1,0 +1,17 @@
+<form>
+  <%- helpers.formGroup({
+    name: 'orgUnit',
+    label: 'observerEditor:',
+    type: 'static',
+    value: _.escape(model.orgUnit)
+  }) %>
+  <%- helpers.formGroup({
+    name: 'users',
+    type: 'select2',
+    label: 'observerEditor:'
+  }) %>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('observerEditor:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

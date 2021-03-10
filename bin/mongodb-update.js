@@ -3,7 +3,16 @@
 
 'use strict';
 
-db.oshkinds.updateOne({_id: 1}, {$set: {entryTypes: ['nearMiss', 'kaizen', 'action']}});
-db.oshkinds.updateOne({_id: 2}, {$set: {entryTypes: ['nearMiss', 'kaizen', 'action']}});
-db.oshkinds.updateOne({_id: 3}, {$set: {entryTypes: ['nearMiss', 'kaizen', 'action']}});
-db.oshkinds.updateOne({_id: 4}, {$set: {entryTypes: ['kaizen']}});
+db.oshemployments.find({}).forEach(doc =>
+{
+  doc.departments.forEach(dept =>
+  {
+    if (!Array.isArray(dept.observerUsers))
+    {
+      dept.observers = 0;
+      dept.observerUsers = [];
+    }
+  });
+
+  db.oshemployments.updateOne({_id: doc._id}, {$set: {departments: doc.departments}});
+});

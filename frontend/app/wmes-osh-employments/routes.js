@@ -53,12 +53,13 @@ define([
   {
     viewport.loadPage(
       [
-        'app/wmes-osh-employments/templates/details'
+        'app/wmes-osh-employments/views/DetailsView',
+        'css!app/wmes-osh-employments/assets/details'
       ],
-      (detailsTemplate) =>
+      (DetailsView) =>
       {
         return dictionaries.bind(new DetailsPage({
-          detailsTemplate: detailsTemplate,
+          DetailsView,
           model: new Employment({_id: req.params.id})
         }));
       }
@@ -69,7 +70,8 @@ define([
   {
     viewport.loadPage(
       [
-        'app/wmes-osh-employments/views/FormView'
+        'app/wmes-osh-employments/views/FormView',
+        'css!app/wmes-osh-employments/assets/form'
       ],
       (FormView) =>
       {

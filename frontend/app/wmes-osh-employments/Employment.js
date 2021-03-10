@@ -56,6 +56,11 @@ define([
 
       obj.departments.forEach(d =>
       {
+        if (!d.department)
+        {
+          return;
+        }
+
         obj.internal += d.internal;
         obj.external += d.external;
         obj.absent += d.absent;

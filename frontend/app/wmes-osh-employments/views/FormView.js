@@ -1,19 +1,23 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
   'app/wmes-osh-common/dictionaries',
+  './ObserverEditorDialogView',
   'app/wmes-osh-employments/templates/form',
   'jquery.stickytableheaders'
 ], function(
+  _,
   $,
   time,
   viewport,
   FormView,
   dictionaries,
+  ObserverEditorDialogView,
   template
 ) {
   'use strict';
@@ -36,16 +40,40 @@ define([
 
       'change input[type="number"]': function(e)
       {
-        const $tr = this.$(e.target).closest('tr');
-        const divisionId = $tr[0].dataset.division;
-        const workplaceId = $tr[0].dataset.workplace;
-
-        clearTimeout(this.timers[`recount${workplaceId}`]);
-        this.timers[`recount${workplaceId}`] = setTimeout(() =>
+        if (!(e.currentTarget.value > 0))
         {
-          this.recountWorkplace(workplaceId);
-          this.recountDivision(divisionId);
-        }, 333);
+          e.currentTarget.value = 0;
+        }
+
+        const department = +this.$(e.currentTarget).closest('tr')[0].dataset.department;
+
+        this.recountDepartment(department);
+      },
+
+      'click .js-observers': function(e)
+      {
+        e.currentTarget.blur();
+
+        this.showObserverEditorDialog(
+          this.$(e.target).closest('.js-department')[0].dataset.department
+        );
+      },
+
+      'keydown input': function(e)
+      {
+        if (e.currentTarget.name.endsWith('observers'))
+        {
+          e.currentTarget.click();
+        }
+
+        if (e.key === 'Enter' || e.key === 'Space')
+        {
+          const department = +this.$(e.currentTarget).closest('tr')[0].dataset.department;
+
+          this.recountDepartment(department);
+
+          return false;
+        }
       }
 
     }, FormView.prototype.events),
@@ -65,6 +93,11 @@ define([
 
       (this.model.get('departments') || []).forEach(d =>
       {
+        if (!d.division)
+        {
+          return;
+        }
+
         if (!divisions.has(d.division))
         {
           divisions.set(d.division, {
@@ -109,7 +142,8 @@ define([
           external: d.external,
           absent: d.absent,
           total: d.total,
-          observers: d.observers
+          observers: d.observers,
+          observerUsers: d.observerUsers
         });
 
         departments.add(d.department);
@@ -177,7 +211,19 @@ define([
         });
       });
 
-      this.departments = {};
+      this.departments = {
+        d0w0d0: {
+          division: 0,
+          workplace: 0,
+          department: 0,
+          internal: 0,
+          external: 0,
+          absent: 0,
+          total: 0,
+          observers: 0,
+          observerUsers: '[]'
+        }
+      };
 
       divisions.forEach(division =>
       {
@@ -193,7 +239,8 @@ define([
           external: 0,
           absent: 0,
           total: 0,
-          observers: 0
+          observers: 0,
+          observerUsers: '[]'
         };
 
         division.workplaces.forEach(workplace =>
@@ -210,7 +257,8 @@ define([
             external: 0,
             absent: 0,
             total: 0,
-            observers: 0
+            observers: 0,
+            observerUsers: '[]'
           };
 
           workplace.departments.forEach(department =>
@@ -223,7 +271,8 @@ define([
               external: department.external,
               absent: department.absent,
               total: department.total,
-              observers: department.observers
+              observers: (department.observerUsers || []).length,
+              observerUsers: JSON.stringify(department.observerUsers || [])
             };
           });
         });
@@ -243,8 +292,6 @@ define([
         departments: this.departments
       };
     },
-
-    checkValidity: () => true,
 
     serializeForm: function(formData)
     {
@@ -267,10 +314,13 @@ define([
         d.absent = parseInt(d.absent, 10) || 0;
         d.total = d.internal + d.external - d.absent;
         d.observers = parseInt(d.observers, 10) || 0;
+        d.observerUsers = d.observerUsers ? JSON.parse(d.observerUsers) : [];
       });
 
       return formData;
     },
+
+    checkValidity: () => true,
 
     afterRender: function()
     {
@@ -278,6 +328,24 @@ define([
 
       this.recountWorkplaces();
       this.recountDivisions();
+      this.recountOverall();
+
+      this.$el.popover({
+        selector: '.js-observers',
+        container: document.body,
+        trigger: 'hover',
+        html: true,
+        hasContent: function()
+        {
+          return this.value > 0;
+        },
+        content: function()
+        {
+          return '<ol style="font-size: 12px; list-style-position: inside; padding-left: 0">'
+            + JSON.parse(this.previousElementSibling.value).map(u => `<li>${_.escape(u.label)}`).join('')
+            + '</ol>';
+        }
+      });
     },
 
     setUpStickyTable: function()
@@ -374,16 +442,21 @@ define([
           const data = res[tr.dataset.department] || {
             internal: 0,
             external: 0,
-            observers: 0
+            observers: 0,
+            observerUsers: []
           };
+          const absent = +tr.querySelector('input[name$="absent"]').value;
 
           tr.querySelector('input[name$="internal"]').value = data.internal;
           tr.querySelector('input[name$="external"]').value = data.external;
+          tr.querySelector('input[name$="total"]').value = data.internal + data.external - absent;
           tr.querySelector('input[name$="observers"]').value = data.observers;
+          tr.querySelector('input[name$="observerUsers"]').value = JSON.stringify(data.observerUsers);
         });
 
         this.recountWorkplaces();
         this.recountDivisions();
+        this.recountOverall();
       });
 
       req.always(() =>
@@ -409,6 +482,32 @@ define([
       });
     },
 
+    recountOverall: function()
+    {
+      const $overall = this.$id('overall');
+      const data = {
+        internal: 0,
+        external: 0,
+        absent: 0,
+        total: 0,
+        observers: 0
+      };
+      const props = Object.keys(data);
+
+      this.$(`.js-division`).each((i, tr) =>
+      {
+        props.forEach(prop =>
+        {
+          data[prop] += parseInt(tr.querySelector(`input[name$="${prop}"]`).value, 10) || 0;
+        });
+      });
+
+      props.forEach(prop =>
+      {
+        $overall.find(`input[name$="${prop}"]`).val(data[prop]);
+      });
+    },
+
     recountDivision: function(division)
     {
       const $division = this.$(`.js-division[data-division="${division}"]`);
@@ -416,6 +515,7 @@ define([
         internal: 0,
         external: 0,
         absent: 0,
+        total: 0,
         observers: 0
       };
       const props = Object.keys(data);
@@ -441,6 +541,7 @@ define([
         internal: 0,
         external: 0,
         absent: 0,
+        total: 0,
         observers: 0
       };
       const props = Object.keys(data);
@@ -457,6 +558,56 @@ define([
       {
         $workplace.find(`input[name$="${prop}"]`).val(data[prop]);
       });
+    },
+
+    recountDepartment: function(department)
+    {
+      const $row = this.$(`.js-department[data-department="${department}"]`);
+
+      const internal = +$row.find('input[name$="internal"]').val();
+      const external = +$row.find('input[name$="external"]').val();
+      const absent = +$row.find('input[name$="absent"]').val();
+
+      $row.find('input[name$="total"]').val(internal + external - absent);
+
+      this.recountWorkplace(+$row[0].dataset.workplace);
+      this.recountDivision(+$row[0].dataset.division);
+      this.recountOverall();
+    },
+
+    showObserverEditorDialog: function(department)
+    {
+      if (viewport.currentDialog instanceof ObserverEditorDialogView)
+      {
+        return;
+      }
+
+      const $row = this.$(`.js-department[data-department="${department}"]`);
+      const $cells = $row.children();
+
+      const dialogView = new ObserverEditorDialogView({
+        model: {
+          orgUnit: `${$cells[0].textContent} > ${$cells[1].textContent} > ${$cells[2].textContent}`,
+          users: JSON.parse($row.find('input[name$="observerUsers"]').val())
+        }
+      });
+
+      this.listenTo(dialogView, 'picked', (users) =>
+      {
+        viewport.closeDialog();
+
+        $row.find('input[name$="observerUsers"]').val(JSON.stringify(users));
+        $row.find('input[name$="observers"]').val(users.length).focus();
+
+        this.recountDepartment(department);
+      });
+
+      this.broker.subscribe('viewport.dialog.hidden')
+        .setLimit(1)
+        .setFilter(d => d === dialogView)
+        .on('message', () => $row.find('input[name$="observers"]').focus());
+
+      viewport.showDialog(dialogView, this.t('observerEditor:title'));
     }
 
   });

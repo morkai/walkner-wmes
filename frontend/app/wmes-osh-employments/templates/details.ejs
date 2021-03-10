@@ -1,7 +1,7 @@
 <div>
   <div class="panel panel-primary is-colored">
     <div class="panel-heading"><%- panelTitle %></div>
-    <table class="table table-bordered table-condensed table-hover">
+    <table class="table table-bordered table-condensed table-hover osh-employments-details-table">
       <thead>
       <tr>
         <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
@@ -17,7 +17,7 @@
       </thead>
       <tbody>
         <% model.orgUnits.forEach((d, i) => { %>
-          <tr class="<%- d.department ? '' : d.workplace ? 'info' : 'secondary' %>">
+          <tr class="<%- d.department ? '' : d.workplace ? 'active' : d.division ? 'info' : 'secondary' %>">
             <td class="is-min" colspan="<%- d.workplace ? 1 : 3 %>"><%- d.division %></td>
             <% if (d.workplace) { %>
               <td class="is-min" colspan="<%- d.department ? 1 : 2 %>"><%- d.workplace %></td>
