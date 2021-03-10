@@ -261,6 +261,9 @@
           </button>
         <% } %>
       <% } %>
+      <button id="<%- id('cancel') %>" type="button" class="btn btn-link" title="<%- t('wmes-osh-common', `FORM:ACTION:title:cancel:${editMode ? 'edit' : 'add'}`) %>">
+        <%- t('wmes-osh-common', `FORM:ACTION:cancel:${editMode ? 'edit' : 'add'}`) %>
+      </button>
     </div>
   </div>
 </form>

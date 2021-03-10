@@ -6,9 +6,9 @@ define([
   'app/user',
   'app/time',
   'app/viewport',
-  'app/core/views/FormView',
   'app/core/util/uuid',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/views/FormView',
   'app/wmes-osh-nearMisses/NearMiss',
   'app/wmes-osh-nearMisses/views/FormView',
   'app/wmes-osh-kaizens/Kaizen',
@@ -23,9 +23,9 @@ define([
   currentUser,
   time,
   viewport,
-  FormView,
   uuid,
   dictionaries,
+  FormView,
   NearMiss,
   NearMissFormView,
   Kaizen,
@@ -327,6 +327,8 @@ define([
         'YYYY-MM-DD HH:mm:ss'
       ).toISOString();
 
+      delete formData.time;
+
       if (formData.observationKind)
       {
         formData.observationKind = +formData.observationKind;
@@ -385,6 +387,8 @@ define([
 
         return true;
       });
+
+      delete formData.easyConfirmed;
 
       return formData;
     },

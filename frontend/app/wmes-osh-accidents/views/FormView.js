@@ -5,8 +5,8 @@ define([
   'app/user',
   'app/time',
   'app/viewport',
-  'app/core/views/FormView',
   'app/wmes-osh-common/dictionaries',
+  'app/wmes-osh-common/views/FormView',
   '../Accident',
   'app/wmes-osh-accidents/templates/form'
 ], function(
@@ -14,8 +14,8 @@ define([
   currentUser,
   time,
   viewport,
-  FormView,
   dictionaries,
+  FormView,
   Accident,
   template
 ) {
@@ -130,6 +130,8 @@ define([
         `${formData.eventDate} ${formData.eventTime || '00:00'}:00`,
         'YYYY-MM-DD HH:mm:ss'
       ).toISOString();
+
+      delete formData.eventTime;
 
       return formData;
     },

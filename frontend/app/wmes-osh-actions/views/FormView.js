@@ -5,12 +5,12 @@ define([
   'app/user',
   'app/time',
   'app/viewport',
-  'app/core/views/FormView',
   'app/core/util/formatResultWithDescription',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/Resolution',
   'app/wmes-osh-common/util/userInfoDecorator',
+  'app/wmes-osh-common/views/FormView',
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-kaizens/views/FormView',
   '../Action',
@@ -22,12 +22,12 @@ define([
   currentUser,
   time,
   viewport,
-  FormView,
   formatResultWithDescription,
   setUpUserSelect2,
   dictionaries,
   Resolution,
   userInfoDecorator,
+  FormView,
   Kaizen,
   KaizenFormView,
   Action,
@@ -468,6 +468,11 @@ define([
       if (!formData.status)
       {
         formData.status = 'finished';
+      }
+
+      if (formData.kind)
+      {
+        formData.kind = parseInt(formData.kind, 10);
       }
 
       return formData;

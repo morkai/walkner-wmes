@@ -236,10 +236,25 @@
         <% } %>
       </button>
       <% if (editMode) { %>
-        <% if (can.inProgress) { %><button id="<%- id('inProgress') %>" type="button" class="btn btn-info"><i class="fa fa-check"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:inProgress') %></span></button><% } %>
-        <% if (can.paused) { %><button id="<%- id('paused') %>" type="button" class="btn btn-warning"><i class="fa fa-hourglass-o"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:paused') %></span></button><% } %>
-        <% if (can.cancelled) { %><button id="<%- id('cancelled') %>" type="button" class="btn btn-danger"><i class="fa fa-ban"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:cancelled') %></span></button><% } %>
+        <% if (can.inProgress) { %>
+          <button id="<%- id('inProgress') %>" type="button" class="btn btn-info" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:inProgress')}) %>">
+            <i class="fa fa-check"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:inProgress') %></span>
+          </button>
+        <% } %>
+        <% if (can.paused) { %>
+          <button id="<%- id('paused') %>" type="button" class="btn btn-warning" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:paused')}) %>">
+            <i class="fa fa-hourglass-o"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:paused') %></span>
+          </button>
+        <% } %>
+        <% if (can.cancelled) { %>
+          <button id="<%- id('cancelled') %>" type="button" class="btn btn-danger" title="<%- t('wmes-osh-common', 'FORM:ACTION:title:status', {status: t('wmes-osh-common', 'status:cancelled')}) %>">
+            <i class="fa fa-ban"></i><span><%- t('wmes-osh-common', 'FORM:ACTION:cancelled') %></span>
+          </button>
+        <% } %>
       <% } %>
+      <button id="<%- id('cancel') %>" type="button" class="btn btn-link" title="<%- t('wmes-osh-common', `FORM:ACTION:title:cancel:${editMode ? 'edit' : 'add'}`) %>">
+        <%- t('wmes-osh-common', `FORM:ACTION:cancel:${editMode ? 'edit' : 'add'}`) %>
+      </button>
     </div>
   </div>
 </form>

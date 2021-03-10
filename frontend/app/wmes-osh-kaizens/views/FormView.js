@@ -5,11 +5,11 @@ define([
   'app/user',
   'app/time',
   'app/viewport',
-  'app/core/views/FormView',
   'app/core/util/formatResultWithDescription',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/util/userInfoDecorator',
+  'app/wmes-osh-common/views/FormView',
   '../Kaizen',
   'app/wmes-osh-kaizens/templates/form'
 ], function(
@@ -17,11 +17,11 @@ define([
   currentUser,
   time,
   viewport,
-  FormView,
   formatResultWithDescription,
   setUpUserSelect2,
   dictionaries,
   userInfoDecorator,
+  FormView,
   Kaizen,
   template
 ) {
@@ -281,6 +281,8 @@ define([
         formData.station = parseInt(this.$id('station').val(), 10) || 0;
       }
 
+      formData.kaizenCategory = this.$id('kaizenCategory').select2('data').id;
+
       const $plannedAt = this.$id('plannedAt');
 
       if ($plannedAt.length && !$plannedAt.prop('disabled'))
@@ -292,6 +294,11 @@ define([
       else
       {
         delete formData.plannedAt;
+      }
+
+      if (formData.kind)
+      {
+        formData.kind = parseInt(formData.kind, 10);
       }
 
       return formData;

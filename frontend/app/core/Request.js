@@ -55,6 +55,11 @@ define([
      */
     this.rql = {};
 
+    /**
+     * @type {boolean}
+     */
+    this.cancel = false;
+
     this.defineGetters();
   }
 

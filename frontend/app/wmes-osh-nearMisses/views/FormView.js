@@ -6,11 +6,11 @@ define([
   'app/user',
   'app/time',
   'app/viewport',
-  'app/core/views/FormView',
   'app/core/util/formatResultWithDescription',
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/util/userInfoDecorator',
+  'app/wmes-osh-common/views/FormView',
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-kaizens/views/FormView',
   'app/wmes-osh-actions/Action',
@@ -24,11 +24,11 @@ define([
   currentUser,
   time,
   viewport,
-  FormView,
   formatResultWithDescription,
   setUpUserSelect2,
   dictionaries,
   userInfoDecorator,
+  FormView,
   Kaizen,
   KaizenFormView,
   Action,
@@ -470,6 +470,8 @@ define([
         `${formData.eventDate} ${formData.eventTime || '00:00'}:00`,
         'YYYY-MM-DD HH:mm:ss'
       ).toISOString();
+
+      delete formData.eventTime;
 
       const eventCategory = dictionaries.eventCategories.get(formData.eventCategory);
       const reasonCategory = dictionaries.reasonCategories.get(formData.reasonCategory);
@@ -1651,7 +1653,7 @@ define([
         this.resolution.rid = dialogView.model.get('rid');
         this.resolution.data = dialogView.model.toJSON();
 
-        this.$id('resolutionId').val(this.resolution.rid);
+        this.$id('resolutionId').val(this.resolution.rid).trigger('change');
 
         viewport.closeDialog();
       };

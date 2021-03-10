@@ -253,8 +253,8 @@
   "metrics:contact:trend": "Wskaźnik kontaktu (trend)",
   "metrics:contact:month": "Miesiąc",
 
-  "metrics:riskyObs:title": "% ryzykownych zachowań",
-  "metrics:riskyObs:filename": "wmes__procent_ryzykownych_zachowan",
+  "metrics:riskyObs:title": "% ryzykownych zachowań i warunków pracy",
+  "metrics:riskyObs:filename": "wmes__procent_ryzykownych_obserwacji",
   "metrics:riskyObs:cards": "Obserwacje",
   "metrics:riskyObs:behaviors": "Zachowania",
   "metrics:riskyObs:workConditions": "Warunki pracy",
