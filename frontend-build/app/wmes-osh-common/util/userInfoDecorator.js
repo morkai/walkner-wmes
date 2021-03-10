@@ -1,1 +1,1 @@
-define([],function(){"use strict";return function(o,e){e.oshWorkplace&&(o.oshDivision=e.oshDivision,o.oshWorkplace=e.oshWorkplace,o.oshDepartment=e.oshDepartment||0)}});
+define([],function(){"use strict";return function(o,e){return e.oshWorkplace&&(o.oshDivision=e.oshDivision,o.oshWorkplace=e.oshWorkplace,o.oshDepartment=e.oshDepartment||0),o}});
