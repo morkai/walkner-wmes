@@ -8,6 +8,11 @@
     required: [true, false]
   }) %>
   <div id="<%- id('orgUnit') %>" class="form-group"></div>
+  <%- helpers.formGroup({
+    id: 'leader',
+    type: 'select2',
+    label: 'filter:'
+  }) %>
   <div class="form-group filter-actions">
     <%- renderButton() %>
   </div>

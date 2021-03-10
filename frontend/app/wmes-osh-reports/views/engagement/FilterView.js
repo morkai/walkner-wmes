@@ -3,6 +3,7 @@
 define([
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
+  'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/views/OrgUnitPickerFilterView',
   'app/wmes-osh-reports/templates/engagement/filter',
@@ -10,6 +11,7 @@ define([
 ], function(
   FilterView,
   dateTimeRange,
+  setUpUserSelect2,
   dictionaries,
   OrgUnitPickerFilterView,
   template
@@ -34,7 +36,11 @@ define([
     },
 
     termToForm: {
-      'date': dateTimeRange.rqlToForm
+      'date': dateTimeRange.rqlToForm,
+      'leader': (propertyName, term, formData) =>
+      {
+        formData[propertyName] = term.args[1];
+      }
     },
 
     initialize: function()
@@ -53,13 +59,6 @@ define([
       }));
     },
 
-    destroy: function()
-    {
-      FilterView.prototype.destroy.call(this);
-
-      this.$('.is-expandable').expandableSelect('destroy');
-    },
-
     getTemplateData: function()
     {
       return {
@@ -72,7 +71,7 @@ define([
       dateTimeRange.formToRql(this, selector);
 
       [
-
+        'leader'
       ].forEach(prop =>
       {
         const $prop = this.$id(prop);
@@ -110,7 +109,10 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
-      this.$('.is-expandable').expandableSelect();
+      setUpUserSelect2(this.$id('leader'), {
+        view: this,
+        width: '300px'
+      });
     }
 
   });
