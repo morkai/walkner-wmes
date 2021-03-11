@@ -356,6 +356,11 @@ define([
         page.listenTo(dispOpts, 'change:useLatestOrderData', page.updateUrl);
 
         page.listenTo(plan.mrps, 'reset', _.debounce(page.renderMrps.bind(page), 1));
+
+        if (page.options.order)
+        {
+          page.focusOrder(page.options.order);
+        }
       });
 
       $(document)
@@ -908,6 +913,28 @@ define([
       }
 
       this.lastKeyPressAt = e.timeStamp;
+    },
+
+    focusOrder: function(orderNo)
+    {
+      var planOrder = this.plan.orders.get(orderNo);
+
+      if (!planOrder)
+      {
+        return;
+      }
+
+      var planMrp = this.plan.mrps.get(planOrder.get('mrp'));
+
+      if (!planMrp)
+      {
+        return;
+      }
+
+      planMrp.orders.trigger('preview', {
+        source: 'page',
+        orderNo: planOrder.id
+      });
     }
 
   });

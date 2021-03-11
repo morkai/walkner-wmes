@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   '../broker',
   '../router',
   '../viewport',
   '../user',
   '../time'
 ], function(
+  $,
   broker,
   router,
   viewport,
@@ -113,5 +115,37 @@ define([
         });
       }
     );
+  });
+
+  router.map('/wh/pickup;jump-to-order', canView, function(req)
+  {
+    viewport.msg.loading();
+
+    var orderNo = req.query.order;
+
+    var orderReq = $.ajax({url: '/orders/' + orderNo + '?select(scheduledStartDate)'});
+
+    orderReq.fail(function()
+    {
+      viewport.msg.loaded();
+
+      broker.publish('viewport.page.loadingFailed', {
+        page: null,
+        xhr: orderReq
+      });
+    });
+
+    orderReq.done(function(order)
+    {
+      viewport.msg.loaded();
+
+      var plan = time.getMoment(order.scheduledStartDate).format('YYYY-MM-DD');
+
+      broker.publish('router.navigate', {
+        url: '/wh/pickup/' + plan + '?&orders=' + orderNo,
+        trigger: true,
+        replace: true
+      });
+    });
   });
 });

@@ -333,6 +333,9 @@
     "NAVBAR:SEARCH:cycleTime": "cycle time",
     "NAVBAR:SEARCH:balancing": "balancing",
     "NAVBAR:SEARCH:deliveredOrders": "delivered orders",
+    "NAVBAR:SEARCH:dailyPlan": "daily plan",
+    "NAVBAR:SEARCH:whPickup": "WH pickup",
+    "NAVBAR:SEARCH:whEvents": "WH events",
 
     "NAVBAR:mor": "Matrix of responsibility",
 

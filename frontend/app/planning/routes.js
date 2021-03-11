@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   '../broker',
   '../router',
   '../viewport',
   '../user',
   '../time'
 ], function(
+  $,
   broker,
   router,
   viewport,
@@ -90,7 +92,8 @@ define([
           mrps: req.query.mrps === undefined ? null : req.query.mrps
             .split(/[^A-Z0-9]+/i)
             .filter(function(mrp) { return mrp.length > 0; }),
-          division: req.query.division || null
+          division: req.query.division || null,
+          order: req.query.order
         });
       }
     );
@@ -149,5 +152,37 @@ define([
         });
       }
     );
+  });
+
+  router.map('/planning;jump-to-order', canView, function(req)
+  {
+    viewport.msg.loading();
+
+    var orderNo = req.query.order;
+
+    var orderReq = $.ajax({url: '/orders/' + orderNo + '?select(mrp,scheduledStartDate)'});
+
+    orderReq.fail(function()
+    {
+      viewport.msg.loaded();
+
+      broker.publish('viewport.page.loadingFailed', {
+        page: null,
+        xhr: orderReq
+      });
+    });
+
+    orderReq.done(function(order)
+    {
+      viewport.msg.loaded();
+
+      var plan = time.getMoment(order.scheduledStartDate).format('YYYY-MM-DD');
+
+      broker.publish('router.navigate', {
+        url: '/planning/plans/' + plan + '?mrps=' + order.mrp + '&order=' + orderNo,
+        trigger: true,
+        replace: true
+      });
+    });
   });
 });

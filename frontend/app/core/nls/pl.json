@@ -342,6 +342,9 @@
   "NAVBAR:SEARCH:cycleTime": "czas cyklu",
   "NAVBAR:SEARCH:balancing": "balansowanie",
   "NAVBAR:SEARCH:deliveredOrders": "dostarczone zlecenia",
+  "NAVBAR:SEARCH:dailyPlan": "plan dzienny",
+  "NAVBAR:SEARCH:whPickup": "kompletacja magazynu",
+  "NAVBAR:SEARCH:whEvents": "zdarzenia magazynu",
 
   "NAVBAR:mor": "Matryca odpowiedzialności",
 

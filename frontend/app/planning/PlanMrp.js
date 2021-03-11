@@ -154,7 +154,7 @@ define([
             var quantityTodo = lineOrder.get('quantity');
             var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, workingTimes);
             var executed = execution.plannedQuantitiesDone.some(quantityDone => quantityDone === quantityTodo);
-if (lineOrder.get('orderNo')==='126389596') console.log({
+if (lineOrder.get('orderNo')==='126526196') console.log({
   orderNo: lineOrder.get('orderNo'),
   shiftNo,
   quantityTodo,
