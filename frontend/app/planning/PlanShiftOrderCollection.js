@@ -156,7 +156,8 @@ define([
         quantityDoneOnDay: 0,
         quantityDoneOnShift: 0,
         plannedQuantityDone: 0,
-        plannedQuantitiesDone: []
+        plannedQuantitiesDone: [],
+        prodShiftOrders: []
       };
 
       if (!planOrder)
@@ -222,6 +223,7 @@ define([
 
           execution.plannedQuantityDone += o.quantityDone;
           execution.plannedQuantitiesDone.push(o.quantityDone, execution.plannedQuantityDone);
+          execution.prodShiftOrders.push(o.pso);
         }
       });
 

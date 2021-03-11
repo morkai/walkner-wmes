@@ -123,6 +123,7 @@ define([
         };
 
         shiftOrders.push({
+          pso: pso,
           line: prodLine,
           quantityDone,
           startedAtTime: startedAt.format('HH:mm:ss'),
@@ -143,6 +144,24 @@ define([
         var execution = this.plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, workingTimes);
 
         ok = execution.plannedQuantitiesDone.some(qty => qty === quantityPlanned);
+
+        if (ok)
+        {
+          shiftOrders.forEach(function(shiftOrder)
+          {
+            if (shiftOrder.ok
+              || shiftOrder.classNames.quantity === 'is-ok'
+              || !execution.prodShiftOrders.includes(shiftOrder.pso))
+            {
+              return;
+            }
+
+            shiftOrder.classNames.quantity = 'is-ok';
+            shiftOrder.ok = shiftOrder.classNames.line === 'is-ok'
+              && shiftOrder.classNames.quantity === 'is-ok'
+              && shiftOrder.timeOk;
+          });
+        }
       }
 
       var cmpOpt = {numeric: true, ignorePunctuation: true};
