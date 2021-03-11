@@ -102,7 +102,9 @@ define([
       show: false,
       backdrop: true
     });
+    this.$dialog.on('show.bs.modal', this.onDialogShowing.bind(this));
     this.$dialog.on('shown.bs.modal', this.onDialogShown.bind(this));
+    this.$dialog.on('hide.bs.modal', this.onDialogHiding.bind(this));
     this.$dialog.on('hidden.bs.modal', this.onDialogHidden.bind(this));
   };
 
@@ -443,6 +445,23 @@ define([
     return this.currentLayout;
   };
 
+  Viewport.prototype.onDialogShowing = function()
+  {
+    if (!this.currentDialog)
+    {
+      return;
+    }
+
+    if (_.isFunction(this.currentDialog.onDialogShowing))
+    {
+      this.currentDialog.onDialogShowing(this);
+    }
+
+    this.broker.publish('viewport.dialog.showing', this.currentDialog);
+
+    this.currentDialog.trigger('dialog:showing');
+  };
+
   Viewport.prototype.onDialogShown = function()
   {
     if (!this.currentDialog)
@@ -460,6 +479,23 @@ define([
     this.broker.publish('viewport.dialog.shown', this.currentDialog);
 
     this.currentDialog.trigger('dialog:shown');
+  };
+
+  Viewport.prototype.onDialogHiding = function()
+  {
+    var dialog = this.currentDialog;
+
+    if (!dialog)
+    {
+      return;
+    }
+
+    if (_.isFunction(dialog.remove))
+    {
+      dialog.trigger('dialog:hiding');
+
+      this.broker.publish('viewport.dialog.hiding', dialog);
+    }
   };
 
   Viewport.prototype.onDialogHidden = function()

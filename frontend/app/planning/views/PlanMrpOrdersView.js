@@ -116,7 +116,8 @@ define([
         this.hidePreview();
         this.hideMenu();
       },
-      'planning.contextMenu.shown': 'hidePreview'
+      'planning.contextMenu.shown': 'hidePreview',
+      'viewport.dialog.showing': 'hidePreview'
     },
 
     initialize: function()
