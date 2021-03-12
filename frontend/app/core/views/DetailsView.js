@@ -63,7 +63,7 @@ define([
 
     onModelEdited: function(message)
     {
-      var remoteModel = message.model;
+      var remoteModel = this.model.parse ? this.model.parse(message.model) : message.model;
 
       if (remoteModel && remoteModel._id === this.model.id)
       {

@@ -7,8 +7,10 @@
   "PROPERTY:absent": "Absencja",
   "PROPERTY:total": "Suma",
   "PROPERTY:observers": "Obserwatorzy",
+  "PROPERTY:locked": "Zablokowane?",
 
   "FORM:recount": "Przelicz zatrudnienie oraz obserwatorów na podstawie aktualnej wersji bazy użytkowników",
+  "FORM:locked": "Zablokuj automatyczne przeliczenie na koniec miesiąca",
 
   "observerEditor:title": "Edytor obserwatorów",
   "observerEditor:submit": "Przypisz obserwatorów",

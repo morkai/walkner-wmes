@@ -421,14 +421,15 @@ define([
         return;
       }
 
-      var model = message.model || message;
+      var Model = this.collection.model;
+      var model = new Model(message.model || message);
 
-      if (!model._id)
+      if (!model.id)
       {
         return;
       }
 
-      this.$('.list-item[data-id="' + model._id + '"]').addClass('is-deleted');
+      this.$('.list-item[data-id="' + model.id + '"]').addClass('is-deleted');
 
       this.refreshCollection(model);
     },

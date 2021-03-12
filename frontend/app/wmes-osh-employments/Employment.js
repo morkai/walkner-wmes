@@ -2,11 +2,15 @@
 
 define([
   'require',
+  'app/i18n',
   'app/time',
+  'app/user',
   'app/core/Model'
 ], function(
   require,
+  t,
   time,
+  currentUser,
   Model
 ) {
   'use strict';
@@ -40,6 +44,7 @@ define([
       const obj = this.toJSON();
 
       obj.month = time.utc.format(obj._id, 'MMMM YYYY');
+      obj.locked = t('core', `BOOL:${obj.locked}`);
 
       return obj;
     },
@@ -79,7 +84,7 @@ define([
       obj.orgUnits = obj.departments.map(d =>
       {
         return {
-          division: dictionaries.getLabel('divisions', d.division),
+          division: d.division ? dictionaries.getLabel('divisions', d.division) : '',
           workplace: d.workplace ? dictionaries.getLabel('workplaces', d.workplace) : '',
           department: d.department ? dictionaries.getLabel('departments', d.department) : '',
           internal: d.internal,
@@ -91,6 +96,13 @@ define([
       });
 
       return obj;
+    }
+
+  }, {
+
+    canDelete: function()
+    {
+      return currentUser.isAllowedTo('SUPER');
     }
 
   });

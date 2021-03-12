@@ -16,6 +16,12 @@
         },
         disabled: editMode
       }) %>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="locked" value="true">
+          <%- t('FORM:locked') %>
+        </label>
+      </div>
       <div class="form-group">
         <input id="<%- id('enableRecount') %>" type="checkbox">
         <button id="<%- id('doRecount') %>" class="btn btn-default" type="button" disabled>

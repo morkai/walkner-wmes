@@ -44,6 +44,7 @@ define([
         {id: 'absent', className: 'is-min is-number'},
         {id: 'total', className: 'is-min is-number'},
         {id: 'observers', className: 'is-min is-number'},
+        {id: 'locked', className: 'is-min'},
         '-'
       ]
     })));

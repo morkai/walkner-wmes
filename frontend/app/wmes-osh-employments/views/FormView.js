@@ -61,7 +61,7 @@ define([
 
       'keydown input': function(e)
       {
-        if (e.currentTarget.name.endsWith('observers'))
+        if (e.currentTarget.name.endsWith('observers') && e.key !== 'Tab')
         {
           e.currentTarget.click();
         }
@@ -289,6 +289,7 @@ define([
     {
       return {
         month: this.options.editMode ? time.utc.format(this.model.id, 'YYYY-MM') : (this.month || ''),
+        locked: this.model.get('locked'),
         departments: this.departments
       };
     },
@@ -312,7 +313,7 @@ define([
         d.internal = parseInt(d.internal, 10) || 0;
         d.external = parseInt(d.external, 10) || 0;
         d.absent = parseInt(d.absent, 10) || 0;
-        d.total = d.internal + d.external - d.absent;
+        d.total = Math.max(0, d.internal + d.external - d.absent);
         d.observers = parseInt(d.observers, 10) || 0;
         d.observerUsers = d.observerUsers ? JSON.parse(d.observerUsers) : [];
       });
@@ -449,7 +450,7 @@ define([
 
           tr.querySelector('input[name$="internal"]').value = data.internal;
           tr.querySelector('input[name$="external"]').value = data.external;
-          tr.querySelector('input[name$="total"]').value = data.internal + data.external - absent;
+          tr.querySelector('input[name$="total"]').value = Math.max(0, data.internal + data.external - absent);
           tr.querySelector('input[name$="observers"]').value = data.observers;
           tr.querySelector('input[name$="observerUsers"]').value = JSON.stringify(data.observerUsers);
         });
@@ -568,7 +569,7 @@ define([
       const external = +$row.find('input[name$="external"]').val();
       const absent = +$row.find('input[name$="absent"]').val();
 
-      $row.find('input[name$="total"]').val(internal + external - absent);
+      $row.find('input[name$="total"]').val(Math.max(0, internal + external - absent));
 
       this.recountWorkplace(+$row[0].dataset.workplace);
       this.recountDivision(+$row[0].dataset.division);

@@ -3,16 +3,4 @@
 
 'use strict';
 
-db.oshemployments.find({}).forEach(doc =>
-{
-  doc.departments.forEach(dept =>
-  {
-    if (!Array.isArray(dept.observerUsers))
-    {
-      dept.observers = 0;
-      dept.observerUsers = [];
-    }
-  });
-
-  db.oshemployments.updateOne({_id: doc._id}, {$set: {departments: doc.departments}});
-});
+db.oshemployments.updateMany({locked: {$exists: false}}, {$set: {locked: false}});
