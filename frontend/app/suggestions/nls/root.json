@@ -29,6 +29,9 @@
     "PANEL:TITLE:changes": "Change history",
 
     "LIST:owners": "{first} +{count, plural, one{1 other} other{{count} others}}",
+    "LIST:COLUMN:date": "Entry<br>date",
+    "LIST:COLUMN:finishedAt": "Finish<br>date",
+    "LIST:COLUMN:opinions": "Opinions",
 
     "PROPERTY:rid": "ID",
     "PROPERTY:subject": "Subject",

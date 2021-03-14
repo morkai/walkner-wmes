@@ -15,7 +15,7 @@ define([
 
     theadHeight: 2,
 
-    rowHeight: 1.5,
+    rowHeight: 1,
 
     rqlQuery: 'exclude(changes)&limit(-1337)&sort(-date)'
 

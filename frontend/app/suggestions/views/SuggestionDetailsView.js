@@ -1,20 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'underscore',
-  'jquery',
-  'app/viewport',
   'app/core/views/DetailsView',
   'app/kaizenOrders/dictionaries',
-  './CoordinateView',
   'app/suggestions/templates/details'
 ], function(
-  _,
-  $,
-  viewport,
   DetailsView,
   kaizenDictionaries,
-  CoordinateView,
   template
 ) {
   'use strict';
@@ -22,34 +14,6 @@ define([
   return DetailsView.extend({
 
     template: template,
-
-    events: Object.assign({
-      'click .js-coordinate': function(e)
-      {
-        var $coordSection = this.$(e.target).closest('.suggestions-details-coordSection');
-
-        var dialogView = new CoordinateView({
-          model: this.model,
-          coordSection: this.model.getCoordSection($coordSection[0].dataset.section)
-        });
-
-        viewport.showDialog(dialogView, this.t('coordinate:title', {rid: this.model.get('rid')}));
-      }
-    }, DetailsView.prototype.events),
-
-    initialize: function()
-    {
-      DetailsView.prototype.initialize.call(this);
-
-      $(window).on('resize.' + this.idPrefix, this.onWindowResize.bind(this));
-    },
-
-    destroy: function()
-    {
-      DetailsView.prototype.destroy.call(this);
-
-      $(window).off('.' + this.idPrefix);
-    },
 
     getTemplateData: function()
     {
@@ -65,11 +29,11 @@ define([
 
     afterRender: function()
     {
-      DetailsView.prototype.afterRender.call(this);
-
       var view = this;
 
-      this.$('.prop[data-dictionary]').each(function()
+      DetailsView.prototype.afterRender.call(view);
+
+      view.$('.prop[data-dictionary]').each(function()
       {
         var descriptionHolder = kaizenDictionaries[this.dataset.dictionary].get(
           view.model.get(this.dataset.property)
@@ -82,7 +46,7 @@ define([
 
         var description = descriptionHolder.get('description');
 
-        if (_.isEmpty(description))
+        if (!description)
         {
           return;
         }
@@ -91,9 +55,11 @@ define([
         this.dataset.description = description;
       });
 
-      this.$el.popover({
+      view.$el.popover({
         container: this.el,
         selector: '.has-description',
+        className: 'suggestions-details-popover',
+        trigger: 'hover',
         placement: function(popoverEl, propEl)
         {
           if (window.innerWidth <= 992)
@@ -110,31 +76,11 @@ define([
 
           return 'right';
         },
-        trigger: 'hover',
         content: function()
         {
           return this.dataset.description;
-        },
-        template: function()
-        {
-          return $($.fn.popover.Constructor.DEFAULTS.template).addClass('suggestions-details-popover');
         }
       });
-
-      this.toggleOverflowX();
-    },
-
-    toggleOverflowX: function()
-    {
-      this.$id('coordSections').css(
-        'overflow-x',
-        (this.$el.outerWidth() + 50) < window.innerWidth ? 'visible' : ''
-      );
-    },
-
-    onWindowResize: function()
-    {
-      this.toggleOverflowX();
     }
 
   });

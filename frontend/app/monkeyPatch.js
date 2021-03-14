@@ -139,9 +139,9 @@ function(
       return !!this.options.hasContent.call(this.$element[0]);
     }
 
-    if (this.options.hasContent)
+    if (typeof this.options.hasContent === 'boolean')
     {
-      return true;
+      return this.options.hasContent;
     }
 
     return !!this.getTitle() || !!this.getContent();
@@ -154,7 +154,8 @@ function(
       return this.$tip;
     }
 
-    var template = this.options.template;
+    var options = this.options;
+    var template = options.template;
 
     if (typeof template === 'function')
     {
@@ -163,19 +164,26 @@ function(
 
     this.$tip = typeof template === 'string' ? $(template) : template;
 
-    if (this.options.css)
+    if (options.css)
     {
-      this.$tip.css(this.options.css);
+      this.$tip.css(options.css);
     }
 
-    if (this.options.contentCss)
+    if (options.contentCss)
     {
-      this.$tip.find('.popover-content').first().css(this.options.contentCss);
+      this.$tip.find('.popover-content').first().css(options.contentCss);
     }
 
-    if (this.options.className)
+    if (options.className)
     {
-      this.$tip.addClass(this.options.className);
+      if (typeof options.className === 'function')
+      {
+        this.$tip.addClass(options.className(this));
+      }
+      else
+      {
+        this.$tip.addClass(options.className);
+      }
     }
 
     return this.$tip;

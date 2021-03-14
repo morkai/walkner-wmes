@@ -1,0 +1,52 @@
+<div class="panel panel-default">
+  <div class="panel-heading <%- changed ? 'is-changed' : '' %>"><%- t('PANEL:TITLE:coordSections') %></div>
+  <% if (!coordSections.length) { %>
+    <div class="panel-body">
+      <p><%- t('coordSections:noData') %></p>
+    </div>
+  <% } else { %>
+    <div id="<%- id('coordSections') %>" class="panel-body suggestions-details-coordSections">
+      <% coordSections.forEach(function(coordSection) { %>
+      <div class="suggestions-details-coordSection" data-section="<%- coordSection._id %>" data-status="<%- coordSection.status %>">
+        <% if (coordSection.canCoordinate) { %>
+        <button class="btn btn-default suggestions-details-coordSection-coordinate js-coordinate" type="button" title="<%- t('PAGE_ACTION:coordinate') %>"><i class="fa fa-gavel"></i></button>
+        <% } %>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:name') %></label>
+          <p class="form-control-static"><%= coordSection.name %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:status') %></label>
+          <p class="form-control-static"><%- t('coordSections:status:' + coordSection.status) %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:user') %></label>
+          <p class="form-control-static"><%- coordSection.user %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:time') %></label>
+          <p class="form-control-static"><%- coordSection.time %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label"><%- t('PROPERTY:coordSections:comment') %></label>
+          <p class="form-control-static text-lines"><%= coordSection.comment || '-' %></p>
+        </div>
+        <div class="form-group">
+          <label class="control-label">
+            <%- t('PROPERTY:coordSections:users') %>
+          </label>
+          <% if (coordSection.users.length) { %>
+          <ul>
+            <% coordSection.users.forEach(function(user) { %>
+            <li><%- user %></li>
+            <% }) %>
+          </ul>
+          <% } else { %>
+          <p class="form-control-static">-</p>
+          <% } %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

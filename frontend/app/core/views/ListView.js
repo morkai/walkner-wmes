@@ -40,8 +40,8 @@ define([
 
       if (topicPrefix)
       {
-        topics[topicPrefix + '.added'] = 'refreshCollection';
-        topics[topicPrefix + '.edited'] = 'refreshCollection';
+        topics[topicPrefix + '.added'] = 'onModelAdded';
+        topics[topicPrefix + '.edited'] = 'onModelEdited';
         topics[topicPrefix + '.deleted'] = 'onModelDeleted';
       }
 
@@ -78,14 +78,16 @@ define([
       },
       'mousedown .list-item[data-id]': function(e)
       {
-        if (!this.isNotClickable(e) && e.button === 1)
+        if (this.isNotClickable(e) || e.button !== 1 || this.isScrollable())
         {
-          e.preventDefault();
+          return;
         }
+
+        e.preventDefault();
       },
       'mouseup .list-item[data-id]': function(e)
       {
-        if (this.isNotClickable(e) || e.button !== 1)
+        if (this.isNotClickable(e) || e.button !== 1 || this.isScrollable())
         {
           return;
         }
@@ -414,6 +416,16 @@ define([
       return model.toJSON();
     },
 
+    onModelAdded: function()
+    {
+      this.refreshCollection();
+    },
+
+    onModelEdited: function()
+    {
+      this.refreshCollection();
+    },
+
     onModelDeleted: function(message)
     {
       if (!message)
@@ -537,6 +549,18 @@ define([
         || targetEl.classList.contains('actions')
         || window.getSelection().toString() !== ''
         || (tagName !== 'TD' && this.$(targetEl).closest('a, input, button').length);
+    },
+
+    isScrollable: function()
+    {
+      var el = this.el.querySelector('.table-responsive');
+
+      if (!el)
+      {
+        return false;
+      }
+
+      return el.scrollWidth > el.offsetWidth;
     },
 
     showContextMenu: function(id, top, left)

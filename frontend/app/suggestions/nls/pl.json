@@ -28,9 +28,10 @@
   "PANEL:TITLE:observers": "Uczestnicy zgłoszenia",
   "PANEL:TITLE:changes": "Historia zmian zgłoszenia",
 
-  "LIST:owners": "{first} <span class=text-nowrap>+{count, plural, one{1 inna} other{{count} inne}}</span>",
-  "LIST:COLUMN:date": "Data złożenia<br>wniosku",
-  "LIST:COLUMN:finishedAt": "Data<br>zakończenia",
+  "LIST:owners": "{first} <span class=text-nowrap>+{count, plural, one{1 inny} other{{count} innych}}</span>",
+  "LIST:COLUMN:date": "Data<br>wniosku",
+  "LIST:COLUMN:finishedAt": "Data<br>zakończ.",
+  "LIST:COLUMN:opinions": "Opiniowanie",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:subject": "Temat zgłoszenia",

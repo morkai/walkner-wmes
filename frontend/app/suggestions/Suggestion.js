@@ -23,6 +23,11 @@ define([
   var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt', 'finishedAt'];
   var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer', 'superior'];
   var OWNER_PROPERTIES = ['suggestionOwners', 'kaizenOwners'];
+  var OPINION_STATUS_ICONS = {
+    pending: 'fa-question',
+    rejected: 'fa-thumbs-down',
+    accepted: 'fa-thumbs-up'
+  };
 
   t = t.forDomain('suggestions');
 
@@ -44,7 +49,7 @@ define([
     {
       return {
         status: 'new',
-        date: new Date()
+        date: new Date().toISOString()
       };
     },
 
@@ -92,17 +97,7 @@ define([
         });
       });
 
-      obj.coordSections = (obj.coordSections || []).map(function(coordSection)
-      {
-        var section = kaizenDictionaries.sections.get(coordSection._id);
-
-        return _.defaults({
-          name: section ? section.getLabel() : coordSection._id,
-          user: coordSection.user ? renderUserInfo({userInfo: coordSection.user}) : '-',
-          time: coordSection.time ? time.format(coordSection.time, 'LLLL') : '-',
-          users: (coordSection.users || []).map(function(u) { return renderUserInfo({userInfo: u}); })
-        }, coordSection);
-      });
+      obj.coordSections = this.serializeCoordSections();
 
       if (!Array.isArray(obj.attachments))
       {
@@ -137,6 +132,12 @@ define([
 
       row.finishedAt = row.finishedAt ? time.format(this.get('finishedAt'), 'L') : '';
 
+      row.opinions = row.coordSections.map(function(coordSection)
+      {
+        return '<i class="fa ' + OPINION_STATUS_ICONS[coordSection.status] + '"></i>'
+          + '<span>' + _.escape(coordSection._id) + '</span>';
+      }).join(' ');
+
       switch (this.get('status'))
       {
         case 'finished':
@@ -170,20 +171,31 @@ define([
 
     serializeDetails: function()
     {
-      var suggestion = this;
-      var Suggestion = this.constructor;
       var obj = this.serialize({longDateTime: true});
 
       obj.changed = obj.observer.changes || {};
-      delete obj.changed.all;
       obj.changed.all = obj.observer.notify && _.isEmpty(obj.observer.changes);
 
-      obj.coordSections.forEach(function(coordSection)
-      {
-        coordSection.canCoordinate = Suggestion.can.coordinateSection(suggestion, coordSection._id);
-      });
-
       return obj;
+    },
+
+    serializeCoordSections: function()
+    {
+      var suggestion = this;
+      var Suggestion = this.constructor;
+
+      return (this.get('coordSections') || []).map(function(coordSection)
+      {
+        var section = kaizenDictionaries.sections.get(coordSection._id);
+
+        return _.defaults({
+          name: section ? section.getLabel() : coordSection._id,
+          user: coordSection.user ? renderUserInfo({userInfo: coordSection.user}) : '-',
+          time: coordSection.time ? time.format(coordSection.time, 'LLLL') : '-',
+          users: (coordSection.users || []).map(function(u) { return renderUserInfo({userInfo: u}); }),
+          canCoordinate: Suggestion.can.coordinateSection(suggestion, coordSection._id)
+        }, coordSection);
+      });
     },
 
     getAttachmentKinds: function()
@@ -449,6 +461,8 @@ define([
   }, {
 
     DATE_PROPERTIES: DATE_PROPERTIES,
+
+    OPINION_STATUS_ICONS: OPINION_STATUS_ICONS,
 
     can: {
 

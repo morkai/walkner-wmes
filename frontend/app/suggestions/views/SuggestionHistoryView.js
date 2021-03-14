@@ -10,6 +10,7 @@ define([
   'app/core/View',
   'app/core/templates/userInfo',
   'app/kaizenOrders/dictionaries',
+  '../Suggestion',
   'app/suggestions/templates/historyItem',
   'app/suggestions/templates/history'
 ], function(
@@ -22,16 +23,11 @@ define([
   View,
   renderUserInfo,
   kaizenDictionaries,
+  Suggestion,
   renderHistoryItem,
   template
 ) {
   'use strict';
-
-  var COORD_SECTION_STATUS_ICONS = {
-    pending: 'fa-question',
-    rejected: 'fa-thumbs-down',
-    accepted: 'fa-thumbs-up'
-  };
 
   return View.extend({
 
@@ -282,8 +278,8 @@ define([
         case 'coordSections':
           return value.map(function(coordSection)
           {
-            return '<i class="fa ' + COORD_SECTION_STATUS_ICONS[coordSection.status] + '"></i><span>'
-              + _.escape(coordSection._id) + '</span>';
+            return '<i class="fa ' + Suggestion.OPINION_STATUS_ICONS[coordSection.status] + '"></i>'
+              + '<span>' + _.escape(coordSection._id) + '</span>';
           }).join(' ');
 
         default:
@@ -300,10 +296,7 @@ define([
         selector: '.has-more',
         placement: 'top',
         trigger: 'hover',
-        template: this.$el.popover.Constructor.DEFAULTS.template.replace(
-          'class="popover"',
-          'class="popover suggestions-history-popover"'
-        ),
+        className: 'suggestions-history-popover',
         title: function()
         {
           return $(this).closest('tr').children().first().text();

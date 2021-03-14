@@ -9,6 +9,7 @@ define([
   'app/core/util/pageActions',
   'app/kaizenOrders/dictionaries',
   '../views/SuggestionDetailsView',
+  '../views/CoordSectionsView',
   '../views/AttachmentsView',
   '../views/SuggestionHistoryView',
   '../views/KomView',
@@ -26,6 +27,7 @@ define([
   pageActions,
   kaizenDictionaries,
   SuggestionDetailsView,
+  CoordSectionsView,
   AttachmentsView,
   SuggestionHistoryView,
   KomView,
@@ -171,6 +173,7 @@ define([
       DetailsPage.prototype.initialize.apply(this, arguments);
 
       this.setView('#-props', this.detailsView);
+      this.setView('#-coordSections', this.coordSectionsView);
       this.setView('#-before', this.beforeView);
       this.setView('#-after', this.afterView);
       this.setView('#-other', this.otherView);
@@ -189,6 +192,7 @@ define([
     defineViews: function()
     {
       this.detailsView = new SuggestionDetailsView({model: this.model});
+      this.coordSectionsView = new CoordSectionsView({model: this.model});
       this.beforeView = new AttachmentsView({model: this.model, kind: 'before'});
       this.afterView = new AttachmentsView({model: this.model, kind: 'after'});
       this.otherView = new AttachmentsView({model: this.model, kind: 'other'});
