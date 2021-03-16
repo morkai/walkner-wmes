@@ -38,9 +38,9 @@
       "importer": 2
     },
     "pila": {
-      "backend": 26,
-      "frontend": 30,
-      "reports": 16,
+      "backend": 27,
+      "frontend": 31,
+      "reports": 17,
       "watchdog": 1
     }
   },

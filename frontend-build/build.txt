@@ -1132,24 +1132,19 @@ app/wmes-osh-observations/assets/./details.css
 app/wmes-osh-observations/assets/./form.css
 app/wmes-osh-observations/assets/main.css
 
-app/wmes-osh-reports/assets/engagement.css
+app/wmes-osh-reports/assets/dataTable.css
 ----------------
-app/wmes-osh-reports/assets/engagement.css
+app/wmes-osh-reports/assets/dataTable.css
 
 app/wmes-osh-reports/assets/main.css
 ----------------
-app/wmes-osh-reports/assets/./engagement.css
-app/wmes-osh-reports/assets/./observers.css
+app/wmes-osh-reports/assets/./dataTable.css
 app/wmes-osh-reports/assets/./metrics.css
 app/wmes-osh-reports/assets/main.css
 
 app/wmes-osh-reports/assets/metrics.css
 ----------------
 app/wmes-osh-reports/assets/metrics.css
-
-app/wmes-osh-reports/assets/observers.css
-----------------
-app/wmes-osh-reports/assets/observers.css
 
 app/wmes-osh-targets/assets/common.css
 ----------------
@@ -1403,7 +1398,7 @@ assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/select2/select2.css
 assets/./select2.css
 assets/../vendor/datatables/media/css/jquery.dataTables.css
-assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
+assets/../vendor/datatables/extensions/FixedColumns/css/fixedColumns.dataTables.css
 assets/../vendor/highlight/styles/monokai-sublime.css
 assets/../app/core/assets/main.css
 assets/../app/orgUnits/assets/main.css
@@ -1443,6 +1438,8 @@ assets/../vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/select2/select2.css
 assets/./select2.css
+assets/../vendor/datatables/media/css/jquery.dataTables.css
+assets/../vendor/datatables/extensions/FixedColumns/css/fixedColumns.dataTables.css
 assets/../app/core/assets/main.css
 assets/../app/settings/assets/main.css
 assets/../app/users/assets/main.css
@@ -1565,21 +1562,17 @@ vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 
-vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
+vendor/datatables/extensions/FixedColumns/css/fixedColumns.dataTables.css
 ----------------
-vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
+vendor/datatables/extensions/FixedColumns/css/fixedColumns.dataTables.css
 
-vendor/datatables/extensions/FixedHeader/css/dataTables.fixedHeader.css
+vendor/datatables/extensions/FixedHeader/css/fixedHeader.dataTables.css
 ----------------
-vendor/datatables/extensions/FixedHeader/css/dataTables.fixedHeader.css
+vendor/datatables/extensions/FixedHeader/css/fixedHeader.dataTables.css
 
-vendor/datatables/extensions/Scroller/css/dataTables.scroller.css
+vendor/datatables/extensions/Scroller/css/scroller.dataTables.css
 ----------------
-vendor/datatables/extensions/Scroller/css/dataTables.scroller.css
-
-vendor/datatables/extensions/TableTools/css/dataTables.tableTools.css
-----------------
-vendor/datatables/extensions/TableTools/css/dataTables.tableTools.css
+vendor/datatables/extensions/Scroller/css/scroller.dataTables.css
 
 vendor/datatables/media/css/jquery.dataTables.css
 ----------------
@@ -2839,14 +2832,6 @@ app/wmes-osh-reports/CountReport.js
 app/wmes-osh-reports/ObserversReport.js
 app/wmes-osh-reports/EngagementReport.js
 app/wmes-osh-reports/MetricsReport.js
-vendor/highcharts/highcharts.js
-vendor/highcharts/modules/exporting.js
-vendor/highcharts/modules/no-data-to-display.js
-vendor/highcharts/modules/grouped-categories.js
-app/nls/core.js
-app/nls/pl/core.js
-i18n!app/nls/core
-app/highcharts.js
 app/reports/util/formatTooltipHeader.js
 app/planning/util/shift.js
 app/reports/util/formatXAxis.js
@@ -2865,9 +2850,8 @@ app/wmes-osh-reports/templates/count/pages.js
 app/wmes-osh-reports/pages/CountReportPage.js
 app/wmes-osh-reports/templates/observers/filter.js
 app/wmes-osh-reports/views/observers/FilterView.js
-app/wmes-osh-reports/util/formatPercent.js
+app/wmes-osh-reports/views/DataTableView.js
 app/wmes-osh-reports/templates/observers/orgUnits.js
-vendor/jquery.stickytableheaders.js
 app/wmes-osh-reports/views/observers/OrgUnitsView.js
 app/wmes-osh-reports/templates/observers/users.js
 app/wmes-osh-reports/views/observers/UsersView.js
@@ -2911,6 +2895,9 @@ app/nls/pl/wmes-osh-reports.js
 i18n!app/nls/wmes-osh-reports
 app/wmes-osh-reports/routes.js
 app/wmes-pila-main-routes.js
+app/nls/core.js
+app/nls/pl/core.js
+i18n!app/nls/core
 app/nls/wmes-osh-common.js
 app/nls/pl/wmes-osh-common.js
 i18n!app/nls/wmes-osh-common
