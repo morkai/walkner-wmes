@@ -38,7 +38,7 @@ define([
     initialize: function(attrs, options)
     {
       this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : createDefaultFilter({
-        orgUnitProperty: ''
+        orgUnitProperty: null
       });
     },
 
@@ -61,14 +61,7 @@ define([
 
     parse: function(report)
     {
-      return {
-        settings: report.settings,
-        userLabels: report.userLabels,
-        months: report.months,
-        orgUnits: report.orgUnits,
-        brigades: report.brigades,
-        users: report.users
-      };
+      return report;
     }
 
   });

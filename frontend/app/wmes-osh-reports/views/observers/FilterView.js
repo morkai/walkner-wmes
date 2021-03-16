@@ -46,27 +46,8 @@ define([
       this.setView('#-orgUnit', new OrgUnitPickerFilterView({
         filterView: this,
         emptyLabel: this.t('wmes-osh-reports', 'filter:orgUnit'),
-        orgUnitTerms: {
-          'oshDivision': 'division',
-          'oshWorkplace': 'workplace',
-          'oshDepartment': 'department'
-        },
         orgUnitTypes: ['division', 'workplace', 'department']
       }));
-    },
-
-    destroy: function()
-    {
-      FilterView.prototype.destroy.call(this);
-
-      this.$('.is-expandable').expandableSelect('destroy');
-    },
-
-    getTemplateData: function()
-    {
-      return {
-
-      };
     },
 
     serializeFormToQuery: function(selector)
@@ -106,13 +87,6 @@ define([
           selector.push({name: 'in', args: [prop, value]});
         }
       });
-    },
-
-    afterRender: function()
-    {
-      FilterView.prototype.afterRender.call(this);
-
-      this.$('.is-expandable').expandableSelect();
     }
 
   });

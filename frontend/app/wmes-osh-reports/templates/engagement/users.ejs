@@ -1,36 +1,40 @@
-<div class="table-responsive">
-  <table class="table table-bordered table-condensed table-hover osh-report-engagement-users">
+<div class="osh-report-dataTable">
+  <% if (!months.length) { %>
+  <p><i class="fa fa-spinner fa-spin"></i></p>
+  <% } else { %>
+  <table class="dataTable-padded cell-border">
     <thead>
     <tr>
-      <th rowspan="2"><%- t('engagement:employee') %></th>
-      <% months.forEach(month => { %>
-        <th class="osh-report-engagement-group" colspan="4"><%- time.utc.format(month, 'MMMM YYYY') %></th>
+      <th class="is-min is-max-rowspan" rowspan="2"><%- t('engagement:employee') %></th>
+      <% months.forEach((month, i) => { %>
+      <th class="text-center <%- i % 2 === 1 ? 'is-odd' : 'is-even' %>" colspan="4"><%- time.utc.format(month, 'MMMM YYYY') %></th>
       <% }) %>
-      <th rowspan="2"></th>
+      <th class="is-max-rowspan is-last" rowspan="2"></th>
     </tr>
     <tr>
-      <% months.forEach(month => { %>
-        <th class="osh-report-engagement-metric osh-report-engagement-group"><%- t('engagement:nearMisses:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:kaizens:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:actions:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:observations:title') %></th>
+      <% months.forEach((month, i) => { %>
+      <% var parity = i % 2 === 1 ? 'is-odd' : 'is-even' %>
+      <% ['nearMisses', 'kaizens', 'actions', 'observations'].forEach((metric, i) => { %>
+      <th class="osh-report-dataTable-metric <%- parity %>" title="<%- t(`engagement:${metric}:title`) %>"><%- t(`engagement:${metric}:header`) %></th>
+      <% }) %>
       <% }) %>
     </tr>
     </thead>
     <tbody>
-    <% users.forEach((user, i) => { %>
+      <% rows.forEach(row => { %>
       <tr>
-        <td><%- user.info %></td>
-        <% months.forEach(month => { %>
-          <% let metrics = user.months[month] || empty %>
-          <td class="osh-report-engagement-metric osh-report-engagement-group <%- metrics[0] ? '' : 'is-invalid' %>"><%- metrics[0].toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- metrics[1] ? '' : 'is-invalid' %>"><%- metrics[1].toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- metrics[2] ? '' : 'is-invalid' %>"><%- metrics[2].toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- metrics[3] ? '' : 'is-invalid' %>"><%- metrics[3].toLocaleString() %></td>
+        <td class="is-min"><%= row.userLabel %></td>
+        <% row.months.forEach((month, i) => { %>
+        <% var cls = `osh-report-dataTable-metric ${i % 2 === 1 ? 'is-odd' : 'is-even'}` %>
+        <td class="<%- cls %> <%- month[0] ? '' : 'is-zero' %>"><%- n(month[0]) %></td>
+        <td class="<%- cls %> <%- month[1] ? '' : 'is-zero' %>"><%- n(month[1]) %></td>
+        <td class="<%- cls %> <%- month[2] ? '' : 'is-zero' %>"><%- n(month[2]) %></td>
+        <td class="<%- cls %> <%- month[3] ? '' : 'is-zero' %>"><%- n(month[3]) %></td>
         <% }) %>
-        <td></td>
+        <td class="is-last"></td>
       </tr>
-    <% }) %>
+      <% }) %>
     </tbody>
   </table>
+  <% } %>
 </div>

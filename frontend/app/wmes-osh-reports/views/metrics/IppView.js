@@ -1,16 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'underscore',
-  'app/highcharts',
+  'require',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
   'app/reports/util/formatXAxis',
   'app/wmes-osh-reports/templates/metrics/ippTable',
   'app/wmes-osh-reports/templates/metrics/tableAndChart'
 ], function(
-  _,
-  Highcharts,
+  require,
   View,
   formatTooltipHeader,
   formatXAxis,
@@ -31,7 +29,11 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, `change:ipp`, this.render);
+
+      this.once('afterRender', () =>
+      {
+        this.listenTo(this.model, `change:ipp`, this.render);
+      });
     },
 
     destroy: function()
@@ -77,6 +79,8 @@ define([
     createChart: function()
     {
       const series = this.serializeChartSeries();
+
+      const Highcharts = require('app/highcharts');
 
       this.chart = new Highcharts.Chart({
         chart: {

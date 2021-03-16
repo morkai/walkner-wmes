@@ -1,5 +1,4 @@
-@import "./engagement.css";
-@import "./observers.css";
+@import "./dataTable.css";
 @import "./metrics.css";
 
 .osh-report > h3 {
@@ -63,6 +62,9 @@
 
 .osh-report .is-invalid {
   color: #E00;
+}
+.osh-report .is-zero {
+  color: #BBB;
 }
 
 .is-print .osh-report {

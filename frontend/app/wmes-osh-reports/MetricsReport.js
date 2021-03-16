@@ -153,6 +153,8 @@ define([
         attrs.trc.series.target.data.push({x: g.key, y: g.trc.target});
         attrs.trc.series.mat.data.push({x: g.key, y: g.trc.mat});
       });
+
+      attrs.trc.series.target.marker.enabled = attrs.trc.months.length === 1;
     },
 
     parseIpr: function(attrs, report)
@@ -202,6 +204,8 @@ define([
         attrs.ipr.series.itm.data.push({x: g.key, y: g.ipr.itm});
         attrs.ipr.series.mat.data.push({x: g.key, y: g.ipr.mat});
       });
+
+      attrs.ipr.series.target.marker.enabled = attrs.ipr.months.length === 1;
     },
 
     parseIpp: function(attrs, report)
@@ -258,6 +262,9 @@ define([
         attrs.ipp.series.observers.data.push({x: g.key, y: g.ipp.observers});
         attrs.ipp.series.observersTarget.data.push({x: g.key, y: g.ipp.observersTarget});
       });
+
+      attrs.ipp.series.target.marker.enabled = attrs.ipp.months.length === 1;
+      attrs.ipp.series.observersTarget.marker.enabled = attrs.ipp.months.length === 1;
     },
 
     parseObsPlan: function(attrs, report)
@@ -379,6 +386,8 @@ define([
         });
         attrs.contact.series.target.data.push({x: g.key, y: g.contact.target});
       });
+
+      attrs.contact.series.target.marker.enabled = attrs.contact.months.length === 1;
     },
 
     parseRiskyObs: function(attrs, report)
@@ -443,6 +452,9 @@ define([
         attrs.riskyObs.series.min.data.push({x: g.key, y: g.obs.minRisky});
         attrs.riskyObs.series.max.data.push({x: g.key, y: g.obs.maxRisky});
       });
+
+      attrs.riskyObs.series.min.marker.enabled = attrs.riskyObs.months.length === 1;
+      attrs.riskyObs.series.max.marker.enabled = attrs.riskyObs.months.length === 1;
     },
 
     parseObservers: function(attrs, report)
@@ -501,10 +513,12 @@ define([
         attrs.observers.categories.push(user.label);
         attrs.observers.series.count.data.push({
           y: user.count,
-          color: user.count >= report.settings.minObsCards ? '#5cb85c' : '#d9534f'
+          color: user.count >= g.obs.minCardsPerObservers ? '#5cb85c' : '#d9534f'
         });
-        attrs.observers.series.target.data.push(report.settings.minObsCards);
+        attrs.observers.series.target.data.push(g.obs.minCardsPerObservers);
       });
+
+      attrs.observers.series.target.marker.enabled = attrs.observers.categories.length === 1;
     }
 
   });

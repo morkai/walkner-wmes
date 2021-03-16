@@ -24,22 +24,27 @@ define([
 
     events: Object.assign({
 
-      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
+
+      'change input[name="mode"]': function()
+      {
+        this.toggleMode();
+      }
 
     }, FilterView.prototype.events),
 
-    defaultFormData: function()
-    {
-      return {
-
-      };
-    },
-
     termToForm: {
       'date': dateTimeRange.rqlToForm,
+      'division': (propertyName, term, formData) =>
+      {
+        formData.mode = 'orgUnit';
+      },
+      'workplace': 'division',
+      'department': 'division',
       'leader': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.args[1];
+        formData.mode = 'leader';
       }
     },
 
@@ -47,23 +52,17 @@ define([
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
-      this.setView('#-orgUnit', new OrgUnitPickerFilterView({
+      this.orgUnitPickerView = new OrgUnitPickerFilterView({
         filterView: this,
         emptyLabel: this.t('wmes-osh-reports', 'filter:orgUnit'),
-        orgUnitTerms: {
-          'oshDivision': 'division',
-          'oshWorkplace': 'workplace',
-          'oshDepartment': 'department'
-        },
-        orgUnitTypes: ['division', 'workplace', 'department']
-      }));
-    },
+        orgUnitTypes: ['division', 'workplace', 'department'],
+        labelInput: {
+          name: 'mode',
+          value: 'orgUnit'
+        }
+      });
 
-    getTemplateData: function()
-    {
-      return {
-
-      };
+      this.setView('#-orgUnit', this.orgUnitPickerView);
     },
 
     serializeFormToQuery: function(selector)
@@ -77,7 +76,7 @@ define([
         const $prop = this.$id(prop);
         let value = $prop.val();
 
-        if (!value || !value.length)
+        if (!value || !value.length || $prop.prop('disabled'))
         {
           return;
         }
@@ -113,6 +112,24 @@ define([
         view: this,
         width: '300px'
       });
+
+      this.toggleMode();
+    },
+
+    toggleMode: function()
+    {
+      const mode = this.$('input[name="mode"]:checked').val();
+
+      if (!mode)
+      {
+        this.$('input[name="mode"]').first().click();
+
+        return;
+      }
+
+      this.orgUnitPickerView.toggle(mode === 'orgUnit');
+
+      this.$id('leader').select2('enable', mode === 'leader');
     }
 
   });

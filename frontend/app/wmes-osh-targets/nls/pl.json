@@ -1,0 +1,24 @@
+{
+  "BREADCRUMB:browse": "Cele",
+
+  "PROPERTY:month": "Miesiąc",
+  "PROPERTY:minActiveUsers": "Min. zaangażo-wanie [%]",
+  "PROPERTY:minObservers": "Min. obserwatorów [%]",
+  "PROPERTY:minObsCardsPerObserver": "Ilość obserwacji na obserwatora",
+  "PROPERTY:minSafeObs": "Min. bezpiecznych obserwacji [%]",
+  "PROPERTY:maxSafeObs": "Maks. bezpiecznych obserwacji [%]",
+  "PROPERTY:ipr": "IPR",
+  "PROPERTY:ips": "IPS [%]",
+  "PROPERTY:trc": "TRC",
+  "PROPERTY:contact": "Wskaźnik kontaktu",
+
+  "FORM:copy:specific": "Skopiuj cel...",
+  "FORM:copy:all": "Skopiuj cele...",
+  "FORM:copy:department": "...do wydziału",
+  "FORM:copy:workplace": "...do całego zakładu",
+  "FORM:copy:division": "...do całej dywizji",
+  "FORM:copy:overall": "...do wszystkich dywizji",
+  "FORM:copy:clipboard": "...do schowka",
+  "FORM:paste:single": "Wklej cel...",
+  "FORM:paste:multi": "Wklej cele..."
+}

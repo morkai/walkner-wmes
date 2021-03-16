@@ -1,99 +1,58 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'jquery',
-  'app/time',
-  'app/core/View',
-  'app/core/templates/userInfo',
-  'app/wmes-osh-reports/util/formatPercent',
-  'app/wmes-osh-reports/templates/observers/users',
-  'jquery.stickytableheaders'
+  'app/wmes-osh-common/dictionaries',
+  '../DataTableView',
+  'app/wmes-osh-reports/templates/observers/users'
 ], function(
-  $,
-  time,
-  View,
-  userInfoTemplate,
-  formatPercent,
+  dictionaries,
+  DataTableView,
   template
 ) {
   'use strict';
 
-  return View.extend({
+  return DataTableView.extend({
 
     template,
 
-    initialize: function()
+    dataProperty: 'users',
+
+    freezeColumns: 1,
+
+    serializeRows: function()
     {
-      this.listenTo(this.model, `change:users`, this.render);
-
-      this.setUpTooltips();
-      this.setUpStickyTable();
-    },
-
-    getTemplateData: function()
-    {
-      const settings = this.model.get('settings');
-      const months = this.model.get('months');
-      const empty = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-      return {
-        months,
-        users: this.model.get('users').map(u =>
-        {
-          return {
-            label: userInfoTemplate(u),
-            months: months.map(month =>
-            {
-              const metrics = u.months[month] || empty;
-              const safePercent = formatPercent(metrics[3] / metrics[1]);
-
-              return {
-                cards: metrics[0],
-                cardsInvalid: metrics[0] < settings.minObsCards,
-                observations: metrics[1],
-                safe: metrics[3],
-                safePercent,
-                safeInvalid: safePercent < settings.minSafeObs || safePercent > settings.maxSafeObs,
-                risky: metrics[4] + metrics[7],
-                easy: metrics[5] + metrics[8],
-                hard: metrics[6] + metrics[9]
-              };
-            })
-          };
-        })
+      const rows = [];
+      const userLabels = this.model.get('userLabels') || {};
+      const months = this.model.get('months') || [];
+      const empty = {
+        safePercent: 0,
+        metrics: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       };
-    },
 
-    setUpTooltips: function()
-    {
-      this.on('afterRender', () =>
+      this.model.get('users').forEach(user =>
       {
-        this.$el.tooltip({
-          container: document.body,
-          selector: 'th[title]'
-        });
+        const row = {
+          userLabel: userLabels[user.id],
+          months: months.map(k =>
+          {
+            const month = user.months[k];
+
+            if (!month)
+            {
+              return empty;
+            }
+
+            return {
+              safePercent: month.metrics[1] ? Math.round(month.metrics[3] / month.metrics[1] * 100) : 0,
+              metrics: month.metrics
+            };
+          })
+        };
+
+        rows.push(row);
       });
 
-      this.on('beforeRender remove', () =>
-      {
-        this.$el.tooltip('destroy');
-      });
-    },
-
-    setUpStickyTable: function()
-    {
-      this.on('afterRender', () =>
-      {
-        this.$('.table').stickyTableHeaders({
-          fixedOffset: $('.navbar-fixed-top'),
-          scrollableAreaX: this.$el
-        });
-      });
-
-      this.on('beforeRender remove', () =>
-      {
-        this.$('.table').stickyTableHeaders('destroy');
-      });
+      return rows;
     }
 
   });

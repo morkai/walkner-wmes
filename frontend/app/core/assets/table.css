@@ -220,6 +220,7 @@ td.is-overflow {
 .is-colored .table tr th,
 .is-colored .table tr td,
 .is-colored > .table-responsive,
+.is-colored.table-responsive,
 .is-colored .actions .btn {
   border-color: #bbb;
 }

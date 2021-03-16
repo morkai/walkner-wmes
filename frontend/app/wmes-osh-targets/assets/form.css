@@ -1,0 +1,36 @@
+.osh-targets-form-table {
+  margin-bottom: 0;
+}
+.osh-targets-form-table th {
+  min-width: 110px;
+}
+.osh-targets-form-table tbody > tr > td {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.osh-targets-form-input {
+  padding: 0!important;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+}
+.osh-targets-form-input.is-readonly {
+  box-shadow: none;
+}
+.osh-targets-form-input .form-control[type="number"] {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 31px;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  text-align: right;
+  font-family: Consolas, Menlo, Monaco, monospace;
+}
+.osh-targets-form-input .form-control[type="number"]:focus {
+  outline: 2px solid #0af;
+}
+.osh-targets-form-input .form-control:read-only {
+  cursor: default;
+}
+.osh-targets-form-observers {
+  cursor: pointer!important;
+}

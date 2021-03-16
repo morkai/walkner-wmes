@@ -1,44 +1,45 @@
-<div class="table-responsive">
-  <table class="table table-bordered table-condensed table-hover osh-report-engagement-users">
+<div class="osh-report-dataTable">
+  <% if (!months.length) { %>
+  <p><i class="fa fa-spinner fa-spin"></i></p>
+  <% } else { %>
+  <table class="dataTable-padded cell-border">
     <thead>
     <tr>
-      <th rowspan="2"><%- t('engagement:leader') %></th>
-      <% months.forEach(month => { %>
-        <th class="osh-report-engagement-group" colspan="7"><%- time.utc.format(month, 'MMMM YYYY') %></th>
+      <th class="is-min is-max-rowspan" rowspan="2"><%- t('engagement:leader') %></th>
+      <% months.forEach((month, i) => { %>
+      <th class="text-center <%- i % 2 === 1 ? 'is-odd' : 'is-even' %>" colspan="7"><%- time.utc.format(month, 'MMMM YYYY') %></th>
       <% }) %>
-      <th rowspan="2"></th>
+      <th class="is-max-rowspan is-last" rowspan="2"></th>
     </tr>
     <tr>
-      <% months.forEach(month => { %>
-        <th class="osh-report-engagement-metric osh-report-engagement-group"><%- t('engagement:members:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:active:title') %></th>
-        <th class="osh-report-engagement-metric" title="<%- t('engagement:activePercent:title') %>"><%- t('engagement:activePercent:header') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:nearMisses:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:kaizens:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:actions:title') %></th>
-        <th class="osh-report-engagement-metric"><%- t('engagement:observations:title') %></th>
+      <% months.forEach((month, i) => { %>
+      <% var parity = i % 2 === 1 ? 'is-odd' : 'is-even' %>
+      <% ['members', 'active', 'activePercent', 'nearMisses', 'kaizens', 'actions', 'observations'].forEach((metric, i) => { %>
+      <th class="osh-report-dataTable-metric <%- parity %>" title="<%- t(`engagement:${metric}:title`) %>"><%- t(`engagement:${metric}:header`) %></th>
+      <% }) %>
       <% }) %>
     </tr>
     </thead>
     <tbody>
-    <% brigades.forEach((brigade, i) => { %>
+      <% rows.forEach(row => { %>
       <tr>
-        <td><%- brigade.info %></td>
-        <% months.forEach(m => { %>
-          <% let month = brigade.months[m] || empty %>
-          <td class="osh-report-engagement-metric osh-report-engagement-group"><%- month.members.length.toLocaleString() %></td>
-          <td class="osh-report-engagement-metric"><%- month.active.toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- month.active < month.members.length ? '' : 'is-invalid' %>">
-            <%- month.members.length ? `${Math.round(month.active / month.members.length * 100).toLocaleString()}%` : '0%' %>
-          </td>
-          <td class="osh-report-engagement-metric <%- month.metrics[0] ? '' : 'is-invalid' %>"><%- month.metrics[0].toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- month.metrics[1] ? '' : 'is-invalid' %>"><%- month.metrics[1].toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- month.metrics[2] ? '' : 'is-invalid' %>"><%- month.metrics[2].toLocaleString() %></td>
-          <td class="osh-report-engagement-metric <%- month.metrics[3] ? '' : 'is-invalid' %>"><%- month.metrics[3].toLocaleString() %></td>
+        <td class="is-min"><%- row.userLabel %></td>
+        <% row.months.forEach((month, i) => { %>
+        <% var parity = i % 2 === 1 ? 'is-odd' : 'is-even' %>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.members.length ? '' : 'is-zero' %>"><%- n(month.members.length) %></td>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.active ? '' : 'is-zero' %>"><%- n(month.active) %></td>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.members.length === 0 ? 'is-zero' : month.active < month.members.length ? 'is-invalid' : '' %>">
+          <%- month.members.length ? n(Math.round(month.active / month.members.length * 100)) : '0' %>%
+        </td>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.metrics[0] ? '' : 'is-zero' %>"><%- n(month.metrics[0]) %></td>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.metrics[1] ? '' : 'is-zero' %>"><%- n(month.metrics[1]) %></td>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.metrics[2] ? '' : 'is-zero' %>"><%- n(month.metrics[2]) %></td>
+        <td class="osh-report-dataTable-metric <%- parity %> <%- month.metrics[3] ? '' : 'is-zero' %>"><%- n(month.metrics[3]) %></td>
         <% }) %>
-        <td></td>
+        <td class="is-last"></td>
       </tr>
-    <% }) %>
+      <% }) %>
     </tbody>
   </table>
+  <% } %>
 </div>

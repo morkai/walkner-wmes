@@ -87,12 +87,26 @@ define([
       });
 
       this.model = null;
+      this.labelInput = null;
+
+      if (this.options.labelInput)
+      {
+        this.labelInput = Object.assign({}, this.options.labelInput);
+      }
 
       this.listenTo(this.filterView, 'filtering', this.onFiltering);
       this.listenTo(this.filterView, 'filterChanged', this.onFilterChanged);
 
       this.filterView.filterHasValue = this.filterHasValue.bind(this, this.filterView, this.filterView.filterHasValue);
       this.filterView.showFilter = this.showFilter.bind(this, this.filterView, this.filterView.showFilter);
+    },
+
+    beforeRender: function()
+    {
+      if (this.labelInput)
+      {
+        this.labelInput.checked = !!this.$('.control-label > input').prop('checked');
+      }
     },
 
     getTemplateData: function()
@@ -103,6 +117,7 @@ define([
       }
 
       return {
+        labelInput: this.labelInput,
         active: !!this.model.type,
         label: this.resolveLabel(this.model.type),
         button: !this.model.type
@@ -185,7 +200,9 @@ define([
 
     onFiltering: function(selector)
     {
-      if (!this.model.type || !this.model.units.length)
+      if (!this.model.type
+        || !this.model.units.length
+        || this.$id('showDialog').prop('disabled'))
       {
         return;
       }
@@ -215,7 +232,7 @@ define([
     {
       if (filter === this.el.parentElement.dataset.filter)
       {
-        return this.model.units.length > 0;
+        return !this.$id('showDialog').prop('disabled') && this.model.units.length > 0;
       }
 
       return filterHasValue.call(filterView, filter);
@@ -229,6 +246,12 @@ define([
       }
 
       return showFilter.call(filterView, filter);
+    },
+
+    toggle: function(enabled)
+    {
+      this.$id('showDialog').prop('disabled', !enabled);
+      this.$id('clear').prop('disabled', !enabled);
     }
 
   });

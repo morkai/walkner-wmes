@@ -1,16 +1,16 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/i18n',
-  'app/highcharts',
   'app/core/View',
   'app/wmes-osh-reports/templates/table',
   'app/wmes-osh-reports/templates/tableAndChart'
 ], function(
+  require,
   _,
   t,
-  Highcharts,
   View,
   tableTemplate,
   template
@@ -29,7 +29,11 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, `change:${this.options.metric}`, this.render);
+
+      this.once('afterRender', () =>
+      {
+        this.listenTo(this.model, `change:${this.options.metric}`, this.render);
+      });
     },
 
     destroy: function()
@@ -76,6 +80,8 @@ define([
     {
       const view = this;
       const series = view.serializeSeries(true);
+
+      const Highcharts = require('app/highcharts');
 
       this.chart = new Highcharts.Chart({
         chart: {

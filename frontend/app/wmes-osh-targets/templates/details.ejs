@@ -1,0 +1,52 @@
+<div>
+  <div class="panel panel-primary is-colored">
+    <div class="panel-heading"><%- panelTitle %></div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-condensed table-hover osh-targets-details-table">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
+            <th class="text-center"><%- t('PROPERTY:minActiveUsers') %></th>
+            <th class="text-center"><%- t('PROPERTY:minObservers') %></th>
+            <th class="text-center"><%- t('PROPERTY:minObsCardsPerObserver') %></th>
+            <th class="text-center"><%- t('PROPERTY:minSafeObs') %></th>
+            <th class="text-center"><%- t('PROPERTY:maxSafeObs') %></th>
+            <th class="text-center"><%- t('PROPERTY:ipr') %></th>
+            <th class="text-center"><%- t('PROPERTY:ips') %></th>
+            <th class="text-center"><%- t('PROPERTY:trc') %></th>
+            <th class="text-center"><%- t('PROPERTY:contact') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+            <% model.orgUnits.forEach(ou => { %>
+              <tr class="osh-targets-<%- ou.type %>">
+                <% if (ou.type === 'department') { %>
+                  <td class="is-min"><%= ou.divisionLabel %></td>
+                  <td class="is-min"><%= ou.workplaceLabel %></td>
+                  <td class="is-min"><%= ou.departmentLabel %></td>
+                <% } else if (ou.type === 'workplace') { %>
+                  <td class="is-min"><%= ou.divisionLabel %></td>
+                  <td class="is-min" colspan="2"><%= ou.workplaceLabel %></td>
+                <% } else { %>
+                  <td class="is-min" colspan="3"><%= ou.divisionLabel %></td>
+                <% } %>
+                <td class="is-min is-number"><%- ou.targets.minActiveUsers.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.minObservers.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.minObsCardsPerObserver.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.minSafeObs.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.maxSafeObs.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.ipr.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.ips.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.trc.toLocaleString() %></td>
+                <td class="is-min is-number"><%- ou.targets.contact.toLocaleString() %></td>
+                <td></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>

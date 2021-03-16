@@ -33,16 +33,6 @@ define([
       ];
     },
 
-    actions: function()
-    {
-      return [{
-        label: this.t('settings:pageAction'),
-        icon: 'cogs',
-        privileges: 'OSH:DICTIONARIES:MANAGE',
-        href: '#osh/reports;settings?tab=observers'
-      }];
-    },
-
     initialize: function()
     {
       this.model = bindLoadingMessage(this.model, this);
@@ -68,7 +58,11 @@ define([
 
     load: function(when)
     {
-      return when(dictionaries.load().done(() => this.model.fetch()));
+      return when(
+        'datatables.net',
+        'datatables-fixedcolumns',
+        dictionaries.load().done(() => this.model.fetch())
+      );
     },
 
     onFilterChanged: function(newRqlQuery)

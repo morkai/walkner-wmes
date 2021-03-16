@@ -1,69 +1,53 @@
-<div class="table-responsive">
-  <table class="table table-bordered table-hover osh-report-observers-orgUnits">
+<div class="osh-report-dataTable">
+  <% if (!months.length) { %>
+  <p><i class="fa fa-spinner fa-spin"></i></p>
+  <% } else { %>
+  <table class="dataTable-padded cell-border">
     <thead>
     <tr>
-      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
-      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
-      <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
-      <th class="is-min"><%- t('observers:employees') %></th>
-      <th class="is-min"><%- t('observers:observers') %></th>
-      <th class="is-min text-center" title="<%- t('observers:observersPercent') %>">%</th>
-      <th class="is-min"><%- t('observers:cards:title') %></th>
-      <th class="is-min text-center" title="<%- t('observers:cardsPercent') %>">%</th>
-      <th class="is-min"><%- t('observers:observations:title') %></th>
-      <th class="is-min"><%- t('observers:safe:title') %></th>
-      <th class="is-min text-center" title="<%- t('observers:safePercent') %>">%</th>
-      <th class="is-min"><%- t('observers:risky:title') %></th>
-      <th class="is-min"><%- t('observers:easy:title') %></th>
-      <th class="is-min"><%- t('observers:hard:title') %></th>
-      <th></th>
+      <th class="is-min is-max-rowspan" rowspan="2"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+      <th class="is-min is-max-rowspan" rowspan="2"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+      <th class="is-min is-max-rowspan" rowspan="2"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
+      <% months.forEach((month, i) => { %>
+      <th class="text-center <%- i % 2 === 1 ? 'is-odd' : 'is-even' %>" colspan="13"><%- time.utc.format(month, 'MMMM YYYY') %></th>
+      <% }) %>
+      <th class="is-max-rowspan is-last" rowspan="2"></th>
+    </tr>
+    <tr>
+      <% months.forEach((month, i) => { %>
+      <% var parity = i % 2 === 1 ? 'is-odd' : 'is-even' %>
+      <% ['employed', 'observers', 'observersPercent', 'engaged', 'engagedPercent', 'cards', 'cardsPercent', 'observations', 'safe', 'safePercent', 'risky', 'easy', 'hard'].forEach((metric, i) => { %>
+      <th class="osh-report-dataTable-metric <%- parity %>" title="<%- t(`observers:${metric}:title`) %>"><%- t(`observers:${metric}:header`) %></th>
+      <% }) %>
+      <% }) %>
     </tr>
     </thead>
     <tbody>
-    <% rows.forEach(row => { %>
+      <% rows.forEach(row => { %>
       <tr>
-        <% if (row.type === 'division') { %>
-          <td class="is-min" rowspan="<%- row.children %>"><%= row.division %></td>
-          <td class="is-min"></td>
-          <td class="is-min"></td>
-        <% } else if (row.type === 'workplace') {  %>
-          <td class="is-min" rowspan="<%- row.children %>"><%= row.workplace %></td>
-          <td class="is-min"></td>
-        <% } else if (row.type === 'department') { %>
-          <td class="is-min"><%= row.department %></td>
-        <% } else if (row.type === 'unknown') { %>
-          <td class="is-min">?</td>
-          <td class="is-min">?</td>
-          <td class="is-min">?</td>
-        <% } else { %>
-          <td class="is-min text-right" colspan="3"><%- t('observers:total') %></td>
-        <% } %>
-        <td class="is-min is-number"><%- n(row.employees) %></td>
-        <td class="is-min is-number"><%- n(row.observers) %></td>
-        <td class="is-min is-number <%- row.observersInvalid ? 'is-invalid' : '' %>">
-          <% if (row.observersPercent >= 0) { %>
-          <%- n(row.observersPercent) %>%
-          <% } %>
-        </td>
-        <td class="is-min is-number"><%- n(row.metrics[0]) %></td>
-        <td class="is-min is-number <%- row.cardsInvalid ? 'is-invalid' : '' %>">
-          <% if (row.cardsPercent >= 0) { %>
-            <%- n(row.cardsPercent) %>%
-          <% } %>
-        </td>
-        <td class="is-min is-number"><%- n(row.metrics[1]) %></td>
-        <td class="is-min is-number"><%- n(row.metrics[3]) %></td>
-          <td class="is-min is-number <%- row.safeInvalid ? 'is-invalid' : '' %>">
-            <% if (row.safePercent >= 0) { %>
-              <%- n(row.safePercent) %>%
-            <% } %>
-          </td>
-        <td class="is-min is-number"><%- n(row.metrics[4] + row.metrics[7]) %></td>
-        <td class="is-min is-number"><%- n(row.metrics[5] + row.metrics[8]) %></td>
-        <td class="is-min is-number"><%- n(row.metrics[6] + row.metrics[9]) %></td>
-        <td></td>
+        <td class="is-min" style="<%- row.workplace ? '' : 'border-right-color: transparent' %>"><% if (row.division) { %><%= row.division %><% } else { %>&nbsp;<% } %></td>
+        <td class="is-min" style="<%- row.department ? '' : 'border-right-color: transparent' %>"><%= row.workplace %></td>
+        <td class="is-min"><%= row.department %></td>
+        <% row.months.forEach((month, i) => { %>
+        <% var cls = 'osh-report-dataTable-metric ' + (i % 2 === 1 ? 'is-odd' : 'is-even') %>
+        <td class="<%- cls %> <%- month.employed ? '' : 'is-zero' %>"><%- n(month.employed) %></td>
+        <td class="<%- cls %> <%- month.observers ? '' : 'is-zero' %>"><%- n(month.observers) %></td>
+        <td class="<%- cls %> <%- month.observersPercent < month.targets.minObservers ? 'is-invalid' : '' %>"><%- n(month.observersPercent) %>%</td>
+        <td class="<%- cls %> <%- month.engaged ? '' : 'is-zero' %>"><%- n(month.engaged) %></td>
+        <td class="<%- cls %> <%- month.engaged < month.observers ? 'is-invalid' : '' %>"><%- n(month.engagedPercent) %>%</td>
+        <td class="<%- cls %> <%- month.metrics[0] ? '' : 'is-zero' %>"><%- n(month.metrics[0]) %></td>
+        <td class="<%- cls %> <%- month.cardsPercent < (month.targets.contact * 100) ? 'is-invalid' : '' %>"><%- n(month.cardsPercent) %>%</td>
+        <td class="<%- cls %> <%- month.metrics[1] ? '' : 'is-zero' %>"><%- n(month.metrics[1]) %></td>
+        <td class="<%- cls %> <%- month.metrics[3] ? '' : 'is-zero' %>"><%- n(month.metrics[3]) %></td>
+        <td class="<%- cls %> <%- month.safePercent < month.targets.minSafeObs || month.safePercent > month.targets.maxSafeObs ? 'is-invalid' : '' %>"><%- n(month.safePercent) %>%</td>
+        <td class="<%- cls %> <%- month.metrics[4] + month.metrics[7] ? '' : 'is-zero' %>"><%- n(month.metrics[4] + month.metrics[7]) %></td>
+        <td class="<%- cls %> <%- month.metrics[5] + month.metrics[8] ? '' : 'is-zero' %>"><%- n(month.metrics[5] + month.metrics[8]) %></td>
+        <td class="<%- cls %> <%- month.metrics[6] + month.metrics[9] ? '' : 'is-zero' %>"><%- n(month.metrics[6] + month.metrics[9]) %></td>
+        <% }) %>
+        <td class="is-last"></td>
       </tr>
-    <% }) %>
+      <% }) %>
     </tbody>
   </table>
+  <% } %>
 </div>

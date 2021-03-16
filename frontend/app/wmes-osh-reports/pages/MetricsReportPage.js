@@ -80,7 +80,10 @@ define([
 
     load: function(when)
     {
-      return when(dictionaries.load().done(() => this.model.fetch()));
+      return when(
+        'app/highcharts',
+        dictionaries.load().done(() => this.model.fetch())
+      );
     },
 
     onFilterChanged: function(newRqlQuery)

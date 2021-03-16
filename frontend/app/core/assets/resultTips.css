@@ -1,7 +1,7 @@
 .resultTip {
   z-index: 9999999;
   display: inline-block;
-  position: absolute;
+  position: fixed;
   top: -999px;
   left: -999px;
   margin: 0;

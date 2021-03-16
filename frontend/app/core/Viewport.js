@@ -203,25 +203,16 @@ define([
     function when()
     {
       var requests = [];
+      var priorityRequests = [];
+      var normalRequests = [];
+      var moduleRequests = [];
 
       page.trigger('beforeLoad', page, requests);
 
       for (var i = 0; i < arguments.length; ++i)
       {
-        var request = arguments[i];
-
-        if (Array.isArray(request))
-        {
-          requests.push.apply(requests, request);
-        }
-        else
-        {
-          requests.push(request);
-        }
+        requests = requests.concat(arguments[i]);
       }
-
-      var priorityRequests = [];
-      var normalRequests = [];
 
       requests.forEach(function(request)
       {
@@ -230,7 +221,11 @@ define([
           return;
         }
 
-        if (request.priority && request.promise && request.promise.then)
+        if (typeof request === 'string')
+        {
+          moduleRequests.push(request);
+        }
+        else if (request.priority && request.promise && request.promise.then)
         {
           priorityRequests.push(page.promised(request.promise));
         }
@@ -243,6 +238,11 @@ define([
           normalRequests.push(page.promised(request));
         }
       });
+
+      if (moduleRequests.length)
+      {
+        priorityRequests.push(loadModules(moduleRequests));
+      }
 
       if (priorityRequests.length)
       {
@@ -308,6 +308,25 @@ define([
       page.remove();
 
       viewport.broker.publish('viewport.page.loadingFailed', {page: page, xhr: jqXhr});
+    }
+
+    function loadModules(modulesToLoad)
+    {
+      var deferred = $.Deferred();
+
+      require(
+        modulesToLoad,
+        function()
+        {
+          deferred.resolve();
+        },
+        function(err)
+        {
+          deferred.reject(err);
+        }
+      );
+
+      return deferred.promise();
     }
   };
 

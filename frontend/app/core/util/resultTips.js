@@ -88,10 +88,10 @@ define([
     id += 1;
     count += 1;
 
-    var top = options.top || options.y || options.pageY || 0;
-    var left = options.left || options.x || options.pageX || 0;
+    var top = options.top || options.y || options.clientY || 0;
+    var left = options.left || options.x || options.clientX || 0;
     var event = options.event || options.e;
-    var target = options.el || options.currenTarget || options.target;
+    var target = options.el || options.currentTarget || options.target;
     var attrs = {
       id: 'resultTip' + id,
       className: ['resultTip', options.type || 'success'].concat(options.className || []),
@@ -106,12 +106,12 @@ define([
     {
       if (!top)
       {
-        top = event.pageY;
+        top = event.clientY;
       }
 
       if (!left)
       {
-        left = event.pageX;
+        left = event.clientX;
       }
     }
 
@@ -139,6 +139,16 @@ define([
           left += (targetRect.width - elRect.width) / 2;
         }
       }
+    }
+
+    if (options.offsetTop)
+    {
+      top += options.offsetTop;
+    }
+
+    if (options.offsetLeft)
+    {
+      left += options.offsetLeft;
     }
 
     if (top + elRect.height + scrollbarSize.height >= window.innerHeight)

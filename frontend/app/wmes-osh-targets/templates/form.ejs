@@ -1,0 +1,92 @@
+<form class="osh-targets-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <%- helpers.formGroup({
+        name: 'month',
+        type: 'month',
+        label: 'PROPERTY:',
+        required: true,
+        placeholder: 'YYYY-MM',
+        min: time.format(window.PRODUCTION_DATA_START_DATE || '2020-01-01', 'YYYY-MM'),
+        max: time.getMoment().startOf('month').add(1, 'months').format('YYYY-MM'),
+        inputStyle: {
+          width: '175px'
+        },
+        disabled: editMode
+      }) %>
+      <div class="table-responsive is-colored osh-targets-form-table">
+        <table class="table table-bordered table-condensed table-hover">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:division') %></th>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:workplace') %></th>
+            <th class="is-min"><%- t('wmes-osh-common', 'orgUnit:department') %></th>
+            <th class="text-center"><%- t('PROPERTY:minActiveUsers') %></th>
+            <th class="text-center"><%- t('PROPERTY:minObservers') %></th>
+            <th class="text-center"><%- t('PROPERTY:minObsCardsPerObserver') %></th>
+            <th class="text-center"><%- t('PROPERTY:minSafeObs') %></th>
+            <th class="text-center"><%- t('PROPERTY:maxSafeObs') %></th>
+            <th class="text-center"><%- t('PROPERTY:ipr') %></th>
+            <th class="text-center"><%- t('PROPERTY:ips') %></th>
+            <th class="text-center"><%- t('PROPERTY:trc') %></th>
+            <th class="text-center"><%- t('PROPERTY:contact') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+            <% orgUnits.forEach(ou => { %>
+              <tr class="osh-targets-<%- ou.type %>" data-type="<%- ou.type %>" data-division="<%- ou.division %>" data-workplace="<%- ou.workplace %>" data-department="<%- ou.department %>">
+                <% if (ou.type === 'department') { %>
+                  <td class="is-min"><%= ou.divisionLabel %></td>
+                  <td class="is-min"><%= ou.workplaceLabel %></td>
+                  <td class="is-min"><%= ou.departmentLabel %></td>
+                <% } else if (ou.type === 'workplace') { %>
+                  <td class="is-min"><%= ou.divisionLabel %></td>
+                  <td class="is-min" colspan="2"><%= ou.workplaceLabel %></td>
+                <% } else { %>
+                  <td class="is-min" colspan="3"><%= ou.divisionLabel %></td>
+                <% } %>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.division" type="hidden">
+                  <input name="orgUnits.<%- ou.key %>.workplace" type="hidden">
+                  <input name="orgUnits.<%- ou.key %>.department" type="hidden">
+                  <input name="orgUnits.<%- ou.key %>.targets.minActiveUsers" type="number" min="0" max="100" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.minObservers" type="number" min="0" max="100" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.minObsCardsPerObserver" type="number" min="0" max="1000" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.minSafeObs" type="number" min="0" max="100" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.maxSafeObs" type="number" min="0" max="100" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.ipr" type="number" min="0" max="100" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.ips" type="number" min="0" max="100" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.trc" type="number" min="0" max="100" step="0.01" class="form-control no-controls">
+                </td>
+                <td class="is-min osh-targets-form-input">
+                  <input name="orgUnits.<%- ou.key %>.targets.contact" type="number" min="0" max="100" step="0.001" class="form-control no-controls">
+                </td>
+                <td></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

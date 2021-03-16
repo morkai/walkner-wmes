@@ -4,8 +4,14 @@
 table.dataTable thead th,
 table.dataTable thead td {
   border-right: 1px solid #ddd;
-  border-bottom: none;
+  border-bottom: 1px solid #ddd;
   padding: 3px 18px 3px 3px;
+}
+table.dataTable thead > tr:last-child > th,
+table.dataTable thead > tr > th.is-max-rowspan,
+table.dataTable thead > tr:last-child > td,
+table.dataTable thead > tr > td.is-max-rowspan {
+  border-bottom: none;
 }
 table.dataTable thead th:focus,
 table.dataTable thead td:focus {
@@ -23,6 +29,16 @@ table.dataTable tbody th,
 table.dataTable tbody td {
   padding: 3px;
 }
+table.dataTable-padded thead th,
+table.dataTable-padded thead td,
+table.dataTable-padded tbody th,
+table.dataTable-padded tbody td {
+  padding: 3px 5px;
+}
+table.dataTable-padded thead th.sorting_disabled,
+table.dataTable-padded thead td.sorting_disabled {
+  padding-right: 5px;
+}
 .DTFC_LeftBodyLiner {
   border-top: 2px solid #ddd;
 }
@@ -34,13 +50,18 @@ table.dataTable.cell-border tbody tr th:first-child,
 table.dataTable.cell-border tbody tr td:first-child {
   border-left: none;
 }
+.dataTable.cell-border th.is-last,
+.dataTable.cell-border td.is-last {
+  border-right: none;
+}
 .DTFC_NoData {
   display: none;
 }
 table.dataTable .is-selectable {
   cursor: pointer;
 }
-table.dataTable tr.is-hovered > td {
+table.dataTable tr.is-hovered > td,
+table.dataTable-hover tr:hover > td {
   background-color: #FFFFD6!important;
 }
 table.dataTable tr.is-selected > td,

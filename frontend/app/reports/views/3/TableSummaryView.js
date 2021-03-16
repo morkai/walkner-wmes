@@ -6,7 +6,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/reports/templates/3/tableSummary',
-  'datatables',
+  'datatables.net',
   'datatables-fixedcolumns'
 ], function(
   _,

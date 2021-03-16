@@ -212,14 +212,14 @@ define([
         return t('wmes-osh-common', `priority:${id}`);
       }
 
-      if (!id)
-      {
-        return '';
-      }
-
       if (dictionary === 'status')
       {
         return t('wmes-osh-common', `status:${id}`);
+      }
+
+      if (!id)
+      {
+        return '';
       }
 
       if (typeof dictionary === 'string')

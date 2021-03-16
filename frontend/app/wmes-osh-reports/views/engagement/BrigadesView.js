@@ -1,85 +1,53 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'jquery',
-  'app/time',
-  'app/core/View',
-  'app/core/templates/userInfo',
-  'app/wmes-osh-reports/templates/engagement/brigades',
-  'jquery.stickytableheaders'
+  '../DataTableView',
+  'app/wmes-osh-reports/templates/engagement/brigades'
 ], function(
-  $,
-  time,
-  View,
-  userInfoTemplate,
+  DataTableView,
   template
 ) {
   'use strict';
 
-  return View.extend({
+  return DataTableView.extend({
 
     template,
 
-    initialize: function()
+    dataProperty: 'brigades',
+
+    freezeColumns: 1,
+
+    serializeRows: function()
     {
-      this.listenTo(this.model, `change:brigades`, this.render);
+      const rows = [];
+      const userLabels = this.model.get('userLabels') || {};
+      const months = this.model.get('months') || [];
 
-      this.setUpTooltips();
-      this.setUpStickyTable();
-    },
-
-    getTemplateData: function()
-    {
-      const userLabels = this.model.get('userLabels');
-
-      return {
-        settings: this.model.get('settings'),
-        months: this.model.get('months'),
-        brigades: this.model.get('brigades').map(b =>
-        {
-          b.label = userLabels[b.id];
-          b.info = userInfoTemplate(b);
-
-          return b;
-        }),
-        empty: {
-          members: [],
-          active: 0,
-          metrics: [0, 0, 0, 0]
-        }
-      };
-    },
-
-    setUpTooltips: function()
-    {
-      this.on('afterRender', () =>
+      this.model.get('brigades').forEach(brigade =>
       {
-        this.$el.tooltip({
-          container: document.body,
-          selector: 'th[title]'
-        });
+        const row = {
+          userLabel: userLabels[brigade.id],
+          months: months.map(k =>
+          {
+            const month = brigade.months[k];
+
+            if (!month)
+            {
+              return {
+                members: [],
+                active: 0,
+                metrics: [0, 0, 0, 0]
+              };
+            }
+
+            return month;
+          })
+        };
+
+        rows.push(row);
       });
 
-      this.on('beforeRender remove', () =>
-      {
-        this.$el.tooltip('destroy');
-      });
-    },
-
-    setUpStickyTable: function()
-    {
-      this.on('afterRender', () =>
-      {
-        this.$('.table').stickyTableHeaders({
-          fixedOffset: $('.navbar-fixed-top'),
-          scrollableAreaX: this.$el
-        });
-      });
-
-      this.on('beforeRender remove', () =>
-      {
-        this.$('.table').stickyTableHeaders('destroy');
-      });
+      return rows;
     }
 
   });
