@@ -369,7 +369,7 @@ exports.events = {
 exports.httpServer = {
   host: '0.0.0.0',
   port: 80,
-  availabilityTopics: ['orgUnits.rebuilt']
+  availabilityTopics: ['orgUnits.rebuilt', 'production.stateLoaded']
 };
 
 exports.httpsServer = {

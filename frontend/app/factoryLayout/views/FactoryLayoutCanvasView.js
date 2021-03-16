@@ -161,6 +161,7 @@ define([
           this.listenTo(prodLineStates, 'change:state', this.onStateChange);
           this.listenTo(prodLineStates, 'change:online', this.onOnlineChange);
           this.listenTo(prodLineStates, 'change:extended', this.onExtendedChange);
+          this.listenTo(prodLineStates, 'change:inspection', this.onInspectionChange);
           this.listenTo(prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
           this.listenTo(prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
           this.listenTo(prodLineStates, 'change:taktTime', this.updateTaktTime);
@@ -415,12 +416,16 @@ define([
         }
       }
 
+      var inspection = prodLineState && prodLineState.get('inspection');
+
       prodLineOuterContainer.classed({
         'is-offline': prodLineState && !prodLineState.get('online'),
         'is-extended': prodLineState && prodLineState.get('extended'),
         'is-eff-high': false,
         'is-eff-mid': false,
-        'is-eff-low': false
+        'is-eff-low': false,
+        'is-inspection-ok': inspection === 'ok',
+        'is-inspection-nok': inspection === 'nok'
       });
 
       var effClassName = prodLineState && prodLineState.getOrderEfficiencyClassName();
@@ -486,6 +491,14 @@ define([
           'data-length': actualQuantityDone.length
         })
         .text(actualQuantityDone);
+
+      prodLineInnerContainer.append('text')
+        .attr({
+          class: 'factoryLayout-inspection',
+          x: 1 + PROD_LINE_NAME_WIDTH + (PROD_LINE_METRIC_WIDTH + PROD_LINE_TEXT_X) * 2 - 21,
+          y: PROD_LINE_TEXT_Y + 10
+        })
+        .html('&#xf00c');
     },
 
     padMetricValue: d3.format(' >3d'),
@@ -748,28 +761,49 @@ define([
     {
       var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
 
-      if (!prodLineOuterContainer.empty())
+      if (prodLineOuterContainer.empty())
       {
-        prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
-
-        this.updateTaktTime(prodLineState);
+        return;
       }
+
+      prodLineOuterContainer.classed('is-offline', !prodLineState.get('online'));
+
+      this.updateTaktTime(prodLineState);
     },
 
     onExtendedChange: function(prodLineState)
     {
       var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
 
-      if (!prodLineOuterContainer.empty())
+      if (prodLineOuterContainer.empty())
       {
-        prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
-
-        if (!prodLineState.get('extended'))
-        {
-          prodLineOuterContainer.style('display', 'none');
-          _.defer(function() { prodLineOuterContainer.style('display', null); });
-        }
+        return;
       }
+
+      prodLineOuterContainer.classed('is-extended', prodLineState.get('extended'));
+
+      if (!prodLineState.get('extended'))
+      {
+        prodLineOuterContainer.style('display', 'none');
+        _.defer(function() { prodLineOuterContainer.style('display', null); });
+      }
+    },
+
+    onInspectionChange: function(prodLineState)
+    {
+      var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
+
+      if (prodLineOuterContainer.empty())
+      {
+        return;
+      }
+
+      var inspection = prodLineState.get('inspection');
+
+      prodLineOuterContainer.classed({
+        'is-inspection-ok': inspection === 'ok',
+        'is-inspection-nok': inspection === 'nok'
+      });
     },
 
     onPlannedQuantityDoneChange: function(prodLineState)
