@@ -37,7 +37,7 @@ define([
     return _.map(correctiveActions, function(action)
     {
       return {
-        status: dictionaries.getLabel('actionStatus', action.status),
+        status: dictionaries ? dictionaries.getLabel('actionStatus', action.status) : action.status,
         when: time.format(action.when, 'LL'),
         who: action.who.map(function(u) { return u.label; }).join(', '),
         what: action.what.trim()
@@ -178,13 +178,13 @@ define([
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');
       obj.updater = renderUserInfo(obj.updater);
       obj.inspectedAtTime = Date.parse(obj.inspectedAt);
-      obj.inspectedAt = time.format(obj.inspectedAtTime, options.dateFormat || 'L');
+      obj.inspectedAt = time.format(obj.inspectedAtTime, options && options.dateFormat || 'L');
       obj.inspector = renderUserInfo(obj.inspector);
       obj.nokOwner = renderUserInfo(obj.nokOwner);
       obj.leader = renderUserInfo(obj.leader);
       obj.coach = renderUserInfo(obj.coach);
       obj.operator = renderUserInfo(obj.operator);
-      obj.kind = dictionaries.getLabel('kind', obj.kind);
+      obj.kind = dictionaries ? dictionaries.getLabel('kind', obj.kind) : obj.kind;
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';
       obj.qtyInspected = obj.qtyInspected.toLocaleString();
       obj.serialNumbers = !Array.isArray(obj.serialNumbers) ? '' : obj.serialNumbers.join(', ');
@@ -199,7 +199,9 @@ define([
       }
       else
       {
-        obj.errorCategory = dictionaries.getLabel('errorCategory', obj.errorCategory);
+        obj.errorCategory = dictionaries
+          && dictionaries.getLabel('errorCategory', obj.errorCategory)
+          || obj.errorCategory;
         obj.qtyToFix = obj.qtyToFix.toLocaleString();
         obj.qtyNok = obj.qtyNok.toLocaleString();
         obj.qtyNokInspected = obj.qtyNokInspected >= 0 ? obj.qtyNokInspected.toLocaleString() : '';
@@ -306,7 +308,9 @@ define([
         }
       }
 
-      var result = dictionaries.getLabel('actionStatus', bestCorrectiveAction.status);
+      var result = dictionaries
+        ? dictionaries.getLabel('actionStatus', bestCorrectiveAction.status)
+        : bestCorrectiveAction.status;
 
       if (bestCorrectiveAction.when)
       {

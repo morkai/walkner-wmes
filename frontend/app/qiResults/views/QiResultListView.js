@@ -68,20 +68,20 @@ define([
       var columns = [
         {id: 'rid', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'orderNo', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
-        {id: 'nc12', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
+        {id: 'nc12', tdClassName: 'is-min text-mono', thClassName: 'is-filter'},
         {id: 'productFamily', tdClassName: 'is-overflow w75', thClassName: 'is-filter'},
-        {id: 'productName'},
+        {id: 'productName', tdClassName: 'is-overflow w300'},
         {id: 'division', tdClassName: 'is-min', thClassName: 'is-filter'},
         {id: 'line', tdClassName: 'is-min', thClassName: 'is-filter'},
-        {id: 'kind', thClassName: 'is-filter'},
+        {id: 'kind', tdClassName: 'is-overflow w200', thClassName: 'is-filter'},
         {id: 'inspectedAt', tdClassName: 'is-min', thClassName: 'is-filter'},
-        {id: 'inspectorLeader', thClassName: 'is-filter'}
+        {id: 'inspectorLeader', tdClassName: 'is-overflow w175', thClassName: 'is-filter'}
       ];
 
       if (hasAnyNokResult)
       {
         columns.push(
-          {id: 'nokOwner', thClassName: 'is-filter'}
+          {id: 'nokOwner', tdClassName: 'is-overflow w175', thClassName: 'is-filter'}
         );
       }
 
@@ -103,10 +103,12 @@ define([
             label: this.t('PROPERTY:correctiveActions'),
             noData: '',
             thClassName: 'is-filter',
-            tdClassName: 'has-popover'
+            tdClassName: 'is-overflow w250 has-popover'
           }
         );
       }
+
+      columns.push('-');
 
       return columns;
     },
@@ -168,9 +170,20 @@ define([
         trigger: 'hover',
         placement: 'auto left',
         html: true,
+        className: function(popover)
+        {
+          var className = ['qiResults-list-popover'];
+
+          if (popover.$element[0].dataset.id === 'correctiveAction')
+          {
+            className.push('is-correctiveAction');
+          }
+
+          return className.join(' ');
+        },
+        title: function() { return ''; },
         content: function()
         {
-          var $tip = view.$el.data('bs.popover').tip().removeClass('is-correctiveAction');
           var model = view.collection.get(this.parentNode.dataset.id);
 
           if (this.dataset.id === 'faultCode')
@@ -184,8 +197,6 @@ define([
 
             if (correctiveActions && correctiveActions.length)
             {
-              $tip.addClass('is-correctiveAction');
-
               return view.renderPartialHtml(renderCorrectiveActionsTable, {
                 bordered: false,
                 correctiveActions: model.serializeCorrectiveActions(qiDictionaries)
@@ -194,12 +205,6 @@ define([
           }
 
           return undefined;
-        },
-        template: function()
-        {
-          return $($.fn.popover.Constructor.DEFAULTS.template)
-            .addClass('qiResults-list-popover')
-            .toggleClass('is-correctiveAction', this.dataset.id === 'correctiveAction');
         }
       });
     }

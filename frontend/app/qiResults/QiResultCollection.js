@@ -17,7 +17,7 @@ define([
 
     theadHeight: 2,
 
-    rowHeight: 2,
+    rowHeight: 1,
 
     rqlQuery: function(rql)
     {
