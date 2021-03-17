@@ -141,7 +141,26 @@ define([
         displayOptions.set('division', attrs.division);
       }
 
-      ['mrps', 'lines', 'orders', 'sets', 'whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
+      ['mrps', 'lines', 'orders', 'sets'].forEach(function(prop)
+      {
+        var value = attrs[prop];
+
+        if (Array.isArray(value))
+        {
+          if (prop === 'sets')
+          {
+            value = value.map(function(v) { return +v; });
+          }
+
+          displayOptions.set(prop, value);
+        }
+        else
+        {
+          displayOptions.set(prop, []);
+        }
+      });
+
+      ['whStatuses', 'psStatuses', 'distStatuses'].forEach(function(prop)
       {
         var value = attrs[prop];
 
