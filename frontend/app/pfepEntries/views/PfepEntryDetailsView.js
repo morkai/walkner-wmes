@@ -11,7 +11,19 @@ define([
 
   return DetailsView.extend({
 
-    template: template
+    template: template,
+
+    remoteTopics: function()
+    {
+      var topics = DetailsView.prototype.remoteTopics.apply(this, arguments);
+
+      topics['pfep.entries.imported'] = function()
+      {
+        this.promised(this.model.fetch());
+      };
+
+      return topics;
+    }
 
   });
 });

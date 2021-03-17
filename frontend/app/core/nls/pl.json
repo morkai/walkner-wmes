@@ -9,6 +9,8 @@
   "MSG:SAVING_FAILURE": "Zapisywanie nie powiodło się.",
   "MSG:EXPORTING": "<i class='fa fa-spinner fa-spin'></i><span>Eksportowanie...</span>",
   "MSG:EXPORTING_FAILURE": "Eksportowanie nie powiodło się.",
+  "MSG:IMPORTING": "<i class='fa fa-spinner fa-spin'></i><span>Importowanie...</span>",
+  "MSG:IMPORTING_FAILURE": "Importowanie nie powiodło się.",
   "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się.",
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
   "MSG:POPUP_BLOCKED": "Wyskakujące okienko zostało zablokowane.",

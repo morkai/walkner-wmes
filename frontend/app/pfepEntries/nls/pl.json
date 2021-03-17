@@ -62,5 +62,10 @@
   "LIST:COLUMN:notes": "Uwagi",
 
   "history:added": "utworzenie wpisu PFEP.",
-  "history:submit": "Komentuj"
+  "history:submit": "Komentuj",
+
+  "import:title": "Importowanie wpisów z pliku",
+  "import:file": "Plik do importu",
+  "import:submit": "Importuj dane",
+  "import:message": "<p>Pierwszy arkusz w pliku powinien zawierać w pierwszym wierszu nazwy kolumn, a w następnych dane wpisów.</p><p>Oczekiwane nazwy kolumn to:</p><ul><li><code>rid</code> - ID wpisu<li><code>nc12</code> - 12NC (wymagane)<li><code>description</code> - Opis<li><code>unit</code> - Jednostka<li><code>packType</code> - Rodzaj opakowania<li><code>externalPackQty</code> - Ilość w opakowaniu zewnętrznym<li><code>internalPackQty</code> - Ilość w opakowaniu wewnętrznym<li><code>packLength</code> - Długość opakowania<li><code>packWidth</code> - Szerokość opakowania<li><code>packHeight</code> - Wysokość opakowania<li><code>packGrossWeight</code> - Waga brutto opakowania<li><code>componentNetWeight</code> - Waga netto komponentu<li><code>componentGrossWeight</code> - Waga brutto komponentu<li><code>qtyPerLayer</code> - Ilość na warstwę<li><code>qtyOnPallet</code> - Ilość na paletę<li><code>palletLength</code> - Długość palety<li><code>palletHeight</code> - Szerokość palety<li><code>palletWidth</code> - Całkowita wysokość palety<li><code>moq</code> - MOQ<li><code>roundingValue</code> - Wartość zaokrąglenia<li><code>vendor</code> - Dostawca<li><code>notes</code> - Uwagi</ul><p>Jeżeli <code>rid</code> nie zostanie podane, to zostanie utworzony nowy wpis.</p>"
 }

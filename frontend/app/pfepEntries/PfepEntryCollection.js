@@ -15,7 +15,7 @@ define([
 
     model: PfepEntry,
 
-    rowHeight: 2,
+    rowHeight: 1,
     theadHeight: 3,
 
     rqlQuery: 'sort(-rid)&limit(-1337)'

@@ -1,0 +1,15 @@
+<form>
+  <div class="form-group">
+    <label for="<%- id('file') %>"><%- t('import:file') %></label>
+    <input id="<%- id('file') %>" name="file" class="form-control" type="file" accept=".xlsx" required>
+  </div>
+  <% if (t.has('import:message')) { %>
+  <div class="form-group">
+    <%- t('import:message') %>
+  </div>
+  <% } %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('import:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

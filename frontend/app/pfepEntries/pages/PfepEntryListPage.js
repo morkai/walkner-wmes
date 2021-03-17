@@ -1,17 +1,19 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'jquery',
+  'app/viewport',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   '../views/PfepEntryFilterView',
-  '../views/PfepEntryListView'
+  '../views/PfepEntryListView',
+  '../views/ImportDialogView'
 ], function(
-  $,
+  viewport,
   FilteredListPage,
   pageActions,
   PfepEntryFilterView,
-  PfepEntryListView
+  PfepEntryListView,
+  ImportDialogView
 ) {
   'use strict';
 
@@ -28,8 +30,20 @@ define([
       return [
         pageActions.jump(this, collection),
         pageActions.export(layout, this, collection, false),
+        {
+          id: 'import',
+          icon: 'upload',
+          label: this.t('core', 'PAGE_ACTION:import'),
+          privileges: 'PFEP:MANAGE',
+          callback: this.showImportDialog.bind(this)
+        },
         pageActions.add(collection)
       ];
+    },
+
+    showImportDialog: function()
+    {
+      viewport.showDialog(new ImportDialogView(), this.t('import:title'));
     }
 
   });

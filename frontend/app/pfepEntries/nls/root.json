@@ -63,7 +63,11 @@
     "LIST:COLUMN:notes": "Notes",
 
     "history:added": "created the PFEP entry.",
-    "history:submit": "Comment"
+    "history:submit": "Comment",
+
+    "import:title": "Importing entries",
+    "import:file": "File to import",
+    "import:submit": "Import entries"
   },
   "pl": true
 }
