@@ -137,7 +137,7 @@ define([
 
     var model = this.get(id);
 
-    return model ? model.getLabel(options) : id;
+    return model ? model.getLabel(options) : String(id);
   };
 
   Collection.prototype.getLabels = function(ids, options)
