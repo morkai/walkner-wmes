@@ -169,7 +169,7 @@ define([
         d.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
         d.mrpControllers = _.map(mrps, function(v, mrp)
         {
-          if (!d.orderMrp || _.includes(d.orderMrp, mrp))
+          if (!d.orderMrp || !d.orderMrp.length || _.includes(d.orderMrp, mrp))
           {
             return mrp;
           }
