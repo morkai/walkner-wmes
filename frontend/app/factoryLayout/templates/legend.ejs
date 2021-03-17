@@ -1,11 +1,21 @@
 <div class="factoryLayout-legend">
+  <div class="factoryLayout-legend-group">
+    <div class="factoryLayout-legend-item" data-state="off"><%- t('legend:line:name') %></div>
+    <div class="factoryLayout-legend-item" data-state="none"><%- t('legend:line:plan') %></div>
+    <div class="factoryLayout-legend-item" data-state="none"><%- t('legend:line:actual') %></div>
+    <div class="factoryLayout-legend-item" data-state="none"><%- t('legend:line:qi') %></div>
+  </div>
   <% if (heff) { %>
+  <div class="factoryLayout-legend-group">
     <% ['off', 'noPlan', 'unplanned', 'under', 'over'].forEach(function(state) { %>
-      <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:heff:' + state + ':title') %>"><%- t('legend:heff:' + state) %></div>
+    <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:heff:' + state + ':title') %>"><%- t('legend:heff:' + state) %></div>
     <% }) %>
+  </div>
   <% } else { %>
-    <% ['off', 'idle', 'low', 'mid', 'high', 'downtime', 'break'].forEach(function(state) { %>
-      <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:layout:' + state + ':title') %>"><%- t('legend:layout:' + state) %></div>
-    <% }) %>
+  <div class="factoryLayout-legend-group">
+  <% ['off', 'idle', 'low', 'mid', 'high', 'downtime', 'break'].forEach(function(state) { %>
+  <div class="factoryLayout-legend-item" data-state="<%- state %>" title="<%- t('legend:layout:' + state + ':title') %>"><%- t('legend:layout:' + state) %></div>
+  <% }) %>
+  </div>
   <% } %>
 </div>

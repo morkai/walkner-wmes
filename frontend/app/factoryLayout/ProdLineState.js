@@ -290,6 +290,11 @@ define([
 
     getMetricValue: function(metricName, heff)
     {
+      if (metricName === 'inspections')
+      {
+        return this.get('qi').count;
+      }
+
       if (!heff)
       {
         return this.get(metricName);

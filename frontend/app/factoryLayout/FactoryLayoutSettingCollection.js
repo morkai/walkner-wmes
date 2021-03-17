@@ -64,6 +64,11 @@ define([
         return this.prepareColorValue(newValue);
       }
 
+      if (/qiKinds$/.test(id))
+      {
+        return this.prepareMultiObjectIdValue(newValue);
+      }
+
       newValue = parseInt(newValue, 10);
 
       return isNaN(newValue) ? undefined : newValue;

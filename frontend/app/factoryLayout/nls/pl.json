@@ -100,5 +100,9 @@
   "legend:layout:downtime": "przestój",
   "legend:layout:downtime:title": "Na linii jest przestój innego typu niż Przerwa.",
   "legend:layout:break": "przerwa",
-  "legend:layout:break:title": "Na linii jest przestój typu Przerwa."
+  "legend:layout:break:title": "Na linii jest przestój typu Przerwa.",
+  "legend:line:name": "linia",
+  "legend:line:plan": "do zrobienia",
+  "legend:line:actual": "zrobione",
+  "legend:line:qi": "inspekcje"
 }

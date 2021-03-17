@@ -128,11 +128,11 @@ define([
       }
     },
 
-    getTemplateData: function()
+    serialize: function()
     {
-      return {
+      return Object.assign(View.prototype.serialize.call(this), {
         renderColorPicker: colorPickerTemplate
-      };
+      });
     },
 
     afterRender: function()

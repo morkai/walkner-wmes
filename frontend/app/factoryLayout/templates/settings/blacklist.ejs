@@ -1,8 +1,8 @@
 <div class="panel-body" data-tab="blacklist">
   <% ['division', 'subdivision', 'mrpController', 'prodFlow', 'workCenter', 'prodLine'].forEach(function(orgUnitType) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-blacklist-<%- orgUnitType %>"><%- t('core', 'ORG_UNIT:' + orgUnitType) %></label>
-    <input id="<%- idPrefix %>-blacklist-<%- orgUnitType %>" name="factoryLayout.blacklist.<%- orgUnitType %>" type="text" autocomplete="new-password">
+    <label for="<%- id('blacklist-' + orgUnitType) %>"><%- t('core', 'ORG_UNIT:' + orgUnitType) %></label>
+    <input id="<%- id('blacklist-' + orgUnitType) %>" name="factoryLayout.blacklist.<%- orgUnitType %>" type="text" data-setting>
   </div>
   <% }) %>
 </div>

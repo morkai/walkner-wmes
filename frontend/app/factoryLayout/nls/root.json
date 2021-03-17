@@ -101,7 +101,11 @@
     "legend:layout:downtime": "downtime",
     "legend:layout:downtime:title": "Line has a downtime other than Break.",
     "legend:layout:break": "break",
-    "legend:layout:break:title": "Line has a downtime of type Break."
+    "legend:layout:break:title": "Line has a downtime of type Break.",
+    "legend:line:name": "line",
+    "legend:line:plan": "todo",
+    "legend:line:actual": "done",
+    "legend:line:qi": "inspections"
   },
   "pl": true
 }

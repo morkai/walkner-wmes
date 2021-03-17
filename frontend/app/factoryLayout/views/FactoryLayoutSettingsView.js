@@ -26,17 +26,17 @@ define([
     },
 
     events: _.assign({
-      'change input[name^="factoryLayout.blacklist"]': function(e)
+      'change [data-setting]': function(e)
       {
         this.updateSetting(e.target.name, e.target.value);
       }
     }, SettingsView.prototype.events),
 
-    serialize: function()
+    getTemplateData: function()
     {
       var settings = this.settings;
 
-      return _.assign(SettingsView.prototype.serialize.call(this), {
+      return {
         divisions: _.map(orgUnits.getAllByType('division'), function(division)
         {
           var property = 'factoryLayout.' + division.id + '.color';
@@ -48,7 +48,7 @@ define([
             color: setting ? setting.get('value') : '#FFFFFF'
           };
         })
-      });
+      };
     },
 
     afterRender: function()
@@ -61,6 +61,7 @@ define([
       this.setUpBlacklistSelect2('prodFlow');
       this.setUpBlacklistSelect2('workCenter');
       this.setUpBlacklistSelect2('prodLine');
+      this.setUpQiKinds();
     },
 
     setUpBlacklistSelect2: function(type)
@@ -79,9 +80,33 @@ define([
       });
     },
 
+    setUpQiKinds: function()
+    {
+      var $input = this.$id('qiKinds');
+
+      $input.select2({
+        multiple: true,
+        data: []
+      }).select2('enable', false);
+
+      this.ajax({url: '/qi/kinds'}).done(function(res)
+      {
+        $input.select2({
+          multiple: true,
+          data: res.collection.map(function(item)
+          {
+            return {
+              id: item._id,
+              text: item.name
+            };
+          })
+        }).select2('enable', true);
+      });
+    },
+
     updateSettingField: function(setting)
     {
-      if (/blacklist/.test(setting.id))
+      if (/(blacklist|qiKinds)/.test(setting.id))
       {
         return this.$('input[name="' + setting.id + '"]').select2('val', setting.getValue());
       }

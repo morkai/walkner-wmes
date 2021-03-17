@@ -23,7 +23,7 @@ define([
 ) {
   'use strict';
 
-  var PROD_LINE_PADDING = 10;
+  var PROD_LINE_PADDING = 9;
   var PROD_LINE_HEIGHT = 22;
   var PROD_LINE_TEXT_X = 4;
   var PROD_LINE_TEXT_Y = 17;
@@ -146,6 +146,7 @@ define([
       this.clickInfo = null;
       this.panInfo = null;
       this.$popover = null;
+      this.dragged = false;
 
       $('body').on('keydown', this.onKeyDown);
       $(window).on('resize', this.onResize);
@@ -161,7 +162,7 @@ define([
           this.listenTo(prodLineStates, 'change:state', this.onStateChange);
           this.listenTo(prodLineStates, 'change:online', this.onOnlineChange);
           this.listenTo(prodLineStates, 'change:extended', this.onExtendedChange);
-          this.listenTo(prodLineStates, 'change:inspection', this.onInspectionChange);
+          this.listenTo(prodLineStates, 'change:qi', this.onQiChange);
           this.listenTo(prodLineStates, 'change:plannedQuantityDone', this.onPlannedQuantityDoneChange);
           this.listenTo(prodLineStates, 'change:actualQuantityDone', this.onActualQuantityDoneChange);
           this.listenTo(prodLineStates, 'change:taktTime', this.updateTaktTime);
@@ -261,6 +262,8 @@ define([
           d.position.y = d3.event.y - (d3.event.y % 10);
 
           d3.select(this).attr('transform', 'translate(' + d.position.x + ',' + d.position.y + ')');
+
+          view.dragged = true;
         });
 
       var g = selection.enter().insert('g')
@@ -391,6 +394,7 @@ define([
       var heff = this.heff && prodLineState ? prodLineState.recalcHeff() : null;
       var plannedQuantityDone = 0;
       var actualQuantityDone = 0;
+      var inspections = 0;
 
       if (prodLineState)
       {
@@ -414,9 +418,11 @@ define([
           plannedQuantityDone = prodLineState.getMetricValue('plannedQuantityDone');
           actualQuantityDone = prodLineState.getMetricValue('actualQuantityDone');
         }
+
+        inspections = prodLineState.getMetricValue('inspections');
       }
 
-      var inspection = prodLineState && prodLineState.get('inspection');
+      var qi = prodLineState && prodLineState.get('qi');
 
       prodLineOuterContainer.classed({
         'is-offline': prodLineState && !prodLineState.get('online'),
@@ -424,8 +430,8 @@ define([
         'is-eff-high': false,
         'is-eff-mid': false,
         'is-eff-low': false,
-        'is-inspection-ok': inspection === 'ok',
-        'is-inspection-nok': inspection === 'nok'
+        'is-inspection-ok': qi && qi.ok === true,
+        'is-inspection-nok': qi && qi.ok === false
       });
 
       var effClassName = prodLineState && prodLineState.getOrderEfficiencyClassName();
@@ -455,6 +461,9 @@ define([
         })
         .text(prodLineState ? prodLineState.getLabel() : ('LPx ' + (i + 1)));
 
+      // Planned quantity done
+      plannedQuantityDone = this.prepareMetricValue(plannedQuantityDone);
+
       prodLineInnerContainer.append('rect').attr({
         class: 'factoryLayout-metric-bg',
         x: PROD_LINE_NAME_WIDTH,
@@ -462,9 +471,6 @@ define([
         width: PROD_LINE_METRIC_WIDTH,
         height: PROD_LINE_HEIGHT
       });
-
-      plannedQuantityDone = this.prepareMetricValue(plannedQuantityDone);
-      actualQuantityDone = this.prepareMetricValue(actualQuantityDone);
 
       prodLineInnerContainer.append('text')
         .attr({
@@ -474,6 +480,9 @@ define([
           'data-length': plannedQuantityDone.length
         })
         .text(plannedQuantityDone);
+
+      // Actual quantity done
+      actualQuantityDone = this.prepareMetricValue(actualQuantityDone);
 
       prodLineInnerContainer.append('rect').attr({
         class: 'factoryLayout-metric-bg',
@@ -492,16 +501,26 @@ define([
         })
         .text(actualQuantityDone);
 
+      // Inspections
+      inspections = this.prepareMetricValue(inspections);
+
+      prodLineInnerContainer.append('rect').attr({
+        class: 'factoryLayout-metric-bg',
+        x: PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH * 2,
+        y: 0,
+        width: PROD_LINE_METRIC_WIDTH,
+        height: PROD_LINE_HEIGHT
+      });
+
       prodLineInnerContainer.append('text')
         .attr({
-          class: 'factoryLayout-inspection',
-          x: 1 + PROD_LINE_NAME_WIDTH + (PROD_LINE_METRIC_WIDTH + PROD_LINE_TEXT_X) * 2 - 21,
-          y: PROD_LINE_TEXT_Y + 10
+          class: 'factoryLayout-metric-value factoryLayout-metric-inspections',
+          x: 1 + PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH * 2 + PROD_LINE_TEXT_X,
+          y: PROD_LINE_TEXT_Y,
+          'data-length': inspections.length
         })
-        .html('&#xf00c');
+        .text(inspections);
     },
-
-    padMetricValue: d3.format(' >3d'),
 
     setUpCanvas: function(size)
     {
@@ -612,22 +631,49 @@ define([
 
     centerView: function()
     {
-      var canvasWidth = this.canvas.node().getBBox().width;
-      var x;
-      var y;
+      this.$el.toggleClass('is-fullscreen', screenfull.isFullscreen);
+
+      var points = [];
+
+      this.model.factoryLayout.get('live').forEach(function(section)
+      {
+        section.points.forEach(function(point)
+        {
+          points.push([point[0] + section.position.x, point[1] + section.position.y]);
+        });
+      });
+
+      points.sort((a, b) => a[0] - b[0]);
+
+      var left = points[0][0];
+      var right = points[points.length - 1][0];
+
+      points.sort((a, b) => a[1] - b[1]);
+
+      var top = points[0][1];
+      var bottom = points[points.length - 1][1];
+
+      var containerWidth = 0;
+      var containerHeight = 0;
 
       if (screenfull.isFullscreen)
       {
-        x = (window.innerWidth - canvasWidth) / 2;
-        y = 0;
+        containerWidth = window.innerWidth;
+        containerHeight = window.innerHeight;
       }
       else
       {
-        x = (this.el.getBoundingClientRect().width - canvasWidth) / 2;
-        y = 5;
+        var rect = this.el.getBoundingClientRect();
+
+        containerWidth = rect.width;
+        containerHeight = rect.height;
       }
 
-      this.$el.toggleClass('is-fullscreen', screenfull.isFullscreen);
+      var layoutWidth = right - left;
+      var layoutHeight = bottom - top;
+
+      var x = Math.round((containerWidth - layoutWidth) / 2);
+      var y = Math.round((containerHeight - layoutHeight) / 2);
 
       this.translate(x, y);
     },
@@ -693,15 +739,26 @@ define([
 
     onResize: function()
     {
-      var size = this.getSize();
+      this.resize();
 
-      this.$el.css(size);
-      this.$('svg').attr(size).find('.factoryLayout-bg').attr(size);
+      if (!this.dragged)
+      {
+        this.centerView();
+      }
     },
 
     onFullscreen: function()
     {
+      this.resize();
       this.centerView();
+    },
+
+    resize: function()
+    {
+      var size = this.getSize();
+
+      this.$el.css(size);
+      this.$('svg').attr(size).find('.factoryLayout-bg').attr(size);
     },
 
     getProdLineOuterContainer: function(prodLineId)
@@ -789,7 +846,7 @@ define([
       }
     },
 
-    onInspectionChange: function(prodLineState)
+    onQiChange: function(prodLineState)
     {
       var prodLineOuterContainer = this.getProdLineOuterContainer(prodLineState.id);
 
@@ -798,12 +855,14 @@ define([
         return;
       }
 
-      var inspection = prodLineState.get('inspection');
+      var qi = prodLineState.get('qi');
 
       prodLineOuterContainer.classed({
-        'is-inspection-ok': inspection === 'ok',
-        'is-inspection-nok': inspection === 'nok'
+        'is-inspection-ok': qi.ok === true,
+        'is-inspection-nok': qi.ok === false
       });
+
+      this.updateMetricValue(prodLineState, 'inspections');
     },
 
     onPlannedQuantityDoneChange: function(prodLineState)
@@ -969,9 +1028,14 @@ define([
       });
     },
 
-    prepareMetricValue: function(value)
+    prepareMetricValue: function(value, maxLength)
     {
-      return value === -1 ? '???' : this.padMetricValue(value);
+      if (!maxLength)
+      {
+        maxLength = 3;
+      }
+
+      return value === -1 ? '?'.padStart(maxLength, '?') : value.toString().padStart(maxLength, ' ');
     },
 
     handleClick: function()
