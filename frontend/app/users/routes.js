@@ -86,6 +86,22 @@ define([
     }
   );
 
+  router.map(
+    '/account',
+    function()
+    {
+      viewport.loadPage(
+        ['app/users/pages/UserDetailsPage'],
+        function(UserDetailsPage)
+        {
+          return new UserDetailsPage({
+            model: new User({_id: user.data._id})
+          });
+        }
+      );
+    }
+  );
+
   router.map('/users;add', canManage, function()
   {
     viewport.loadPage(
