@@ -39,7 +39,7 @@
     },
     "pila": {
       "backend": 27,
-      "frontend": 31,
+      "frontend": 32,
       "reports": 17,
       "watchdog": 1
     }
