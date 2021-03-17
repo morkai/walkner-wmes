@@ -81,7 +81,8 @@
 				if (/5\.1[\.\d]* Safari/.test(navigator.userAgent)) {
 					elem[request]();
 				} else {
-					elem[request](keyboardAllowed && Element.ALLOW_KEYBOARD_INPUT);
+					console.log(elem, request, arguments);
+					elem[request]();
 				}
 			},
 			exit: function () {
