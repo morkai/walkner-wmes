@@ -320,7 +320,7 @@ define([
       formData.department = this.$id('department').select2('data').id;
       formData.building = this.$id('building').select2('data').id;
       formData.location = this.$id('location').select2('data').id;
-      formData.station = parseInt(this.$id('station').val(), 10) || null;
+      formData.station = parseInt(this.$id('station').val(), 10) || 0;
 
       formData.date = time.utc.getMoment(
         `${formData.date} ${formData.time || '00:00'}:00`,

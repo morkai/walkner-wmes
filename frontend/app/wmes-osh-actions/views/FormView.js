@@ -281,7 +281,7 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.resolutionsI = 0;
-      this.newStatus = this.options.newStatus || 'new';
+      this.newStatus = this.options.newStatus || null;
 
       this.once('afterRender', () =>
       {
@@ -395,7 +395,7 @@ define([
         formData.department = this.$id('department').select2('data').id;
         formData.building = this.$id('building').select2('data').id;
         formData.location = this.$id('location').select2('data').id;
-        formData.station = parseInt(this.$id('station').val(), 10) || null;
+        formData.station = parseInt(this.$id('station').val(), 10) || 0;
       }
 
       if (features.rootCauses)
@@ -446,7 +446,7 @@ define([
 
       if (features.implementers)
       {
-        formData.status = this.newStatus;
+        formData.status = this.newStatus || this.model.get('status') || 'new';
         formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
         formData.plannedAt = time.utc.getMoment(this.$id('plannedAt').val(), 'YYYY-MM-DD').toISOString();
       }
