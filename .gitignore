@@ -5,11 +5,13 @@
 /node_modules_prod
 /frontend/files
 /frontend-build/files
+/frontend-pending
 /build
 /config/production
 /config/standalone
 /config/development
 /config/vps
+/config/pila
 /config/license.ed.private.pem
 /config/gdrive.private.json
 /data
