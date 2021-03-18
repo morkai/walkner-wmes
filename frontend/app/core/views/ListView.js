@@ -416,14 +416,14 @@ define([
       return model.toJSON();
     },
 
-    onModelAdded: function()
+    onModelAdded: function(message)
     {
-      this.refreshCollection();
+      this.refreshCollection(message);
     },
 
-    onModelEdited: function()
+    onModelEdited: function(message)
     {
-      this.refreshCollection();
+      this.refreshCollection(message);
     },
 
     onModelDeleted: function(message)
