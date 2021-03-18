@@ -832,23 +832,39 @@ define([
         userInfoDecorators: [userInfoDecorator]
       });
 
-      const creator = this.model.get('creator') || userInfoDecorator(currentUser.getInfo(), currentUser.data);
-      const helper = (this.model.get('implementers') || []).find(u => u.id !== creator.id);
+      const data = [];
 
-      const data = [{
-        id: creator.id,
-        text: creator.label,
-        locked: !privileged,
-        user: creator
-      }];
-
-      if (helper)
+      if (this.options.editMode)
       {
-        data.push({
-          id: helper.id,
-          text: helper.label,
-          user: helper
+        (this.model.get('implementers') || []).forEach(user =>
+        {
+          data.push({
+            id: user.id,
+            text: user.label,
+            user
+          });
         });
+      }
+      else
+      {
+        const creator = this.model.get('creator') || userInfoDecorator(currentUser.getInfo(), currentUser.data);
+        const helper = (this.model.get('implementers') || []).find(u => u.id !== creator.id);
+
+        data.push({
+          id: creator.id,
+          text: creator.label,
+          locked: !privileged,
+          user: creator
+        });
+
+        if (helper)
+        {
+          data.push({
+            id: helper.id,
+            text: helper.label,
+            user: helper
+          });
+        }
       }
 
       $input
