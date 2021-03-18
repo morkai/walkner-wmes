@@ -465,7 +465,7 @@ define([
       plannedQuantityDone = this.prepareMetricValue(plannedQuantityDone);
 
       prodLineInnerContainer.append('rect').attr({
-        class: 'factoryLayout-metric-bg',
+        class: 'factoryLayout-metric-bg factoryLayout-metric-plannedQuantityDone-bg',
         x: PROD_LINE_NAME_WIDTH,
         y: 0,
         width: PROD_LINE_METRIC_WIDTH,
@@ -485,7 +485,7 @@ define([
       actualQuantityDone = this.prepareMetricValue(actualQuantityDone);
 
       prodLineInnerContainer.append('rect').attr({
-        class: 'factoryLayout-metric-bg',
+        class: 'factoryLayout-metric-bg factoryLayout-metric-actualQuantityDone-bg',
         x: PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH,
         y: 0,
         width: PROD_LINE_METRIC_WIDTH,
@@ -505,7 +505,7 @@ define([
       inspections = this.prepareMetricValue(inspections);
 
       prodLineInnerContainer.append('rect').attr({
-        class: 'factoryLayout-metric-bg',
+        class: 'factoryLayout-metric-bg factoryLayout-metric-inspections-bg',
         x: PROD_LINE_NAME_WIDTH + PROD_LINE_METRIC_WIDTH * 2,
         y: 0,
         width: PROD_LINE_METRIC_WIDTH,

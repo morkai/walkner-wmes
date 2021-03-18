@@ -142,11 +142,16 @@
   text-shadow: 0 1px 2px #000;
   fill: #fff;
 }
-.is-inspection-ok .factoryLayout-metric-inspections {
-  fill: #090;
+.is-inspection-ok .factoryLayout-metric-inspections-bg {
+  fill: url(/#factoryLayout-prodLine-bg-working);
 }
+.is-inspection-nok .factoryLayout-metric-inspections-bg {
+  fill: url(/#factoryLayout-prodLine-bg-downtime);
+}
+.is-inspection-ok .factoryLayout-metric-inspections,
 .is-inspection-nok .factoryLayout-metric-inspections {
-  fill: #F00;
+  text-shadow: 0 1px 2px #000;
+  fill: #fff;
 }
 .is-idle .factoryLayout-prodLine-bg,
 .is-heff-noPlan .factoryLayout-prodLine-bg {

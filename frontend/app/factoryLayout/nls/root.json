@@ -71,6 +71,7 @@
     "settings:tab:other": "Other",
     "settings:extendedDowntimeDelay": "Extended downtime [min]",
     "settings:outOfSyncWindow": "Plan deviation threshold [%]",
+    "settings:qiKinds": "Counted inspection kinds",
 
     "legend:heff:off": "unavailable",
     "legend:heff:off:title": "Line didn't connect to the server yet.",

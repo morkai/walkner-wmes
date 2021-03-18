@@ -70,6 +70,7 @@
   "settings:tab:other": "Inne",
   "settings:extendedDowntimeDelay": "Długi przestój [min]",
   "settings:outOfSyncWindow": "Próg odbiegania od planu [%]",
+  "settings:qiKinds": "Zliczane rodzaje inspekcji",
 
   "legend:heff:off": "niedostępna",
   "legend:heff:off:title": "Od startu serwera linia nie nawiązała z nim połączenia.",
