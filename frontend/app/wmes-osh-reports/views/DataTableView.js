@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/core/View'
 ], function(
+  _,
   $,
   View
 ) {
@@ -48,7 +50,7 @@ define([
 
       this.once('afterRender', () =>
       {
-        this.listenTo(this.model, `change:${this.dataProperty}`, this.render);
+        this.listenTo(this.model, `sync change:${this.dataProperty}`, _.debounce(this.render.bind(this), 1));
       });
 
       this.setUpTooltips();
@@ -58,6 +60,7 @@ define([
     getTemplateData: function()
     {
       return {
+        loading: this.model.get('loading'),
         months: this.model.get('months') || [],
         rows: this.serializeRows(),
         n: n => n >= 0 ? (Math.round(n * 100) / 100).toLocaleString() : ''
@@ -106,6 +109,7 @@ define([
         if (this.dataTable)
         {
           this.dataTable.destroy();
+          this.dataTable = null;
         }
       });
     },

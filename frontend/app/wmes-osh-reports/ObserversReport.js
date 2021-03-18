@@ -26,6 +26,7 @@ define([
     defaults: function()
     {
       return {
+        loading: false,
         settings: {},
         months: [],
         orgUnits: [],
@@ -38,6 +39,9 @@ define([
       this.rqlQuery = options.rqlQuery && !options.rqlQuery.isEmpty() ? options.rqlQuery : createDefaultFilter({
         orgUnitProperty: null
       });
+
+      this.on('request', () => this.set('loading', true));
+      this.on('sync error', () => this.set('loading', false));
     },
 
     fetch: function(options)
