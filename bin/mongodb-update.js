@@ -3,4 +3,4 @@
 
 'use strict';
 
-db.oshemployments.updateMany({locked: {$exists: false}}, {$set: {locked: false}});
+db.users.updateMany({syncId: {$exists: false}}, {$set: {syncId: ''}});
