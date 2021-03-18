@@ -1,1 +1,1 @@
-define(["app/core/views/DetailsView","app/pfepEntries/templates/details"],function(e,t){"use strict";return e.extend({template:t})});
+define(["app/core/views/DetailsView","app/pfepEntries/templates/details"],function(e,t){"use strict";return e.extend({template:t,remoteTopics:function(){var t=e.prototype.remoteTopics.apply(this,arguments);return t["pfep.entries.imported"]=function(){this.promised(this.model.fetch())},t}})});

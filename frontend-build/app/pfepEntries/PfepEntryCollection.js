@@ -1,1 +1,1 @@
-define(["../time","../core/Collection","./PfepEntry"],function(e,t,i){"use strict";return t.extend({model:i,rowHeight:2,theadHeight:3,rqlQuery:"sort(-rid)&limit(-1337)"})});
+define(["../time","../core/Collection","./PfepEntry"],function(e,t,i){"use strict";return t.extend({model:i,rowHeight:1,theadHeight:3,rqlQuery:"sort(-rid)&limit(-1337)"})});
