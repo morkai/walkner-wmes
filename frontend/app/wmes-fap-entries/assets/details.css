@@ -174,12 +174,21 @@
   display: block;
 }
 .fap-details-panel-hd {
+  position: relative;
   padding: 7px 0;
   text-align: center;
   font-size: 21px;
   text-transform: lowercase;
   font-variant: small-caps;
   color: #444;
+}
+.fap-details-panel-hd .btn-link {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  padding: 4px 12px;
+  vertical-align: top;
+  font-size: 21px;
 }
 .fap-details-panel-bd {
   overflow-y: scroll;

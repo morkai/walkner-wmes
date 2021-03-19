@@ -27,10 +27,20 @@ define([
       {
         return Array.isArray(newValue) ? newValue : typeof newValue === 'string' ? newValue.split(',') : [];
       }
+
+      if (/quickUsers$/.test(id))
+      {
+        return newValue;
+      }
     },
 
     prepareFormValue: function(id, value)
     {
+      if (/quickUsers$/.test(id))
+      {
+        return Array.isArray(value) ? value.map(function(u) { return u.id; }).join(',') : '';
+      }
+
       return value;
     },
 

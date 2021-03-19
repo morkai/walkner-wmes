@@ -1,5 +1,5 @@
 <div class="fap-observers fap-details-panel <%- showMessage ? 'fap-details-panel-message-show' : '' %>">
-  <div class="fap-details-panel-hd"><%- helpers.t('PROPERTY:observers') %></div>
+  <div class="fap-details-panel-hd"><%- t('PROPERTY:observers') %></div>
   <div class="fap-details-panel-message message message-inline message-warning">Dodatkowe osoby zostaną automatycznie dodane po eskalacji zgłoszenia.</div>
   <div class="fap-details-panel-bd fap-details-list">
     <% observers.forEach(function(observer) { %>
@@ -12,7 +12,11 @@
     <% }) %>
     <div style="border-top: 1px solid #ddd">&nbsp;</div>
   </div>
-  <div class="fap-details-panel-ft">
-    <input id="<%- idPrefix %>-observer" type="text">
+  <div class="fap-details-panel-ft" style="display: flex">
+    <input id="<%- id('observer') %>" type="text">
+    <div id="<%- id('quickAdd') %>" class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="margin-left: -1px"><i class="fa fa-plus"></i></button>
+      <ul class="dropdown-menu"></ul>
+    </div>
   </div>
 </div>

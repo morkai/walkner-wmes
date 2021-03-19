@@ -112,6 +112,7 @@
     "settings:general:pendingFunctions": "Functions requiring verification",
     "settings:general:pendingFunctions:help": "Entries added by a user without assigned Function or with a Function from the following list will be added with the <em>Pending</em> status and will have to be verified by a leader.",
     "settings:general:categoryFunctions": "Functions allowing category changes",
+    "settings:general:quickUsers": "Users available in the quick add menu",
 
     "navbar:dictionaries": "Dictionaries",
     "navbar:categories": "Categories",

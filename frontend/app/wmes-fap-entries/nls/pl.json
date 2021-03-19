@@ -117,6 +117,7 @@
   "settings:general:pendingFunctions": "Funkcje wymagające zatwierdzenia",
   "settings:general:pendingFunctions:help": "Zgłoszenia dodane przez użytkownika bez przypisanej funkcji lub z przypisaną jedną z poniższych funkcji zostaną dodane ze statusem <em>Oczekujące</em> i będą musiały być zatwierdzone przez lidera.",
   "settings:general:categoryFunctions": "Funkcje zmiany kategorii",
+  "settings:general:quickUsers": "Użytkownicy dostępni w menu szybkiego dodawania",
 
   "navbar:dictionaries": "Słowniki",
   "navbar:categories": "Kategorie",

@@ -1,5 +1,4 @@
 .fap-attachments {
-  position: relative;
   margin-top: 11px;
   border-bottom: 1px solid #ddd;
 }
@@ -47,12 +46,4 @@
   position: absolute;
   pointer-events: none;
   opacity: 0;
-}
-.fap-attachments .btn-link {
-  position: absolute;
-  top: 3px;
-  right: 0;
-  padding: 4px 12px;
-  vertical-align: top;
-  font-size: 21px;
 }
