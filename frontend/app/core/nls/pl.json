@@ -40,7 +40,8 @@
   "BREADCRUMB:editForm": "Edycja",
   "BREADCRUMB:ACTION_FORM:delete": "Usuwanie",
 
-  "ERROR:notify:message": "Kliknij tutaj, aby poinformować administratora o błędzie.",
+  "ERROR:notify:message": "Poinformuj administratora o błędzie",
+  "ERROR:notify:placeholder": "Komentarz...",
   "ERROR:notify:success": "Administrator został powiadomiony o błędzie!",
   "ERROR:notify:failure": "Nie udało się powiadomić administratora.",
   "ERROR:notify:subject": "[{APP_NAME}] Błąd {code} od {user}",

@@ -41,6 +41,7 @@
     "BREADCRUMB:ACTION_FORM:delete": "Deleting",
 
     "ERROR:notify:message": "Click here to notify the admin about the error.",
+    "ERROR:notify:placeholder": "Comment...",
     "ERROR:notify:success": "The admin was notified!",
     "ERROR:notify:failure": "Failed to notify the admin.",
     "ERROR:notify:subject": "[{APP_NAME}] Error {code} from {user}",

@@ -2,6 +2,11 @@
   <p><%- message %></p>
   <% if (notify) { %>
   <hr style="margin: 0 0 10px 0">
-  <p id="<%- idPrefix %>-notify"><a href="#"><%- t('core', 'ERROR:notify:message') %></a></p>
+  <form>
+    <textarea id="<%- id('comment') %>" class="form-control" rows="3" required placeholder="<%- t('core', 'ERROR:notify:placeholder') %>"></textarea>
+    <button id="<%- id('notify') %>" type="submit" class="btn btn-default" style="margin-top: -1px">
+      <i class="fa fa-envelope"></i><span><%- t('core', 'ERROR:notify:message') %></span>
+    </button>
+  </form>
   <% } %>
 </div>

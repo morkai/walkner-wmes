@@ -3,12 +3,14 @@
 define([
   'underscore',
   'app/i18n',
+  'app/viewport',
   '../View',
   'app/core/templates/error',
   'app/data/localStorage'
 ], function(
   _,
   t,
+  viewport,
   View,
   template,
   localStorage
@@ -20,12 +22,29 @@ define([
     pageId: 'error',
 
     events: {
-      'click #-notify > a': function()
+      'change #-comment': function()
+      {
+        var $comment = this.$id('comment');
+        var comment = $comment.val().trim();
+
+        if (comment.replace(/[^a-zA-Z]+/g, '').length < 3)
+        {
+          comment = '';
+        }
+
+        $comment.val(comment);
+      },
+      'submit form': function()
       {
         var page = this;
         var body = page.buildMail();
 
-        page.$id('notify').html('<i class="fa fa-spinner fa-spin"></i>');
+        page.$id('comment').prop('disabled', true);
+        page.$id('notify')
+          .prop('disabled', true)
+          .find('.fa')
+          .removeClass('fa-envelope')
+          .addClass('fa-spinner fa-spin');
 
         page.trySendMail('/mail;send', body, function(err)
         {
@@ -83,8 +102,7 @@ define([
             code += ':guest';
           }
 
-          return template({
-            idPrefix: page.idPrefix,
+          return page.renderPartialHtml(template, {
             message: t('core', 'ERROR:' + code + ':message'),
             notify: page.notify
           });
@@ -151,7 +169,25 @@ define([
 
     handleMailSent: function(err)
     {
-      this.$id('notify').html(t('core', 'ERROR:notify:' + (err ? 'failure' : 'success')));
+      if (err)
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('core', 'ERROR:notify:failure')
+        });
+
+        this.$id('comment').prop('disabled', true);
+        this.$id('notify')
+          .prop('disabled', false)
+          .find('.fa')
+          .removeClass('fa-spinner fa-spin')
+          .addClass('fa-envelope');
+      }
+      else
+      {
+        this.$('form').html('<p>' + t('core', 'ERROR:notify:success') + '</p>');
+      }
     },
 
     buildMail: function()
@@ -170,6 +206,7 @@ define([
         );
       };
 
+      prop('comment', this.$id('comment').val().trim());
       prop('date', new Date().toLocaleString());
       prop('user', '<a href="' + window.location.origin + '/#users/' + user.data._id + '">' + user.getLabel() + '</a>'
         + '<br>' + json(_.assign({cname: window.COMPUTERNAME}, _.omit(user.data, 'privilegesMap')), null, 2));
