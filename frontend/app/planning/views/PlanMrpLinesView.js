@@ -77,9 +77,12 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
-      this.listenTo(this.plan.whLines, 'add remove change:redirLine', this.onWhLineChanged);
-      this.listenTo(this.mrp.lines, 'change:frozenOrders', this.onFrozenOrdersChanged);
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
+        this.listenTo(this.plan.whLines, 'add remove change:redirLine', this.onWhLineChanged);
+        this.listenTo(this.mrp.lines, 'change:frozenOrders', this.onFrozenOrdersChanged);
+      });
     },
 
     destroy: function()

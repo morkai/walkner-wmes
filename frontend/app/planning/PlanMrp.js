@@ -51,7 +51,7 @@ define([
       Object.defineProperty(this, 'settings', {
         get: function()
         {
-          return this.plan.settings.mrps.get(this.id);
+          return this.plan ? this.plan.settings.mrps.get(this.id) : null;
         }
       });
     },
