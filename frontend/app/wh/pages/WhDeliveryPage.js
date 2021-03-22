@@ -154,7 +154,7 @@ define([
       }), this);
 
       this.setCarts = bindLoadingMessage(new WhSetCartCollection(null, {
-        rqlQuery: 'limit(0)&status=in=(completing,completed,delivering)',
+        rqlQuery: 'limit(0)&status=in=(completing,completed,delivering)&kind=' + this.options.kind,
         paginate: false
       }), this);
 
@@ -169,7 +169,6 @@ define([
         model: this.model,
         whSettings: this.whSettings,
         lines: this.lines,
-        allCarts: this.setCarts,
         setCarts: this.setCarts.completed,
         status: 'completed',
         kind: this.options.kind
@@ -179,7 +178,6 @@ define([
         model: this.model,
         whSettings: this.whSettings,
         lines: this.lines,
-        allCarts: this.setCarts,
         setCarts: this.setCarts.pending,
         status: 'pending'
       });
@@ -188,7 +186,6 @@ define([
         model: this.model,
         whSettings: this.whSettings,
         lines: this.lines,
-        allCarts: this.setCarts,
         setCarts: this.setCarts.delivering,
         status: 'delivering',
         actions: !embedded.isEnabled()
@@ -433,11 +430,6 @@ define([
 
       page.setCarts.forEach(function(setCart)
       {
-        if (setCart.get('kind') !== page.options.kind)
-        {
-          return;
-        }
-
         if (setCart.get('status') === 'delivering')
         {
           delivering.push(setCart);
@@ -466,11 +458,6 @@ define([
 
     onSetCartAdded: function(setCart)
     {
-      if (setCart.get('kind') !== this.options.kind)
-      {
-        return;
-      }
-
       if (setCart.get('status') === 'delivering')
       {
         this.setCarts.delivering.add(setCart);
@@ -487,11 +474,6 @@ define([
 
     onSetCartChanged: function(setCart)
     {
-      if (setCart.get('kind') !== this.options.kind)
-      {
-        return;
-      }
-
       var setCarts = this.setCarts;
       var status = setCart.get('status');
 
@@ -542,13 +524,6 @@ define([
         return true;
       }
 
-      return page.isMinTimeForDelivery(setCart)
-        && !page.hasEarlierDiffKindSetCart(setCart);
-    },
-
-    isMinTimeForDelivery: function(setCart)
-    {
-      var page = this;
       var minTimeForDelivery = page.whSettings.getMaxMinTimeForDelivery(setCart.get('orders'));
 
       return setCart.get('lines').some(function(lineId)
@@ -556,28 +531,6 @@ define([
         var whLine = page.lines.get(lineId);
 
         return !!whLine && whLine.get('available').time < minTimeForDelivery;
-      });
-    },
-
-    hasEarlierDiffKindSetCart: function(a)
-    {
-      var kind = this.options.kind;
-      var date = a.get('date');
-      var set = a.get('set');
-      var startTime = Date.parse(a.get('startTime'));
-      var lines = a.get('lines');
-
-      return this.setCarts.some(function(b)
-      {
-        if (b.get('kind') === kind
-          || b.get('status') === 'delivering'
-          || (b.get('set') === set && b.get('date') === date)
-          || !_.intersection(lines, b.get('lines')).length)
-        {
-          return false;
-        }
-
-        return Date.parse(b.get('startTime')) < startTime;
       });
     },
 
