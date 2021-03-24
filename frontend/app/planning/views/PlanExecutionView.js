@@ -99,7 +99,8 @@ define([
         }
       }
 
-      var shiftOrders = [];
+      var shiftOrderList = [];
+      var shiftOrderMap = {};
       var ok = false;
 
       this.plan.shiftOrders.findOrders(orderNo).forEach(pso =>
@@ -121,8 +122,7 @@ define([
           date: CMP_CLASS[startedAtDate === startAtDate],
           time: CMP_CLASS[timeOk]
         };
-
-        shiftOrders.push({
+        var shiftOrder = {
           pso: pso,
           line: prodLine,
           quantityDone,
@@ -134,9 +134,13 @@ define([
           ok: classNames.line === 'is-ok'
             && classNames.quantity === 'is-ok'
             && timeOk
-        });
+        };
 
-        ok = ok || shiftOrders[shiftOrders.length - 1].ok;
+        ok = ok || shiftOrder.ok;
+
+        shiftOrderList.push(shiftOrder);
+
+        shiftOrderMap[pso.id] = shiftOrder;
       });
 
       if (!ok)
@@ -147,26 +151,33 @@ define([
 
         if (ok)
         {
-          shiftOrders.forEach(function(shiftOrder)
-          {
-            if (shiftOrder.ok
-              || shiftOrder.classNames.quantity === 'is-ok'
-              || !execution.prodShiftOrders.includes(shiftOrder.pso))
-            {
-              return;
-            }
+          var matchingPsos = [];
+          var matchingQty = 0;
 
-            shiftOrder.classNames.quantity = 'is-ok';
-            shiftOrder.ok = shiftOrder.classNames.line === 'is-ok'
-              && shiftOrder.classNames.quantity === 'is-ok'
-              && shiftOrder.timeOk;
+          for (let i = 0; i < execution.prodShiftOrders.length && matchingQty !== quantityPlanned; ++i)
+          {
+            matchingPsos = [];
+            matchingQty = 0;
+
+            for (let ii = i; ii < execution.prodShiftOrders.length && matchingQty !== quantityPlanned; ++ii)
+            {
+              const pso = execution.prodShiftOrders[ii];
+
+              matchingPsos.push(pso);
+              matchingQty += pso.get('quantityDone');
+            }
+          }
+
+          matchingPsos.forEach(function(pso)
+          {
+            shiftOrderMap[pso.id].ok = true;
           });
         }
       }
 
       var cmpOpt = {numeric: true, ignorePunctuation: true};
 
-      shiftOrders.sort((a, b) =>
+      shiftOrderList.sort((a, b) =>
       {
         if (a.line === line.id && b.line !== line.id)
         {
@@ -193,7 +204,7 @@ define([
         quantityPlanned: quantityPlanned,
         startAtTime: startAt.format('HH:mm:ss'),
         startAtDate: startAtDate,
-        shiftOrders: shiftOrders,
+        shiftOrders: shiftOrderList,
         ok: ok
       };
     }

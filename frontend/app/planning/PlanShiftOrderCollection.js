@@ -217,7 +217,7 @@ define([
 
         if (!cache[o.pso.id]
           && execution.plannedQuantityDone < qtyPlan
-          && (o.startedAt >= fromTime && o.startedAt <= toTime || o.continuation))
+          && ((o.startedAt >= fromTime && o.startedAt <= toTime) || o.continuation))
         {
           cache[o.pso.id] = true;
 
