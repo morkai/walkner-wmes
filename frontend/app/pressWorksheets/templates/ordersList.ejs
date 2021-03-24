@@ -115,7 +115,7 @@
     </tr>
     <% if (order.notes) { %>
     <tr class="pressWorksheets-orders-notes <%- i % 2 !== 0 ? '' : 'is-odd' %>">
-      <td colspan="<%- extended ? 14 : 11 %>"><%= order.notes %></td>
+      <td colspan="<%- (extended ? 14 : 11) + (losses ? 2 : 1) %>"><%= order.notes %></td>
     </tr>
     <% } %>
     <% }) %>
