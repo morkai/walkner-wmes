@@ -569,8 +569,10 @@ define([
 
       return this.setCarts.some(function(b)
       {
-        if (b.get('kind') === kind
-          || b.get('status') === 'delivering'
+        var bStatus = b.get('status');
+
+        if ((b.get('kind') === kind && bStatus === 'completed')
+          || bStatus === 'delivering'
           || (b.get('set') === set && b.get('date') === date)
           || !_.intersection(lines, b.get('lines')).length)
         {
