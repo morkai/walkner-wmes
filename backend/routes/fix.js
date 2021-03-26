@@ -13,17 +13,7 @@ module.exports = function startFixRoutes(app, express)
 
   const inProgress = {};
 
-  function onlySuper(req, res, next)
-  {
-    const user = req.session.user;
-
-    if (user && user.super)
-    {
-      return next();
-    }
-
-    return res.sendStatus(403);
-  }
+  const onlySuper = app.user.auth('SUPER');
 
   express.get('/fix/prodShifts/durations', onlySuper, fixProdShiftDurations);
   express.get('/fix/prodShiftOrders/durations', onlySuper, fixProdShiftOrderDurations);
