@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'js2form',
   'app/time',
   'app/core/View',
@@ -11,6 +12,7 @@ define([
   'app/suggestions/templates/engagementReportFilter',
   'app/core/util/ExpandableSelect'
 ], function(
+  _,
   js2form,
   time,
   View,
@@ -44,7 +46,16 @@ define([
     getTemplateData: function()
     {
       return {
-        statuses: kaizenDictionaries.kzStatuses
+        statuses: [
+          'new',
+          'accepted',
+          'todo',
+          'inProgress',
+          'verification',
+          'paused',
+          'finished',
+          'cancelled'
+        ]
       };
     },
 

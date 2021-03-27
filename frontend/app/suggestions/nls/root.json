@@ -170,6 +170,9 @@
     "filter:user:suggestionOwners:title": "The specified user is a suggestion owner",
     "filter:user:kaizenOwners": "Kaizen owner",
     "filter:user:kaizenOwners:title": "The specified user is a kaizen owner",
+    "filter:status:new": "New",
+    "filter:status:todo": "To do",
+    "filter:status:paused": "Paused",
     "filter:submit": "Filter",
 
     "history:added": "added the entry.",

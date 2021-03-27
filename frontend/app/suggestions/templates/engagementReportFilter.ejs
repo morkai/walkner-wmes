@@ -4,7 +4,7 @@
   }) %>
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
-    <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
+    <div id="<%- id('interval') %>" class="btn-group filter-btn-group" data-toggle="buttons">
       <% ['year', 'quarter', 'month', 'week'].forEach(function(interval) { %>
       <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
         <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
@@ -13,16 +13,16 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
-    <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
+    <label for="<%- id('status') %>"><%- t('PROPERTY:status') %></label>
+    <select id="<%- id('status') %>" name="status[]" class="form-control is-expandable" multiple size="1">
       <% statuses.forEach(function(status) { %>
-      <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
+      <option value="<%- status %>"><%- t.has('filter:status:' + status) ? t('filter:status:' + status) : t('status:' + status) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-sections"><%- helpers.t('PROPERTY:section') %></label>
-    <input id="<%- idPrefix %>-sections" name="sections" type="text" autocomplete="new-password">
+    <label for="<%- id('sections') %>"><%- t('PROPERTY:section') %></label>
+    <input id="<%- id('sections') %>" name="sections" type="text" autocomplete="new-password">
   </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>

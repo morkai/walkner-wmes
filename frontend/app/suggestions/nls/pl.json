@@ -173,6 +173,9 @@
   "filter:user:suggestionOwners:title": "Wybrany użytkownik jest osobą wnioskującą w zgłoszeniu",
   "filter:user:kaizenOwners": "Osoba wykonująca",
   "filter:user:kaizenOwners:title": "Wybrany użytkownik jest osobą wykonującą w zgłoszeniu",
+  "filter:status:new": "Nowe",
+  "filter:status:todo": "Do realizacji",
+  "filter:status:paused": "Wstrzymane",
   "filter:submit": "Filtruj",
 
   "history:added": "utworzenie zgłoszenia.",

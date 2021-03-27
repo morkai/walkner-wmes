@@ -232,13 +232,17 @@ define([
           return this.t('status:' + value);
 
         case 'section':
-        case 'category':
         case 'productFamily':
         {
           var model = kaizenDictionaries.forProperty(property).get(value);
 
           return model ? model.getLabel() : value;
         }
+
+        case 'categories':
+          return value
+            .map(function(id) { return kaizenDictionaries.forProperty(property).getLabel(id); })
+            .join('; ');
 
         case 'subject':
         case 'howItIs':
