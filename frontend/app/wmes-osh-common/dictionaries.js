@@ -25,7 +25,8 @@ define([
   'app/wmes-osh-kaizens/Kaizen',
   'app/wmes-osh-actions/Action',
   'app/wmes-osh-observations/Observation',
-  './SettingCollection'
+  './SettingCollection',
+  'i18n!app/nls/wmes-osh-common'
 ], function(
   $,
   broker,

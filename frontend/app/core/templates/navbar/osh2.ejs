@@ -1,0 +1,53 @@
+<li data-online class="dropdown hidden">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('NAVBAR:osh2:main') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header"><%- t('NAVBAR:osh2:entries') %>
+    <li data-privilege="USER" data-module="wmes-osh" class="navbar-with-button"><a href="#osh/nearMisses"><%- t('NAVBAR:osh2:nearMisses') %></a><button class="btn btn-default" data-href="#osh/nearMisses;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="USER" data-module="wmes-osh" class="navbar-with-button"><a href="#osh/kaizens"><%- t('NAVBAR:osh2:kaizens') %></a><button class="btn btn-default" data-href="#osh/kaizens;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="USER" data-module="wmes-osh" class="navbar-with-button"><a href="#osh/actions"><%- t('NAVBAR:osh2:actions') %></a><button class="btn btn-default" data-href="#osh/actions;add" data-privilege="OSH:ACTIONS:MANAGE OSH:COORDINATOR"><i class="fa fa-plus"></i></button>
+    <li data-privilege="USER" data-module="wmes-osh" class="navbar-with-button"><a href="#osh/observations"><%- t('NAVBAR:osh2:observations') %></a><button class="btn btn-default" data-href="#osh/observations;add" data-privilege="OSH:OBSERVATIONS:MANAGE OSH:OBSERVER"><i class="fa fa-plus"></i></button>
+    <li data-privilege="OSH:ACCIDENTS:VIEW" data-module="wmes-osh" class="navbar-with-button"><a href="#osh/accidents"><%- t('NAVBAR:osh2:accidents') %></a><button class="btn btn-default" data-href="#osh/accidents;add" data-privilege="OSH:ACCIDENTS:MANAGE"><i class="fa fa-plus"></i></button>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('NAVBAR:osh2:reports') %>
+    <% [
+        'metrics',
+        'engagement',
+        'observers',
+        'count/nearMiss',
+        'count/kaizen',
+        'count/action',
+        'count/observation'
+      ].forEach(report => { %>
+    <li data-privilege="USER" data-module="wmes-osh"><a href="#osh/reports/<%- report %>"><%- t(`NAVBAR:osh2:reports:${report}`) %></a>
+    <% }) %>
+    <li data-privilege="OSH:ACCIDENTS:VIEW"><a href="#osh/reports/count/accident"><%- t(`NAVBAR:osh2:reports:count/accident`) %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('NAVBAR:osh2:hr') %>
+    <li data-privilege="OSH:HR:VIEW" data-module="wmes-osh"><a href="#osh/employments"><%- t('NAVBAR:osh2:employments') %></a>
+    <li data-privilege="OSH:HR:VIEW" data-module="wmes-osh"><a href="#osh/targets"><%- t('NAVBAR:osh2:targets') %></a>
+    <li data-privilege="OSH:HR:VIEW OSH:LEADER" data-module="wmes-osh"><a href="#osh/brigades"><%- t('NAVBAR:osh2:brigades') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('NAVBAR:osh2:dictionaries') %>
+    <% [
+        'companies',
+        'divisions',
+        'workplaces',
+        'departments',
+        'buildings',
+        'locations',
+        'stations',
+        'kinds',
+        'activityKinds',
+        'observationKinds',
+        'observationCategories',
+        'eventCategories',
+        'kaizenCategories',
+        'reasonCategories',
+        'rootCauseCategories'
+      ].forEach(d => { %>
+    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="wmes-osh"><a href="#osh/<%- d %>"><%- t(`NAVBAR:osh2:${d}`) %></a>
+    <% }) %>
+  </ul>

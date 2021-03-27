@@ -1,0 +1,53 @@
+<li data-online data-privilege="LOCAL USER" class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('NAVBAR:osh1:main') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header"><%- t('NAVBAR:osh1:entries') %>
+    <li data-module="kaizen" class="navbar-with-button">
+      <a href="#kaizenOrders"><%- t('NAVBAR:osh1:nearMisses') %></a>
+      <a class="btn btn-default" data-privilege="USER" href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(-1337)" title="<%- t('NAVBAR:osh1:entries:mine') %>"><i class="fa fa-user"></i></a>
+      <a class="btn btn-default" href="#kaizenOrders;add" title="<%- t('NAVBAR:osh1:entries:add') %>"><i class="fa fa-plus"></i></a>
+    </li>
+    <li data-module class="navbar-with-button">
+      <a href="#suggestions"><%- t('NAVBAR:osh1:suggestions') %></a>
+      <a class="btn btn-default" data-privilege="USER" href="#suggestions?observers.user.id=mine&sort(-date)&limit(-1337)" title="<%- t('NAVBAR:osh1:entries:mine') %>"><i class="fa fa-user"></i></a>
+      <a class="btn btn-default" href="#suggestions;add" title="<%- t('NAVBAR:osh1:entries:add') %>"><i class="fa fa-plus"></i></a>
+    </li>
+    <li data-privilege="USER" data-module class="navbar-with-button">
+      <a href="#behaviorObsCards"><%- t('NAVBAR:osh1:observations') %></a>
+      <a class="btn btn-default" href="/orderDocuments/133700000000002?original=1" target="_blank" title="<%- t('NAVBAR:osh1:observations:print') %>"><i class="fa fa-print"></i></a>
+      <a class="btn btn-default" data-privilege="USER" href="#behaviorObsCards?users=mine&sort(-date)&limit(-1337)" title="<%- t('NAVBAR:osh1:entries:mine') %>"><i class="fa fa-user"></i></a>
+      <a class="btn btn-default" href="#behaviorObsCards;add" title="<%- t('NAVBAR:osh1:entries:add') %>"><i class="fa fa-plus"></i></a>
+    </li>
+    <li data-privilege="USER" data-module class="navbar-with-button">
+      <a href="#minutesForSafetyCards"><%- t('NAVBAR:osh1:minutes') %></a>
+      <a class="btn btn-default" data-privilege="USER" href="#minutesForSafetyCards?users=mine&sort(-date)&limit(-1337)" title="<%- t('NAVBAR:osh1:entries:mine') %>"><i class="fa fa-user"></i></a>
+      <a class="btn btn-default" href="#minutesForSafetyCards;add" title="<%- t('NAVBAR:osh1:entries:add') %>"><i class="fa fa-plus"></i></a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('NAVBAR:osh1:reports') %>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenReport"><%- t('NAVBAR:osh1:reports:count:nearMisses') %></a>
+    <li data-privilege="USER" data-module="suggestions"><a href="#suggestionCountReport"><%- t('NAVBAR:osh1:reports:count:suggestions') %></a>
+    <li data-privilege="USER" data-module="behaviorObsCards"><a href="#behaviorObsCardCountReport"><%- t('NAVBAR:osh1:reports:count:observations') %></a>
+    <li data-privilege="USER" data-module="minutesForSafetyCards"><a href="#minutesForSafetyCardCountReport"><%- t('NAVBAR:osh1:reports:count:minutes') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenSummaryReport"><%- t('NAVBAR:osh1:reports:summary:nearMisses') %></a>
+    <li data-privilege="USER" data-module="suggestions"><a href="#suggestionSummaryReport"><%- t('NAVBAR:osh1:reports:summary:suggestions') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenMetricsReport"><%- t('NAVBAR:osh1:reports:metrics') %></a>
+    <li data-privilege="USER" data-module="suggestions"><a href="#suggestionEngagementReport"><%- t('NAVBAR:osh1:reports:engagement') %></a>
+    <li data-privilege="USER" data-module="suggestions"><a href="#suggestionRewardReport"><%- t('NAVBAR:osh1:reports:reward') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('NAVBAR:osh1:dictionaries') %>
+    <% [
+        'kaizenSections',
+        'kaizenAreas',
+        'kaizenCategories',
+        'kaizenCauses',
+        'kaizenRisks',
+        'kaizenBehaviours',
+        'kaizenProductFamilies'
+      ].forEach(d => { %>
+    <li data-privilege="OSH:DICTIONARIES:VIEW" data-module="kaizen"><a href="#<%- d %>"><%- t(`NAVBAR:osh1:${d}`) %></a>
+    <% }) %>
+  </ul>

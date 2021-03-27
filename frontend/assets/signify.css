@@ -50,6 +50,9 @@
   padding-bottom: 25px;
   border-bottom: none;
 }
+.navbar-default .navbar-with-button .btn-default:hover {
+  background: #00E696;
+}
 .navbar-default .navbar-status-online {
   color: #00E696;
   text-shadow: 0 0 3px #3c3c41;

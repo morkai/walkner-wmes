@@ -124,10 +124,11 @@ define([
         }
 
         var href = e.currentTarget.dataset.href;
+        var target = e.currentTarget.dataset.target;
 
-        if (e.ctrlKey || e.button === 1)
+        if (e.ctrlKey || e.button === 1 || (target && target !== '_self'))
         {
-          window.open(href);
+          window.open(href, target);
         }
         else
         {
