@@ -111,8 +111,6 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
-
-      this.$els = null;
     },
 
     load: function(when)

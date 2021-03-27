@@ -5,15 +5,13 @@ define([
   '../time',
   '../router',
   '../viewport',
-  '../user',
-  '../core/pages/FilteredListPage'
+  '../user'
 ], function(
   broker,
   time,
   router,
   viewport,
-  user,
-  FilteredListPage
+  user
 ) {
   'use strict';
 

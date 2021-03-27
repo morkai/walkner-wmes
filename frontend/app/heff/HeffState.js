@@ -34,6 +34,11 @@ define([
 
     parse: function(res)
     {
+      if (!res)
+      {
+        return;
+      }
+
       if (res.prodDowntimes)
       {
         this.prodDowntimes.reset(res.prodDowntimes);

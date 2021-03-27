@@ -41,13 +41,6 @@ define([
 
     }, FilterView.prototype.events),
 
-    defaultFormData: function()
-    {
-      return {
-
-      };
-    },
-
     termToForm: {
       'eventDate': dateTimeRange.rqlToForm,
       'workplace': (propertyName, term, formData) =>
@@ -70,26 +63,9 @@ define([
       }));
     },
 
-    getTemplateData: function()
-    {
-      return {
-
-      };
-    },
-
     serializeFormToQuery: function(selector)
     {
       dateTimeRange.formToRql(this, selector);
-    },
-
-    afterRender: function()
-    {
-      FilterView.prototype.afterRender.call(this);
-    },
-
-    destroy: function()
-    {
-      FilterView.prototype.destroy.call(this);
     },
 
     filterHasValue: function(filter)
@@ -103,11 +79,6 @@ define([
       }
 
       return FilterView.prototype.filterHasValue.apply(this, arguments);
-    },
-
-    showFilter: function(filter)
-    {
-      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });

@@ -314,10 +314,16 @@ define([
     {
       this.timelineView.onWindowResize();
 
-      if (this.quantitiesDoneChartView)
+      var chartView = this.quantitiesDoneChartView;
+
+      if (chartView)
       {
-        this.quantitiesDoneChartView.$el.css('width', this.calcWidth() + 'px');
-        this.quantitiesDoneChartView.chart.reflow();
+        chartView.$el.css('width', this.calcWidth() + 'px');
+
+        if (chartView.chart)
+        {
+          chartView.chart.reflow();
+        }
       }
     },
 

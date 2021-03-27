@@ -606,9 +606,15 @@ define([
 
     translate: function(x, y)
     {
-      this.zoom.translate([x, y]);
+      if (this.zoom)
+      {
+        this.zoom.translate([x, y]);
+      }
 
-      this.canvas.attr('transform', 'translate(' + x + ',' + y + ')');
+      if (this.canvas)
+      {
+        this.canvas.attr('transform', 'translate(' + x + ',' + y + ')');
+      }
     },
 
     getSize: function()
@@ -635,7 +641,7 @@ define([
 
       var points = [];
 
-      this.model.factoryLayout.get('live').forEach(function(section)
+      (this.model.factoryLayout.get('live') || []).forEach(function(section)
       {
         section.points.forEach(function(point)
         {

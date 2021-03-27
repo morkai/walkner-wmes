@@ -4,14 +4,12 @@ define([
   'require',
   'underscore',
   'app/i18n',
-  'app/core/Model',
-  'app/core/templates/userInfo'
+  'app/core/Model'
 ], function(
   require,
   _,
   t,
-  Model,
-  userInfoTemplate
+  Model
 ) {
   'use strict';
 

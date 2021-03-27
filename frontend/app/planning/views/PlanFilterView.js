@@ -145,7 +145,7 @@ define([
       });
     },
 
-    copyOrderList: function(shiftNo, x, y)
+    copyOrderList: function(shiftNo)
     {
       var view = this;
       var mrps = {};

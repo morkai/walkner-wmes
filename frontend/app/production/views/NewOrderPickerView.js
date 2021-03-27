@@ -414,6 +414,19 @@ define([
 
       var next = nextOrders[0];
       var order = next.order;
+
+      if (!order || !order.no)
+      {
+        if (window.WMES_LOG_BROWSER_ERROR)
+        {
+          window.WMES_LOG_BROWSER_ERROR( // eslint-disable-line new-cap
+            'Invalid nextOrder!?! ' + JSON.stringify(nextOrders)
+          );
+        }
+
+        return;
+      }
+
       var $order = this.$id('order');
 
       if (this.options.embedded)

@@ -908,6 +908,11 @@ define([
 
       var user = this.model.users.get($user[0].dataset.userId);
 
+      if (!user)
+      {
+        return;
+      }
+
       this.$userPopover = $user.popover({
         placement: 'right',
         trigger: 'manual',
