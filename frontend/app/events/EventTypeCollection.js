@@ -15,15 +15,18 @@ define([
 
     model: EventType,
 
-    parse: function(response)
-    {
-      return response.map(function(type)
-      {
-        return {_id: type, text: t.bound('events', 'TYPE:' + type)};
-      });
-    },
+    comparator: 'text',
 
-    comparator: 'text'
+    parse: function(res)
+    {
+      return res.map(function(type)
+      {
+        return {
+          _id: type,
+          text: t('events', 'TYPE:' + type)
+        };
+      });
+    }
 
   });
 });

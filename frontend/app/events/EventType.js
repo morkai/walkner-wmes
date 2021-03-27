@@ -17,9 +17,7 @@ define([
 
     labelAttribute: 'text',
 
-    defaults: {
-      text: null
-    },
+    defaults: {},
 
     toSelect2Option: function()
     {
