@@ -15,26 +15,9 @@ define([
 
     model: KaizenOrder,
 
-    rowHeight: 2,
+    rowHeight: 1,
 
-    rqlQuery: function(rql)
-    {
-      return rql.Query.fromObject({
-        selector: {
-          name: 'and',
-          args: [
-            {name: 'ge', args: ['eventDate', time.getMoment().subtract(90, 'days')]}
-          ]
-        },
-        fields: {
-          changes: 0
-        },
-        sort: {
-          eventDate: -1
-        },
-        limit: -1337
-      });
-    }
+    rqlQuery: 'exclude(changes)&sort(-eventDate)&limit(-1337)'
 
   });
 });

@@ -23,6 +23,15 @@ define([
   var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt'];
   var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer'];
   var OWNER_PROPERTIES = ['nearMissOwners', 'suggestionOwners', 'kaizenOwners'];
+  var STATUS_TO_CLASS = {
+    new: 'default',
+    accepted: 'info',
+    todo: 'info',
+    inProgress: 'active',
+    paused: 'warning',
+    finished: 'success',
+    cancelled: 'danger'
+  };
 
   return Model.extend({
 
@@ -132,9 +141,11 @@ define([
     {
       var row = this.serialize(options);
 
+      row.className = STATUS_TO_CLASS[this.get('status')];
+
       if (row.observer && row.observer.notify && _.isEmpty(row.observer.changes))
       {
-        row.className = 'is-changed';
+        row.className += ' is-changed';
       }
 
       var owners = row.owners;

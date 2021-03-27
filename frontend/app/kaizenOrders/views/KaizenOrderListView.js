@@ -18,16 +18,24 @@ define([
 
   return ListView.extend({
 
-    className: 'kaizenOrders-list is-clickable',
+    className: 'kaizenOrders-list is-clickable is-colored',
 
     serializeColumns: function()
     {
       var simple = !!this.options.simple;
-      var columns = [{id: 'rid', className: 'is-min is-number'}];
+      var columns = [
+        {
+          id: 'rid',
+          className: 'is-min is-number'
+        }
+      ];
 
       if (window.KAIZEN_MULTI)
       {
-        columns.push('types');
+        columns.push({
+          id: 'types',
+          className: 'is-min'
+        });
       }
 
       columns.push(
@@ -38,33 +46,40 @@ define([
         },
         {
           id: 'subject',
-          className: 'has-popover',
+          className: simple ? 'has-popover' : 'is-overflow w250 has-popover',
           tdAttrs: tdAttrs,
           label: this.t('PROPERTY:subjectAndDescription')
         }
       );
 
-      if (!simple)
+      if (simple)
       {
-        columns.push(
-          {id: 'eventDate', className: 'is-min', tdAttrs: tdAttrs},
-          {id: 'area', tdAttrs: tdAttrs},
-          {id: 'cause', tdAttrs: tdAttrs},
-          {id: 'risk', tdAttrs: tdAttrs},
-          {id: 'nearMissCategory', tdAttrs: tdAttrs}
-        );
-
-        if (window.KAIZEN_MULTI)
-        {
-          columns.push({id: 'suggestionCategory', tdAttrs: tdAttrs});
-        }
-
-        columns.push(
-          {id: 'section', tdAttrs: tdAttrs},
-          {id: 'confirmer', tdAttrs: tdAttrs},
-          {id: 'owners', className: 'has-popover', label: this.t('PROPERTY:nearMissOwners')}
-        );
+        return columns;
       }
+
+      columns.push(
+        {id: 'eventDate', className: 'is-min', tdAttrs: tdAttrs},
+        {id: 'area', className: 'is-overflow w200', tdAttrs: tdAttrs},
+        {id: 'cause', className: 'is-overflow w225', tdAttrs: tdAttrs},
+        {id: 'risk', className: 'is-min', tdAttrs: tdAttrs},
+        {id: 'nearMissCategory', className: 'is-overflow w200', tdAttrs: tdAttrs}
+      );
+
+      if (window.KAIZEN_MULTI)
+      {
+        columns.push({
+          id: 'suggestionCategory',
+          className: 'is-overflow w200',
+          tdAttrs: tdAttrs
+        });
+      }
+
+      columns.push(
+        {id: 'section', className: 'is-overflow w200', tdAttrs: tdAttrs},
+        {id: 'confirmer', className: 'is-min', tdAttrs: tdAttrs},
+        {id: 'owners', className: 'is-min has-popover', label: this.t('PROPERTY:nearMissOwners')},
+        '-'
+      );
 
       return columns;
     },
