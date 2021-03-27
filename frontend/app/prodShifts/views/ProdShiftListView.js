@@ -15,7 +15,7 @@ define([
 
   return ListView.extend({
 
-    className: 'prodShifts-list is-clickable',
+    className: 'prodShifts-list is-clickable is-colored',
 
     remoteTopics: {
       'prodShifts.created.*': 'refreshIfMatches',
@@ -35,11 +35,6 @@ define([
         (user.isAllowedTo('PROD_DATA:VIEW:EFF') ? {id: 'efficiency', className: 'is-min is-number'} : null),
         {id: 'fill', label: '&nbsp;'}
       ];
-    },
-
-    serializeRow: function(model)
-    {
-      return model.serialize({orgUnits: true, totalQuantityDone: true});
     },
 
     serializeActions: function()

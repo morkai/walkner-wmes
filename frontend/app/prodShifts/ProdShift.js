@@ -226,6 +226,32 @@ define([
       });
     },
 
+    serializeRow: function()
+    {
+      var row = this.serialize({orgUnits: true, totalQuantityDone: true});
+
+      var efficiency = this.get('efficiency');
+      var working = this.get('working');
+
+      if (working)
+      {
+        if (efficiency >= 1)
+        {
+          row.className = 'success';
+        }
+        else if (efficiency < 0.9)
+        {
+          row.className = 'danger';
+        }
+        else
+        {
+          row.className = 'warning';
+        }
+      }
+
+      return row;
+    },
+
     startShiftChangeMonitor: function()
     {
       this.stopShiftChangeMonitor();

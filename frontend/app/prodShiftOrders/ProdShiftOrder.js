@@ -145,16 +145,19 @@ define([
       obj.taktTime = this.getActualTaktTime();
       obj.taktTimeEff = this.getTaktTimeEfficiency();
       obj.workerCountSap = this.getWorkerCountSap();
+      obj.eff = 0;
       obj.efficiency = '';
 
       var eff = this.getEfficiency(options);
 
       if (eff)
       {
+        obj.eff = eff;
         obj.efficiency = Math.round(eff * 100) + '%';
       }
       else if (obj.taktTimeEff)
       {
+        obj.eff = obj.taktTimeEff / 100;
         obj.efficiency = obj.taktTimeEff + '%';
       }
 
@@ -165,7 +168,21 @@ define([
     {
       var row = this.serialize(options);
 
-      row.className = this.get('mechOrder') || !this.get('sapTaktTime') ? '' : row.taktTimeOk ? 'success' : 'warning';
+      if (row.eff && this.get('sapTaktTime'))
+      {
+        if (row.eff >= 1)
+        {
+          row.className = 'success';
+        }
+        else if (row.eff < 0.9)
+        {
+          row.className = 'danger';
+        }
+        else
+        {
+          row.className = 'warning';
+        }
+      }
 
       var orgUnitMrp = this.get('mrpControllers') || [];
       var orderData = this.get('orderData');
