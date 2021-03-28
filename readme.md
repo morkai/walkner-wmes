@@ -56,4 +56,4 @@ node backend/main.js ../config/wmes-frontend.js
 
 This project is released under the [CC BY-NC-SA 4.0](https://raw.github.com/morkai/walkner-wmes/master/license.md).
 
-Copyright (c) 2016, Łukasz Walukiewicz (lukasz@miracle.systems)
+Copyright (c) 2021, Łukasz Walukiewicz (lukasz@miracle.systems)
