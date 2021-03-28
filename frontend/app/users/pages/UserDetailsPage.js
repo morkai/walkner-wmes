@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'app/user',
   'app/viewport',
   'app/core/util/pageActions',
@@ -10,6 +11,7 @@ define([
   '../views/UserDetailsView',
   'app/users/templates/anonymizeDialog'
 ], function(
+  require,
   user,
   viewport,
   pageActions,

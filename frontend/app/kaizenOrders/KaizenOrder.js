@@ -1,20 +1,20 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   '../i18n',
   '../time',
   '../user',
   '../core/Model',
-  './dictionaries',
   'app/core/templates/userInfo'
 ], function(
+  require,
   _,
   t,
   time,
   user,
   Model,
-  kaizenDictionaries,
   renderUserInfo
 ) {
   'use strict';
@@ -107,13 +107,21 @@ define([
         obj[timeProperty] = obj[timeProperty] ? time.format(obj[timeProperty], timeFormat) : null;
       });
 
-      obj.section = kaizenDictionaries.sections.getLabel(obj.section);
-      obj.area = kaizenDictionaries.areas.getLabel(obj.area);
-      obj.nearMissCategory = kaizenDictionaries.categories.getLabel(obj.nearMissCategory);
-      obj.suggestionCategory = kaizenDictionaries.categories.getLabel(obj.suggestionCategory);
-      obj.cause = kaizenDictionaries.causes.getLabel(obj.cause);
-      obj.risk = kaizenDictionaries.risks.getLabel(obj.risk);
-      obj.kaizenDuration = obj.kaizenDuration ? time.toString(obj.kaizenDuration) : null;
+      var dictionaries = null;
+
+      try { dictionaries = require('app/kaizenOrders/dictionaries'); } catch (err) {} // eslint-disable-line no-empty
+
+      if (dictionaries)
+      {
+        obj.section = dictionaries.sections.getLabel(obj.section);
+        obj.area = dictionaries.areas.getLabel(obj.area);
+        obj.nearMissCategory = dictionaries.categories.getLabel(obj.nearMissCategory);
+        obj.suggestionCategory = dictionaries.categories.getLabel(obj.suggestionCategory);
+        obj.cause = dictionaries.causes.getLabel(obj.cause);
+        obj.risk = dictionaries.risks.getLabel(obj.risk);
+        obj.kaizenDuration = obj.kaizenDuration ? time.toString(obj.kaizenDuration) : null;
+      }
+
       obj.stdReturn = t('core', 'BOOL:' + !!obj.stdReturn);
 
       USER_INFO_PROPERTIES.forEach(function(userInfoProperty)

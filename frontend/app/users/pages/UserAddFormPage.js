@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'app/core/pages/AddFormPage',
   'app/data/loadedModules',
   '../views/UserFormView'
 ], function(
+  require,
   AddFormPage,
   loadedModules,
   UserFormView

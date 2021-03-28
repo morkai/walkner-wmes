@@ -1,18 +1,18 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'jquery',
   'app/i18n',
   'app/core/views/ListView',
-  'app/kaizenOrders/dictionaries',
   './CoordSectionsView'
 ], function(
+  require,
   _,
   $,
   t,
   ListView,
-  kaizenDictionaries,
   CoordSectionsView
 ) {
   'use strict';
@@ -190,7 +190,10 @@ define([
     {
       ListView.prototype.afterRender.call(this);
 
-      this.setUpPopover();
+      if (!this.options.simple)
+      {
+        this.setUpPopover();
+      }
 
       if (this.$opinionPopover)
       {
@@ -207,6 +210,7 @@ define([
     setUpPopover: function()
     {
       var view = this;
+      var dictionaries = require('app/kaizenOrders/dictionaries');
 
       view.$el.popover({
         selector: '.has-popover',
@@ -254,7 +258,7 @@ define([
           {
             return view.serializePopoverList(model.get(column).map(function(id)
             {
-              return kaizenDictionaries.categories.getLabel(id);
+              return dictionaries.categories.getLabel(id);
             }));
           }
 

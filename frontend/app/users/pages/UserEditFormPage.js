@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'app/user',
   'app/core/pages/EditFormPage',
   'app/data/loadedModules',
   '../views/UserFormView'
 ], function(
+  require,
   user,
   EditFormPage,
   loadedModules,

@@ -1,20 +1,20 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   '../i18n',
   '../time',
   '../user',
   '../core/Model',
-  'app/kaizenOrders/dictionaries',
   'app/core/templates/userInfo'
 ], function(
+  require,
   _,
   t,
   time,
   currentUser,
   Model,
-  kaizenDictionaries,
   renderUserInfo
 ) {
   'use strict';
@@ -68,11 +68,23 @@ define([
       var obj = this.toJSON();
 
       obj.status = t(options && options.nlsDomain || 'suggestions', 'status:' + obj.status);
-      obj.section = kaizenDictionaries.sections.getLabel(obj.section);
-      obj.categories = (obj.categories || [])
-        .map(function(c) { return kaizenDictionaries.categories.getLabel(c); })
-        .join('; ');
-      obj.productFamily = obj.kaizenEvent || kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '';
+
+      var dictionaries = null;
+
+      try { dictionaries = require('app/kaizenOrders/dictionaries'); } catch (err) {} // eslint-disable-line no-empty
+
+      if (dictionaries)
+      {
+        obj.section = dictionaries.sections.getLabel(obj.section);
+        obj.categories = (obj.categories || [])
+          .map(function(c) { return dictionaries.categories.getLabel(c); })
+          .join('; ');
+        obj.productFamily = obj.kaizenEvent || dictionaries.productFamilies.getLabel(obj.productFamily) || '';
+      }
+      else
+      {
+        obj.categories = (obj.categories || []).join('; ');
+      }
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {
@@ -183,10 +195,13 @@ define([
     {
       var suggestion = this;
       var Suggestion = this.constructor;
+      var dictionaries = null;
+
+      try { dictionaries = require('app/kaizenOrders/dictionaries'); } catch (err) {} // eslint-disable-line no-empty
 
       return (this.get('coordSections') || []).map(function(coordSection)
       {
-        var section = kaizenDictionaries.sections.get(coordSection._id);
+        var section = dictionaries ? dictionaries.sections.get(coordSection._id) : null;
 
         return _.defaults({
           name: section ? section.getLabel() : coordSection._id,
@@ -225,7 +240,11 @@ define([
 
     isPossibleConfirmer: function()
     {
-      var section = kaizenDictionaries.sections.get(this.get('section'));
+      var dictionaries = null;
+
+      try { dictionaries = require('app/kaizenOrders/dictionaries'); } catch (err) {} // eslint-disable-line no-empty
+
+      var section = dictionaries ? dictionaries.sections.get(this.get('section')) : null;
 
       return !!section && section.get('confirmers').some(function(u) { return u.id === currentUser.data._id; });
     },

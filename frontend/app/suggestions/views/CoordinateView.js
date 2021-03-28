@@ -1,20 +1,20 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/user',
   'app/viewport',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
-  'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/coordinate'
 ], function(
+  require,
   _,
   user,
   viewport,
   FormView,
   setUpUserSelect2,
-  kaizenDictionaries,
   template
 ) {
   'use strict';
@@ -57,13 +57,14 @@ define([
 
     setUpSectionSelect2: function()
     {
+      var dictionaries = require('app/kaizenOrders/dictionaries');
       var canManage = this.model.canManage();
       var data = [];
       var selected = this.options.coordSection ? this.options.coordSection._id : null;
 
       this.model.get('coordSections').forEach(function(coordSection)
       {
-        var section = kaizenDictionaries.sections.get(coordSection._id);
+        var section = dictionaries.sections.get(coordSection._id);
 
         if (!section)
         {
@@ -127,9 +128,10 @@ define([
 
     serializeToForm: function()
     {
+      var dictionaries = require('app/kaizenOrders/dictionaries');
       var coordSections = this.model.get('coordSections').filter(function(coordSection)
       {
-        var section = kaizenDictionaries.sections.get(coordSection._id);
+        var section = dictionaries.sections.get(coordSection._id);
 
         return section
           && _.some(section.get('coordinators'), function(c) { return c.id === user.data._id; });

@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/i18n',
   'app/core/Model',
   'app/core/templates/userInfo',
   'app/data/orgUnits'
 ], function(
+  require,
   _,
   t,
   Model,

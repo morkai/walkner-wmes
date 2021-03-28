@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'app/i18n',
   'app/core/Model',
   'app/data/prodFunctions'
 ], function(
+  require,
   t,
   Model,
   prodFunctions

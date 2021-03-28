@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'h5.rql/index',
   'app/core/util/transliterate',
@@ -9,6 +10,7 @@ define([
   'app/data/companies',
   'app/data/loadedModules'
 ], function(
+  require,
   _,
   rql,
   transliterate,
