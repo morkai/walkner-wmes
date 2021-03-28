@@ -1,0 +1,1 @@
+define(["../core/Collection","./KaizenControlList"],function(e,n){"use strict";return e.extend({model:n,comparator:"name"})});

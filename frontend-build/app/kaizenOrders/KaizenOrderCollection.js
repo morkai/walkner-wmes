@@ -1,1 +1,1 @@
-define(["../time","../core/Collection","./KaizenOrder"],function(e,t,r){"use strict";return t.extend({model:r,rowHeight:2,rqlQuery:function(t){return t.Query.fromObject({selector:{name:"and",args:[{name:"ge",args:["eventDate",e.getMoment().subtract(90,"days")]}]},fields:{changes:0},sort:{eventDate:-1},limit:-1337})}})});
+define(["../time","../core/Collection","./KaizenOrder"],function(e,t,r){"use strict";return t.extend({model:r,rowHeight:1,rqlQuery:"exclude(changes)&sort(-eventDate)&limit(-1337)"})});

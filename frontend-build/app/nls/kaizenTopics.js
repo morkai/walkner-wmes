@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:base":function(n){return"React"},"BREADCRUMB:browse":function(n){return"Topics"},"PROPERTY:active":function(n){return"Active?"},"PROPERTY:position":function(n){return"Position"},"PROPERTY:shortName":function(n){return"Short name"},"PROPERTY:fullName":function(n){return"Full name"}},pl:!0}});

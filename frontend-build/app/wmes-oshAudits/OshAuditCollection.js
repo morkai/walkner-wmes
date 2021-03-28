@@ -1,0 +1,1 @@
+define(["../core/Collection","./OshAudit"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)&sort(-date)"})});

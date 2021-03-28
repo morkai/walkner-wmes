@@ -1,0 +1,1 @@
+define(["app/core/views/FormView","app/kaizenControlCategories/templates/form"],function(e,t){"use strict";return e.extend({template:t,serializeToForm:function(){return Object.assign({active:!0},this.model.toJSON())}})});

@@ -1,1 +1,1 @@
-define(["../core/Collection","./KaizenSection"],function(e,o){"use strict";return e.extend({model:o,comparator:"position"})});
+define(["../core/Collection","./KaizenSection"],function(e,n){"use strict";return e.extend({model:n,comparator:"position",forEntryType:function(e){return this.filter(function(n){return n.get("entryTypes").includes(e)})}})});
