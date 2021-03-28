@@ -34,7 +34,7 @@ define([
 
     getLabel: function(options)
     {
-      return this.get(options.short === false ? 'fullName' : 'shortName');
+      return this.get(options && options.short === false ? 'fullName' : 'shortName');
     }
 
   });
