@@ -1,0 +1,21 @@
+<tr>
+  <td>
+    <input type="hidden" name="results[<%- i %>].category" value="<%- result.category %>">
+    <input type="hidden" name="results[<%- i %>].shortName" value="<%= result.shortName %>">
+    <input type="hidden" name="results[<%- i %>].fullName" value="<%= result.fullName %>">
+    <input type="radio" name="results[<%- i %>].ok" value="-1" tabindex="-1" <%- result.ok === null ? 'checked' : '' %>>
+    <%= result.fullName %>
+  </td>
+  <td class="is-min oshAudits-form-radio">
+    <input type="radio" name="results[<%- i %>].ok" value="1" <%- result.ok === true ? 'checked' : '' %>>
+  </td>
+  <td class="is-min oshAudits-form-radio">
+    <input type="radio" name="results[<%- i %>].ok" value="0" <%- result.ok === false ? 'checked' : '' %>>
+  </td>
+  <td class="oshAudits-form-textarea">
+    <textarea class="form-control" name="results[<%- i %>].comment" rows="2" required <%- result.ok !== false ? 'disabled' : '' %>><%= result.comment %></textarea>
+  </td>
+  <td class="is-min">
+    <input type="text" name="results[<%- i %>].owner">
+  </td>
+</tr>

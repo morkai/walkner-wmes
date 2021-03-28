@@ -5,12 +5,14 @@ define([
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
+  'app/kaizenOrders/dictionaries',
   'app/kaizenSections/templates/form'
 ], function(
   FormView,
   idAndLabel,
   orgUnits,
   setUpUserSelect2,
+  dictionaries,
   template
 ) {
   'use strict';
@@ -24,8 +26,10 @@ define([
       var formData = this.model.toJSON();
 
       formData.subdivisions = Array.isArray(formData.subdivisions) ? formData.subdivisions.join(',') : '';
+      formData.controlLists = Array.isArray(formData.controlLists) ? formData.controlLists.join(',') : '';
       formData.confirmers = '';
       formData.coordinators = '';
+      formData.auditors = '';
 
       return formData;
     },
@@ -33,8 +37,11 @@ define([
     serializeForm: function(formData)
     {
       formData.subdivisions = formData.subdivisions ? formData.subdivisions.split(',') : [];
+      formData.controlLists = formData.controlLists ? formData.controlLists.split(',') : [];
       formData.confirmers = setUpUserSelect2.getUserInfo(this.$id('confirmers')) || [];
       formData.coordinators = setUpUserSelect2.getUserInfo(this.$id('coordinators')) || [];
+      formData.auditors = setUpUserSelect2.getUserInfo(this.$id('auditors')) || [];
+      formData.entryTypes = formData.entryTypes || [];
 
       return formData;
     },
@@ -48,7 +55,6 @@ define([
       if (view.options.editMode)
       {
         view.$id('id').prop('readonly', true);
-        view.$id('name').focus();
       }
 
       view.$id('subdivisions').select2({
@@ -63,7 +69,7 @@ define([
         })
       });
 
-      ['confirmers', 'coordinators'].forEach(function(prop)
+      ['confirmers', 'coordinators', 'auditors'].forEach(function(prop)
       {
         var $users = setUpUserSelect2(view.$id(prop), {
           multiple: true,
@@ -77,6 +83,12 @@ define([
             text: u.label
           };
         }));
+      });
+
+      this.$id('controlLists').select2({
+        width: '100%',
+        multiple: true,
+        data: dictionaries.controlLists.map(idAndLabel)
       });
     }
 

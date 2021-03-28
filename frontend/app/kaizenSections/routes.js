@@ -19,29 +19,28 @@ define([
   var canView = user.auth('KAIZEN:DICTIONARIES:VIEW');
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
 
-  router.map('/kaizenSections', canView, function(req)
+  router.map('/kaizenSections', canView, function()
   {
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/kaizenSections/KaizenSectionCollection',
+        'app/kaizenOrders/dictionaries',
         nls
       ],
-      function(ListPage, KaizenSectionCollection)
+      function(ListPage, dictionaries)
       {
-        return new ListPage({
+        return dictionaries.bind(new ListPage({
           baseBreadcrumb: true,
-          collection: new KaizenSectionCollection(null, {rqlQuery: req.rql}),
+          load: null,
+          collection: dictionaries.sections,
           columns: [
             {id: '_id', className: 'is-min'},
-            {id: 'name', className: 'is-min'},
+            {id: 'name'},
+            {id: 'entryTypes', className: 'is-min'},
             {id: 'active', className: 'is-min'},
-            {id: 'subdivisions'},
-            {id: 'confirmers'},
-            {id: 'coordinators'},
             {id: 'position', className: 'is-min', tdClassName: 'is-number'}
           ]
-        });
+        }));
       }
     );
   });
@@ -51,18 +50,21 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenSections/KaizenSection',
         'app/kaizenSections/templates/details',
         nls
       ],
-      function(DetailsPage, KaizenSection, detailsTemplate)
+      function(DetailsPage, dictionaries, KaizenSection, detailsTemplate)
       {
-        return new DetailsPage({
+        var model = dictionaries.sections.get(req.params.id) || new KaizenSection({_id: req.params.id});
+
+        return dictionaries.bind(new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          model: new KaizenSection({_id: req.params.id}),
+          model: model,
           detailsTemplate: detailsTemplate
-        });
+        }));
       }
     );
   });
@@ -72,18 +74,19 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenSections/KaizenSection',
         'app/kaizenSections/views/KaizenSectionFormView',
         nls
       ],
-      function(AddFormPage, KaizenSection, KaizenSectionFormView)
+      function(AddFormPage, dictionaries, KaizenSection, KaizenSectionFormView)
       {
-        return new AddFormPage({
+        return dictionaries.bind(new AddFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenSectionFormView,
           model: new KaizenSection()
-        });
+        }));
       }
     );
   });
@@ -93,18 +96,21 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenSections/KaizenSection',
         'app/kaizenSections/views/KaizenSectionFormView',
         nls
       ],
-      function(EditFormPage, KaizenSection, KaizenSectionFormView)
+      function(EditFormPage, dictionaries, KaizenSection, KaizenSectionFormView)
       {
-        return new EditFormPage({
+        var model = dictionaries.sections.get(req.params.id) || new KaizenSection({_id: req.params.id});
+
+        return dictionaries.bind(new EditFormPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           FormView: KaizenSectionFormView,
-          model: new KaizenSection({_id: req.params.id})
-        });
+          model: model
+        }));
       }
     );
   });

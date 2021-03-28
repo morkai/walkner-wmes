@@ -1,0 +1,22 @@
+.oshTalks-form-radio {
+  width: 100px!important;
+  text-align: center;
+  cursor: pointer;
+}
+.oshTalks-form-radio > input {
+  cursor: pointer;
+}
+.oshTalks-form .table input[tabindex="-1"] {
+  position: absolute;
+  top: 0;
+  left: -100px;
+}
+.oshTalks-form .checkbox {
+  margin-bottom: 15px;
+}
+.oshTalks-form-button {
+  margin-top: -20px;
+}
+.oshTalks-form-textarea textarea {
+  resize: vertical;
+}

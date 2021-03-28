@@ -14,12 +14,15 @@ define([
   '../kaizenRisks/KaizenRiskCollection',
   '../kaizenBehaviours/KaizenBehaviourCollection',
   '../kaizenProductFamilies/KaizenProductFamilyCollection',
+  '../kaizenTopics/KaizenTopicCollection',
+  '../kaizenControlLists/KaizenControlListCollection',
+  '../kaizenControlCategories/KaizenControlCategoryCollection',
   './KaizenSettingCollection'
 ], function(
   $,
   broker,
   pubsub,
-  user,
+  currentUser,
   createSettings,
   companies,
   KaizenSectionCollection,
@@ -29,6 +32,9 @@ define([
   KaizenRiskCollection,
   KaizenBehaviourCollection,
   KaizenProductFamilyCollection,
+  KaizenTopicCollection,
+  KaizenControlListCollection,
+  KaizenControlCategoryCollection,
   KaizenSettingCollection
 ) {
   'use strict';
@@ -40,7 +46,10 @@ define([
     'causes',
     'risks',
     'productFamilies',
-    'behaviours'
+    'behaviours',
+    'topics',
+    'controlLists',
+    'controlCategories'
   ];
   var PROP_TO_DICT = {
     section: 'sections',
@@ -52,7 +61,10 @@ define([
     risk: 'risks',
     behaviour: 'behaviours',
     productFamily: 'productFamilies',
-    company: 'companies'
+    company: 'companies',
+    topic: 'topics',
+    controlList: 'controlLists',
+    controlCategory: 'controlCategories'
   };
 
   var req = null;
@@ -60,6 +72,7 @@ define([
   var pubsubSandbox = null;
   var kaizenSeenSub = null;
   var suggestionSeenSub = null;
+  var auditor = null;
   var settings = createSettings(KaizenSettingCollection);
   var dictionaries = {
     multiType: !!window.KAIZEN_MULTI,
@@ -81,6 +94,9 @@ define([
     risks: new KaizenRiskCollection(),
     behaviours: new KaizenBehaviourCollection(),
     productFamilies: new KaizenProductFamilyCollection(),
+    topics: new KaizenTopicCollection(),
+    controlLists: new KaizenControlListCollection(),
+    controlCategories: new KaizenControlCategoryCollection(),
     companies: companies,
     loaded: false,
     load: function()
@@ -168,16 +184,44 @@ define([
     {
       var dictionaries = this;
 
+      if (page.__kaizenDictionariesBound__)
+      {
+        return page;
+      }
+
+      page.__kaizenDictionariesBound__ = true;
+
       page.on('beforeLoad', function(page, requests)
       {
-        requests.push(dictionaries.load());
+        requests.push({
+          priority: true,
+          promise: dictionaries.load()
+        });
       });
 
-      page.on('afterRender', dictionaries.load.bind(dictionaries));
+      page.on('afterRender', function()
+      {
+        dictionaries.load();
+      });
 
-      page.once('remove', dictionaries.unload.bind(dictionaries));
+      page.once('remove', function()
+      {
+        dictionaries.unload();
+
+        page.__kaizenDictionariesBound__ = false;
+      });
 
       return page;
+    },
+    isAuditor: function()
+    {
+      if (auditor === null)
+      {
+        auditor = currentUser.isAllowedTo('OSH_AUDITS:AUDITOR')
+          || dictionaries.sections.some(k => k.get('auditors').some(u => u.id === currentUser.data._id));
+      }
+
+      return auditor;
     }
   };
 
@@ -198,6 +242,11 @@ define([
     subToSeenMessages();
   });
 
+  dictionaries.sections.on('reset change:auditors', function()
+  {
+    auditor = null;
+  });
+
   function resetDictionaries(data)
   {
     DICTS.forEach(function(prop)
@@ -216,8 +265,8 @@ define([
   {
     if (pubsubSandbox)
     {
-      kaizenSeenSub = pubsubSandbox.subscribe('kaizen.orders.seen.' + user.data._id, handleKaizenSeenMessage);
-      suggestionSeenSub = pubsubSandbox.subscribe('suggestions.seen.' + user.data._id, handleSuggestionSeenMessage);
+      kaizenSeenSub = pubsubSandbox.subscribe('kaizen.orders.seen.' + currentUser.data._id, handleKaizenSeenMessage);
+      suggestionSeenSub = pubsubSandbox.subscribe('suggestions.seen.' + currentUser.data._id, handleSuggestionSeenMessage);
     }
   }
 

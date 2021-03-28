@@ -1,0 +1,26 @@
+<form class="well filter-form oshAudits-report-filter" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix
+  }) %>
+  <div class="form-group">
+    <label><%- t('reports', 'filter:interval') %></label>
+    <div id="<%- id('interval') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
+          <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+        </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('sections') %>"><%- t('PROPERTY:section') %></label>
+    <input id="<%- id('sections') %>" name="sections" type="text"t(>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('auditor') %>"><%- t('PROPERTY:auditor') %></label>
+    <input id="<%- id('auditor') %>" name="auditor" type="text"t(>
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
+  </div>
+</form>

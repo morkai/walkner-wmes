@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMB:base": "Suggestions",
+    "BREADCRUMB:base": "Improvements",
     "BREADCRUMB:browse": "Entries",
     "BREADCRUMB:reports:count": "Number of entries",
     "BREADCRUMB:reports:summary": "Summary",
@@ -85,7 +85,7 @@
     "coordSections:status:accepted": "Accepted",
     "coordSections:noData": "Entry doesn't have any coordinating departments.",
 
-    "type:suggestion": "Suggestion",
+    "type:suggestion": "Improvement",
     "type:kaizen": "Kaizen",
 
     "status:new": "New",
@@ -192,7 +192,7 @@
     "report:title:owner": "Entry count by owners",
     "report:series:total": "Total",
     "report:series:entry": "Entries",
-    "report:series:suggestion": "Suggestions",
+    "report:series:suggestion": "Improvements",
     "report:series:kaizen": "Kaizens",
     "report:series:kaizenEvent": "Kaizen Events",
     "report:filenames:type": "SUG_Count",
@@ -217,10 +217,10 @@
     "report:series:summary:open": "Open",
     "report:series:summary:finished": "Finished",
     "report:series:summary:cancelled": "Cancelled",
-    "report:filenames:summary:averageDuration": "SUG_AvgImplDays",
-    "report:filenames:summary:count": "SUG_CountByWeek",
-    "report:filenames:summary:suggestionOwners": "SUG_CountByOwners",
-    "report:filenames:summary:categories": "SUG_CountByCategory",
+    "report:filenames:summary:averageDuration": "IMP_AvgImplDays",
+    "report:filenames:summary:count": "IMP_CountByWeek",
+    "report:filenames:summary:suggestionOwners": "IMP_CountByOwners",
+    "report:filenames:summary:categories": "IMP_CountByCategory",
 
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)",

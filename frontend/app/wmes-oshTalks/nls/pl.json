@@ -1,0 +1,35 @@
+{
+  "BREADCRUMB:browse": "Rozmowy o BHP",
+  "BREADCRUMB:reports:count": "Ilość rozmów",
+
+  "PROPERTY:rid": "ID",
+  "PROPERTY:date": "Data rozmowy",
+  "PROPERTY:section": "Dział",
+  "PROPERTY:auditor": "Prezenter",
+  "PROPERTY:creator": "Stworzone przez",
+  "PROPERTY:updater": "Ostatnio zmienione przez",
+  "PROPERTY:createdAt": "Czas utworzenia",
+  "PROPERTY:updatedAt": "Czas ostatniej zmiany",
+  "PROPERTY:topics": "Omawiane tematy",
+  "PROPERTY:participants": "Uczestnicy",
+  "PROPERTY:notes": "Uwagi / komentarze",
+
+  "filter:user:mine": "Moje",
+  "filter:user:auditor": "Prezenter",
+  "filter:user:participants": "Uczestnik",
+  "filter:user:others": "Użytkownik",
+
+  "report:title:total": "Ilość przeprowadzonych rozmów",
+  "report:title:countBySection": "Ilość przeprowadzonych rozmów wg działów",
+  "report:title:topics": "Ilość przeprowadzonych rozmów wg tematów",
+  "report:title:auditors": "Ilość przeprowadzonych rozmów wg prezenterów",
+  "report:title:participants": "Ilość przeprowadzonych rozmów wg uczestników",
+  "report:series:talk": "Rozmowy",
+  "report:series:topic": "Tematy",
+  "report:series:total": "Suma",
+  "report:filenames:total": "wmes_ilosc_rozmow_o_bhp",
+  "report:filenames:countBySection": "wmes_ilosc_rozmow_o_bhp_wg_dzialow",
+  "report:filenames:topics": "wmes_ilosc_rozmow_o_bhp_wg_tematow",
+  "report:filenames:auditors": "wmes_ilosc_rozmow_o_bhp_wg_prezenterow",
+  "report:filenames:participants": "wmes_ilosc_rozmow_o_bhp_wg_uczestnikow"
+}

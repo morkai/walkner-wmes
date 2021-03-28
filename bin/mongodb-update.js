@@ -3,4 +3,8 @@
 
 'use strict';
 
-db.users.updateMany({syncId: {$exists: false}}, {$set: {syncId: ''}});
+db.kaizensections.updateMany({entryTypes: {$exists: false}}, {$set: {
+  entryTypes: ['kaizenOrders', 'suggestions', 'observations', 'minutes'],
+  auditors: [],
+  controlLists: []
+}});

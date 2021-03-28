@@ -1,0 +1,15 @@
+<tr>
+  <td class="is-min">
+    <input type="hidden" name="categories[<%- i %>]._id" value="<%- category._id %>">
+    <span><%= category.label %></span>
+  </td>
+  <td><input type="text" name="categories[<%- i %>].shortName" class="form-control" value="<%= category.shortName %>" required></td>
+  <td><input type="text" name="categories[<%- i %>].fullName" class="form-control" value="<%= category.fullName %>" required></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button" class="btn btn-default" data-action="up"><i class="fa fa-arrow-up"></i></button>
+      <button type="button" class="btn btn-default" data-action="down"><i class="fa fa-arrow-down"></i></button>
+      <button type="button" class="btn btn-default" data-action="remove"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+</tr>

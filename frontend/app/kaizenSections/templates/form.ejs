@@ -1,15 +1,15 @@
-<form method="post" action="<%- formAction %>">
+<form method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
         <label for="<%- id('id') %>" class="control-label is-required"><%- t('PROPERTY:_id') %></label>
-        <input id="<%- id('id') %>" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
+        <input id="<%- id('id') %>" class="form-control" type="text" name="_id" required maxlength="20" pattern="^[A-Za-z0-9-]+$">
       </div>
       <div class="form-group">
         <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
-        <input id="<%- id('name') %>" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
+        <input id="<%- id('name') %>" class="form-control" type="text" name="name" required maxlength="100">
       </div>
       <div class="checkbox">
         <label class="control-label">
@@ -22,16 +22,35 @@
         <input id="<%- id('position') %>" class="form-control" type="number" name="position" min="0" required>
       </div>
       <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:entryTypes') %></label>
+        <% ['kaizenOrders', 'suggestions', 'observations', 'minutes', 'audits', 'talks'].forEach(function(type) { %>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="entryTypes[]" value="<%- type %>">
+              <%- t('entryType:' + type) %>
+            </label>
+          </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
         <label for="<%- id('subdivisions') %>" class="control-label"><%- t('PROPERTY:subdivisions') %></label>
-        <input id="<%- id('subdivisions') %>" type="text" autocomplete="new-password" name="subdivisions">
+        <input id="<%- id('subdivisions') %>" type="text" name="subdivisions">
       </div>
       <div class="form-group">
         <label for="<%- id('confirmers') %>" class="control-label"><%- t('PROPERTY:confirmers') %></label>
-        <input id="<%- id('confirmers') %>" type="text" autocomplete="new-password" name="confirmers">
+        <input id="<%- id('confirmers') %>" type="text" name="confirmers">
       </div>
       <div class="form-group">
         <label for="<%- id('coordinators') %>" class="control-label"><%- t('PROPERTY:coordinators') %></label>
-        <input id="<%- id('coordinators') %>" type="text" autocomplete="new-password" name="coordinators">
+        <input id="<%- id('coordinators') %>" type="text" name="coordinators">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('auditors') %>" class="control-label"><%- t('PROPERTY:auditors') %></label>
+        <input id="<%- id('auditors') %>" type="text" name="auditors">
+      </div>
+      <div class="form-group">
+        <label for="<%- id('controlLists') %>" class="control-label"><%- t('PROPERTY:controlLists') %></label>
+        <input id="<%- id('controlLists') %>" type="text" name="controlLists">
       </div>
     </div>
     <div class="panel-footer">

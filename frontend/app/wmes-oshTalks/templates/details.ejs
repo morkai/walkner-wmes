@@ -1,0 +1,41 @@
+<div class="oshTalks-details">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('core', 'PANEL:TITLE:details') %></div>
+    <div class="panel-details">
+      <div class="row">
+        <div class="col-md-6">
+          <%- helpers.props(model, {
+            first: true,
+            props: [
+              '!auditor',
+              'section',
+              'date',
+              {id: 'notes', valueClassName: 'text-lines'}
+            ]
+          }) %>
+        </div>
+        <div class="col-md-6">
+          <%- helpers.props(model, ['createdAt', '!creator', 'updatedAt', '!updater']) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PROPERTY:topics') %></div>
+    <div class="panel-body">
+      <ol>
+        <% model.topics.forEach(function(topic) { %>
+        <li><%= topic %></li>
+        <% }) %>
+      </ol>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PROPERTY:participants') %></div>
+    <div class="panel-body">
+      <p>
+        <%- model.participants.join(', ') %>
+      </p>
+    </div>
+  </div>
+</div>

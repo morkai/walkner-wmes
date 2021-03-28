@@ -1,0 +1,37 @@
+<form class="oshTalks-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-lg-4 has-required-select2">
+          <label for="<%- id('auditor') %>" class="control-label is-required"><%- t('PROPERTY:auditor') %></label>
+          <input id="<%- id('auditor') %>" type="text" name="auditor" required>
+        </div>
+        <div class="form-group col-lg-4 has-required-select2">
+          <label for="<%- id('section') %>" class="control-label is-required"><%- t('PROPERTY:section') %></label>
+          <input id="<%- id('section') %>" type="text" name="section" required>
+        </div>
+        <div class="form-group">
+          <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
+          <input id="<%- id('date') %>" class="form-control" type="date" name="date" required min="2020-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
+        </div>
+      </div>
+      <div class="form-group has-required-select2 settings-select2-long">
+        <label for="<%- id('topics') %>" class="control-label is-required"><%- t('PROPERTY:topics') %></label>
+        <input id="<%- id('topics') %>" type="text" name="topics" required>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- id('participants') %>" class="control-label is-required"><%- t('PROPERTY:participants') %></label>
+        <input id="<%- id('participants') %>" type="text" name="participants" required>
+      </div>
+      <div class="form-group">
+        <label for="<%- id('notes') %>" class="control-label"><%- t('PROPERTY:notes') %></label>
+        <textarea id="<%- id('notes') %>" name="notes" class="form-control" rows="4"></textarea>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

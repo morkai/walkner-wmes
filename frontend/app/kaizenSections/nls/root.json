@@ -1,15 +1,25 @@
 {
   "root": {
-    "BREADCRUMB:base": "Improvements",
+    "BREADCRUMB:base": "React",
     "BREADCRUMB:browse": "Sections",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:active": "Active?",
+    "PROPERTY:entryTypes": "Entry types",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
     "PROPERTY:subdivisions": "Subdivisions",
     "PROPERTY:confirmers": "Confirmers",
-    "PROPERTY:coordinators": "Coordinators"
+    "PROPERTY:coordinators": "Coordinators",
+    "PROPERTY:auditors": "Auditors/Presenters",
+    "PROPERTY:controlLists": "Control lists",
+
+    "entryType:kaizenOrders": "Near misses",
+    "entryType:suggestions": "Improvements",
+    "entryType:observations": "Observations",
+    "entryType:minutes": "Minutes",
+    "entryType:audits": "Audits",
+    "entryType:talks": "Talks"
   },
   "pl": true
 }

@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMB:base": "Improvements",
+    "BREADCRUMB:base": "React",
     "BREADCRUMB:browse": "Categories",
 
     "PROPERTY:_id": "ID",
@@ -8,7 +8,7 @@
     "PROPERTY:name": "Name",
     "PROPERTY:description": "Description",
     "PROPERTY:inNearMiss": "In near misses?",
-    "PROPERTY:inSuggestion": "In suggestions?",
+    "PROPERTY:inSuggestion": "In improvements?",
     "PROPERTY:position": "Position",
     "PROPERTY:coordSections": "Coordinating sections",
 

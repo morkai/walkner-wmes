@@ -1,0 +1,13 @@
+{
+  "BREADCRUMB:base": "Reaguj",
+  "BREADCRUMB:browse": "Listy kontrolne",
+
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:categories": "Kategorie kontroli",
+  "PROPERTY:categories:category": "Kategoria",
+  "PROPERTY:categories:shortName": "Krótka nazwa",
+  "PROPERTY:categories:fullName": "Długa nazwa",
+
+  "FORM:category:placeholder": "Dodaj wybraną kategorię..."
+}

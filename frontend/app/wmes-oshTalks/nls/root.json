@@ -1,0 +1,38 @@
+{
+  "root": {
+    "BREADCRUMB:browse": "OSH talks",
+    "BREADCRUMB:reports:count": "Number of talks",
+
+    "PROPERTY:rid": "ID",
+    "PROPERTY:date": "Date",
+    "PROPERTY:section": "Section",
+    "PROPERTY:auditor": "Presenter",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:updater": "Updater",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:updatedAt": "Updated at",
+    "PROPERTY:topics": "Topics",
+    "PROPERTY:participants": "Participants",
+    "PROPERTY:notes": "Notes / comments",
+
+    "filter:user:mine": "Mine",
+    "filter:user:auditor": "Presenter",
+    "filter:user:participants": "Participant",
+    "filter:user:others": "User",
+
+    "report:title:total": "Number of talks",
+    "report:title:countBySection": "Number of talks by sections",
+    "report:title:topics": "Number of talks by topics",
+    "report:title:auditors": "Number of talks by presenters",
+    "report:title:participants": "Number of talks by participants",
+    "report:series:talk": "Talks",
+    "report:series:topic": "Topics",
+    "report:series:total": "Total",
+    "report:filenames:total": "wmes_osh_talks_count",
+    "report:filenames:countBySection": "wmes_osh_talks_by_section",
+    "report:filenames:topics": "wmes_osh_talks_by_topics",
+    "report:filenames:auditors": "wmes_osh_talks_by_presenters",
+    "report:filenames:participants": "wmes_osh_talks_by_participants"
+  },
+  "pl": true
+}

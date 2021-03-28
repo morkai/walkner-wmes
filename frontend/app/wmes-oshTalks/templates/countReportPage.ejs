@@ -1,0 +1,7 @@
+<div class="oshTalks-report">
+  <div id="<%- id('filter') %>" class="filter-container"></div>
+  <% metrics.forEach(function(metric) { %>
+  <h3><%- t('report:title:' + metric) %></h3>
+  <div id="<%- id(metric) %>" class="oshTalks-report-<%- metric %>"></div>
+  <% }) %>
+</div>

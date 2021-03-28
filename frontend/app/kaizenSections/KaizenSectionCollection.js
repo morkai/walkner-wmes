@@ -13,7 +13,15 @@ define([
 
     model: KaizenSection,
 
-    comparator: 'position'
+    comparator: 'position',
+
+    forEntryType: function(entryType)
+    {
+      return this.filter(function(section)
+      {
+        return section.get('entryTypes').includes(entryType);
+      });
+    }
 
   });
 });

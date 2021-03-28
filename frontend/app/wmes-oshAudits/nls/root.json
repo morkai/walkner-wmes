@@ -1,0 +1,59 @@
+{
+  "root": {
+    "BREADCRUMB:browse": "OSH audits",
+    "BREADCRUMB:reports:count": "Number of audits",
+
+    "PROPERTY:rid": "ID",
+    "PROPERTY:status": "Status",
+    "PROPERTY:date": "Audit date",
+    "PROPERTY:section": "Section",
+    "PROPERTY:auditor": "Auditor",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:updater": "Updater",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:updatedAt": "Updated at",
+    "PROPERTY:results": "Control list",
+    "PROPERTY:results:category": "Situation assessment",
+    "PROPERTY:results:ok:true": "OK",
+    "PROPERTY:results:ok:false": "NOK",
+    "PROPERTY:results:owner": "Person responsible for action",
+    "PROPERTY:results:comment": "Comment / identified irregularities, risks",
+
+    "status:new": "New",
+    "status:inProgress": "In progress",
+    "status:finished": "Finished",
+    "status:cancelled": "Cancelled",
+
+    "filter:user:mine": "Mine",
+    "filter:user:auditor": "Auditor",
+    "filter:user:owner": "Owner",
+    "filter:user:others": "User",
+    "filter:anyNok": "Irregularities",
+
+    "LIST:COLUMN:nok": "Irregularities found",
+
+    "FORM:addOther": "Other...",
+    "FORM:empty": "Control list can not be empty.",
+
+    "report:title:total": "Number of audits",
+    "report:title:countBySection": "Number of audits by sections",
+    "report:title:countByStatus": "Number of audits by statuses",
+    "report:title:nok": "Number of irregularities",
+    "report:title:nokBySection": "Number of irregularities by sections",
+    "report:title:nokByCategory": "Number of irregularities by categories",
+    "report:title:auditors": "Number of audits by auditors",
+    "report:title:owners": "Number of irregularities by owners",
+    "report:series:audit": "Audits",
+    "report:series:nok": "Irregularities",
+    "report:series:total": "Total",
+    "report:filenames:total": "AUD_Count",
+    "report:filenames:countBySection": "AUD_CountBySection",
+    "report:filenames:countByStatus": "AUD_CountByStatus",
+    "report:filenames:nok": "AUD_Nok",
+    "report:filenames:nokBySection": "AUD_NokBySection",
+    "report:filenames:nokByCategory": "AUD_NokByCategory",
+    "report:filenames:auditors": "AUD_CountByAuditors",
+    "report:filenames:owners": "AUD_NokByOwners"
+  },
+  "pl": true
+}

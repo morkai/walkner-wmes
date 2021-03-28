@@ -1,0 +1,22 @@
+.oshAudits-form-radio {
+  width: 100px!important;
+  text-align: center;
+  cursor: pointer;
+}
+.oshAudits-form-radio > input {
+  cursor: pointer;
+}
+.oshAudits-form .table input[tabindex="-1"] {
+  position: absolute;
+  top: 0;
+  left: -100px;
+}
+.oshAudits-form .checkbox {
+  margin-bottom: 15px;
+}
+.oshAudits-form-button {
+  margin-top: -20px;
+}
+.oshAudits-form-textarea textarea {
+  resize: vertical;
+}

@@ -251,6 +251,7 @@ define([
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
 
+      this.setUpSectionSelect2();
       this.setUpUserSelect2('owner');
       this.setUpParticipantsSelect2();
 
@@ -267,6 +268,37 @@ define([
       }
 
       this.$id('owner').focus();
+    },
+
+    setUpSectionSelect2: function()
+    {
+      var id = this.model.get('section');
+      var model = kaizenDictionaries.sections.get(id);
+      var map = {};
+
+      kaizenDictionaries.sections.forEntryType('minutes').forEach(function(s)
+      {
+        if (s.get('active'))
+        {
+          map[s.id] = idAndLabel(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idAndLabel(model);
+        }
+      }
+
+      this.$id('section').select2({
+        data: _.values(map)
+      });
     },
 
     setUpUserSelect2: function(prop)

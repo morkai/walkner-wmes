@@ -29,6 +29,8 @@ module.exports = {
   'opinionSurvey': require(`${MODULES}/opinionSurveys/report`),
   'behaviorObsCards/count': require(`${MODULES}/behaviorObsCards/countReport`),
   'minutesForSafetyCards/count': require(`${MODULES}/minutesForSafetyCards/countReport`),
+  'wmes-oshAudits/count': require(`${MODULES}/wmes-oshAudits/countReport`),
+  'wmes-oshTalks/count': require(`${MODULES}/wmes-oshTalks/countReport`),
   'paintShop/load': require(`${MODULES}/paintShop/loadReport`),
   'wmes-fap/count': require(`${MODULES}/wmes-fap/reports/count`),
   'planning/execution': require(`${MODULES}/planning/reports/execution`),

@@ -607,7 +607,7 @@ define([
       var model = kaizenDictionaries.sections.get(id);
       var map = {};
 
-      kaizenDictionaries.sections.forEach(function(s)
+      kaizenDictionaries.sections.forEntryType('suggestions').forEach(function(s)
       {
         if (s.get('active') && s.get('confirmers').length)
         {

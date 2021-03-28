@@ -1,0 +1,13 @@
+<div class="panel panel-primary">
+  <div class="panel-heading"><%- panelTitle %></div>
+  <div class="panel-details">
+    <%- helpers.props(model, [
+      'name',
+      'active',
+      {id: '!categories', value: function(v)
+      {
+        return '<ul><li>' + v.map(function(i) { return _.escape(i.fullName); }).join('<li>') + '</ul>';
+      }}
+    ]) %>
+  </div>
+</div>

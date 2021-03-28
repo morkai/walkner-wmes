@@ -27,7 +27,7 @@ define([
 
       return [
         pageActions.jump(this, collection),
-        pageActions.export(layout, this, this.collection),
+        pageActions.export(layout, this, collection),
         pageActions.add(collection, false)
       ];
     },

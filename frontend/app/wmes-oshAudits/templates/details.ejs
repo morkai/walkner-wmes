@@ -1,0 +1,19 @@
+<div class="oshAudits-details">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- t('core', 'PANEL:TITLE:details') %></div>
+    <div class="panel-details">
+      <div class="row">
+        <div class="col-md-6">
+          <%- helpers.props(model, {
+            first: true,
+            props: ['status', '!auditor', 'section', 'date']
+          }) %>
+        </div>
+        <div class="col-md-6">
+          <%- helpers.props(model, ['createdAt', '!creator', 'updatedAt', '!updater']) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include resultsPanel.ejs %>
+</div>

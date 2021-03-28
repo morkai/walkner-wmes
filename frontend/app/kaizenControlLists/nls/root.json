@@ -1,0 +1,14 @@
+{
+  "root": {
+    "BREADCRUMB:base": "React",
+    "BREADCRUMB:browse": "Sections",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:name": "Name",
+    "PROPERTY:categories": "Control categories",
+    "PROPERTY:categories:category": "Category",
+    "PROPERTY:categories:shortName": "Short name",
+    "PROPERTY:categories:fullName": "Full name"
+  },
+  "pl": true
+}

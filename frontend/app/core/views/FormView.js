@@ -29,19 +29,24 @@ define([
 
     initialize: function()
     {
-      this.$errorMessage = null;
+      var view = this;
 
-      if (!this.model)
+      view.$errorMessage = null;
+
+      if (!view.model)
       {
-        this.model = new Model();
+        view.model = new Model();
       }
 
-      this.listenTo(this.model, 'change', function()
+      view.once('afterRender', function()
       {
-        if (this.isRendered() && this.updateOnChange)
+        view.listenTo(view.model, 'change', function()
         {
-          js2form(this.el, this.serializeToForm(true), '.', null, false, false);
-        }
+          if (view.updateOnChange)
+          {
+            js2form(view.el, view.serializeToForm(true), '.', null, false, false);
+          }
+        });
       });
     },
 

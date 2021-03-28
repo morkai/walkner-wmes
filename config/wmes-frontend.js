@@ -74,6 +74,8 @@ exports.modules = [
   'suggestions',
   'behaviorObsCards',
   'minutesForSafetyCards',
+  'wmes-oshAudits',
+  'wmes-oshTalks',
   'opinionSurveys',
   'cags',
   'sapGui/importer',

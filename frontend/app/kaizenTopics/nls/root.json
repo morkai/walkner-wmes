@@ -1,0 +1,12 @@
+{
+  "root": {
+    "BREADCRUMB:base": "React",
+    "BREADCRUMB:browse": "Topics",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:position": "Position",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:fullName": "Full name"
+  },
+  "pl": true
+}

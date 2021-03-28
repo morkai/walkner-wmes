@@ -512,7 +512,7 @@ define([
       var model = kaizenDictionaries.sections.get(id);
       var map = {};
 
-      kaizenDictionaries.sections.forEach(function(s)
+      kaizenDictionaries.sections.forEntryType('kaizenOrders').forEach(function(s)
       {
         if (s.get('active'))
         {

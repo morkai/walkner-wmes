@@ -1,0 +1,16 @@
+.oshTalks-filter select {
+  max-width: 200px;
+}
+.oshTalks-list-expander {
+  cursor: default!important;
+}
+.oshTalks-list-expander.is-enabled {
+  cursor: ns-resize!important;
+}
+.table > tbody > .oshTalks-list-details:hover > td {
+  background-color: #fff;
+}
+.table > tbody > .oshTalks-list-details > td {
+  padding: 15px;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+}

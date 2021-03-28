@@ -1,12 +1,22 @@
 {
-  "BREADCRUMB:base": "Usprawnienia",
+  "BREADCRUMB:base": "Reaguj",
   "BREADCRUMB:browse": "Działy",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:active": "Aktywny?",
+  "PROPERTY:entryTypes": "Typy zgłoszeń",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja",
   "PROPERTY:subdivisions": "Działy WMES",
   "PROPERTY:confirmers": "Zatwierdzający",
-  "PROPERTY:coordinators": "Koordynatorzy"
+  "PROPERTY:coordinators": "Koordynatorzy",
+  "PROPERTY:auditors": "Audytorzy/Prezenterzy",
+  "PROPERTY:controlLists": "Listy kontrolne",
+
+  "entryType:kaizenOrders": "ZPW",
+  "entryType:suggestions": "Usprawnienia",
+  "entryType:observations": "Obserwacje",
+  "entryType:minutes": "Minutki",
+  "entryType:audits": "Audyty",
+  "entryType:talks": "Rozmowy"
 }

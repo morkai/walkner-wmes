@@ -1,0 +1,53 @@
+<form class="oshAudits-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div id="<%- id('statusGroup') %>" class="form-group">
+        <label for="<%- id('status') %>" class="control-label"><%- t('PROPERTY:status') %></label>
+        <br>
+        <div id="<%- id('status') %>" class="btn-group" data-toggle="buttons">
+          <% ['new', 'inProgress', 'finished', 'cancelled'].forEach(function(status) { %>
+          <label class="btn btn-default">
+            <input type="radio" name="status" value="<%- status %>"><%- t('status:' + status) %>
+          </label>
+          <% }) %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-4 has-required-select2">
+          <label for="<%- id('auditor') %>" class="control-label is-required"><%- t('PROPERTY:auditor') %></label>
+          <input id="<%- id('auditor') %>" type="text" name="auditor" required>
+        </div>
+        <div class="form-group col-lg-4 has-required-select2">
+          <label for="<%- id('section') %>" class="control-label is-required"><%- t('PROPERTY:section') %></label>
+          <input id="<%- id('section') %>" type="text" name="section" required>
+        </div>
+        <div class="form-group">
+          <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
+          <input id="<%- id('date') %>" class="form-control" type="date" name="date" required min="2020-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-condensed oshAudits-form-results">
+          <thead>
+          <tr>
+            <th style="width: 350px"><%- t('PROPERTY:results:category') %></th>
+            <th class="is-min text-center"><%- t('PROPERTY:results:ok:true') %></th>
+            <th class="is-min text-center"><%- t('PROPERTY:results:ok:false') %></th>
+            <th style="min-width: 400px"><label class="control-label is-required"><%- t('PROPERTY:results:comment') %></label></th>
+            <th class="is-min"><%- t('PROPERTY:results:owner') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('results') %>"></tbody>
+        </table>
+      </div>
+      <button id="<%- id('addOther') %>" class="btn btn-default oshAudits-form-button" type="button">
+        <i class="fa fa-plus"></i><span><%- t('FORM:addOther') %></span>
+      </button>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

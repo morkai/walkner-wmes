@@ -35,30 +35,37 @@ define([
 
     serialize: function()
     {
+      var dictionaries = require('app/kaizenOrders/dictionaries');
       var o = this.toJSON();
 
       o.active = t('core', 'BOOL:' + o.active);
 
-      o.subdivisions = _.map(o.subdivisions, function(s)
+      o.entryTypes = o.entryTypes.map(function(id) { return t('kaizenSections', 'entryType:' + id); });
+
+      o.subdivisions = _.map(o.subdivisions, function(id)
       {
-        s = orgUnits.getByTypeAndId('subdivision', s);
+        var s = orgUnits.getByTypeAndId('subdivision', id);
 
         return s
           ? (s.get('division') + ' \\ ' + s.get('name'))
-          : '';
-      }).filter(function(s) { return !!s.length; }).join('; ');
+          : id;
+      });
 
-      o.confirmers = _.map(
-        o.confirmers,
-        function(u) { return userInfoTemplate({userInfo: u}); }
-      ).join(', ');
-
-      o.coordinators = _.map(
-        o.coordinators,
-        function(u) { return userInfoTemplate({userInfo: u}); }
-      ).join(', ');
+      o.confirmers = _.map(o.confirmers, userInfoTemplate);
+      o.coordinators = _.map(o.coordinators, userInfoTemplate);
+      o.auditors = _.map(o.auditors, userInfoTemplate);
+      o.controlLists = _.map(o.controlLists, function(id) { return dictionaries.controlLists.getLabel(id); });
 
       return o;
+    },
+
+    serializeRow: function()
+    {
+      var row = this.serialize();
+
+      row.entryTypes = row.entryTypes.join('; ');
+
+      return row;
     }
 
   });

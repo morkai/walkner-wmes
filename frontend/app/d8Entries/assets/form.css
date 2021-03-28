@@ -41,7 +41,7 @@
 .d8Entries-form-dates > .form-group:last-child {
   margin-bottom: 15px;
 }
-.d8Entries-form .form-group.has-required-select2 > input[name="owner"] {
+.d8Entries-form .has-required-select2 > input[name="owner"] {
   top: 25px!important;
   bottom: auto!important;
   height: 34px;

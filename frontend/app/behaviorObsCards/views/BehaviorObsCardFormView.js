@@ -31,7 +31,7 @@ define([
   setUpUserSelect2,
   prodLines,
   companies,
-  kaizenDictionaries,
+  dictionaries,
   BehaviorObsCard,
   template,
   renderObservation,
@@ -105,7 +105,7 @@ define([
         this.$id('observations').append(renderObservation({
           observation: {
             id: 'OTHER-' + Date.now(),
-            behavior: kaizenDictionaries.getLabel('behaviours', 'OTHER'),
+            behavior: dictionaries.getLabel('behaviours', 'OTHER'),
             observation: '',
             safe: null,
             easy: null
@@ -381,7 +381,7 @@ define([
     filterObservation: function(o)
     {
       o.id = o.behavior;
-      o.behavior = kaizenDictionaries.getLabel('behaviours', /^OTHER-/.test(o.id) ? 'OTHER' : o.id);
+      o.behavior = dictionaries.getLabel('behaviours', /^OTHER-/.test(o.id) ? 'OTHER' : o.id);
       o.observation = (o.observation || '').trim();
       o.cause = (o.cause || '').trim();
       o.safe = o.safe === '-1' ? null : o.safe === '1';
@@ -412,14 +412,6 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      this.$id('observerSection').select2({
-        data: kaizenDictionaries.sections.map(idAndLabel)
-      });
-
-      this.$id('section').select2({
-        data: kaizenDictionaries.sections.map(idAndLabel)
-      });
-
       this.$id('line').select2({
         data: prodLines
           .filter(function(line) { return !line.get('deactivatedAt'); })
@@ -432,6 +424,8 @@ define([
       });
 
       buttonGroup.toggle(this.$id('shift'));
+      this.setUpSectionSelect2('observerSection');
+      this.setUpSectionSelect2('section');
       this.setUpObserverSelect2();
       this.setUpSuperiorSelect2();
       this.renderObservations();
@@ -440,8 +434,37 @@ define([
       this.toggleEasyDiscussed();
       this.toggleCompanyName(this.model.get('companyName'));
       this.toggleValidity();
+    },
 
-      this.$('input[autofocus]').focus();
+    setUpSectionSelect2: function(prop)
+    {
+      var id = this.model.get(prop);
+      var model = dictionaries.sections.get(id);
+      var map = {};
+
+      dictionaries.sections.forEntryType('observations').forEach(function(s)
+      {
+        if (s.get('active'))
+        {
+          map[s.id] = idAndLabel(s);
+        }
+      });
+
+      if (id)
+      {
+        if (!model)
+        {
+          map[id] = {id: id, text: id};
+        }
+        else
+        {
+          map[id] = idAndLabel(model);
+        }
+      }
+
+      this.$id(prop).select2({
+        data: _.values(map)
+      });
     },
 
     setUpObserverSelect2: function()
@@ -497,7 +520,7 @@ define([
         width: '500px',
         placeholder: 'Wybierz kategorię zachowań, aby dodać nową obserwację...',
         minimumResultsForSearch: 7,
-        data: kaizenDictionaries.behaviours
+        data: dictionaries.behaviours
           .filter(function(behavior) { return !map[behavior.id]; })
           .map(idAndLabel)
       });
@@ -530,7 +553,7 @@ define([
         map[obs.id] = obs;
       });
 
-      kaizenDictionaries.behaviours.forEach(function(behavior)
+      dictionaries.behaviours.forEach(function(behavior)
       {
         var obs = map[behavior.id];
 

@@ -1,0 +1,22 @@
+<form class="well filter-form oshTalks-filter" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    labels: {text: t('PROPERTY:date'), ranges: true}
+  }) %>
+  <div class="form-group">
+    <input id="<%- id('userType') %>" name="userType" type="hidden" value="others">
+    <input id="<%- id('user') %>" name="user" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('section') %>"><%- t('PROPERTY:section') %></label>
+    <select id="<%- id('section') %>" name="section[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15" style="max-width: 225px">
+      <% sections.forEach(function(section) { %>
+        <option value="<%- section.id %>"><%= section.text %></option>
+      <% }) %>
+    </select>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>
