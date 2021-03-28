@@ -48,7 +48,7 @@ define([
       var formData = this.model.toJSON();
 
       formData.date = time.format(formData.date || new Date(), 'YYYY-MM-DD');
-      formData.topics = formData.topics.join(',');
+      formData.topics = (formData.topics || []).join(',');
 
       delete formData.participants;
 
