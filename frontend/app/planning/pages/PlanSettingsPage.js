@@ -52,7 +52,7 @@ define([
     {
       EditFormPage.prototype.defineModels.apply(this, arguments);
 
-      this.orderGroups = new OrderGroupCollection([], {rqlQuery: 'sort(name)&limit(0)'});
+      this.orderGroups = new OrderGroupCollection([], {rqlQuery: 'sort(name)&limit(0)&target=plan'});
       this.orderGroups.comparator = function(a, b)
       {
         return a.get('name').localeCompare(b.get('name'));

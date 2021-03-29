@@ -46,8 +46,8 @@ define([
 
       ['productInclude', 'productExclude', 'bomInclude', 'bomExclude'].forEach(function(prop)
       {
-        formData[prop] = (formData[prop] || '')
-          .split('\n')
+        formData[prop] = _.uniq((formData[prop] || '')
+          .split('\n'))
           .map(line =>
           {
             return _.uniq(line.split(/; */)
@@ -56,6 +56,11 @@ define([
           })
           .filter(words => words.length > 0);
       });
+
+      if (!formData.target)
+      {
+        formData.target = [];
+      }
 
       return formData;
     },

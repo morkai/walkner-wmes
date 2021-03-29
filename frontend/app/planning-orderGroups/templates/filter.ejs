@@ -1,7 +1,18 @@
 <form class="well filter-form" autocomplete="off">
-  <div class="form-group" data-filter="search">
+  <div class="form-group">
     <label for="<%- id('search') %>"><%- t('PROPERTY:search') %></label>
     <input id="<%- id('search') %>" name="search" class="form-control" type="text" maxlength="50" style="width: 300px">
+  </div>
+  <div class="form-group">
+    <label><%- t('PROPERTY:target') %></label>
+    <div id="<%- id('target') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="checkbox" name="target[]" value="plan"> <%- t('target:plan') %>
+      </label>
+      <label class="btn btn-default">
+        <input type="checkbox" name="target[]" value="ct"> <%- t('target:ct') %>
+      </label>
+    </div>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

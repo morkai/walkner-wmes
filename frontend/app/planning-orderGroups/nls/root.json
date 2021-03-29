@@ -5,6 +5,7 @@
 
     "PROPERTY:search": "Search by phrase",
     "PROPERTY:active": "Active?",
+    "PROPERTY:target": "Target",
     "PROPERTY:mrp": "MRP",
     "PROPERTY:name": "Group name",
     "PROPERTY:description": "Group description",
@@ -12,6 +13,9 @@
     "PROPERTY:productExclude": "Product (exclude)",
     "PROPERTY:bomInclude": "Component (include)",
     "PROPERTY:bomExclude": "Component (exclude)",
+
+    "target:plan": "Daily plan",
+    "target:ct": "Cycle time",
 
     "LIST:ACTION:copy": "Copy",
     "PAGE:ACTION:copy": "Copy",

@@ -1,5 +1,11 @@
 <div class="ct-report-groups-product">
-  <h2><a href="#ct/orderGroups/<%- group._id %>"><%= group.name %></a></h2>
-  <div id="<%- idPrefix %>-chart"></div>
-  <div id="<%- idPrefix %>-table"></div>
+  <h2>
+    <% if (canViewGroups) { %>
+    <a href="#planning/orderGroups/<%- group._id %>"><%= group.name %></a>
+    <% } else { %>
+    <%= group.name %>
+    <% } %>
+  </h2>
+  <div id="<%- id('chart') %>"></div>
+  <div id="<%- id('table') %>"></div>
 </div>

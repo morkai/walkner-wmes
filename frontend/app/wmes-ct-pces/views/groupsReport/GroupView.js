@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/user',
   'app/core/View',
   './ChartView',
   './TableView',
   'app/wmes-ct-pces/templates/groupsReport/group'
 ], function(
+  currentUser,
   View,
   ChartView,
   TableView,
@@ -33,7 +35,8 @@ define([
     getTemplateData: function()
     {
       return {
-        group: this.group.attributes
+        group: this.group.attributes,
+        canViewGroups: currentUser.isAllowedTo('PLANNING:VIEW', 'FN:process-engineer')
       };
     }
 

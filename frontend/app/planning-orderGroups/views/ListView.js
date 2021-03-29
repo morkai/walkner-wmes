@@ -10,9 +10,10 @@ define([
   return ListView.extend({
 
     columns: [
-      {id: 'active', className: 'is-min'},
       {id: 'name'},
-      {id: 'mrp', className: 'is-min'}
+      {id: 'mrp', className: 'is-min'},
+      {id: 'target', className: 'is-min'},
+      {id: 'active', className: 'is-min'}
     ],
 
     actions: function()

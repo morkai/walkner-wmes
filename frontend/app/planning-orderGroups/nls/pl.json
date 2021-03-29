@@ -4,6 +4,7 @@
 
   "PROPERTY:search": "Szukaj wg frazy",
   "PROPERTY:active": "Aktywna?",
+  "PROPERTY:target": "Cel",
   "PROPERTY:mrp": "MRP",
   "PROPERTY:name": "Nazwa grupy",
   "PROPERTY:description": "Opis grupy",
@@ -11,6 +12,9 @@
   "PROPERTY:productExclude": "Wyrób nie zawiera",
   "PROPERTY:bomInclude": "Zawiera komponent",
   "PROPERTY:bomExclude": "Nie zawiera komponentu",
+
+  "target:plan": "Plan dzienny",
+  "target:ct": "Czas cyklu",
 
   "LIST:ACTION:copy": "Kopiuj",
   "PAGE:ACTION:copy": "Kopiuj",

@@ -12,6 +12,21 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="control-label"><%- t('PROPERTY:target') %></label>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="target[]" value="plan">
+            <%- t('target:plan') %>
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="target[]" value="ct">
+            <%- t('target:ct') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="<%- id('name') %>" class="control-label is-required"><%- t('PROPERTY:name') %></label>
         <input id="<%- id('name') %>" class="form-control" type="text" name="name" required maxlength="200">
       </div>

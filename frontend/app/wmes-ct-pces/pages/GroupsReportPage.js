@@ -44,7 +44,8 @@ define([
       return [
         {
           label: this.t('PAGE_ACTION:orderGroups'),
-          href: '#ct/orderGroups'
+          href: '#planning/orderGroups',
+          privileges: [['PLANNING:VIEW'], ['FN:process-engineer']]
         }
       ];
     },

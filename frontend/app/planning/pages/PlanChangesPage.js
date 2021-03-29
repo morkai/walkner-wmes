@@ -168,7 +168,7 @@ define([
       this.expanded = {};
 
       this.collection = bindLoadingMessage(this.collection, this);
-      this.orderGroups = bindLoadingMessage(new OrderGroupCollection(null, {rqlQuery: 'limit(0)'}), this);
+      this.orderGroups = bindLoadingMessage(new OrderGroupCollection(null, {rqlQuery: 'limit(0)&target=plan'}), this);
 
       this.listenTo(this.collection, 'add', this.renderChange);
     },

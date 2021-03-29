@@ -40,6 +40,8 @@ define([
 
       obj.active = t('core', 'BOOL:' + obj.active);
 
+      obj.target = obj.target.map(target => t(this.nlsDomain, `target:${target}`));
+
       return obj;
     },
 
@@ -48,6 +50,8 @@ define([
       var obj = this.serialize();
 
       obj.mrp = (obj.mrp || []).join('; ');
+
+      obj.target = obj.target.join('; ');
 
       return obj;
     },

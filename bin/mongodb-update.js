@@ -34,3 +34,5 @@ db.paintshoporders.find({}).forEach(psOrder =>
 
   db.paintshoporders.updateOne({_id: psOrder._id}, {$set: {childOrders: psOrder.childOrders}});
 });
+
+db.planordergroups.updateMany({target: {$exists: false}}, {$set: {target: ['plan']}});

@@ -307,7 +307,7 @@ define([
       });
 
       page.orderGroups = new OrderGroupCollection(null, {
-        rqlQuery: 'select(name,mrp)&sort(name)&limit(0)',
+        rqlQuery: 'select(name,mrp)&sort(name)&limit(0)&target=plan',
         paginate: false,
         sortByName: true
       });

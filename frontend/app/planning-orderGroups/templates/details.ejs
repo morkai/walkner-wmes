@@ -3,6 +3,7 @@
   <div class="panel-details">
     <%- helpers.props(model, [
       'active',
+      {id: '!target', value: v => `<ul><li>${v.join('<li>')}</ul>`},
       'name',
       {id: 'description', valueClassName: 'text-lines'},
       '!mrp',
