@@ -121,11 +121,16 @@
   <% childOrder.components.forEach(function(component) { %>
   <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
     <td class="paintShop-property" data-property="nc12">
-      <% if (details && component.unit === 'PCE') { %>
-        <a href="/orderDocuments/110<%- component.nc12 %>?order=<%- order.order %>" target="_blank" data-action="openDocument"><%- component.nc12 %></a>
-      <% } else { %>
-        <%- component.nc12 %>
-      <% } %>
+      <span style="display: flex">
+        <span class="paintShop-order-component-item"><%- component.item %></span>
+        <span class="paintShop-order-component-nc12">
+          <% if (details && component.unit === 'PCE') { %>
+            <a href="/orderDocuments/110<%- component.nc12 %>?order=<%- order.order %>" target="_blank" data-action="openDocument"><%- component.nc12 %></a>
+          <% } else { %>
+            <%- component.nc12 %>
+          <% } %>
+        </span>
+      </span>
     </td>
     <td class="paintShop-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit"><%- component.unit %></td>

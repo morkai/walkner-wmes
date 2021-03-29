@@ -1,4 +1,65 @@
 <div class="hidden">
+  <h1>v0.159.0</h1>
+  <h2><%- time.format('2021-03-28', 'LL') %></h2>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący duplikowanie zleceń w magazynie dla linii, które zostały usunięte z planu
+      dziennego.</li>
+    <li>Zmieniono generowanie planu dziennego tak, aby maksymalna ilość do rozplanowania zlecenia podzielonego w grupie
+      była przeliczana podczas rozpoczynania planowania na każdej kolejnej linii, a nie tylko na pierwszej.</li>
+    <li>Zmieniono wyświetlanie znaczków w realizacji sekwencji planu tak, aby widoczne były tylko przy zleceniach
+      zrobionych, które pasują do zaplanowanego zlecenia (nawet jak składają się z kilku części), a nie tylko dla
+      zleceń zrobionych, których linia, ilość oraz czas się zgadza.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować rozpoczęcie kompletacji zleceń oczekujących na malowanie, których wiercenie
+      zostało zakończone.</li>
+    <li>Zmieniono wysyłkę wózków tak, aby nie można było wysłać wózka jednego rodzaju, jeżeli istnieją wózki innego
+      rodzaju dla tej samej linii zawierające wcześniejsze zlecenia.</li>
+  </ul>
+  <h3>Monitoring > Układ fabryki</h3>
+  <ul>
+    <li>Dodano licznik inspekcji przeprowadzonych w aktualnym dniu na każdej linii.</li>
+  </ul>
+  <h3>Baza PFEP</h3>
+  <ul>
+    <li>Dodano możliwość importowania wpisów.</li>
+  </ul>
+  <h3>Produkcja > Zmiany produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować nieprzeliczanie wskaźników skończonej zmiany (np. wydajność) po
+      rozpoczęciu nowej.</li>
+  </ul>
+  <h3>Dummy paint</h3>
+  <ul>
+    <li>Dodano obsługę zleceń, w których przypisane zlecenie sprzedaży (Sales Order) to oferta (Inquiry).</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Przeniesiono menu ZPW do Reaguj.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący utratę właścicieli zgłoszenia podczas optymalizacji załączonych zdjęć.</li>
+    <li>Przeniesiono menu Usprawnień do Reaguj.</li>
+    <li>Dodano kolumnę 'Opiniowanie' do listy zgłoszeń.</li>
+  </ul>
+  <h3>Audyty BHP</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Rozmowy o BHP</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano do wyszukiwarki po nr zleceń skróty do planu dziennego, kompletacji magazynu oraz zdarzeń magazynu
+      zawierające dane zlecenie.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.158.0</h1>
   <h2><%- time.format('2021-02-28', 'LL') %></h2>
   <h3>Formatka operatora</h3>

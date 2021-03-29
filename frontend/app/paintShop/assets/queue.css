@@ -38,6 +38,15 @@
 .paintShop-order-component {
   background-color: #fff;
 }
+.paintShop-order-component-item {
+  display: inline-block;
+  width: 32px;
+  margin-left: -42px;
+}
+.paintShop-order-component-nc12 {
+  display: inline-block;
+  margin-left: 10px;
+}
 .paintShop-order[data-status="aside"] .paintShop-order-order {
   background-color: #ff69b4;
   border-bottom-color: #dd4792;
