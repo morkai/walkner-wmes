@@ -41,5 +41,8 @@ exports.express = {
   },
   cookieSecret: '1ee7\\/\\/mes$@P',
   textBody: {limit: '1mb'},
-  jsonBody: {limit: '1mb'}
+  jsonBody: {limit: '1mb'},
+  routes: [
+    require('../backend/routes/core')
+  ]
 };
