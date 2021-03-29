@@ -52,8 +52,13 @@ module.exports = (app, express) =>
     res.send(Date.now().toString());
   });
 
-  function showIndex(req, res)
+  function showIndex(req, res, next)
   {
+    if (!updaterModule)
+    {
+      return next(app.createError('No app available.', 'SERVICE_UNAVAILABLE', 503));
+    }
+
     res.render('index', updaterModule.getAppTemplateData('frontend', req, {
       ROOT_USER,
       GUEST_USER,
