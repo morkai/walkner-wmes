@@ -1,25 +1,25 @@
 <form class="production-orderQueue">
-  <p class="message message-inline message-info"><%- t('production', 'orderQueue:message:order') %></p>
+  <p class="message message-inline message-info"><%- t('orderQueue:message:order') %></p>
   <div class="form-group">
-    <label for="<%- idPrefix %>-order"><%- t('production', 'orderQueue:order:label') %></label>
-    <input id="<%- idPrefix %>-order" class="form-control" type="text" autocomplete="new-password" placeholder="<%- t('production', 'orderQueue:order:placeholder') %>" data-ignore-key="1">
+    <label for="<%- id('order') %>"><%- t('orderQueue:order:label') %></label>
+    <input id="<%- id('order') %>" class="form-control" type="text" autocomplete="new-password" placeholder="<%- t('orderQueue:order:placeholder') %>" data-ignore-key="1">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-operation"><%- t('production', 'orderQueue:operation:label') %></label>
-    <input id="<%- idPrefix %>-operation" class="form-control" type="text" autocomplete="new-password" placeholder="<%- t('production', 'orderQueue:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1">
+    <label for="<%- id('operation') %>"><%- t('orderQueue:operation:label') %></label>
+    <input id="<%- id('operation') %>" class="form-control" type="text" autocomplete="new-password" placeholder="<%- t('orderQueue:operation:placeholder') %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1">
   </div>
   <div class="form-group">
-    <button id="<%- idPrefix %>-enqueue" type="button" class="btn btn-lg btn-default"><%- t('production', 'orderQueue:enqueue') %></button>
-    <button id="<%- idPrefix %>-clear" type="button" class="btn btn-lg btn-link"><%- t('production', 'orderQueue:clear') %></button>
+    <button id="<%- id('enqueue') %>" type="button" class="btn btn-lg btn-default"><%- t('orderQueue:enqueue') %></button>
+    <button id="<%- id('clear') %>" type="button" class="btn btn-lg btn-link"><%- t('orderQueue:clear') %></button>
   </div>
-  <p id="<%- idPrefix %>-empty" class="message message-inline message-info"><%- t('production', 'orderQueue:message:empty') %></p>
-  <div class="form-group hidden" id="<%- idPrefix %>-queue">
+  <p id="<%- id('empty') %>" class="message message-inline message-info"><%- t('orderQueue:message:empty') %></p>
+  <div class="form-group hidden" id="<%- id('queue') %>">
     <table class="table table-condensed table-bordered table-hover">
-      <tbody id="<%- idPrefix %>-rows"></tbody>
+      <tbody id="<%- id('rows') %>"></tbody>
     </table>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="button" class="btn btn-lg btn-primary"><%- t('production', 'orderQueue:submit') %></button>
-    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'orderQueue:cancel') %></button>
+    <button id="<%- id('submit') %>" type="button" class="btn btn-lg btn-primary"><%- t('orderQueue:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('orderQueue:cancel') %></button>
   </div>
 </form>

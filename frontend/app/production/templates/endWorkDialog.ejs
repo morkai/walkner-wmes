@@ -1,36 +1,36 @@
-<form class="production-endWorkDialog">
-  <p class="message message-inline message-warning"><%- t('production', 'endWorkDialog:warning', {downtime: downtime}) %></p>
+<form class="production-endWorkDialog" autocomplete="off">
+  <p class="message message-inline message-warning"><%- t('endWorkDialog:warning', {downtime: downtime}) %></p>
   <% if (spigot) { %>
-  <div id="<%- idPrefix %>-spigot" class="form-group">
-    <label for="<%- idPrefix %>-spigot-nc12"><%- t('production', 'endWorkDialog:spigot:nc12') %></label>
-    <input id="<%- idPrefix %>-spigot-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
+  <div id="<%- id('spigot') %>" class="form-group">
+    <label for="<%- id('spigot-nc12') %>"><%- t('endWorkDialog:spigot:nc12') %></label>
+    <input id="<%- id('spigot-nc12') %>" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" value="" placeholder="<%- t('endWorkDialog:spigot:placeholder') %>" required>
   </div>
   <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-quantitiesDone"><%- t('production', 'endWorkDialog:quantitiesDone', {hourRange: hourRange}) %></label>
-    <input id="<%- idPrefix %>-quantitiesDone" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- quantitiesDone %>" <%- spigot ? '' : 'autofocus' %> min="0" max="<%- maxQuantitiesDone %>" data-ignore-key="1" data-vkb="numeric">
+    <label for="<%- id('quantitiesDone') %>"><%- t('endWorkDialog:quantitiesDone', {hourRange: hourRange}) %></label>
+    <input id="<%- id('quantitiesDone') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- quantitiesDone %>" min="0" max="<%- maxQuantitiesDone %>" data-ignore-key="1" data-vkb="numeric">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'endWorkDialog:quantityDone') %></label>
-    <input id="<%- idPrefix %>-quantityDone" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- quantityDone %>" max="<%- maxQuantityDone %>" data-ignore-key="1" data-vkb="numeric">
+    <label for="<%- id('quantityDone') %>"><%- t('endWorkDialog:quantityDone') %></label>
+    <input id="<%- id('quantityDone') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- quantityDone %>" max="<%- maxQuantityDone %>" data-ignore-key="1" data-vkb="numeric">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-workerCount"><%- t('production', 'endWorkDialog:workerCount') %></label>
-    <input id="<%- idPrefix %>-workerCount" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>" data-ignore-key="1" data-vkb="numeric">
+    <label for="<%- id('workerCount') %>"><%- t('endWorkDialog:workerCount') %></label>
+    <input id="<%- id('workerCount') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>" data-ignore-key="1" data-vkb="numeric">
   </div>
-  <div id="<%- idPrefix %>-ft" class="hidden" style="margin-bottom: 15px">
-    <p class="message message-inline message-error"><%- t('production', 'ft:warning') %></p>
+  <div id="<%- id('ft') %>" class="hidden" style="margin-bottom: 15px">
+    <p class="message message-inline message-error"><%- t('ft:warning') %></p>
     <div class="form-group">
-      <label for="<%- idPrefix %>-ft-login"><%- t('production', 'ft:login') %></label>
-      <input id="<%- idPrefix %>-ft-login" class="form-control is-embedded" type="text" required data-ignore-key="1" data-vkb="alpha numeric">
+      <label for="<%- id('ft-login') %>"><%- t('ft:login') %></label>
+      <input id="<%- id('ft-login') %>" class="form-control is-embedded" type="text" required data-ignore-key="1" data-vkb="alpha numeric">
     </div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-ft-password"><%- t('production', 'ft:password') %></label>
-      <input id="<%- idPrefix %>-ft-password" class="form-control is-embedded" type="password" required autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric extended">
+      <label for="<%- id('ft-password') %>"><%- t('ft:password') %></label>
+      <input id="<%- id('ft-password') %>" class="form-control is-embedded" type="password" required autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric extended">
     </div>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-warning" type="submit"><%- t('production', 'endWorkDialog:yes') %></button>
-    <button class="btn btn-lg btn-link cancel" type="button"><%- t('production', 'endWorkDialog:no') %></button>
+    <button id="<%- id('submit') %>" class="btn btn-lg btn-warning" type="submit"><%- t('endWorkDialog:yes') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- t('endWorkDialog:no') %></button>
   </div>
 </form>

@@ -1,20 +1,20 @@
 <table class="table table-bordered table-hover table-condensed">
   <thead>
     <tr>
-      <th class="is-min"><%- t('production', 'quantities:column:time') %></th>
-      <th class="is-min"><%- t('production', 'quantities:column:planned') %></th>
-      <th><%- t('production', 'quantities:column:actual') %></th>
+      <th class="is-min"><%- t('quantities:column:time') %></th>
+      <th class="is-min"><%- t('quantities:column:planned') %></th>
+      <th><%- t('quantities:column:actual') %></th>
     </tr>
   </thead>
   <tbody>
     <% quantityRows.forEach(function(row, i) { %>
     <tr>
       <td class="is-min"><%- row.time %></td>
-      <td class="is-min"><%- row.planned %> <%- t('production', 'quantities:unit') %></td>
+      <td class="is-min"><%- row.planned %> <%- t('quantities:unit') %></td>
       <td class="production-quantities-actual" data-hour="<%- i %>">
-        <span><%- row.actual %> <%- t('production', 'quantities:unit') %></span>
+        <span><%- row.actual %> <%- t('quantities:unit') %></span>
         <% if (row.editable) { %>
-        <button class="btn btn-link"><%- t('production', 'quantities:change') %></button>
+        <button class="btn btn-link"><%- t('quantities:change') %></button>
         <% } %>
       </td>
     </tr>

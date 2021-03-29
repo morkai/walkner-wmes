@@ -124,10 +124,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         orderNo: this.model.prodShiftOrder.get('orderId') || ''
       };
     },

@@ -21,51 +21,51 @@
           <div class="panel-body" data-subtab="taktTime">
             <div class="checkbox">
               <label class="control-label">
-                <input id="<%- idPrefix %>-taktTime-enabled" name="production.taktTime.enabled" type="checkbox" value="true">
+                <input id="<%- id('taktTime-enabled') %>" name="production.taktTime.enabled" type="checkbox" value="true">
                 <%- t('settings:taktTime:enabled') %>
               </label>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-taktTime-ignoredLines"><%- t('settings:taktTime:ignoredLines') %></label>
-              <input id="<%- idPrefix %>-taktTime-ignoredLines" name="production.taktTime.ignoredLines" type="text" autocomplete="new-password" data-setting>
+              <label for="<%- id('taktTime-ignoredLines') %>"><%- t('settings:taktTime:ignoredLines') %></label>
+              <input id="<%- id('taktTime-ignoredLines') %>" name="production.taktTime.ignoredLines" type="text" autocomplete="new-password" data-setting>
             </div>
             <% ['sap', 'last', 'avg', 'smiley'].forEach(function(p) { %>
             <div class="checkbox">
               <label class="control-label">
-                <input id="<%- idPrefix %>-taktTime-<%- p %>" name="production.taktTime.<%- p %>" type="checkbox" value="true">
+                <input id="<%- id('taktTime-<%- p %>') %>" name="production.taktTime.<%- p %>" type="checkbox" value="true">
                 <%- t('settings:taktTime:' + p) %>
               </label>
             </div>
             <% }) %>
             <div class="form-group">
-              <label for="<%- idPrefix %>-taktTime-ignoredDowntimes"><%- t('settings:taktTime:ignoredDowntimes') %></label>
-              <input id="<%- idPrefix %>-taktTime-ignoredDowntimes" name="production.taktTime.ignoredDowntimes" type="text" autocomplete="new-password" data-setting>
+              <label for="<%- id('taktTime-ignoredDowntimes') %>"><%- t('settings:taktTime:ignoredDowntimes') %></label>
+              <input id="<%- id('taktTime-ignoredDowntimes') %>" name="production.taktTime.ignoredDowntimes" type="text" autocomplete="new-password" data-setting>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-taktTime-coeffs"><%- t('settings:taktTime:coeffs') %></label>
+              <label for="<%- id('taktTime-coeffs') %>"><%- t('settings:taktTime:coeffs') %></label>
               <span class="help-block"><%- t('settings:taktTime:coeffs:help') %></span>
-              <textarea id="<%- idPrefix %>-taktTime-coeffs" class="form-control text-mono" name="production.taktTime.coeffs" rows="15" data-keyup-delay="10000" data-change-delay="0"></textarea>
+              <textarea id="<%- id('taktTime-coeffs') %>" class="form-control text-mono" name="production.taktTime.coeffs" rows="15" data-keyup-delay="10000" data-change-delay="0"></textarea>
             </div>
           </div>
           <% } %>
           <% if (_.some(subtabs, {_id: 'downtimes'})) { %>
           <div class="panel-body" data-subtab="downtimes">
             <div class="form-group">
-              <label for="<%- idPrefix %>-initialDowntimeWindow"><%- t('settings:initialDowntimeWindow') %></label>
-              <input id="<%- idPrefix %>-initialDowntimeWindow" class="form-control" name="production.initialDowntimeWindow" type="number" step="1" min="0" max="60">
+              <label for="<%- id('initialDowntimeWindow') %>"><%- t('settings:initialDowntimeWindow') %></label>
+              <input id="<%- id('initialDowntimeWindow') %>" class="form-control" name="production.initialDowntimeWindow" type="number" step="1" min="0" max="60">
             </div>
             <hr>
             <div class="form-group">
-              <label for="<%- idPrefix %>-lineAutoDowntimes-groups"><%- t('settings:lineAutoDowntimes:groups:label') %></label>
-              <input id="<%- idPrefix %>-lineAutoDowntimes-groups" type="text" autocomplete="new-password">
+              <label for="<%- id('lineAutoDowntimes-groups') %>"><%- t('settings:lineAutoDowntimes:groups:label') %></label>
+              <input id="<%- id('lineAutoDowntimes-groups') %>" type="text" autocomplete="new-password">
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-lineAutoDowntimes-group"><%- t('settings:lineAutoDowntimes:group:label') %></label>
-              <input id="<%- idPrefix %>-lineAutoDowntimes-group" class="form-control" type="text" autocomplete="new-password">
+              <label for="<%- id('lineAutoDowntimes-group') %>"><%- t('settings:lineAutoDowntimes:group:label') %></label>
+              <input id="<%- id('lineAutoDowntimes-group') %>" class="form-control" type="text" autocomplete="new-password">
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-lineAutoDowntimes-lines"><%- t('settings:lineAutoDowntimes:lines:label') %></label>
-              <input id="<%- idPrefix %>-lineAutoDowntimes-lines" type="text" autocomplete="new-password">
+              <label for="<%- id('lineAutoDowntimes-lines') %>"><%- t('settings:lineAutoDowntimes:lines:label') %></label>
+              <input id="<%- id('lineAutoDowntimes-lines') %>" type="text" autocomplete="new-password">
             </div>
             <table class="table table-condensed table-with-tfoot production-settings-lineAutoDowntimes">
               <thead>
@@ -78,46 +78,46 @@
               </thead>
               <tfoot>
               <tr>
-                <td colspan="5"><input id="<%- idPrefix %>-lineAutoDowntimes-reasons" type="text" autocomplete="new-password"></td>
+                <td colspan="5"><input id="<%- id('lineAutoDowntimes-reasons') %>" type="text" autocomplete="new-password"></td>
               </tr>
               </tfoot>
-              <tbody id="<%- idPrefix %>-lineAutoDowntimes-body"></tbody>
+              <tbody id="<%- id('lineAutoDowntimes-body') %>"></tbody>
             </table>
           </div>
           <% } %>
           <% if (_.some(subtabs, {_id: 'spigot'})) { %>
           <div class="panel-body" data-subtab="spigot">
             <div class="form-group">
-              <label for="<%- idPrefix %>-rearmDowntimeReason"><%- t('settings:rearmDowntimeReason') %></label>
-              <input id="<%- idPrefix %>-rearmDowntimeReason" name="production.rearmDowntimeReason" type="text" autocomplete="new-password" data-setting <%- onlySpigot ? 'disabled' : '' %>>
+              <label for="<%- id('rearmDowntimeReason') %>"><%- t('settings:rearmDowntimeReason') %></label>
+              <input id="<%- id('rearmDowntimeReason') %>" name="production.rearmDowntimeReason" type="text" autocomplete="new-password" data-setting <%- onlySpigot ? 'disabled' : '' %>>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-spigotLines"><%- t('settings:spigotLines') %></label>
-              <input id="<%- idPrefix %>-spigotLines" name="production.spigotLines" type="text" autocomplete="new-password" data-setting>
+              <label for="<%- id('spigotLines') %>"><%- t('settings:spigotLines') %></label>
+              <input id="<%- id('spigotLines') %>" name="production.spigotLines" type="text" autocomplete="new-password" data-setting>
             </div>
             <div class="checkbox">
               <label class="control-label">
-                <input id="<%- idPrefix %>-spigotFinish" name="production.spigotFinish" type="checkbox" value="true" <%- onlySpigot ? 'disabled' : '' %>>
+                <input id="<%- id('spigotFinish') %>" name="production.spigotFinish" type="checkbox" value="true" <%- onlySpigot ? 'disabled' : '' %>>
                 <%- t('settings:spigotFinish') %>
               </label>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-spigotPatterns"><%- t('settings:spigotPatterns') %></label>
-              <textarea id="<%- idPrefix %>-spigotPatterns" name="production.spigotPatterns" class="form-control text-mono" rows="4" <%- onlySpigot ? 'disabled' : '' %>></textarea>
+              <label for="<%- id('spigotPatterns') %>"><%- t('settings:spigotPatterns') %></label>
+              <textarea id="<%- id('spigotPatterns') %>" name="production.spigotPatterns" class="form-control text-mono" rows="4" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-spigotNotPatterns"><%- t('settings:spigotNotPatterns') %></label>
-              <textarea id="<%- idPrefix %>-spigotNotPatterns" name="production.spigotNotPatterns" class="form-control text-mono" rows="4" <%- onlySpigot ? 'disabled' : '' %>></textarea>
+              <label for="<%- id('spigotNotPatterns') %>"><%- t('settings:spigotNotPatterns') %></label>
+              <textarea id="<%- id('spigotNotPatterns') %>" name="production.spigotNotPatterns" class="form-control text-mono" rows="4" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-spigotGroups"><%- t('settings:spigotGroups') %></label>
+              <label for="<%- id('spigotGroups') %>"><%- t('settings:spigotGroups') %></label>
               <span class="help-block"><%- t('settings:spigotGroups:help') %></span>
-              <textarea id="<%- idPrefix %>-spigotGroups" name="production.spigotGroups" class="form-control text-mono" rows="7" data-keyup-delay="2000" <%- onlySpigot ? 'disabled' : '' %>></textarea>
+              <textarea id="<%- id('spigotGroups') %>" name="production.spigotGroups" class="form-control text-mono" rows="7" data-keyup-delay="2000" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
             <div class="form-group">
-              <label for="<%- idPrefix %>-spigotInsertGroups"><%- t('settings:spigotInsertGroups') %></label>
+              <label for="<%- id('spigotInsertGroups') %>"><%- t('settings:spigotInsertGroups') %></label>
               <span class="help-block"><%- t('settings:spigotInsertGroups:help') %></span>
-              <textarea id="<%- idPrefix %>-spigotInsertGroups" name="production.spigotInsertGroups" class="form-control text-mono" rows="7" data-keyup-delay="2000" <%- onlySpigot ? 'disabled' : '' %>></textarea>
+              <textarea id="<%- id('spigotInsertGroups') %>" name="production.spigotInsertGroups" class="form-control text-mono" rows="7" data-keyup-delay="2000" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
           </div>
           <% } %>

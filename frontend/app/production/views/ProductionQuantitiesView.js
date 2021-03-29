@@ -44,7 +44,7 @@ define([
       });
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var currentTime = time.getMoment().valueOf();
       var currentShiftMoment = this.model.getCurrentShiftMoment();

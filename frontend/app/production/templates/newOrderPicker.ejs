@@ -1,74 +1,74 @@
-<form class="production-newOrderPicker">
+<form class="production-newOrderPicker" autocomplete="off">
   <% if (replacingOrder) { %>
-  <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:checkData:warning') %></p>
+  <p class="message message-inline message-warning"><%- t('newOrderPicker:checkData:warning') %></p>
   <% if (spigot) { %>
-  <div id="<%- idPrefix %>-spigot" class="form-group">
-    <label for="<%- idPrefix %>-spigot-nc12"><%- t('production', 'endWorkDialog:spigot:nc12') %></label>
-    <input id="<%- idPrefix %>-spigot-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
+  <div id="<%- id('spigot') %>" class="form-group">
+    <label for="<%- id('spigot-nc12') %>"><%- t('endWorkDialog:spigot:nc12') %></label>
+    <input id="<%- id('spigot-nc12') %>" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" value="" placeholder="<%- t('endWorkDialog:spigot:placeholder') %>" required>
   </div>
   <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-quantityDone"><%- t('production', 'newOrderPicker:quantityDone') %></label>
-    <input id="<%- idPrefix %>-quantityDone" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- quantityDone %>" <%- spigot ? '' : 'autofocus' %> min="0" max="<%- maxQuantityDone %>" pattern="^[0-9]{1,3}$" data-ignore-key="1" data-vkb="numeric">
+    <label for="<%- id('quantityDone') %>"><%- t('newOrderPicker:quantityDone') %></label>
+    <input id="<%- id('quantityDone') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- quantityDone %>"min="0" max="<%- maxQuantityDone %>" pattern="^[0-9]{1,3}$" data-ignore-key="1" data-vkb="numeric">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-workerCount"><%- t('production', 'newOrderPicker:workerCount') %></label>
-    <input id="<%- idPrefix %>-workerCount" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>" pattern="^[0-9]{1,2}$" data-ignore-key="1" data-vkb="numeric">
+    <label for="<%- id('workerCount') %>"><%- t('newOrderPicker:workerCount') %></label>
+    <input id="<%- id('workerCount') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>" pattern="^[0-9]{1,2}$" data-ignore-key="1" data-vkb="numeric">
   </div>
-  <div id="<%- idPrefix %>-ft" class="hidden" style="margin-bottom: 15px">
-    <p class="message message-inline message-error"><%- t('production', 'ft:warning') %></p>
+  <div id="<%- id('ft') %>" class="hidden" style="margin-bottom: 15px">
+    <p class="message message-inline message-error"><%- t('ft:warning') %></p>
     <div class="form-group">
-      <label for="<%- idPrefix %>-ft-login"><%- t('production', 'ft:login') %></label>
-      <input id="<%- idPrefix %>-ft-login" class="form-control is-embedded" type="text" required data-ignore-key="1" data-vkb="alpha numeric">
+      <label for="<%- id('ft-login') %>"><%- t('ft:login') %></label>
+      <input id="<%- id('ft-login') %>" class="form-control is-embedded" type="text" required data-ignore-key="1" data-vkb="alpha numeric">
     </div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-ft-password"><%- t('production', 'ft:password') %></label>
-      <input id="<%- idPrefix %>-ft-password" class="form-control is-embedded" type="password" required autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric extended">
+      <label for="<%- id('ft-password') %>"><%- t('ft:password') %></label>
+      <input id="<%- id('ft-password') %>" class="form-control is-embedded" type="password" required autocomplete="new-password" data-ignore-key="1" data-vkb="alpha numeric extended">
     </div>
   </div>
   <div class="modal-header">
-    <h3 class="modal-title"><%- t('production', 'newOrderPicker:title') %></h3>
+    <h3 class="modal-title"><%- t('newOrderPicker:title') %></h3>
   </div>
   <% } %>
   <% if (!correctingOrder) { %>
   <% if (offline) { %>
-  <p class="message message-inline message-warning"><%- t('production', 'newOrderPicker:offline:warning:' + orderIdType) %></p>
+  <p class="message message-inline message-warning"><%- t('newOrderPicker:offline:warning:' + orderIdType) %></p>
   <% } else { %>
-  <p class="message message-inline message-info"><%- t('production', 'newOrderPicker:online:info:' + orderIdType) %></p>
+  <p class="message message-inline message-info"><%- t('newOrderPicker:online:info:' + orderIdType) %></p>
   <% } %>
   <% } %>
   <% if (correctingOrder || !embedded) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label:' + orderIdType) %></label>
-    <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
+    <label for="<%- id('order') %>"><%- t('newOrderPicker:order:label:' + orderIdType) %></label>
+    <input id="<%- id('order') %>" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
   </div>
   <% } else { %>
   <div class="production-newOrderPicker-row">
     <div class="form-group">
-      <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label:' + orderIdType) %></label>
-      <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
+      <label for="<%- id('order') %>"><%- t('newOrderPicker:order:label:' + orderIdType) %></label>
+      <input id="<%- id('order') %>" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
     </div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-newWorkerCount"><%- t('production', 'newOrderPicker:newWorkerCount') %></label>
-      <input id="<%- idPrefix %>-newWorkerCount" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" maxlength="2" min="1" max="15" data-ignore-key="1" data-vkb="numeric" required>
+      <label for="<%- id('newWorkerCount') %>"><%- t('newOrderPicker:newWorkerCount') %></label>
+      <input id="<%- id('newWorkerCount') %>" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" maxlength="2" min="1" max="15" data-ignore-key="1" data-vkb="numeric" required>
     </div>
   </div>
   <% } %>
   <% if (!offline && embedded) { %>
-  <div id="<%- idPrefix %>-operationGroup" class="production-form-btn-group">
-    <label><%- t('production', 'newOrderPicker:operation:label:online') %></label>
-    <div class="btn-group-vertical"><p><%- t('production', 'newOrderPicker:order:tooShort') %></p></div>
+  <div id="<%- id('operationGroup') %>" class="production-form-btn-group">
+    <label><%- t('newOrderPicker:operation:label:online') %></label>
+    <div class="btn-group-vertical"><p><%- t('newOrderPicker:order:tooShort') %></p></div>
   </div>
   <% } else { %>
-  <div id="<%- idPrefix %>-operationGroup" class="form-group">
-    <label for="<%- idPrefix %>-operation"><%- t('production', 'newOrderPicker:operation:label:' + (offline ? 'offline' : 'online')) %></label>
-    <input id="<%- idPrefix %>-operation" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- operationPlaceholder %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1" data-vkb="numeric">
+  <div id="<%- id('operationGroup') %>" class="form-group">
+    <label for="<%- id('operation') %>"><%- t('newOrderPicker:operation:label:' + (offline ? 'offline' : 'online')) %></label>
+    <input id="<%- id('operation') %>" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- operationPlaceholder %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1" data-vkb="numeric">
   </div>
   <% } %>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-success">
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-lg btn-success">
       <%- submitLabel %>
     </button>
-    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'newOrderPicker:cancel') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('newOrderPicker:cancel') %></button>
   </div>
 </form>

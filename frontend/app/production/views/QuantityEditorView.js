@@ -59,10 +59,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         hours: this.model.hours,
         maxQuantity: this.model.maxQuantity,
         embedded: this.options.embedded

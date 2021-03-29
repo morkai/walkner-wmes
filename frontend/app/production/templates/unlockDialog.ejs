@@ -1,9 +1,9 @@
 <form class="production-<%- type %>Dialog" autocomplete="off">
-  <input id="<%- idPrefix %>-apiKey" type="hidden" value="<%- apiKey %>">
+  <input id="<%- id('apiKey') %>" type="hidden" value="<%- apiKey %>">
   <% if (type === 'unlock') { %>
   <div class="production-form-btn-group">
     <label class="control-label is-required"><%- t('unlockDialog:prodLine') %></label>
-    <div id="<%- idPrefix %>-list" class="btn-group-vertical">
+    <div id="<%- id('list') %>" class="btn-group-vertical">
       <p>
         <i class="fa fa-spinner fa-spin"></i>
       </p>
@@ -23,16 +23,16 @@
   <% } %>
   <% if (!apiKey) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('unlockDialog:login') %></label>
-    <input id="<%- idPrefix %>-login" class="form-control is-embedded" type="text" autocomplete="new-password" required data-vkb="alpha numeric">
+    <label for="<%- id('login') %>" class="control-label is-required"><%- t('unlockDialog:login') %></label>
+    <input id="<%- id('login') %>" class="form-control is-embedded" type="text" autocomplete="new-password" required data-vkb="alpha numeric">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-password" class="control-label is-required"><%- t('unlockDialog:password') %></label>
-    <input id="<%- idPrefix %>-password" class="form-control is-embedded" type="password" autocomplete="new-password" required data-vkb="alpha numeric extended">
+    <label for="<%- id('password') %>" class="control-label is-required"><%- t('unlockDialog:password') %></label>
+    <input id="<%- id('password') %>" class="form-control is-embedded" type="password" autocomplete="new-password" required data-vkb="alpha numeric extended">
   </div>
   <% } %>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit"><%- t('unlockDialog:' + type) %></button>
+    <button id="<%- id('submit') %>" class="btn btn-lg btn-primary" type="submit"><%- t('unlockDialog:' + type) %></button>
     <button class="btn btn-lg btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
 </form>

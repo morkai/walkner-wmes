@@ -390,6 +390,10 @@
   font-size: 40px;
   text-transform: uppercase;
 }
+.is-production .form-control.is-embedded[disabled] {
+  background: #eee!important;
+  cursor: not-allowed;
+}
 .is-production .form-control.is-vkb-focused {
   border-color: #66afe9;
   outline: 0;

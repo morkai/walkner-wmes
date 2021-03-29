@@ -23,6 +23,8 @@ define([
 
     dialogClassName: 'production-modal',
 
+    nlsDomain: 'production',
+
     events: {
       'input #-qty': 'checkQtyValidity',
       'click .btn[data-id]': function(e)
@@ -56,10 +58,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         palletKinds: palletKinds.map(function(palletKind)
         {
           return {

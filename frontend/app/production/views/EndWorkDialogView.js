@@ -142,13 +142,12 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var shift = this.model;
       var order = shift.prodShiftOrder;
 
       return {
-        idPrefix: this.idPrefix,
         spigot: shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
         downtime: shift.isDowntime(),
         hourRange: shift.getCurrentQuantityDoneHourRange(),
@@ -166,6 +165,19 @@ define([
     {
       this.limitQuantityDone();
       this.notifySpigotCheckRequest();
+
+      if (this.model.isTaktTimeEnabled())
+      {
+        this.$id('quantitiesDone').prop('disabled', true);
+        this.$id('quantityDone').prop('disabled', true);
+      }
+
+      this.focusFirstInput();
+    },
+
+    focusFirstInput: function()
+    {
+      this.$('input:not([disabled])').select();
     },
 
     notifySpigotCheckRequest: function()

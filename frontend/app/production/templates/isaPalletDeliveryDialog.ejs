@@ -1,10 +1,10 @@
 <form class="production-isa-palletDelivery">
   <div class="form-group">
-    <label for="<%- idPrefix %>-qty"><%- t('production', 'isa:deliver:qty') %></label>
-    <input id="<%- idPrefix %>-qty" class="form-control" type="text" autocomplete="new-password" data-vkb="numeric" required>
+    <label for="<%- id('qty') %>"><%- t('isa:deliver:qty') %></label>
+    <input id="<%- id('qty') %>" class="form-control" type="text" autocomplete="new-password" data-vkb="numeric" required>
   </div>
-  <div id="<%- idPrefix %>-palletKind" class="production-form-btn-group">
-    <label><%- t('production', 'isa:deliver:palletKind') %></label>
+  <div id="<%- id('palletKind') %>" class="production-form-btn-group">
+    <label><%- t('isa:deliver:palletKind') %></label>
     <div class="btn-group-vertical">
       <% palletKinds.forEach(function(palletKind) { %>
       <button type="button" class="btn btn-lg btn-default" data-id="<%- palletKind.id %>"><%= palletKind.text %></button>
@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary" disabled><%- t('production', 'isa:deliver:submit') %></button>
-    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'isa:deliver:cancel') %></button>
+    <button id="<%- id('submit') %>" type="submit" class="btn btn-lg btn-primary" disabled><%- t('isa:deliver:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('isa:deliver:cancel') %></button>
   </div>
 </form>

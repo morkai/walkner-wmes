@@ -3,13 +3,13 @@
   <div class="production-properties">
     <% ['currentTime', 'shift', 'orgUnit'].forEach(function(prop) { %>
     <div class="production-property production-property-<%- prop %>">
-      <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
+      <div class="production-property-name"><%- t('property:' + prop) %></div>
       <div class="production-property-value"></div>
     </div>
     <% }) %>
     <% ['master', 'leader', 'operator'].forEach(function(prop) { %>
-    <div id="<%- idPrefix %>-<%- prop %>" class="production-property production-property-<%- prop %>">
-      <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
+    <div id="<%- id(prop) %>" class="production-property production-property-<%- prop %>">
+      <div class="production-property-name"><%- t('property:' + prop) %></div>
       <div class="production-property-value is-editable"></div>
     </div>
     <% }) %>

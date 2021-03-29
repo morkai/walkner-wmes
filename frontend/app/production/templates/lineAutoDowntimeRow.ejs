@@ -4,7 +4,7 @@
     <% ['initial', 'always', 'time'].forEach(function(when) { %>
     <label class="radio-inline">
       <input name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].when" type="radio" value="<%- when %>" <%- when === lineAutoDowntime.when ? 'checked' : '' %>>
-      <%- t('production', 'settings:lineAutoDowntimes:when:' + when, {time: ''}) %>
+      <%- t('settings:lineAutoDowntimes:when:' + when, {time: ''}) %>
     </label>
     <% }) %>
   </td>

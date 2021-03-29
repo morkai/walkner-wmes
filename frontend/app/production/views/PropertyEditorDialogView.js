@@ -57,10 +57,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         property: this.options.property,
         value: this.options.value,
         min: this.options.min || 0,

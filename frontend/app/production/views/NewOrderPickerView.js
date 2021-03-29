@@ -261,7 +261,11 @@ define([
       }
 
       this.notifySpigotCheckRequest();
-      this.focusFirstInput();
+
+      if (this.model.isTaktTimeEnabled())
+      {
+        this.$id('quantityDone').prop('disabled', true);
+      }
     },
 
     notifySpigotCheckRequest: function()
@@ -341,15 +345,9 @@ define([
 
     focusFirstInput: function()
     {
-      var $nc12 = this.$id('spigot-nc12');
-
-      if ($nc12.length)
+      if (this.$id('spigot-nc12').length)
       {
-        $nc12.focus();
-      }
-      else if (!this.options.correctingOrder && this.model.hasOrder())
-      {
-        this.$id('quantityDone').select();
+        this.$id('spigot-nc12').focus();
       }
       else if (!this.options.embedded && this.socket.isConnected())
       {

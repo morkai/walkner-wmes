@@ -1,10 +1,10 @@
 <form class="production-propertyEditorDialog">
   <div class="form-group">
-    <label for="<%- idPrefix %>-value"><%- t('production', 'propertyEditorDialog:label:' + property) %></label>
-    <input id="<%- idPrefix %>-value" class="form-control small is-embedded" type="text" autocomplete="new-password" value="<%- value %>" min="<%- min %>" max="<%- max %>" data-vkb="numeric">
+    <label for="<%- id('value') %>"><%- t('propertyEditorDialog:label:' + property) %></label>
+    <input id="<%- id('value') %>" class="form-control small is-embedded" type="text" autocomplete="new-password" value="<%- value %>" min="<%- min %>" max="<%- max %>" data-vkb="numeric">
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit"><%- t('production', 'propertyEditorDialog:yes') %></button>
-    <button class="btn btn-lg btn-link cancel" type="button"><%- t('production', 'propertyEditorDialog:no') %></button>
+    <button id="<%- id('submit') %>" class="btn btn-lg btn-primary" type="submit"><%- t('propertyEditorDialog:yes') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- t('propertyEditorDialog:no') %></button>
   </div>
 </form>

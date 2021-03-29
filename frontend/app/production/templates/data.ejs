@@ -1,17 +1,17 @@
 <div class="production-data">
-  <h2 class="production-sectionHeader"><%- t('production', 'section:data') %></h2>
+  <h2 class="production-sectionHeader"><%- t('section:data') %></h2>
   <div class="production-properties production-properties-orderInfo">
     <% ['orderNo', 'nc12', 'productName', 'operationName'].forEach(function(prop) { %>
-    <div id="<%- idPrefix %>-<%- prop %>" class="production-property production-property-<%- prop %>">
-      <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
+    <div id="<%- id(prop) %>" class="production-property production-property-<%- prop %>">
+      <div class="production-property-name"><%- t('property:' + prop) %></div>
       <div class="production-property-value"></div>
     </div>
     <% }) %>
   </div>
   <div class="production-properties production-properties-orderData">
     <% ['createdAt', 'totalQuantityDone', 'quantityDone', 'workerCount', 'workerCountSap', 'taktTime', 'lastTaktTime', 'avgTaktTime'].forEach(function(prop) { %>
-    <div id="<%- idPrefix %>-<%- prop %>" class="production-property production-property-<%- prop %>">
-      <div class="production-property-name"><%- t('production', 'property:' + prop) %></div>
+    <div id="<%- id(prop) %>" class="production-property production-property-<%- prop %>">
+      <div class="production-property-name"><%- t('property:' + prop) %></div>
       <div class="production-property-value"></div>
     </div>
     <% }) %>

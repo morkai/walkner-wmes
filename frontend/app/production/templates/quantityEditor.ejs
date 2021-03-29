@@ -1,6 +1,6 @@
 <form class="production-quantityEditor">
   <div class="form-group">
-    <label for="<%- idPrefix %>-quantity"><%= t('production', 'quantityEditor:label:hour') %></label>
+    <label for="<%- id('quantity') %>"><%= t('quantityEditor:label:hour') %></label>
     <div class="btn-group" data-toggle="buttons">
       <% hours.forEach(function(hour) { %>
       <label class="btn btn-default <%- hour.disabled ? 'disabled' : '' %>">
@@ -11,11 +11,11 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-value"><%= t('production', 'quantityEditor:label:value') %></label>
-    <input id="<%- idPrefix %>-value" class="form-control input-lg small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" min="0" max="<%- maxQuantity %>" data-vkb="numeric">
+    <label for="<%- id('value') %>"><%= t('quantityEditor:label:value') %></label>
+    <input id="<%- id('value') %>" class="form-control input-lg small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" min="0" max="<%- maxQuantity %>" data-vkb="numeric">
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-lg btn-primary"><%- t('production', 'quantityEditor:submit') %></button>
-    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'quantityEditor:cancel') %></button>
+    <button type="submit" class="btn btn-lg btn-primary"><%- t('quantityEditor:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('quantityEditor:cancel') %></button>
   </div>
 </form>

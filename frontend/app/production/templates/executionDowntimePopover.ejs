@@ -2,7 +2,7 @@
   <tbody>
   <% ['reason', 'aor', 'startedAt', 'finishedAt'].forEach(function(prop) { %>
   <tr>
-    <th><%- t('production', 'execution:downtime:' + prop) %></th>
+    <th><%- t('execution:downtime:' + prop) %></th>
     <td><span class="production-execution-popover-value"><%= downtime[prop] %></span></td>
   </tr>
   <% }) %>

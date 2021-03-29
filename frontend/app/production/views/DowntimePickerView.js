@@ -31,6 +31,8 @@ define([
 
     dialogClassName: 'production-modal',
 
+    nlsDomain: 'production',
+
     events: {
       'keypress .select2-container': function(e)
       {
@@ -287,10 +289,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         startedAt: this.model.startedAt,
         mode: this.model.mode,
         embedded: this.options.embedded

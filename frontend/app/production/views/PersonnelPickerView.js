@@ -111,15 +111,14 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var offline = !this.socket.isConnected();
       var labelType = offline ? 'offline' : this.options.embedded ? 'embedded' : 'online';
 
       return {
-        idPrefix: this.idPrefix,
         offline: offline,
-        label: t('production', 'personnelPicker:' + labelType + ':label')
+        label: this.t('personnelPicker:' + labelType + ':label')
       };
     },
 
