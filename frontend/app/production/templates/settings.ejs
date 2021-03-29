@@ -32,7 +32,7 @@
             <% ['sap', 'last', 'avg', 'smiley'].forEach(function(p) { %>
             <div class="checkbox">
               <label class="control-label">
-                <input id="<%- id('taktTime-<%- p %>') %>" name="production.taktTime.<%- p %>" type="checkbox" value="true">
+                <input id="<%- id('taktTime-' + p) %>" name="production.taktTime.<%- p %>" type="checkbox" value="true">
                 <%- t('settings:taktTime:' + p) %>
               </label>
             </div>
