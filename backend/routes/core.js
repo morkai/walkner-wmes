@@ -32,23 +32,25 @@ module.exports = (app, express) =>
 
   express.get('/redirect', redirectRoute);
 
-  express.options('/time', (req, res) =>
-  {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '');
-    res.end();
-  });
+  express.get('/config.js', sendRequireJsConfig);
 
-  express.get('/time', (req, res) =>
+  express.options('/ping', cors, (req, res) => res.end());
+  express.get('/ping', cors, (req, res) => res.format({
+    text: () =>
+    {
+      res.send('pong');
+    },
+    json: () =>
+    {
+      res.json('pong');
+    }
+  }));
+
+  express.options('/time', cors, (req, res) => res.end());
+  express.get('/time', cors, (req, res) =>
   {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '');
     res.send(Date.now().toString());
   });
-
-  express.get('/config.js', sendRequireJsConfig);
 
   function showIndex(req, res)
   {
@@ -93,5 +95,15 @@ module.exports = (app, express) =>
   function setUpFrontendVersionUpdater()
   {
     app.broker.subscribe('dictionaries.updated', () => updaterModule.updateFrontendVersion());
+  }
+
+  function cors(req, res, next)
+  {
+    res.set('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.set('Access-Control-Allow-Methods', 'GET');
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '');
+
+    next();
   }
 };
