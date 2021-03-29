@@ -28,7 +28,16 @@ define([
     {
       return {
         formatHeader: formatTooltipHeader.bind(this),
-        groups: this.model.get('groups')
+        groups: this.model.get('groups'),
+        counters: [
+          'nearMisses',
+          'suggestions',
+          'observations',
+          'minutes',
+          'audits',
+          'talks',
+          'total'
+        ]
       };
     }
 

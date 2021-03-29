@@ -46,6 +46,12 @@
 .suggestions-report-summary-productFamily {
   display: none;
 }
+.suggestions-report-engagement .is-min {
+  min-width: 72px;
+}
+.suggestions-report-engagement .is-zero {
+  color: #BBB;
+}
 
 @media print {
   .is-print .page[data-id="suggestionSummaryReport"] .page-actions {

@@ -69,8 +69,11 @@ define([
           name: 0,
           nearMisses: 0,
           suggestions: 0,
-          behaviorObs: 0,
-          minutesForSafety: 0
+          observations: 0,
+          minutes: 0,
+          audits: 0,
+          talks: 0,
+          total: 0
         };
 
         group = {
@@ -81,15 +84,24 @@ define([
             totals.name += 1;
             totals.nearMisses += user.nearMisses;
             totals.suggestions += user.suggestions;
-            totals.behaviorObs += user.behaviorObs;
-            totals.minutesForSafety += user.minutesForSafety;
+            totals.observations += user.observations;
+            totals.minutes += user.minutes;
+            totals.audits += user.audits;
+            totals.talks += user.talks;
+
+            user.total = 0;
+
+            incTotal(user);
 
             return {
               name: report.users[userKey] || userKey,
               nearMisses: user.nearMisses,
               suggestions: user.suggestions,
-              behaviorObs: user.behaviorObs,
-              minutesForSafety: user.minutesForSafety,
+              observations: user.observations,
+              minutes: user.minutes,
+              audits: user.audits,
+              talks: user.talks,
+              total: user.total,
               sections: Object.keys(user.sections).map(function(section)
               {
                 return report.sections[section] || section;
@@ -97,6 +109,8 @@ define([
             };
           })
         };
+
+        incTotal(totals);
 
         group.users.sort(function(a, b)
         {
@@ -117,12 +131,22 @@ define([
       }
 
       return attrs;
+
+      function incTotal(o)
+      {
+        o.total += o.nearMisses
+          + o.suggestions
+          + o.observations
+          + o.minutes
+          + o.audits
+          + o.talks;
+      }
     },
 
     serializeToCsv: function()
     {
       var rows = [
-        'date;name;nearMisses;suggestions;behaviorObs;minutesForSafety;sections'
+        'date;name;nearMisses;suggestions;observations;minutes;audits;talks;sections'
       ];
 
       _.forEach(this.get('groups'), function(group)
@@ -135,8 +159,10 @@ define([
             row + '"' + user.name
             + '";' + user.nearMisses
             + ';' + user.suggestions
-            + ';' + user.behaviorObs
-            + ';' + user.minutesForSafety
+            + ';' + user.observations
+            + ';' + user.minutes
+            + ';' + user.audits
+            + ';' + user.talks
             + ';"' + user.sections.join(',') + '"'
           );
         });
