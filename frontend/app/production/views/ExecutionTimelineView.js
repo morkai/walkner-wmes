@@ -207,7 +207,7 @@ define([
     {
       var order = this.model.get(this.orderProp)[i];
 
-      return !order ? undefined : orderPopoverTemplate({
+      return !order ? undefined : this.renderPartialHtml(orderPopoverTemplate, {
         order: {
           orderNo: order.orderId,
           operationNo: order.operationNo,
@@ -225,7 +225,7 @@ define([
       var reason = downtimeReasons.get(downtime.reason);
       var aor = aors.get(downtime.aor);
 
-      return !downtime ? undefined : downtimePopoverTemplate({
+      return !downtime ? undefined : this.renderPartialHtml(downtimePopoverTemplate, {
         downtime: {
           reason: reason ? reason.getLabel() : downtime.reason,
           aor: aor ? aor.getLabel() : aor.reason,

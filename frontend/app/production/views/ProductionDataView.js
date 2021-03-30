@@ -620,6 +620,7 @@ define([
       var dialogView = new DialogView({
         dialogClassName: 'production-modal',
         template: endDowntimeDialogTemplate,
+        nlsDomain: 'production',
         model: {
           yesSeverity: this.model.hasOrder() ? 'success' : 'warning'
         }

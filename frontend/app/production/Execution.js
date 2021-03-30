@@ -11,6 +11,8 @@ define([
 
   return Model.extend({
 
+    nlsDomain: 'production',
+
     initialize: function(attrs, options)
     {
       this.prodLineId = options.prodLineId;
