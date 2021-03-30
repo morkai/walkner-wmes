@@ -64,7 +64,7 @@ define([
           .removeClass('hidden');
       });
 
-      req.done(function()
+      req.always(function()
       {
         view.$('.btn-primary').prop('disabled', false);
       });
