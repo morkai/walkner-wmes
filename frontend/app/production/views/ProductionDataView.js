@@ -715,7 +715,7 @@ define([
       var view = this;
       var pso = view.model.prodShiftOrder;
 
-      if (view.model.isTaktTimeEnabled())
+      if (0 && view.model.isTaktTimeEnabled())
       {
         return;
       }
