@@ -5,7 +5,7 @@
   "version": "0.159.0",
   "updater": {
     "wmes": {
-      "backend": 662,
+      "backend": 663,
       "frontend": 816,
       "reports": 142,
       "attachments": 3,
@@ -13,7 +13,7 @@
       "importer-results": 12,
       "watchdog": 14,
       "mailer": 17,
-      "operator": 106,
+      "operator": 107,
       "docs": 58,
       "heff": 54,
       "planning": 111,
