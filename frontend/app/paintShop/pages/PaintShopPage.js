@@ -35,8 +35,7 @@ define([
   'app/paintShop/templates/mrpTabs',
   'app/paintShop/templates/totals',
   'app/paintShop/templates/printPage',
-  'app/paintShop/templates/userPageAction',
-  'app/paintShop/templates/openDocumentPageAction'
+  'app/paintShop/templates/userPageAction'
 ], function(
   _,
   $,
@@ -72,8 +71,7 @@ define([
   mrpTabsTemplate,
   totalsTemplate,
   printPageTemplate,
-  userPageActionTemplate,
-  openDocumentPageActionTemplate
+  userPageActionTemplate
 ) {
   'use strict';
 
@@ -117,29 +115,12 @@ define([
     {
       var page = this;
       var actions = [];
-      var documents = page.settings.getValue('documents', []);
       var documentsAction = {
-        id: 'openDocument',
-        visible: documents.length > 0,
-        template: page.renderPartialHtml.bind(page, openDocumentPageActionTemplate, {
-          documents: documents
-        }),
-        afterRender: function($action)
-        {
-          $action.on('click', 'a[data-nc15]', function(e)
-          {
-            e.preventDefault();
-
-            if (1 || embedded.isEnabled())
-            {
-              page.openDocumentWindow(this);
-            }
-            else
-            {
-              window.open(this.href);
-            }
-          });
-        }
+        id: page.idPrefix + '-documentsAction',
+        icon: 'file-o',
+        label: page.t('PAGE_ACTION:openDocument'),
+        callback: function() { page.showDocumentsMenu(page.settings.getValue('documents', [])); },
+        visible: page.settings.getValue('documents', []).length > 0
       };
 
       if (embedded.isEnabled())
@@ -295,6 +276,38 @@ define([
       'old.wh.orders.updated': function(message)
       {
         this.whOrders.update(message.updated);
+      },
+      'orderDocuments.tree.fileAdded': function(message)
+      {
+        var page = this;
+
+        message.file.folders.forEach(function(folderId)
+        {
+          delete page.folderToDocuments[folderId];
+        });
+      },
+      'orderDocuments.tree.fileEdited': function(message)
+      {
+        var page = this;
+
+        message.file.folders.forEach(function(folderId)
+        {
+          delete page.folderToDocuments[folderId];
+        });
+
+        message.file.oldFolders.forEach(function(folderId)
+        {
+          delete page.folderToDocuments[folderId];
+        });
+      },
+      'orderDocuments.tree.fileRemoved': function(message)
+      {
+        var page = this;
+
+        message.file.oldFolders.forEach(function(folderId)
+        {
+          delete page.folderToDocuments[folderId];
+        });
       }
     },
 
@@ -367,6 +380,8 @@ define([
     {
       this.onResize = _.debounce(this.resize.bind(this), 30);
       this.onVkbValueChange = this.onVkbValueChange.bind(this);
+
+      this.folderToDocuments = {};
 
       this.defineModels();
       this.defineViews();
@@ -1434,10 +1449,6 @@ define([
       {
         this.renderTotals();
       }
-      else if (this.layout && setting.id === 'paintShop.documents')
-      {
-        this.layout.setActions(this.actions, this);
-      }
     },
 
     onActionRequested: function(action)
@@ -1720,7 +1731,78 @@ define([
       });
     },
 
-    openDocumentWindow: function(aEl)
+    showDocumentsMenu: function(documents)
+    {
+      var page = this;
+      var rect = this.$id('documentsAction')[0].getBoundingClientRect();
+      var menu = documents.map(function(item)
+      {
+        var isDoc = item.nc15.length === 15;
+
+        return {
+          icon: isDoc ? 'fa-file-o' : 'fa-folder-o',
+          label: item.name || item.nc15,
+          handler: isDoc
+            ? page.openDocumentWindow.bind(page, item.nc15)
+            : page.showDocumentFolder.bind(page, item.nc15),
+          visible: isDoc || user.isLoggedIn()
+        };
+      });
+
+      contextMenu.show(page, rect.top + rect.height + 3, rect.left, menu);
+    },
+
+    showDocumentFolder: function(folderId, e)
+    {
+      if (!this.folderToDocuments[folderId])
+      {
+        return this.loadDocumentFolder(folderId);
+      }
+
+      setTimeout(this.showDocumentsMenu.bind(this, this.folderToDocuments[folderId]), 1);
+    },
+
+    loadDocumentFolder: function(folderId)
+    {
+      var page = this;
+
+      viewport.msg.loading();
+
+      var req = page.ajax({
+        url: '/orderDocuments/files?select(name)&folders=' + folderId
+      });
+
+      req.done(function(res)
+      {
+        viewport.msg.loaded();
+
+        if (!res.totalCount)
+        {
+          return;
+        }
+
+        page.folderToDocuments[folderId] = [];
+
+        (res.collection || []).forEach(function(file)
+        {
+          page.folderToDocuments[folderId].push({
+            nc15: file._id,
+            name: file.name
+          });
+        });
+
+        contextMenu.hide(page, false);
+
+        page.showDocumentFolder(folderId);
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.loadingFailed();
+      });
+    },
+
+    openDocumentWindow: function(nc15)
     {
       var view = this;
       var ready = false;
@@ -1742,7 +1824,7 @@ define([
         + ',width=' + Math.floor(width)
         + ',height=' + Math.floor(height);
       var windowName = 'WMES_ORDER_DOCUMENT_PREVIEW';
-      var win = window.open(aEl.href, windowName, windowFeatures);
+      var win = window.open('/orderDocuments/' + nc15, windowName, windowFeatures);
 
       if (!win)
       {

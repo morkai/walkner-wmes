@@ -57,12 +57,12 @@ define([
 
       (rawValue || '').split('\n').forEach(function(line)
       {
-        var matches = line.trim().match(/^([0-9]+)(.*?)$/);
+        var matches = line.trim().match(/^([0-9]{1,15}|[A-F0-9\-]{36}) (.*?)$/);
 
         if (matches)
         {
           var nc15 = padString.start(matches[1], 15, '0');
-          var name = (matches[2] || '').trim();
+          var name = matches[2].trim();
 
           documents.push({
             nc15: nc15,
