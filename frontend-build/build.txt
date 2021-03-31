@@ -3892,7 +3892,6 @@ app/paintShop/templates/mrpTabs.js
 app/paintShop/templates/totals.js
 app/paintShop/templates/printPage.js
 app/paintShop/templates/userPageAction.js
-app/paintShop/templates/openDocumentPageAction.js
 app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
