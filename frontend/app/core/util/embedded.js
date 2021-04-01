@@ -5,20 +5,24 @@ define([
   'jquery',
   'app/i18n',
   'app/viewport',
+  'app/data/localStorage',
   'app/core/View',
   'app/core/views/DialogView',
   'app/core/templates/embedded/appsDialog',
   'app/core/templates/embedded/confirmDialog',
+  'app/core/templates/embedded/uiLock',
   'app/core/templates/embedded/actions'
 ], function(
   require,
   $,
   t,
   viewport,
+  localStorage,
   View,
   DialogView,
   appsDialogTemplate,
   confirmDialogTemplate,
+  uiLockTemplate,
   actionsTemplate
 ) {
   'use strict';
@@ -160,6 +164,36 @@ define([
         });
 
         require('app/viewport').showDialog(dialogView, t('core', 'embedded:shutdown:title'));
+      },
+      lockUi: function()
+      {
+        var $uiLock = $('.embedded-uiLock');
+
+        if ($uiLock.length)
+        {
+          return;
+        }
+
+        $uiLock = $(uiLockTemplate()).appendTo(document.body);
+
+        $uiLock.find('div').on('click', function()
+        {
+          localStorage.removeItem('WMES_EMBEDDED_UI_LOCKED');
+
+          $uiLock.remove();
+        });
+
+        $uiLock.on('touchstart', function(e)
+        {
+          if (!$(e.target).closest('.embedded-uiLock-inner').length)
+          {
+            return false;
+          }
+        });
+
+        $uiLock.appendTo('body');
+
+        localStorage.setItem('WMES_EMBEDDED_UI_LOCKED', '1');
       }
     },
 
@@ -185,26 +219,48 @@ define([
       var showCount = 0;
       var showCountTimer = null;
 
-      var actions = Object.assign({}, this.actions, options && options.actions);
+      var actions = Object.assign({}, options && options.actions);
+
+      if (actions.lockUi)
+      {
+        if (typeof actions.lockUi !== 'object')
+        {
+          actions.lockUi = {};
+        }
+
+        actions.lockUi = Object.assign({
+          icon: 'fa-lock',
+          handler: this.actions.lockUi,
+          title: t('core', 'embedded:actions:lockUi')
+        }, actions.lockUi);
+
+        if (localStorage.getItem('WMES_EMBEDDED_UI_LOCKED') === '1')
+        {
+          view.timers.lockUi = setTimeout(actions.lockUi.handler, 1);
+        }
+      }
+
       var $embeddedActions = $(actionsTemplate({
         app: window.WMES_APP_ID,
         left: options && options.left === true,
-        actions: options && options.actions || {}
+        actions: actions
       }));
+
+      var handlers = Object.assign({}, this.actions, actions);
 
       $embeddedActions.on('click', '[data-action]', function(e)
       {
-        var action = actions[e.currentTarget.dataset.action];
+        var action = handlers[e.currentTarget.dataset.action];
 
         if (action)
         {
           if (typeof action.handler === 'function')
           {
-            action.handler();
+            action.handler(view, action);
           }
           else if (typeof action === 'function')
           {
-            action();
+            action(view, action);
           }
         }
 
