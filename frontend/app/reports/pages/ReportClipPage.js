@@ -62,7 +62,7 @@ define([
         page: this,
         collection: this.orders,
         privilege: false,
-        label: t('reports', 'PAGE_ACTION:2:export')
+        label: this.t('PAGE_ACTION:2:export')
       }));
 
       return actions;

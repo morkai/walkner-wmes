@@ -38,6 +38,7 @@ define([
     $charts: null,
 
     layoutName: 'page',
+    nlsDomain: 'reports',
 
     template: drillingReportPageTemplate,
 

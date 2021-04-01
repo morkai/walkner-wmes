@@ -3,7 +3,7 @@
 define([
   'underscore',
   'app/time',
-  'app/i18n',
+  'app/viewport',
   'app/user',
   'app/highcharts',
   'app/core/View',
@@ -15,7 +15,7 @@ define([
 ], function(
   _,
   time,
-  t,
+  viewport,
   user,
   Highcharts,
   View,
@@ -319,6 +319,10 @@ define([
       };
       var menuItems = Highcharts.getDefaultMenuItems().concat([
         {
+          text: view.t('clip:exportMetrics'),
+          onclick: view.exportMetrics.bind(view)
+        },
+        {
           text: view.t('clip:exportOrders'),
           onclick: view.exportOrders.bind(view)
         }
@@ -506,7 +510,7 @@ define([
 
     serializeToCsv: function()
     {
-      var lines = ['date;readableDate;total;production;end2end'];
+      var lines = ['date;readableDate;total;production;end2end;clipProd;clipE2e'];
       var series = this.chart.series;
       var points = series[0].data;
 
@@ -515,13 +519,83 @@ define([
         lines.push(
           time.format(points[i].x, 'YYYY-MM-DD')
           + ';"' + this.formatTooltipHeader(points[i].x) + '"'
-          + ';' + series[0].data[i].y
-          + ';' + series[1].data[i].y
-          + ';' + series[2].data[i].y
+          + ';' + series[0].data[i].y.toLocaleString()
+          + ';' + series[1].data[i].y.toLocaleString()
+          + ';' + series[2].data[i].y.toLocaleString()
+          + ';' + series[3].data[i].y.toLocaleString()
+          + ';' + series[4].data[i].y.toLocaleString()
         );
       }
 
       return lines.join('\r\n');
+    },
+
+    exportMetrics: function()
+    {
+      var view = this;
+
+      var $msg = viewport.msg.show({
+        type: 'warning',
+        text: view.t('core', 'MSG:EXPORTING')
+      });
+
+      var orgUnit = view.getTitle();
+      var series = view.chart.series;
+      var points = series[0].data;
+      var data = points.map(function(point, i)
+      {
+        return {
+          orgUnit: orgUnit,
+          date: new Date(point.x),
+          dateLong: view.formatTooltipHeader(point.x),
+          dateShort: formatXAxis(view, {value: point.x}),
+          total: series[0].data[i].y,
+          production: series[1].data[i].y,
+          end2end: series[2].data[i].y,
+          clipProd: series[3].data[i].y,
+          clipE2E: series[4].data[i].y
+        };
+      });
+
+      var req = view.ajax({
+        method: 'POST',
+        url: '/xlsxExporter',
+        data: JSON.stringify({
+          filename: 'WMES-CLIP_METRICS',
+          freezeRows: 1,
+          freezeColumns: 0,
+          columns: {
+            orgUnit: 20,
+            date: 'date',
+            dateLong: 30,
+            dateShort: 10,
+            total: 'integer',
+            production: 'integer',
+            end2end: 'integer',
+            clipProd: 'decimal',
+            clipE2E: 'decimal'
+          },
+          data: data
+        })
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.hide($msg, true);
+
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: view.t('core', 'MSG:EXPORTING_FAILURE')
+        });
+      });
+
+      req.done(function(id)
+      {
+        viewport.msg.hide($msg, true);
+
+        pageActions.exportXlsx('/xlsxExporter/' + id);
+      });
     },
 
     exportOrders: function()

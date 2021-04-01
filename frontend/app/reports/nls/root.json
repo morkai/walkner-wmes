@@ -484,6 +484,7 @@
     "clip:filter:dateOffset:2": "Filter: ",
     "clip:filter:dateOffset:3": "Data: ",
     "clip:exportOrders": "Export orders",
+    "clip:exportMetrics": "Export metrics",
     "clip:showLineOrders": "Show line orders",
     "clip:toggleSystemChanges": "Hide system changes",
 
