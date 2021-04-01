@@ -1730,6 +1730,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -1807,6 +1808,9 @@ app/mor/views/MorView.js
 app/core/templates/navbar/searchResults.js
 app/core/views/NavbarView.js
 app/users/templates/logInForm.js
+app/nls/users.js
+app/nls/pl/users.js
+i18n!app/nls/users
 app/users/views/LogInFormView.js
 vendor/deployJava.js
 app/purchaseOrders/templates/qzPrintInitWarning.js
@@ -1820,6 +1824,7 @@ app/purchaseOrders/PurchaseOrderPrintCollection.js
 app/purchaseOrders/PurchaseOrder.js
 app/core/util/bindLoadingMessage.js
 app/purchaseOrders/PurchaseOrderCollection.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -1887,9 +1892,6 @@ app/core/util/showDeleteFormPage.js
 app/users/pages/LogInFormPage.js
 app/users/templates/userInfoPopover.js
 app/users/util/userInfoPopover.js
-app/nls/users.js
-app/nls/pl/users.js
-i18n!app/nls/users
 app/users/routes.js
 app/vendors/Vendor.js
 app/vendors/VendorCollection.js
@@ -1975,6 +1977,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -2060,6 +2063,9 @@ vendor/form2js.js
 vendor/js2form.js
 app/core/views/FormView.js
 app/users/templates/logInForm.js
+app/nls/users.js
+app/nls/pl/users.js
+i18n!app/nls/users
 app/users/views/LogInFormView.js
 app/core/util/showDeleteFormPage.js
 app/aors/routes.js
@@ -2067,6 +2073,7 @@ app/companies/routes.js
 app/core/templates/userInfo.js
 app/kaizenOrders/KaizenOrder.js
 app/kaizenOrders/KaizenOrderCollection.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -2285,9 +2292,6 @@ app/subdivisions/routes.js
 app/users/pages/LogInFormPage.js
 app/users/templates/userInfoPopover.js
 app/users/util/userInfoPopover.js
-app/nls/users.js
-app/nls/pl/users.js
-i18n!app/nls/users
 app/users/routes.js
 app/vis/routes.js
 app/workCenters/routes.js
@@ -2498,6 +2502,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -2583,6 +2588,9 @@ vendor/form2js.js
 vendor/js2form.js
 app/core/views/FormView.js
 app/users/templates/logInForm.js
+app/nls/users.js
+app/nls/pl/users.js
+i18n!app/nls/users
 app/users/views/LogInFormView.js
 app/wmes-osh-companies/Company.js
 app/wmes-osh-companies/CompanyCollection.js
@@ -2635,9 +2643,6 @@ app/core/util/showDeleteFormPage.js
 app/users/pages/LogInFormPage.js
 app/users/templates/userInfoPopover.js
 app/users/util/userInfoPopover.js
-app/nls/users.js
-app/nls/pl/users.js
-i18n!app/nls/users
 app/users/routes.js
 app/changelog/routes.js
 app/printers/tags.js
@@ -2656,6 +2661,7 @@ app/opinionSurveyQuestions/routes.js
 app/opinionSurveyScanTemplates/routes.js
 app/opinionSurveyOmrResults/routes.js
 app/wmes-osh-nearMisses/NearMissCollection.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -3031,6 +3037,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -3312,6 +3319,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -3457,6 +3465,7 @@ app/production/views/OrderQueueView.js
 app/core/util/matchesDate.js
 app/prodSerialNumbers/ProdSerialNumber.js
 app/prodSerialNumbers/ProdSerialNumberCollection.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -3588,6 +3597,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -3768,6 +3778,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -3971,6 +3982,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -4005,6 +4017,7 @@ app/core/layouts/PageLayout.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/bindLoadingMessage.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -4112,6 +4125,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -4250,6 +4264,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -4410,6 +4425,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -4648,6 +4664,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -4735,6 +4752,7 @@ app/wh/WhOrder.js
 app/wh/WhOrderCollection.js
 app/wh/templates/problems/filter.js
 app/wh/views/WhProblemFilterView.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -4840,6 +4858,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -5007,6 +5026,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -5174,6 +5194,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -5341,6 +5362,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -5501,6 +5523,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
@@ -5536,6 +5559,7 @@ vendor/jsplumb.js
 app/core/util/uuid.js
 app/production/templates/vkb.js
 app/production/views/VkbView.js
+app/core/util/scrollbarSize.js
 app/orders/templates/commentPopover.js
 vendor/require-css/normalize.js
 vendor/require-css/css.js
@@ -5642,6 +5666,7 @@ app/core/util/forms/dateTimeRange.js
 app/core/util/forms.js
 app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/uiLock.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
 app/user.js
