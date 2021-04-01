@@ -5,7 +5,8 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/users/templates/logInForm'
+  'app/users/templates/logInForm',
+  'i18n!app/nls/users'
 ], function(
   user,
   t,
@@ -44,15 +45,15 @@ define([
       }
     },
 
+    nlsDomain: 'users',
+
     initialize: function()
     {
       this.resetting = false;
       this.originalTitle = null;
       this.$title = null;
       this.$submit = null;
-      this.model = {
-        nlsDomain: 'users'
-      };
+      this.model = {};
     },
 
     destroy: function()
