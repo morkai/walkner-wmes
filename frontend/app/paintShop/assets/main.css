@@ -162,3 +162,8 @@
   color: #fff;
   text-shadow: 1px 1px 1px #333;
 }
+.is-embedded .paintShop-documentsMenu {
+  margin-right: 17px;
+  max-height: 90vh;
+  overflow: auto;
+}

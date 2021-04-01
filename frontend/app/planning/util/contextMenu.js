@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/i18n',
   'app/broker',
+  'app/core/util/scrollbarSize',
   'app/orders/util/commentPopover',
   'app/planning/templates/contextMenu',
   'i18n!app/nls/planning'
@@ -13,6 +14,7 @@ define([
   $,
   t,
   broker,
+  scrollbarSize,
   commentPopover,
   template
 ) {
@@ -309,30 +311,41 @@ define([
       }
 
       var $menu = view.$contextMenu;
-      var width = $menu.outerWidth();
-      var height = $menu.outerHeight();
 
-      if (left + width >= document.body.clientWidth)
+      position(false);
+
+      function position(again)
       {
-        left -= (left + width) - document.body.clientWidth + 5;
+        var width = $menu.outerWidth();
+        var height = $menu.outerHeight();
+
+        if (left + width >= document.body.clientWidth)
+        {
+          left -= (left + width) - document.body.clientWidth + 5;
+        }
+
+        var maxHeight = window.innerHeight + window.pageYOffset;
+
+        if (top + height >= maxHeight)
+        {
+          top -= (top + height) - maxHeight + 5;
+        }
+
+        $menu.css({
+          top: top + 'px',
+          left: left + 'px'
+        });
+
+        _.assign($menu.data('options'), {
+          top: top,
+          left: left
+        });
+
+        if (!again && $menu[0].scrollHeight > $menu[0].offsetHeight)
+        {
+          position(true);
+        }
       }
-
-      var maxHeight = window.innerHeight + window.pageYOffset;
-
-      if (top + height >= maxHeight)
-      {
-        top -= (top + height) - maxHeight + 5;
-      }
-
-      $menu.css({
-        top: top + 'px',
-        left: left + 'px'
-      });
-
-      _.assign($menu.data('options'), {
-        top: top,
-        left: left
-      });
     },
 
     actions: {

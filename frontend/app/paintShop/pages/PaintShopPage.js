@@ -119,7 +119,7 @@ define([
         id: page.idPrefix + '-documentsAction',
         icon: 'file-o',
         label: page.t('PAGE_ACTION:openDocument'),
-        callback: function() { page.showDocumentsMenu(page.settings.getValue('documents', [])); },
+        callback: function() { page.showDocumentsMenu(null); },
         visible: page.settings.getValue('documents', []).length > 0
       };
 
@@ -281,7 +281,7 @@ define([
       {
         var page = this;
 
-        message.file.folders.forEach(function(folderId)
+        (message.file.folders || []).forEach(function(folderId)
         {
           delete page.folderToDocuments[folderId];
         });
@@ -290,12 +290,12 @@ define([
       {
         var page = this;
 
-        message.file.folders.forEach(function(folderId)
+        (message.file.folders || []).forEach(function(folderId)
         {
           delete page.folderToDocuments[folderId];
         });
 
-        message.file.oldFolders.forEach(function(folderId)
+        (message.file.oldFolders || []).forEach(function(folderId)
         {
           delete page.folderToDocuments[folderId];
         });
@@ -304,7 +304,7 @@ define([
       {
         var page = this;
 
-        message.file.oldFolders.forEach(function(folderId)
+        (message.file.oldFolders || []).forEach(function(folderId)
         {
           delete page.folderToDocuments[folderId];
         });
@@ -382,6 +382,7 @@ define([
       this.onVkbValueChange = this.onVkbValueChange.bind(this);
 
       this.folderToDocuments = {};
+      this.folderPath = [];
 
       this.defineModels();
       this.defineViews();
@@ -1731,10 +1732,11 @@ define([
       });
     },
 
-    showDocumentsMenu: function(documents)
+    showDocumentsMenu: function(folderId)
     {
       var page = this;
-      var rect = this.$id('documentsAction')[0].getBoundingClientRect();
+      var rect = page.$id('documentsAction')[0].getBoundingClientRect();
+      var documents = folderId ? page.folderToDocuments[folderId] : page.settings.getValue('documents', []);
       var menu = documents.map(function(item)
       {
         var isDoc = item.nc15.length === 15;
@@ -1744,22 +1746,54 @@ define([
           label: item.name || item.nc15,
           handler: isDoc
             ? page.openDocumentWindow.bind(page, item.nc15)
-            : page.showDocumentFolder.bind(page, item.nc15),
-          visible: isDoc || user.isLoggedIn()
+            : page.showDocumentFolder.bind(page, item.nc15, folderId)
         };
       });
 
-      contextMenu.show(page, rect.top + rect.height + 3, rect.left, menu);
+      if (folderId)
+      {
+        menu.unshift({
+          icon: 'fa-arrow-up',
+          label: '...',
+          handler: page.showPrevDocumentFolder.bind(page)
+        });
+      }
+      else
+      {
+        this.folderPath = [];
+      }
+
+      contextMenu.show(page, rect.top + rect.height + 3, rect.left, {
+        menu: menu,
+        className: 'paintShop-documentsMenu'
+      });
     },
 
-    showDocumentFolder: function(folderId, e)
+    showPrevDocumentFolder: function()
     {
+      if (this.folderPath.length)
+      {
+        this.showDocumentFolder(this.folderPath.pop());
+      }
+      else
+      {
+        this.showDocumentsMenu(null);
+      }
+    },
+
+    showDocumentFolder: function(folderId, parentId)
+    {
+      if (parentId !== undefined && !this.folderPath.includes(parentId))
+      {
+        this.folderPath.push(parentId);
+      }
+
       if (!this.folderToDocuments[folderId])
       {
         return this.loadDocumentFolder(folderId);
       }
 
-      setTimeout(this.showDocumentsMenu.bind(this, this.folderToDocuments[folderId]), 1);
+      setTimeout(this.showDocumentsMenu.bind(this, folderId, 1));
     },
 
     loadDocumentFolder: function(folderId)
@@ -1768,24 +1802,32 @@ define([
 
       viewport.msg.loading();
 
-      var req = page.ajax({
-        url: '/orderDocuments/files?select(name)&folders=' + folderId
-      });
+      var req = $.when(
+        page.ajax({url: '/orderDocuments/folders?select(name)&parent=' + folderId}),
+        page.ajax({url: '/orderDocuments/files?select(name)&folders=' + folderId})
+      );
 
-      req.done(function(res)
+      req.done(function(res1, res2)
       {
         viewport.msg.loaded();
 
-        if (!res.totalCount)
-        {
-          return;
-        }
-
         page.folderToDocuments[folderId] = [];
 
-        (res.collection || []).forEach(function(file)
+        (res1[0].collection || []).forEach(function(folder)
         {
           page.folderToDocuments[folderId].push({
+            type: 'folder',
+            parent: folderId,
+            nc15: folder._id,
+            name: folder.name
+          });
+        });
+
+        (res2[0].collection || []).forEach(function(file)
+        {
+          page.folderToDocuments[folderId].push({
+            type: 'file',
+            parent: folderId,
             nc15: file._id,
             name: file.name
           });
