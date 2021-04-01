@@ -12,12 +12,13 @@
     "PROPERTY:updater": "Updater",
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:updatedAt": "Updated at",
+    "PROPERTY:comment": "Comment",
     "PROPERTY:results": "Control list",
     "PROPERTY:results:category": "Situation assessment",
     "PROPERTY:results:ok:true": "OK",
     "PROPERTY:results:ok:false": "NOK",
     "PROPERTY:results:owner": "Person responsible for action",
-    "PROPERTY:results:comment": "Comment / identified irregularities, risks",
+    "PROPERTY:results:comment": "Identified irregularities, risks",
 
     "status:new": "New",
     "status:inProgress": "In progress",
@@ -31,6 +32,7 @@
     "filter:anyNok": "Irregularities",
 
     "LIST:COLUMN:nok": "Irregularities found",
+    "LIST:COLUMN:categories": "Categories",
 
     "FORM:addOther": "Other...",
     "FORM:empty": "Control list can not be empty.",

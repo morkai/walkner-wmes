@@ -11,12 +11,13 @@
   "PROPERTY:updater": "Ostatnio zmienione przez",
   "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
+  "PROPERTY:comment": "Komentarz",
   "PROPERTY:results": "Lista kontrolna",
   "PROPERTY:results:category": "Ocena sytuacji",
   "PROPERTY:results:ok:true": "OK",
   "PROPERTY:results:ok:false": "NOK",
   "PROPERTY:results:owner": "Osoba odpowiedzialna za działania",
-  "PROPERTY:results:comment": "Komentarz / stwierdzone nieprawidłowości, ryzyka",
+  "PROPERTY:results:comment": "Stwierdzone nieprawidłowości, ryzyka",
 
   "status:new": "Nowy",
   "status:inProgress": "W realizacji",
@@ -30,6 +31,7 @@
   "filter:anyNok": "Nieprawidłowości",
 
   "LIST:COLUMN:nok": "Stwierdzone nieprawidłowości",
+  "LIST:COLUMN:categories": "Kategorie",
 
   "FORM:addOther": "Inne...",
   "FORM:empty": "Lista kontrolna nie może być pusta.",

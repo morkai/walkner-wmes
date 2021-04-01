@@ -90,12 +90,14 @@ define([
 
       row.className = STATUS_TO_CLASS[this.get('status')];
 
+      row.categories = row.results
+        .filter(r => r.ok !== null)
+        .map(r => r.shortName)
+        .join('; ');
+
       if (row.anyNok)
       {
-        row.nok = row.results
-          .filter(function(r) { return r.ok === false; })
-          .map(function(r) { return r.shortName; })
-          .join('; ');
+        row.nok = row.results.filter(r => !!r.comment)[0].comment;
       }
 
       return row;

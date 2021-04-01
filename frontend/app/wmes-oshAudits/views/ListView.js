@@ -35,24 +35,28 @@ define([
 
     serializeColumns: function()
     {
+      const tdAttrs = row =>
+      {
+        return {
+          className: 'oshAudits-list-expander ' + (row.anyNok ? 'is-enabled' : '')
+        };
+      };
+
       return [
         {id: 'rid', className: 'is-min is-number'},
         {id: 'status', className: 'is-min'},
         {id: 'date', className: 'is-min'},
         {id: 'auditor', className: 'is-min'},
         {id: 'section', className: 'is-min'},
-        {id: 'nok', tdAttrs: function(row)
-        {
-          return {
-            className: 'oshAudits-list-expander ' + (row.anyNok ? 'is-enabled' : '')
-          };
-        }}
+        {id: 'categories', className: 'is-overflow w400', tdAttrs},
+        {id: 'nok', className: 'is-overflow w500', tdAttrs},
+        '-'
       ];
     },
 
     toggleDetails: function(rowId, columnId)
     {
-      var $rowToExpand = this.$('.list-item[data-id="' + rowId + '"]');
+      var $rowToExpand = this.$(`.list-item[data-id="${rowId}"]`);
       var $expandedRow = this.$('.is-expanded');
 
       this.collapseDetails($expandedRow);
@@ -77,7 +81,7 @@ define([
         model: {}
       };
 
-      templateData.model[property] = model.get(property);
+      templateData.model[property] = model.serializeDetails()[property];
 
       var $detailsRow = this.renderPartial(detailsRowTemplate, templateData);
 

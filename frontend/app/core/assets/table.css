@@ -60,7 +60,7 @@ td.text-center {
 }
 .table .actions {
   white-space: nowrap;
-  width: 1%;
+  width: 1px;
 }
 .table td.actions {
   padding: 0;
@@ -215,6 +215,14 @@ td.is-overflow {
 .w450 {
   width: 450px;
   max-width: 450px;
+}
+.w475 {
+  width: 475px;
+  max-width: 475px;
+}
+.w500 {
+  width: 500px;
+  max-width: 500px;
 }
 .is-colored .table,
 .is-colored .table tr th,

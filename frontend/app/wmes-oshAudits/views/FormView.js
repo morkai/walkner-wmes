@@ -110,7 +110,8 @@ define([
 
     toggleValidity: function()
     {
-      var valid = !!this.$('input[value="0"]:checked').length;
+      var valid = !!this.$('input[value="1"]:checked').length
+        || !!this.$('input[value="0"]:checked').length;
 
       this.$('input[value="1"]').first()[0].setCustomValidity(valid ? '' : this.t('FORM:empty'));
     },
@@ -163,8 +164,18 @@ define([
           r.owner = null;
         }
 
+        if (!r.comment)
+        {
+          r.comment = '';
+        }
+
         return r;
       });
+
+      if (!formData.comment)
+      {
+        formData.comment = '';
+      }
 
       return formData;
     },

@@ -6,7 +6,13 @@
         <div class="col-md-6">
           <%- helpers.props(model, {
             first: true,
-            props: ['status', '!auditor', 'section', 'date']
+            props: [
+              'status',
+              '!auditor',
+              'section',
+              'date',
+              {id: 'comment', valueClassName: 'text-lines', visible: !!model.comment}
+            ]
           }) %>
         </div>
         <div class="col-md-6">

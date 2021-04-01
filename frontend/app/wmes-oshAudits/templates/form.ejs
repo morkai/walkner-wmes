@@ -45,6 +45,10 @@
       <button id="<%- id('addOther') %>" class="btn btn-default oshAudits-form-button" type="button">
         <i class="fa fa-plus"></i><span><%- t('FORM:addOther') %></span>
       </button>
+      <div class="form-group" style="margin-top: 15px">
+        <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
+        <textarea id="<%- id('comment') %>" class="form-control" name="comment" rows="3"></textarea>
+      </div>
     </div>
     <div class="panel-footer">
       <button id="<%- id('submit') %>" type="submit" class="btn btn-primary"><%- formActionText %></button>
