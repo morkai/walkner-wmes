@@ -23,7 +23,7 @@
       ].forEach(report => { %>
     <li data-privilege="USER" data-module="wmes-osh"><a href="#osh/reports/<%- report %>"><%- t(`NAVBAR:osh2:reports:${report}`) %></a>
     <% }) %>
-    <li data-privilege="OSH:ACCIDENTS:VIEW"><a href="#osh/reports/count/accident"><%- t(`NAVBAR:osh2:reports:count/accident`) %></a>
+    <li data-privilege="OSH:ACCIDENTS:VIEW" data-module="wmes-osh"><a href="#osh/reports/count/accident"><%- t(`NAVBAR:osh2:reports:count/accident`) %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('NAVBAR:osh2:hr') %>
     <li data-privilege="OSH:HR:VIEW" data-module="wmes-osh"><a href="#osh/employments"><%- t('NAVBAR:osh2:employments') %></a>
