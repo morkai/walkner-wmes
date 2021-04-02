@@ -132,6 +132,12 @@ define([
   function renderOrgUnit(model, link)
   {
     var label = _.escape(model.getLabel());
+
+    if (link === null)
+    {
+      return label;
+    }
+
     var style = model.get('deactivatedAt') ? 'text-decoration: line-through!important' : '';
 
     if (!link)

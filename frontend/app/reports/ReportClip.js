@@ -109,6 +109,7 @@ define([
     parseClip: function(clipList, attributes)
     {
       var clip = {
+        mrps: [],
         orderCount: [],
         productionCount: [],
         endToEndCount: [],
@@ -128,6 +129,7 @@ define([
         var production = Math.round(metrics.productionCount / metrics.orderCount * 1000) / 10 || 0;
         var endToEnd = Math.round(metrics.endToEndCount / metrics.orderCount * 1000) / 10 || 0;
 
+        clip.mrps.push(metrics.mrps);
         clip.orderCount.push({x: metrics.key, y: metrics.orderCount});
         clip.production.push({x: metrics.key, y: production});
         clip.productionCount.push({x: metrics.key, y: metrics.productionCount});

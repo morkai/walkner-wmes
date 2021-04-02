@@ -157,7 +157,7 @@ define([
       };
     },
 
-    getTitle: function()
+    getTitle: function(link)
     {
       var orgUnitType = this.model.get('orgUnitType');
 
@@ -170,7 +170,7 @@ define([
 
       if (orgUnitType === 'subdivision')
       {
-        return renderOrgUnitPath(orgUnit, false, false);
+        return renderOrgUnitPath(orgUnit, link, false);
       }
 
       return orgUnit.getLabel();
@@ -350,7 +350,7 @@ define([
           }
         },
         title: {
-          text: view.getTitle()
+          text: view.getTitle(false)
         },
         noData: {},
         tooltip: {
@@ -539,12 +539,19 @@ define([
         text: view.t('core', 'MSG:EXPORTING')
       });
 
-      var orgUnit = view.getTitle();
+      var orgUnit = view.getTitle(null);
+      var orgUnitType = view.model.get('orgUnitType');
+      var mrps = !orgUnitType || orgUnitType === 'division' || orgUnitType === 'subdivision'
+        ? (view.model.get('clip').mrps || {})
+        : {};
       var series = view.chart.series;
       var points = series[0].data;
-      var data = points.map(function(point, i)
+      var data = [];
+
+      points.forEach(function(point, i)
       {
-        return {
+        var parent = {
+          orgUnitType: orgUnitType,
           orgUnit: orgUnit,
           date: new Date(point.x),
           dateLong: view.formatTooltipHeader(point.x),
@@ -555,6 +562,26 @@ define([
           clipProd: series[3].data[i].y,
           clipE2E: series[4].data[i].y
         };
+
+        data.push(parent);
+
+        Object.keys(mrps[i]).forEach(function(mrp)
+        {
+          var metrics = mrps[i][mrp];
+
+          data.push({
+            orgUnitType: 'mrpController',
+            orgUnit: mrp,
+            date: parent.date,
+            dateLong: parent.dateLong,
+            dateShort: parent.dateShort,
+            total: metrics[0],
+            production: metrics[1],
+            end2end: metrics[2],
+            clipProd: Math.round(metrics[1] / metrics[0] * 1000) / 10 || 0,
+            clipE2E: Math.round(metrics[2] / metrics[0] * 1000) / 10 || 0
+          });
+        });
       });
 
       var req = view.ajax({
@@ -565,6 +592,7 @@ define([
           freezeRows: 1,
           freezeColumns: 0,
           columns: {
+            orgUnitType: 15,
             orgUnit: 20,
             date: 'date',
             dateLong: 30,
