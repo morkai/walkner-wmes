@@ -78,7 +78,7 @@
   display: none;
 }
 .pressWorksheets-form-paintShop .pressWorksheets-form-group-paintShop {
-  display: block;
+  display: flex;
 }
 .pressWorksheets-form-group-paintShop > .form-group {
   display: inline-block;
@@ -159,4 +159,10 @@
 }
 .pressWorksheets-orders-notes > td {
   white-space: pre-line;
+}
+.pressWorksheets-form th[data-column="part"] {
+  min-width: 430px;
+}
+.pressWorksheets-form th[data-column="operation"] {
+  min-width: 300px;
 }

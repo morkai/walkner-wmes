@@ -61,5 +61,7 @@
   "FORM:PLACEHOLDER:prodLine": "Wybierz maszynę...",
   "FORM:focusLastPart": "(skrót ALT+Enter zaznaczy ostatnie pole)",
   "FORM:typeChangeWarning": "<strong>UWAGA!</strong> Zmiana typu wyczyści listę wykonanych części!",
-  "FORM:existingWarning": "<strong>UWAGA!</strong> Dla wybranej Daty, Zmiany i Podpisanego nastawiacza/operatora {count, plural, one{istnieje już karta pracy} other{istnieją już karty pracy}}: {links}."
+  "FORM:existingWarning": "<strong>UWAGA!</strong> Dla wybranej Daty, Zmiany i Podpisanego nastawiacza/operatora {count, plural, one{istnieje już karta pracy} other{istnieją już karty pracy}}: {links}.",
+  "FORM:autoOrders:generate": "Wygeneruj listę części na podstawie danych z malarnii",
+  "FORM:autoOrders:noWorkOrders": "Nie zarejestowano żadnych wykonanych sztuk."
 }

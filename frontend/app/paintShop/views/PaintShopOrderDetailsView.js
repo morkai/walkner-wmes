@@ -7,12 +7,16 @@ define([
   'app/viewport',
   'app/user',
   'app/core/View',
+  'app/core/util/uuid',
+  'app/core/util/getShiftStartInfo',
   'app/paintShop/PaintShopEventCollection',
   'app/paintShop/templates/orderDetails',
   'app/paintShop/templates/orderChanges',
   'app/paintShop/templates/orderChange',
   'app/paintShop/templates/queueOrder',
-  'app/paintShop/templates/whOrders'
+  'app/paintShop/templates/whOrders',
+  'app/paintShop/templates/workOrderEditor',
+  'app/paintShop/templates/removeWorkOrderConfirmer'
 ], function(
   _,
   $,
@@ -20,12 +24,16 @@ define([
   viewport,
   user,
   View,
+  uuid,
+  getShiftStartInfo,
   PaintShopEventCollection,
   orderDetailsTemplate,
   orderChangesTemplate,
   orderChangeTemplate,
   queueOrderTemplate,
-  whOrdersTemplate
+  whOrdersTemplate,
+  workOrderEditorTemplate,
+  removeWorkOrderConfirmerTemplate
 ) {
   'use strict';
 
@@ -50,6 +58,8 @@ define([
       },
       'focus [data-vkb]': function(e)
       {
+        this.hideWorkOrderEditor();
+
         if (!this.vkb)
         {
           return;
@@ -105,6 +115,27 @@ define([
         view.openDocumentWindow(aEl);
 
         return false;
+      },
+      'click .paintShop-order-childOrder': function(e)
+      {
+        if (this.$(e.target).closest('td[data-property="actions"]').length)
+        {
+          this.hideWorkOrderEditor();
+
+          return;
+        }
+
+        if (this.canAct())
+        {
+          this.showWorkOrderEditor(+e.currentTarget.dataset.childOrderIndex);
+        }
+      },
+      'click a[data-action="removeWorkOrder"]': function(e)
+      {
+        this.hideWorkOrderEditor();
+        this.showRemoveWorkOrderConfirmer(this.$(e.currentTarget).closest('tr')[0].dataset.workOrderId);
+
+        return false;
       }
     },
 
@@ -113,6 +144,7 @@ define([
       this.vkb = this.options.vkb;
       this.psEvents = PaintShopEventCollection.forOrder(this.model.id);
 
+      this.listenTo(this.psEvents, 'add', this.onEventAdded);
       this.listenTo(this.orders, 'change', this.onChange);
 
       if (this.orders.whOrders)
@@ -143,6 +175,8 @@ define([
         this.$changes.remove();
         this.$changes = null;
       }
+
+      this.hideWorkOrderEditor();
     },
 
     closeDialog: function() {},
@@ -199,9 +233,9 @@ define([
     renderChanges: function()
     {
       var view = this;
-      var $changes = $(orderChangesTemplate({
+      var $changes = this.renderPartial(orderChangesTemplate, {
         canAct: view.canAct()
-      }));
+      });
 
       $changes.find('.paintShop-orderChanges-comment').on('focus', function()
       {
@@ -209,6 +243,7 @@ define([
         {
           clearTimeout(view.timers.hideVkb);
 
+          view.hideWorkOrderEditor();
           view.options.vkb.show(this);
           view.resizeChanges();
         }
@@ -243,16 +278,37 @@ define([
           return;
         }
 
-        var html = view.psEvents.map(function(event)
-        {
-          return orderChangeTemplate({change: event.serialize()});
-        });
+        var html = view.psEvents
+          .map(function(event)
+          {
+            return view.renderPartialHtml(orderChangeTemplate, {
+              change: event.serialize()
+            });
+          })
+          .join('');
 
         view.$changes
           .find('.paintShop-orderChanges-changes')
           .html(html)
           .prop('scrollTop', 99999);
       });
+    },
+
+    onEventAdded: function(event)
+    {
+      var view = this;
+
+      if (!view.$changes || !view.$changes.length)
+      {
+        return;
+      }
+
+      view.$changes
+        .find('.paintShop-orderChanges-changes')
+        .append(view.renderPartialHtml(orderChangeTemplate, {
+          change: event.serialize()
+        }))
+        .prop('scrollTop', 99999);
     },
 
     toggleActions: function()
@@ -289,6 +345,8 @@ define([
         .css('height', this.calcChangesHeight() + 'px')
         .find('.paintShop-orderChanges-changes')
         .prop('scrollTop', 99999);
+
+      this.positionWorkOrderEditor();
     },
 
     resizeFiller: function()
@@ -304,7 +362,8 @@ define([
         - 75
         - this.options.height // PS order details
         - 24 // WH orders header
-        - 25 * this.model.serialize().whOrders.length; // WH orders rows
+        - 25 * this.model.serialize().whOrders.length
+        - 19 * this.model.get('workOrders').length;
 
       return Math.max(height, 0);
     },
@@ -389,7 +448,7 @@ define([
       });
     },
 
-    onChange: function(order, options)
+    onChange: function(order)
     {
       if (order !== this.model)
       {
@@ -402,6 +461,7 @@ define([
         first: false,
         last: false,
         commentVisible: false,
+        canAct: this.canAct(),
         rowSpan: 'rowSpanDetails',
         mrpDropped: this.dropZones.getState(order.get('mrp')),
         getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders),
@@ -410,12 +470,9 @@ define([
 
       this.$('.paintShop-order').replaceWith(html);
 
-      if (!options.drilling && !options.wh)
-      {
-        this.reloadChanges();
-      }
-
       this.toggleActions();
+
+      viewport.adjustDialogBackdrop();
     },
 
     onVkbFocused: function()
@@ -531,6 +588,260 @@ define([
           win.focus();
         }
       }, 250);
+    },
+
+    showWorkOrderEditor: function(childOrderI)
+    {
+      var view = this;
+      var childOrder = view.model.get('childOrders')[childOrderI];
+
+      if (!childOrder)
+      {
+        return;
+      }
+
+      view.hideVkb();
+
+      var $editor = view.$id('workOrderEditor');
+
+      if (!$editor.length)
+      {
+        var shifts = [
+          null,
+          {no: 1, value: 0, current: false},
+          {no: 2, value: 0, current: false},
+          {no: 3, value: 0, current: false}
+        ];
+        var currShift = getShiftStartInfo(Date.now());
+        var prevShift = getShiftStartInfo(currShift.startTime - 4 * 3600 * 1000);
+
+        shifts[currShift.no].current = true;
+        shifts[currShift.no].value = currShift.moment.utc(true).valueOf();
+        shifts[prevShift.no].value = prevShift.moment.utc(true).valueOf();
+
+        $editor = view.renderPartial(workOrderEditorTemplate, {
+          shifts: shifts,
+          currentShift: currShift.no
+        });
+
+        $editor.on('submit', view.submitWorkOrderEditor.bind(view));
+
+        $editor.find('#' + view.idPrefix + '-woe-cancel').on('click', view.hideWorkOrderEditor.bind(view));
+
+        if (view.vkb)
+        {
+          $editor.find('input[data-vkb]')
+            .on('blur', view.scheduleHideVkb.bind(view))
+            .on('focus', view.showWorkOrderEditorVkb.bind(view));
+        }
+
+        $editor.appendTo(document.body);
+      }
+
+      $editor.data('childOrderI', childOrderI);
+      $editor.css({
+        top: '0',
+        left: '-1000px'
+      });
+
+      var $qtyDone = $editor.find('input[name="qtyDone"]').val(view.calcWorkOrderQuantity(childOrder));
+
+      $editor.removeClass('hidden');
+
+      view.positionWorkOrderEditor();
+
+      $qtyDone.focus();
+    },
+
+    calcWorkOrderQuantity: function(childOrder)
+    {
+      var quantities = [];
+
+      for (var i = 0; i < childOrder.paintCount; ++i)
+      {
+        quantities.push(childOrder.qty);
+      }
+
+      this.model.get('workOrders').forEach(function(o)
+      {
+        if (o.childOrder !== childOrder.order)
+        {
+          return;
+        }
+
+        var qtyDone = o.qtyDone;
+
+        while (quantities.length)
+        {
+          quantities[0] -= qtyDone;
+
+          if (quantities[0] === 0)
+          {
+            quantities.shift();
+
+            break;
+          }
+
+          if (quantities[0] < 0)
+          {
+            qtyDone = quantities[0] * -1;
+
+            quantities.shift();
+
+            continue;
+          }
+
+          break;
+        }
+      });
+
+      return quantities.length ? quantities[0] : 0;
+    },
+
+    positionWorkOrderEditor: function()
+    {
+      var view = this;
+      var $editor = view.$id('workOrderEditor');
+      var childOrderI = $editor.data('childOrderI');
+      var $childOrder = view.$('.paintShop-order-childOrder[data-child-order-index="' + childOrderI + '"]').first();
+
+      if (!$childOrder.length)
+      {
+        return;
+      }
+
+      var $order = $childOrder.find('.paintShop-property[data-property="order"]');
+      var rect = $order[0].getBoundingClientRect();
+      var top = rect.top + 24;
+      var editorHeight = $editor.outerHeight() + 15;
+
+      if (top + editorHeight > window.innerHeight)
+      {
+        top -= (top + editorHeight) - window.innerHeight;
+      }
+
+      $editor.css({
+        top: top + 'px',
+        left: (rect.left + 5) + 'px'
+      });
+    },
+
+    hideWorkOrderEditor: function()
+    {
+      this.$id('workOrderEditor').remove();
+      this.$id('removeWorkOrderConfirmer').remove();
+    },
+
+    showWorkOrderEditorVkb: function(e)
+    {
+      var view = this;
+
+      clearTimeout(view.timers.hideVkb);
+
+      view.vkb.show(e.currentTarget);
+
+      var $editor = view.$id('workOrderEditor');
+      var editorRect = $editor[0].getBoundingClientRect();
+      var inputRect = e.currentTarget.getBoundingClientRect();
+      var top = inputRect.top;
+      var vkbHeight = view.vkb.$el.outerHeight() + 15;
+
+      if (top + vkbHeight > window.innerHeight)
+      {
+        top -= (top + vkbHeight) - window.innerHeight;
+      }
+
+      view.vkb.$el.css({
+        top: top + 'px',
+        left: (editorRect.left + editorRect.width + 15) + 'px'
+      });
+    },
+
+    submitWorkOrderEditor: function(e)
+    {
+      e.preventDefault();
+
+      var view = this;
+      var $editor = view.$id('workOrderEditor');
+      var childOrder = view.model.get('childOrders')[$editor.data('childOrderI')];
+
+      view.hideVkb();
+
+      if (!childOrder)
+      {
+        return view.hideWorkOrderEditor();
+      }
+
+      var creator = user.getInfo();
+      var workOrder = {
+        _id: uuid(),
+        createdAt: new Date(),
+        creator: creator,
+        childOrder: childOrder.order,
+        qtyDone: parseInt($editor.find('input[name="qtyDone"]').val(), 10) || 0,
+        shift: new Date(+$editor.find('input[name="shift"]:checked').val()),
+        workers: [view.orders.user || creator]
+      };
+
+      if (workOrder.qtyDone <= 0)
+      {
+        return view.hideWorkOrderEditor();
+      }
+
+      var $actions = view.$('.form-actions .btn').prop('disabled', true);
+
+      view.act('addWorkOrder', '', {workOrder: workOrder})
+        .fail(function()
+        {
+          $actions.prop('disabled', false);
+        })
+        .done(function()
+        {
+          view.hideWorkOrderEditor();
+        });
+    },
+
+    showRemoveWorkOrderConfirmer: function(workOrderId)
+    {
+      var $confirmer = this.renderPartial(removeWorkOrderConfirmerTemplate);
+
+      $confirmer.find('.btn-danger').on('click', this.removeWorkOrder.bind(this, workOrderId));
+
+      $confirmer.find('.btn-default').on('click', this.hideWorkOrderEditor.bind(this));
+
+      var $workOrder = this.$('.is-workOrder[data-work-order-id="' + workOrderId + '"]');
+      var $action = $workOrder.find('a[data-action="removeWorkOrder"]');
+      var rect = $action[0].getBoundingClientRect();
+
+      $confirmer.css({
+        top: rect.top + 'px',
+        left: rect.left + 'px'
+      });
+
+      $confirmer.appendTo(document.body);
+    },
+
+    removeWorkOrder: function(workOrderId)
+    {
+      var view = this;
+      var workOrder = view.model.get('workOrders').find(function(o) { return o._id === workOrderId; });
+
+      if (!workOrder)
+      {
+        return view.hideWorkOrderEditor();
+      }
+
+      var $actions = view.$id('removeWorkOrderConfirmer').find('.btn').prop('disabled', true);
+
+      view.act('removeWorkOrder', '', {workOrder: workOrder})
+        .fail(function()
+        {
+          $actions.prop('disabled', false);
+        })
+        .done(function()
+        {
+          view.hideWorkOrderEditor();
+        });
     }
 
   });

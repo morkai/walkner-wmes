@@ -35,6 +35,26 @@
   border-top: 1px solid #c4c4c4;
   border-bottom: 1px solid #c4c4c4;
 }
+.is-editable .paintShop-order-childOrder {
+  cursor: pointer;
+}
+.paintShop-property[data-property="actions"] {
+  cursor: default;
+  text-align: right;
+}
+.paintShop-order-childOrder.is-notes {
+  border-top-width: 0;
+}
+.paintShop-order-childOrder.is-workOrder {
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+.paintShop-order-childOrder.is-workOrder.is-last {
+  border-bottom-width: 1px;
+}
+.paintShop-order-childOrder.is-workOrder > td {
+  padding-top: 0;
+}
 .paintShop-order-component {
   background-color: #fff;
 }
@@ -42,6 +62,7 @@
   display: inline-block;
   width: 32px;
   margin-left: -42px;
+  pointer-events: none;
 }
 .paintShop-order-component-nc12 {
   display: inline-block;
@@ -164,6 +185,7 @@
 .paintShop-order:last-child > .paintShop-order-order > td[rowspan] {
   border-bottom: none;
 }
+
 td.paintShop-property {
   vertical-align: top;
   padding: 5px;

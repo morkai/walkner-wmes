@@ -1,4 +1,4 @@
-<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" data-cabin="<%- order.cabin %>">
+<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %> <%- details && canAct ? 'is-editable' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" data-cabin="<%- order.cabin %>">
   <tr class="paintShop-properties paintShop-order-order">
     <td class="paintShop-property" data-property="no" rowspan="<%- order[rowSpan] %>">
       <%- order.no %>
@@ -96,10 +96,10 @@
   </tr>
   <% } %>
   <% order.childOrders.forEach(function(childOrder, i) { %>
-  <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
+  <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>" style="border-bottom-width: <%- childOrder.noteList.length ? 0 : 1 %>px">
     <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>">
       <%- childOrder.order %>
-      <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder, order) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
+      <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder, order) %>"><i class="fa fa-level-down"></i></span>
     </td>
     <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>
@@ -108,7 +108,7 @@
     <td class="paintShop-property"></td>
   </tr>
   <% if (childOrder.noteList.length) { %>
-  <tr class="paintShop-properties paintShop-order-childOrder">
+  <tr class="paintShop-properties paintShop-order-childOrder is-notes" data-child-order-index="<%- i %>" style="border-bottom-width: <%- details && childOrder.workOrders.length ? 0 : 1 %>px">
     <td class="paintShop-order-notes" colspan="5">
       <% childOrder.noteList.forEach(function(note) { %>
       <span class="paintShop-orderDetails-message" data-priority="<%- note.priority %>">
@@ -117,6 +117,21 @@
       <% }) %>
     </td>
   </tr>
+  <% } %>
+  <% if (details) { %>
+  <% childOrder.workOrders.forEach(function(workOrder, workOrderI) { %>
+  <tr class="paintShop-properties paintShop-order-childOrder is-workOrder <%- workOrderI === childOrder.workOrders.length - 1 ? 'is-last' : '' %>" data-child-order-index="<%- i %>" data-work-order-id="<%- workOrder._id %>">
+    <td class="paintShop-property"><%- workOrder.shiftText %></td>
+    <td class="paintShop-property" data-property="qty"><%- workOrder.qtyDone.toLocaleString() %></td>
+    <td class="paintShop-property">PCE</td>
+    <td class="paintShop-property" data-property="name"><%= workOrder.workersText %></td>
+    <td class="paintShop-property" data-property="actions">
+      <% if (canAct) { %>
+      <a href="javascript:void(0)" data-action="removeWorkOrder"><i class="fa fa-times"></i></a>
+      <% } %>
+    </td>
+  </tr>
+  <% }) %>
   <% } %>
   <% childOrder.components.forEach(function(component) { %>
   <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">

@@ -2,14 +2,16 @@
 
 define([
   'underscore',
-  '../time',
-  '../i18n',
-  '../core/Model'
+  'app/time',
+  'app/i18n',
+  'app/core/Model',
+  'app/planning/util/shift'
 ], function(
   _,
   time,
   t,
-  Model
+  Model,
+  shiftUtil
 ) {
   'use strict';
 
@@ -97,6 +99,8 @@ define([
         obj.rowSpanDetails += 1;
       }
 
+      obj.rowSpanList = obj.rowSpanDetails;
+
       obj.paints = {};
       obj.mrps = {};
       obj.mrps[obj.mrp] = 1;
@@ -107,6 +111,30 @@ define([
         obj.mrps[DRILLING_MRP] = 1;
         obj.paints['000000000000'] = obj.qty;
       }
+
+      var workOrderMap = {};
+
+      obj.workOrders.forEach(function(workOrder)
+      {
+        if (!workOrderMap[workOrder.childOrder])
+        {
+          workOrderMap[workOrder.childOrder] = [];
+        }
+
+        workOrderMap[workOrder.childOrder].push(workOrder);
+
+        var shiftTime = Date.parse(workOrder.shift);
+        var shiftNo = shiftUtil.getShiftNo(shiftTime, true);
+
+        workOrder.shiftText = time.utc.format(shiftTime, 'L') + ', ' + t('core', 'SHIFT:' + shiftNo);
+
+        workOrder.workersText = workOrder.workers[0].label;
+
+        if (workOrder.workers.length > 1)
+        {
+          workOrder.workersText += ' +' + (workOrder.workers.length - 1);
+        }
+      });
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
@@ -161,7 +189,9 @@ define([
           components.push(component);
         });
 
-        var rowSpanDetails = components.length;
+        var rowSpanCommon = components.length;
+        var rowSpanList = 0;
+        var rowSpanDetails = 0;
 
         if (childOrder.paintCount !== 1)
         {
@@ -194,13 +224,19 @@ define([
 
         if (childOrder.noteList.length)
         {
-          rowSpanDetails += 1;
+          rowSpanCommon += 1;
         }
 
-        obj.rowSpanDetails += rowSpanDetails;
+        childOrder.workOrders = workOrderMap[childOrder.order] || [];
+
+        rowSpanDetails += childOrder.workOrders.length;
+
+        obj.rowSpanList += rowSpanCommon + rowSpanList;
+        obj.rowSpanDetails += rowSpanCommon + rowSpanDetails;
 
         return _.assign({
-          rowSpanDetails: rowSpanDetails + 1,
+          rowSpanList: rowSpanCommon + rowSpanList + 1,
+          rowSpanDetails: rowSpanCommon + rowSpanDetails + 1,
           last: i === lastChildOrderI
         }, childOrder, {
           components: components

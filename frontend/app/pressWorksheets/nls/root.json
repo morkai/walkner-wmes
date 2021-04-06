@@ -62,7 +62,9 @@
     "FORM:PLACEHOLDER:prodLine": "Choose a machine...",
     "FORM:focusLastPart": "(ALT+Enter focuses the last search field)",
     "FORM:typeChangeWarning": "<strong>WARNING!</strong> Changing of the type will erase all entered parts!",
-    "FORM:existingWarning": "<strong>WARNING!</strong> {count, plural, one{Worksheet} other{Worksheets}} for the specified Date, Shift and Signed operator already {count, plural, one{exists} other{exist}}: {links}."
+    "FORM:existingWarning": "<strong>WARNING!</strong> {count, plural, one{Worksheet} other{Worksheets}} for the specified Date, Shift and Signed operator already {count, plural, one{exists} other{exist}}: {links}.",
+    "FORM:autoOrders:generate": "Generate part list from paint-shop data",
+    "FORM:autoOrders:noWorkOrders": "No painted parts were registered."
   },
   "pl": true
 }

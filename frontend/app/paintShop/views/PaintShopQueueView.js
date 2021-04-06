@@ -117,7 +117,7 @@ define([
           first: false,
           last: false,
           commentVisible: true,
-          rowSpan: 'rowSpanDetails',
+          rowSpan: 'rowSpanList',
           mrpDropped: view.dropZones.getState(order.mrp),
           getChildOrderDropZoneClass: getChildOrderDropZoneClass,
           details: false
@@ -463,9 +463,11 @@ define([
 
       view.$('.paintShop-childOrder-dropZone').each(function()
       {
+        var dataset = view.$(this).closest('.paintShop-order-childOrder')[0].dataset;
+
         this.classList.remove('is-dropped', 'is-undroppable', 'is-droppable');
 
-        var order = view.orders.get(this.dataset.orderId);
+        var order = view.orders.get(dataset.orderId);
 
         if (!order)
         {
@@ -474,7 +476,7 @@ define([
 
         order = order.serialize();
 
-        var childOrder = order.childOrders[this.dataset.childOrderIndex];
+        var childOrder = order.childOrders[dataset.childOrderIndex];
 
         if (!childOrder)
         {
@@ -540,7 +542,7 @@ define([
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
         commentVisible: true,
-        rowSpan: 'rowSpanDetails',
+        rowSpan: 'rowSpanList',
         mrpDropped: view.dropZones.getState(orderData.mrp),
         getChildOrderDropZoneClass: view.orders.getChildOrderDropZoneClass.bind(view.orders),
         details: false

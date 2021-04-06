@@ -1,0 +1,23 @@
+<form id="<%- id('workOrderEditor') %>" class="paintShop-workOrderEditor hidden">
+  <div class="form-group">
+    <label class="control-label"><%- t('workOrderEditor:shift') %></label>
+    <br>
+    <div id="<%- id('woe-shift') %>" class="btn-group" data-toggle="buttons">
+      <% shifts.forEach(function(shift) { %>
+      <% if (!shift) return %>
+      <label class="btn btn-default <%- shift.current ? 'active' : '' %> <%- shift.value ? '' : 'disabled' %>">
+        <input type="radio" name="shift" value="<%- shift.value %>" <%- shift.current ? 'checked' : '' %>>
+        <%- t('core', 'SHIFT:' + shift.no) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- id('woe-qtyDone') %>" class="control-label"><%- t('workOrderEditor:qtyDone') %></label>
+    <input id="<%- id('woe-qtyDone') %>" name="qtyDone" class="form-control" type="text" maxlength="3" required pattern="^[0-9]{1,3}$" data-vkb="numeric">
+  </div>
+  <div class="form-actions">
+    <button id="<%- id('woe-submit') %>" class="btn btn-primary" type="submit"><i class="fa fa-check"></i></button>
+    <button id="<%- id('woe-cancel') %>" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
+  </div>
+</form>

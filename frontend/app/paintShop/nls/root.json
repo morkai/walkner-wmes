@@ -14,6 +14,8 @@
     "MSG:deliver:failure": "Failed to deliver the order.",
     "MSG:aside:failure": "Failed to set aside the order.",
     "MSG:search:failure": "Order not found.",
+    "MSG:addWorkOrder:failure": "Saving failed.",
+    "MSG:removeWorkOrder:failure": "Removing failed.",
 
     "PAGE_ACTION:drilling": "Drilling",
     "PAGE_ACTION:load": "Load",
@@ -98,6 +100,8 @@
     "orderChanges:change:finish": "Finished {qtyDone} PCE",
     "orderChanges:change:continue": "{cabin, select, =1{Resumed order in the first cabin} =2{Resumed order in the second cabin} other{Resumed order.}}",
     "orderChanges:change:deliver": "Delivered {qtyDlv} PCE",
+    "orderChanges:change:addWorkOrder": "Finished {workOrder->qtyDone} PCE from child order {workOrder->childOrder}.",
+    "orderChanges:change:removeWorkOrder": "Cancelled {workOrder->qtyDone} PCE from child order {workOrder->childOrder}.",
 
     "menu:header:mrp": "{mrp}",
     "menu:header:all": "All MRPs",
@@ -198,7 +202,10 @@
     "printPage:mrp": "MRP:",
     "printPage:order": "Order:",
     "printPage:page": "Page {n} of {total}",
-    "printPage:printed": "Printed on {time} by {user} with WMES."
+    "printPage:printed": "Printed on {time} by {user} with WMES.",
+
+    "workOrderEditor:shift": "Production shift",
+    "workOrderEditor:qtyDone": "Quantity done"
   },
   "pl": true
 }

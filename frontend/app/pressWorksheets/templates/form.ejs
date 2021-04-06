@@ -3,36 +3,36 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div id="<%- idPrefix %>-typeChangeWarning" class="message message-inline message-warning"><%- helpers.t('FORM:typeChangeWarning') %></div>
+      <div id="<%- id('typeChangeWarning') %>" class="message message-inline message-warning"><%- t('FORM:typeChangeWarning') %></div>
       <div class="form-group">
         <label class="radio-inline">
-          <input id="<%- idPrefix %>-type" type="radio" name="type" value="mech">
-          <%- helpers.t('PROPERTY:type:mech') %>
+          <input id="<%- id('type') %>" type="radio" name="type" value="mech">
+          <%- t('PROPERTY:type:mech') %>
         </label>
         <label class="radio-inline">
           <input type="radio" name="type" value="optics">
-          <%- helpers.t('PROPERTY:type:optics') %>
+          <%- t('PROPERTY:type:optics') %>
         </label>
         <label class="radio-inline">
           <input type="radio" name="type" value="paintShop">
-          <%- helpers.t('PROPERTY:type:paintShop') %>
+          <%- t('PROPERTY:type:paintShop') %>
         </label>
       </div>
       <div class="row">
         <div class="col-md-3 form-group has-required-select2">
-          <label for="<%- idPrefix %>-operators" class="control-label is-required"><%- helpers.t('PROPERTY:operators') %></label>
-          <input id="<%- idPrefix %>-operators" type="text" autocomplete="new-password" name="operators" required>
+          <label for="<%- id('operators') %>" class="control-label is-required"><%- t('PROPERTY:operators') %></label>
+          <input id="<%- id('operators') %>" type="text" name="operators" required>
         </div>
         <div class="col-md-3 pressWorksheets-form-dateAndShift">
           <div class="row">
             <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
-              <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required>
+              <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
+              <input id="<%- id('date') %>" class="form-control" type="date" name="date" required>
             </div>
             <div class="col-md-6 form-group pressWorksheets-form-group-shift">
-              <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- helpers.t('PROPERTY:shift') %></label>
+              <label for="<%- id('shift-1') %>" class="control-label is-required"><%- t('PROPERTY:shift') %></label>
               <div class="pressWorksheets-form-group-shift-checkboxes">
-                <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked> <%- t('core', 'SHIFT:1') %></label>
+                <label class="radio-inline"><input id="<%- id('shift-1') %>" name="shift" type="radio" value="1" checked> <%- t('core', 'SHIFT:1') %></label>
                 <label class="radio-inline"><input name="shift" type="radio" value="2"> <%- t('core', 'SHIFT:2') %></label>
                 <label class="radio-inline"><input name="shift" type="radio" value="3"> <%- t('core', 'SHIFT:3') %></label>
               </div>
@@ -40,30 +40,43 @@
           </div>
         </div>
         <div class="col-md-3 form-group has-required-select2">
-          <label for="<%- idPrefix %>-operator" class="control-label is-required"><%- helpers.t('PROPERTY:operator') %></label>
-          <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator" required>
+          <label for="<%- id('operator') %>" class="control-label is-required"><%- t('PROPERTY:operator') %></label>
+          <input id="<%- id('operator') %>" type="text" name="operator" required>
         </div>
         <div class="col-md-3 form-group has-required-select2">
-          <label for="<%- idPrefix %>-master" class="control-label is-required"><%- helpers.t('PROPERTY:master') %></label>
-          <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master" required>
+          <label for="<%- id('master') %>" class="control-label is-required"><%- t('PROPERTY:master') %></label>
+          <input id="<%- id('master') %>" type="text" name="master" required>
         </div>
       </div>
-      <div id="<%- idPrefix %>-existingWarning" class="message message-inline message-warning"></div>
-      <div class="pressWorksheets-form-group-paintShop">
+      <div id="<%- id('existingWarning') %>" class="message message-inline message-warning"></div>
+      <div class="form-row pressWorksheets-form-group-paintShop">
         <div class="form-group">
-          <label for="<%- idPrefix %>-startedAt" class="control-label"><%- helpers.t('PROPERTY:startedAt') %></label>
-          <input id="<%- idPrefix %>-startedAt" class="form-control pressWorksheets-form-time" type="time" name="startedAt">
+          <label for="<%- id('startedAt') %>" class="control-label"><%- t('PROPERTY:startedAt') %></label>
+          <input id="<%- id('startedAt') %>" class="form-control pressWorksheets-form-time" type="time" name="startedAt">
         </div>
         <div class="form-group">
-          <label for="<%- idPrefix %>-finishedAt" class="control-label"><%- helpers.t('PROPERTY:finishedAt') %></label>
-          <input id="<%- idPrefix %>-finishedAt" class="form-control pressWorksheets-form-time" type="time" name="finishedAt">
+          <label for="<%- id('finishedAt') %>" class="control-label"><%- t('PROPERTY:finishedAt') %></label>
+          <input id="<%- id('finishedAt') %>" class="form-control pressWorksheets-form-time" type="time" name="finishedAt">
+        </div>
+        <div class="form-group" style="width: auto">
+          <label class="control-label">&nbsp;</label>
+          <br>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <%- t('FORM:autoOrders:generate') %> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" data-auto-wc="METALASS">METALASS</a></li>
+              <li><a href="#" data-auto-wc="PAINT">PAINT</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div id="<%- idPrefix %>-ordersTable" class="table-responsive"></div>
+      <div id="<%- id('ordersTable') %>" class="table-responsive"></div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
-      <button type="submit" class="btn btn-danger"><%- helpers.t('FROM:ACTION:saveOverlapping') %></button>
+      <button type="submit" class="btn btn-danger"><%- t('FROM:ACTION:saveOverlapping') %></button>
     </div>
   </div>
 </form>

@@ -223,6 +223,15 @@ define([
           }
         }
       },
+      'paintShop.events.saved': function(event)
+      {
+        if (viewport.currentDialog
+          && viewport.currentDialog.psEvents
+          && viewport.currentDialog.model.id === event.order)
+        {
+          viewport.currentDialog.psEvents.add(event);
+        }
+      },
       'paintShop.dropZones.updated.*': function(message)
       {
         this.dropZones.updated(message);

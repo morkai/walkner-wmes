@@ -133,6 +133,60 @@
 .paintShop-orderDetails-whOrders > tbody > tr > td:last-child {
   border-right: none;
 }
+
+.paintShop-workOrderEditor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  padding-top: 15px;
+  background: #fff;
+  border: 1px solid #000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
+.paintShop-workOrderEditor .form-group {
+  padding: 0 15px;
+}
+.paintShop-workOrderEditor .btn-group {
+  display: flex;
+}
+.paintShop-workOrderEditor .btn-group .btn {
+  flex: 1 1 0;
+  padding: 12px 0;
+  min-width: 80px;
+  font-size: 32px;
+}
+.paintShop-workOrderEditor .form-control {
+  padding: 0;
+  width: 238px;
+  height: 71px;
+  font-size: 48px;
+  text-align: center;
+}
+.paintShop-workOrderEditor .form-actions {
+  display: flex;
+  padding: 0;
+}
+.paintShop-workOrderEditor .form-actions .btn {
+  flex: 1 1 0;
+  padding: 12px 0;
+  font-size: 32px;
+}
+.paintShop-removeWorkOrderConfirmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  display: flex;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
+.paintShop-removeWorkOrderConfirmer .btn {
+  flex: 1 1 0;
+  padding: 12px 0;
+  min-width: 80px;
+  font-size: 32px;
+}
+
 @media (min-width: 768px) {
   .paintShop-orderDetails-dialog .modal-dialog {
     width: 900px;

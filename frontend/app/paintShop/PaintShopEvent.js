@@ -32,6 +32,7 @@ define([
       obj.time = time.toTagData(obj.time);
       obj.user = renderUserInfo({userInfo: obj.user, noIp: true});
       obj.comment = obj.data && obj.data.comment || '';
+      obj.data = t.flatten(obj.data);
 
       return obj;
     }

@@ -13,6 +13,8 @@
   "MSG:deliver:failure": "Nie udało się dostarczyć zlecenia.",
   "MSG:aside:failure": "Nie udało się odstawić zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
+  "MSG:addWorkOrder:failure": "Zapisywanie nie powiodło się.",
+  "MSG:removeWorkOrder:failure": "Usuwanie nie powiodło się.",
 
   "PAGE_ACTION:drilling": "Wiercenie",
   "PAGE_ACTION:load": "Obciążenie",
@@ -102,6 +104,8 @@
   "orderChanges:change:finish": "Zakończono {qtyDone} szt.",
   "orderChanges:change:continue": "{cabin, select, =1{Wznowiono zlecenie w kabinie pierwszej.} =2{Wznowiono zlecenie w kabinie drugiej.} other{Wznowiono zlecenie.}}",
   "orderChanges:change:deliver": "Dostarczono {qtyDlv} szt.",
+  "orderChanges:change:addWorkOrder": "Zrobiono {workOrder->qtyDone} szt. z podzlecenia {workOrder->childOrder}.",
+  "orderChanges:change:removeWorkOrder": "Cofnięto {workOrder->qtyDone} szt. z podzlecenia {workOrder->childOrder}.",
 
   "menu:header:mrp": "{mrp}",
   "menu:header:all": "Wszystkie przepływy",
@@ -200,5 +204,8 @@
   "printPage:mrp": "Przepływ:",
   "printPage:order": "Zlecenie:",
   "printPage:page": "Strona {n} z {total}",
-  "printPage:printed": "Wydrukowano w {time} przez {user} za pomocą systemu WMES."
+  "printPage:printed": "Wydrukowano w {time} przez {user} za pomocą systemu WMES.",
+
+  "workOrderEditor:shift": "Zmiana produkcyjna",
+  "workOrderEditor:qtyDone": "Ilość zrobiona"
 }

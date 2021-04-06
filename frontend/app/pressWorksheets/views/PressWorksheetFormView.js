@@ -35,6 +35,11 @@ define([
 ) {
   'use strict';
 
+  var AUTO_WORK_CENTERS = {
+    PAINT: 'PAINT_',
+    METALASS: 'METALASS_'
+  };
+
   return FormView.extend({
 
     template: formTemplate,
@@ -238,6 +243,12 @@ define([
         {
           $notesRow.find('textarea').focus();
         });
+      },
+      'click a[data-auto-wc]': function(e)
+      {
+        e.preventDefault();
+
+        this.generateAutoOrders(e.currentTarget.dataset.autoWc);
       }
     },
 
@@ -302,6 +313,13 @@ define([
       {
         this.$id('type').focus();
       }
+if (!this.options.editMode)
+{
+this.$('input[value="paintShop"]').parent().click();
+this.$id('date').val('2021-04-06').change();
+this.$('input[value="3"]').parent().click();
+this.generateAutoOrders('PAINT');
+}
     },
 
     prepareProdLinesData: function()
@@ -372,9 +390,9 @@ define([
         })
         .map(this.serializeOrder.bind(this, $orders, this.model.lossReasons));
 
-      formData.operators = this.$id('operators').select2('data').map(userDataToInfo);
-      formData.operator = userDataToInfo(this.$id('operator').select2('data'));
-      formData.master = userDataToInfo(this.$id('master').select2('data'));
+      formData.operators = setUpUserSelect2.getUserInfo(this.$id('operators'));
+      formData.operator = setUpUserSelect2.getUserInfo(this.$id('operator'));
+      formData.master = setUpUserSelect2.getUserInfo(this.$id('master'));
       formData.shift = parseInt(formData.shift, 10);
 
       var divisions = {};
@@ -388,14 +406,6 @@ define([
 
       formData.divisions = Object.keys(divisions);
       formData.prodLines = Object.keys(prodLines);
-
-      function userDataToInfo(userData)
-      {
-        return {
-          id: userData.id,
-          label: userData.text
-        };
-      }
 
       return formData;
     },
@@ -499,21 +509,18 @@ define([
         shiftMoment.valueOf() > Date.now() ? t('pressWorksheets', 'FORM:ERROR:date') : ''
       );
 
-      if (this.isPaintShop())
+      var $startedAt = this.$id('startedAt');
+      var $finishedAt = this.$id('finishedAt');
+
+      if (!shiftMoment.isValid())
       {
-        var $startedAt = this.$id('startedAt');
-        var $finishedAt = this.$id('finishedAt');
+        return;
+      }
 
-        if (!shiftMoment.isValid())
-        {
-          return;
-        }
-
-        if (!this.paintShopTimeFocused)
-        {
-          $startedAt.val(shiftMoment.format('HH:mm'));
-          $finishedAt.val(shiftMoment.add(8, 'hours').format('HH:mm'));
-        }
+      if (!this.paintShopTimeFocused)
+      {
+        $startedAt.val(shiftMoment.format('HH:mm'));
+        $finishedAt.val(shiftMoment.add(8, 'hours').format('HH:mm'));
       }
     },
 
@@ -741,15 +748,15 @@ define([
 
       ++this.lastOrderNo;
 
-      var $orderRow = $(renderOrdersTableRow({
+      var $orderRow = this.renderPartial(renderOrdersTableRow, {
         no: this.lastOrderNo,
         lossReasons: this.lossReasons,
         downtimeReasons: this.downtimeReasons
-      }));
-      var $notesRow = $(renderOrdersTableNotesRow({
+      });
+      var $notesRow = this.renderPartial(renderOrdersTableNotesRow, {
         no: this.lastOrderNo,
         colspan: $orderRow.find('td').length
-      }));
+      });
 
       $notesRow.hide();
 
@@ -1209,7 +1216,7 @@ define([
         order.downtimes.forEach(this.fillDowntime.bind(this, $orderRow));
       }
 
-      if (this.model.get('type') !== 'paintShop')
+      if (!this.isPaintShop())
       {
         var opWorkDuration = order.opWorkDuration > 0
           ? time.toString(order.opWorkDuration * 3600, true).split(':').slice(0, 2).join(':')
@@ -1346,7 +1353,341 @@ define([
       var opWorkDuration = parts.join(':');
 
       $opWorkDuration.val(opWorkDuration);
-    }
+    },
 
+    generateAutoOrders: async function(wc)
+    {
+      var shiftTime = this.getShiftMoment().utc(true).valueOf();
+
+      if (!shiftTime)
+      {
+        this.$id('startedAt').focus();
+
+        return;
+      }
+
+      var psOrderRes = await fetch(`/paintShop/orders?select(workOrders)&limit(0)&workOrders.shift=${shiftTime}`);
+      var psOrderBody = await psOrderRes.json();
+
+      if (!psOrderBody.totalCount)
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: this.t('FORM:autoOrders:noWorkOrders')
+        });
+
+        return;
+      }
+
+      var orders = {};
+      var operators = {};
+
+      psOrderBody.collection.forEach(psOrder =>
+      {
+        psOrder.workOrders.forEach(workOrder =>
+        {
+          if (Date.parse(workOrder.shift) !== shiftTime)
+          {
+            return;
+          }
+
+          if (!orders[workOrder.childOrder])
+          {
+            orders[workOrder.childOrder] = {
+              _id: workOrder.childOrder,
+              nc12: '',
+              operations: [],
+              workOrders: [],
+              prevWorkOrders: []
+            };
+          }
+
+          orders[workOrder.childOrder].workOrders.push(workOrder);
+
+          workOrder.workers.forEach(worker =>
+          {
+            operators[worker.id] = {
+              id: worker.id,
+              text: worker.label
+            };
+          });
+        });
+      });
+
+      var sapOrderNos = Object.keys(orders);
+
+      var prevPsOrderRes = await fetch(
+        `/paintShop/orders?select(workOrders)&limit(0)`
+        + `&childOrders.order=in=(${sapOrderNos})&workOrders.shift<${shiftTime}`
+      );
+      var prevPsOrderBody = await prevPsOrderRes.json();
+
+      prevPsOrderBody.collection.forEach(psOrder =>
+      {
+        psOrder.workOrders.forEach(workOrder =>
+        {
+          if (!orders[workOrder.childOrder]
+            || Date.parse(workOrder.shift) >= shiftTime)
+          {
+            return;
+          }
+
+          orders[workOrder.childOrder].prevWorkOrders.push(workOrder);
+        });
+      });
+
+      var sapOrderRes = await fetch(`/orders?select(nc12,operations)&_id=in=(${sapOrderNos})`);
+      var sapOrderBody = await sapOrderRes.json();
+
+      sapOrderBody.collection.forEach(sapOrder =>
+      {
+        var o = orders[sapOrder._id];
+
+        o.nc12 = sapOrder.nc12;
+
+        var relatedOps = [];
+
+        sapOrder.operations.forEach(op =>
+        {
+          if (op.workCenter === 'PAINT')
+          {
+            if (o.operations.length)
+            {
+              relatedOps = [];
+            }
+
+            op.qtyDone = 0;
+            op.related = relatedOps;
+
+            o.operations.push(op);
+          }
+          else
+          {
+            relatedOps.push(op);
+          }
+        });
+      });
+
+      const parts = {};
+
+      sapOrderNos.forEach(orderNo =>
+      {
+        var o = orders[orderNo];
+
+        if (!o.nc12 || !o.operations.length)
+        {
+          return;
+        }
+
+        if (!parts[o.nc12])
+        {
+          parts[o.nc12] = {};
+        }
+
+        var part = parts[o.nc12];
+
+        o.operations.forEach(op =>
+        {
+          if (!part[op.no])
+          {
+            part[op.no] = {
+              qtyDone: 0,
+              related: op.related
+            };
+          }
+        });
+
+        if (o.prevWorkOrders.length)
+        {
+          countWorkOrders(o, o.prevWorkOrders, null);
+        }
+
+        countWorkOrders(o, o.workOrders, part);
+      });
+
+      var nc12s = Object.keys(parts);
+      var orderDataRes = await fetch(`/production/orders?nc12=${nc12s}`);
+      var orderDataBody = await orderDataRes.json();
+      var orderDataMap = {};
+
+      orderDataBody.forEach(orderData =>
+      {
+        orderData.nc12 = orderData._id;
+        delete orderData._id;
+
+        orderDataMap[orderData.nc12] = orderData;
+      });
+
+      var formData = this.getFormData();
+
+      formData.operators.forEach(operator =>
+      {
+        operators[operator.id] = {
+          id: operator.id,
+          text: operator.label
+        };
+      });
+
+      this.$id('operators').select2('data', Object.values(operators).sort((a, b) => a.text.localeCompare(b.text)));
+
+      var oldOrders = {};
+
+      formData.orders.forEach(o =>
+      {
+        var key = `${o.nc12}:${o.operationNo}`;
+
+        if (!oldOrders[key])
+        {
+          oldOrders[key] = o;
+        }
+      });
+
+      this.renderOrdersTable();
+
+      var prodLine = prodLines.get(AUTO_WORK_CENTERS[wc]);
+
+      if (!prodLine)
+      {
+        this.addOrderRow();
+
+        return;
+      }
+
+      var subdivision = prodLine.getSubdivision();
+
+      nc12s.forEach(nc12 =>
+      {
+        var orderData = orderDataMap[nc12];
+
+        Object.keys(parts[nc12]).forEach(operationNo =>
+        {
+          var {qtyDone, related} = parts[nc12][operationNo];
+
+          if (!qtyDone)
+          {
+            return;
+          }
+
+          var ops = [];
+
+          if (wc === 'PAINT')
+          {
+            ops.push(_.find(orderData.operations, op => op.no === operationNo));
+          }
+          else
+          {
+            related.forEach(op => ops.push(op));
+          }
+
+          ops.forEach(operationData =>
+          {
+            if (!operationData)
+            {
+              return;
+            }
+
+            var oldOrder = oldOrders[`${nc12}:${operationData.no}`];
+            var order = {
+              prodShiftOrder: null,
+              division: subdivision ? subdivision.get('division') : null,
+              prodLine: prodLine.id,
+              nc12,
+              name: orderData.name,
+              operationNo: operationData.no,
+              operationName: operationData.name,
+              orderData: orderData,
+              quantityDone: qtyDone,
+              startedAt: null,
+              finishedAt: null,
+              opWorkDuration: 0,
+              losses: oldOrder ? oldOrder.losses : [],
+              downtimes: oldOrder ? oldOrder.downtimes : [],
+              notes: oldOrder ? oldOrder.notes : ''
+            };
+
+            this.fillOrder(order);
+          });
+        });
+      });
+
+      this.addOrderRow();
+    }
   });
+
+  function countWorkOrders(o, workOrders, part)
+  {
+    var ops = [].concat(o.operations);
+
+    workOrders.forEach(workOrder =>
+    {
+      while (ops.length)
+      {
+        var op = ops[0];
+        var remaining = op.qty - op.qtyDone;
+
+        if (remaining <= 0)
+        {
+          ops.shift();
+
+          continue;
+        }
+
+        if (workOrder.qtyDone > remaining)
+        {
+          if (part)
+          {
+            part[op.no].qtyDone += remaining;
+          }
+
+          op.qtyDone += remaining;
+          workOrder.qtyDone -= remaining;
+
+          ops.shift();
+
+          continue;
+        }
+
+        if (part)
+        {
+          part[op.no].qtyDone += workOrder.qtyDone;
+        }
+
+        op.qtyDone += workOrder.qtyDone;
+        workOrder.qtyDone = 0;
+
+        break;
+      }
+    });
+
+    var remainingQty = 0;
+
+    workOrders.forEach(workOrder =>
+    {
+      remainingQty += workOrder.qtyDone;
+    });
+
+    var remainingPerOp = Math.ceil(remainingQty / o.operations.length);
+
+    o.operations.forEach(op =>
+    {
+      if (part)
+      {
+        part[op.no].qtyDone += remainingPerOp;
+      }
+
+      op.qtyDone += remainingPerOp;
+      remainingQty -= remainingPerOp;
+
+      if (remainingQty < 0)
+      {
+        op.qtyDone += remainingQty;
+
+        if (part)
+        {
+          part[op.no].qtyDone += remainingQty;
+        }
+      }
+    });
+  }
 });

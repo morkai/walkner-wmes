@@ -3,36 +3,6 @@
 
 'use strict';
 
-db.paintshoporders.find({}).forEach(psOrder =>
-{
-  psOrder.childOrders.forEach(childOrder =>
-  {
-    var sapOrder = db.orders.findOne({_id: childOrder.order}, {bom: 1});
+db.paintshoporders.updateMany({workOrders: {$exists: false}}, {$set: {workOrders: []}});
 
-    if (!sapOrder)
-    {
-      childOrder.components.forEach(component =>
-      {
-        component.item = '';
-      });
-
-      return;
-    }
-
-    var codeToItem = {};
-
-    sapOrder.bom.forEach(component =>
-    {
-      codeToItem[component.nc12] = component.item;
-    });
-
-    childOrder.components.forEach(component =>
-    {
-      component.item = codeToItem[component.nc12] || '';
-    });
-  });
-
-  db.paintshoporders.updateOne({_id: psOrder._id}, {$set: {childOrders: psOrder.childOrders}});
-});
-
-db.planordergroups.updateMany({target: {$exists: false}}, {$set: {target: ['plan']}});
+db.paintshoporders.createIndex({'workOrders.shift': 1});
