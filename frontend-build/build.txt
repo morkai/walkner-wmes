@@ -3858,6 +3858,7 @@ app/settings/Setting.js
 app/settings/SettingCollection.js
 app/paintShop/PaintShopSetting.js
 app/paintShop/PaintShopSettingCollection.js
+app/core/util/uuid.js
 app/paintShop/PaintShopEvent.js
 app/paintShop/PaintShopEventCollection.js
 app/paintShop/templates/orderDetails.js
@@ -3865,6 +3866,8 @@ app/paintShop/templates/orderChanges.js
 app/paintShop/templates/orderChange.js
 app/paintShop/templates/queueOrder.js
 app/paintShop/templates/whOrders.js
+app/paintShop/templates/workOrderEditor.js
+app/paintShop/templates/removeWorkOrderConfirmer.js
 app/paintShop/views/PaintShopOrderDetailsView.js
 app/paintShop/templates/queue.js
 app/paintShop/views/PaintShopQueueView.js
