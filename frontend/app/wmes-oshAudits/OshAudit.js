@@ -91,7 +91,7 @@ define([
       row.className = STATUS_TO_CLASS[this.get('status')];
 
       row.categories = row.results
-        .filter(r => r.ok !== null)
+        .filter(r => r.ok === false)
         .map(r => r.shortName)
         .join('; ');
 
