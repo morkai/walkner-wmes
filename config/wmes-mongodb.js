@@ -10,8 +10,10 @@ module.exports = {
     connectTimeoutMS: 30000,
     socketTimeoutMS: 0,
     forceServerObjectId: false,
-    w: 1,
-    wtimeout: 5000,
+    writeConcern: {
+      w: 1,
+      wtimeout: 5000
+    },
     promiseLibrary: global.Promise,
     useNewUrlParser: true,
     useCreateIndex: true,
