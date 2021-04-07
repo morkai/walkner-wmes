@@ -10,7 +10,7 @@
   <div class="form-group">
     <label for="<%- id('psStatuses') %>" class="control-label"><%- t('filter:psStatuses') %></label>
     <select id="<%- id('psStatuses') %>" name="psStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="7">
-      <% ['unknown', 'new', 'started', 'partial', 'finished', 'aside', 'cancelled'].forEach(function(psStatus) { %>
+      <% ['unknown', 'new', 'started', 'startedMsp', 'partial', 'finished', 'aside', 'cancelled'].forEach(function(psStatus) { %>
       <option value="<%- psStatus %>" <%- _.includes(psStatuses, psStatus) ? 'selected' : '' %>><%- t('planning', 'orders:psStatus:' + psStatus) %></option>
       <% }) %>
     </select>
