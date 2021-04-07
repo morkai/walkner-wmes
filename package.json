@@ -5,7 +5,7 @@
   "version": "0.159.0",
   "updater": {
     "wmes": {
-      "backend": 665,
+      "backend": 666,
       "frontend": 820,
       "reports": 143,
       "attachments": 3,
@@ -19,7 +19,7 @@
       "planning": 112,
       "ps-queue": 62,
       "ps-load": 20,
-      "wh-pickup": 77,
+      "wh-pickup": 78,
       "wh-problems": 49,
       "wh-delivery-components": 50,
       "wh-delivery-packaging": 50,
