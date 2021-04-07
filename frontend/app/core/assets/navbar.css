@@ -67,6 +67,8 @@
   height: 26px;
   line-height: 26px;
   border-width: 0;
+}
+.navbar-with-button > .btn-default {
   background: transparent;
 }
 .navbar-with-button > .btn:last-child {
