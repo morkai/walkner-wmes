@@ -313,13 +313,6 @@ define([
       {
         this.$id('type').focus();
       }
-if (!this.options.editMode)
-{
-this.$('input[value="paintShop"]').parent().click();
-this.$id('date').val('2021-04-06').change();
-this.$('input[value="3"]').parent().click();
-this.generateAutoOrders('PAINT');
-}
     },
 
     prepareProdLinesData: function()
