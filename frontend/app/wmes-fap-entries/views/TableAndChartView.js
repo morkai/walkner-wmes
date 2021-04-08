@@ -1,29 +1,27 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
-  'app/i18n',
-  'app/highcharts',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
   'app/reports/util/formatXAxis',
   'app/wmes-fap-entries/templates/reportTable',
   'app/wmes-fap-entries/templates/tableAndChart'
 ], function(
+  require,
   _,
-  t,
-  Highcharts,
   View,
   formatTooltipHeader,
   formatXAxis,
-  renderReportTable,
+  tableTemplate,
   template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: template,
+    template,
 
     initialize: function()
     {
@@ -33,7 +31,11 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:' + this.options.metric, this.render);
+
+      this.once('afterRender', () =>
+      {
+        this.listenTo(this.model, `change:${this.options.metric}`, this.render);
+      });
     },
 
     destroy: function()
@@ -80,8 +82,43 @@ define([
 
     createChart: function()
     {
-      var metric = this.options.metric;
-      var series = this.serializeChartSeries();
+      const series = this.serializeChartSeries();
+      const unit = this.options.yAxisUnit || this.options.unit || '';
+      let valueDecimals = this.options.valueDecimals >= 0 ? this.options.valueDecimals : 0;
+
+      if (this.options.metric === 'duration')
+      {
+        valueDecimals = 1;
+      }
+
+      let dataLabelsDecimals = valueDecimals;
+
+      if (unit && dataLabelsDecimals === 2)
+      {
+        if (series[0].data.length > 52)
+        {
+          dataLabelsDecimals = 0;
+        }
+        else if (series[0].data.length > 39)
+        {
+          dataLabelsDecimals = 1;
+        }
+      }
+
+      const xAxis = {};
+
+      if (this.model.getInterval() === 'none')
+      {
+        xAxis.type = 'category';
+        xAxis.categories = this.serializeCategories();
+      }
+      else
+      {
+        xAxis.type = 'datetime';
+        xAxis.labels = formatXAxis.labels(this);
+      }
+
+      const Highcharts = require('app/highcharts');
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -90,10 +127,10 @@ define([
           spacing: [10, 1, 1, 0]
         },
         exporting: {
-          filename: this.t('report:filenames:' + metric),
+          filename: this.options.filename,
           chartOptions: {
             title: {
-              text: this.t('report:title:' + metric)
+              text: this.options.title
             },
             legend: {
               enabled: true
@@ -108,20 +145,21 @@ define([
         },
         title: false,
         noData: {},
-        xAxis: {
-          type: 'datetime',
-          labels: formatXAxis.labels(this)
-        },
+        xAxis,
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false,
-          opposite: true
+          allowDecimals: this.options.allowDecimals === true,
+          opposite: true,
+          labels: {
+            format: '{value}' + unit
+          }
         },
         tooltip: {
           shared: true,
-          valueDecimals: this.options.metric === 'duration' ? 1 : 0,
-          headerFormatter: formatTooltipHeader.bind(this)
+          valueDecimals,
+          valueSuffix: unit,
+          headerFormatter: xAxis.type === 'datetime' ? formatTooltipHeader.bind(this) : undefined
         },
         legend: {
           enabled: false
@@ -129,14 +167,16 @@ define([
         plotOptions: {
           column: {
             borderWidth: 0,
+            stacking: series.length > this.options.stackingLimit ? 'normal' : null,
             dataLabels: {
               enabled: series.length
                 ? (series.length * series[0].data.length <= (series[0].data.length === 1 ? 40 : 35))
-                : false
+                : false,
+              format: '{y:.' + dataLabelsDecimals + 'f}'
             }
           }
         },
-        series: series
+        series
       });
     },
 
@@ -148,24 +188,83 @@ define([
 
     updateTable: function()
     {
-      this.$id('table').html(renderReportTable({
-        rows: this.model.get(this.options.metric).rows
+      let absDecimals = this.options.absDecimals;
+
+      if (absDecimals === true)
+      {
+        absDecimals = this.options.valueDecimals;
+      }
+
+      let absUnit = this.options.absUnit;
+
+      if (absUnit === true)
+      {
+        absUnit = this.options.unit;
+      }
+
+      this.$id('table').html(this.renderPartialHtml(tableTemplate, {
+        rows: (this.model.get(this.options.metric) || {rows: []}).rows,
+        relColumn: this.options.relColumn !== false,
+        absUnit: absUnit || '',
+        absDecimals: Math.pow(10, absDecimals || 0)
       }));
+    },
+
+    serializeCategories: function()
+    {
+      const {rows} = this.model.get(this.options.metric) || {rows: []};
+      const categories = [];
+
+      for (let i = 0, l = Math.min(15, rows.length); i < l; ++i)
+      {
+        const row = rows[i];
+
+        if (row.id !== 'total')
+        {
+          categories.push(row.label || this.t(`report:series:${row.id}`));
+        }
+      }
+
+      return categories;
     },
 
     serializeChartSeries: function()
     {
-      var view = this;
-      var series = view.model.get(view.options.metric).series;
+      const {rows, series} = this.model.get(this.options.metric) || {rows: [], series: {}};
 
-      return Object.keys(series).map(function(seriesId)
+      if (this.model.getInterval() === 'none')
       {
-        var serie = series[seriesId];
-
-        return _.defaults(serie, {
-          id: seriesId,
+        const s = {
+          id: this.options.metric,
           type: 'column',
-          name: serie.name || view.t('report:series:' + seriesId),
+          name: this.t(`report:series:entry`),
+          data: []
+        };
+
+        for (let i = 0, l = Math.min(15, rows.length); i < l; ++i)
+        {
+          const row = rows[i];
+
+          if (row.id !== 'total')
+          {
+            s.data.push({
+              y: row.abs,
+              color: row.color
+            });
+          }
+        }
+
+        return [s];
+      }
+
+      return Object.keys(series).map(id =>
+      {
+        var s = series[id];
+
+        return _.defaults(s, {
+          id,
+          type: 'column',
+          name: s.name || this.t(`report:series:${id}`),
           data: []
         });
       });

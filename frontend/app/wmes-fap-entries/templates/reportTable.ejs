@@ -5,9 +5,11 @@
       <% if (row.no != null) { %>
       <td class="is-min is-number" style="border-left: 0"><%- row.no %><%- (/^[0-9]+$/).test(row.no) ? '.' : '' %></td>
       <% } %>
-      <td style="<% if (row.color) { %>border-left-color: <%- row.color %>;<% } else { %>border-left: 0;<% } %>"><%= row.label || t('wmes-fap-entries', 'report:series:' + row.id) %></td>
-      <td class="is-min is-number"><%- Math.round(row.abs || 0).toLocaleString() %></td>
+      <td style="<% if (row.color) { %>border-left-color: <%- row.color %>;<% } else { %>border-left: 0;<% } %>"><%= row.label || t(`report:series:${row.id}`) %></td>
+      <td class="is-min is-number"><%- (Math.round((row.abs || 0) * absDecimals) / absDecimals).toLocaleString() %><%- absUnit %></td>
+      <% if (relColumn) { %>
       <td class="is-min is-number"><%- Math.round((row.rel || 0) * 100).toLocaleString() %>%</td>
+      <% } %>
     </tr>
     <% }) %>
     <tr>

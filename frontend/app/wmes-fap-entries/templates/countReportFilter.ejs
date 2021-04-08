@@ -5,7 +5,7 @@
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
-      <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+      <% ['year', 'quarter', 'month', 'week', 'day', 'none'].forEach(function(interval) { %>
       <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
         <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
       </label>
@@ -13,23 +13,23 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrps"><%- helpers.t('PROPERTY:mrp') %></label>
+    <label for="<%- idPrefix %>-mrps"><%- t('PROPERTY:mrp') %></label>
     <input id="<%- idPrefix %>-mrps" name="mrps" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-categories"><%- helpers.t('PROPERTY:category') %></label>
+    <label for="<%- idPrefix %>-categories"><%- t('PROPERTY:category') %></label>
     <input id="<%- idPrefix %>-categories" name="categories" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-subdivisionTypes"><%- helpers.t('PROPERTY:subdivisionType') %></label>
+    <label for="<%- idPrefix %>-subdivisionTypes"><%- t('PROPERTY:subdivisionType') %></label>
     <select id="<%- idPrefix %>-subdivisionTypes" name="subdivisionTypes" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% subdivisionTypes.forEach(function(subdivisionType) { %>
-      <option value="<%= subdivisionType %>"><%- helpers.t('subdivisionType:' + subdivisionType) %></option>
+      <option value="<%= subdivisionType %>"><%- t('subdivisionType:' + subdivisionType) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-divisions"><%- helpers.t('PROPERTY:divisions') %></label>
+    <label for="<%- idPrefix %>-divisions"><%- t('PROPERTY:divisions') %></label>
     <select id="<%- idPrefix %>-divisions" name="divisions" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% divisions.forEach(function(division) { %>
       <option value="<%= division.id %>"><%= division.text %></option>
@@ -37,7 +37,7 @@
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-levels"><%- helpers.t('PROPERTY:level') %></label>
+    <label for="<%- idPrefix %>-levels"><%- t('PROPERTY:level') %></label>
     <div id="<%- idPrefix %>-levels" class="btn-group filter-btn-group" data-toggle="buttons">
       <% [0, 1, 2, 3, 4].forEach(function(level) { %>
       <label class="btn btn-default">

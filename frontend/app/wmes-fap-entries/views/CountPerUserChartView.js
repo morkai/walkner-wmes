@@ -1,18 +1,18 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
   'app/i18n',
-  'app/highcharts',
   'app/core/View',
   'app/wmes-fap-entries/templates/reportTable',
   'app/wmes-fap-entries/templates/tableAndChart'
 ], function(
+  require,
   _,
   t,
-  Highcharts,
   View,
-  renderReportTable,
+  tableTemplate,
   template
 ) {
   'use strict';
@@ -29,7 +29,11 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:' + this.options.metric, this.render);
+
+      this.once('afterRender', () =>
+      {
+        this.listenTo(this.model, `change:${this.options.metric}`, this.render);
+      });
     },
 
     destroy: function()
@@ -74,9 +78,10 @@ define([
 
     createChart: function()
     {
-      var view = this;
-      var metric = view.options.metric;
-      var series = view.serializeSeries(true);
+      const view = this;
+      const series = view.serializeSeries(true);
+
+      const Highcharts = require('app/highcharts');
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -86,10 +91,10 @@ define([
           type: 'column'
         },
         exporting: {
-          filename: view.t('report:filenames:' + metric),
+          filename: this.options.filename,
           chartOptions: {
             title: {
-              text: view.t('report:title:' + metric)
+              text: this.options.title
             }
           },
           buttons: {
@@ -134,7 +139,7 @@ define([
             }
           }
         },
-        series: series
+        series
       });
     },
 
@@ -146,14 +151,14 @@ define([
 
     updateTable: function(filtered)
     {
-      var totalRows = this.model.get(this.options.totalProperty || 'count').rows;
-      var categories = this.serializeCategories(false);
-      var series = this.serializeSeries(false);
-      var chart = this.chart;
-      var total = 0;
-      var invisible = false;
-      var rectEl = this.el.querySelectorAll('svg > rect')[1];
-      var oldX = +rectEl.getAttribute('x');
+      const totalRows = (this.model.get(this.options.totalProperty || 'count') || {rows: []}).rows;
+      const chart = this.chart;
+      const rectEl = this.el.querySelectorAll('svg > rect')[1];
+      const oldX = +rectEl.getAttribute('x');
+      let categories = this.serializeCategories(false);
+      let series = this.serializeSeries(false);
+      let total = 0;
+      let invisible = false;
 
       _.forEach(series, function(s, i)
       {
@@ -167,11 +172,11 @@ define([
         }
       });
 
-      var rows = categories.map(function(label, dataIndex)
+      let rows = categories.map((label, dataIndex) =>
       {
-        var abs = 0;
+        let abs = 0;
 
-        _.forEach(series, function(s, seriesIndex)
+        _.forEach(series, (s, seriesIndex) =>
         {
           if (chart.series[seriesIndex].visible)
           {
@@ -180,24 +185,24 @@ define([
         });
 
         return {
-          dataIndex: dataIndex,
+          dataIndex,
           no: dataIndex + 1,
-          label: label,
-          abs: abs,
+          label,
+          abs,
           rel: abs / total
         };
       });
 
       if (invisible)
       {
-        rows = rows.filter(function(d) { return d.abs > 0; });
+        rows = rows.filter((d) => d.abs > 0);
 
-        rows.sort(function(a, b) { return b.abs - a.abs; });
+        rows.sort((a, b) => b.abs - a.abs);
 
-        var newCategories = [];
-        var newSeries = series.map(function() { return []; });
+        const newCategories = [];
+        const newSeries = series.map(() => []);
 
-        rows.forEach(function(row, i)
+        rows.forEach((row, i) =>
         {
           row.no = i + 1;
 
@@ -205,7 +210,7 @@ define([
           {
             newCategories.push(row.label);
 
-            _.forEach(newSeries, function(data, i)
+            _.forEach(newSeries, (data, i) =>
             {
               data.push(series[i].data[row.dataIndex]);
             });
@@ -217,7 +222,7 @@ define([
       }
       else
       {
-        series = series.map(function(s) { return s.data.slice(0, 15); });
+        series = series.map((s) => s.data.slice(0, 15));
       }
 
       rows.push({
@@ -232,7 +237,7 @@ define([
       {
         chart.xAxis[0].setCategories(categories, false);
 
-        series.forEach(function(data, i)
+        series.forEach((data, i) =>
         {
           chart.series[i].setData(data, false, false, false);
         });
@@ -241,14 +246,31 @@ define([
         rectEl.setAttribute('x', oldX);
       }
 
-      this.$id('table').html(renderReportTable({
-        rows: rows
+      let absDecimals = this.options.absDecimals;
+
+      if (absDecimals === true)
+      {
+        absDecimals = this.options.valueDecimals;
+      }
+
+      let absUnit = this.options.absUnit;
+
+      if (absUnit === true)
+      {
+        absUnit = this.options.unit;
+      }
+
+      this.$id('table').html(this.renderPartialHtml(tableTemplate, {
+        rows,
+        relColumn: this.options.relColumn !== false,
+        absUnit: absUnit || '',
+        absDecimals: Math.pow(10, absDecimals || 0)
       }));
     },
 
     serializeCategories: function(top)
     {
-      var categories = this.model.get(this.options.metric).categories;
+      let {categories} = this.model.get(this.options.metric) || {categories: []};
 
       if (top)
       {
@@ -260,7 +282,7 @@ define([
 
     serializeSeries: function(top)
     {
-      var series = this.model.get(this.options.metric).series;
+      let {series} = this.model.get(this.options.metric) || {series: []};
 
       if (top)
       {

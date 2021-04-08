@@ -4,7 +4,7 @@
     "BREADCRUMB:browse": "FAP",
     "BREADCRUMB:settings": "Settings",
     "BREADCRUMB:history": "Changelog",
-    "BREADCRUMB:reports:count": "Count report",
+    "BREADCRUMB:reports:count": "Report",
 
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:jump:title": "Jump to entry by ID",
@@ -194,6 +194,8 @@
     "report:title:division": "Entry count by divisions",
     "report:title:mrp": "Entry count by MRP",
     "report:title:assessment": "Entry count by assessment",
+    "report:title:shift": "Entry count by production shift",
+    "report:title:hour": "Entry count by creation hour",
     "report:series:entry": "Entry",
     "report:series:analysis": "Analysis",
     "report:series:total": "Total",
@@ -208,7 +210,9 @@
     "report:filenames:subdivisionType": "FAP_CountBySubdivisions",
     "report:filenames:division": "FAP_CountByDivisions",
     "report:filenames:mrp": "FAP_CountByMRP",
-    "report:filenames:assessment": "FAP_CountByAssessment"
+    "report:filenames:assessment": "FAP_CountByAssessment",
+    "report:filenames:shift": "FAP_CountByShift",
+    "report:filenames:hour": "FAP_CountByHour"
   },
   "pl": true
 }

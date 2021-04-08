@@ -35,6 +35,7 @@
 .fap-report-chart {
   margin-left: 325px;
   height: 309px;
+  overflow: visible!important;
 }
 .fap-report-chart .highcharts-grid > path:first-child {
   display: none;

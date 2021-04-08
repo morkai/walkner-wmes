@@ -25,6 +25,8 @@ define([
   var TABLE_AND_CHART_METRICS = [
     'count',
     'duration',
+    'shift',
+    'hour',
     'status',
     'level',
     'category',
@@ -42,7 +44,12 @@ define([
   };
   var LABEL_METRICS = {
     category: 'categories',
-    subCategory: 'subCategories'
+    subCategory: 'subCategories',
+    shift: {
+      1: 'I',
+      2: 'II',
+      3: 'III'
+    }
   };
 
   return Model.extend({
@@ -64,6 +71,11 @@ define([
         mrps: [],
         levels: -1
       };
+    },
+
+    getInterval: function()
+    {
+      return this.get('interval');
     },
 
     fetch: function(options)
@@ -187,15 +199,25 @@ define([
 
         if (USERS_METRICS[metric])
         {
-          attrs[metric] = {
-            categories: totals[metric].map(function(total) { return report.users[total[0]] || total[0]; }),
-            series: [{
-              id: 'entry',
-              name: t('wmes-fap-entries', 'report:series:entry'),
-              color: COLORS.entry,
-              data: totals[metric].map(function(total) { return total[1]; })
-            }]
-          };
+          if (totals[metric])
+          {
+            attrs[metric] = {
+              categories: totals[metric].map(function(total) { return report.users[total[0]] || total[0]; }),
+              series: [{
+                id: 'entry',
+                name: t('wmes-fap-entries', 'report:series:entry'),
+                color: COLORS.entry,
+                data: totals[metric].map(function(total) { return total[1]; })
+              }]
+            };
+          }
+          else
+          {
+            attrs[metric] = {
+              categories: [],
+              series: []
+            };
+          }
 
           return;
         }
@@ -284,10 +306,25 @@ define([
 
     createSeriesFromRows: function(metric, attrs, group)
     {
-      var series = attrs[metric].series;
-
-      _.forEach(attrs[metric].rows, function(row)
+      if (!attrs[metric])
       {
+        attrs[metric] = {rows: [], series: {}};
+      }
+
+      const {rows, series} = attrs[metric];
+
+      if (!Array.isArray(rows))
+      {
+        return;
+      }
+
+      _.forEach(rows, function(row)
+      {
+        if (row.id === 'total')
+        {
+          return;
+        }
+
         if (!series[row.id])
         {
           series[row.id] = {

@@ -3,7 +3,7 @@
   "BREADCRUMB:browse": "FAP",
   "BREADCRUMB:settings": "Ustawienia",
   "BREADCRUMB:history": "Historia zmian",
-  "BREADCRUMB:reports:count": "Ilości",
+  "BREADCRUMB:reports:count": "Raport",
 
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",
@@ -201,6 +201,8 @@
   "report:title:division": "Ilość zgłoszeń wg wydziałów",
   "report:title:mrp": "Ilość zgłoszeń wg MRP",
   "report:title:assessment": "Ilość zgłoszeń wg oceny kroków gaszących",
+  "report:title:shift": "Ilość zgłoszeń wg zmiany produkcyjnej",
+  "report:title:hour": "Ilość zgłoszeń wg godziny zgłoszenia",
   "report:series:entry": "Zgłoszenia",
   "report:series:analysis": "Analizy",
   "report:series:total": "Suma",
@@ -216,5 +218,7 @@
   "report:filenames:subdivisionType": "FAP_IloscWgDzialow",
   "report:filenames:division": "FAP_IloscWgWydzialow",
   "report:filenames:mrp": "FAP_IloscWgMRP",
-  "report:filenames:assessment": "FAP_IloscWgOceny"
+  "report:filenames:assessment": "FAP_IloscWgOceny",
+  "report:filenames:shift": "FAP_IloscWgZmiany",
+  "report:filenames:hour": "FAP_IloscWgGodziny"
 }
