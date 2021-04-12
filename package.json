@@ -5,7 +5,7 @@
   "version": "0.159.0",
   "updater": {
     "wmes": {
-      "backend": 666,
+      "backend": 667,
       "frontend": 821,
       "reports": 144,
       "attachments": 3,
@@ -28,7 +28,7 @@
       "luma2": 13,
       "trw": 19,
       "luca": 7,
-      "drilling": 12,
+      "drilling": 13,
       "wiring": 4,
       "ct": 15
     },
