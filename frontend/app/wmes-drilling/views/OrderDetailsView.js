@@ -224,6 +224,11 @@ define([
 
       view.promised(view.drillEvents.fetch({reset: true})).done(function()
       {
+        if (!view.$changes)
+        {
+          return;
+        }
+
         var html = view.drillEvents.map(function(event)
         {
           return orderChangeTemplate({change: event.serialize()});
