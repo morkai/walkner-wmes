@@ -8,6 +8,7 @@ define([
   'app/socket',
   'app/core/View',
   'app/planning/util/contextMenu',
+  'app/wmes-fap-entries/views/NavbarView',
   'app/wmes-compRel-entries/templates/details/chat',
   'app/wmes-compRel-entries/templates/details/chatMessage'
 ], function(
@@ -18,6 +19,7 @@ define([
   socket,
   View,
   contextMenu,
+  NavbarView,
   template,
   messageTemplate
 ) {
@@ -83,6 +85,45 @@ define([
       'click #-submit': function()
       {
         this.send();
+      },
+      'mouseup .autolink': function(e)
+      {
+        var id = e.currentTarget.dataset.id;
+
+        if (e.button === 1)
+        {
+          switch (e.currentTarget.dataset.type)
+          {
+            case 'order':
+              window.open('/#orders/' + id);
+              break;
+
+            case 'product':
+              window.open('/r/nc12/' + id);
+              break;
+
+            case 'document':
+              if (user.isAllowedTo('DOCUMENTS:VIEW'))
+              {
+                window.open('/#orderDocuments/tree?file=' + id);
+              }
+              else
+              {
+                window.open('/orderDocuments/' + id);
+              }
+              break;
+          }
+        }
+        else if (NavbarView.appNavbarView)
+        {
+          this.showAutolinkMenu(e);
+        }
+        else
+        {
+          $('.navbar-search-phrase').first().val(id).focus();
+        }
+
+        return false;
       }
 
     },
@@ -267,6 +308,72 @@ define([
       {
         this.$id('new').addClass('hidden');
       }
+    },
+
+    showAutolinkMenu: function(e)
+    {
+      if (!NavbarView.appNavbarView)
+      {
+        return;
+      }
+
+      var $results = NavbarView.appNavbarView.renderSearchResults(
+        NavbarView.appNavbarView.parseSearchPhrase(e.currentTarget.dataset.id)
+      );
+
+      while ($results.length)
+      {
+        var $last = $results.children().last();
+
+        if ($last.hasClass('dropdown-header') || $last.hasClass('divider'))
+        {
+          $last.remove();
+        }
+        else
+        {
+          break;
+        }
+      }
+
+      var menu = [];
+      var groups = 0;
+
+      $results.children().each(function()
+      {
+        if (groups > 1)
+        {
+          return;
+        }
+
+        if (this.classList.contains('navbar-search-result'))
+        {
+          menu.push({
+            label: this.textContent,
+            href: this.querySelector('a').href,
+            handler: function() { window.open(this.href); }
+          });
+
+          return;
+        }
+
+        groups += 1;
+
+        if (groups > 1)
+        {
+          return;
+        }
+
+        if (this.classList.contains('dropdown-header'))
+        {
+          menu.push(this.textContent);
+        }
+        else if (this.classList.contains('divider'))
+        {
+          menu.push('-');
+        }
+      });
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
     }
 
   });
