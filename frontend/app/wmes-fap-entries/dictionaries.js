@@ -46,7 +46,7 @@ define([
 
       if (dictionaries.loaded)
       {
-        return null;
+        return $.Deferred().resolve();
       }
 
       if (req !== null)
