@@ -5,8 +5,8 @@
   "version": "0.159.0",
   "updater": {
     "wmes": {
-      "backend": 667,
-      "frontend": 821,
+      "backend": 668,
+      "frontend": 822,
       "reports": 144,
       "attachments": 3,
       "importer-sap": 73,
