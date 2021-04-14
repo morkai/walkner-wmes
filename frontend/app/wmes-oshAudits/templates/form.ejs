@@ -36,7 +36,6 @@
             <th class="is-min text-center"><%- t('PROPERTY:results:ok:true') %></th>
             <th class="is-min text-center"><%- t('PROPERTY:results:ok:false') %></th>
             <th style="min-width: 400px"><label class="control-label is-required"><%- t('PROPERTY:results:comment') %></label></th>
-            <th class="is-min"><%- t('PROPERTY:results:owner') %></th>
           </tr>
           </thead>
           <tbody id="<%- id('results') %>"></tbody>
@@ -45,6 +44,12 @@
       <button id="<%- id('addOther') %>" class="btn btn-default oshAudits-form-button" type="button">
         <i class="fa fa-plus"></i><span><%- t('FORM:addOther') %></span>
       </button>
+      <div id="<%- id('nokConfirmGroup') %>" class="checkbox">
+        <label class="control-label">
+          <input id="<%- id('nokConfirmValue') %>" name="nokConfirm" type="checkbox" value="1">
+          <%- t('FORM:nokConfirm') %>
+        </label>
+      </div>
       <div class="form-group" style="margin-top: 15px">
         <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
         <textarea id="<%- id('comment') %>" class="form-control" name="comment" rows="3"></textarea>

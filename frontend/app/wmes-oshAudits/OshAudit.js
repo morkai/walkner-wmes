@@ -71,9 +71,7 @@ define([
 
       obj.results = obj.results.map(function(r)
       {
-        return Object.assign({}, r, {
-          owner: renderUserInfo(r.owner)
-        });
+        return Object.assign({}, r);
       });
 
       return obj;

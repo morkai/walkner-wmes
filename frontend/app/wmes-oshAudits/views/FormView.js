@@ -67,6 +67,11 @@ define([
         {
           radioEl.checked = !radioEl.checked;
 
+          if (radioEl.checked && radioEl.value === '0')
+          {
+            view.$id('nokConfirmValue').prop('checked', false);
+          }
+
           if (!radioEl.checked)
           {
             $null.prop('checked', true);
@@ -85,8 +90,7 @@ define([
           shortName: other.get('shortName'),
           fullName: other.get('fullName'),
           ok: false,
-          comment: '',
-          owner: null
+          comment: ''
         });
       },
       'change #-auditor': function()
@@ -110,10 +114,13 @@ define([
 
     toggleValidity: function()
     {
-      var valid = !!this.$('input[value="1"]:checked').length
-        || !!this.$('input[value="0"]:checked').length;
+      var anyOk = !!this.$('input[value="1"]:checked').length;
+      var anyNok = !!this.$('input[value="0"]:checked').length;
 
-      this.$('input[value="1"]').first()[0].setCustomValidity(valid ? '' : this.t('FORM:empty'));
+      this.$('input[value="1"]').first()[0].setCustomValidity(anyOk || anyNok ? '' : this.t('FORM:empty'));
+
+      this.$id('nokConfirmGroup').toggleClass('hidden', !anyNok);
+      this.$id('nokConfirmValue').prop('required', anyNok);
     },
 
     checkValidity: function(formData)
@@ -132,6 +139,8 @@ define([
 
       formData.date = time.format(formData.date || new Date(), 'YYYY-MM-DD');
 
+      formData.nokConfirm = 1;
+
       return formData;
     },
 
@@ -143,8 +152,6 @@ define([
       formData.auditor = {id: auditor.id, label: auditor.text};
       formData.date = dateMoment.isValid() ? dateMoment.toISOString() : null;
 
-      var $owners = this.$('input[name$=".owner"]');
-
       formData.results = (formData.results || []).map(function(r, i)
       {
         r.ok = r.ok === '1' ? true : r.ok === '0' ? false : null;
@@ -152,16 +159,6 @@ define([
         if (r.ok !== false)
         {
           r.comment = '';
-          r.owner = null;
-        }
-
-        if (r.owner)
-        {
-          r.owner = setUpUserSelect2.getUserInfo($owners.eq(i));
-        }
-        else
-        {
-          r.owner = null;
         }
 
         if (!r.comment)
@@ -321,8 +318,7 @@ define([
             shortName: category.shortName,
             fullName: category.fullName,
             ok: null,
-            comment: '',
-            owner: null
+            comment: ''
           });
         });
       });
@@ -338,24 +334,6 @@ define([
       });
 
       this.$id('results').append($result);
-
-      var $owner = setUpUserSelect2($result.find('input[name$=".owner"]'), {
-        allowClear: true,
-        view: this
-      });
-
-      if (result.owner)
-      {
-        $owner.select2('data', {
-          id: result.owner.id,
-          text: result.owner.label
-        });
-      }
-
-      if (result.ok !== false)
-      {
-        $owner.select2('enable', false);
-      }
     },
 
     toggleResult: function($tr)
@@ -364,12 +342,6 @@ define([
       var enabled = ok === 0;
 
       $tr.find('textarea').prop('disabled', !enabled);
-
-      $tr.find('[name$=".owner"]')
-        .prop('required', false)
-        .select2('enable', enabled)
-        .parent()
-        .toggleClass('has-required-select2', false);
     }
 
   });

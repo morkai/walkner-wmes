@@ -69,11 +69,6 @@ define([
         formData.userType = 'auditor';
         formData.user = term.args[1];
       },
-      'results.owner.id': function(propertyName, term, formData)
-      {
-        formData.userType = 'owner';
-        formData.user = term.args[1];
-      },
       'users': function(propertyName, term, formData)
       {
         if (term.args[1] === 'mine')
@@ -124,10 +119,6 @@ define([
         if (userType === 'others')
         {
           userProp = 'users';
-        }
-        else if (userType === 'owner')
-        {
-          userProp = 'results.owner.id';
         }
         else
         {
@@ -194,8 +185,7 @@ define([
       var options = [
         'mine',
         'others',
-        'auditor',
-        'owner'
+        'auditor'
       ].map(function(userType)
       {
         return {

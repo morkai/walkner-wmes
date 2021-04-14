@@ -7,7 +7,6 @@
         <th class="is-min"><%- t('PROPERTY:results:category') %></th>
         <th class="is-min text-center"><%- t('PROPERTY:results:ok:true') %>/<%- t('PROPERTY:results:ok:false') %></th>
         <th><%- t('PROPERTY:results:comment') %></th>
-        <th class="is-min"><%- t('PROPERTY:results:owner') %></th>
       </tr>
       </thead>
       <tbody>
@@ -17,7 +16,6 @@
         <td class="is-min"><%= r.fullName %></td>
         <td class="is-min text-center"><i class="fa <%- r.ok ? 'fa-check' : 'fa-times' %>"></i></td>
         <td class="text-lines"><%= r.comment %></td>
-        <td class="is-min"><%- r.owner %></td>
       </tr>
       <% }) %>
       </tbody>

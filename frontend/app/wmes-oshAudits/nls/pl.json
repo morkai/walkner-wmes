@@ -16,7 +16,6 @@
   "PROPERTY:results:category": "Ocena sytuacji",
   "PROPERTY:results:ok:true": "OK",
   "PROPERTY:results:ok:false": "NOK",
-  "PROPERTY:results:owner": "Osoba odpowiedzialna za działania",
   "PROPERTY:results:comment": "Stwierdzone nieprawidłowości, ryzyka",
 
   "status:new": "Nowy",
@@ -26,7 +25,6 @@
 
   "filter:user:mine": "Moje",
   "filter:user:auditor": "Audytor",
-  "filter:user:owner": "Osoba odpowiedzialna",
   "filter:user:others": "Użytkownik",
   "filter:anyNok": "Nieprawidłowości",
 
@@ -35,6 +33,7 @@
 
   "FORM:addOther": "Inne...",
   "FORM:empty": "Lista kontrolna nie może być pusta.",
+  "FORM:nokConfirm": "Ryzykowne warunki zostały zarejestrowane w bazie ZPW.",
 
   "report:title:total": "Ilość przeprowadzonych audytów",
   "report:title:countBySection": "Ilość przeprowadzonych audytów wg obszarów",
@@ -43,7 +42,6 @@
   "report:title:nokBySection": "Ilość nieprawidłowości wg obszarów",
   "report:title:nokByCategory": "Ilość nieprawidłowości wg kategorii",
   "report:title:auditors": "Ilość przeprowadzonych audytów wg audytorów",
-  "report:title:owners": "Ilość nieprawidłowości wg osób odpowiedzialnych",
   "report:series:audit": "Audyty",
   "report:series:nok": "Nieprawidłowości",
   "report:series:total": "Suma",
@@ -53,6 +51,5 @@
   "report:filenames:nok": "AUD_IloscNok",
   "report:filenames:nokBySection": "AUD_IloscNokWgObszarow",
   "report:filenames:nokByCategory": "AUD_IloscNokWgKategorii",
-  "report:filenames:auditors": "AUD_IloscWgAudytorow",
-  "report:filenames:owners": "AUD_IloscNokWgOdpowiedzialnych"
+  "report:filenames:auditors": "AUD_IloscWgAudytorow"
 }

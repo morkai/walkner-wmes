@@ -56,18 +56,13 @@ define([
         model: this.model
       }));
 
-      this.setView('#-owners', new CountPerUserChartView({
-        metric: 'owners',
-        model: this.model
-      }));
-
       this.listenTo(this.model, 'filtered', this.onFiltered);
     },
 
     getTemplateData: function()
     {
       return {
-        metrics: Report.TABLE_AND_CHART_METRICS.concat('auditors', 'owners')
+        metrics: Report.TABLE_AND_CHART_METRICS.concat('auditors')
       };
     },
 

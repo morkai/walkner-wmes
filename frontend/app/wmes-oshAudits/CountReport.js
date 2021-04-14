@@ -101,10 +101,6 @@ define([
           categories: this.prepareUserCategories(report.users, totals.auditors),
           series: this.prepareAuditorSeries(totals.auditors, report.groups)
         },
-        owners: {
-          categories: this.prepareUserCategories(report.users, totals.owners),
-          series: this.prepareOwnerSeries(totals.owners, report.groups)
-        },
         nok: {
           rows: [
             {
@@ -269,25 +265,6 @@ define([
       ];
 
       _.forEach(auditorTotals, function(totals)
-      {
-        series[0].data.push(totals[1]);
-      });
-
-      return series;
-    },
-
-    prepareOwnerSeries: function(ownerTotals)
-    {
-      var series = [
-        {
-          id: 'nok',
-          name: t(this.nlsDomain, 'report:series:nok'),
-          data: [],
-          color: COLOR_NOK
-        }
-      ];
-
-      _.forEach(ownerTotals, function(totals)
       {
         series[0].data.push(totals[1]);
       });
