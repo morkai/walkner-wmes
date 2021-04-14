@@ -49,8 +49,7 @@ define([
         {id: 'auditor', className: 'is-min'},
         {id: 'section', className: 'is-min'},
         {id: 'categories', className: 'is-overflow w400', tdAttrs},
-        {id: 'nok', className: 'is-overflow w500', tdAttrs},
-        '-'
+        {id: 'nok', tdAttrs}
       ];
     },
 
