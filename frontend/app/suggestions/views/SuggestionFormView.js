@@ -212,6 +212,30 @@ define([
         this.$(e.currentTarget).closest('tr').remove();
 
         this.setUpCoordSectionSelect2();
+      },
+
+      'change input[type="file"]': function(e)
+      {
+        var max = null;
+        var limit = 10;
+        var total = 0;
+
+        this.$('input[type="file"]').each(function()
+        {
+          this.setCustomValidity('');
+
+          total += this.files.length;
+
+          if (!max || max.length < this.files.length)
+          {
+            max = this;
+          }
+        });
+
+        if (total > limit)
+        {
+          max.setCustomValidity(this.t('FORM:ERROR:tooManyFiles', {max: max}));
+        }
       }
 
     }, FormView.prototype.events),

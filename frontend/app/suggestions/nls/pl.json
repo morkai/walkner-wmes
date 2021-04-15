@@ -139,6 +139,7 @@
   "FORM:ERROR:sectionCoord": "Dział zatwierdzający nie może być równocześnie działem koordynującym.",
   "FORM:ERROR:tooManyOwners": "Można wybrać maksymalnie {max} {max, plural, few{osoby} one{osobę} other{osób}}.",
   "FORM:ERROR:tooManyTotalOwners": "Można wybrać maksymalnie {max} {max, plural, few{różne osoby} one{osobę} other{różnych osób}} w całym zgłoszeniu.",
+  "FORM:ERROR:tooManyFiles": "Za jednym razem można dodać maksymalnie {max} {max, plural, few{załączniki} one{załącznik} other{załączników}}.",
   "FORM:help:subject": "Wpisz krótki tekst...",
   "FORM:help:section": "Wybierz swój dział...",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
