@@ -69,11 +69,6 @@ define([
         obj[userInfoProperty] = renderUserInfo(obj[userInfoProperty]);
       });
 
-      obj.results = obj.results.map(function(r)
-      {
-        return Object.assign({}, r);
-      });
-
       return obj;
     },
 
@@ -93,9 +88,11 @@ define([
         .map(r => r.shortName)
         .join('; ');
 
-      if (row.anyNok)
+      var nok = row.results.find(r => !!r.comment);
+
+      if (nok)
       {
-        row.nok = row.results.filter(r => !!r.comment)[0].comment;
+        row.nok = nok.comment;
       }
 
       return row;
