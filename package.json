@@ -5,8 +5,8 @@
   "version": "0.159.0",
   "updater": {
     "wmes": {
-      "backend": 668,
-      "frontend": 822,
+      "backend": 669,
+      "frontend": 823,
       "reports": 144,
       "attachments": 3,
       "importer-sap": 73,
@@ -19,7 +19,7 @@
       "planning": 113,
       "ps-queue": 62,
       "ps-load": 20,
-      "wh-pickup": 78,
+      "wh-pickup": 79,
       "wh-problems": 49,
       "wh-delivery-components": 50,
       "wh-delivery-packaging": 50,
