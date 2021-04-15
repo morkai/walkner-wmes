@@ -3,13 +3,15 @@
 
 'use strict';
 
-db.oshaudits.createIndex({date: -1});
-db.oshaudits.createIndex({section: 1});
-db.oshaudits.createIndex({'auditor.id': 1});
-db.oshaudits.createIndex({users: 1});
+db.oshaudits.find({}).forEach(doc =>
+{
+  doc.anyNok = false;
+  doc.results.forEach(r =>
+  {
+    doc.anyNok = doc.anyNok || r.ok === false;
 
-db.oshtalks.createIndex({date: -1});
-db.oshtalks.createIndex({section: 1});
-db.oshtalks.createIndex({'auditor.id': 1});
-db.oshtalks.createIndex({'participants.id': 1});
-db.oshtalks.createIndex({users: 1});
+    delete r.owner;
+  });
+
+  db.oshaudits.replaceOne({_id: doc._id}, doc);
+});
