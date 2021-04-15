@@ -265,6 +265,13 @@ define([
       obj.clickable.printLabels = canManage
         || (isUser && userFunc._id !== 'platformer' && userFunc._id !== 'painter');
 
+      obj.name = obj.name.replace(/[a-zA-Z0-9\/-_]{16,}/, function(match)
+      {
+        var half = Math.floor(match.length / 2);
+
+        return match.substring(0, half) + ' ' + match.substring(half);
+      });
+
       return obj;
     },
 
