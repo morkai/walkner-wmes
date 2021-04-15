@@ -208,6 +208,11 @@ define([
         formData.stations = this.$id('stations').children().map(function() { return {}; }).get();
       }
 
+      if (!formData.common)
+      {
+        formData.common = {};
+      }
+
       return formData;
     }
 
