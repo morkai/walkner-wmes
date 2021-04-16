@@ -121,7 +121,7 @@ define([
         data[section.id] = idAndLabel(section);
       }
 
-      dictionaries.sections.forEntryType('audits').forEach(function(section)
+      dictionaries.sections.forEntryType('talks').forEach(function(section)
       {
         if (!section.get('active'))
         {
