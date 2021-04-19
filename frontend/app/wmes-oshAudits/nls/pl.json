@@ -2,6 +2,8 @@
   "BREADCRUMB:browse": "Audyty BHP",
   "BREADCRUMB:reports:count": "Ilość audytów",
 
+  "PANEL:ACTION:nearMiss": "Przypisane ZPW:",
+
   "PROPERTY:rid": "ID",
   "PROPERTY:status": "Status",
   "PROPERTY:date": "Data audytu",
@@ -29,11 +31,18 @@
   "filter:anyNok": "Nieprawidłowości",
 
   "LIST:COLUMN:nok": "Stwierdzone nieprawidłowości",
-  "LIST:COLUMN:categories": "Kategorie",
+  "LIST:COLUMN:categories": "Kategorie nieprawidłowości",
 
   "FORM:addOther": "Inne...",
   "FORM:empty": "Lista kontrolna nie może być pusta.",
   "FORM:nokConfirm": "Ryzykowne warunki zostały zarejestrowane w bazie ZPW.",
+  "FORM:MSG:nearMiss:add": "Stwierdzone ryzykowne warunki w miejscu prowadzenia audytu zarejestruj w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś nowe ZPW</a> lub <a href=# role=rid data-kind=nearMiss>przypisz istniejące</a>!",
+  "FORM:MSG:nearMiss:edit": "Stwierdzone ryzykowne warunki w miejscu prowadzenia audytu zostały zarejestrowane w bazie ZPW - <a href='#kaizenOrders/{rid}'>zgłoszenie #{rid}</a>! (<a href=# role=rid data-kind=nearMiss>zmień</a>)",
+  "FORM:ridEditor:rid": "ID zgłoszenia",
+  "FORM:ridEditor:submit": "Zmień",
+  "FORM:ridEditor:cancel": "Anuluj",
+  "FORM:ridEditor:notFound": "Dane zgłoszenie nie istnieje!",
+  "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia.",
 
   "report:title:total": "Ilość przeprowadzonych audytów",
   "report:title:countBySection": "Ilość przeprowadzonych audytów wg obszarów",

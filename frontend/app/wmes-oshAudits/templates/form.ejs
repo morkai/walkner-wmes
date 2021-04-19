@@ -44,12 +44,16 @@
       <button id="<%- id('addOther') %>" class="btn btn-default oshAudits-form-button" type="button">
         <i class="fa fa-plus"></i><span><%- t('FORM:addOther') %></span>
       </button>
-      <div id="<%- id('nokConfirmGroup') %>" class="checkbox">
-        <label class="control-label">
-          <input id="<%- id('nokConfirmValue') %>" name="nokConfirm" type="checkbox" value="1">
-          <%- t('FORM:nokConfirm') %>
-        </label>
-      </div>
+      <p id="<%- id('nokConfirmGroup') %>" class="message message-inline message-error hidden" style="margin-top: 15px">
+        <input id="<%- id('nokConfirmValue') %>" class="oshAudits-form-rid-required" name="nearMiss" type="text" tabindex="-1">
+        <span class="oshAudits-form-rid-message">
+          <% if (model.nearMiss) { %>
+            <%- t('FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
+          <% } else { %>
+            <%- t('FORM:MSG:nearMiss:add') %>
+          <% } %>
+        </span>
+      </p>
       <div class="form-group" style="margin-top: 15px">
         <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
         <textarea id="<%- id('comment') %>" class="form-control" name="comment" rows="3"></textarea>

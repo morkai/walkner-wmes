@@ -207,7 +207,8 @@ define([
       var data;
       var types = {
         BOC_LAST: 'behaviorObsCards',
-        MFS_LAST: 'minutesForSafetyCards'
+        MFS_LAST: 'minutesForSafetyCards',
+        AUD_LAST: 'oshAudits'
       };
 
       _.forEach(types, function(v, k)

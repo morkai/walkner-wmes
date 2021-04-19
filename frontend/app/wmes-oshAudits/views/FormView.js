@@ -11,7 +11,8 @@ define([
   'app/kaizenOrders/dictionaries',
   '../OshAudit',
   'app/wmes-oshAudits/templates/form',
-  'app/wmes-oshAudits/templates/_formResult'
+  'app/wmes-oshAudits/templates/_formResult',
+  'app/wmes-oshAudits/templates/_formRidEditor'
 ], function(
   _,
   time,
@@ -23,7 +24,8 @@ define([
   dictionaries,
   OshAudit,
   template,
-  resultTemplate
+  resultTemplate,
+  ridEditorTemplate
 ) {
   'use strict';
 
@@ -101,6 +103,24 @@ define([
       'change #-section': function()
       {
         this.renderResults();
+      },
+      'click .oshAudits-form-rid-message > a': function()
+      {
+        sessionStorage.setItem(
+          'AUD_LAST',
+          JSON.stringify(
+            _.assign(
+              this.model.toJSON(),
+              this.getFormData()
+            )
+          )
+        );
+      },
+      'click a[role=rid]': function(e)
+      {
+        this.showRidEditor(e.currentTarget.dataset.kind, e.currentTarget);
+
+        return false;
       }
 
     }, FormView.prototype.events),
@@ -116,10 +136,14 @@ define([
     {
       var anyOk = !!this.$('input[value="1"]:checked').length;
       var anyNok = !!this.$('input[value="0"]:checked').length;
+      var anyResults = this.$id('results')[0].childElementCount > 0;
+console.log({anyNok, anyOk, anyResults})
+      this.$id('results')
+        .find('input[value="1"]')
+        .first()[0]
+        .setCustomValidity(anyOk || anyNok ? '' : this.t('FORM:empty'));
 
-      this.$('input[value="1"]').first()[0].setCustomValidity(anyOk || anyNok ? '' : this.t('FORM:empty'));
-
-      this.$id('nokConfirmGroup').toggleClass('hidden', !anyNok);
+      this.$id('nokConfirmGroup').toggleClass('hidden', !anyResults || !anyNok);
       this.$id('nokConfirmValue').prop('required', anyNok);
     },
 
@@ -139,8 +163,6 @@ define([
 
       formData.date = time.format(formData.date || new Date(), 'YYYY-MM-DD');
 
-      formData.nokConfirm = 1;
-
       return formData;
     },
 
@@ -152,11 +174,17 @@ define([
       formData.auditor = {id: auditor.id, label: auditor.text};
       formData.date = dateMoment.isValid() ? dateMoment.toISOString() : null;
 
-      formData.results = (formData.results || []).map(function(r, i)
+      var anyNok = false;
+
+      formData.results = (formData.results || []).map(function(r)
       {
         r.ok = r.ok === '1' ? true : r.ok === '0' ? false : null;
 
-        if (r.ok !== false)
+        if (r.ok === false)
+        {
+          anyNok = true;
+        }
+        else
         {
           r.comment = '';
         }
@@ -168,6 +196,11 @@ define([
 
         return r;
       });
+
+      if (!anyNok)
+      {
+        formData.nearMiss = 0;
+      }
 
       if (!formData.comment)
       {
@@ -275,10 +308,11 @@ define([
     renderResults: function()
     {
       var view = this;
+      var results = view.model.get('results');
 
-      if (view.options.editMode)
+      if (results && results.length)
       {
-        view.model.get('results').forEach(view.addResult, view);
+        results.forEach(view.addResult, view);
         view.toggleValidity();
 
         return;
@@ -342,6 +376,114 @@ define([
       var enabled = ok === 0;
 
       $tr.find('textarea').prop('disabled', !enabled);
+    },
+
+    handleSuccess: function()
+    {
+      sessionStorage.removeItem('AUD_LAST');
+
+      FormView.prototype.handleSuccess.apply(this, arguments);
+    },
+
+    showRidEditor: function(ridProperty, aEl)
+    {
+      var view = this;
+      var $a = view.$(aEl);
+
+      if ($a.next('.popover').length)
+      {
+        $a.popover('destroy');
+
+        return;
+      }
+
+      $a.popover({
+        placement: 'auto top',
+        html: true,
+        trigger: 'manual',
+        content: this.renderPartialHtml(ridEditorTemplate, {
+          property: ridProperty,
+          rid: this.model.get(ridProperty) || ''
+        })
+      }).popover('show');
+
+      var $popover = $a.next('.popover');
+      var $input = $popover.find('.form-control').select();
+      var $submit = $popover.find('.btn-default');
+      var $cancel = $popover.find('.btn-link');
+
+      $cancel.on('click', function()
+      {
+        $a.popover('destroy');
+      });
+
+      $input.on('keydown', function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          return false;
+        }
+      });
+
+      $input.on('keyup', function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          $submit.click();
+
+          return false;
+        }
+      });
+
+      $submit.on('click', function()
+      {
+        $input.prop('disabled', true);
+        $submit.prop('disabled', true);
+        $cancel.prop('disabled', true);
+
+        var rid = parseInt($input.val(), 10) || 0;
+
+        if (rid <= 0)
+        {
+          return updateRid(null);
+        }
+
+        var url = (ridProperty === 'nearMiss' ? '/kaizen/orders' : '/suggestions') + '/' + rid;
+        var req = view.ajax({url: url});
+
+        req.fail(function(jqXhr)
+        {
+          view.showErrorMessage(view.t('FORM:ridEditor:' + (jqXhr.status === 404 ? 'notFound' : 'failure')));
+
+          $input.prop('disabled', false);
+          $submit.prop('disabled', false);
+          $cancel.prop('disabled', false);
+
+          (jqXhr.status === 404 ? $input : $submit).focus();
+        });
+
+        req.done(function()
+        {
+          updateRid(rid);
+        });
+
+        return false;
+      });
+
+      function updateRid(newRid)
+      {
+        $a
+          .popover('destroy')
+          .closest('.message')
+          .find('.oshAudits-form-rid-message')
+          .html(view.t('FORM:MSG:' + ridProperty + ':' + (newRid ? 'edit' : 'add'), {
+            rid: newRid
+          }));
+
+        view.model.attributes[ridProperty] = newRid;
+
+        view.$('input[name="' + ridProperty + '"]').val(newRid || '');
+      }
     }
 
   });

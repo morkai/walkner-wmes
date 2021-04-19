@@ -94,7 +94,7 @@ define([
     );
   });
 
-  router.map('/oshAudits;add', canAccess, function()
+  router.map('/oshAudits;add', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -107,10 +107,27 @@ define([
       ],
       function(AddFormPage, dictionaries, OshAudit, FormView)
       {
+        var data = {};
+
+        try { _.assign(data, JSON.parse(sessionStorage.getItem('AUD_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { sessionStorage.removeItem('AUD_LAST'); }
+
+        if (req.query.nearMiss)
+        {
+          data.nearMiss = +req.query.nearMiss;
+
+          broker.publish('router.navigate', {
+            url: '/oshAudits;add',
+            trigger: false,
+            replace: true
+          });
+        }
+
         return dictionaries.bind(new AddFormPage({
           pageClassName: 'page-max-flex',
           FormView: FormView,
-          model: new OshAudit()
+          model: new OshAudit(data)
         }));
       }
     );
@@ -129,11 +146,39 @@ define([
       ],
       function(EditFormPage, dictionaries, OshAudit, FormView)
       {
-        return dictionaries.bind(new EditFormPage({
+        var model = new OshAudit({_id: req.params.id});
+        var data = {};
+
+        try { _.assign(data, JSON.parse(sessionStorage.getItem('AUD_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { sessionStorage.removeItem('AUD_LAST'); }
+
+        if (req.query.nearMiss)
+        {
+          data.nearMiss = +req.query.nearMiss;
+
+          broker.publish('router.navigate', {
+            url: '/oshAudits/' + req.params.id + ';edit',
+            trigger: false,
+            replace: true
+          });
+        }
+
+        var page = dictionaries.bind(new EditFormPage({
           pageClassName: 'page-max-flex',
           FormView: FormView,
-          model: new OshAudit({_id: req.params.id})
+          model: model
         }));
+
+        if (data._id === req.params.id)
+        {
+          page.listenToOnce(model, 'sync', function()
+          {
+            _.assign(model.attributes, data);
+          });
+        }
+
+        return page;
       }
     );
   });

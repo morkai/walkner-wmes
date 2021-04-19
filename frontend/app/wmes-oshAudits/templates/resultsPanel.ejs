@@ -1,5 +1,12 @@
 <div class="panel panel-default">
-  <div class="panel-heading"><%- t('PROPERTY:results') %></div>
+  <div class="panel-heading is-with-actions">
+    <%- t('PROPERTY:results') %>
+    <% if (model.nearMiss) { %>
+      <div class="panel-actions">
+        <p><%- t('PANEL:ACTION:nearMiss') %> <a href="#kaizenOrders/<%- model.nearMiss %>">#<%- model.nearMiss %></a></p>
+      </div>
+    <% } %>
+  </div>
   <div class="table-responsive">
     <table class="table table-bordered table-hover oshAudits-details-results">
       <thead>

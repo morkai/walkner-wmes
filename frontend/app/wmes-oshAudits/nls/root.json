@@ -3,6 +3,8 @@
     "BREADCRUMB:browse": "OSH audits",
     "BREADCRUMB:reports:count": "Number of audits",
 
+    "PANEL:ACTION:nearMiss": "Assigned near miss:",
+
     "PROPERTY:rid": "ID",
     "PROPERTY:status": "Status",
     "PROPERTY:date": "Audit date",
@@ -30,11 +32,18 @@
     "filter:anyNok": "Irregularities",
 
     "LIST:COLUMN:nok": "Irregularities found",
-    "LIST:COLUMN:categories": "Categories",
+    "LIST:COLUMN:categories": "Irregularity categories",
 
     "FORM:addOther": "Other...",
     "FORM:empty": "Control list can not be empty.",
     "FORM:nokConfirm": "Identified irregularities were registered in the Near misses database.",
+    "FORM:MSG:nearMiss:add": "If you've found at-risk conditions at the place of the audit, register them in the Near miss database - <a href='#kaizenOrders;add'>Add a new Near miss</a> or <a href=# role=rid data-kind=nearMiss>assign an existing one</a>!",
+    "FORM:MSG:nearMiss:edit": "The at-risk conditions at the place of the audit were registered in the Near miss database - <a href='#kaizenOrders/{rid}'>entry #{rid}</a>! (<a href=# role=rid data-kind=nearMiss>change</a>)",
+    "FORM:ridEditor:rid": "Entry ID",
+    "FORM:ridEditor:submit": "Change",
+    "FORM:ridEditor:cancel": "Cancel",
+    "FORM:ridEditor:notFound": "The specified entry doesn't exist!",
+    "FORM:ridEditor:failure": "Failed to check the entry.",
 
     "report:title:total": "Number of audits",
     "report:title:countBySection": "Number of audits by sections",

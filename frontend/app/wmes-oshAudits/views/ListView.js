@@ -35,21 +35,14 @@ define([
 
     serializeColumns: function()
     {
-      const tdAttrs = row =>
-      {
-        return {
-          className: 'oshAudits-list-expander ' + (row.anyNok ? 'is-enabled' : '')
-        };
-      };
-
       return [
         {id: 'rid', className: 'is-min is-number'},
         {id: 'status', className: 'is-min'},
         {id: 'date', className: 'is-min'},
         {id: 'auditor', className: 'is-min'},
         {id: 'section', className: 'is-min'},
-        {id: 'categories', className: 'is-overflow w400', tdAttrs},
-        {id: 'nok', tdAttrs}
+        {id: 'categories', className: 'is-overflow w400', tdClassName: 'oshAudits-list-expander is-enabled'},
+        {id: 'nok', tdClassName: 'oshAudits-list-expander is-enabled'}
       ];
     },
 
@@ -77,7 +70,9 @@ define([
       var property = 'results';
       var templateData = {
         columnId: columnId,
-        model: {}
+        model: {
+          nearMiss: model.get('nearMiss')
+        }
       };
 
       templateData.model[property] = model.serializeDetails()[property];

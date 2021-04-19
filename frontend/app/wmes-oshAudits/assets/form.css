@@ -20,3 +20,9 @@
 .oshAudits-form-textarea textarea {
   resize: vertical;
 }
+.oshAudits-form-rid-required {
+  position: absolute;
+  opacity: 0;
+  border: 0;
+  width: 1px
+}
