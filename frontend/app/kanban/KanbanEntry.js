@@ -65,6 +65,8 @@ define([
 
       entry.rowClassName = entry.discontinued ? 'kanban-is-discontinued' : '';
 
+      entry.kanbanStorageBin = entry.storageBin;
+
       if (component)
       {
         entry.description = component.get('description');

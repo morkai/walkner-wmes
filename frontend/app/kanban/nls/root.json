@@ -63,6 +63,8 @@
     "column:storageBin:title": "Storage bin (SAP)",
     "column:newStorageBin": "Storage<br>bin<br>(new)",
     "column:newStorageBin:title": "Storage bin (new)",
+    "column:kanbanStorageBin": "Storage<br>bin<br>(kanban)",
+    "column:kanbanStorageBin:title": "Storage bin (kanban)",
     "column:kanbanId": "Kanban<br>ID",
     "column:kanbanIdCount": "Kanban ID<br>count in SAP",
     "column:kanbanIdCount:title": "Kanban ID count in SAP",

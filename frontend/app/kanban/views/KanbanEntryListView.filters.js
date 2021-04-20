@@ -248,6 +248,7 @@ define([
     description: 'text',
     storageBin: 'text',
     newStorageBin: 'text',
+    kanbanStorageBin: 'text',
     comment: 'text',
     unit: 'text',
     supplyArea: {

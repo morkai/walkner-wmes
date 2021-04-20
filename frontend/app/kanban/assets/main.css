@@ -202,7 +202,8 @@ tr:hover > .kanban-is-invalid,
   text-align: left;
 }
 .kanban-td[data-column-id="supplyArea"],
-.kanban-td[data-column-id="workCenter"] {
+.kanban-td[data-column-id="workCenter"],
+.kanban-td[data-column-id="kanbanStorageBin"] {
   width: 90px;
   text-align: left;
 }

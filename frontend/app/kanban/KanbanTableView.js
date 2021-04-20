@@ -200,6 +200,7 @@ define([
       }
     },
     newStorageBin: {
+      enabled: false,
       width: 10,
       rotated: true,
       prepareFilter: function(input)
@@ -208,6 +209,7 @@ define([
       }
     },
     newMarkerColor: {
+      enabled: false,
       width: 3,
       rotated: true,
       expand: 150,
@@ -233,6 +235,10 @@ define([
           ? (t.has('kanban', 'color:' + value) ? t('kanban', 'color:' + value) : value)
           : '';
       }
+    },
+    kanbanStorageBin: {
+      width: 12,
+      tdClassName: invalidTdClassName
     },
     kanbanId: {
       width: 10,
@@ -687,6 +693,11 @@ define([
       {
         var column = tableView.serializeColumn(columnId);
 
+        if (!column.enabled)
+        {
+          return;
+        }
+
         if (column.visible)
         {
           columns.list.push(column);
@@ -702,6 +713,7 @@ define([
     {
       var column = _.assign(
         {
+          enabled: true,
           state: this.state,
           _id: columnId,
           type: 'string',

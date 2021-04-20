@@ -62,6 +62,8 @@
   "column:storageBin:title": "Lokalizacja magazynowa (SAP)",
   "column:newStorageBin": "Lokalizacja<br>magazynowa<br>(nowa)",
   "column:newStorageBin:title": "Lokalizacja magazynowa (nowa)",
+  "column:kanbanStorageBin": "Lokalizacja<br>kanban",
+  "column:kanbanStorageBin:title": "Lokalizacja kanban",
   "column:kanbanId": "Kanban<br>ID",
   "column:kanbanIdCount": "Ilość Kanban<br>ID w SAP",
   "column:kanbanIdCount:title": "Ilość Kanban ID w SAP",
