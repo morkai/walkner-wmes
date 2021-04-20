@@ -66,6 +66,7 @@
     "axon": "^2.0.3",
     "bcrypt": "5.0.1",
     "body-parser": "^1.19.0",
+    "check-disk-space": "^2.1.0",
     "cheerio": "~0.22.0",
     "content-disposition": "^0.5.3",
     "cookie": "^0.4.1",
