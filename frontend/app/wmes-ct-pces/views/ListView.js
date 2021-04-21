@@ -32,6 +32,7 @@ define([
         {id: 'pce', className: 'is-min is-number', label: this.t('PROPERTY:pce:short')},
         {id: 'line', className: 'is-min'},
         {id: 'station', className: 'is-min is-number', label: this.t('PROPERTY:station:short')},
+        {id: 'cart', className: 'is-min', tdClassName: 'text-fixed'},
         '-'
       ];
     },

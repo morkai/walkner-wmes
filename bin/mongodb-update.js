@@ -3,15 +3,5 @@
 
 'use strict';
 
-db.oshaudits.find({}).forEach(doc =>
-{
-  doc.anyNok = false;
-  doc.results.forEach(r =>
-  {
-    doc.anyNok = doc.anyNok || r.ok === false;
-
-    delete r.owner;
-  });
-
-  db.oshaudits.replaceOne({_id: doc._id}, doc);
-});
+db.ctpces.dropIndex({line: 1, station: 1});
+db.ctpces.createIndex({line: 1, station: 1, cart: 1, startedAt: -1});
