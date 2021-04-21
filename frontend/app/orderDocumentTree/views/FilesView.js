@@ -236,7 +236,7 @@ define([
           });
         }
 
-        if (user.isAllowedTo('DOCUMENTS:MANAGE'))
+        if (tree.canManageFolder(tree.getSelectedFolder()))
         {
           if (tree.isTrash())
           {
@@ -374,14 +374,28 @@ define([
 
     serializeFiles: function()
     {
-      var dateFilter = this.model.getDateFilter();
-      var filterFile = function() { return true; };
+      var view = this;
+      var checkAccess = view.model.hasSearchPhrase();
+      var dateFilter = view.model.getDateFilter();
 
       if (dateFilter)
       {
         dateFilter += 'T00:00:00.000Z';
-        filterFile = function(file)
+      }
+
+      var files = view.model.files
+        .filter(function(file)
         {
+          if (checkAccess && !view.model.canViewFile(file))
+          {
+            return false;
+          }
+
+          if (!dateFilter)
+          {
+            return true;
+          }
+
           var files = file.get('files');
 
           for (var i = 0; i < files.length; ++i)
@@ -393,11 +407,9 @@ define([
           }
 
           return false;
-        };
-      }
-
-      var files = this.model.files.filter(filterFile).map(this.serializeFile);
-      var moreFiles = this.serializeMoreFiles();
+        })
+        .map(view.serializeFile);
+      var moreFiles = view.serializeMoreFiles();
 
       if (moreFiles)
       {
@@ -648,6 +660,10 @@ define([
         .toggleClass('is-trash', isTrash)
         .toggleClass('is-in-trash', isInTrash)
         .removeClass('hidden');
+
+      $preview
+        .find('.btn[data-action]')
+        .toggleClass('hidden', !tree.canManageFolder(selectedFolder));
 
       this.$id('subFile')
         .prop('disabled', true)

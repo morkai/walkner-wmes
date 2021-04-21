@@ -112,7 +112,7 @@ define([
 
     hasSearchPhrase: function()
     {
-      return this.get('searchPhrase').length >= 4;
+      return this.get('searchPhrase').length > 0;
     },
 
     getSearchPhrase: function()
@@ -267,14 +267,17 @@ define([
 
     getRootFolders: function()
     {
-      var rootFolders = this.folders.filter(function(folder)
+      var tree = this;
+      var rootFolders = tree.folders.filter(function(folder)
       {
-        return folder.isRoot() && folder.id !== '__TRASH__';
+        return folder.isRoot()
+          && folder.id !== '__TRASH__'
+          && tree.canViewFolder(folder);
       });
 
-      if (this.canSeeTrash() && this.folders.get('__TRASH__'))
+      if (tree.canSeeTrash() && tree.folders.get('__TRASH__'))
       {
-        rootFolders.push(this.folders.get('__TRASH__'));
+        rootFolders.push(tree.folders.get('__TRASH__'));
       }
 
       return rootFolders;
@@ -383,6 +386,71 @@ define([
     canSeeTrash: function()
     {
       return user.isAllowedTo('DOCUMENTS:MANAGE');
+    },
+
+    canViewFile: function(file)
+    {
+      var tree = this;
+
+      return file.get('folders').some(function(folderId)
+      {
+        return tree.canViewFolder(tree.folders.get(folderId));
+      });
+    },
+
+    canViewFolder: function(folder)
+    {
+      return this.checkFolderAccess(folder, true);
+    },
+
+    canManageFolder: function(folder)
+    {
+      return user.isAllowedTo('DOCUMENTS:MANAGE') && this.checkFolderAccess(folder, false);
+    },
+
+    checkFolderAccess: function(folder, emptyAccess)
+    {
+      if (user.isAllowedTo('DOCUMENTS:ALL'))
+      {
+        return true;
+      }
+
+      if (!folder)
+      {
+        return false;
+      }
+
+      if (!folder.isRoot())
+      {
+        var parent = this.folders.get(folder.get('parent'));
+
+        return parent ? this.checkFolderAccess(parent, emptyAccess) : false;
+      }
+
+      var subdivisions = folder.get('subdivisions');
+
+      if (!subdivisions || !subdivisions.length)
+      {
+        return emptyAccess;
+      }
+
+      var userDivision = user.getDivision();
+      var userSubdivision = user.getSubdivision();
+
+      if (userSubdivision)
+      {
+        return subdivisions.includes(userSubdivision.id);
+      }
+
+      if (userDivision)
+      {
+        return subdivisions.some(function(subdivision)
+        {
+          return subdivision.get('division') === userDivision.id && subdivisions.includes(subdivision.id);
+        });
+      }
+
+      return false;
     },
 
     canMoveFolder: function(movedFolder, newParentFolder)
@@ -501,6 +569,26 @@ define([
       req.fail(function()
       {
         tree.folders.handleFolderRenamed(folder.id, oldName);
+      });
+
+      return req;
+    },
+
+    editFolder: function(folder, newData)
+    {
+      var tree = this;
+      var oldData = Object.assign({}, folder.attributes);
+
+      tree.folders.handleFolderEdited(folder.id, newData);
+
+      var req = tree.act('editFolder', {
+        folderId: folder.id,
+        data: newData
+      });
+
+      req.fail(function()
+      {
+        tree.folders.handleFolderEdited(folder.id, oldData);
       });
 
       return req;
@@ -714,6 +802,10 @@ define([
 
         case 'folderRenamed':
           this.folders.handleFolderRenamed(message.folder._id, message.folder.name);
+          break;
+
+        case 'folderEdited':
+          this.folders.handleFolderEdited(message.folder);
           break;
 
         case 'folderMoved':

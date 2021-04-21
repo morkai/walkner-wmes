@@ -1,0 +1,17 @@
+<form class="orderDocumentTree-editFolder" method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%= formMethod %>">
+  <%- helpers.formGroup({
+    name: 'name',
+    label: 'editFolder:',
+    required: true
+  }) %>
+  <%- helpers.formGroup({
+    name: 'subdivisions',
+    type: 'select2',
+    label: 'editFolder:'
+  }) %>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit"><%- t('editFolder:submit') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('editFolder:cancel') %></button>
+  </div>
+</form>

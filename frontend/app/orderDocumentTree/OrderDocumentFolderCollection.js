@@ -124,6 +124,16 @@ define([
       }
     },
 
+    handleFolderEdited: function(newFolder)
+    {
+      var folder = this.get(newFolder._id);
+
+      if (folder)
+      {
+        folder.set(newFolder);
+      }
+    },
+
     handleFolderRecovered: function(folderId)
     {
       var folder = this.get(folderId);

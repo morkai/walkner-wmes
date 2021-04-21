@@ -9,7 +9,8 @@ define([
   'app/core/View',
   'app/core/views/DialogView',
   'app/core/util/uuid',
-  'app/orderDocumentTree/OrderDocumentFolder',
+  '../OrderDocumentFolder',
+  './EditFolderDialogView',
   'app/orderDocumentTree/templates/folders',
   'app/orderDocumentTree/templates/folder',
   'app/orderDocumentTree/templates/foldersContextMenu',
@@ -24,6 +25,7 @@ define([
   DialogView,
   uuid,
   OrderDocumentFolder,
+  EditFolderDialogView,
   template,
   renderFolder,
   renderContextMenu,
@@ -116,6 +118,7 @@ define([
       view.listenTo(tree.folders, 'remove', this.onRemove);
       view.listenTo(tree.folders, 'change:parent', this.onParentChange);
       view.listenTo(tree.folders, 'change:name', this.onNameChange);
+      view.listenTo(tree.folders, 'change:subdivisions', this.render);
 
       $(window).on('mousedown.' + view.idPrefix, view.hideContextMenu.bind(view));
 
@@ -215,10 +218,20 @@ define([
 
       var tree = this.model;
       var sourceFolder = tree.folders.get(sourceFolderId) || null;
+      var isRoot = !!sourceFolder && sourceFolder.isRoot();
       var cutFolder = tree.folders.get(this.model.get('cutFolder')) || null;
+      var canManage = tree.canManageFolder(sourceFolder);
+      var canEdit = canManage;
 
-      $contextMenu.html(renderContextMenu({
-        canManage: user.isAllowedTo('DOCUMENTS:MANAGE'),
+      if (canEdit && !user.isAllowedTo('DOCUMENTS:ALL') && (!sourceFolder || isRoot))
+      {
+        canEdit = false;
+      }
+
+      $contextMenu.html(this.renderPartialHtml(renderContextMenu, {
+        canManage: canManage,
+        canEdit: canEdit,
+        isRoot: isRoot,
         isTrash: sourceFolder && sourceFolder.id === '__TRASH__',
         isInTrash: sourceFolder && tree.getRoot(sourceFolder).id === '__TRASH__',
         isRecoverable: sourceFolder && sourceFolder.isInTrash(),
@@ -473,6 +486,10 @@ define([
           this.handleRenameFolder(data.folderId);
           break;
 
+        case 'editFolder':
+          this.handleEditFolder(data.folderId);
+          break;
+
         case 'recoverFolder':
           this.handleRecoverFolder(data.folderId);
           break;
@@ -502,8 +519,9 @@ define([
 
     handleNewFolder: function(parentFolderId)
     {
-      var tree = this.model;
-      var $parentFolder = this.$folder(parentFolderId);
+      var view = this;
+      var tree = view.model;
+      var $parentFolder = view.$folder(parentFolderId);
       var newFolder = new OrderDocumentFolder({
         _id: uuid(),
         name: '',
@@ -511,7 +529,7 @@ define([
         children: [],
         oldParent: null
       });
-      var $newFolder = $(this.renderFolder(newFolder, {isEditing: true, isNew: true}));
+      var $newFolder = $(view.renderFolder(newFolder, {isEditing: true, isNew: true}));
 
       if ($parentFolder.length)
       {
@@ -521,11 +539,11 @@ define([
           .children('.orderDocumentTree-folders-children')
           .append($newFolder);
 
-        this.model.toggleFolder(parentFolderId, true);
+        view.model.toggleFolder(parentFolderId, true);
       }
       else
       {
-        this.$id('root').append($newFolder);
+        view.$id('root').append($newFolder);
       }
 
       var $editor = $newFolder.find('.orderDocumentTree-folders-editor');
@@ -575,7 +593,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('orderDocumentTree', 'folders:msg:addFolder:failure')
+            text: view.t('folders:msg:addFolder:failure')
           });
         });
       }
@@ -583,7 +601,8 @@ define([
 
     handleMoveFolder: function(sourceFolderId, newParentFolderId)
     {
-      var tree = this.model;
+      var view = this;
+      var tree = view.model;
       var sourceFolder = tree.folders.get(sourceFolderId);
       var newParentFolder = tree.folders.get(newParentFolderId) || null;
 
@@ -592,14 +611,15 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('orderDocumentTree', 'folders:msg:moveFolder:failure')
+          text: view.t('folders:msg:moveFolder:failure')
         });
       });
     },
 
     handleRemoveFolder: function(folderId)
     {
-      var tree = this.model;
+      var view = this;
+      var tree = view.model;
       var folder = tree.folders.get(folderId);
 
       if (!folder)
@@ -609,11 +629,11 @@ define([
 
       if (tree.isInTrash(folder))
       {
-        this.handlePurgeFolder(folder);
+        view.handlePurgeFolder(folder);
       }
       else
       {
-        var $folder = this.$folder(folder.id).addClass('is-removed');
+        var $folder = view.$folder(folder.id).addClass('is-removed');
 
         this.model.removeFolder(folder)
           .fail(function()
@@ -621,7 +641,7 @@ define([
             viewport.msg.show({
               type: 'error',
               time: 3000,
-              text: t('orderDocumentTree', 'folders:msg:removeFolder:failure')
+              text: view.t('folders:msg:removeFolder:failure')
             });
           })
           .always(function()
@@ -633,7 +653,8 @@ define([
 
     handlePurgeFolder: function(folder)
     {
-      var tree = this.model;
+      var view = this;
+      var tree = view.model;
       var isTrash = folder.id === '__TRASH__';
       var dialogView = new DialogView({
         template: purgeFolderDialogTemplate,
@@ -644,7 +665,7 @@ define([
         }
       });
 
-      this.listenTo(dialogView, 'answered', function()
+      view.listenTo(dialogView, 'answered', function()
       {
         var req = tree.purgeFolder(folder);
 
@@ -655,7 +676,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('orderDocumentTree', 'purgeFolder:msg:failure' + (isTrash ? ':trash' : ''))
+            text: view.t('purgeFolder:msg:failure' + (isTrash ? ':trash' : ''))
           });
         });
 
@@ -666,24 +687,24 @@ define([
           viewport.msg.show({
             type: 'success',
             time: 2000,
-            text: t('orderDocumentTree', 'purgeFolder:msg:success' + (isTrash ? ':trash' : ''))
+            text: view.t('purgeFolder:msg:success' + (isTrash ? ':trash' : ''))
           });
         });
       });
 
-      viewport.showDialog(dialogView, t('orderDocumentTree', 'purgeFolder:title' + (isTrash ? ':trash' : '')));
+      viewport.showDialog(dialogView, view.t('purgeFolder:title' + (isTrash ? ':trash' : '')));
     },
 
     handleRecoverFolder: function(folderId)
     {
-      var tree = this.model;
+      var view = this;
 
-      tree.recoverFolder(tree.folders.get(folderId)).fail(function()
+      view.tree.recoverFolder(view.tree.folders.get(folderId)).fail(function()
       {
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('orderDocumentTree', 'folders:msg:recoverFolder:failure')
+          text: view.t('folders:msg:recoverFolder:failure')
         });
       });
     },
@@ -734,10 +755,34 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('orderDocumentTree', 'folders:msg:renameFolder:failure')
+            text: view.t('folders:msg:renameFolder:failure')
           });
         });
       }
+    },
+
+    handleEditFolder: function(folderId)
+    {
+      var view = this;
+      var tree = view.model;
+      var folder = tree.folders.get(folderId);
+
+      if (!folder)
+      {
+        return;
+      }
+
+      if (!folder.isRoot())
+      {
+        return view.handleRenameFolder(folderId);
+      }
+
+      var dialogView = new EditFolderDialogView({
+        folder: folder,
+        model: tree
+      });
+
+      viewport.showDialog(dialogView, view.t('editFolder:title'));
     }
 
   });

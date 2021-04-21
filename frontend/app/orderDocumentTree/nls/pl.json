@@ -119,6 +119,14 @@
   "editFile:msg:success": "Dokument został zmieniony pomyślnie.",
   "editFile:msg:failure": "Nie udało się zmienić dokumentu.",
 
+  "editFolder:title": "Edycja katalogu",
+  "editFolder:submit": "Edytuj katalog",
+  "editFolder:cancel": "Anuluj",
+  "editFolder:name": "Nazwa katalogu",
+  "editFolder:subdivisions": "Działy",
+  "editFolder:msg:success": "Katalog został zmieniony pomyślnie.",
+  "editFolder:msg:failure": "Nie udało się zmienić katalogu.",
+
   "purgeFolder:title": "Usuwanie katalogu",
   "purgeFolder:title:trash": "Opróżnianie Śmietnika",
   "purgeFolder:submit": "Usuń katalog",
@@ -139,6 +147,7 @@
   "contextMenu:newFolder": "Nowy katalog",
   "contextMenu:newSubFolder": "Nowy podkatalog",
   "contextMenu:renameFolder": "Zmień nazwę",
+  "contextMenu:editFolder": "Edytuj",
   "contextMenu:removeFolder": "Usuń",
   "contextMenu:cutFolder": "Wytnij",
   "contextMenu:moveFolder": "Przenieś <em>{folder}</em>",

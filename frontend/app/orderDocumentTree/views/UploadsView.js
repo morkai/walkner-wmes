@@ -205,7 +205,10 @@ define([
       e.preventDefault();
       e.stopPropagation();
 
-      if (!user.isAllowedTo('DOCUMENTS:MANAGE'))
+      var tree = this.model;
+      var selectedFolder = tree.getSelectedFolder();
+
+      if (!tree.canManageFolder(selectedFolder))
       {
         viewport.msg.show({
           type: 'warning',
@@ -215,9 +218,6 @@ define([
 
         return;
       }
-
-      var tree = this.model;
-      var selectedFolder = tree.getSelectedFolder();
 
       if (!selectedFolder)
       {

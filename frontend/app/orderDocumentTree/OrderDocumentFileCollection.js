@@ -50,7 +50,7 @@ define([
 
     setSearchPhrase: function(newSearchPhrase)
     {
-      this.searchPhrase = newSearchPhrase.replace(/#/g, '.').replace(/\*/g, '.+');
+      this.searchPhrase = newSearchPhrase;
 
       this.updateRqlQuery();
     },

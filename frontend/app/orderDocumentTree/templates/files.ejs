@@ -1,10 +1,10 @@
 <div class="orderDocumentTree-files is-<%- displayMode %> <%- folders.length ? 'has-folders' : 'has-no-folders' %>">
-  <div id="<%- idPrefix %>-folders" class="orderDocumentTree-files-items">
+  <div id="<%- id('folders') %>" class="orderDocumentTree-files-items">
     <% folders.forEach(function(folder) { %>
     <% include ./filesFolder.ejs %>
     <% }) %>
   </div>
-  <div id="<%- idPrefix %>-files" class="orderDocumentTree-files-items">
+  <div id="<%- id('files') %>" class="orderDocumentTree-files-items">
     <% if (files.length === 0 && folders.length === 0) { %>
     <p><%- t('files:' + (searchPhrase ? 'noResults' : 'empty')) %></p>
     <% } %>
@@ -12,16 +12,16 @@
     <% include ./filesFile.ejs %>
     <% }) %>
   </div>
-  <div id="<%- idPrefix %>-preview" class="orderDocumentTree-files-preview hidden">
+  <div id="<%- id('preview') %>" class="orderDocumentTree-files-preview hidden">
     <div class="orderDocumentTree-files-preview-actions">
-      <i id="<%- idPrefix %>-previewIcon" class="fa fa-3x fa-file-o"></i>
+      <i id="<%- id('previewIcon') %>" class="fa fa-3x fa-file-o"></i>
       <% if (user.isAllowedTo('USER', 'DOCUMENTS:VIEW')) { %>
-      <button id="<%- idPrefix %>-subFile" class="btn btn-default" disabled><i class="fa"></i></button>
+      <button id="<%- id('subFile') %>" class="btn btn-default" disabled><i class="fa"></i></button>
       <% } %>
       <% if (user.isAllowedTo('DOCUMENTS:MANAGE')) { %>
-      <button id="<%- idPrefix %>-recoverFile" class="btn btn-default" data-action="recoverFile" title="<%- t('files:recover') %>"><i class="fa fa-undo"></i></button>
-      <button id="<%- idPrefix %>-editFile" class="btn btn-default" data-action="editFile" title="<%- t('files:edit') %>"><i class="fa fa-edit"></i></button>
-      <button id="<%- idPrefix %>-removeFile" class="btn btn-default" data-action="removeFile" title="<%- t('files:remove') %>"><i class="fa fa-trash-o"></i></button>
+      <button id="<%- id('recoverFile') %>" class="btn btn-default" data-action="recoverFile" title="<%- t('files:recover') %>"><i class="fa fa-undo"></i></button>
+      <button id="<%- id('editFile') %>" class="btn btn-default" data-action="editFile" title="<%- t('files:edit') %>"><i class="fa fa-edit"></i></button>
+      <button id="<%- id('removeFile') %>" class="btn btn-default" data-action="removeFile" title="<%- t('files:remove') %>"><i class="fa fa-trash-o"></i></button>
       <% } %>
     </div>
     <dl class="orderDocumentTree-files-preview-props">
@@ -30,12 +30,12 @@
       <dd data-prop="<%- prop %>"></dd>
       <% }) %>
       <% if (user.isAllowedTo('DOCUMENTS:VIEW')) { %>
-      <dt><a id="<%- idPrefix %>-showChanges" href="javascript:void(0)"><%- t('files:updatedAt') %></a></dt>
+      <dt><a id="<%- id('showChanges') %>" href="javascript:void(0)"><%- t('files:updatedAt') %></a></dt>
       <% } else { %>
       <dt><%- t('files:updatedAt') %></dt>
       <% } %>
       <dd data-prop="updatedAt"></dd>
     </dl>
-    <i id="<%- idPrefix %>-closePreview" class="fa fa-remove" title="<%- t('files:close') %>"></i>
+    <i id="<%- id('closePreview') %>" class="fa fa-remove" title="<%- t('files:close') %>"></i>
   </div>
 </div>

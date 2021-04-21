@@ -140,6 +140,7 @@
     "contextMenu:newFolder": "New folder",
     "contextMenu:newSubFolder": "New subfolder",
     "contextMenu:renameFolder": "Rename",
+    "contextMenu:editFolder": "Edit",
     "contextMenu:removeFolder": "Remove",
     "contextMenu:cutFolder": "Cut",
     "contextMenu:moveFolder": "Move <em>{folder}</em>",
