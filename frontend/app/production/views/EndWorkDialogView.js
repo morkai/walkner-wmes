@@ -166,11 +166,13 @@ define([
       this.limitQuantityDone();
       this.notifySpigotCheckRequest();
 
-      if (0 && this.model.isTaktTimeEnabled())
+      /*
+      if (this.model.isTaktTimeEnabled())
       {
         this.$id('quantitiesDone').prop('disabled', true);
         this.$id('quantityDone').prop('disabled', true);
       }
+      */
 
       this.focusFirstInput();
     },

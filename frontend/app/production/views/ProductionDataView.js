@@ -716,10 +716,12 @@ define([
       var view = this;
       var pso = view.model.prodShiftOrder;
 
-      if (0 && view.model.isTaktTimeEnabled())
+      /*
+      if (view.model.isTaktTimeEnabled())
       {
         return;
       }
+      */
 
       if (view.options.embedded)
       {

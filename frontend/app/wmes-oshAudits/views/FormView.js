@@ -137,7 +137,7 @@ define([
       var anyOk = !!this.$('input[value="1"]:checked').length;
       var anyNok = !!this.$('input[value="0"]:checked').length;
       var anyResults = this.$id('results')[0].childElementCount > 0;
-console.log({anyNok, anyOk, anyResults})
+
       this.$id('results')
         .find('input[value="1"]')
         .first()[0]

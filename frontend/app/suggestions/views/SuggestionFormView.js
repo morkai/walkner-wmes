@@ -214,7 +214,7 @@ define([
         this.setUpCoordSectionSelect2();
       },
 
-      'change input[type="file"]': function(e)
+      'change input[type="file"]': function()
       {
         var max = null;
         var limit = 10;

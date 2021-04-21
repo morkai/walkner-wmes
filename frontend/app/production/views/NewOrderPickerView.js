@@ -262,10 +262,12 @@ define([
 
       this.notifySpigotCheckRequest();
 
-      if (0 && this.model.isTaktTimeEnabled())
+      /*
+      if (this.model.isTaktTimeEnabled())
       {
         this.$id('quantityDone').prop('disabled', true);
       }
+      */
     },
 
     notifySpigotCheckRequest: function()
