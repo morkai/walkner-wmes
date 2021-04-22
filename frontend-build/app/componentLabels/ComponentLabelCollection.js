@@ -1,1 +1,1 @@
-define(["../core/Collection","./ComponentLabel"],function(e,o){"use strict";return e.extend({model:o,rqlQuery:"sort(productCode)&limit(-1337)"})});
+define(["../core/Collection","./ComponentLabel"],function(e,o){"use strict";return e.extend({model:o,rqlQuery:"sort(componentCode)&limit(-1337)"})});
