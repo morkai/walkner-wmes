@@ -331,7 +331,7 @@ define([
         if (operation)
         {
           qtyTodo = operation.qty;
-          qtyDone = qtyDoneTotal.byOperation ? qtyDoneTotal.byOperation[operation.no] : -1;
+          qtyDone = qtyDoneTotal.byOperation ? (qtyDoneTotal.byOperation[operation.no] || 0) : -1;
         }
         else
         {

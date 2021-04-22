@@ -377,7 +377,10 @@ define([
         page.loadOrderQueue();
       });
 
-      page.listenTo(model.prodShiftOrder, 'change:orderId', page.subscribeForQuantityDoneChanges);
+      page.listenTo(model.prodShiftOrder, 'change:orderId', function()
+      {
+        page.subscribeForQuantityDoneChanges(false);
+      });
 
       if (model.id)
       {
@@ -386,7 +389,7 @@ define([
 
       if (model.prodShiftOrder.get('orderId'))
       {
-        this.subscribeForQuantityDoneChanges();
+        this.subscribeForQuantityDoneChanges(true);
       }
 
       page.listenTo(model.prodDowntimes, 'change:finishedAt', function()
@@ -760,7 +763,7 @@ define([
       );
     },
 
-    subscribeForQuantityDoneChanges: function()
+    subscribeForQuantityDoneChanges: function(subOnly)
     {
       if (this.qtyDoneSub)
       {
@@ -780,6 +783,11 @@ define([
         'orders.quantityDone.' + orderNo,
         function(changes) { model.set('totalQuantityDone', changes.qtyDone); }
       );
+
+      if (subOnly)
+      {
+        return;
+      }
 
       this.ajax({url: '/orders?_id=' + orderNo + '&select(qtyDone)&limit(1)'}).done(function(res)
       {
