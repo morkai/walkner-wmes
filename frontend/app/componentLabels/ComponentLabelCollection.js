@@ -13,7 +13,7 @@ define([
 
     model: ComponentLabel,
 
-    rqlQuery: 'sort(productCode)&limit(-1337)'
+    rqlQuery: 'sort(componentCode)&limit(-1337)'
 
   });
 });

@@ -60,16 +60,25 @@ define([
       this.selected = null;
       this.labelShift = JSON.parse(localStorage.getItem('WMES_OPERATOR_COMPONENT_LABEL_SHIFT') || '[0, 0]');
 
+      var orderNo = this.model.prodShiftOrder.get('orderId');
+
       this.componentLabels = new ComponentLabelCollection(null, {
         url: '/orders/'
-          + this.model.prodShiftOrder.get('orderId')
+          + orderNo
           + '/componentLabels/'
           + this.model.prodShiftOrder.get('operationNo')
       });
 
       this.once('afterRender', function()
       {
-        this.promised(this.componentLabels.fetch({reset: true}));
+        if (orderNo)
+        {
+          this.promised(this.componentLabels.fetch({reset: true}));
+        }
+        else
+        {
+          this.componentLabels.reset([]);
+        }
       });
 
       this.listenTo(this.componentLabels, 'reset', this.renderComponentLabels);

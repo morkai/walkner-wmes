@@ -11,6 +11,7 @@
     "PROPERTY:template": "Template",
     "PROPERTY:description": "Description",
     "PROPERTY:global": "Global",
+    "PROPERTY:lines": "Production lines",
 
     "FORM:ERROR:duplicate": "The specified label already exists."
   },

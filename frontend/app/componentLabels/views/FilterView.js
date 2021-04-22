@@ -35,7 +35,7 @@ define([
         operationNo = '0' + operationNo;
       }
 
-      if (operationNo !== '0000')
+      if (operationNo)
       {
         selector.push({name: 'eq', args: ['operationNo', operationNo]});
       }

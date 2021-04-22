@@ -1,11 +1,11 @@
 <form class="well filter-form" autocomplete="off">
   <div class="form-group">
-    <label for="<%- idPrefix %>-componentCode"><%- t('PROPERTY:componentCode') %></label>
-    <input id="<%- idPrefix %>-componentCode" class="form-control" name="componentCode" type="text" autocomplete="new-password">
+    <label for="<%- id('componentCode') %>"><%- t('PROPERTY:componentCode') %></label>
+    <input id="<%- id('componentCode') %>" class="form-control" name="componentCode" type="text">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-operationNo"><%- t('PROPERTY:operationNo') %></label>
-    <input id="<%- idPrefix %>-operationNo" class="form-control" name="operationNo" type="text" autocomplete="new-password">
+    <label for="<%- id('operationNo') %>"><%- t('PROPERTY:operationNo') %></label>
+    <input id="<%- id('operationNo') %>" class="form-control" name="operationNo" type="text">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

@@ -31,6 +31,7 @@ define([
       var obj = this.toJSON();
 
       obj.global = t('core', 'BOOL:' + !!obj.global);
+      obj.lines = obj.lines.join('; ');
 
       return obj;
     }

@@ -10,6 +10,7 @@
   "PROPERTY:template": "Szablon",
   "PROPERTY:description": "Opis",
   "PROPERTY:global": "Globalna",
+  "PROPERTY:lines": "Linie produkcyjne",
 
   "FORM:ERROR:duplicate": "Podana etykieta już istnieje."
 }
