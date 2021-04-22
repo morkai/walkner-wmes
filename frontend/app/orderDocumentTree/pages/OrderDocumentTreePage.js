@@ -101,7 +101,7 @@ define([
       page.listenTo(tree, 'change:selectedFolder change:searchPhrase', page.onSelectedChange.bind(page, true));
       page.listenTo(tree, 'change:selectedFile change:dateFilter', page.onSelectedChange.bind(page, false));
       page.listenTo(tree.files, 'remove', page.onFileRemove);
-      page.listenTo(tree.folders, 'reset change:subdivisions', page.checkAccess);
+      page.listenTo(tree.folders, 'reset change:funcs', page.checkAccess);
       page.listenTo(tree.uploads, 'reset add remove', page.onUploadChange);
 
       $(window)

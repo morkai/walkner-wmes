@@ -120,6 +120,14 @@
     "editFile:msg:success": "Document edited successfully",
     "editFile:msg:failure": "Failed to edit the document",
 
+    "editFolder:title": "Editing folder",
+    "editFolder:submit": "Edit folder",
+    "editFolder:cancel": "Cancel",
+    "editFolder:name": "Folder name",
+    "editFolder:funcs": "Available to prod. functions",
+    "editFolder:msg:success": "Folder edited successfully.",
+    "editFolder:msg:failure": "Failed to edit the folder.",
+
     "purgeFolder:title": "Purging folder",
     "purgeFolder:title:trash": "Cleaning Trash",
     "purgeFolder:submit": "Purge folder",

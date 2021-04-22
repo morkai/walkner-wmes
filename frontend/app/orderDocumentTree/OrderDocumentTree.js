@@ -427,30 +427,14 @@ define([
         return parent ? this.checkFolderAccess(parent, emptyAccess) : false;
       }
 
-      var subdivisions = folder.get('subdivisions');
+      var funcs = folder.get('funcs');
 
-      if (!subdivisions || !subdivisions.length)
+      if (!funcs || !funcs.length)
       {
         return emptyAccess;
       }
 
-      var userDivision = user.getDivision();
-      var userSubdivision = user.getSubdivision();
-
-      if (userSubdivision)
-      {
-        return subdivisions.includes(userSubdivision.id);
-      }
-
-      if (userDivision)
-      {
-        return subdivisions.some(function(subdivision)
-        {
-          return subdivision.get('division') === userDivision.id && subdivisions.includes(subdivision.id);
-        });
-      }
-
-      return false;
+      return funcs.includes(user.data.prodFunction);
     },
 
     canMoveFolder: function(movedFolder, newParentFolder)

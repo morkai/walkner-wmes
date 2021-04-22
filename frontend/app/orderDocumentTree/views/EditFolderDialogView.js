@@ -1,24 +1,16 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'underscore',
-  'jquery',
-  'app/i18n',
-  'app/time',
   'app/viewport',
   'app/core/views/FormView',
-  'app/data/orgUnits',
-  'app/orgUnits/util/renderOrgUnitPath',
+  'app/core/util/idAndLabel',
+  'app/data/prodFunctions',
   'app/orderDocumentTree/templates/editFolderDialog'
 ], function(
-  _,
-  $,
-  t,
-  time,
   viewport,
   FormView,
-  orgUnits,
-  renderOrgUnitPath,
+  idAndLabel,
+  prodFunctions,
   template
 ) {
   'use strict';
@@ -31,13 +23,13 @@ define([
     {
       return {
         name: this.folder.get('name'),
-        subdivisions: (this.folder.get('subdivisions') || []).join(',')
+        funcs: (this.folder.get('funcs') || []).join(',')
       };
     },
 
     serializeForm: function(formData)
     {
-      formData.subdivisions = (formData.subdivisions || '').split(',').filter(id => id.length === 24);
+      formData.funcs = (formData.funcs || '').split(',').filter(id => !!id.length);
 
       return formData;
     },
@@ -54,7 +46,7 @@ define([
 
     handleSuccess: function()
     {
-      if (_.isFunction(this.closeDialog))
+      if (typeof this.closeDialog === 'function')
       {
         this.closeDialog();
       }
@@ -77,37 +69,11 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
-      this.setUpSubdivisionsSelect2();
-    },
-
-    setUpSubdivisionsSelect2: function()
-    {
-      this.$id('subdivisions').select2({
+      this.$id('funcs').select2({
         placeholder: ' ',
         allowClear: true,
         multiple: true,
-        data: orgUnits.getActiveByType('division').map(function(division)
-        {
-          var divisionText = division.getLabel();
-
-          return {
-            text: divisionText,
-            children: orgUnits.getChildren(division)
-              .filter(function(subdivision) { return !subdivision.get('deactivatedAt'); })
-              .map(function(subdivision)
-              {
-                return {
-                  id: subdivision.id,
-                  text: subdivision.getLabel(),
-                  divisionText: divisionText
-                };
-              })
-          };
-        }),
-        formatSelection: function(item, container, e)
-        {
-          return e(item.divisionText + ' \\ ' + item.text);
-        }
+        data: prodFunctions.map(idAndLabel)
       });
     }
 

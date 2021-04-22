@@ -118,7 +118,7 @@ define([
       view.listenTo(tree.folders, 'remove', this.onRemove);
       view.listenTo(tree.folders, 'change:parent', this.onParentChange);
       view.listenTo(tree.folders, 'change:name', this.onNameChange);
-      view.listenTo(tree.folders, 'change:subdivisions', this.render);
+      view.listenTo(tree.folders, 'change:funcs', this.render);
 
       $(window).on('mousedown.' + view.idPrefix, view.hideContextMenu.bind(view));
 

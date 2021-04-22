@@ -123,7 +123,7 @@
   "editFolder:submit": "Edytuj katalog",
   "editFolder:cancel": "Anuluj",
   "editFolder:name": "Nazwa katalogu",
-  "editFolder:subdivisions": "Działy",
+  "editFolder:funcs": "Dostępny dla funkcji",
   "editFolder:msg:success": "Katalog został zmieniony pomyślnie.",
   "editFolder:msg:failure": "Nie udało się zmienić katalogu.",
 
