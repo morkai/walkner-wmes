@@ -94,6 +94,7 @@ define([
           ok: false,
           comment: ''
         });
+        this.toggleValidity();
       },
       'change #-auditor': function()
       {
