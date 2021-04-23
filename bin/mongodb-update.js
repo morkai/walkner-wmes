@@ -3,7 +3,5 @@
 
 'use strict';
 
-db.ctpces.dropIndex({line: 1, station: 1});
-db.ctpces.createIndex({line: 1, station: 1, cart: 1, startedAt: -1});
-
-db.componentlabels.updateMany({lines: {$exists: false}}, {$set: {lines: []}});
+db.componentlabels.dropIndex({operationNo: 1, componentCode: 1});
+db.componentlabels.createIndex({operationNo: 1, componentCode: 1});
