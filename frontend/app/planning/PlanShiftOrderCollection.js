@@ -190,14 +190,18 @@ define([
       {
         var shiftNo = shiftUtil.getShiftNo(localStartAt, true);
 
-        if (prevShiftOverlap < 0 && workingTimes.prevAt[shiftNo])
+        if (prevShiftOverlap < 0)
         {
-          fromTime = time.utc.getMoment(workingTimes.prevAt[shiftNo]).local(true).valueOf() + prevShiftOverlap;
+          fromTime = workingTimes.prevAt[shiftNo]
+            ? (time.utc.getMoment(workingTimes.prevAt[shiftNo]).local(true).valueOf() + prevShiftOverlap)
+            : 0;
         }
 
-        if (nextShiftOverlap > 0 && workingTimes.nextAt[shiftNo])
+        if (nextShiftOverlap > 0)
         {
-          toTime = time.utc.getMoment(workingTimes.nextAt[shiftNo]).local(true).valueOf() + nextShiftOverlap;
+          toTime = workingTimes.nextAt[shiftNo]
+            ? (time.utc.getMoment(workingTimes.nextAt[shiftNo]).local(true).valueOf() + nextShiftOverlap)
+            : Number.MAX_SAFE_INTEGER;
         }
       }
 
