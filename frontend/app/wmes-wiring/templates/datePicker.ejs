@@ -7,7 +7,7 @@
     <input id="<%- idPrefix %>-year" name="year" class="form-control" value="<%- year %>" pattern="^[0-9]{4}$" maxlength="4" required placeholder="<%- helpers.t('datePicker:placeholder:year') %>" data-vkb="numeric" min="2017" max="2100">
   </div>
   <div class="wiring-datePicker-buttons">
-    <% [-2, -1, 0, 1, 2].forEach(function(d) { %>
+    <% [-2, -1, 0, '+1', '+2'].forEach(function(d) { %>
     <button class="btn btn-default" type="button" data-days="<%- d %>"><%- helpers.t('datePicker:d' + d) %></button>
     <% }) %>
     <button class="btn btn-primary"><%- helpers.t('datePicker:submit') %></button>
