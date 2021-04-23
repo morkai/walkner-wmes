@@ -55,6 +55,7 @@ Viewer.TEMPLATE =
 
 var adjustMarksTimer = null;
 var adjustViewportAfterMarks = false;
+var componentLabel = null;
 var viewer = new Viewer(document.getElementById('images'), {
   button: false,
   keyboard: false,
@@ -85,11 +86,23 @@ var viewer = new Viewer(document.getElementById('images'), {
   rendering: function()
   {
     document.getElementById('marks').style.display = 'none';
+
+    var componentLabelEl = document.getElementById('componentLabel');
+
+    if (componentLabelEl)
+    {
+      componentLabelEl.style.display = 'none';
+    }
   },
   rendered: function()
   {
     clearTimeout(adjustMarksTimer);
-    adjustMarksTimer = setTimeout(adjustMarks, 300);
+    adjustMarksTimer = setTimeout(adjustMarks, 200);
+
+    if (!window.ready && window.parent.WMES_DOCS_BOM_MARKS)
+    {
+      document.querySelector('.viewer-canvas > img').addEventListener('click', showComponentLabel);
+    }
 
     window.ready = true;
   }
@@ -372,9 +385,9 @@ function showMarks(marks, page) // eslint-disable-line no-unused-vars
       anyMarksOnCurrentPage = true;
     }
 
-    return '<div class="mark" style="display: none" data-x="' + mark.x
+    return '<div class="mark" style="display: none" data-x="' + (mark.x - 3)
       + '" data-y="' + mark.y
-      + '" data-w="' + mark.w
+      + '" data-w="' + (mark.w + 6)
       + '" data-h="' + mark.h
       + '" data-p="' + mark.p + '"></div>';
   }).join('\n');
@@ -420,6 +433,8 @@ function adjustMarks()
     adjustMark(markEls[i]);
   }
 
+  adjustComponentLabel();
+
   if (adjustViewportAfterMarks)
   {
     adjustViewportAfterMarks = false;
@@ -437,10 +452,10 @@ function adjustMark(markEl)
   var left = markEl.dataset.x * 2 * ratio;
 
   markEl.style.display = +markEl.dataset.p === (viewer.index + 1) ? '' : 'none';
-  markEl.style.width = (width + 20 * ratio) + 'px';
-  markEl.style.height = (height + 10 * ratio) + 'px';
+  markEl.style.width = width + 'px';
+  markEl.style.height = height + 'px';
   markEl.style.top = top + 'px';
-  markEl.style.left = (left - 10 * ratio) + 'px';
+  markEl.style.left = left + 'px';
 }
 
 function adjustViewport()
@@ -553,4 +568,100 @@ function toggleBom(newState)
 
     bomToggle.innerHTML = 'BOM';
   });
+}
+
+function showComponentLabel(e)
+{
+  var el = document.getElementById('componentLabel');
+
+  if (!el)
+  {
+    el = document.createElement('div');
+    el.setAttribute('id', 'componentLabel');
+    document.body.appendChild(el);
+  }
+
+  var ratio = viewer.imageData.ratio;
+  var x1 = e.offsetX / 2 / ratio;
+  var y1 = e.offsetY / 2 / ratio;
+
+  window.parent.WMES_DOCS_BOM_MARKS(function(err, marks) // eslint-disable-line new-cap
+  {
+    if (err)
+    {
+      marks = [];
+    }
+
+    const candidates = marks.map(mark =>
+    {
+      var distance = Number.MAX_SAFE_INTEGER;
+
+      if (mark.p === viewer.index + 1)
+      {
+        var x2 = (mark.x - 3) + (mark.w + 6) / 2;
+        var y2 = mark.y - mark.h / 2;
+
+        var a = x1 - x2;
+        var b = y1 - y2;
+
+        distance = Math.sqrt(a * a + b * b);
+      }
+
+      return {
+        mark,
+        distance
+      };
+    });
+
+    candidates.sort((a, b) => a.distance - b.distance);
+
+    var best = candidates[0].mark;
+    var maxDistance = (best.w * ratio) / 2 + 25;
+
+    if (candidates[0].distance > maxDistance)
+    {
+      componentLabel = null;
+
+      el.style.display = 'none';
+
+      return;
+    }
+
+    var label = best.label;
+
+    if (/wire.*?L-?[0-9]{1,4}/i.test(label))
+    {
+      label = label.match(/L-?([0-9]{1,4})/)[1] + 'mm';
+    }
+
+    el.innerHTML = label;
+
+    componentLabel = best;
+
+    adjustComponentLabel();
+  });
+}
+
+function adjustComponentLabel()
+{
+  var el = document.getElementById('componentLabel');
+
+  if (!componentLabel || !el)
+  {
+    return;
+  }
+
+  var ratio = viewer.imageData.ratio;
+  var imgEl = document.querySelector('.viewer-canvas > img');
+  var left = parseInt(imgEl.style.marginLeft, 10) + componentLabel.x * 2 * ratio;
+  var top = parseInt(imgEl.style.marginTop, 10) + componentLabel.y * 2 * ratio;
+
+  el.style.left = left + 'px';
+  el.style.top = top + 'px';
+  el.style.fontSize = Math.min(28, Math.max(14, componentLabel.h * 2 * ratio)) + 'px';
+  el.style.display = '';
+
+  var rect = el.getBoundingClientRect();
+
+  el.style.marginLeft = (componentLabel.w + 6) * ratio + (rect.width / 2 * -1) + 'px';
 }

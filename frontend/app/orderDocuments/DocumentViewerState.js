@@ -213,6 +213,11 @@ define([
       return this.get('remoteOrder');
     },
 
+    getCurrentDocumentNc15: function()
+    {
+      return this.getCurrentOrder().nc15;
+    },
+
     getCurrentOrderInfo: function()
     {
       var orderInfo = {

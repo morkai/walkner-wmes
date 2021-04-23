@@ -201,6 +201,7 @@ define([
       {
         window.WMES_DOCS_BOM_TOGGLE = page.toggleBom.bind(page);
         window.WMES_DOCS_BOM_ACTIVE = page.model.isBomActive.bind(page.model);
+        window.WMES_DOCS_BOM_MARKS = page.getBomMarks.bind(page);
 
         page.onBomChanged();
 
@@ -479,6 +480,40 @@ define([
       });
     },
 
+    getBomMarks: function(done)
+    {
+      var page = this;
+
+      page.loadBom(function(err)
+      {
+        if (err)
+        {
+          return done(err, []);
+        }
+
+        var bom = page.model.get('bom');
+        var documentNc15 = page.model.getCurrentDocumentNc15();
+        var marks = [];
+
+        bom.components.forEach(function(component)
+        {
+          var documentMarks = component.marks[documentNc15];
+
+          if (!documentMarks)
+          {
+            return;
+          }
+
+          documentMarks.forEach(function(mark)
+          {
+            marks.push(Object.assign({label: component.name}, mark));
+          });
+        });
+
+        done(null, marks);
+      });
+    },
+
     toggleBom: function(newState, done)
     {
       var currentOrder = this.model.getCurrentOrder();
@@ -505,6 +540,47 @@ define([
       {
         this.hideBom(done);
       }
+    },
+
+    loadBom: function(done)
+    {
+      var page = this;
+
+      if (page.model.isBomAvailable())
+      {
+        if (done)
+        {
+          done();
+        }
+
+        return;
+      }
+
+      var currentOrder = page.model.getCurrentOrder();
+      var req = page.ajax({
+        url: '/orders/' + currentOrder.no + '/documentContents?result=bom'
+      });
+
+      req.fail(function()
+      {
+        if (done)
+        {
+          done(true);
+        }
+      });
+
+      req.done(function(bom)
+      {
+        bom.active = false;
+        bom.orderNo = currentOrder.no;
+
+        page.model.set('bom', bom);
+
+        if (done)
+        {
+          done();
+        }
+      });
     },
 
     hideBom: function(done)
@@ -552,32 +628,15 @@ define([
         return;
       }
 
-      var currentOrder = page.model.getCurrentOrder();
-      var req = page.ajax({
-        url: '/orders/' + currentOrder.no + '/documentContents?result=bom'
-      });
-
-      req.fail(function()
+      page.loadBom(function(err)
       {
-        page.hideBom(function()
+        if (err)
         {
-          if (done)
-          {
-            done(true);
-          }
-        });
-      });
-
-      req.done(function(bom)
-      {
-        bom.active = true;
-        bom.orderNo = currentOrder.no;
-
-        page.model.set('bom', bom);
-
-        if (done)
+          page.hideBom(done);
+        }
+        else
         {
-          done();
+          page.showBom(done);
         }
       });
     },
