@@ -5,15 +5,15 @@
   "version": "0.159.0",
   "updater": {
     "wmes": {
-      "backend": 671,
-      "frontend": 824,
+      "backend": 672,
+      "frontend": 825,
       "reports": 144,
       "attachments": 3,
       "importer-sap": 73,
       "importer-results": 12,
       "watchdog": 14,
       "mailer": 17,
-      "operator": 107,
+      "operator": 108,
       "docs": 58,
       "heff": 54,
       "planning": 113,
