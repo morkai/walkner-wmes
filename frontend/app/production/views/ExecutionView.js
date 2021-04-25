@@ -24,11 +24,13 @@ define([
 
       this.todoView = new ExecutionTimelineView({
         type: 'todo',
-        model: this.model.execution
+        model: this.model.execution,
+        prodShift: this.model
       });
       this.doneView = new ExecutionTimelineView({
         type: 'done',
-        model: this.model.execution
+        model: this.model.execution,
+        prodShift: this.model
       });
 
       this.setView('#-todo', this.todoView);

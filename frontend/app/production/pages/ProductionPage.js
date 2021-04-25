@@ -374,7 +374,11 @@ define([
       page.listenTo(model, 'change:_id', function()
       {
         page.subscribeForShiftChanges();
-        page.loadOrderQueue();
+
+        page.timers.loadOrderQueue = setTimeout(
+          page.loadOrderQueue.bind(page),
+          _.random(666, 6666)
+        );
       });
 
       page.listenTo(model.prodShiftOrder, 'change:orderId', function()
@@ -385,11 +389,6 @@ define([
       if (model.id)
       {
         this.subscribeForShiftChanges();
-      }
-
-      if (model.prodShiftOrder.get('orderId'))
-      {
-        this.subscribeForQuantityDoneChanges(true);
       }
 
       page.listenTo(model.prodDowntimes, 'change:finishedAt', function()
@@ -809,7 +808,7 @@ define([
     {
       var page = this;
 
-      if (!page.productionJoined || page.model.hasOrderQueue() || !page.model.id)
+      if (!page.productionJoined || !page.model.id)
       {
         return;
       }

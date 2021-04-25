@@ -76,31 +76,33 @@ define([
       this.trigger('change:lastOrder', lastOrder);
     },
 
-    serializeDowntime: function(prodDowntime)
+    serializeDowntime: function(dt)
     {
-      var finishedAt = prodDowntime.get('finishedAt');
+      var finishedAt = dt.get('finishedAt');
 
       return {
-        reason: prodDowntime.get('reason'),
-        aor: prodDowntime.get('aor'),
-        startedAt: prodDowntime.get('startedAt').toISOString(),
-        finishedAt: finishedAt ? finishedAt.toISOString() : null
+        shift: dt.get('shift'),
+        reason: dt.get('reason'),
+        aor: dt.get('aor'),
+        startedAt: dt.get('startedAt').getTime(),
+        finishedAt: finishedAt ? finishedAt.getTime() : 0
       };
     },
 
-    serializeOrder: function(prodShiftOrder)
+    serializeOrder: function(pso)
     {
-      var finishedAt = prodShiftOrder.get('finishedAt');
+      var finishedAt = pso.get('finishedAt');
 
       return {
-        orderId: prodShiftOrder.get('orderId'),
-        operationNo: prodShiftOrder.get('operationNo'),
-        quantityDone: prodShiftOrder.get('quantityDone'),
-        workerCount: prodShiftOrder.get('workerCount'),
-        startedAt: prodShiftOrder.get('startedAt').toISOString(),
-        finishedAt: finishedAt ? finishedAt.toISOString() : null,
-        taktTime: prodShiftOrder.get('avgTaktTime') && prodShiftOrder.get('sapTaktTime')
-          ? (prodShiftOrder.isTaktTimeOk() ? 'ok' : 'nok')
+        shift: pso.get('shift'),
+        orderId: pso.get('orderId'),
+        operationNo: pso.get('operationNo'),
+        quantityDone: pso.get('quantityDone'),
+        workerCount: pso.get('workerCount'),
+        startedAt: pso.get('startedAt').getTime(),
+        finishedAt: finishedAt ? finishedAt.getTime() : 0,
+        taktTime: pso.get('avgTaktTime') && pso.get('sapTaktTime')
+          ? (pso.isTaktTimeOk() ? 'ok' : 'nok')
           : 'na'
       };
     }

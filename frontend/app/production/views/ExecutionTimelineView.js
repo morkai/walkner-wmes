@@ -74,6 +74,7 @@ define([
         trigger: 'hover',
         placement: 'auto top',
         html: true,
+        className: 'production-execution-popover',
         content: function()
         {
           if (this.dataset.type === 'order')
@@ -85,16 +86,12 @@ define([
           {
             return view.renderDowntimePopover(this.dataset.id);
           }
-        },
-        template: function(defaultTemplate)
-        {
-          return $(defaultTemplate).addClass('production-execution-popover');
         }
       });
 
-      this.renderOrders();
-      this.renderDowntimes();
-      this.scheduleExtendLastItems();
+      view.renderOrders();
+      view.renderDowntimes();
+      view.scheduleExtendLastItems();
     },
 
     renderOrders: function()
@@ -111,12 +108,23 @@ define([
     {
       var view = this;
       var items = view.model.get(view[type + 'Prop']) || [];
-      var shiftStartedAt = items.length ? getShiftStartInfo(items[0].startedAt).startTime : 0;
-      var now = Date.now();
+      var html = '';
 
-      var html = items
-        .map(function(item, i) { return view.renderItem(type, item, i, shiftStartedAt, now); })
-        .join('');
+      if (items.length)
+      {
+        var shiftStartTime = view.prodShift.get('date').getTime();
+        var now = Date.now();
+
+        items.forEach(function(item, i)
+        {
+          if (item.startedAt < shiftStartTime)
+          {
+            return;
+          }
+
+          html += view.renderItem(type, item, i, shiftStartTime, now);
+        });
+      }
 
       view.$el.find('.production-timeline-item[data-type="' + type + '"]').remove();
       view.$el.append(html);
@@ -124,11 +132,11 @@ define([
       view.scheduleExtendLastItems();
     },
 
-    renderItem: function(type, item, i, shiftStartedAt, now)
+    renderItem: function(type, item, i, shiftStartTime, now)
     {
-      if (!shiftStartedAt)
+      if (!shiftStartTime)
       {
-        shiftStartedAt = getShiftStartInfo(item.startedAt).startTime;
+        shiftStartTime = getShiftStartInfo(item.startedAt).startTime;
       }
 
       if (!now)
@@ -136,11 +144,11 @@ define([
         now = Date.now();
       }
 
-      var startedAt = Date.parse(item.startedAt);
-      var finishedAt = Date.parse(item.finishedAt) || now;
+      var startedAt = item.startedAt;
+      var finishedAt = item.finishedAt || now;
       var duration = finishedAt - startedAt;
       var width = duration / SHIFT_DURATION * 100;
-      var left = (startedAt - shiftStartedAt) / SHIFT_DURATION * 100;
+      var left = (startedAt - shiftStartTime) / SHIFT_DURATION * 100;
 
       return itemTemplate({
         type: type,
@@ -172,20 +180,24 @@ define([
 
     scheduleExtendLastItems: function()
     {
+      if (this.options.type !== 'done')
+      {
+        return;
+      }
+
       clearTimeout(this.timers.extendLastItems);
-      this.timers.extendLastItems = setTimeout(this.extendLastItems.bind(this), 60000);
+      this.timers.extendLastItems = setTimeout(this.extendLastItems.bind(this), 6000);
     },
 
     extendLastItems: function()
     {
       this.extendLastItem('order');
       this.extendLastItem('downtime');
+      this.scheduleExtendLastItems();
     },
 
     extendLastItem: function(type)
     {
-      this.scheduleExtendLastItems();
-
       var items = this.model.get(this[type + 'Prop']) || [];
       var lastI = items.length - 1;
       var last = items[lastI];
@@ -196,8 +208,7 @@ define([
       }
 
       var $item = this.$('.production-timeline-item[data-type="' + type + '"][data-id="' + lastI + '"]');
-      var startedAt = Date.parse(last.startedAt);
-      var duration = Date.now() - startedAt;
+      var duration = Date.now() - last.startedAt;
       var width = duration / SHIFT_DURATION * 100;
 
       $item[0].style.width = width + '%';
