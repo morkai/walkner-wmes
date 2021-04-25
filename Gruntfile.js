@@ -16,6 +16,7 @@ module.exports = grunt =>
     {name: 'pos-main', include},
     {name: 'wmes-main', include},
     {name: 'wmes-pila-main', include},
+    {name: 'wmes-test-main', include},
     {name: 'wmes-docs', include},
     {name: 'wmes-operator', include},
     {name: 'wmes-heff', include},

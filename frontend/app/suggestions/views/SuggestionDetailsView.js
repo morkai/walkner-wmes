@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/core/views/DetailsView',
   'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/details'
 ], function(
+  _,
   DetailsView,
   kaizenDictionaries,
   template
@@ -80,6 +82,31 @@ define([
         {
           return this.dataset.description;
         }
+      });
+    },
+
+    editModel: function(remoteModel)
+    {
+      var change = _.last(remoteModel.changes);
+      var newData = remoteModel;
+
+      if (change.data.resolutions)
+      {
+        newData = _.omit(newData, 'resolutions');
+
+        this.reloadResolutions();
+      }
+
+      this.model.set(newData);
+    },
+
+    reloadResolutions: function()
+    {
+      var view = this;
+
+      view.ajax({url: view.model.url() + '?select(resolutions)'}).done(function(res)
+      {
+        view.model.set(res);
       });
     }
 

@@ -42,10 +42,27 @@
 .suggestions-form .help-block {
   font-size: 0.9em;
 }
-.suggestions-form-typePanel + .message,
-.suggestions-form-typePanel + .row {
-  margin-top: 15px;
+@media (min-width: 768px) {
+  .suggestions-form-dialog .modal-dialog {
+    width: auto;
+    margin: 10px;
+  }
 }
-.suggestions-form .message-inline {
-  margin-bottom: 15px;
+@media (min-width: 1360px) {
+  .suggestions-form-dialog .modal-dialog {
+    width: 1280px;
+    margin: 30px auto;
+  }
+}
+.suggestions-form-resolutions-actions {
+  width: 160px;
+}
+.suggestions-form-dialog .modal-content {
+  border: none;
+}
+.suggestions-form-dialog .modal-body {
+  padding: 0;
+}
+.suggestions-form-dialog .panel-primary {
+  margin: 0;
 }

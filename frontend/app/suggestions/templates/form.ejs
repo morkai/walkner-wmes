@@ -53,6 +53,7 @@
         <input id="<%- id('coordSection') %>" type="text">
       </div>
       <% } %>
+      <div style="margin-bottom: 15px">
       <div id="<%- id('panel-suggestion') %>" class="panel panel-warning suggestions-form-typePanel">
         <div class="panel-heading"><%- t('type:suggestion') %></div>
         <div id="<%- id('suggestionPanelBody') %>" class="panel-body has-lastElementRow">
@@ -131,6 +132,28 @@
           </div>
         </div>
       </div>
+      </div>
+      <div id="<%- id('resolutionsGroup') %>" class="form-group">
+        <label class="control-label"><%- t('PROPERTY:resolutions') %></label>
+        <table class="table table-condensed table-bordered table-hover">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('PROPERTY:resolutions:rid') %></th>
+            <th class="is-min"><%- t('PROPERTY:status') %></th>
+            <th><%- t('PROPERTY:resolutions:subject') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('resolutions') %>"></tbody>
+        </table>
+        <div id="<%- id('resolutionsActions') %>" class="input-group suggestions-form-resolutions-actions">
+          <input id="<%- id('resolutionRid') %>" class="form-control text-mono no-controls" type="number">
+          <span class="input-group-btn">
+            <button id="<%- id('linkResolution') %>" type="button" class="btn btn-default" title="<%- t('resolutions:link') %>"><i class="fa fa-link"></i></button>
+            <button id="<%- id('addResolution') %>" type="button" class="btn btn-default" title="<%- t('resolutions:add') %>"><i class="fa fa-plus"></i></button>
+          </span>
+        </div>
+      </div>
       <div class="row">
         <%- helpers.formGroup({
           name: 'attachments.before',
@@ -140,7 +163,6 @@
           multiple: true,
           groupClassName: 'col-lg-4'
         }) %>
-        <% if (editMode) { %>
         <%- helpers.formGroup({
           name: 'attachments.after',
           type: 'file',
@@ -149,7 +171,6 @@
           multiple: true,
           groupClassName: 'col-lg-4'
         }) %>
-        <% } %>
         <%- helpers.formGroup({
           name: 'attachments.other',
           type: 'file',

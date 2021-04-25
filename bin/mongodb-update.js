@@ -5,3 +5,6 @@
 
 db.componentlabels.dropIndex({operationNo: 1, componentCode: 1});
 db.componentlabels.createIndex({operationNo: 1, componentCode: 1});
+
+db.suggestions.updateMany({resolutions: {$exists: false}}, {resolutions: []});
+db.suggestions.addIndex({'resolutions._id': 1});

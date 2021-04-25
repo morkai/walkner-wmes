@@ -210,7 +210,7 @@ define([
       });
 
       dropdownRadio(view.$id('userType'), {
-        label: view.t('filter:user:label'),
+        label: view.t('filter:user:others'),
         options: options
       });
     },

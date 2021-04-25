@@ -24,12 +24,13 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
+        'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategoryCollection',
         nls
       ],
-      function(ListPage, KaizenCategoryCollection)
+      function(ListPage, dictionaries, KaizenCategoryCollection)
       {
-        return new ListPage({
+        return dictionaries.bind(new ListPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
           collection: new KaizenCategoryCollection(null, {rqlQuery: req.rql}),
@@ -41,7 +42,7 @@ define([
             {id: 'inSuggestion', className: 'is-min'},
             {id: 'position', className: 'is-min', tdClassName: 'is-number'}
           ]
-        });
+        }));
       }
     );
   });

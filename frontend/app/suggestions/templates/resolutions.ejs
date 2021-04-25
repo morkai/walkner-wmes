@@ -1,0 +1,27 @@
+<div class="panel panel-default <%- resolutions.length ? '' : 'hidden' %>" style="margin-bottom: 20px">
+  <div class="panel-heading <%- changed ? 'is-changed' : '' %>"><%- t('PROPERTY:resolutions') %></div>
+  <% if (!resolutions.length) { %>
+    <div class="panel-body">
+      <p><%- t('resolutions:noData') %></p>
+    </div>
+  <% } else { %>
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+      <tr>
+        <th class="is-min"><%- t('PROPERTY:resolutions:rid') %></th>
+        <th class="is-min"><%- t('PROPERTY:status') %></th>
+        <th><%- t('PROPERTY:resolutions:subject') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% resolutions.forEach(function(resolution) { %>
+      <tr>
+        <td class="is-min"><a href="#suggestions/<%- resolution._id %>" target="_blank"><%= resolution.rid %></a></td>
+        <td class="is-min"><%= t('status:' + resolution.status) %></td>
+        <td><%= resolution.subject %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

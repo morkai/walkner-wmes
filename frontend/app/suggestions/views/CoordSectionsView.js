@@ -52,8 +52,10 @@ define([
 
     getTemplateData: function()
     {
+      var changes = this.model.get('observer').changes;
+
       return {
-        changed: this.model.get('observer').changes.coordSections,
+        changed: changes.all || changes.resolutions,
         coordSections: this.model.serializeCoordSections()
       };
     },

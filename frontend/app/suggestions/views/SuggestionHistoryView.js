@@ -286,6 +286,9 @@ define([
               + '<span>' + _.escape(coordSection._id) + '</span>';
           }).join(' ');
 
+        case 'resolutions':
+          return '<a href="#suggestions/' + value._id + '">' + value.rid + '</a>';
+
         default:
           return value || '';
       }

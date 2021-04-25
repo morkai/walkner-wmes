@@ -61,13 +61,18 @@ define([
       return model.toJSON();
     },
 
+    editModel: function(remoteModel)
+    {
+      this.model.set(remoteModel);
+    },
+
     onModelEdited: function(message)
     {
       var remoteModel = this.model.parse ? this.model.parse(message.model) : message.model;
 
       if (remoteModel && remoteModel._id === this.model.id)
       {
-        this.model.set(remoteModel);
+        this.editModel(remoteModel);
       }
     },
 

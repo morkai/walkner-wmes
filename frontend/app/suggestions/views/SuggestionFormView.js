@@ -6,30 +6,36 @@ define([
   'app/i18n',
   'app/time',
   'app/user',
+  'app/viewport',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
+  'app/core/util/resultTips',
   'app/core/views/FormView',
   'app/core/templates/userInfo',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
   '../Suggestion',
   'app/suggestions/templates/form',
-  'app/suggestions/templates/formCoordSectionRow'
+  'app/suggestions/templates/formCoordSectionRow',
+  'app/suggestions/templates/formResolutionRow'
 ], function(
   _,
   $,
   t,
   time,
   user,
+  viewport,
   buttonGroup,
   idAndLabel,
+  resultTips,
   FormView,
   userInfoTemplate,
   setUpUserSelect2,
   kaizenDictionaries,
   Suggestion,
   template,
-  coordSectionRowTemplate
+  coordSectionRowTemplate,
+  resolutionRowTemplate
 ) {
   'use strict';
 
@@ -105,6 +111,7 @@ define([
       'change [name="categories"]': function()
       {
         this.toggleProductFamily();
+        this.toggleResolutions();
       },
 
       'change [name="productFamily"]': function()
@@ -236,6 +243,26 @@ define([
         {
           max.setCustomValidity(this.t('FORM:ERROR:tooManyFiles', {max: max}));
         }
+      },
+
+      'keydown #-resolutionRid': function(e)
+      {
+        if (e.key === 'Enter')
+        {
+          this.$id('linkResolution').click();
+
+          return false;
+        }
+      },
+
+      'click #-addResolution': 'showAddResolutionDialog',
+      'click #-linkResolution': 'linkResolution',
+
+      'click .btn[data-action="unlinkResolution"]': function(e)
+      {
+        var $tr = this.$(e.currentTarget).closest('tr');
+
+        $tr.fadeOut('fast', function() { $tr.remove(); });
       }
 
     }, FormView.prototype.events),
@@ -246,6 +273,7 @@ define([
 
       this.productFamilyObservers = {};
       this.otherConfirmer = false;
+      this.resolutionI = 0;
 
       this.listenTo(kaizenDictionaries.sections, 'add remove change', this.onSectionUpdated);
     },
@@ -567,6 +595,20 @@ define([
         formData.kom = false;
       }
 
+      if (this.$id('resolutionsGroup').hasClass('hidden'))
+      {
+        formData.resolutions = [];
+      }
+      else
+      {
+        formData.resolutions = (formData.resolutions || []).map(function(r)
+        {
+          r.rid = +r.rid;
+
+          return r;
+        });
+      }
+
       delete formData.attachments;
 
       return formData;
@@ -617,6 +659,7 @@ define([
         this.setUpCoordSectionsSelect2();
       }
 
+      this.setUpResolutions();
       this.toggleStatuses();
       this.toggleRequiredToFinishFlags();
       this.togglePanels();
@@ -1241,6 +1284,115 @@ define([
       {
         this.setUpCoordSectionsSelect2();
       }
+    },
+
+    setUpResolutions: function()
+    {
+      this.toggleResolutions();
+      this.renderResolutions();
+    },
+
+    toggleResolutions: function()
+    {
+      var kaizenEvent = this.$id('categories').select2('data').some(function(item) { return item.id === 'KI'; });
+      var dialog = viewport.currentDialog === this;
+
+      this.$id('resolutionsGroup').toggleClass('hidden', !kaizenEvent || dialog);
+    },
+
+    renderResolutions: function()
+    {
+      this.$id('resolutions').html('');
+
+      (this.model.get('resolutions') || []).forEach(this.addResolution, this);
+    },
+
+    addResolution: function(resolution)
+    {
+      this.$id('resolutions').append(this.renderPartialHtml(resolutionRowTemplate, {
+        i: ++this.resolutionI,
+        resolution: resolution
+      }));
+    },
+
+    linkResolution: function()
+    {
+      var view = this;
+      var rid = parseInt(view.$id('resolutionRid').val(), 10);
+
+      if (isNaN(rid)
+        || rid <= 0
+        || rid === view.model.get('rid')
+        || view.$id('resolutions').find('input[name$=".rid"][value="' + rid + '"]').length)
+      {
+        view.$id('resolutionRid').val('').focus();
+
+        return;
+      }
+
+      viewport.msg.loading();
+
+      var $actions = this.$id('resolutionsActions').find('.form-control, .btn').prop('disabled', true);
+
+      var req = this.ajax({url: '/suggestions/' + rid + '?select(rid,status,subject)'});
+
+      req.fail(function()
+      {
+        resultTips.show({
+          type: 'error',
+          text: view.t('resolutions:error:' + (req.status === 404 ? 'notFound' : 'failure')),
+          time: 2000,
+          el: view.$id('resolutionsActions')[0]
+        });
+      });
+
+      req.done(function(resolution)
+      {
+        resolution.type = 'suggestion';
+
+        view.addResolution(resolution);
+
+        $actions.prop('disabled', false);
+        view.$id('resolutionRid').val('').focus();
+      });
+
+      req.always(function()
+      {
+        viewport.msg.loaded();
+
+        $actions.prop('disabled', false);
+      });
+    },
+
+    showAddResolutionDialog: function()
+    {
+      var view = this;
+      var model = new Suggestion();
+      var dialogView = new view.constructor({
+        dialogClassName: 'suggestions-form-dialog',
+        editMode: false,
+        model: model,
+        formMethod: 'POST',
+        formAction: model.url(),
+        formActionText: view.t('core', 'FORM:ACTION:add'),
+        failureText: view.t('core', 'FORM:ERROR:addFailure'),
+        panelTitleText: view.t('core', 'PANEL:TITLE:addForm')
+      });
+
+      dialogView.handleSuccess = function()
+      {
+        view.addResolution({
+          _id: model.id,
+          rid: model.get('rid'),
+          type: 'suggestion',
+          status: model.get('status'),
+          subject: model.get('subject')
+        });
+
+        viewport.closeDialog();
+      };
+
+      viewport.showDialog(dialogView);
     }
 
   });

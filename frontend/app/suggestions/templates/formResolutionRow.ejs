@@ -1,0 +1,15 @@
+<tr data-id="<%- resolution._id %>">
+  <td class="is-min">
+    <a href="#suggestions/<%- resolution._id %>" target="_blank"><%= resolution.rid %></a>
+    <input type="hidden" name="resolutions[<%- i %>]._id" value="<%- resolution._id %>">
+    <input type="hidden" name="resolutions[<%- i %>].rid" value="<%- resolution.rid %>">
+    <input type="hidden" name="resolutions[<%- i %>].type" value="<%- resolution.type %>">
+  </td>
+  <td class="is-min"><%= t('status:' + resolution.status) %></td>
+  <td><%= resolution.subject %></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button" class="btn btn-default" data-action="unlinkResolution" title="<%- t('resolutions:unlink') %>"><i class="fa fa-unlink"></i></button>
+    </div>
+  </td>
+</tr>

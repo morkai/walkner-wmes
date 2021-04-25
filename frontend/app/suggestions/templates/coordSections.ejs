@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default <%- coordSections.length ? '' : 'hidden' %>" style="margin-bottom: 20px">
   <div class="panel-heading <%- changed ? 'is-changed' : '' %>"><%- t('PANEL:TITLE:coordSections') %></div>
   <% if (!coordSections.length) { %>
     <div class="panel-body">

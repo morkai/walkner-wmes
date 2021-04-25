@@ -1,5 +1,4 @@
 {
-
   "BREADCRUMB:base": "Usprawnienia",
   "BREADCRUMB:browse": "Zgłoszenia",
   "BREADCRUMB:reports:count": "Ilość zgłoszeń",
@@ -77,6 +76,16 @@
   "PROPERTY:coordSections:time": "Czas opinii",
   "PROPERTY:coordSections:comment": "Komentarz",
   "PROPERTY:coordSections:users": "Użytkownicy",
+  "PROPERTY:resolutions": "Działania korygujące",
+  "PROPERTY:resolutions:rid": "ID",
+  "PROPERTY:resolutions:status": "Status",
+  "PROPERTY:resolutions:subject": "Temat",
+
+  "resolutions:add": "Dodaj nowe zgłoszenie",
+  "resolutions:link": "Przypisz istniejące zgłoszenie",
+  "resolutions:unlink": "Odłącz zgłoszenie",
+  "resolutions:error:failure": "Sprawdzanie zgłoszenia nie powiodło się.",
+  "resolutions:error:notFound": "Zgłoszenie nie istnieje.",
 
   "coordSections:add:placeholder": "Wybierz działy koordynujące...",
   "coordSections:edit:placeholder": "Dodaj dział koordynujący",
