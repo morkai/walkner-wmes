@@ -175,7 +175,7 @@ define([
     {
       var onlySpigot = !user.isAllowedTo('SUPER') && user.isAllowedTo('PROD_DATA:MANAGE:SPIGOT_ONLY');
 
-      return _.assign(SettingsView.prototype.getTemplateData.apply(this, arguments), {
+      return {
         subtabs: onlySpigot ? [{_id: 'spigot'}] : [
           {_id: 'taktTime'},
           {_id: 'downtimes'},
@@ -184,7 +184,7 @@ define([
           {_id: 'componentLabels', redirect: '#componentLabels'}
         ],
         onlySpigot: onlySpigot
-      });
+      };
     },
 
     afterRender: function()
@@ -227,7 +227,7 @@ define([
 
       this.$id('lineAutoDowntimes-reasons').select2({
         width: '400px',
-        placeholder: t('production', 'settings:lineAutoDowntimes:reasons:placeholder'),
+        placeholder: this.t('settings:lineAutoDowntimes:reasons:placeholder'),
         data: downtimeReasons.map(function(d)
         {
           return {
@@ -282,7 +282,7 @@ define([
     {
       this.$id('lineAutoDowntimes-groups').select2({
         allowClear: true,
-        placeholder: t('production', 'settings:lineAutoDowntimes:groups:placeholder'),
+        placeholder: this.t('settings:lineAutoDowntimes:groups:placeholder'),
         data: (this.settings.getValue('lineAutoDowntimes') || []).map(function(lineAutoDowntime)
         {
           return {
@@ -324,7 +324,7 @@ define([
 
     addAutoDowntimeRow: function(autoDowntime)
     {
-      this.$id('lineAutoDowntimes-body').append(renderLineAutoDowntimeRow({
+      this.$id('lineAutoDowntimes-body').append(this.renderPartialHtml(renderLineAutoDowntimeRow, {
         lineAutoDowntime: {
           i: ++this.autoDowntimeIndex,
           reason: idAndLabel(downtimeReasons.get(autoDowntime.reason)),
