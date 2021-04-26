@@ -78,19 +78,16 @@ define([
         if (entry.storageType === 153)
         {
           entry.storageBin = '';
-          entry.newStorageBin = '';
         }
         else
         {
           entry.storageBin = component.get('storageBin');
-          entry.newStorageBin = component.get('newStorageBin');
         }
       }
       else
       {
         entry.description = '';
         entry.storageBin = '';
-        entry.newStorageBin = '';
         entry.minBinQty = 0;
         entry.maxBinQty = 0;
         entry.replenQty = 0;
@@ -106,17 +103,6 @@ define([
       {
         entry.storageBinRow = '';
         entry.markerColor = null;
-      }
-
-      if (entry.newStorageBin)
-      {
-        entry.newStorageBinRow = entry.newStorageBin.substr(1, 1);
-        entry.newMarkerColor = options.settings.getRowColor(entry.newStorageBinRow);
-      }
-      else
-      {
-        entry.newStorageBinRow = '';
-        entry.newMarkerColor = null;
       }
 
       if (supplyArea)

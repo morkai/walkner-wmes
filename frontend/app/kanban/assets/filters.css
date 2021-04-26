@@ -26,8 +26,7 @@
 .kanban-filter[data-column-id="container"] .form-control > option:first-child {
   font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
 }
-.kanban-filter[data-column-id="markerColor"] .form-control,
-.kanban-filter[data-column-id="newMarkerColor"] .form-control {
+.kanban-filter[data-column-id="markerColor"] .form-control {
   font-family: inherit;
 }
 .kanban-filter[data-column-id="kind"] .form-control {

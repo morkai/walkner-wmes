@@ -247,7 +247,6 @@ define([
     nc12: 'text',
     description: 'text',
     storageBin: 'text',
-    newStorageBin: 'text',
     kanbanStorageBin: 'text',
     comment: 'text',
     unit: 'text',
@@ -360,8 +359,7 @@ define([
           [{id: '', text: this.t('filters:value:empty')}].concat(KanbanSettingCollection.getMarkerColors())
         );
       }
-    },
-    newMarkerColor: 'markerColor'
+    }
 
   };
 });

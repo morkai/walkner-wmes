@@ -328,6 +328,17 @@ define([
     {
       var kanbanState = this.model;
 
+      if (kanbanState.entries.filtered.length > 100)
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: this.t('builder:error:tooMany')
+        });
+
+        return;
+      }
+
       kanbanState.builder.addFromEntries(kanbanState.entries.filtered.map(function(entry)
       {
         return entry.serialize(kanbanState);

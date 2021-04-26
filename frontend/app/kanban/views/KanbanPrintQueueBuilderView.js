@@ -199,11 +199,6 @@ define([
           view.recountTotals();
           view.validate();
         });
-      },
-
-      'change #-newStorageBin': function()
-      {
-        this.model.builder.toggleNewStorageBin(this.$id('newStorageBin').prop('checked'));
       }
 
     },
@@ -238,7 +233,6 @@ define([
       var layouts = this.model.builder.layouts;
 
       return {
-        newStorageBin: this.model.builder.newStorageBin,
         layouts: kanbanLayouts.map(function(layout)
         {
           return {
@@ -542,7 +536,6 @@ define([
       viewport.msg.saving();
 
       var $inputs = view.$('button, select, input').prop('disabled', true);
-      var newStorageBin = view.$id('newStorageBin').prop('checked');
       var jobs = [];
 
       view.model.builder.forEach(function(model)
@@ -570,12 +563,6 @@ define([
           var lineIndex = entry.lines.indexOf(line);
           var fromIndex = lineIndex * entry.kanbanQtyUser;
           var toIndex = lineIndex * entry.kanbanQtyUser + entry.kanbanQtyUser;
-          var storageBin = entry.storageBin;
-
-          if (newStorageBin && entry.newStorageBin)
-          {
-            storageBin = entry.newStorageBin;
-          }
 
           jobs.push({
             _id: uuid(),
@@ -590,7 +577,7 @@ define([
               family: entry.family,
               componentQty: entry.componentQty,
               unit: entry.unit,
-              storageBin: storageBin,
+              storageBin: entry.storageBin,
               minBinQty: entry.minBinQty,
               maxBinQty: entry.maxBinQty,
               replenQty: entry.replenQty,

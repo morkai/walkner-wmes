@@ -199,43 +199,6 @@ define([
           : '';
       }
     },
-    newStorageBin: {
-      enabled: false,
-      width: 10,
-      rotated: true,
-      prepareFilter: function(input)
-      {
-        return input.split(/[;, ]+/).filter(function(v) { return v.length > 0; }).join('; ');
-      }
-    },
-    newMarkerColor: {
-      enabled: false,
-      width: 3,
-      rotated: true,
-      expand: 150,
-      tdClassName: function()
-      {
-        return this.state.auth.manage || this.state.auth.whman ? 'kanban-is-editable' : '';
-      },
-      renderValue: function(value, column, i, entry)
-      {
-        if (!value)
-        {
-          return '';
-        }
-
-        var color = this.state.settings.getMarkerColor(entry.newMarkerColor);
-
-        return '<span class="kanban-td-color-marker" style="background: ' + color.color + '"></span>'
-          + '<span class="kanban-td-color-label">' + color.text + '</span>';
-      },
-      exportValue: function(value)
-      {
-        return value
-          ? (t.has('kanban', 'color:' + value) ? t('kanban', 'color:' + value) : value)
-          : '';
-      }
-    },
     kanbanStorageBin: {
       width: 12,
       tdClassName: invalidTdClassName

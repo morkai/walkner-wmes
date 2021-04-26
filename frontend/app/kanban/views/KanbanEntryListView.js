@@ -1743,11 +1743,6 @@ define([
         return this.model.settings.updateRowColor(data.storageBinRow, newValue);
       }
 
-      if (column._id === 'newMarkerColor')
-      {
-        return this.model.settings.updateRowColor(data.newStorageBinRow, newValue);
-      }
-
       return this.ajax({
         method: 'PATCH',
         url: entry.url(),

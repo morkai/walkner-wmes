@@ -309,9 +309,7 @@ define([
         var selected = [entry[cell.columnId] || ''];
 
         this.editors.select.call(this, cell, false, options, selected);
-      },
-
-      newMarkerColor: 'markerColor'
+      }
 
     },
 

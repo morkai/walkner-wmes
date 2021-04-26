@@ -230,8 +230,7 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="componentQty"] {
   width: 50px;
 }
-.kanban-td[data-column-id="storageBin"],
-.kanban-td[data-column-id="newStorageBin"] {
+.kanban-td[data-column-id="storageBin"] {
   width: 80px;
   text-align: left;
 }
@@ -295,12 +294,10 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="discontinued"] {
   width: 30px;
 }
-.kanban-td[data-column-id="markerColor"],
-.kanban-td[data-column-id="newMarkerColor"] {
+.kanban-td[data-column-id="markerColor"] {
   width: 30px;
 }
-.kanban-tbody-table .kanban-td[data-column-id="markerColor"],
-.kanban-tbody-table .kanban-td[data-column-id="newMarkerColor"] {
+.kanban-tbody-table .kanban-td[data-column-id="markerColor"] {
   text-align: left;
 }
 .kanban-td-color-marker {
@@ -392,8 +389,7 @@ tr:hover > .kanban-is-invalid,
 .kanban-editor-form[data-column-id="comment"] {
   width: 400px;
 }
-.kanban-editor-form[data-column-id="markerColor"],
-.kanban-editor-form[data-column-id="newMarkerColor"] {
+.kanban-editor-form[data-column-id="markerColor"] {
   width: 140px;
 }
 .kanban-popover .popover-title {

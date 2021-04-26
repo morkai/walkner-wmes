@@ -29,27 +29,6 @@
 .kanban-hide {
   color: inherit;
 }
-.kanban-builder-newStorageBin {
-  margin: 0 0 0 auto;
-  padding-right: 12px;
-  font-weight: normal;
-  cursor: pointer;
-  border-right: 1px solid #ccc;
-}
-.kanban-builder-newStorageBin > input {
-  margin-top: 0;
-  vertical-align: middle;
-}
-.kanban-builder-newStorageBin > span {
-  display: inline-block;
-  vertical-align: middle;
-}
-.kanban-builder-newStorageBin > input:checked + span {
-  color: #00ff00;
-  text-shadow: 1px 1px 1px #000;
-  font-weight: bold;
-  font-size: 16px;
-}
 .kanban-builder .btn:focus {
   outline: none;
 }
