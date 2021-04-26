@@ -113,11 +113,12 @@ define([
       if (items.length)
       {
         var shiftStartTime = view.prodShift.get('date').getTime();
+        var shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
         var now = Date.now();
 
         items.forEach(function(item, i)
         {
-          if (item.startedAt < shiftStartTime)
+          if (item.startedAt < shiftStartTime || item.startedAt >= shiftEndTime)
           {
             return;
           }
