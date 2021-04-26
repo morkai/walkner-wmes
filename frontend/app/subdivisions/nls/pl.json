@@ -15,8 +15,10 @@
   "autoDowntimes:when": "Inicjalizacja",
   "autoDowntimes:when:initial": "na początku zmiany",
   "autoDowntimes:when:always": "zawsze",
-  "autoDowntimes:when:time": "o godzinie:",
+  "autoDowntimes:when:time": "o godzinie",
   "autoDowntimes:duration": "({minutes} {minutes, plural, one{minuta} few{minuty} other{minut}})",
+  "autoDowntimes:when:after": "po innym",
+  "autoDowntimes:when:after:placeholder": "wybierz inny przestój...",
 
   "TYPE:assembly": "Montaż",
   "TYPE:press": "Tłocznia",

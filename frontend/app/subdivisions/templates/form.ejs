@@ -1,32 +1,32 @@
-<form class="subdivisions-form" method="post" action="<%- formAction %>">
+<form class="subdivisions-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-type" class="control-label is-required"><%- helpers.t('PROPERTY:type') %></label>
+        <label for="<%- id('type') %>" class="control-label is-required"><%- t('PROPERTY:type') %></label>
         <% ['assembly', 'press', 'storage', 'paintShop', 'other'].forEach(function(type) { %>
         <div class="radio">
-          <label><input type="radio" name="type" value="<%- type %>" checked> <%- helpers.t('TYPE:' + type) %></label>
+          <label><input type="radio" name="type" value="<%- type %>" checked> <%- t('TYPE:' + type) %></label>
         </div>
         <% }) %>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="150">
+        <label for="<%- id('name') %>-" class="control-label is-required"><%- t('PROPERTY:name') %></label>
+        <input id="<%- id('') %>" class="form-control" type="text" name="name" required maxlength="150">
       </div>
       <% ['prodTaskTags', 'aor'].forEach(function(prop) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- helpers.t('PROPERTY:' + prop) %></label>
-        <input id="<%- idPrefix %>-<%- prop %>" type="text" autocomplete="new-password" name="<%- prop %>">
+        <label for="<%- id(prop) %>" class="control-label"><%- t('PROPERTY:' + prop) %></label>
+        <input id="<%- id(prop) %>" type="text" name="<%- prop %>">
       </div>
       <% }) %>
       <table class="table table-condensed table-with-tfoot subdivisions-form-autoDowntimes">
         <thead>
         <tr>
-          <th class="is-min"><%- helpers.t('autoDowntimes:reason') %></th>
-          <th class="is-min"><%- helpers.t('autoDowntimes:when') %></th>
+          <th class="is-min"><%- t('autoDowntimes:reason') %></th>
+          <th class="is-min"><%- t('autoDowntimes:when') %></th>
           <th class="is-min"></th>
           <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
           <th></th>
@@ -34,16 +34,17 @@
         </thead>
         <tfoot>
         <tr>
-          <td class="subdivisions-form-autoDowntimes-actions" colspan="4">
-            <input id="<%- idPrefix %>-autoDowntimeReason" type="text" autocomplete="new-password">
-            <button id="<%- idPrefix %>-addAutoDowntime" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('autoDowntimes:add') %></span></button>
+          <td class="subdivisions-form-autoDowntimes-actions" colspan="5">
+            <input id="<%- id('autoDowntimeReason') %>" type="text">
+            <button id="<%- id('addAutoDowntime') %>" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('autoDowntimes:add') %></span></button>
+          </td>
         </tr>
         </tfoot>
-        <tbody id="<%- idPrefix %>-autoDowntimes"></tbody>
+        <tbody id="<%- id('autoDowntimes') %>"></tbody>
       </table>
       <div class="form-group">
-        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- helpers.t('PROPERTY:deactivatedAt') %></label>
-        <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
+        <label for="<%- id('deactivatedAt') %>" class="control-label"><%- t('PROPERTY:deactivatedAt') %></label>
+        <input id="<%- id('deactivatedAt') %>" class="form-control" type="date" name="deactivatedAt" maxlength="10">
       </div>
     </div>
     <div class="panel-footer">

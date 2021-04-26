@@ -1428,7 +1428,7 @@ define([
      */
     startNextAutoDowntime: function(prevDowntime)
     {
-      if (!prevDowntime || !prevDowntime.get('auto'))
+      if (!prevDowntime)
       {
         return;
       }
@@ -1453,13 +1453,15 @@ define([
         return;
       }
 
+      var prevAuto = prevDowntime.get('auto');
+      var prevReason = prevDowntime.get('reason');
       var nextAutoDowntime;
 
       for (var i = 0; i < autoDowntimes.length; ++i)
       {
         var autoDowntime = autoDowntimes[i];
 
-        if (autoDowntime.reason !== prevDowntime.get('reason'))
+        if (prevAuto && autoDowntime.reason !== prevReason)
         {
           continue;
         }
@@ -1468,7 +1470,8 @@ define([
         {
           var next = autoDowntimes[j];
 
-          if (next.when !== 'time')
+          if ((prevAuto && next.when === 'always')
+            || (next.when === 'after' && next.after === prevReason))
           {
             nextAutoDowntime = next;
 
@@ -1482,15 +1485,34 @@ define([
         }
       }
 
-      if (nextAutoDowntime)
+      if (!nextAutoDowntime)
       {
-        this.startDowntime({
-          aor: aor,
-          reason: nextAutoDowntime.reason,
-          reasonComment: '',
-          auto: {}
-        });
+        return;
       }
+
+      var downtimeReason = downtimeReasons.get(nextAutoDowntime.reason);
+
+      if (!downtimeReason)
+      {
+        return;
+      }
+
+      if (nextAutoDowntime.when === 'after')
+      {
+        var reasonAors = downtimeReason.get('aors');
+
+        if (Array.isArray(reasonAors) && reasonAors.length === 1)
+        {
+          aor = reasonAors[0];
+        }
+      }
+
+      this.startDowntime({
+        aor: aor,
+        reason: downtimeReason.id,
+        reasonComment: '',
+        auto: {}
+      });
     },
 
     /**

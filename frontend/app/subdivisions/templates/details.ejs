@@ -1,32 +1,32 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <%- helpers.t('core', 'PANEL:TITLE:details') %>
+    <%- t('core', 'PANEL:TITLE:details') %>
   </div>
   <div class="panel-details">
     <div class="props first">
       <% ['division', 'type', 'name', 'prodTaskTags', 'aor'].forEach(function(prop) { %>
       <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+        <div class="prop-name"><%- t('PROPERTY:' + prop) %></div>
         <div class="prop-value"><%- model[prop] || '' %></div>
       </div>
       <% }) %>
       <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:autoDowntimes') %></div>
+        <div class="prop-name"><%- t('PROPERTY:autoDowntimes') %></div>
         <div class="prop-value">
           <% if (model.autoDowntimes.length) { %>
           <ol>
             <% model.autoDowntimes.forEach(function(autoDowntime) { %>
             <li>
               <% if (autoDowntime.when !== 'time') { %>
-              <%= autoDowntime.reason %> (<%- helpers.t('autoDowntimes:when:' + autoDowntime.when) %>)
+              <%= autoDowntime.reason %> (<%- t('autoDowntimes:when:' + autoDowntime.when) %>)
               <% } else { %>
-              <%= autoDowntime.reason %>, <%- helpers.t('autoDowntimes:when:time') %>
+              <%= autoDowntime.reason %>, <%- t('autoDowntimes:when:time') %>
               <ul>
                 <% _.forEach(autoDowntime.time, function(time) { %>
                 <li>
                   <%- time.h %>:<%- time.m %>
                   <% if (time.d) { %>
-                  <%- helpers.t('autoDowntimes:duration', {minutes: time.d}) %>
+                  <%- t('autoDowntimes:duration', {minutes: time.d}) %>
                   <% } %>
                 </li>
                 <% }) %>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:deactivatedAt') %></div>
+        <div class="prop-name"><%- t('PROPERTY:deactivatedAt') %></div>
         <div class="prop-value"><%- model.deactivatedAt || '-' %></div>
       </div>
     </div>

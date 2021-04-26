@@ -91,23 +91,6 @@ define([
   window.fakeSN = handleScanBuffer;
 
   return {
-    // TODO remove
-    handleKeyboardEvent: function(e)
-    {
-      if (e.target.classList.contains('form-control')
-        && e.target.dataset.snAccept === undefined)
-      {
-        return;
-      }
-
-      if (e.key && e.key.length === 1)
-      {
-        scanBuffer += e.key.toUpperCase();
-
-        clearTimeout(handleTimeout);
-        handleTimeout = setTimeout(handleScanBuffer, 50);
-      }
-    },
     contains: function(sn)
     {
       return !VIRTUAL_SN_RE.test(sn) && !!snBuffer[sn];

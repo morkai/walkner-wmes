@@ -3,8 +3,32 @@
 
 'use strict';
 
-db.componentlabels.dropIndex({operationNo: 1, componentCode: 1});
-db.componentlabels.createIndex({operationNo: 1, componentCode: 1});
+db.subdivisions.find({}).forEach(doc =>
+{
+  if (!doc.autoDowntimes)
+  {
+    doc.autoDowntimes = [];
+  }
 
-db.suggestions.updateMany({resolutions: {$exists: false}}, {resolutions: []});
-db.suggestions.addIndex({'resolutions._id': 1});
+  doc.autoDowntimes.forEach(adt =>
+  {
+    if (!adt.always)
+    {
+      adt.always = '';
+    }
+  });
+
+  db.subdivisions.updateOne({_id: doc._id}, {$set: {autoDowntimes: doc.autoDowntimes}});
+});
+
+db.settings.updateOne({_id: 'production.lineAutoDowntimes'}, {$set: {
+  value: db.settings.findOne({_id: 'production.lineAutoDowntimes'}).value.map(adt =>
+  {
+    if (!adt.always)
+    {
+      adt.always = '';
+    }
+
+    return adt;
+  })
+}});

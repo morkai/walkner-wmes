@@ -21,7 +21,7 @@ define([
   FormView,
   idAndLabel,
   template,
-  renderAutoDowntimeRow
+  autoDowntimeRowTemplate
 ) {
   'use strict';
 
@@ -41,6 +41,7 @@ define([
           this.addAutoDowntime({
             reason: reason,
             when: 'always',
+            after: '',
             time: []
           });
         }
@@ -76,10 +77,11 @@ define([
       },
       'change [name$="when"]': function(e)
       {
-        var $tr = this.$(e.target).closest('tr');
-        var when = $tr.find('[name$="when"]:checked').val();
-
-        $tr.find('[name$="time"]').prop('disabled', when !== 'time');
+        this.toggleAutoDowntimeOptions(this.$(e.currentTarget).closest('tr'));
+      },
+      'change [name$="after"]': function(e)
+      {
+        this.toggleAutoDowntimeOptions(this.$(e.currentTarget).closest('tr'));
       },
       'change [name$="time"]': function(e)
       {
@@ -136,7 +138,7 @@ define([
     {
       FormView.prototype.initialize.call(this);
 
-      this.autoDowntimeCounter = 0;
+      this.autoDowntimeI = 0;
 
       this.orgUnitDropdownsView = new OrgUnitDropdownsView({
         orgUnit: OrgUnitDropdownsView.ORG_UNIT.DIVISION,
@@ -210,21 +212,28 @@ define([
 
       _.forEach(data.autoDowntimes, function(autoDowntime)
       {
-        if (autoDowntime.when !== 'time')
+        if (autoDowntime.when === 'time')
         {
-          return;
+          autoDowntime.time = autoDowntime.time.split(',').map(function(time)
+          {
+            var matches = time.match(/(?:([0-9]+)@)?([0-9]{1,2}):([0-9]{1,2})/);
+
+            return {
+              h: +matches[2],
+              m: +matches[3],
+              d: +matches[1] || 0
+            };
+          });
+        }
+        else
+        {
+          autoDowntime.time = [];
         }
 
-        autoDowntime.time = autoDowntime.time.split(',').map(function(time)
+        if (autoDowntime.when !== 'after')
         {
-          var matches = time.match(/(?:([0-9]+)@)?([0-9]{1,2}):([0-9]{1,2})/);
-
-          return {
-            h: +matches[2],
-            m: +matches[3],
-            d: +matches[1] || 0
-          };
-        });
+          autoDowntime.after = '';
+        }
       });
 
       var deactivatedAt = time.getMoment(data.deactivatedAt || null);
@@ -244,19 +253,45 @@ define([
         return;
       }
 
-      this.$id('autoDowntimes').append(renderAutoDowntimeRow({
+      const $row = this.renderPartial(autoDowntimeRowTemplate, {
         autoDowntime: {
-          i: ++this.autoDowntimeCounter,
+          i: ++this.autoDowntimeI,
           reason: idAndLabel(downtimeReasons.get(autoDowntime.reason)),
           when: autoDowntime.when,
-          time: (autoDowntime.time || []).map(function(time)
-          {
-            return (time.d > 0 ? (time.d + '@') : '')
-              + (time.h < 10 ? '0' : '') + time.h
-              + ':' + (time.m < 10 ? '0' : '') + time.m;
-          }).join(', ')
+          after: autoDowntime.after || '',
+          time: autoDowntime.time
+            .map(time =>
+            {
+              return (time.d > 0 ? `${time.d}@` : '')
+                + time.h.toString().padStart(2, '0')
+                + ':'
+                + time.m.toString().padStart(2, '0');
+            })
+            .join(', ')
         }
-      }));
+      });
+
+      this.$id('autoDowntimes').append($row);
+
+      $row.find('input[name$="after"]').select2({
+        width: '400px',
+        placeholder: this.t('autoDowntimes:when:after:placeholder'),
+        data: downtimeReasons
+          .filter(r => r.id !== autoDowntime.reason)
+          .map(idAndLabel)
+      });
+
+      this.toggleAutoDowntimeOptions($row);
+    },
+
+    toggleAutoDowntimeOptions: function($row)
+    {
+      const when = $row.find('select[name$="when"]').val();
+      const $after = $row.find('input[name$="after"]');
+      const $time = $row.find('input[name$="time"]');
+
+      $after.select2('container').toggleClass('hidden', when !== 'after');
+      $time.toggleClass('hidden', when !== 'time');
     }
 
   });

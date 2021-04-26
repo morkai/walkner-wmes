@@ -188,12 +188,19 @@ define([
       return options.hasAccessToAor(this.get('aor')) ? 1 : 0;
     },
 
-    getDurationString: function(currentTime, compact)
+    getDuration: function(currentTime)
     {
       var startTime = Date.parse(this.get('startedAt'));
       var endTime = Date.parse(this.get('finishedAt')) || currentTime || Date.now();
 
-      return time.toString(Math.round((endTime - startTime) / 1000), compact);
+      return endTime - startTime;
+    },
+
+    getDurationString: function(currentTime, compact)
+    {
+      var duration = this.getDuration(currentTime);
+
+      return time.toString(Math.round(duration / 1000), compact);
     },
 
     isBreak: function()

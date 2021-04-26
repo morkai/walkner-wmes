@@ -395,5 +395,7 @@
   "settings:lineAutoDowntimes:init": "Inicjalizacja",
   "settings:lineAutoDowntimes:when:initial": "na początku zmiany",
   "settings:lineAutoDowntimes:when:always": "zawsze",
-  "settings:lineAutoDowntimes:when:time": "o godzinie:"
+  "settings:lineAutoDowntimes:when:time": "o godzinie",
+  "settings:lineAutoDowntimes:when:after": "po innym",
+  "settings:lineAutoDowntimes:when:after:placeholder": "wybierz inny przestój..."
 }

@@ -1,14 +1,18 @@
 <tr>
-  <td class="is-min"><input name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].reason" type="hidden" value="<%- lineAutoDowntime.reason.id %>"> <%= lineAutoDowntime.reason.text %></td>
+  <td class="is-min"><input name="lineAutoDowntimes[<%- autoDowntime.i %>].reason" type="hidden" value="<%- autoDowntime.reason.id %>"> <%= autoDowntime.reason.text %></td>
   <td class="is-min">
-    <% ['initial', 'always', 'time'].forEach(function(when) { %>
-    <label class="radio-inline">
-      <input name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].when" type="radio" value="<%- when %>" <%- when === lineAutoDowntime.when ? 'checked' : '' %>>
-      <%- t('settings:lineAutoDowntimes:when:' + when, {time: ''}) %>
-    </label>
-    <% }) %>
+    <select class="form-control" name="lineAutoDowntimes[<%- autoDowntime.i %>].when" style="width: auto">
+      <% ['initial', 'always', 'after', 'time'].forEach(function(when) { %>
+        <option value="<%- when %>" <%- when === autoDowntime.when ? 'selected' : '' %>>
+          <%- t('settings:lineAutoDowntimes:when:' + when, {time: ''}) %>
+        </option>
+      <% }) %>
+    </select>
   </td>
-  <td class="is-min"><input class="form-control production-settings-lineAutoDowntimes-time" name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].time" type="text" autocomplete="new-password" value="<%- lineAutoDowntime.time %>" placeholder="00:00, 00:00..." <%- lineAutoDowntime.when === 'time' ? '' : 'disabled' %>></td>
+  <td class="is-min">
+    <input class="production-settings-lineAutoDowntimes-after" name="lineAutoDowntimes[<%- autoDowntime.i %>].after" type="text" value="<%- autoDowntime.after %>">
+    <input class="form-control production-settings-lineAutoDowntimes-time" name="lineAutoDowntimes[<%- autoDowntime.i %>].time" type="text" value="<%- autoDowntime.time %>" placeholder="00:00, 00:00...">
+  </td>
   <td class="actions">
     <div class="actions-group">
       <button class="btn btn-default" data-auto-downtime-action="up" type="button"><i class="fa fa-arrow-up"></i></button>

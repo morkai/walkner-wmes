@@ -1,14 +1,18 @@
 <tr>
   <td class="is-min"><input name="autoDowntimes[<%- autoDowntime.i %>].reason" type="hidden" value="<%- autoDowntime.reason.id %>"> <%= autoDowntime.reason.text %></td>
   <td class="is-min">
-    <% ['initial', 'always', 'time'].forEach(function(when) { %>
-    <label class="radio-inline">
-      <input name="autoDowntimes[<%- autoDowntime.i %>].when" type="radio" value="<%- when %>" <%- when === autoDowntime.when ? 'checked' : '' %>>
-      <%- t('subdivisions', 'autoDowntimes:when:' + when, {time: ''}) %>
-    </label>
-    <% }) %>
+    <select class="form-control" name="autoDowntimes[<%- autoDowntime.i %>].when" style="width: auto">
+      <% ['initial', 'always', 'after', 'time'].forEach(function(when) { %>
+        <option value="<%- when %>" <%- when === autoDowntime.when ? 'selected' : '' %>>
+          <%- t('autoDowntimes:when:' + when, {time: ''}) %>
+        </option>
+      <% }) %>
+    </select>
   </td>
-  <td class="is-min"><input class="form-control subdivisions-form-autoDowntimes-time" name="autoDowntimes[<%- autoDowntime.i %>].time" type="text" autocomplete="new-password" value="<%- autoDowntime.time %>" placeholder="00:00, 00:00..." <%- autoDowntime.when === 'time' ? '' : 'disabled' %>></td>
+  <td class="is-min">
+    <input class="subdivisions-form-autoDowntimes-after" name="autoDowntimes[<%- autoDowntime.i %>].after" type="text" value="<%- autoDowntime.after %>">
+    <input class="form-control subdivisions-form-autoDowntimes-time" name="autoDowntimes[<%- autoDowntime.i %>].time" type="text" value="<%- autoDowntime.time %>" placeholder="00:00, 00:00...">
+  </td>
   <td class="actions">
     <div class="actions-group">
       <button class="btn btn-default" data-auto-downtime-action="up" type="button"><i class="fa fa-arrow-up"></i></button>

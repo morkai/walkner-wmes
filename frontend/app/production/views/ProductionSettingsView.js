@@ -20,7 +20,7 @@ define([
   downtimeReasons,
   orgUnits,
   SettingsView,
-  renderLineAutoDowntimeRow,
+  lineAutoDowntimeRowTemplate,
   template
 ) {
   'use strict';
@@ -60,6 +60,7 @@ define([
         var autoDowntime = {
           reason: e.added.id,
           when: 'always',
+          after: '',
           time: []
         };
 
@@ -94,20 +95,20 @@ define([
       },
       'click .btn[data-auto-downtime-action="remove"]': function(e)
       {
-        var view = this;
-        var $tr = view.$(e.target).closest('tr').fadeOut('fast', function()
+        var $tr = this.$(e.target).closest('tr').fadeOut('fast', () =>
         {
           $tr.remove();
-          view.updateAutoDowntimes();
+          this.updateAutoDowntimes();
         });
       },
       'change [name$="when"]': function(e)
       {
-        var $tr = this.$(e.target).closest('tr');
-        var when = $tr.find('[name$="when"]:checked').val();
-
-        $tr.find('[name$="time"]').prop('disabled', when !== 'time');
-
+        this.toggleAutoDowntimeOptions(this.$(e.currentTarget).closest('tr'));
+        this.updateAutoDowntimes();
+      },
+      'change [name$="after"]': function(e)
+      {
+        this.toggleAutoDowntimeOptions(this.$(e.currentTarget).closest('tr'));
         this.updateAutoDowntimes();
       },
       'change [name$="time"]': function(e)
@@ -166,7 +167,7 @@ define([
     {
       SettingsView.prototype.initialize.apply(this, arguments);
 
-      this.autoDowntimeIndex = 0;
+      this.autoDowntimeI = 0;
 
       this.selectedAutoDowntimeGroup = null;
     },
@@ -183,7 +184,7 @@ define([
           {_id: 'bomChecker', redirect: '#orderBomMatchers'},
           {_id: 'componentLabels', redirect: '#componentLabels'}
         ],
-        onlySpigot: onlySpigot
+        onlySpigot
       };
     },
 
@@ -191,10 +192,10 @@ define([
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
 
-      var downtimes = downtimeReasons.map(idAndLabel);
-      var activeLines = orgUnits.getAllByType('prodLine')
-        .filter(function(d) { return !d.get('deactivatedAt'); })
-        .map(idAndLabel);
+      const downtimes = downtimeReasons.map(idAndLabel);
+      const activeLines = orgUnits.getActiveByType('prodLine')
+        .map(idAndLabel)
+        .sort((a, b) => a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true}));
 
       this.$id('rearmDowntimeReason').select2({
         allowClear: true,
@@ -228,7 +229,7 @@ define([
       this.$id('lineAutoDowntimes-reasons').select2({
         width: '400px',
         placeholder: this.t('settings:lineAutoDowntimes:reasons:placeholder'),
-        data: downtimeReasons.map(function(d)
+        data: downtimeReasons.map(d =>
         {
           return {
             id: d.id,
@@ -240,23 +241,15 @@ define([
       this.$id('lineAutoDowntimes-lines').select2({
         placeholder: ' ',
         multiple: true,
-        data: orgUnits.getAllByType('prodLine')
-          .filter(function(prodLine)
+        data: orgUnits.getActiveByType('prodLine')
+          .filter(prodLine =>
           {
-            if (prodLine.get('deactivatedAt'))
-            {
-              return false;
-            }
-
-            var subdivision = orgUnits.getSubdivisionFor(prodLine);
+            const subdivision = orgUnits.getSubdivisionFor(prodLine);
 
             return subdivision && subdivision.get('type') === 'assembly';
           })
           .map(idAndLabel)
-          .sort(function(a, b)
-          {
-            return a.text.localeCompare(b.text);
-          })
+          .sort((a, b) => a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true}))
       });
 
       if (this.selectedAutoDowntimeGroup)
@@ -273,7 +266,7 @@ define([
 
     resizeTaktTimeCoeffs: function()
     {
-      var $textarea = this.$id('taktTime-coeffs');
+      const $textarea = this.$id('taktTime-coeffs');
 
       $textarea.prop('rows', ($textarea.val() || '').split('\n').length + 5);
     },
@@ -283,7 +276,7 @@ define([
       this.$id('lineAutoDowntimes-groups').select2({
         allowClear: true,
         placeholder: this.t('settings:lineAutoDowntimes:groups:placeholder'),
-        data: (this.settings.getValue('lineAutoDowntimes') || []).map(function(lineAutoDowntime)
+        data: (this.settings.getValue('lineAutoDowntimes') || []).map(lineAutoDowntime =>
         {
           return {
             id: lineAutoDowntime.id,
@@ -302,9 +295,9 @@ define([
 
     selectAutoDowntimeGroup: function(groupId)
     {
-      var group = _.find(
+      const group = _.find(
         this.settings.getValue('lineAutoDowntimes'),
-        function(group) { return group.id === groupId; }
+        group => group.id === groupId
       );
 
       if (!group)
@@ -324,21 +317,45 @@ define([
 
     addAutoDowntimeRow: function(autoDowntime)
     {
-      this.$id('lineAutoDowntimes-body').append(this.renderPartialHtml(renderLineAutoDowntimeRow, {
-        lineAutoDowntime: {
-          i: ++this.autoDowntimeIndex,
+      const $row = this.renderPartial(lineAutoDowntimeRowTemplate, {
+        autoDowntime: {
+          i: ++this.autoDowntimeI,
           reason: idAndLabel(downtimeReasons.get(autoDowntime.reason)),
           when: autoDowntime.when,
+          after: autoDowntime.after || '',
           time: autoDowntime.time
-            .map(function(time)
+            .map(time =>
             {
-              return (time.d > 0 ? (time.d + '@') : '')
-                + (time.h < 10 ? '0' : '') + time.h
-                + ':' + (time.m < 10 ? '0' : '') + time.m;
+              return (time.d > 0 ? `${time.d}@` : '')
+                + time.h.toString().padStart(2, '0')
+                + ':'
+                + time.m.toString().padStart(2, '0');
             })
             .join(', ')
         }
-      }));
+      });
+
+      this.$id('lineAutoDowntimes-body').append($row);
+
+      $row.find('input[name$="after"]').select2({
+        width: '400px',
+        placeholder: this.t('settings:lineAutoDowntimes:when:after:placeholder'),
+        data: downtimeReasons
+          .filter(r => r.id !== autoDowntime.reason)
+          .map(idAndLabel)
+      });
+
+      this.toggleAutoDowntimeOptions($row);
+    },
+
+    toggleAutoDowntimeOptions: function($row)
+    {
+      const when = $row.find('select[name$="when"]').val();
+      const $after = $row.find('input[name$="after"]');
+      const $time = $row.find('input[name$="time"]');
+
+      $after.select2('container').toggleClass('hidden', when !== 'after');
+      $time.toggleClass('hidden', when !== 'time');
     },
 
     clearAutoDowntimeGroup: function()
@@ -375,14 +392,15 @@ define([
 
     updateAutoDowntimes: function()
     {
-      var downtimes = [];
+      const downtimes = [];
 
       this.$id('lineAutoDowntimes-body').find('tr').each(function()
       {
-        downtimes.push({
+        const dt = {
           reason: this.querySelector('[name$="reason"]').value,
-          when: this.querySelector('[name$="when"]:checked').value,
-          time: this.querySelector('[name$="time"]').value.split(',').map(function(time)
+          when: this.querySelector('[name$="when"]').value,
+          after: this.querySelector('[name$="after"]').value,
+          time: this.querySelector('[name$="time"]').value.split(',').map(time =>
           {
             var matches = time.match(/(?:([0-9]+)@)?([0-9]{1,2}):([0-9]{1,2})/);
 
@@ -391,8 +409,20 @@ define([
               m: +matches[3],
               d: +matches[1] || 0
             };
-          }).filter(function(time) { return !!time; })
-        });
+          }).filter(v => !!v)
+        };
+
+        if (dt.when !== 'after')
+        {
+          dt.after = '';
+        }
+
+        if (dt.when !== 'time')
+        {
+          dt.time = [];
+        }
+
+        downtimes.push(dt);
       });
 
       this.selectedAutoDowntimeGroup.downtimes = downtimes;
@@ -414,10 +444,10 @@ define([
     {
       this.saveAutoDowntimesTimer = null;
 
-      var lineAutoDowntimes = [].concat(this.settings.getValue('lineAutoDowntimes') || []);
-      var selectedGroup = this.selectedAutoDowntimeGroup;
-      var groupIndex = _.findIndex(lineAutoDowntimes, function(group) { return group.id === selectedGroup.id; });
-      var existingGroup = lineAutoDowntimes[groupIndex];
+      let lineAutoDowntimes = [].concat(this.settings.getValue('lineAutoDowntimes') || []);
+      const selectedGroup = this.selectedAutoDowntimeGroup;
+      const groupIndex = _.findIndex(lineAutoDowntimes, group => group.id === selectedGroup.id);
+      const existingGroup = lineAutoDowntimes[groupIndex];
 
       if (existingGroup)
       {
@@ -426,13 +456,10 @@ define([
       else
       {
         lineAutoDowntimes.push(selectedGroup);
-        lineAutoDowntimes.sort(function(a, b)
-        {
-          return a.name.localeCompare(b.name);
-        });
+        lineAutoDowntimes.sort((a, b) => a.name.localeCompare(b.name));
       }
 
-      lineAutoDowntimes = lineAutoDowntimes.filter(function(group)
+      lineAutoDowntimes = lineAutoDowntimes.filter(group =>
       {
         return group.name.length > 0
           && group.lines.length > 0
@@ -468,11 +495,11 @@ define([
     {
       this.setUpAutoDowntimeGroups();
 
-      var oldSelectedGroup = this.selectedAutoDowntimeGroup;
-      var newSelectedGroup = _.find(this.settings.getValue('lineAutoDowntimes'), function(group)
-      {
-        return group.id === oldSelectedGroup.id;
-      });
+      const oldSelectedGroup = this.selectedAutoDowntimeGroup;
+      const newSelectedGroup = _.find(
+        this.settings.getValue('lineAutoDowntimes'),
+          group => group.id === oldSelectedGroup.id
+      );
 
       if (!newSelectedGroup)
       {

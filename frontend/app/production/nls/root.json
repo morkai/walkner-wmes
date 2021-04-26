@@ -396,9 +396,11 @@
     "settings:lineAutoDowntimes:lines:label": "Production lines in the group",
     "settings:lineAutoDowntimes:reason": "Auto downtime reason",
     "settings:lineAutoDowntimes:init": "Initialization",
-    "settings:lineAutoDowntimes:when:initial": "only shift start",
+    "settings:lineAutoDowntimes:when:initial": "at shift start",
     "settings:lineAutoDowntimes:when:always": "always",
-    "settings:lineAutoDowntimes:when:time": "at:"
+    "settings:lineAutoDowntimes:when:time": "at",
+    "settings:lineAutoDowntimes:when:after": "after",
+    "settings:lineAutoDowntimes:when:after:placeholder": "choose another reason..."
   },
   "pl": true
 }
