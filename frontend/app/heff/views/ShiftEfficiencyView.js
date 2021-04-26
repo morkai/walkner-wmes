@@ -25,6 +25,7 @@ define([
 
     initialize: function()
     {
+      this.debug = false;
       this.currentMetrics = 'tt';
 
       this.todoView = new ShiftTimelineView({
@@ -109,6 +110,15 @@ define([
         var workDuration = pso.get('workDuration');
         var quantityDone = pso.get('quantityDone') || 1;
 
+        if (this.debug)
+        {
+          console.log({
+            workDuration: workDuration,
+            quantityDone: quantityDone,
+            now: new Date(now)
+          });
+        }
+
         if (workDuration > 0)
         {
           workDuration *= 3600000;
@@ -139,6 +149,16 @@ define([
 
             workDuration -= finishedAt - startedAt;
           });
+
+          if (this.debug)
+          {
+            console.log({
+              workDuration: workDuration,
+              startedAt: new Date(startedAt),
+              finishedAt: new Date(finishedAt),
+              prodDowntimes: this.model.prodDowntimes
+            });
+          }
         }
 
         var plannedTt = pso.get('sapTaktTime');
@@ -155,9 +175,26 @@ define([
           icon = 'fa-frown-o';
         }
 
+        if (this.debug)
+        {
+          console.log({
+            plannedTt: plannedTt,
+            actualTt: actualTt
+          });
+        }
+
         if (pso.get('quantityDone'))
         {
           var orderEff = pso.getEfficiency({workDuration: workDuration / 3600000});
+
+          if (this.debug)
+          {
+            console.log({
+              orderEff: orderEff,
+              quantityDone: pso.get('quantityDone'),
+              workDuration: workDuration
+            });
+          }
 
           if (orderEff)
           {
@@ -168,6 +205,14 @@ define([
 
       this.$id('actualTt').text(actualTtText);
       this.$id('orderEff').text(orderEffText);
+
+      if (this.debug)
+      {
+        console.log({
+          actualTtText: actualTtText,
+          orderEffText: orderEffText
+        });
+      }
 
       if (!this.$id('icon').hasClass(icon))
       {
