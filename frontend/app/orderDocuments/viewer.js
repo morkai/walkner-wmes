@@ -592,6 +592,15 @@ function showComponentLabel(e)
       marks = [];
     }
 
+    if (!marks.length)
+    {
+      componentLabel = null;
+
+      el.style.display = 'none';
+
+      return;
+    }
+
     const candidates = marks.map(mark =>
     {
       var distance = Number.MAX_SAFE_INTEGER;
