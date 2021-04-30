@@ -52,6 +52,7 @@
     "section:downtimes": "Downtimes",
     "section:isa": "Storage area",
     "section:taktTime": "Cycle time",
+    "section:sequence": "Sequence",
 
     "property:currentTime": "Current time",
     "property:shift": "Shift",
@@ -362,6 +363,11 @@
     "componentLabels:error": "Printing failed.",
     "componentLabels:error:PRINTER_NOT_FOUND": "Printer not found.",
     "componentLabels:error:INVALID_PRINTER": "Invalid printer.",
+
+    "sequence:shift": "Shift",
+    "sequence:order": "Order",
+    "sequence:quantity": "Quantity",
+    "sequence:empty": "No data.",
 
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",

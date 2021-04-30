@@ -28,6 +28,7 @@ define([
   '../views/TaktTimeView',
   '../views/SpigotCheckerView',
   '../views/ExecutionView',
+  '../views/SequenceView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
@@ -58,6 +59,7 @@ define([
   TaktTimeView,
   SpigotCheckerView,
   ExecutionView,
+  SequenceView,
   productionPageTemplate,
   duplicateWarningTemplate
 ) {
@@ -288,24 +290,26 @@ define([
         embedded: IS_EMBEDDED,
         vkb: page.vkbView
       });
+      page.sequenceView = new SequenceView({
+        model: model
+      });
       page.executionView = new ExecutionView({
         model: model
       });
 
-      var idPrefix = '#' + page.idPrefix + '-';
-
-      page.setView(idPrefix + 'controls', page.controlsView);
-      page.setView(idPrefix + 'header', page.headerView);
-      page.setView(idPrefix + 'data', page.dataView);
-      page.setView(idPrefix + 'execution', page.executionView);
-      page.setView(idPrefix + 'downtimes', page.downtimesView);
-      page.setView(idPrefix + 'taktTime', page.taktTimeView);
-      page.setView(idPrefix + 'quantities', page.quantitiesView);
-      page.setView(idPrefix + 'isa', page.isaView);
+      page.setView('#-controls', page.controlsView);
+      page.setView('#-header', page.headerView);
+      page.setView('#-data', page.dataView);
+      page.setView('#-execution', page.executionView);
+      page.setView('#-sequence', page.sequenceView);
+      page.setView('#-downtimes', page.downtimesView);
+      page.setView('#-taktTime', page.taktTimeView);
+      page.setView('#-quantities', page.quantitiesView);
+      page.setView('#-isa', page.isaView);
 
       if (IS_EMBEDDED)
       {
-        page.setView(idPrefix + 'vkb', page.vkbView);
+        page.setView('#-vkb', page.vkbView);
       }
     },
 
@@ -333,18 +337,9 @@ define([
           page.layout.setBreadcrumbs(page.breadcrumbs, page);
         }
 
-        var oldState = model.previous('state');
-        var newState = model.get('state');
-
-        if (oldState)
-        {
-          page.$el.removeClass('is-' + oldState);
-        }
-
-        if (newState)
-        {
-          page.$el.addClass('is-' + newState);
-        }
+        page.$el
+          .removeClass('is-idle is-working is-downtime')
+          .addClass('is-' + model.get('state'));
 
         page.checkSpigot();
         page.updateCurrentDowntime();
@@ -375,21 +370,21 @@ define([
       {
         page.subscribeForShiftChanges();
 
-        page.timers.loadOrderQueue = setTimeout(
-          page.loadOrderQueue.bind(page),
-          _.random(666, 6666)
-        );
+        if (page.productionJoined)
+        {
+          model.execution.clear();
+
+          page.timers.loadOrderQueue = setTimeout(
+            page.loadOrderQueue.bind(page),
+            _.random(666, 6666)
+          );
+        }
       });
 
       page.listenTo(model.prodShiftOrder, 'change:orderId', function()
       {
-        page.subscribeForQuantityDoneChanges(false);
+        page.subscribeForQuantityDoneChanges(page.productionJoined === 0);
       });
-
-      if (model.id)
-      {
-        this.subscribeForShiftChanges();
-      }
 
       page.listenTo(model.prodDowntimes, 'change:finishedAt', function()
       {
@@ -686,6 +681,8 @@ define([
         {
           model.setNextOrder(res.orderQueue);
         }
+
+        model.execution.set('whProblems', res.whProblems || []);
 
         if (!_.isEmpty(res.execution))
         {

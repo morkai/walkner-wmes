@@ -26,7 +26,7 @@
   right: 175px;
   bottom: -1px;
   display: flex;
-  z-index: 1;
+  z-index: 4;
 }
 .is-embedded .production-controls-group {
   display: flex;

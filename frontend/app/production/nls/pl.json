@@ -49,6 +49,7 @@
   "section:downtimes": "Przestoje",
   "section:isa": "Pole odkładcze",
   "section:taktTime": "Czas cyklu",
+  "section:sequence": "Sekwencja",
 
   "property:currentTime": "Aktualny czas",
   "property:shift": "Zmiana",
@@ -359,6 +360,11 @@
   "componentLabels:error": "Drukowanie nie powiodło się.",
   "componentLabels:error:PRINTER_NOT_FOUND": "Nie znaleziono drukarki.",
   "componentLabels:error:INVALID_PRINTER": "Nieprawidłowa drukarka.",
+
+  "sequence:shift": "Zmiana",
+  "sequence:order": "Zlecenie",
+  "sequence:quantity": "Ilość",
+  "sequence:empty": "Brak danych.",
 
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",

@@ -4,14 +4,12 @@
 @import "vkb.css";
 @import "modal.css";
 @import "execution.css";
+@import "sequence.css";
 @import "multiPersonnelPicker.css";
 @import "message.css";
 @import "unlock.css";
 @import "controls.css";
 
-.is-production {
-  overflow: auto;
-}
 .is-production.is-embedded {
   margin-bottom: 75px;
 }
@@ -231,14 +229,14 @@
   margin-bottom: 0;
   border-bottom: 0;
 }
-.production-downtimes {
+.production-downtimes,
+.production-sequence {
   flex: 1 1 auto;
   margin-right: 30px;
 }
 .production-quantities {
   flex: 0 0 auto;
   width: 300px;
-  margin-right: 30px;
 }
 .production-quantities-actual {
   position: relative;
@@ -511,6 +509,7 @@
   }
   .production-taktTime,
   .production-downtimes,
+  .production-sequence,
   .production-quantities {
     margin-right: 15px;
   }
@@ -556,7 +555,8 @@
   .production-ft {
     flex-wrap: wrap;
   }
-  .production-downtimes {
+  .production-downtimes,
+  .production-sequence {
     margin-right: 0;
     order: 2;
     width: 100%;
@@ -567,13 +567,13 @@
   .production-currentDowntime {
     font-size: 36px;
   }
-}
-@media (max-width: 880px) {
   .production-taktTime,
   .production-quantities,
   .production-isa {
     width: 100%;
   }
+}
+@media (max-width: 880px) {
   .production-currentDowntime {
     font-size: 32px;
   }
