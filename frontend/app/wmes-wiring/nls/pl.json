@@ -60,6 +60,8 @@
 
   "empty": "Brak zleceń dla wybranego dnia.",
 
+  "openDocument:empty": "Nie znaleziono dokumentów.",
+
   "settings:tab:planning": "Planowanie",
   "settings:planning:namePattern": "Wzorzec nazwy zlecenia",
   "settings:planning:namePattern:help": "Wyrażenie regularne jakie musi spełniać nazwa wyrobu, aby było zlecenie było potraktowane jako zlecenie cięcia przewodów.",

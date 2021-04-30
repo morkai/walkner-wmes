@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'app/viewport',
   'app/core/View',
   'app/core/util/buttonGroup',
   '../WiringOrderCollection',
@@ -10,6 +11,7 @@ define([
 ], function(
   _,
   $,
+  viewport,
   View,
   buttonGroup,
   WiringOrderCollection,
@@ -129,7 +131,7 @@ define([
 
     onKeyUp: function(e)
     {
-      if (!e.key)
+      if (!e.key || viewport.currentDialog)
       {
         return;
       }

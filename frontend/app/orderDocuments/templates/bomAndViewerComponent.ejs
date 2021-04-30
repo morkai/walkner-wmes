@@ -1,0 +1,21 @@
+<div class="orderDocuments-bomAndViewer-component <%- component.rowClassName %>">
+  <div class="orderDocuments-bomAndViewer-item">
+    <% if (component.compRel) { %>
+      <i class="fa fa-exchange"></i>
+    <% } else { %>
+      <%- component.item %>
+    <% } %>
+  </div>
+  <div class="orderDocuments-bomAndViewer-nc12"><%- component.nc12 %></div>
+  <div class="orderDocuments-bomAndViewer-qty">
+    <% if (component.qty) { %>
+      <% if (component.qty[1]) { %>
+        <%- component.qty.join(decimalSeparator) %>
+      <% } else { %>
+        <%- component.qty[0] %>
+      <% } %>
+    <% } %>
+  </div>
+  <div class="orderDocuments-bomAndViewer-unit"><%- component.unit || '' %></div>
+  <div class="orderDocuments-bomAndViewer-name"><%- component.name %></div>
+</div>

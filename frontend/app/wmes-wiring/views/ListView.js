@@ -6,7 +6,10 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/resultTips',
   'app/data/clipboard',
+  'app/planning/util/contextMenu',
+  'app/orderDocuments/views/BomAndViewerView',
   '../WiringOrderCollection',
   'app/wmes-wiring/templates/list',
   'app/wmes-wiring/templates/listRow',
@@ -18,7 +21,10 @@ define([
   user,
   viewport,
   View,
+  resultTips,
   clipboard,
+  contextMenu,
+  BomAndViewerView,
   WiringOrderCollection,
   listTemplate,
   listRowTemplate,
@@ -45,6 +51,13 @@ define([
         }
 
         view.hidePopover(true);
+
+        if (cell.dataset.columnId === 'nc12')
+        {
+          view.handleOpenDocumentAction(view.$(cell).closest('tr')[0].dataset.id, e);
+
+          return;
+        }
 
         if (!content)
         {
@@ -348,6 +361,11 @@ define([
 
     onKeyDown: function(e)
     {
+      if (viewport.currentDialog)
+      {
+        return;
+      }
+
       if (e.ctrlKey && e.key.toUpperCase() === 'C')
       {
         this.handleCopy(e);
@@ -633,6 +651,78 @@ define([
           viewport.msg.saved();
         }
       });
+    },
+
+    handleOpenDocumentAction: function(orderId, e)
+    {
+      var order = this.orders.get(orderId);
+
+      if (!order)
+      {
+        return;
+      }
+
+      viewport.msg.loading();
+
+      var childOrders = order.get('orders').map(o => o._id).slice(0, 10);
+      var req = this.ajax({
+        url: `/orders?select(documents)&limit(1)&_id=in=(${childOrders})&exists(documents.0)`
+      });
+
+      req.fail(() =>
+      {
+        viewport.msg.loadingFailed();
+      });
+
+      req.done(res =>
+      {
+        viewport.msg.loaded();
+
+        if (res.totalCount === 0 || res.collection[0].documents.length === 0)
+        {
+          resultTips.show({
+            type: 'warning',
+            text: this.t('openDocument:empty'),
+            e
+          });
+
+          return;
+        }
+
+        const {documents} = res.collection[0];
+
+        if (documents.length === 1)
+        {
+          this.openDocument(documents[0], order.get('orders')[0].leadingOrder);
+        }
+        else
+        {
+          this.showOpenDocumentMenu(documents, order.get('orders')[0].leadingOrder, e);
+        }
+      });
+    },
+
+    showOpenDocumentMenu: function(documents, leadingOrderNo, e)
+    {
+      contextMenu.show(this, e.pageY, e.pageX, documents.map(doc =>
+      {
+        return {
+          label: '<code>' + doc.nc15 + '</code> ' + _.escape(doc.name),
+          handler: () => this.openDocument(doc, leadingOrderNo)
+        };
+      }));
+    },
+
+    openDocument: function(document, leadingOrderNo)
+    {
+      const dialogView = new BomAndViewerView({
+        model: {
+          document,
+          order: leadingOrderNo
+        }
+      });
+
+      viewport.showDialog(dialogView);
     }
 
   });

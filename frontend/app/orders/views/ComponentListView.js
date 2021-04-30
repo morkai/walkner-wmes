@@ -3,18 +3,14 @@
 define([
   'app/user',
   'app/viewport',
-  'app/time',
   'app/core/View',
-  'app/core/util/decimalSeparator',
-  'app/core/templates/userInfo',
+  'app/orders/util/prepareReleasedBom',
   'app/orders/templates/componentList'
 ], function(
   user,
   viewport,
-  time,
   View,
-  decimalSeparator,
-  userInfoTemplate,
+  prepareReleasedBom,
   template
 ) {
   'use strict';
@@ -117,145 +113,14 @@ define([
 
     getTemplateData: function()
     {
-      var components = [];
-      var oldToNew = {};
-      var newToOld = {};
-      var colored = false;
-      var extraCompRels = [];
-
-      (this.model.get('compRels') || []).forEach(function(compRel)
-      {
-        compRel.newComponents.forEach(function(newComponent)
-        {
-          if (!newToOld[newComponent._id])
-          {
-            newToOld[newComponent._id] = [];
-          }
-        });
-
-        if (compRel.oldComponents.length === 0)
-        {
-          extraCompRels.push(compRel);
-        }
-
-        compRel.oldComponents.forEach(function(oldComponent)
-        {
-          if (!oldToNew[oldComponent._id])
-          {
-            oldToNew[oldComponent._id] = [];
-          }
-
-          oldToNew[oldComponent._id].push(compRel);
-
-          compRel.newComponents.forEach(function(newComponent)
-          {
-            newToOld[newComponent._id].push({
-              compRel: compRel,
-              oldComponent: oldComponent
-            });
-          });
-        });
-      });
-
-      this.model.get('bom').forEach(function(component)
-      {
-        if (!component.get('nc12'))
-        {
-          return;
-        }
-
-        component = component.toJSON();
-
-        var qty = component.qty.toString().split('.');
-
-        component.qty = [
-          qty[0].toString(),
-          qty[1] ? (decimalSeparator + qty[1]) : ''
-        ];
-
-        components.push(component);
-
-        var newComponents = oldToNew[component.nc12];
-
-        if (newComponents)
-        {
-          colored = true;
-          component.rowClassName = 'danger';
-
-          newComponents.forEach(function(compRel)
-          {
-            compRel.newComponents.forEach(function(newComponent)
-            {
-              components.push({
-                compRel: true,
-                rowClassName: 'success',
-                orderNo: component.orderNo,
-                mrp: component.mrp,
-                nc12: newComponent._id,
-                name: newComponent.name,
-                releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
-                releasedBy: userInfoTemplate({userInfo: compRel.releasedBy, noIp: true})
-              });
-            });
-          });
-
-          return;
-        }
-
-        var oldComponents = newToOld[component.nc12];
-
-        if (oldComponents)
-        {
-          colored = true;
-          component.rowClassName = 'success';
-
-          oldComponents.forEach(function(old)
-          {
-            var compRel = old.compRel;
-
-            component.releasedAt = time.format(compRel.releasedAt, 'L HH:mm');
-            component.releasedBy = userInfoTemplate({userInfo: compRel.releasedBy, noIp: true});
-
-            components.push({
-              compRel: true,
-              rowClassName: 'danger',
-              orderNo: component.orderNo,
-              mrp: component.mrp,
-              nc12: old.oldComponent._id,
-              name: old.oldComponent.name
-            });
-          });
-        }
-      });
-
-      if (extraCompRels.length)
-      {
-        colored = true;
-
-        extraCompRels.forEach(compRel =>
-        {
-          compRel.newComponents.forEach(newComponent =>
-          {
-            components.unshift({
-              compRel: true,
-              rowClassName: 'success',
-              orderNo: '',
-              mrp: '',
-              nc12: newComponent._id,
-              name: newComponent.name,
-              releasedAt: time.format(compRel.releasedAt, 'L HH:mm'),
-              releasedBy: compRel.releasedBy.label
-            });
-          });
-        });
-      }
+      var releasedComponents = prepareReleasedBom(this.model.get('bom'), this.model.get('compRels'));
 
       return {
-        colored: colored,
-        empty: components.length === 0,
+        colored: releasedComponents.colored,
+        empty: releasedComponents.components.length === 0,
         paint: !!this.options.paint,
         linkPfep: !!this.options.linkPfep && user.isAllowedTo('PFEP:VIEW'),
-        bom: components
+        bom: releasedComponents.components
       };
     },
 
