@@ -23,7 +23,7 @@
           type: 'static',
           label: 'FORM:',
           groupClassName: 'col-lg-4',
-          value: user.getLabel()
+          value: editMode ? model.creator.label : user.getLabel()
         }) %>
         <%- helpers.formGroup({
           name: 'userWorkplace',
