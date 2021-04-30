@@ -25,7 +25,7 @@ define([
 
     initialize: function()
     {
-      this.debug = false;
+      this.debug = window.ENV !== 'production';
       this.currentMetrics = 'tt';
 
       this.todoView = new ShiftTimelineView({
