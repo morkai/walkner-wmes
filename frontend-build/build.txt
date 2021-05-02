@@ -365,6 +365,10 @@ app/orderDocuments/assets/bom.css
 ----------------
 app/orderDocuments/assets/bom.css
 
+app/orderDocuments/assets/bomAndViewer.css
+----------------
+app/orderDocuments/assets/bomAndViewer.css
+
 app/orderDocuments/assets/main.css
 ----------------
 app/orderDocuments/assets/../../production/assets/modal.css
@@ -619,6 +623,7 @@ app/production/assets/bomChecker.css
 app/production/assets/vkb.css
 app/production/assets/modal.css
 app/production/assets/execution.css
+app/production/assets/sequence.css
 app/production/assets/multiPersonnelPicker.css
 app/production/assets/message.css
 app/production/assets/unlock.css
@@ -636,6 +641,10 @@ app/production/assets/modal.css
 app/production/assets/multiPersonnelPicker.css
 ----------------
 app/production/assets/multiPersonnelPicker.css
+
+app/production/assets/sequence.css
+----------------
+app/production/assets/sequence.css
 
 app/production/assets/settings.css
 ----------------
@@ -2216,6 +2225,7 @@ app/orders/templates/documentList.js
 app/orders/templates/removeDocumentDialog.js
 app/orders/templates/reloadDocumentsDialog.js
 app/orders/views/DocumentListView.js
+app/orders/util/prepareReleasedBom.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
 app/orders/templates/commentForm.js
@@ -3276,6 +3286,7 @@ app/orders/templates/documentList.js
 app/orders/templates/removeDocumentDialog.js
 app/orders/templates/reloadDocumentsDialog.js
 app/orders/views/DocumentListView.js
+app/orders/util/prepareReleasedBom.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
 app/orders/templates/commentForm.js
@@ -4058,6 +4069,7 @@ app/orders/templates/documentList.js
 app/orders/templates/removeDocumentDialog.js
 app/orders/templates/reloadDocumentsDialog.js
 app/orders/views/DocumentListView.js
+app/orders/util/prepareReleasedBom.js
 app/orders/templates/componentList.js
 app/orders/views/ComponentListView.js
 app/core/util/idAndLabel.js
@@ -4358,6 +4370,8 @@ app/production/templates/executionDowntimePopover.js
 app/production/views/ExecutionTimelineView.js
 app/production/templates/execution.js
 app/production/views/ExecutionView.js
+app/production/templates/sequence.js
+app/production/views/SequenceView.js
 app/production/templates/productionPage.js
 app/production/templates/duplicateWarning.js
 app/production/pages/ProductionPage.js
@@ -5026,6 +5040,23 @@ app/wmes-wiring/views/FilterView.js
 app/core/util/scrollbarSize.js
 app/core/util/resultTips.js
 app/data/clipboard.js
+app/orders/templates/commentPopover.js
+vendor/require-css/normalize.js
+vendor/require-css/css.js
+css!app/orders/assets/commentPopover
+app/orders/util/commentPopover.js
+app/planning/templates/contextMenu.js
+app/nls/planning.js
+app/nls/pl/planning.js
+i18n!app/nls/planning
+app/planning/util/contextMenu.js
+app/core/util/decimalSeparator.js
+app/core/templates/userInfo.js
+app/orders/util/prepareReleasedBom.js
+app/orderDocuments/templates/bomAndViewer.js
+app/orderDocuments/templates/bomAndViewerComponent.js
+css!app/orderDocuments/assets/bomAndViewer
+app/orderDocuments/views/BomAndViewerView.js
 app/wmes-wiring/templates/list.js
 app/wmes-wiring/templates/listRow.js
 app/wmes-wiring/templates/action.js
