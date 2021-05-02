@@ -237,7 +237,7 @@
     "LOG_IN_FORM:LINK:LOG_IN": "Log in",
     "LOG_IN_FORM:LINK:RESET": "Forgot your password?",
     "LOG_IN_FORM:LINK:OFFICE365": "Sign in with {OFFICE365_TENANT}",
-    "LOG_IN_FORM:RESET:SUBJECT": "[{APP_NAME}] password reset",
+    "LOG_IN_FORM:RESET:SUBJECT": "[{APP_NAME}] Password reset",
     "LOG_IN_FORM:RESET:TEXT": "We've received a request to reset your password for the {APP_NAME} app.\n\nTo change your password, please click this link:\n{resetUrl}\n\nPassword reset links are valid for only 24 hours. If the link expires, you will need to submit a new request here: {appUrl}\n\nIf you didn't request a change, please disregard this e-mail and your password will stay the same.\n\nContact your supervisor or an administrator if you need help or have questions.\n\nSincerely, the support team.",
     "LOG_IN_FORM:RESET:MSG:FAILURE": "Failed to reset the password.",
     "LOG_IN_FORM:RESET:MSG:SUCCESS": "Check your e-mail!",
