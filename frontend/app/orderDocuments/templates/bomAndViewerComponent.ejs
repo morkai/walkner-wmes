@@ -10,7 +10,7 @@
   <div class="orderDocuments-bomAndViewer-qty">
     <% if (component.qty) { %>
       <% if (component.qty[1]) { %>
-        <%- component.qty.join(decimalSeparator) %>
+        <%- component.qty.join('') %>
       <% } else { %>
         <%- component.qty[0] %>
       <% } %>

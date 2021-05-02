@@ -37,7 +37,7 @@ define([
     loadBom: function()
     {
       const req = this.ajax({
-        url: `/orders/${this.model.order}?select(bom)`
+        url: `/orders/${this.model.order}?select(qty,bom)`
       });
 
       req.fail(() =>
@@ -47,6 +47,11 @@ define([
 
       req.done(order =>
       {
+        order.bom.forEach(component =>
+        {
+          component.qty /= order.qty;
+        });
+
         this.renderBom(prepareReleasedBom(order.bom, order.compRels).components);
       });
     },

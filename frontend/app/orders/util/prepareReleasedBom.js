@@ -65,7 +65,7 @@ define([
         return;
       }
 
-      var qty = component.qty.toString().split('.');
+      var qty = (Math.round(component.qty * 1000) / 1000).toString().split('.');
 
       component.qty = [
         qty[0].toString(),
