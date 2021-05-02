@@ -22,10 +22,6 @@ define([
 
     dialogClassName: 'orderDocuments-bomAndViewer-dialog',
 
-    events: {
-
-    },
-
     initialize: function()
     {
       this.once('afterRender', () =>
@@ -36,14 +32,6 @@ define([
 
         this.loadBom();
       });
-    },
-
-    getTemplateData: function()
-    {
-      return {
-        document: this.model.document,
-        order: this.model.order
-      };
     },
 
     loadBom: function()
@@ -66,7 +54,7 @@ define([
     renderBom: function(bom)
     {
       let html = '';
-console.log(bom);
+
       bom.forEach(component =>
       {
         html += this.renderPartialHtml(componentTemplate, {
