@@ -4,56 +4,74 @@
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
         <em><%- t('core', 'ORG_UNIT:prodFlow') %></em>
-        <span role=prodFlow><%= prodFlow %></span>
+        <span id="<%- id('prodFlow') %>"><%= prodFlow %></span>
       </div>
     </td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
-        <em><%- t('factoryLayout', 'prop:shift') %></em>
-        <span role=shift><%- shift.text %></span>
+        <em><%- t('prop:shift') %></em>
+        <span id="<%- id('shift') %>"><%- shift.text %></span>
       </div>
     </td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
-        <em><%- t('factoryLayout', 'prop:master') %></em>
-        <span role=master><%- master %></span>
+        <em><%- t('prop:master') %></em>
+        <span id="<%- id('master') %>"><%- master %></span>
       </div>
     </td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
-        <em><%- t('factoryLayout', 'prop:leader') %></em>
-        <span role=leader><%- leader %></span>
+        <em><%- t('prop:leader') %></em>
+        <span id="<%- id('leader') %>"><%- leader %></span>
       </div>
     </td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
-        <em><%- t('factoryLayout', 'prop:operator') %></em>
-        <span role=operator><%- operator %></span>
+        <em><%- t('prop:operator') %></em>
+        <span id="<%- id('operator') %>"><%- operator %></span>
       </div>
     </td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop" title="<%- order.title %>">
-        <em role=orderLabel><%- order.label %></em>
-        <span role=orderValue><%- order.value %></span>
+        <em id="<%- id('orderLabel') %>"><%- order.label %></em>
+        <span id="<%- id('orderValue') %>"><%- order.value %></span>
       </div>
     </td>
     <td>
       <div class="factoryLayout-prodLineListItem-prop">
-        <em role=downtimeLabel><%- downtime.label %></em>
-        <span role=downtimeValue><%- downtime.value %></span>
+        <em id="<%- id('downtimeLabel') %>"><%- downtime.label %></em>
+        <span id="<%- id('downtimeValue') %>"><%- downtime.value %></span>
       </div>
     </td>
     <td>
-      <div class="factoryLayout-prodLineListItem-prop factoryLayout-quantitiesDone-prop">
-        <em><i class="fa fa-bar-chart"></i> <%- t('factoryLayout', 'prop:qty') %></em>
-        <span role=quantitiesDone><%- quantitiesDone %></span>
+      <div class="factoryLayout-prodLineListItem-prop factoryLayout-quantityDone-prop">
+        <em><i class="fa fa-bar-chart"></i> <%- t('prop:qty') %></em>
+        <span id="<%- id('quantityDone') %>"><%- quantityDone %></span>
       </div>
     </td>
   </tr>
   <tr>
-    <td class="factoryLayout-timeline-container" colspan="999"></td>
+    <td id="<%- id('timeline') %>" class="factoryLayout-timeline-container" colspan="9"></td>
   </tr>
   <tr>
-    <td class="factoryLayout-quantitiesDone-container" colspan="999"></td>
+    <td id="<%- id('quantitiesDone') %>" class="factoryLayout-quantitiesDone-container hidden" colspan="9"></td>
+  </tr>
+  <tr>
+    <td id="<%- id('comments') %>" class="factoryLayout-comments-container hidden" colspan="9">
+      <div class="factoryLayout-comments">
+        <% for (var i = 0; i < 8; ++i) { %>
+        <div class="factoryLayout-comment" data-i="<%- i %>">
+          <p></p>
+          <% if (canComment) { %>
+            <button type="button" class="btn btn-default" data-action="comment"><i class="fa fa-edit"></i></button>
+            <form>
+              <textarea class="form-control"></textarea>
+              <button class="btn btn-primary btn-block" type="submit"><%- t('comments:save') %></button>
+            </form>
+          <% } %>
+        </div>
+        <% } %>
+      </div>
+    </td>
   </tr>
 </tbody>

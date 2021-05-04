@@ -106,7 +106,10 @@
     "legend:line:name": "line",
     "legend:line:plan": "todo",
     "legend:line:actual": "done",
-    "legend:line:qi": "inspections"
+    "legend:line:qi": "inspections",
+
+    "comments:empty": "No comments.",
+    "comments:save": "Save comment"
   },
   "pl": true
 }

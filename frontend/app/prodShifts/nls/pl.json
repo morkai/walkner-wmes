@@ -29,6 +29,7 @@
   "PROPERTY:totalQuantityDone": "Wykonana ilość",
   "PROPERTY:efficiency": "Wydajność",
   "PROPERTY:orderMrp": "MRP zleceń",
+  "PROPERTY:comments": "Komentarze",
 
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zmiany produkcyjnej: nie wykryto żadnych poprawnych zmian.",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",

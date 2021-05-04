@@ -71,9 +71,9 @@
   color: #2a6496;
 }
 .factoryLayout-quantitiesDone-container {
-  display: none;
   background: #fff;
   border-top: 1px solid #999;
+  height: 221px;
 }
 .factoryLayout-prodLineListItem-prop {
   margin-top: 2px;
@@ -203,4 +203,51 @@
 .factoryLayout-displayOptions-history .form-control,
 .factoryLayout-displayOptions-history .filter-btn-group {
   display: inline-block;
+}
+.factoryLayout-comments-container {
+  background: #fff;
+}
+.factoryLayout-comments {
+  display: flex;
+  margin: 5px 10px 10px 39px;
+}
+.factoryLayout-comment {
+  position: relative;
+  flex: 1 1 0;
+  padding: 7px 10px;
+  font-size: 12px;
+  text-align: center;
+  border-left: 1px solid #E6E6E6;
+}
+.factoryLayout-comment:first-child {
+  border-left: none;
+}
+.factoryLayout-comment > .btn {
+  display: none;
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  height: 33px;
+  z-index: 1;
+}
+.factoryLayout-comment:hover > .btn {
+  display: inline-block;
+}
+.factoryLayout-comment > p {
+  margin: 0;
+}
+.factoryLayout-comment > form {
+  display: none;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  z-index: 2;
+}
+.factoryLayout-comment > form.active {
+  display: block;
+}
+.factoryLayout-comment .form-control {
+  min-height: 100px;
+  font-size: 12px;
+  resize: vertical;
 }

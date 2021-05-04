@@ -94,6 +94,7 @@ define([
           {planned: 0, actual: 0},
           {planned: 0, actual: 0}
         ],
+        comments: [null, null, null, null, null, null, null, null],
         creator: null,
         createdAt: null,
         master: null,
@@ -477,6 +478,7 @@ define([
           {planned: 0, actual: 0},
           {planned: 0, actual: 0}
         ],
+        comments: [null, null, null, null, null, null, null, null],
         creator: user.getInfo(),
         createdAt: new Date(),
         master: null,

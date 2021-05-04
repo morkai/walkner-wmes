@@ -2,8 +2,10 @@
 
 define([
   'underscore',
-  'app/i18n',
+  'jquery',
   'app/time',
+  'app/user',
+  'app/viewport',
   'app/data/orgUnits',
   'app/data/downtimeReasons',
   'app/core/View',
@@ -14,12 +16,14 @@ define([
   'app/prodShifts/views/QuantitiesDoneChartView'
 ], function(
   _,
-  t,
+  $,
   time,
+  currentUser,
+  viewport,
   orgUnits,
   downtimeReasons,
   View,
-  renderUserInfo,
+  userInfoTemplate,
   resolveProductName,
   template,
   ProdShiftTimelineView,
@@ -32,7 +36,7 @@ define([
     template: template,
 
     events: {
-      'click .factoryLayout-quantitiesDone-prop': function(e)
+      'click .factoryLayout-quantityDone-prop': function(e)
       {
         if (e.currentTarget.classList.contains('is-clickable'))
         {
@@ -67,6 +71,104 @@ define([
         }
 
         return false;
+      },
+      'click .btn[data-action="comment"]': function(e)
+      {
+        var view = this;
+        var prodShift = view.model.get('prodShift');
+
+        view.$id('comments').find('form.active').removeClass('active');
+
+        if (!prodShift)
+        {
+          return;
+        }
+
+        var prodShiftId = prodShift.id;
+        var $comment = view.$(e.currentTarget).closest('.factoryLayout-comment');
+        var $form = $comment.find('form');
+        var $textarea = $form.find('.form-control');
+        var $submit = $form.find('.btn-primary');
+        var i = +$comment[0].dataset.i;
+        var comments = prodShift.get('comments') || [];
+        var comment = comments[i] || {text: ''};
+        var rect = $comment[0].getBoundingClientRect();
+
+        $textarea.val(comment.text).css({
+          width: (rect.width + 2) + 'px',
+          height: Math.max(rect.height, 100) + 'px'
+        });
+
+        $form.addClass('active');
+        $textarea.focus();
+
+        $form.on('submit', function(e)
+        {
+          e.preventDefault();
+
+          save();
+        });
+
+        $textarea.on('keydown', function(e)
+        {
+          if (e.key === 'Escape')
+          {
+            hide();
+          }
+          else if (e.key === 'Enter' && e.ctrlKey)
+          {
+            save();
+          }
+        });
+
+        function hide()
+        {
+          $textarea.off();
+          $form.off();
+          $form.removeClass('active');
+          $textarea.prop('disabled', false);
+          $submit.prop('disabled', false);
+        }
+
+        function save()
+        {
+          var newText = $textarea.val().trim();
+
+          if (newText === comment.text)
+          {
+            return hide();
+          }
+
+          viewport.msg.saving();
+
+          $textarea.prop('disabled', true);
+          $submit.prop('disabled', true);
+
+          var req = view.ajax({
+            method: 'PUT',
+            url: '/prodShifts/' + prodShiftId,
+            data: JSON.stringify({
+              comment: {
+                i: i,
+                text: newText
+              }
+            })
+          });
+
+          req.fail(function()
+          {
+            viewport.msg.savingFailed();
+          });
+
+          req.done(function()
+          {
+            viewport.msg.saved();
+
+            hide();
+          });
+
+          setTimeout(() => hide(), 1000);
+        }
       }
     },
 
@@ -101,7 +203,7 @@ define([
       this.quantitiesDoneChartView = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var classNames = [];
 
@@ -134,6 +236,7 @@ define([
       var downtime = this.serializeDowntime();
 
       return {
+        canComment: currentUser.isAllowedTo('PROD_DATA:VIEW', 'FN:master', 'FN:leader'),
         classNames: classNames.join(' '),
         prodLine: this.model.getLabel(),
         prodFlow: prodFlow ? prodFlow.getLabel() : '?',
@@ -142,7 +245,7 @@ define([
         order: order,
         nc12: nc12,
         downtime: downtime,
-        quantitiesDone: this.serializeQuantitiesDone(),
+        quantityDone: this.serializeQuantityDone(),
         master: this.serializePersonnel('master'),
         leader: this.serializePersonnel('leader'),
         operator: this.serializePersonnel('operator')
@@ -162,7 +265,7 @@ define([
       }
 
       return {
-        text: time.format(prodShift.get('date'), 'L') + ', ' + t('core', 'SHIFT:' + prodShift.get('shift')),
+        text: time.format(prodShift.get('date'), 'L') + ', ' + this.t('core', 'SHIFT:' + prodShift.get('shift')),
         href: '#prodShifts/' + (this.displayOptions.isHistoryData() ? prodShift.id : this.model.id)
       };
     },
@@ -191,7 +294,7 @@ define([
       userInfo.label = lastName + (firstName.length ? (' ' + firstName.substring(0, 1) + '.') : '');
       userInfo.title = fullName;
 
-      return renderUserInfo({userInfo: userInfo});
+      return userInfoTemplate(userInfo);
     },
 
     serializeOrder: function()
@@ -220,7 +323,7 @@ define([
       }
 
       return {
-        label: t('factoryLayout', !lastOrder || lastOrder.get('finishedAt') ? 'prop:lastOrder' : 'prop:order'),
+        label: this.t(!lastOrder || lastOrder.get('finishedAt') ? 'prop:lastOrder' : 'prop:order'),
         value: value,
         title: title
       };
@@ -231,7 +334,7 @@ define([
       var lastOrder = this.model.get('prodShiftOrders').last();
 
       return {
-        label: t('factoryLayout', !lastOrder || lastOrder.get('finishedAt') ? 'prop:lastNc12' : 'prop:nc12'),
+        label: this.t(!lastOrder || lastOrder.get('finishedAt') ? 'prop:lastNc12' : 'prop:nc12'),
         value: lastOrder ? lastOrder.getNc12() : '-'
       };
     },
@@ -242,23 +345,54 @@ define([
       var downtimeReason = lastDowntime ? downtimeReasons.get(lastDowntime.get('reason')) : null;
 
       return {
-        label: t(
-          'factoryLayout',
-          !lastDowntime || lastDowntime.get('finishedAt') ? 'prop:lastDowntime' : 'prop:downtime'
-        ),
+        label: this.t(!lastDowntime || lastDowntime.get('finishedAt') ? 'prop:lastDowntime' : 'prop:downtime'),
         value: downtimeReason ? downtimeReason.getLabel() : (lastDowntime ? '?' : '-')
       };
     },
 
-    serializeQuantitiesDone: function()
+    serializeQuantityDone: function()
     {
       var actual = this.model.get('actualQuantityDone');
       var planned = this.model.get('plannedQuantityDone');
 
-      return t('factoryLayout', 'qty', {
+      return this.t('qty', {
         actual: actual === -1 ? '?' : actual.toLocaleString(),
         planned: planned === -1 ? '?' : planned.toLocaleString()
       });
+    },
+
+    serializeComments: function()
+    {
+      var prodShift = this.model.get('prodShift');
+      var comments = prodShift && prodShift.get('comments') || [];
+      var result = [];
+
+      for (var i = 0; i < 8; ++i)
+      {
+        var comment = comments[i] || {
+          date: null,
+          user: null,
+          text: ''
+        };
+        var v = 0;
+        var title = '';
+
+        if (comment.date)
+        {
+          var date = time.getMoment(comment.date);
+
+          v = date.valueOf();
+          title = comment.user.label + ' @ ' + date.format('L LT');
+        }
+
+        result.push({
+          v: v.toString(),
+          title: title,
+          text: comment.text
+        });
+      }
+
+      return result;
     },
 
     afterRender: function()
@@ -275,7 +409,7 @@ define([
         calcWidth: this.calcWidth
       });
 
-      this.setView('.factoryLayout-timeline-container', this.timelineView).render();
+      this.setView('#-timeline', this.timelineView).render();
 
       this.listenTo(this.timelineView, 'chartRendered', this.onTimelineChartRendered);
 
@@ -283,7 +417,7 @@ define([
 
       if (hasProdShift)
       {
-        this.$('.factoryLayout-quantitiesDone-prop').addClass('is-clickable');
+        this.$('.factoryLayout-quantityDone-prop').addClass('is-clickable');
       }
 
       this.$el.toggleClass('has-prodShift', hasProdShift);
@@ -356,15 +490,21 @@ define([
         showLegend: false
       });
 
-      this.setView('.factoryLayout-quantitiesDone-container', this.quantitiesDoneChartView).render();
-      this.quantitiesDoneChartView.$el.parent().show();
+      this.setView('#-quantitiesDone', this.quantitiesDoneChartView).render();
+
+      this.updateComments(true);
+
+      this.$id('quantitiesDone').removeClass('hidden');
+      this.$id('comments').removeClass('hidden');
     },
 
     destroyQuantitiesDoneChart: function()
     {
       if (this.quantitiesDoneChartView !== null)
       {
-        this.quantitiesDoneChartView.$el.parent().hide();
+        this.$id('comments').addClass('hidden');
+        this.$id('quantitiesDone').addClass('hidden');
+
         this.quantitiesDoneChartView.remove();
         this.quantitiesDoneChartView = null;
       }
@@ -385,6 +525,42 @@ define([
       {
         this.$el.addClass(effClassName);
       }
+    },
+
+    updateComments: function(force)
+    {
+      var view = this;
+
+      if (!force && view.$id('comments').hasClass('hidden'))
+      {
+        return;
+      }
+
+      var comments = view.serializeComments();
+
+      view.$('.factoryLayout-comment').each(function(i, el)
+      {
+        var comment = comments[i];
+
+        if (comment.v === el.dataset.v)
+        {
+          return;
+        }
+
+        el.dataset.v = comment.v;
+        el.title = comment.title;
+
+        var p = el.querySelector('p');
+
+        if (comment.text)
+        {
+          p.textContent = comment.text;
+        }
+        else
+        {
+          p.innerHTML = '<i>' + view.t('comments:empty') + '</i>';
+        }
+      });
     },
 
     toggleVisibility: function()
@@ -426,21 +602,25 @@ define([
 
     onProdShiftChanged: function()
     {
-      this.$('[role=shift]').html(this.serializeShift().text);
+      var view = this;
+
+      view.$id('shift').html(view.serializeShift().text);
 
       ['master', 'leader', 'operator'].forEach(function(type)
       {
-        this.$('[role=' + type + ']').html(this.serializePersonnel(type));
-      }, this);
+        view.$id(type).html(view.serializePersonnel(type));
+      });
 
-      var hasProdShift = !!this.model.get('prodShift');
+      var hasProdShift = !!view.model.get('prodShift');
 
       if (!hasProdShift)
       {
-        this.destroyQuantitiesDoneChart();
+        view.destroyQuantitiesDoneChart();
       }
 
-      this.$('.factoryLayout-quantitiesDone-prop').toggleClass('is-clickable', hasProdShift);
+      view.$('.factoryLayout-quantityDone-prop').toggleClass('is-clickable', hasProdShift);
+
+      view.updateComments(false);
     },
 
     onProdShiftOrdersChanged: function(options)
@@ -448,10 +628,10 @@ define([
       var order = this.serializeOrder();
       var nc12 = this.serializeNc12();
 
-      this.$('[role=orderLabel]').html(order.label);
-      this.$('[role=orderValue]').html(order.value);
-      this.$('[role=nc12Label]').html(nc12.label);
-      this.$('[role=nc12Value]').html(nc12.value);
+      this.$id('orderLabel').html(order.label);
+      this.$id('orderValue').html(order.value);
+      this.$id('nc12Label').html(nc12.label);
+      this.$id('nc12Value').html(nc12.value);
 
       if (options && options.reset)
       {
@@ -463,8 +643,8 @@ define([
     {
       var downtime = this.serializeDowntime();
 
-      this.$('[role=downtimeLabel]').html(downtime.label);
-      this.$('[role=downtimeValue]').html(downtime.value);
+      this.$id('downtimeLabel').html(downtime.label);
+      this.$id('downtimeValue').html(downtime.value);
 
       if (options && options.reset)
       {
@@ -474,7 +654,7 @@ define([
 
     onMetricsChanged: function()
     {
-      this.$('[role=quantitiesDone]').html(this.serializeQuantitiesDone());
+      this.$id('quantityDone').html(this.serializeQuantityDone());
     },
 
     onTimelineChartRendered: function()

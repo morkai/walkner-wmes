@@ -30,6 +30,7 @@
     "PROPERTY:totalQuantityDone": "Quantity done",
     "PROPERTY:efficiency": "Efficiency",
     "PROPERTY:orderMrp": "Order MRP",
+    "PROPERTY:comments": "comments",
 
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the shift: no valid changes were detected.",
     "FORM:ERROR:INPUT": "Invalid input data!",

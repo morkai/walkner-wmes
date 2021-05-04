@@ -1,4 +1,97 @@
 <div class="hidden">
+  <h1>v0.160.0</h1>
+  <h2><%- time.format('2021-04-30', 'LL') %></h2>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Dodano wyświetlanie i eksportowanie numeru pozycji komponentu (item).</li>
+    <li>Dodano możliwość rejestracji wykonanych ilości na zmianie produkcyjnej w każdym podzleceniu.</li>
+    <li>Dodano możliwość przypisania katalogu z modułu Dokumenty do listy dokumentów.</li>
+  </ul>
+  <h3>Karty pracy</h3>
+  <ul>
+    <li>Dodano możliwość wygenerowania listy części dla malarnii na podstawie zarejestrowanych ilości wykonanych
+      na zmianie produkcyjnej.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zablokowano możliwość zmiany ilości wykonanej w zleceniu oraz ilości wykonanej w godzinie, jeżeli linia
+      ma włączone skanowanie numerów seryjnych.</li>
+    <li>Zmieniono automatyczną kolejkę zleceń tak, aby zawierała także zlecenia z przyszłych zmian produkcyjnych,
+      a nie tylko z aktualnej zmiany.</li>
+    <li>Dodano możliwość drukowania etykiety bez 12NC komponentu.</li>
+    <li>Dodano możliwość przypisania etykiet komponentów do konkretnych linii produkcyjnych.</li>
+    <li>Dodano możliwość zdefiniowania automatycznego uruchamiania wybranego przestoju po zakończeniu innego.</li>
+    <li>Dodano wyłączanie automatycznych przestojów po upłynięciu zdefiniowanego czasu trwania.</li>
+    <li>Dodano nową sekcję Sekwencja zawierającą cały plan dzienny linii.</li>
+  </ul>
+  <h3>Czas cyklu</h3>
+  <ul>
+    <li>Grupy zleceń w raporcie Grupy wyrobów brane są od teraz z modułu Planów dziennych.</li>
+    <li>Zmieniono zliczanie sztuk tak, aby pojawienie się nowego wózka na stanowisku kończyło aktualną sztukę na tym
+      stanowisku, jeżeli jeszcze nie została zakończona.</li>
+    <li>Zmieniono wskaźnik UPPH w raporcie Wyniki tak, aby do każdego zlecenia montażu brane były pod uwagę zlecenia
+      wspomagające.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Dodano możliwość eksportowania wskaźników do pliku.</li>
+  </ul>
+  <h3>Reaguj</h3>
+  <ul>
+    <li>Dodano Audyty oraz Rozmowy o BHP do raportu Zaangażowanie.</li>
+  </ul>
+  <h3>Audyty BHP</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający edycję audytów przez osobę z uprawnieniami do zarządzania.</li>
+    <li>Usunięto Osobę odpowiedzialną za niezgodność.</li>
+    <li>Zmieniono formularz tak, aby można było zapisać audyt bez żadnych niezgodności (wszystko OK).</li>
+    <li>Zmieniono nazwę pola 'Komentarz / Stwierdzone nieprawidłowości, ryzyka' na 'Stwierdzone nieprawidłowości,
+      ryzyka'.</li>
+    <li>Zmieniono kolumnę 'Stwierdzone nieprawidłowości' tak, aby pokazywała opis nieprawidłowości zamiast nazwy
+      kategorii.</li>
+    <li>Dodano do listy kolumnę 'Kategorie'.</li>
+    <li>Dodano nowe pole: Komentarz.</li>
+    <li>Dodano wymuszenie potwierdzenia zarejestrowania niezgodności jako ZPW.</li>
+  </ul>
+  <h3>Rozmowy o BHP</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający edycję rozmów przez osobę z uprawnieniami do zarządzania.</li>
+    <li>Poprawiono błąd umożliwiający wybranie działów zdefiniowanych dla Audytów a nie Rozmów.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Zmieniono drukowanie picklisty malarnii tak, aby każde zlecenie znajdowało się na oddzielnej stronie.</li>
+    <li>Dodano status malarnii 'W trakcie malowania (MSP)' do filtra kompletacji.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Powiadomienia e-mail nie będą już wysyłane do uczestników zgłoszenia, jeżeli w momencie wysyłki przeglądają oni
+      dane zgłoszenie.</li>
+    <li>Dodano do raportu nowy podział czasu: brak (grupowanie sumy dla całego okresu).</li>
+    <li>Dodano do raportu dwa nowe wykresy: Ilość zgłoszeń wg zmiany produkcyjnej i godziny zgłoszenia.</li>
+    <li>Dodano wysyłanie powiadomień e-mail do uczestników wywołanych na czacie (nazwa+<kbd>TAB</kbd>).</li>
+  </ul>
+  <h3>Dopuszczenia</h3>
+  <ul>
+    <li>Dodano brakujące menu kontekstowe do podświetlonych na czacie kodów 12NC oraz numerów zleceń.</li>
+  </ul>
+  <h3>Dokumenty</h3>
+  <ul>
+    <li>Dodano możliwość ograniczenia dostępu do nadrzędnych katalogów do wybranych funkcji na produkcji.</li>
+    <li>Dodano możliwość wyświetlenia nazwy komponentu po kliknięciu na nr pozycji komponentu znajdujący się
+      w wyświetlanym dokumencie.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano możliwość przypisania do usprawnienia o kategorii Kaizen Event działań korygujących (inne, powiązane
+      usprawnienia).</li>
+  </ul>
+  <h3>Przewody</h3>
+  <ul>
+    <li>Dodano możliwość otworzenia BOM i dokumentu powiązanego z kodem przewodu.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.159.0</h1>
   <h2><%- time.format('2021-03-28', 'LL') %></h2>
   <h3>Planowanie</h3>

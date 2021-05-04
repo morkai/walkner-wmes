@@ -36,18 +36,55 @@ define([
       }
     },
 
-    breadcrumbs: [
+    remoteTopics: {
+      'production.edited.shift.*': function(message)
       {
-        label: t.bound('factoryLayout', 'bc:layout'),
-        href: '#factoryLayout'
-      },
-      t.bound('factoryLayout', 'bc:list')
-    ],
+        if (!message.comments)
+        {
+          return;
+        }
+
+        [
+          this.model.prodLineStates.get(message.prodLine),
+          this.model.historyData.get(message._id)
+        ].forEach(function(prodLineState)
+        {
+          if (!prodLineState)
+          {
+            return;
+          }
+
+          var prodShift = prodLineState.get('prodShift');
+
+          if (!prodShift || prodShift.id !== message._id)
+          {
+            return;
+          }
+
+          prodLineState.update({
+            prodShift: {
+              comments: message.comments
+            }
+          });
+        });
+      }
+    },
+
+    breadcrumbs: function()
+    {
+      return [
+        {
+          label: this.t('bc:layout'),
+          href: '#factoryLayout'
+        },
+        this.t('bc:list')
+      ];
+    },
 
     actions: function()
     {
       return [{
-        label: t.bound('factoryLayout', 'pa:settings'),
+        label: this.t('pa:settings'),
         icon: 'cogs',
         privileges: 'FACTORY_LAYOUT:MANAGE',
         href: '#factoryLayout;settings?tab=blacklist'
