@@ -27,6 +27,8 @@ define([
 
     if (!prodShiftOrder.id || !socket.isConnected())
     {
+      ftOk(view);
+
       return;
     }
 
@@ -220,6 +222,8 @@ define([
       else if (!socket.isConnected())
       {
         view.ft.checkCredentials = null;
+
+        ftOk(view);
       }
       else
       {
