@@ -891,7 +891,7 @@ define([
 
     adjustCurrentDowntimeBox: function()
     {
-      var $downtimesHeader = this.$id('downtimes-header');
+      var $downtimesHeader = this.$id('sequence-header');
       var offset = $downtimesHeader.offset();
 
       if (!offset)
