@@ -67,12 +67,16 @@ define([
         }
 
         $order.select2('val', '', true).select2('focus');
+
+        viewport.adjustDialogBackdrop();
       },
       'click #-clear': function()
       {
         this.$id('rows').empty();
         this.$id('queue').addClass('hidden');
         this.$id('empty').html(t('production', 'orderQueue:message:empty'));
+
+        viewport.adjustDialogBackdrop();
       },
       'click .btn[data-action="remove"]': function(e)
       {
@@ -83,6 +87,8 @@ define([
           this.$id('queue').addClass('hidden');
           this.$id('empty').html(t('production', 'orderQueue:message:empty'));
         }
+
+        viewport.adjustDialogBackdrop();
       },
       'click .btn[data-action="moveDown"]': function(e)
       {
@@ -163,6 +169,8 @@ define([
       this.setUpOrderSelect2();
       this.setUpOperationSelect2();
       this.focusFirstInput();
+
+      viewport.adjustDialogBackdrop();
     },
 
     addRow: function(order, operationNo)
