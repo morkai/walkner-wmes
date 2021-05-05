@@ -229,10 +229,15 @@
   margin-bottom: 0;
   border-bottom: 0;
 }
+.production-ft > div {
+  margin-right: 30px;
+}
+.production-ft > div:last-child {
+  margin-right: 0;
+}
 .production-downtimes,
 .production-sequence {
   flex: 1 1 auto;
-  margin-right: 30px;
 }
 .production-quantities {
   flex: 0 0 auto;
@@ -504,13 +509,7 @@
   .production-property-value {
     font-size: 20px;
   }
-  .production-ft {
-    padding: 0 0 15px 0;
-  }
-  .production-taktTime,
-  .production-downtimes,
-  .production-sequence,
-  .production-quantities {
+  .production-ft > div {
     margin-right: 15px;
   }
   .production-downtimes .list-item > td:nth-child(2) {
@@ -555,9 +554,11 @@
   .production-ft {
     flex-wrap: wrap;
   }
+  .production-ft > div {
+    margin-right: 0;
+  }
   .production-downtimes,
   .production-sequence {
-    margin-right: 0;
     order: 2;
     width: 100%;
   }
