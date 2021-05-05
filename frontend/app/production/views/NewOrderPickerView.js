@@ -627,15 +627,7 @@ define([
           });
         }
 
-        var qtyDone = orderInfo.qtyDone
-          && orderInfo.qtyDone.byOperation
-          && orderInfo.qtyDone.byOperation[operationNo]
-          || 0;
-        var qtyMax = orderInfo.qtyMax
-          && orderInfo.qtyMax[operationNo]
-          || orderInfo.qty;
-
-        if (qtyMax && qtyDone >= qtyMax && _.intersection(statuses, ['CNF', 'DLV']).length)
+        if (_.intersection(statuses, ['CNF', 'DLV']).length)
         {
           this.$id('order').select();
           this.$id('submit').prop('disabled', false);
