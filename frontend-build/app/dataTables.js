@@ -1,0 +1,1 @@
+define(["jquery","datatables.net"],function(e){"use strict";var t=new Intl.Collator(["pl"],{usage:"sort",sensitivity:"base",ignorePunctuation:!0,numeric:!0});return e.fn.dataTable.ext.type.order["locale-asc"]=function(e,n){return t.compare(e,n)},e.fn.dataTable.ext.type.order["locale-desc"]=function(e,n){return t.compare(n,e)},e});

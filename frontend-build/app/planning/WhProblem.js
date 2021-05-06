@@ -1,0 +1,1 @@
+define(["../i18n","../core/Model"],function(e,o){"use strict";return o.extend({urlRoot:"/old/wh/orders"})});
