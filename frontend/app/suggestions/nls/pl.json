@@ -1,8 +1,9 @@
 {
   "BREADCRUMB:base": "Usprawnienia",
   "BREADCRUMB:browse": "Zgłoszenia",
-  "BREADCRUMB:reports:count": "Ilość zgłoszeń",
-  "BREADCRUMB:reports:summary": "Zestawienie informacji",
+  "BREADCRUMB:reports:base": "Reaguj",
+  "BREADCRUMB:reports:count": "Ilość usprawnień",
+  "BREADCRUMB:reports:summary": "Zestawienie usprawnień",
   "BREADCRUMB:reports:engagement": "Zaangażowanie",
   "BREADCRUMB:reports:reward": "Wynagrodzenie",
 
@@ -240,9 +241,11 @@
   "thanks:message": "Dziękujemy za zgłoszenie!",
   "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)",
 
+  "engagement:title": "Zaangażowanie",
   "engagement:name": "Nazwisko i imię",
   "engagement:nearMisses": "ZPW",
-  "engagement:suggestions": "BHP<br>+ergo.",
+  "engagement:osh": "BHP<br>+ergo.",
+  "engagement:suggestions": "Uspraw.",
   "engagement:observations": "Obs.",
   "engagement:minutes": "Minutki",
   "engagement:audits": "Audyty",
@@ -250,6 +253,13 @@
   "engagement:total": "Suma",
   "engagement:sections": "Dział zgłaszający",
   "engagement:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
+  "engagement:series:nearMisses": "ZPW",
+  "engagement:series:osh": "BHP+ergonomia",
+  "engagement:series:suggestions": "Usprawnienia",
+  "engagement:series:observations": "Obserwacje",
+  "engagement:series:minutes": "Minutki",
+  "engagement:series:audits": "Audyty",
+  "engagement:series:talks": "Rozmowy",
   "engagement:export:action": "Eksportuj do pliku",
   "engagement:export:filename": "WMES_ZAANGAZOWANIE",
 

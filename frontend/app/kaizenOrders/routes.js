@@ -23,7 +23,7 @@ define([
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
   var canAccessLocal = user.auth('LOCAL', 'USER');
 
-  router.map('/kaizenReport', canAccess, function(req)
+  router.map('/kaizenOrders/reports/count', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -43,7 +43,7 @@ define([
     );
   });
 
-  router.map('/kaizenSummaryReport', canAccess, function(req)
+  router.map('/kaizenOrders/reports/summary', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -64,28 +64,7 @@ define([
     );
   });
 
-  router.map('/kaizenEngagementReport', canAccess, function(req)
-  {
-    viewport.loadPage(
-      [
-        'app/suggestions/SuggestionEngagementReport',
-        'app/suggestions/pages/SuggestionEngagementReportPage',
-        css,
-        'i18n!app/nls/reports',
-        'i18n!app/nls/suggestions',
-        nls
-      ],
-      function(SuggestionEngagementReport, SuggestionEngagementReportPage)
-      {
-        return new SuggestionEngagementReportPage({
-          baseBreadcrumbNls: 'kaizenOrders',
-          model: SuggestionEngagementReport.fromQuery(req.query)
-        });
-      }
-    );
-  });
-
-  router.map('/kaizenMetricsReport', canAccess, function(req)
+  router.map('/kaizenOrders/reports/metrics', canAccess, function(req)
   {
     viewport.loadPage(
       [

@@ -9,7 +9,7 @@ define([
   'app/suggestions/templates/rewardReportPage'
 ], function(
   View,
-  kaizenDictionaries,
+  dictionaries,
   RewardReport,
   RewardReportFilterView,
   RewardReportView,
@@ -21,14 +21,12 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'suggestionRewardReport',
-
     template: template,
 
     breadcrumbs: function()
     {
       return [
-        this.t('BREADCRUMB:base'),
+        this.t('BREADCRUMB:reports:base'),
         this.t('BREADCRUMB:reports:reward')
       ];
     },
@@ -75,7 +73,7 @@ define([
 
     initialize: function()
     {
-      kaizenDictionaries.bind(this);
+      dictionaries.bind(this);
 
       this.defineViews();
 

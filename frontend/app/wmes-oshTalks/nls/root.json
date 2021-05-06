@@ -1,6 +1,7 @@
 {
   "root": {
     "BREADCRUMB:browse": "OSH talks",
+    "BREADCRUMB:reports:base": "React",
     "BREADCRUMB:reports:count": "Number of talks",
 
     "PROPERTY:rid": "ID",

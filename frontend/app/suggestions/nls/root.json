@@ -1,9 +1,10 @@
 {
   "root": {
+    "BREADCRUMB:react": "React",
     "BREADCRUMB:base": "Improvements",
     "BREADCRUMB:browse": "Entries",
-    "BREADCRUMB:reports:count": "Number of entries",
-    "BREADCRUMB:reports:summary": "Summary",
+    "BREADCRUMB:reports:count": "Number of improvements",
+    "BREADCRUMB:reports:summary": "Improvement summary",
     "BREADCRUMB:reports:engagement": "Engagement",
     "BREADCRUMB:reports:reward": "Reward",
 
@@ -226,9 +227,11 @@
     "thanks:message": "Thanks for the entry!",
     "thanks:footnote": "(click any button or key to close this window)",
 
+    "engagement:title": "Engagement",
     "engagement:name": "Name",
     "engagement:nearMisses": "NM",
-    "engagement:suggestions": "OSH<br>+ergo.",
+    "engagement:osh": "OSH<br>+ergo.",
+    "engagement:suggestions": "Sug.",
     "engagement:observations": "Obs.",
     "engagement:minutes": "Minutes",
     "engagement:audits": "Audits",
@@ -236,6 +239,13 @@
     "engagement:sections": "Section",
     "engagement:total": "Total",
     "engagement:empty": "No entries matching the current filters.",
+    "engagement:series:nearMisses": "Near misses",
+    "engagement:series:osh": "OSH+ergonomics",
+    "engagement:series:suggestions": "Improvements",
+    "engagement:series:observations": "Observations",
+    "engagement:series:minutes": "Minutes",
+    "engagement:series:audits": "Audits",
+    "engagement:series:talks": "Talks",
     "engagement:export:action": "Export to file",
     "engagement:export:filename": "WMES_ENGAGEMENT",
 

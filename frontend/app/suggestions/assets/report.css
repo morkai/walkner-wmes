@@ -46,8 +46,11 @@
 .suggestions-report-summary-productFamily {
   display: none;
 }
-.suggestions-report-engagement .is-min {
-  min-width: 72px;
+.suggestions-report-engagement table.dataTable {
+  width: auto;
+  margin: 0;
+  table-layout: fixed;
+  white-space: nowrap;
 }
 .suggestions-report-engagement .is-zero {
   color: #BBB;

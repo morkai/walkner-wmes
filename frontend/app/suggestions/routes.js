@@ -20,7 +20,7 @@ define([
   var canAccess = user.auth();
   var canAccessLocal = user.auth('LOCAL', 'USER');
 
-  router.map('/suggestionCountReport', canAccess, function(req)
+  router.map('/suggestions/reports/count', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -39,7 +39,7 @@ define([
     );
   });
 
-  router.map('/suggestionSummaryReport', canAccess, function(req)
+  router.map('/suggestions/reports/summary', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -58,42 +58,40 @@ define([
     );
   });
 
-  router.map('/suggestionEngagementReport', canAccess, function(req)
+  router.map('/suggestions/reports/engagement', canAccess, function(req)
   {
     viewport.loadPage(
       [
-        'app/suggestions/SuggestionEngagementReport',
-        'app/suggestions/pages/SuggestionEngagementReportPage',
+        'app/suggestions/EngagementReport',
+        'app/suggestions/pages/EngagementReportPage',
         css,
         'i18n!app/nls/reports',
         nls
       ],
-      function(SuggestionEngagementReport, SuggestionEngagementReportPage)
+      function(EngagementReport, EngagementReportPage)
       {
-        return new SuggestionEngagementReportPage({
-          baseBreadcrumbNls: 'suggestions',
-          model: SuggestionEngagementReport.fromQuery(req.query)
+        return new EngagementReportPage({
+          model: EngagementReport.fromQuery(req.query)
         });
       }
     );
   });
 
-  router.map('/suggestionRewardReport', canAccess, function(req)
+  router.map('/suggestions/reports/reward', canAccess, function(req)
   {
     viewport.loadPage(
       [
-        'app/kaizenOrders/dictionaries',
         'app/suggestions/RewardReport',
         'app/suggestions/pages/RewardReportPage',
         css,
         'i18n!app/nls/reports',
         nls
       ],
-      function(dictionaries, RewardReport, RewardReportPage)
+      function(RewardReport, RewardReportPage)
       {
-        return dictionaries.bind(new RewardReportPage({
+        return new RewardReportPage({
           model: RewardReport.fromQuery(req.query)
-        }));
+        });
       }
     );
   });

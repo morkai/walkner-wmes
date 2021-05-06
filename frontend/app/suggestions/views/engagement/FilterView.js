@@ -9,7 +9,7 @@ define([
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
   'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/engagementReportFilter',
+  'app/suggestions/templates/engagement/filter',
   'app/core/util/ExpandableSelect'
 ], function(
   _,

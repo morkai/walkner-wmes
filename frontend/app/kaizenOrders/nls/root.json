@@ -3,8 +3,9 @@
     "BREADCRUMB:base": "Near miss",
     "BREADCRUMB:browse": "Entries",
     "BREADCRUMB:settings": "Settings",
-    "BREADCRUMB:reports:count": "Entry count",
-    "BREADCRUMB:reports:summary": "Summary",
+    "BREADCRUMB:reports:base": "React",
+    "BREADCRUMB:reports:count": "Near miss count",
+    "BREADCRUMB:reports:summary": "Near miss summary",
 
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",

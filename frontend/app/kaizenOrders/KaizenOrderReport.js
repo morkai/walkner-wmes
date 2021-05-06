@@ -78,7 +78,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/kaizenReport'
+      return '/kaizenOrders/reports/count'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')

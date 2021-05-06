@@ -52,7 +52,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/suggestionSummaryReport'
+      return '/suggestions/reports/summary'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&section=' + this.get('section')

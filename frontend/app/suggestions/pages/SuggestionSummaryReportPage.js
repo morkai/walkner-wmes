@@ -1,7 +1,6 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/highcharts',
   'app/core/View',
   'app/kaizenOrders/dictionaries',
@@ -13,10 +12,9 @@ define([
   '../views/SuggestionSummaryPerUserChartView',
   'app/suggestions/templates/summaryReportPage'
 ], function(
-  t,
   Highcharts,
   View,
-  kaizenDictionaries,
+  dictionaries,
   SuggestionSummaryReport,
   SuggestionSummaryReportFilterView,
   SuggestionTableAndChartView,
@@ -35,16 +33,19 @@ define([
 
     template: template,
 
-    breadcrumbs: [
-      t.bound('suggestions', 'BREADCRUMB:base'),
-      t.bound('suggestions', 'BREADCRUMB:reports:summary')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        this.t('BREADCRUMB:reports:base'),
+        this.t('BREADCRUMB:reports:summary')
+      ];
+    },
 
     actions: function()
     {
       return [
         {
-          label: t.bound('suggestions', 'PAGE_ACTION:print'),
+          label: this.t('PAGE_ACTION:print'),
           icon: 'print',
           callback: this.togglePrintMode.bind(this)
         }
@@ -53,6 +54,8 @@ define([
 
     initialize: function()
     {
+      dictionaries.bind(this);
+
       this.defineViews();
 
       this.setView('.filter-container', this.filterView);
@@ -93,23 +96,15 @@ define([
     destroy: function()
     {
       document.body.classList.remove('is-print');
-      kaizenDictionaries.unload();
     },
 
     load: function(when)
     {
-      if (kaizenDictionaries.loaded)
-      {
-        return when(this.model.fetch());
-      }
-
-      return kaizenDictionaries.load().then(this.model.fetch.bind(this.model));
+      return when(this.model.fetch());
     },
 
     afterRender: function()
     {
-      kaizenDictionaries.load();
-
       this.updateSubtitles();
     },
 
@@ -129,20 +124,20 @@ define([
       var total = this.model.get('total');
       var productFamilies = (this.model.get('productFamily') || []).map(function(id)
       {
-        return kaizenDictionaries.productFamilies.get(id).getLabel();
+        return dictionaries.productFamilies.get(id).getLabel();
       });
       var avgDurKey = 'report:subtitle:summary:averageDuration'
         + (document.body.classList.contains('is-print') ? ':short' : '');
 
-      this.$id('averageDuration').html(t('suggestions', avgDurKey, {
+      this.$id('averageDuration').html(this.t(avgDurKey, {
         averageDuration: Highcharts.numberFormat(total.averageDuration, 2)
       }));
-      this.$id('count').html(t('suggestions', 'report:subtitle:summary:count', total.count));
+      this.$id('count').html(this.t('report:subtitle:summary:count', total.count));
 
       this.$id('productFamily').html(
         !productFamilies.length
           ? ''
-          : t('suggestions', 'report:subtitle:summary:productFamily', {productFamily: productFamilies.join(', ')})
+          : this.t('report:subtitle:summary:productFamily', {productFamily: productFamilies.join(', ')})
       );
     },
 

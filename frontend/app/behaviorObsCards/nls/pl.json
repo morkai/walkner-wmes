@@ -1,6 +1,7 @@
 {
   "BREADCRUMB:base": "Obserwacje",
   "BREADCRUMB:browse": "Karty",
+  "BREADCRUMB:reports:base": "Reaguj",
   "BREADCRUMB:reports:count": "Ilość obserwacji",
 
   "PAGE_ACTION:printable": "Wersja do druku",

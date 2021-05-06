@@ -21,7 +21,7 @@ define([
   var nls = 'i18n!app/nls/wmes-oshTalks';
   var canAccess = user.auth('USER');
 
-  router.map('/oshTalkCountReport', canAccess, function(req)
+  router.map('/oshTalks/reports/count', canAccess, function(req)
   {
     viewport.loadPage(
       [

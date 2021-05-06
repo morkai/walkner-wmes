@@ -29,10 +29,13 @@ define([
 
     template: template,
 
-    breadcrumbs: [
-      t.bound('kaizenOrders', 'BREADCRUMB:base'),
-      t.bound('kaizenOrders', 'BREADCRUMB:reports:metrics')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        this.t('BREADCRUMB:reports:base'),
+        this.t('BREADCRUMB:reports:metrics')
+      ];
+    },
 
     events: {
       'click .kaizenOrders-report-grouping': function(e)

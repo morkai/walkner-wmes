@@ -2,8 +2,9 @@
   "BREADCRUMB:base": "ZPW",
   "BREADCRUMB:browse": "Zgłoszenia",
   "BREADCRUMB:settings": "Ustawienia",
-  "BREADCRUMB:reports:count": "Ilość zgłoszeń",
-  "BREADCRUMB:reports:summary": "Zestawienie informacji",
+  "BREADCRUMB:reports:base": "Reaguj",
+  "BREADCRUMB:reports:count": "Ilość ZPW",
+  "BREADCRUMB:reports:summary": "Zestawienie ZPW",
 
   "MSG:markAsSeen:failure": "Nie udało się oznaczyć zgłoszenia jako przeczytane.",
   "MSG:observe:failure": "Nie udało się rozpocząć obserwacji zgłoszenia.",

@@ -27,10 +27,13 @@ define([
 
     template: template,
 
-    breadcrumbs: [
-      t.bound('minutesForSafetyCards', 'BREADCRUMB:base'),
-      t.bound('minutesForSafetyCards', 'BREADCRUMB:reports:count')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        this.t('BREADCRUMB:reports:base'),
+        this.t('BREADCRUMB:reports:count')
+      ];
+    },
 
     initialize: function()
     {

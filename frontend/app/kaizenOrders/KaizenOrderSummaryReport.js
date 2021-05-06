@@ -50,7 +50,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/kaizenSummaryReport'
+      return '/kaizenOrders/reports/summary'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&section=' + this.get('section')

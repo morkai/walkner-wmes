@@ -50,7 +50,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/suggestionRewardReport'
+      return '/suggestions/reports/reward'
         + '?month=' + this.get('month')
         + '&confirmer=' + this.get('confirmer')
         + '&superior=' + this.get('superior')

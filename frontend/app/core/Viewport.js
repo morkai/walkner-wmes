@@ -191,23 +191,69 @@ define([
 
     viewport.broker.publish('viewport.page.loading', {page: page});
 
-    if (_.isFunction(page.load))
+    var requests = [];
+    var priorityRequests = [];
+    var normalRequests = [];
+    var moduleRequests = [];
+
+    page.trigger('beforeLoad', page, requests);
+
+    requests.forEach(function(request)
     {
-      page.load(when).then(onPageLoadSuccess, onPageLoadFailure);
+      if (!request)
+      {
+        return;
+      }
+
+      if (typeof request === 'string')
+      {
+        moduleRequests.push(request);
+      }
+      else if (request.priority && request.promise && request.promise.then)
+      {
+        priorityRequests.push(page.promised(request.promise));
+      }
+      else if (request.priority && request.then)
+      {
+        priorityRequests.push(page.promised(request));
+      }
+      else if (request.then)
+      {
+        normalRequests.push(page.promised(request));
+      }
+    });
+
+    if (moduleRequests.length)
+    {
+      priorityRequests.unshift(loadModules(moduleRequests));
+    }
+
+    if (priorityRequests.length)
+    {
+      when.apply(null, priorityRequests).then(loadPage, onPageLoadFailure);
     }
     else
     {
-      when().then(onPageLoadSuccess, onPageLoadFailure);
+      loadPage();
+    }
+
+    function loadPage()
+    {
+      if (_.isFunction(page.load))
+      {
+        page.load(when).then(onPageLoadSuccess, onPageLoadFailure);
+      }
+      else
+      {
+        when().then(onPageLoadSuccess, onPageLoadFailure);
+      }
     }
 
     function when()
     {
       var requests = [];
       var priorityRequests = [];
-      var normalRequests = [];
       var moduleRequests = [];
-
-      page.trigger('beforeLoad', page, requests);
 
       for (var i = 0; i < arguments.length; ++i)
       {

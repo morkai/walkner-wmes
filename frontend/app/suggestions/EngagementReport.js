@@ -49,7 +49,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/suggestionEngagementReport'
+      return '/suggestions/reports/engagement'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
@@ -68,6 +68,7 @@ define([
         var totals = {
           name: 0,
           nearMisses: 0,
+          osh: 0,
           suggestions: 0,
           observations: 0,
           minutes: 0,
@@ -83,6 +84,7 @@ define([
           {
             totals.name += 1;
             totals.nearMisses += user.nearMisses;
+            totals.osh += user.osh;
             totals.suggestions += user.suggestions;
             totals.observations += user.observations;
             totals.minutes += user.minutes;
@@ -96,6 +98,7 @@ define([
             return {
               name: report.users[userKey] || userKey,
               nearMisses: user.nearMisses,
+              osh: user.osh,
               suggestions: user.suggestions,
               observations: user.observations,
               minutes: user.minutes,
@@ -135,7 +138,7 @@ define([
       function incTotal(o)
       {
         o.total += o.nearMisses
-          + o.suggestions
+          + o.osh
           + o.observations
           + o.minutes
           + o.audits
@@ -146,7 +149,7 @@ define([
     serializeToCsv: function()
     {
       var rows = [
-        'date;name;nearMisses;suggestions;observations;minutes;audits;talks;sections'
+        'date;name;nearMisses;osh;observations;minutes;audits;talks;suggestions;sections'
       ];
 
       _.forEach(this.get('groups'), function(group)
@@ -158,11 +161,12 @@ define([
           rows.push(
             row + '"' + user.name
             + '";' + user.nearMisses
-            + ';' + user.suggestions
+            + '";' + user.osh
             + ';' + user.observations
             + ';' + user.minutes
             + ';' + user.audits
             + ';' + user.talks
+            + ';' + user.suggestions
             + ';"' + user.sections.join(',') + '"'
           );
         });
@@ -172,6 +176,17 @@ define([
     }
 
   }, {
+
+    COUNTERS: [
+      'nearMisses',
+      'osh',
+      'observations',
+      'minutes',
+      'audits',
+      'talks',
+      'total',
+      'suggestions'
+    ],
 
     fromQuery: function(query)
     {

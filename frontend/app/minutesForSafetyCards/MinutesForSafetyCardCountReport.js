@@ -68,7 +68,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/minutesForSafetyCardCountReport'
+      return '/minutesForSafetyCards/reports/count'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')

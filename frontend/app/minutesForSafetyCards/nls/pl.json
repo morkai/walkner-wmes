@@ -1,6 +1,7 @@
 {
   "BREADCRUMB:base": "Minutki",
   "BREADCRUMB:browse": "Karty",
+  "BREADCRUMB:reports:base": "Reaguj",
   "BREADCRUMB:reports:count": "Ilość minutek",
 
   "PAGE_ACTION:print": "Wersja do druku",

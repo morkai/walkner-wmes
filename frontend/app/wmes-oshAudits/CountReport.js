@@ -68,7 +68,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/oshAuditCountReport'
+      return '/oshAudits/reports/count'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')

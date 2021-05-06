@@ -53,7 +53,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/kaizenMetricsReport'
+      return '/kaizenOrders/reports/metrics'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')

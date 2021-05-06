@@ -2,30 +2,22 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/highcharts',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
   'app/reports/util/formatXAxis',
-  'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/reportTable',
-  'app/suggestions/templates/tableAndChart'
+  '../../EngagementReport'
 ], function(
   _,
-  t,
   Highcharts,
   View,
   formatTooltipHeader,
   formatXAxis,
-  kaizenDictionaries,
-  renderReportTable,
-  template
+  EngagementReport
 ) {
   'use strict';
 
   return View.extend({
-
-    template: template,
 
     initialize: function()
     {
@@ -35,7 +27,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:' + this.options.metric, this.render);
+      this.listenTo(this.model, 'change:groups', this.render);
     },
 
     destroy: function()
@@ -74,36 +66,26 @@ define([
           this.chart.showLoading();
         }
       }
-
-      this.updateTable();
-
-      this.$el.toggleClass('has-many-series', this.chart.series.length > 10);
     },
 
     createChart: function()
     {
-      var metric = this.options.metric;
-      var series = this.serializeChartSeries();
+      const series = this.serializeChartSeries();
 
       this.chart = new Highcharts.Chart({
         chart: {
-          renderTo: this.$id('chart')[0],
+          renderTo: this.el,
           plotBorderWidth: 1,
-          spacing: [10, 1, 1, 0]
+          spacing: [10, 1, 1, 1]
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + metric),
+          filename: this.t('engagement:export:filename'),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:' + metric)
+              text: this.t('engagement:title')
             },
             legend: {
               enabled: true
-            }
-          },
-          buttons: {
-            contextButton: {
-              align: 'left'
             }
           },
           noDataLabels: series.length && series.length * series[0].data.length > 30
@@ -117,8 +99,7 @@ define([
         yAxis: {
           title: false,
           min: 0,
-          allowDecimals: false,
-          opposite: true
+          allowDecimals: false
         },
         tooltip: {
           shared: true,
@@ -126,17 +107,17 @@ define([
           headerFormatter: formatTooltipHeader.bind(this)
         },
         legend: {
-          enabled: false
+          enabled: true
         },
         plotOptions: {
           column: {
             borderWidth: 0,
             dataLabels: {
-              enabled: series.length && series.length * series[0].data.length <= 35
+              enabled: series.length && series.length * series[0].data.length <= 70
             }
           }
         },
-        series: series
+        series
       });
     },
 
@@ -146,30 +127,32 @@ define([
       this.createChart();
     },
 
-    updateTable: function()
-    {
-      this.$id('table').html(this.renderPartialHtml(renderReportTable, {
-        rows: this.model.get(this.options.metric).rows
-      }));
-    },
-
     serializeChartSeries: function()
     {
-      var view = this;
-      var nlsPrefix = view.options.metric === 'status' ? 'status:' : 'report:series:';
-      var series = view.model.get(view.options.metric).series;
+      const series = [];
+      const groups = this.model.get('groups');
 
-      return Object.keys(series).map(function(seriesId)
+      EngagementReport.COUNTERS.forEach(metric =>
       {
-        var serie = series[seriesId];
+        if (metric === 'total')
+        {
+          return;
+        }
 
-        return _.defaults(serie, {
-          id: seriesId,
+        const s = {
+          id: metric,
+          name: this.t(`engagement:series:${metric}`),
           type: 'column',
-          name: serie.name || view.t(nlsPrefix + seriesId),
-          data: []
-        });
+          data: groups.map(g => ({
+            x: g.key,
+            y: g.totals[metric]
+          }))
+        };
+
+        series.push(s);
       });
+
+      return series;
     },
 
     onModelLoading: function()

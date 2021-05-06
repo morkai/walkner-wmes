@@ -79,7 +79,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/behaviorObsCardCountReport'
+      return '/behaviorObsCards/reports/count'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')

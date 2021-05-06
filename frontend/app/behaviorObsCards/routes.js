@@ -21,7 +21,7 @@ define([
   var nls = 'i18n!app/nls/behaviorObsCards';
   var canAccess = user.auth('LOCAL', 'USER');
 
-  router.map('/behaviorObsCardCountReport', canAccess, function(req)
+  router.map('/behaviorObsCards/reports/count', canAccess, function(req)
   {
     viewport.loadPage(
       [

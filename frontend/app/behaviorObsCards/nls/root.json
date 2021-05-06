@@ -2,6 +2,7 @@
   "root": {
     "BREADCRUMB:base": "Observations",
     "BREADCRUMB:browse": "Cards",
+    "BREADCRUMB:reports:base": "React",
     "BREADCRUMB:reports:count": "Observation count",
 
     "PAGE_ACTION:printable": "Printable version",

@@ -72,7 +72,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/suggestionCountReport'
+      return '/suggestions/reports/count'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
@@ -269,22 +269,23 @@ define([
 
     prepareOwnerSeries: function(ownerTotals)
     {
+      var nlsDomain = this.getNlsDomain();
       var series = [
         {
           id: 'suggestion',
-          name: t.bound('suggestions', 'report:series:suggestion'),
+          name: t(nlsDomain, 'report:series:suggestion'),
           data: [],
           color: COLOR_SUGGESTION
         },
         {
           id: 'kaizen',
-          name: t.bound('suggestions', 'report:series:kaizen'),
+          name: t(nlsDomain, 'report:series:kaizen'),
           data: [],
           color: COLOR_KAIZEN
         },
         {
           id: 'kaizenEvent',
-          name: t.bound('suggestions', 'report:series:kaizenEvent'),
+          name: t(nlsDomain, 'report:series:kaizenEvent'),
           data: [],
           color: COLOR_KAIZEN_EVENT
         }
@@ -305,7 +306,7 @@ define([
       return [
         {
           id: 'entry',
-          name: t.bound('suggestions', 'report:series:entry'),
+          name: t(this.getNlsDomain(), 'report:series:entry'),
           data: _.map(confirmerTotals, function(t) { return t[1]; })
         }
       ];

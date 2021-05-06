@@ -1,0 +1,39 @@
+<div class="suggestions-report-engagement-tables">
+  <% if (!groups.length) { %>
+  <p class="well"><%- t('engagement:empty') %></p>
+  <% } %>
+  <% groups.forEach(function(group) { %>
+    <h3><%- formatHeader(group.key) %></h3>
+    <table class="stripe order-column cell-border">
+      <thead>
+      <tr>
+        <th><%- t('engagement:name') %></th>
+        <% counters.forEach(function(c) { %>
+          <th><%- t('engagement:' + c) %></th>
+        <% }) %>
+        <th><%- t('engagement:sections') %></th>
+      </tr>
+      </thead>
+      <tfoot>
+      <tr>
+        <td class="is-number"><%- group.totals.name.toLocaleString() %></td>
+        <% counters.forEach(function(c) { %>
+          <td class="is-number"><%- group.totals[c].toLocaleString() %></td>
+        <% }) %>
+        <td></td>
+      </tr>
+      </tfoot>
+      <tbody>
+      <% group.users.forEach(function(user) { %>
+        <tr>
+          <td><%= user.name %></td>
+          <% counters.forEach(function(c) { %>
+            <td class="is-number"><%- user[c].toLocaleString() %></td>
+          <% }) %>
+          <td><%- user.sections.join('; ') %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  <% }) %>
+</div>

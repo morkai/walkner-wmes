@@ -21,7 +21,7 @@ define([
   var nls = 'i18n!app/nls/minutesForSafetyCards';
   var canAccess = user.auth();
 
-  router.map('/minutesForSafetyCardCountReport', canAccess, function(req)
+  router.map('/minutesForSafetyCards/reports/count', canAccess, function(req)
   {
     viewport.loadPage(
       [
