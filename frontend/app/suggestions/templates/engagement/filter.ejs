@@ -5,7 +5,7 @@
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- id('interval') %>" class="btn-group filter-btn-group" data-toggle="buttons">
-      <% ['year', 'quarter', 'month', 'week'].forEach(function(interval) { %>
+      <% ['year', 'quarter', 'month', 'week', 'none'].forEach(function(interval) { %>
       <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
         <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
       </label>

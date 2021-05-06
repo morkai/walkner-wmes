@@ -4,6 +4,7 @@ define([
   'underscore',
   'app/highcharts',
   'app/core/View',
+  'app/data/colorFactory',
   'app/reports/util/formatTooltipHeader',
   'app/reports/util/formatXAxis',
   '../../EngagementReport'
@@ -11,6 +12,7 @@ define([
   _,
   Highcharts,
   View,
+  colorFactory,
   formatTooltipHeader,
   formatXAxis,
   EngagementReport
@@ -70,6 +72,7 @@ define([
 
     createChart: function()
     {
+      const xAxis = this.serializeXAxis();
       const series = this.serializeChartSeries();
 
       this.chart = new Highcharts.Chart({
@@ -79,10 +82,10 @@ define([
           spacing: [10, 1, 1, 1]
         },
         exporting: {
-          filename: this.t('engagement:export:filename'),
+          filename: this.t(`engagement:export:filename:${this.options.totals}`),
           chartOptions: {
             title: {
-              text: this.t('engagement:title')
+              text: this.t(`engagement:title:${this.options.totals}`)
             },
             legend: {
               enabled: true
@@ -92,10 +95,7 @@ define([
         },
         title: false,
         noData: {},
-        xAxis: {
-          type: 'datetime',
-          labels: formatXAxis.labels(this)
-        },
+        xAxis,
         yAxis: {
           title: false,
           min: 0,
@@ -104,10 +104,10 @@ define([
         tooltip: {
           shared: true,
           valueDecimals: 0,
-          headerFormatter: formatTooltipHeader.bind(this)
+          headerFormatter: xAxis.type === 'datetime' ? formatTooltipHeader.bind(this) : undefined
         },
         legend: {
-          enabled: true
+          enabled: xAxis.type === 'datetime'
         },
         plotOptions: {
           column: {
@@ -127,10 +127,45 @@ define([
       this.createChart();
     },
 
+    serializeXAxis: function()
+    {
+      if (this.model.get('groups').length === 1)
+      {
+        return {
+          type: 'category',
+          categories: EngagementReport.COUNTERS
+            .filter(m => m !== 'total')
+            .map(m => this.t(`engagement:series:${m}`))
+        };
+      }
+
+      return {
+        type: 'datetime',
+        labels: formatXAxis.labels(this)
+      };
+    },
+
     serializeChartSeries: function()
     {
       const series = [];
       const groups = this.model.get('groups');
+      const users = this.options.totals === 'users';
+
+      if (groups.length === 1)
+      {
+        series.push({
+          type: 'column',
+          name: this.t(`engagement:series:${this.options.totals}`),
+          data: EngagementReport.COUNTERS
+            .filter(metric => metric !== 'total')
+            .map(metric => ({
+              color: colorFactory.getColor('suggestions/engagement', metric),
+              y: users ? groups[0].totals.users[metric] : groups[0].totals[metric]
+            }))
+        });
+
+        return series;
+      }
 
       EngagementReport.COUNTERS.forEach(metric =>
       {
@@ -143,10 +178,14 @@ define([
           id: metric,
           name: this.t(`engagement:series:${metric}`),
           type: 'column',
-          data: groups.map(g => ({
-            x: g.key,
-            y: g.totals[metric]
-          }))
+          color: colorFactory.getColor('suggestions/engagement', metric),
+          data: groups.map(g =>
+          {
+            return {
+              x: g.key,
+              y: users ? g.totals.users[metric] : g.totals[metric]
+            };
+          })
         };
 
         series.push(s);

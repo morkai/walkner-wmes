@@ -16,9 +16,17 @@
       </thead>
       <tfoot>
       <tr>
-        <td class="is-number"><%- group.totals.name.toLocaleString() %></td>
+        <td class="text-right">
+          <%- t('engagement:total:entries') %>
+          <br>
+          <%- t('engagement:total:users') %>
+        </td>
         <% counters.forEach(function(c) { %>
-          <td class="is-number"><%- group.totals[c].toLocaleString() %></td>
+          <td class="is-number">
+            <%- group.totals[c].toLocaleString() %>
+            <br>
+            <%- group.totals.users[c].toLocaleString() %>
+          </td>
         <% }) %>
         <td></td>
       </tr>

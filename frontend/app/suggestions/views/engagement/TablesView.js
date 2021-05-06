@@ -42,7 +42,9 @@ define([
     getTemplateData: function()
     {
       return {
-        formatHeader: formatTooltipHeader.bind(this),
+        formatHeader: this.model.get('interval') !== 'none'
+          ? formatTooltipHeader.bind(this)
+          : () => this.t('engagement:title:none'),
         groups: this.model.get('groups'),
         counters: EngagementReport.COUNTERS
       };

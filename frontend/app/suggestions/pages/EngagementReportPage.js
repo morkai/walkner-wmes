@@ -75,7 +75,12 @@ define([
       this.setView('#-filter', new FilterView({
         model: this.model
       }));
-      this.setView('#-chart', new ChartView({
+      this.setView('#-entriesChart', new ChartView({
+        totals: 'entries',
+        model: this.model
+      }));
+      this.setView('#-usersChart', new ChartView({
+        totals: 'users',
         model: this.model
       }));
       this.setView('#-tables', new TablesView({

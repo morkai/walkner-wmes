@@ -66,7 +66,6 @@ define([
       _.forEach(report.groups, function(group, groupKey)
       {
         var totals = {
-          name: 0,
           nearMisses: 0,
           osh: 0,
           suggestions: 0,
@@ -74,7 +73,17 @@ define([
           minutes: 0,
           audits: 0,
           talks: 0,
-          total: 0
+          total: 0,
+          users: {
+            nearMisses: 0,
+            osh: 0,
+            suggestions: 0,
+            observations: 0,
+            minutes: 0,
+            audits: 0,
+            talks: 0,
+            total: 0
+          }
         };
 
         group = {
@@ -82,7 +91,6 @@ define([
           totals: totals,
           users: _.map(group, function(user, userKey)
           {
-            totals.name += 1;
             totals.nearMisses += user.nearMisses;
             totals.osh += user.osh;
             totals.suggestions += user.suggestions;
@@ -90,6 +98,14 @@ define([
             totals.minutes += user.minutes;
             totals.audits += user.audits;
             totals.talks += user.talks;
+            totals.users.nearMisses += user.nearMisses ? 1 : 0;
+            totals.users.osh += user.osh ? 1 : 0;
+            totals.users.suggestions += user.suggestions ? 1 : 0;
+            totals.users.observations += user.observations ? 1 : 0;
+            totals.users.minutes += user.minutes ? 1 : 0;
+            totals.users.audits += user.audits ? 1 : 0;
+            totals.users.talks += user.talks ? 1 : 0;
+            totals.users.total += 1;
 
             user.total = 0;
 
