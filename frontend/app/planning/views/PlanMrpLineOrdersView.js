@@ -63,11 +63,11 @@ define([
           return;
         }
 
-        var orderNo = this.line.orders.get(e.currentTarget.dataset.id).get('orderNo');
+        const orderNo = this.line.orders.get(e.currentTarget.dataset.id).get('orderNo');
 
         if (e.ctrlKey)
         {
-          window.open('/#orders/' + orderNo);
+          window.open(`/#orders/${orderNo}`);
 
           return;
         }
@@ -75,21 +75,21 @@ define([
         if (this.mrp.orders.get(orderNo))
         {
           this.mrp.orders.trigger('preview', {
-            orderNo: orderNo,
+            orderNo,
             source: 'lineOrders'
           });
 
           return;
         }
 
-        var planOrder = this.plan.orders.get(orderNo);
+        const planOrder = this.plan.orders.get(orderNo);
 
         if (!planOrder)
         {
           return;
         }
 
-        var externalMrp = this.plan.mrps.get(planOrder.get('mrp'));
+        const externalMrp = this.plan.mrps.get(planOrder.get('mrp'));
 
         if (!externalMrp)
         {
@@ -97,7 +97,7 @@ define([
         }
 
         externalMrp.orders.trigger('preview', {
-          orderNo: orderNo,
+          orderNo,
           scrollIntoView: true,
           source: 'lineOrders'
         });
@@ -116,7 +116,7 @@ define([
 
     initialize: function()
     {
-      var view = this;
+      const view = this;
 
       view.listenTo(view.plan, 'change:active', this.renderIfNotLoading);
 
@@ -127,7 +127,12 @@ define([
 
       view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
 
+      view.listenTo(view.plan.whProblems, 'reset', view.onWhProblemReset);
+      view.listenTo(view.plan.whProblems, 'add', view.onWhProblemAdd);
+      view.listenTo(view.plan.whProblems, 'remove', view.onWhProblemRemove);
+
       view.listenTo(view.line.orders, 'reset', view.renderIfNotLoading);
+      view.listenTo(view.line.orders, 'change:executed', view.onLineOrderExecuted);
 
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
       view.listenTo(view.mrp.orders, 'change:incomplete', view.onIncompleteChange);
@@ -146,21 +151,20 @@ define([
       this.$el.popover('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      var prodState = this.serializeProdState();
+      const prodState = this.serializeProdState();
 
       return {
-        idPrefix: this.idPrefix,
+        prodState,
         line: this.line.id,
-        prodState: prodState,
         shifts: this.serializeShifts(prodState)
       };
     },
 
     afterRender: function()
     {
-      var view = this;
+      const view = this;
 
       view.$el.popover({
         container: view.el,
@@ -169,9 +173,10 @@ define([
         html: true,
         placement: function()
         {
-          return this.$element.attr('data-popover-placement') || 'top';
+          return this.$element[0].dataset.popoverPlacement || 'top';
         },
         hasContent: true,
+        className: 'planning-mrp-popover',
         content: function()
         {
           switch (this.dataset.popoverContent)
@@ -188,11 +193,7 @@ define([
             case 'line':
               return view.serializeLinePopover();
           }
-        },
-        template: '<div class="popover planning-mrp-popover">'
-          + '<div class="arrow"></div>'
-          + '<div class="popover-content"></div>'
-          + '</div>'
+        }
       });
     },
 
@@ -206,12 +207,12 @@ define([
 
     $item: function(id)
     {
-      return id ? this.$('.planning-mrp-list-item[data-id="' + id + '"]') : this.$('.planning-mrp-list-item');
+      return id ? this.$(`.planning-mrp-list-item[data-id="${id}"]`) : this.$('.planning-mrp-list-item');
     },
 
     serializeProdState: function()
     {
-      var prodLineState = this.prodLineState;
+      const prodLineState = this.prodLineState;
 
       if (!prodLineState || !this.plan.isProdStateUsed())
       {
@@ -223,8 +224,8 @@ define([
         };
       }
 
-      var prodShift = prodLineState.get('prodShift');
-      var prodShiftOrder = prodLineState.getCurrentOrder();
+      const prodShift = prodLineState.get('prodShift');
+      const prodShiftOrder = prodLineState.getCurrentOrder();
 
       return {
         online: prodLineState.get('online') ? 'is-online' : 'is-offline',
@@ -236,20 +237,20 @@ define([
 
     serializeShifts: function(prodState)
     {
-      var plan = this.plan;
-      var planMrp = this.mrp;
-      var planLine = this.line;
-      var shifts = [];
+      const plan = this.plan;
+      const planMrp = this.mrp;
+      const planLine = this.line;
+      const shifts = [];
 
       if (planLine.orders.length === 0)
       {
         return shifts;
       }
 
-      [0, 1, 2, 3].forEach(function(no)
+      [0, 1, 2, 3].forEach(no =>
       {
         shifts.push({
-          no: no,
+          no,
           state: prodState.shift === no ? prodState.state : '',
           startTime: 0,
           orders: [],
@@ -257,34 +258,34 @@ define([
         });
       });
 
-      planLine.orders.forEach(function(lineOrder)
+      planLine.orders.forEach(lineOrder =>
       {
-        var orderNo = lineOrder.get('orderNo');
-        var planOrder = plan.orders.get(orderNo);
-        var orderData = plan.getActualOrderData(orderNo);
-        var mrp = planOrder ? planOrder.get('mrp') : planOrder;
-        var startAt = Date.parse(lineOrder.get('startAt'));
-        var finishAt = Date.parse(lineOrder.get('finishAt'));
-        var duration = finishAt - startAt;
-        var shift = shifts[shiftUtil.getShiftNo(startAt)];
+        const orderNo = lineOrder.get('orderNo');
+        const planOrder = plan.orders.get(orderNo);
+        const orderData = plan.getActualOrderData(orderNo);
+        const mrp = planOrder ? planOrder.get('mrp') : planOrder;
+        const startAt = Date.parse(lineOrder.get('startAt'));
+        const finishAt = Date.parse(lineOrder.get('finishAt'));
+        const duration = finishAt - startAt;
+        const shift = shifts[shiftUtil.getShiftNo(startAt)];
 
         if (shift.startTime === 0)
         {
           shift.startTime = shiftUtil.getShiftStartTime(startAt);
         }
 
-        var prevShiftOrder = shift.orders[shift.orders.length - 1];
-        var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
-        var quantityTodo = lineOrder.get('quantity');
-        var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, lineOrder);
-        var shiftOrderCompleted = quantityDone >= quantityTodo;
-        var sapOrderCompleted = orderData.quantityDone >= orderData.quantityTodo;
-        var confirmed = orderData.statuses.indexOf('CNF') !== -1;
-        var delivered = orderData.statuses.indexOf('DLV') !== -1;
+        const prevShiftOrder = shift.orders[shift.orders.length - 1];
+        const prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
+        const quantityTodo = lineOrder.get('quantity');
+        const quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, lineOrder);
+        const shiftOrderCompleted = quantityDone >= quantityTodo;
+        const sapOrderCompleted = orderData.quantityDone >= orderData.quantityTodo;
+        const confirmed = orderData.statuses.includes('CNF');
+        const delivered = orderData.statuses.includes('DLV');
 
         shift.orders.push({
           _id: lineOrder.id,
-          orderNo: orderNo,
+          orderNo,
           quantity: lineOrder.get('quantity'),
           missing: planOrder ? '' : 'is-missing',
           incomplete: planOrder && planOrder.get('incomplete') > 0 ? 'is-incomplete' : '',
@@ -292,19 +293,21 @@ define([
           started: quantityDone > 0 && quantityDone < quantityTodo ? 'is-started' : '',
           confirmed: confirmed ? 'is-cnf' : '',
           delivered: delivered ? 'is-dlv' : '',
-          selected: shift.state && orderNo === prodState.orderNo ? 'is-selected' : '',
+          selected: orderNo === prodState.orderNo ? 'is-selected' : '',
+          executed: this.resolveExecutedClassName(lineOrder),
+          problem: plan.whProblems.isProblem(planLine.id, orderNo) ? 'is-problem' : '',
           external: mrp !== planMrp.id ? 'is-external' : '',
-          finishAt: finishAt,
+          finishAt,
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: duration * 100 / shiftUtil.SHIFT_DURATION,
-          mrp: mrp
+          mrp
         });
       });
 
-      planLine.get('downtimes').forEach(function(downtime, i)
+      planLine.get('downtimes').forEach((downtime, i) =>
       {
-        var startAt = Date.parse(downtime.startAt);
-        var shift = shifts[shiftUtil.getShiftNo(startAt)];
+        const startAt = Date.parse(downtime.startAt);
+        const shift = shifts[shiftUtil.getShiftNo(startAt)];
 
         shift.downtimes.push({
           _id: i,
@@ -332,10 +335,10 @@ define([
 
     serializeLinePopover: function()
     {
-      var hourlyPlan = this.line.get('hourlyPlan');
-      var orderCount = 0;
-      var quantity = 0;
-      var manHours = 0;
+      const hourlyPlan = this.line.get('hourlyPlan');
+      let orderCount = 0;
+      let quantity = 0;
+      let manHours = 0;
 
       (this.line.get('shiftData') || []).forEach(function(shift, shiftNo)
       {
@@ -349,22 +352,22 @@ define([
         manHours += shift.manHours;
       });
 
-      return lineOrderLinePopoverTemplate({
+      return this.renderPartialHtml(lineOrderLinePopoverTemplate, {
         stats: {
-          orderCount: orderCount,
-          quantity: quantity,
-          manHours: manHours,
-          hourlyPlan: hourlyPlan
+          orderCount,
+          quantity,
+          manHours,
+          hourlyPlan
         }
       });
     },
 
     serializeShiftPopover: function(shiftI)
     {
-      var hourlyPlan = this.line.get('hourlyPlan').slice(shiftI * 8, shiftI * 8 + 8);
-      var shiftData = (this.line.get('shiftData') || [])[shiftI + 1] || {};
+      const hourlyPlan = this.line.get('hourlyPlan').slice(shiftI * 8, shiftI * 8 + 8);
+      const shiftData = (this.line.get('shiftData') || [])[shiftI + 1] || {};
 
-      return lineOrderShiftPopoverTemplate({
+      return this.renderPartialHtml(lineOrderShiftPopoverTemplate, {
         stats: {
           orderCount: shiftData.orderCount || 0,
           quantity: shiftData.quantity || 0,
@@ -376,16 +379,16 @@ define([
 
     serializeOrderPopover: function(id)
     {
-      var lineOrder = this.line.orders.get(id);
-      var orderNo = lineOrder.get('orderNo');
-      var sapOrder = this.plan.sapOrders.get(orderNo);
-      var orderData = this.plan.getActualOrderData(orderNo);
-      var startAt = Date.parse(lineOrder.get('startAt'));
-      var finishAt = Date.parse(lineOrder.get('finishAt'));
-      var quantityDone = this.plan.isProdStateUsed()
+      const lineOrder = this.line.orders.get(id);
+      const orderNo = lineOrder.get('orderNo');
+      const sapOrder = this.plan.sapOrders.get(orderNo);
+      const orderData = this.plan.getActualOrderData(orderNo);
+      const startAt = Date.parse(lineOrder.get('startAt'));
+      const finishAt = Date.parse(lineOrder.get('finishAt'));
+      const quantityDone = this.plan.isProdStateUsed()
         ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, lineOrder)
         : -1;
-      var orderGroup = this.orderGroups.get(lineOrder.get('group'));
+      const orderGroup = this.orderGroups.get(lineOrder.get('group'));
 
       return this.renderPartialHtml(lineOrderPopoverTemplate, {
         lineOrder: {
@@ -409,16 +412,16 @@ define([
 
     serializeDowntimePopover: function(id)
     {
-      var downtime = this.line.get('downtimes')[id];
-      var startAt = Date.parse(downtime.startAt);
-      var finishAt = startAt + downtime.duration;
-      var downtimeReason = downtimeReasons.get(downtime.reason);
+      const downtime = this.line.get('downtimes')[id];
+      const startAt = Date.parse(downtime.startAt);
+      const finishAt = startAt + downtime.duration;
+      const downtimeReason = downtimeReasons.get(downtime.reason);
 
       return lineOrderDowntimePopoverTemplate({
         lineDowntime: {
           reason: downtimeReason ? downtimeReason.getLabel() : downtime.reason,
-          startAt: startAt,
-          finishAt: finishAt,
+          startAt,
+          finishAt,
           duration: downtime.duration / 1000
         }
       });
@@ -431,9 +434,9 @@ define([
 
     showLineOrderMenu: function(e)
     {
-      var lineOrder = this.line.orders.get(this.$(e.currentTarget).attr('data-id'));
-      var orderNo = lineOrder.get('orderNo');
-      var menu = [
+      const lineOrder = this.line.orders.get(this.$(e.currentTarget).attr('data-id'));
+      const orderNo = lineOrder.get('orderNo');
+      const menu = [
         contextMenu.actions.sapOrder(orderNo)
       ];
 
@@ -443,7 +446,7 @@ define([
       {
         menu.push({
           icon: 'fa-file-text-o',
-          label: t('planning', 'orders:menu:shiftOrder'),
+          label: this.t('orders:menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, lineOrder)
         });
       }
@@ -458,14 +461,14 @@ define([
 
     handleShiftOrderAction: function(lineOrder)
     {
-      var orderNo = lineOrder.get('orderNo');
-      var line = this.line.id;
-      var shift = shiftUtil.getShiftNo(lineOrder.get('startAt'));
-      var shiftOrders = this.plan.shiftOrders.findOrders(orderNo, line, shift);
+      const orderNo = lineOrder.get('orderNo');
+      const line = this.line.id;
+      const shift = shiftUtil.getShiftNo(lineOrder.get('startAt'));
+      let shiftOrders = this.plan.shiftOrders.findOrders(orderNo, line, shift);
 
       if (shiftOrders.length === 1)
       {
-        return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
+        return window.open(`/#prodShiftOrders/${shiftOrders[0].id}`);
       }
 
       if (shiftOrders.length)
@@ -482,7 +485,7 @@ define([
 
       if (shiftOrders.length === 1)
       {
-        return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
+        return window.open(`/#prodShiftOrders/${shiftOrders[0].id}`);
       }
 
       if (shiftOrders.length)
@@ -498,18 +501,17 @@ define([
 
       if (shiftOrders.length === 1)
       {
-        return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
+        return window.open(`/#prodShiftOrders/${shiftOrders[0].id}`);
       }
 
-      window.open('/#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=string:' + orderNo);
+      window.open(`/#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=string:${orderNo}`);
     },
 
     updateShiftState: function()
     {
-      var prodState = this.serializeProdState();
-
-      var $shifts = this.$('.planning-mrp-lineOrders-shift').attr('data-state', '');
-      var $shift = $shifts.filter('[data-shift="' + prodState.shift + '"]');
+      const prodState = this.serializeProdState();
+      const $shifts = this.$('.planning-mrp-lineOrders-shift').attr('data-state', '');
+      const $shift = $shifts.filter(`[data-shift="${prodState.shift}"]`);
 
       if ($shift.length && prodState.state)
       {
@@ -520,21 +522,19 @@ define([
 
       if (prodState.shift && prodState.orderNo)
       {
-        this.$id('list-' + prodState.shift)
-          .find('.is-lineOrder[data-order-no="' + prodState.orderNo + '"]')
-          .addClass('is-selected');
+        this.$(`.is-lineOrder[data-order-no="${prodState.orderNo}"]`).addClass('is-selected');
       }
     },
 
     onOrderHighlight: function(message)
     {
-      this.$('.is-lineOrder[data-order-no="' + message.orderNo + '"]')
+      this.$(`.is-lineOrder[data-order-no="${message.orderNo}"]`)
         .toggleClass('is-highlighted', message.state);
     },
 
     onIncompleteChange: function(model)
     {
-      this.$('.is-lineOrder[data-order-no="' + model.id + '"]')
+      this.$(`.is-lineOrder[data-order-no="${model.id}"]`)
         .toggleClass('is-incomplete', model.get('incomplete') > 0);
     },
 
@@ -548,11 +548,11 @@ define([
 
     onOnlineChange: function()
     {
-      var $hd = this.$('.planning-mrp-list-hd').removeClass('is-online is-offline');
+      const $hd = this.$('.planning-mrp-list-hd').removeClass('is-online is-offline');
 
       if (this.prodLineState && this.plan.isProdStateUsed())
       {
-        $hd.addClass('is-' + (this.prodLineState.get('online') ? 'online' : 'offline'));
+        $hd.addClass(this.prodLineState.get('online') ? 'is-online' : 'is-offline');
       }
     },
 
@@ -563,35 +563,86 @@ define([
         return;
       }
 
-      var prodShift = this.prodLineState.get('prodShift');
+      const prodShift = this.prodLineState.get('prodShift');
 
       if (!prodShift)
       {
         return;
       }
 
-      var shift = prodShift.get('shift');
-      var orderNo = planShiftOrder.get('orderId');
-      var $lineOrder = this.$id('list-' + shift).find('.is-lineOrder[data-order-no="' + orderNo + '"]');
+      const shift = prodShift.get('shift');
+      const orderNo = planShiftOrder.get('orderId');
+      const $lineOrder = this.$id('list-' + shift).find('.is-lineOrder[data-order-no="' + orderNo + '"]');
 
       if (!$lineOrder.length)
       {
         return;
       }
 
-      var lineOrder = this.line.orders.get($lineOrder.attr('data-id'));
+      const lineOrder = this.line.orders.get($lineOrder.attr('data-id'));
 
       if (!lineOrder)
       {
         return;
       }
 
-      var quantityTodo = lineOrder.get('quantity');
-      var quantityDone = this.plan.shiftOrders.getTotalQuantityDone(this.line.id, lineOrder);
+      this.onLineOrderExecuted(lineOrder);
+    },
 
-      $lineOrder
-        .toggleClass('is-started', quantityDone > 0)
-        .toggleClass('is-completed', quantityDone >= quantityTodo);
+    onLineOrderExecuted: function(lineOrder)
+    {
+      this.$(`.is-lineOrder[data-id="${lineOrder.id}"]`)
+        .removeClass('is-sequence-ok is-sequence-nok is-sequence-unknown')
+        .addClass(this.resolveExecutedClassName(lineOrder));
+    },
+
+    resolveExecutedClassName: function(lineOrder)
+    {
+      const executed = lineOrder.get('executed');
+
+      if (executed)
+      {
+        return 'is-sequence-ok';
+      }
+
+      if (executed == null)
+      {
+        return 'is-sequence-unknown';
+      }
+
+      if (this.plan.shiftOrders.findOrders(lineOrder.get('orderNo')).length)
+      {
+        return 'is-sequence-nok';
+      }
+
+      return 'is-sequence-unknown';
+    },
+
+    onWhProblemReset: function()
+    {
+      this.$('.is-problem').removeClass('is-problem');
+
+      this.plan.whProblems.forEach(this.onWhProblemAdd, this);
+    },
+
+    onWhProblemAdd: function(whProblem)
+    {
+      if (whProblem.get('line') !== this.line.id)
+      {
+        return;
+      }
+
+      this.$(`.is-lineOrder[data-order-no="${whProblem.get('order')}"]`).addClass('is-problem');
+    },
+
+    onWhProblemRemove: function(whProblem)
+    {
+      if (whProblem.get('line') !== this.line.id)
+      {
+        return;
+      }
+
+      this.$(`.is-problem[data-order-no="${whProblem.get('order')}"]`).removeClass('is-problem');
     }
 
   });

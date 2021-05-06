@@ -174,6 +174,7 @@ define([
       this.listenTo(this.mrp.orders, 'added removed changed reset', this.scheduleRender);
       this.listenTo(this.mrp.lines, 'added removed changed reset', this.scheduleRender);
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
+      this.listenTo(this.plan.shiftOrders, 'change:finishedAt', this.onShiftOrderFinished);
     },
 
     getTemplateData: function()
@@ -556,6 +557,14 @@ define([
         this.$id('toggleLock')
           .toggleClass('active', locked)
           .attr('title', this.t('toolbar:toggleLock:' + locked));
+      }
+    },
+
+    onShiftOrderFinished: function(shiftOrder)
+    {
+      if (this.mrp.orders.get(shiftOrder.get('orderId')))
+      {
+        this.scheduleRender();
       }
     }
 

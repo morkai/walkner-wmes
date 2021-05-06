@@ -135,15 +135,18 @@
 .planning-mrp-list-item.is-incomplete {
   background-color: #fcf8e3;
 }
-.planning-mrp-list-item.is-unplanned {
+.planning-mrp-list-item.is-unplanned,
+.planning-mrp-list-item.is-sequence-nok {
   background-color: #fbf2c0;
   border-color: #999;
 }
-.planning-mrp-list-item.is-completed {
+.planning-mrp-list-item.is-completed,
+.planning-mrp-list-item.is-sequence-ok {
   background-color: #dff0d8;
   border-color: #999;
 }
-.planning-mrp-list-item.is-surplus {
+.planning-mrp-list-item.is-surplus,
+.planning-mrp-list-item.is-problem {
   background-color: #ffe8e8;
 }
 .planning-mrp-list-item.is-teco {

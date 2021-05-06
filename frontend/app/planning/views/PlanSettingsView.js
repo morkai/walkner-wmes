@@ -445,7 +445,6 @@ define([
         filter: '.select2-search-choice-close',
         onStart: function()
         {
-          console.log('onSortStart');
           $priority.select2('onSortStart');
         },
         onEnd: function()

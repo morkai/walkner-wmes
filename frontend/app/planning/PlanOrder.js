@@ -118,39 +118,7 @@ define([
 
     getStatus: function()
     {
-      if (!this.collection || !this.collection.plan)
-      {
-        return 'unknown';
-      }
-
-      var orderData = this.collection.plan.getActualOrderData(this.id);
-
-      if (orderData.quantityDone > orderData.quantityTodo)
-      {
-        return 'surplus';
-      }
-
-      if (orderData.quantityDone === orderData.quantityTodo)
-      {
-        return 'completed';
-      }
-
-      if (this.attributes.incomplete === this.getQuantityTodo())
-      {
-        return 'unplanned';
-      }
-
-      if (this.attributes.incomplete > 0)
-      {
-        return 'incomplete';
-      }
-
-      if (orderData.quantityDone > 0)
-      {
-        return 'started';
-      }
-
-      return 'planned';
+      return 'unknown';
     },
 
     mapSapStatuses: function(statuses)

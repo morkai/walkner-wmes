@@ -17,6 +17,7 @@ define([
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
+  '../WhProblemCollection',
   '../views/PlanFilterView',
   '../views/PlanMrpView',
   '../views/CopySettingsDialogView',
@@ -41,6 +42,7 @@ define([
   Plan,
   PlanSettings,
   PlanDisplayOptions,
+  WhProblemCollection,
   PlanFilterView,
   PlanMrpView,
   CopySettingsDialogView,
@@ -242,6 +244,10 @@ define([
         {
           this.plan.whLines.handleUpdate(message);
         }
+      },
+      'old.wh.problems.*.*': function(change)
+      {
+        this.plan.whProblems.handleChange(change);
       }
     },
 
@@ -301,6 +307,8 @@ define([
         paginate: false
       });
 
+      plan.whProblems = new WhProblemCollection();
+
       page.delayReasons = new DelayReasonCollection(null, {
         rqlQuery: 'sort(name)&limit(0)',
         paginate: false
@@ -317,6 +325,8 @@ define([
       bindLoadingMessage(page.orderGroups, page);
       bindLoadingMessage(plan, page);
       bindLoadingMessage(plan.settings, page);
+      bindLoadingMessage(plan.whLines, page);
+      bindLoadingMessage(plan.whProblems, page);
       bindLoadingMessage(plan.workingLines, page);
       bindLoadingMessage(plan.lateOrders, page);
       bindLoadingMessage(plan.sapOrders, page);
@@ -390,7 +400,8 @@ define([
         page.promised(plan.shiftOrders.fetch({reset: true})),
         page.promised(plan.sapOrders.fetch({reset: true})),
         plan.settings.getVersion() === 1 ? page.promised(plan.lateOrders.fetch({reset: true})) : null,
-        page.promised(plan.whLines.fetch({reset: true}))
+        page.promised(plan.whLines.fetch({reset: true})),
+        page.promised(plan.whProblems.fetch())
       );
 
       load1.fail(function() { deferred.reject.apply(deferred, arguments); });
@@ -442,6 +453,7 @@ define([
             all ? page.delayReasons.fetch(fetchOptions) : null,
             all ? page.orderGroups.fetch(fetchOptions) : null,
             all ? plan.whLines.fetch(fetchOptions) : null,
+            all ? plan.whProblems.fetch({reload: true}) : null,
             plan.workingLines.fetch(fetchOptions),
             plan.shiftOrders.fetch(fetchOptions),
             plan.sapOrders.fetch(fetchOptions),

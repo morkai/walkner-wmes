@@ -155,6 +155,8 @@ define([
             var execution = plan.shiftOrders.getLineOrderExecution(line.id, lineOrder, workingTimes);
             var executed = execution.plannedQuantitiesDone.some(quantityDone => quantityDone === quantityTodo);
 
+            lineOrder.set('executed', executed);
+
             stats.manHours.plan += lineOrder.get('manHours');
             stats.quantity.plan += quantityTodo;
             stats.orders.plan += 1;

@@ -13,24 +13,24 @@
   border-right-color: #555;
   border-bottom-color: #555;
 }
-.planning-darker .planning-mrp-list-item.is-started {
-  background-color: #ccc;
-  border-color: #555;
-}
 .planning-darker .planning-mrp-list-item.is-incomplete {
   background-color: #fe9;
 }
-.planning-darker .planning-mrp-list-item.is-unplanned {
+.planning-darker .planning-mrp-list-item.is-unplanned,
+.planning-darker .planning-mrp-list-item.is-sequence-nok {
   background-color: #ffe555;
   border-color: #555;
 }
-.planning-darker .planning-mrp-list-item.is-completed {
+.planning-darker .planning-mrp-list-item.is-completed,
+.planning-darker .planning-mrp-list-item.is-sequence-ok {
   background-color: #00e600;
   color: #000;
   border-color: #555;
 }
-.planning-darker .planning-mrp-list-item.is-surplus {
+.planning-darker .planning-mrp-list-item.is-surplus,
+.planning-darker .planning-mrp-list-item.is-problem {
   background-color: #f00;
+  color: #fff;
 }
 .planning-darker .planning-mrp-list-item.is-teco {
   background-color: #000;

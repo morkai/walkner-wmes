@@ -3,7 +3,7 @@
   <div class="planning-mrp-list-container planning-mrp-lineOrders">
     <div class="planning-mrp-list-hd <%- prodState.online %>"><%= line %></div>
     <div class="planning-mrp-lineOrders-shift"></div>
-    <div id="<%- idPrefix %>-list-0" class="planning-mrp-list"></div>
+    <div id="<%- id('list-0') %>" class="planning-mrp-list"></div>
   </div>
   <% } else { %>
   <hr>
@@ -11,25 +11,23 @@
   <% shifts.forEach(function(shift, i) { %>
   <div class="planning-mrp-list-container planning-mrp-lineOrders">
     <% if (i == 0) { %>
-    <div class="planning-mrp-list-hd <%- prodState.online %>" data-popover-placement="right" data-popover-content="line">
-      <%= line %>
-    </div>
+    <div class="planning-mrp-list-hd <%- prodState.online %>" data-popover-placement="right" data-popover-content="line"><%= line %></div>
     <% } %>
     <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>" data-state="<%- shift.state %>" data-popover-placement="right" data-popover-content="shift">
       <%- t('core', 'SHIFT:' + shift.no) %>
     </div>
-    <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list" data-shift-start-time="<%- shift.startTime %>">
+    <div id="<%- id(`list-${shift.no}`) %>" class="planning-mrp-list planning-mrp-lineOrders-list" data-shift-start-time="<%- shift.startTime %>">
       <% shift.orders.forEach(function(shiftOrder) { %>
-      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete %> <%- shiftOrder.started %> <%- shiftOrder.completed %> <%- shiftOrder.external %> <%- shiftOrder.selected %> <%- shiftOrder.missing %>"
+      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete %> <%- shiftOrder.external %> <%- shiftOrder.selected %> <%- shiftOrder.missing %> <%- shiftOrder.executed %> <%- shiftOrder.problem %>"
            data-id="<%- shiftOrder._id %>"
            data-order-no="<%- shiftOrder.orderNo %>"
            data-popover-content="lineOrder"
            style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
         <div class="planning-mrp-list-item-inner">
           <% if (shiftOrder.external) { %>
-          <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>, <%- shiftOrder.mrp %>
+          <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('lineOrders:unit') %>, <%- shiftOrder.mrp %>
           <% } else { %>
-          <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>
+          <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('lineOrders:unit') %>
           <% } %>
         </div>
       </div>

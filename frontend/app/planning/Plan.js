@@ -60,6 +60,7 @@ define([
         displayOptions: null,
         settings: null,
         whLines: null,
+        whProblems: null,
         sapOrders: null,
         minMaxDates: false
       });
@@ -69,6 +70,7 @@ define([
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
       this.whLines = options.whLines;
+      this.whProblems = options.whProblems;
 
       this.workingLines = new PlanWorkingLineCollection(null, {
         plan: this,
