@@ -180,9 +180,8 @@ For $i = 1 To $items[0] Step 1
         $sbar = $session.FindById($sbarId)
         AssertControl($sbar, $sbarId)
 
-        If Not StringInStr($sbar.Text, "allow confirmation") Then
-          LogDebug("COMPONENT_NOT_SET=NO_CONFIRM_SBAR=" & $sbar.Text)
-          ExitLoop
+        If StringInStr($sbar.Text, "allow confirmation") Then
+          $session.FindById("wnd[0]").sendVKey(0)
         EndIf
 
         $session.FindById("wnd[0]").sendVKey(0)
