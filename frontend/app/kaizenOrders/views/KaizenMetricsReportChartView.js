@@ -78,7 +78,7 @@ define([
       var valueDecimals = this.options.valueDecimals >= 0 ? this.options.valueDecimals : 2;
       var dataLabelsDecimals = valueDecimals;
 
-      if (unit && dataLabelsDecimals === 2)
+      if (series.length && unit && dataLabelsDecimals === 2)
       {
         if (series[0].data.length > 52)
         {
