@@ -295,6 +295,12 @@
     "delivery:stats:orders": "Orders",
     "delivery:stats:qty": "PCE",
     "delivery:stats:time": "Prod. time",
+    "delivery:reasons:code:completing": "A",
+    "delivery:reasons:title:completing": "Set is not completed yet.",
+    "delivery:reasons:code:minTimeForDelivery": "B",
+    "delivery:reasons:title:minTimeForDelivery": "The line stock is over the limit.",
+    "delivery:reasons:code:earlierSetCart": "C",
+    "delivery:reasons:title:earlierSetCart": "There is an earlier set for the same line.",
 
     "blockedPickup:title": "Pickup blocked",
 

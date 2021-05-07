@@ -126,6 +126,17 @@ define([
       obj.orders.forEach(function(o) { obj.sapOrders[o.sapOrder] = 1; });
       obj.sapOrders = Object.keys(obj.sapOrders);
 
+      if (this.options.status === 'completed')
+      {
+        obj.title = this.t('delivery:reasons:title:' + obj.reason);
+        obj.reason = this.t('delivery:reasons:code:' + obj.reason);
+      }
+      else
+      {
+        obj.title = '';
+        obj.reason = '';
+      }
+
       return obj;
     },
 

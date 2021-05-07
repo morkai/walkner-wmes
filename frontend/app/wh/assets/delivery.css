@@ -157,6 +157,10 @@
   line-height: 1;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
+.wh-delivery-item .wh-delivery-item-reason {
+  vertical-align: top;
+  padding-left: 14px;
+}
 .wh-delivery-is-completed {
   padding: 5px;
   background: #E00;

@@ -520,11 +520,12 @@ define([
 
     isPendingSetCart: function(setCart)
     {
-      var page = this;
       var status = setCart.get('status');
 
       if (status === 'completing')
       {
+        setCart.set('reason', 'completing');
+
         return false;
       }
 
@@ -532,6 +533,8 @@ define([
 
       if (pending && !setCart.get('deliveringAt'))
       {
+        setCart.set('reason', null);
+
         return true;
       }
 
@@ -539,11 +542,28 @@ define([
         && setCart.get('forced')
         && status === 'completed')
       {
+        setCart.set('reason', null);
+
         return true;
       }
 
-      return page.isMinTimeForDelivery(setCart)
-        && !page.hasEarlierDiffKindSetCart(setCart);
+      if (!this.isMinTimeForDelivery(setCart))
+      {
+        setCart.set('reason', 'minTimeForDelivery');
+
+        return false;
+      }
+
+      if (this.hasEarlierDiffKindSetCart(setCart))
+      {
+        setCart.set('reason', 'earlierSetCart');
+
+        return false;
+      }
+
+      setCart.set('reason', null);
+
+      return true;
     },
 
     isMinTimeForDelivery: function(setCart)

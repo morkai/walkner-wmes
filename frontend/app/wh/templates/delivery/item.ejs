@@ -1,8 +1,7 @@
-<tbody class="wh-delivery-item <%- item.className %>" data-id="<%- item._id %>">
+<tbody class="wh-delivery-item <%- item.className %>" data-id="<%- item._id %>" title="<%= item.title %>">
 <tr>
   <td class="wh-delivery-item-cart"><%- item.cart %></td>
-  <td class="wh-delivery-item-line <%- item.line.className %>" title="<%= item.line.title %>"><%- item.line.label %>
-  </td>
+  <td class="wh-delivery-item-line <%- item.line.className %>" title="<%= item.line.title %>"><%- item.line.label %></td>
   <td class="wh-delivery-item-plan">
     <%- item.date %>
     <% if (item.status !== 'delivering') { %>
@@ -20,7 +19,7 @@
   <% } %>
 </tr>
 <tr class="wh-delivery-item-ft">
-  <td></td>
+  <td class="wh-delivery-item-reason"><%- item.reason %></td>
   <td class="wh-delivery-item-orders" colspan="3">
     <% item.sapOrders.forEach(function(orderNo) { %>
     <span class="wh-delivery-item-order"><%- orderNo %></span>

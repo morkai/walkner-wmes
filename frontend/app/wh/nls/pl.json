@@ -298,6 +298,12 @@
   "delivery:stats:orders": "Zlecenia",
   "delivery:stats:qty": "Sztuki",
   "delivery:stats:time": "Czas produkcji",
+  "delivery:reasons:code:completing": "A",
+  "delivery:reasons:title:completing": "Set nie został jeszcze skompletowany.",
+  "delivery:reasons:code:minTimeForDelivery": "B",
+  "delivery:reasons:title:minTimeForDelivery": "Zapas linii jest powyżej limitu.",
+  "delivery:reasons:code:earlierSetCart": "C",
+  "delivery:reasons:title:earlierSetCart": "Istnieje wcześniejszy set na daną linię.",
 
   "blockedPickup:title": "Kompletacja zablokowana",
 
