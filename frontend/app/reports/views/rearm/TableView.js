@@ -1,11 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/time',
+  'jquery',
   'app/core/View',
-  'app/reports/templates/rearm/table'
+  'app/reports/templates/rearm/table',
+  'jquery.stickytableheaders'
 ], function(
-  time,
+  $,
   View,
   template
 ) {
@@ -15,11 +16,31 @@ define([
 
     template: template,
 
+    initialize: function()
+    {
+      this.setUpStickyTable();
+    },
+
     getTemplateData: function()
     {
       return {
         orders: this.line.get('orders')
       };
+    },
+
+    setUpStickyTable: function()
+    {
+      this.on('afterRender', () =>
+      {
+        this.$el.stickyTableHeaders({
+          fixedOffset: $('.navbar-fixed-top')
+        });
+      });
+
+      this.on('beforeRender remove', () =>
+      {
+        this.$el.stickyTableHeaders('destroy');
+      });
     }
 
   });
