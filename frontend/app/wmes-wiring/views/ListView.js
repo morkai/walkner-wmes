@@ -693,11 +693,11 @@ define([
 
         if (documents.length === 1)
         {
-          this.openDocument(documents[0], order.get('orders')[0].leadingOrder);
+          this.openDocument(documents[0], order.get('orders')[0]._id);
         }
         else
         {
-          this.showOpenDocumentMenu(documents, order.get('orders')[0].leadingOrder, e);
+          this.showOpenDocumentMenu(documents, order.get('orders')[0]._id, e);
         }
       });
     },
