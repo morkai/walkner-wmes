@@ -3,38 +3,8 @@
 
 'use strict';
 
-db.subdivisions.find({}).forEach(doc =>
-{
-  if (!doc.autoDowntimes)
-  {
-    doc.autoDowntimes = [];
-  }
-
-  doc.autoDowntimes.forEach(adt =>
-  {
-    if (!adt.always)
-    {
-      adt.always = '';
-    }
-  });
-
-  db.subdivisions.updateOne({_id: doc._id}, {$set: {autoDowntimes: doc.autoDowntimes}});
-});
-
-db.settings.updateOne({_id: 'production.lineAutoDowntimes'}, {$set: {
-  value: db.settings.findOne({_id: 'production.lineAutoDowntimes'}).value.map(adt =>
-  {
-    if (!adt.always)
-    {
-      adt.always = '';
-    }
-
-    return adt;
-  })
-}});
-
 const toRemove = [
-  {collection: 'prodlines', _id: 'Praski'}
+  {collection: 'prodlines', _id: 'Kable'}
 ];
 const toUpdate = [{
   oldOrgUnits: {
@@ -43,7 +13,7 @@ const toUpdate = [{
     mrpControllers: ['KS6'],
     prodFlow: new ObjectId('559a63ac32de99e04e217a3a'),
     workCenter: 'WIRE_C',
-    prodLine: 'Praski'
+    prodLine: 'Kable'
   },
   newOrgUnits: {
     division: 'LPc',
@@ -51,7 +21,7 @@ const toUpdate = [{
     mrpControllers: ['KS6'],
     prodFlow: new ObjectId('559a63ac32de99e04e217a3a'),
     workCenter: 'WIRE_C',
-    prodLine: 'Kable'
+    prodLine: 'Przewody'
   },
   fteMasterEntry: null,
   names: {}
