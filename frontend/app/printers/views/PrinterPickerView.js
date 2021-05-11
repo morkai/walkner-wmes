@@ -99,6 +99,8 @@ define([
     {
       cache = res.collection || [];
 
+      sortPrinters();
+
       done(filterPrinters(tag));
     });
   }
@@ -107,7 +109,7 @@ define([
   {
     cache.sort(function(a, b)
     {
-      return a.label.localeCompare(b.label);
+      return a.label.localeCompare(b.label, undefined, {numeric: true, ignorePunctuation: true});
     });
   }
 
