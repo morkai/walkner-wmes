@@ -27,6 +27,7 @@ exports.modules = [
   'orders/importer/bom',
   'orders/importer/zlf1',
   'orders/importer/pkhd',
+  'orders/importer/changeNumbers',
   'orders/iptChecker',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
@@ -147,6 +148,11 @@ exports['orders/importer/bom'] = {
   filterRe: /^ORDERS_COMPONENTS\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR,
   xiconfFilePathPattern: exports['orderDocuments/importer'].xiconfProgramFilePathPattern
+};
+
+exports['orders/importer/changeNumbers'] = {
+  filterRe: /^CHANGE_NUMBERS\.txt$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 
 exports['orders/importer/zlf1'] = {

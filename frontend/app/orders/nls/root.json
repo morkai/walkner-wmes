@@ -82,6 +82,7 @@
     "PROPERTY:bom.unloadingPoint": "Unloading point",
     "PROPERTY:bom.supplyArea": "Supply area",
     "PROPERTY:bom.distStrategy": "Dist. strategy",
+    "PROPERTY:bom.validFrom": "Valid from",
     "PROPERTY:whTime": "Drop zone time",
     "PROPERTY:whDropZone": "Drop zone group",
     "PROPERTY:whStatus": "Drop zone status",

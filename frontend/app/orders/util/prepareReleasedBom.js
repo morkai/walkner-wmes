@@ -72,6 +72,20 @@ define([
         qty[1] ? (decimalSeparator + qty[1]) : ''
       ];
 
+      component.rowClassName = '';
+
+      if (component.validFrom)
+      {
+        var validFrom = time.utc.getMoment(component.validFrom);
+
+        component.validFrom = validFrom.format('L');
+
+        if (Math.abs(validFrom.diff(Date.now(), 'days')) < 30)
+        {
+          component.rowClassName += ' is-recent';
+        }
+      }
+
       components.push(component);
 
       var newComponents = oldToNew[component.nc12];
@@ -79,7 +93,7 @@ define([
       if (newComponents)
       {
         colored = true;
-        component.rowClassName = 'danger';
+        component.rowClassName += ' danger';
 
         newComponents.forEach(function(compRel)
         {
@@ -106,7 +120,7 @@ define([
       if (oldComponents)
       {
         colored = true;
-        component.rowClassName = 'success';
+        component.rowClassName += ' success';
 
         oldComponents.forEach(function(old)
         {

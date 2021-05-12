@@ -81,6 +81,7 @@
   "PROPERTY:bom.unloadingPoint": "Punkt rozładunku",
   "PROPERTY:bom.supplyArea": "Obszar zaopatrzenia",
   "PROPERTY:bom.distStrategy": "Strategia dostarczania",
+  "PROPERTY:bom.validFrom": "Ważny od",
   "PROPERTY:whTime": "Czas drop zone",
   "PROPERTY:whDropZone": "Grupa drop zone",
   "PROPERTY:whStatus": "Status drop zone",

@@ -21,6 +21,7 @@
             <th class="is-min"><%- t('PROPERTY:bom.distStrategy') %>
             <th class="is-min"><%- t('PROPERTY:bom.unloadingPoint') %>
             <th class="is-min"><%- t('PROPERTY:bom.supplyArea') %>
+            <th class="is-min"><%- t('PROPERTY:bom.validFrom') %>
             <th>
           </tr>
         </thead>
@@ -47,9 +48,9 @@
             <% if (component.compRel) { %>
             <% if (component.releasedAt) { %>
             <td class="is-min"><%= component.name  %>
-            <td colspan="7"><%- t('bom:released', component) %></td>
+            <td colspan="8"><%- t('bom:released', component) %></td>
             <% } else { %>
-            <td class="is-min" colspan="8"><%= component.name  %>
+            <td class="is-min" colspan="9"><%= component.name  %>
             <% } %>
             <% } else { %>
             <td class="is-min"><%= component.name  %>
@@ -59,6 +60,7 @@
             <td class="is-min"><%= component.distStrategy || '' %>
             <td class="is-min"><%= component.unloadingPoint || '' %>
             <td class="is-min"><%= component.supplyArea || '' %>
+            <td class="is-min orders-bom-validFrom"><%= component.validFrom || '' %>
             <td>
               <% if (!component.compRel && component.releasedAt) { %>
               <%- t('bom:released', component) %>

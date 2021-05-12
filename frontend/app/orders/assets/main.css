@@ -160,6 +160,25 @@
 .orders-bom-pfep {
   cursor: pointer;
 }
+.orders-bom .is-recent td {
+  background: greenyellow;
+  color: #000;
+}
+.orders-bom .is-recent.success,
+.orders-bom .is-recent.danger {
+  outline: 4px solid greenyellow;
+  outline-offset: -4px;
+}
+.orders-bom .is-recent.success td {
+  background: #dff0d8;
+}
+.orders-bom .is-recent.danger td {
+  background: #f2dede;
+}
+.orders-bom .is-recent .orders-bom-validFrom {
+  background: greenyellow;
+  color: #000;
+}
 .orders-no-system-changes .is-system-change {
   display: none;
 }
