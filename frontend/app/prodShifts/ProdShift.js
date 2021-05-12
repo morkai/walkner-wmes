@@ -1420,7 +1420,7 @@ define([
         aor: aor,
         reason: downtimeReason.id,
         reasonComment: '',
-        auto: {}
+        auto: {d: 0}
       });
     },
 
@@ -1513,7 +1513,7 @@ define([
         aor: aor,
         reason: downtimeReason.id,
         reasonComment: '',
-        auto: {}
+        auto: {d: 0}
       });
     },
 
