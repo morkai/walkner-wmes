@@ -964,7 +964,7 @@ define([
       this.$id('currentDowntime-aor').text(aor);
       this.$id('currentDowntime-elapsedTime').text(elapsedTime);
 
-      if (duration)
+      if (duration > 0)
       {
         this.$id('currentDowntime-duration').text(time.toString(duration * 60)).removeClass('hidden');
       }
@@ -984,7 +984,10 @@ define([
         this.model.startTimedAutoDowntime(incomingAutoDowntime.reason, incomingAutoDowntime.duration);
       }
 
-      if (duration && downtime && downtime.get('auto') && downtime.getDuration() >= duration * 60 * 1000)
+      if (duration > 0
+        && downtime
+        && downtime.get('auto')
+        && downtime.getDuration() >= duration * 60 * 1000)
       {
         this.model.endDowntime();
       }

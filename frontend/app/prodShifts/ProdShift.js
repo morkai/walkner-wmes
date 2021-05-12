@@ -1420,7 +1420,10 @@ define([
         aor: aor,
         reason: downtimeReason.id,
         reasonComment: '',
-        auto: {d: 0}
+        auto: {
+          d: 0,
+          when: autoDowntime.when
+        }
       });
     },
 
@@ -1455,36 +1458,47 @@ define([
         return;
       }
 
-      var prevAuto = prevDowntime.get('auto');
       var prevReason = prevDowntime.get('reason');
+      var psoId = this.prodShiftOrder.id;
+      var alreadyStarted = {};
+      var always = [];
+      var after = [];
+
+      this.prodDowntimes.forEach(function(dt)
+      {
+        if (dt.get('prodShiftOrder') === psoId)
+        {
+          alreadyStarted[dt.get('reason')] = true;
+        }
+      });
+
+      autoDowntimes.forEach(function(autoDowntime)
+      {
+        if (alreadyStarted[autoDowntime.reason])
+        {
+          return;
+        }
+
+        if (autoDowntime.when === 'always')
+        {
+          always.push(autoDowntime);
+        }
+
+        if (autoDowntime.when === 'after' && autoDowntime.after === prevReason)
+        {
+          after.push(autoDowntime);
+        }
+      });
+
       var nextAutoDowntime;
 
-      for (var i = 0; i < autoDowntimes.length; ++i)
+      if (after.length)
       {
-        var autoDowntime = autoDowntimes[i];
-
-        if (prevAuto && autoDowntime.reason !== prevReason)
-        {
-          continue;
-        }
-
-        for (var j = i + 1; j < autoDowntimes.length; ++j)
-        {
-          var next = autoDowntimes[j];
-
-          if ((prevAuto && next.when === 'always')
-            || (next.when === 'after' && next.after === prevReason))
-          {
-            nextAutoDowntime = next;
-
-            break;
-          }
-        }
-
-        if (nextAutoDowntime)
-        {
-          break;
-        }
+        nextAutoDowntime = after[0];
+      }
+      else if (always.length)
+      {
+        nextAutoDowntime = always[0];
       }
 
       if (!nextAutoDowntime)
@@ -1513,7 +1527,10 @@ define([
         aor: aor,
         reason: downtimeReason.id,
         reasonComment: '',
-        auto: {d: 0}
+        auto: {
+          d: 0,
+          when: nextAutoDowntime.when
+        }
       });
     },
 
@@ -1568,7 +1585,8 @@ define([
         reason: reason,
         reasonComment: '',
         auto: {
-          d: duration
+          d: duration,
+          when: 'time'
         }
       });
     }

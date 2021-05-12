@@ -164,7 +164,42 @@ define([
         return _.includes(group.lines, lineId);
       });
 
-      return lineAutoDowntimes ? lineAutoDowntimes.downtimes : [];
+      if (!lineAutoDowntimes)
+      {
+        return [];
+      }
+
+      lineAutoDowntimes.downtimes.sort(function(a, b)
+      {
+        if (a.when === b.when)
+        {
+          return 0;
+        }
+
+        if (a.when === 'initial')
+        {
+          return -1;
+        }
+
+        if (b.when === 'initial')
+        {
+          return 1;
+        }
+
+        if (a.when === 'always')
+        {
+          return -1;
+        }
+
+        if (b.when === 'always')
+        {
+          return 1;
+        }
+
+        return 0;
+      });
+
+      return lineAutoDowntimes.downtimes;
     },
 
     isTaktTimeEnabled: function(prodLine)
