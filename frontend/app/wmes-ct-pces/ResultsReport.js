@@ -26,6 +26,7 @@ define([
       return {
         from: 0,
         to: 0,
+        interval: 'week',
         ignoredMrps: null,
         includedMrps: null,
         minLineWorkDuration: null,
@@ -58,7 +59,7 @@ define([
       options.data = _.assign(
         options.data || {},
         _.pick(this.attributes, [
-          'from', 'to',
+          'from', 'to', 'interval',
           'ignoredMrps',
           'includedMrps',
           'minLineWorkDuration',
@@ -87,6 +88,7 @@ define([
       var url = this.urlRoot
         + '?from=' + (attrs.from || '')
         + '&to=' + (attrs.to || '')
+        + '&interval=' + attrs.interval
         + '&tab=' + attrs.tab;
 
       var props = {
@@ -134,6 +136,7 @@ define([
       var attrs = {
         from: +query.from || 0,
         to: +query.to || 0,
+        interval: query.interval || 'week',
         tab: query.tab || undefined,
         upph: query.upph || undefined
       };

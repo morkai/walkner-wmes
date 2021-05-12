@@ -3,6 +3,7 @@
 define([
   'underscore',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/core/util/pageActions',
@@ -18,6 +19,7 @@ define([
 ], function(
   _,
   t,
+  time,
   viewport,
   View,
   pageActions,
@@ -155,10 +157,10 @@ define([
           width: 5,
           caption: view.t('resultsReport:avgOutput:export:mrp')
         },
-        week: {
-          type: 'string',
+        date: {
+          type: 'date',
           width: 10,
-          caption: view.t('resultsReport:avgOutput:export:week')
+          caption: view.t('resultsReport:avgOutput:export:date')
         },
         std: {
           type: 'decimal',
@@ -174,7 +176,7 @@ define([
       var rows = [];
 
       Object.keys(upph)
-        .sort(function(a, b)
+        .sort((a, b) =>
         {
           return a === 'total'
             ? -1
@@ -182,17 +184,17 @@ define([
               ? 1
               : a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true});
         })
-        .forEach(function(k)
+        .forEach(k =>
         {
           var mrp = k === 'total' ? '' : k;
 
-          upph[k].forEach(function(week)
+          upph[k].forEach(data =>
           {
             rows.push({
-              mrp: mrp,
-              week: week._id,
-              std: week.std,
-              norm: week.norm
+              mrp,
+              date: new Date(data._id),
+              std: data.std,
+              norm: data.norm
             });
           });
         });

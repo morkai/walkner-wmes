@@ -1,15 +1,25 @@
 <form class="well filter-form ct-report-groups-filter" autocomplete="off">
   <%- forms.dateTimeRange({
-    idPrefix: idPrefix,
+    idPrefix,
     required: true
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-shiftCount" class="control-label"><%- t('resultsReport:filter:shiftCount') %></label>
-    <input id="<%- idPrefix %>-shiftCount" name="shiftCount" class="form-control" type="number" min="1" max="3" placeholder="3" style="width: 80px">
+    <label><%- t('reports', 'filter:interval') %></label>
+    <div id="<%- id('interval') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+        <label class="btn btn-default" title="<%- t('reports', `filter:interval:title:${interval}`) %>" data-interval="<%- interval %>">
+          <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', `filter:interval:${interval}`) %>
+        </label>
+      <% }) %>
+    </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-includedMrps" class="control-label"><%- t('resultsReport:filter:includedMrps') %></label>
-    <input id="<%- idPrefix %>-includedMrps" name="includedMrps" type="text">
+    <label for="<%- id('shiftCount') %>" class="control-label"><%- t('resultsReport:filter:shiftCount') %></label>
+    <input id="<%- id('shiftCount') %>" name="shiftCount" class="form-control" type="number" min="1" max="3" placeholder="3" style="width: 80px">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('includedMrps') %>" class="control-label"><%- t('resultsReport:filter:includedMrps') %></label>
+    <input id="<%- id('includedMrps') %>" name="includedMrps" type="text">
   </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>

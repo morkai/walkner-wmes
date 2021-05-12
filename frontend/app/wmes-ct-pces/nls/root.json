@@ -117,7 +117,7 @@
     "resultsReport:avgOutput:exportUpph": "Export UPPH",
     "resultsReport:avgOutput:export:filename": "WMES_AvgOutput_UPPH",
     "resultsReport:avgOutput:export:sheetName": "UPPH",
-    "resultsReport:avgOutput:export:week": "Week",
+    "resultsReport:avgOutput:export:date": "Date",
     "resultsReport:avgOutput:export:mrp": "MRP",
     "resultsReport:avgOutput:export:standard": "Standard",
     "resultsReport:avgOutput:export:normalized": "Normalized",

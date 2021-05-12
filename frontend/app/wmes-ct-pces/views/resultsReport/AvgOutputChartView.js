@@ -4,12 +4,16 @@ define([
   'underscore',
   'app/i18n',
   'app/highcharts',
-  'app/core/View'
+  'app/core/View',
+  'app/reports/util/formatXAxis',
+  'app/reports/util/formatTooltipHeader'
 ], function(
   _,
   t,
   Highcharts,
-  View
+  View,
+  formatXAxis,
+  formatTooltipHeader
 ) {
   'use strict';
 
@@ -88,7 +92,8 @@ define([
         title: false,
         noData: {},
         xAxis: {
-          categories: view.serializeCategories()
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: [
           {
@@ -100,7 +105,8 @@ define([
         ],
         tooltip: {
           shared: true,
-          valueDecimals: 1
+          valueDecimals: 1,
+          headerFormatter: formatTooltipHeader.bind(this)
         },
         legend: {
           enabled: false
@@ -142,7 +148,7 @@ define([
 
       return [{
         name: this.t('resultsReport:avgOutput:series'),
-        data: this.getUpph().map(function(d) { return d[prop]; }),
+        data: this.getUpph().map(d => ({x: d._id, y: d[prop]})),
         valueDecimals: 1
       }];
     },

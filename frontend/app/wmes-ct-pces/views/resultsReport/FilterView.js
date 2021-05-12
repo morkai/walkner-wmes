@@ -5,6 +5,7 @@ define([
   'js2form',
   'app/time',
   'app/core/View',
+  'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
   'app/mrpControllers/util/setUpMrpSelect2',
@@ -14,6 +15,7 @@ define([
   js2form,
   time,
   View,
+  buttonGroup,
   idAndLabel,
   dateTimeRange,
   setUpMrpSelect2,
@@ -47,6 +49,8 @@ define([
 
       js2form(view.el, view.serializeFormData());
 
+      buttonGroup.toggle(this.$id('interval'));
+
       view.updatePlaceholders();
 
       var includedMrps = view.settings.getValue('reports.results.includedMrps', []);
@@ -69,6 +73,7 @@ define([
       return {
         'from-date': attrs.from ? time.format(attrs.from, 'YYYY-MM-DD') : '',
         'to-date': attrs.to ? time.format(attrs.to, 'YYYY-MM-DD') : '',
+        interval: attrs.interval,
         includedMrps: Array.isArray(attrs.includedMrps) ? attrs.includedMrps.join(',') : '',
         minLineWorkDuration: attrs.minLineWorkDuration == null ? '' : attrs.minLineWorkDuration,
         minUpphWorkDuration: attrs.minUpphWorkDuration == null ? '' : attrs.minUpphWorkDuration,
@@ -86,6 +91,7 @@ define([
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
+        interval: buttonGroup.getValue(view.$id('interval')),
         includedMrps: view.$id('includedMrps').val().split(',').filter(function(v) { return !!v.length; }),
         minLineWorkDuration: parseFloat(view.$id('minLineWorkDuration').val()),
         minUpphWorkDuration: parseFloat(view.$id('minUpphWorkDuration').val()),
@@ -95,9 +101,9 @@ define([
         minMrpEfficiency: parseInt(view.$id('minMrpEfficiency').val(), 10)
       };
 
-      _.forEach(query, function(v, k)
+      _.forEach(query, (v, k) =>
       {
-        if (v == null || (isNaN(v) && !Array.isArray(v)))
+        if (typeof v !== 'string' && (v == null || (isNaN(v) && !Array.isArray(v))))
         {
           query[k] = null;
         }
