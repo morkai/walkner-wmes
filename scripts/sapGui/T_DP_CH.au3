@@ -4,6 +4,36 @@
 
 #include "_Common.au3"
 
+$itemOverviewId = "wnd[0]/tbar[1]/btn[6]"
+$itemTblId = "wnd[0]/usr/tabsTAXI_TABSTRIP_OVERVIEW/tabpT\02/ssubSUBSCREEN_BODY:SAPMV45A:4401/subSUBSCREEN_TC:SAPMV45A:4900/tblSAPMV45ATCTRL_U_ERF_AUFTRAG"
+$configTblId1 = "wnd[0]/usr/tabsTABSTRIP_CHAR/tabpTAB1/ssubCHARACTERISTICS:SAPLCEI0:1400/tblSAPLCEI0CHARACTER_VALUES"
+$configTblId2 = "wnd[0]/usr/subCHARACTERISTICS:SAPLCEI0:1400/tblSAPLCEI0CHARACTER_VALUES"
+
+Func ExecuteItemOverview($order)
+  ; Set Sales order
+  $ctrlId = "wnd[0]/usr/ctxtVBAK-VBELN"
+  $ctrl = $session.FindById($ctrlId)
+  AssertControl($ctrl, $ctrlId)
+  $ctrl.Text = $order
+
+  ; Execute Item overview
+  $ctrl = $session.FindById($itemOverviewId)
+  AssertControl($ctrl, $itemOverviewId)
+  $ctrl.Press()
+
+  ; Close any possible modal
+  While True
+    $modal = $session.FindById("wnd[1]")
+
+    If IsObj($modal) Then
+      LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
+      $modal.Close()
+    Else
+      ExitLoop
+    EndIf
+  WEnd
+EndFunc
+
 $t = "T_DP_CH"
 
 If $CmdLine[0] = 1 And $CmdLine[1] = "--help" Then
@@ -27,39 +57,13 @@ LogDebug($t)
 
 StartTransaction("VA03")
 
-$itemOverviewId = "wnd[0]/tbar[1]/btn[6]"
-$itemTblId = "wnd[0]/usr/tabsTAXI_TABSTRIP_OVERVIEW/tabpT\02/ssubSUBSCREEN_BODY:SAPMV45A:4401/subSUBSCREEN_TC:SAPMV45A:4900/tblSAPMV45ATCTRL_U_ERF_AUFTRAG"
-$configTblId1 = "wnd[0]/usr/tabsTABSTRIP_CHAR/tabpTAB1/ssubCHARACTERISTICS:SAPLCEI0:1400/tblSAPLCEI0CHARACTER_VALUES"
-$configTblId2 = "wnd[0]/usr/subCHARACTERISTICS:SAPLCEI0:1400/tblSAPLCEI0CHARACTER_VALUES"
-
 For $orderI = 1 To $CmdLine[0] Step 1
   $parts = StringSplit($CmdLine[$orderI], "/")
   $order = $parts[1]
 
   LogDebug("SALES_ORDER_NO=" & $order)
 
-  ; Set Sales order
-  $ctrlId = "wnd[0]/usr/ctxtVBAK-VBELN"
-  $ctrl = $session.FindById($ctrlId)
-  AssertControl($ctrl, $ctrlId)
-  $ctrl.Text = $order
-
-  ; Execute Item overview
-  $ctrl = $session.FindById($itemOverviewId)
-  AssertControl($ctrl, $itemOverviewId)
-  $ctrl.Press()
-
-  ; Close any possible modal
-  While True
-    $modal = $session.FindById("wnd[1]")
-
-    If IsObj($modal) Then
-      LogDebug("CLOSING_DIALOG=" & ReadAllText($modal, " "))
-      $modal.Close()
-    Else
-      ExitLoop
-    EndIf
-  WEnd
+  ExecuteItemOverview($order)
 
   ; Check the status bar
   $error = ""
@@ -166,11 +170,20 @@ For $orderI = 1 To $CmdLine[0] Step 1
       $ctrl.Press()
 
       ; Close any modal
-      $modal = $session.FindById("wnd[1]")
+      For $j = 0 To 10 Step 1
+        $modal = $session.FindById("wnd[1]")
 
-      If IsObj($modal) Then
+        If Not IsObj($modal) Then
+          ExitLoop
+        EndIf
+
         LogDebug("CLOSING_MODAL=" & ReadAllText($modal, " "))
-        If $modal.Text = "Conflict" Then
+
+        If StringInStr($modal.Text, "Configuration screen for material") Then
+          LogDebug("ERROR=" & $modal.Text)
+        EndIf
+
+        If StringInStr($modal.Text, "Conflict") Then
           $continue = $session.FindById("wnd[1]/tbar[0]/btn[0]")
           If IsObj($continue) Then
             LogDebug("SKIP_CONFLICT")
@@ -181,7 +194,7 @@ For $orderI = 1 To $CmdLine[0] Step 1
         Else
           $modal.Close()
         EndIf
-      EndIf
+      Next
 
       ; Check for constraint restriction
       $sbar = $session.FindById("wnd[0]/sbar")
@@ -196,6 +209,12 @@ For $orderI = 1 To $CmdLine[0] Step 1
         LogDebug("SKIP_CONSTRAINT_RESTRICTION=" & $sbar.Text)
       EndIf
     Next
+
+    If StringRegExp($session.FindById("wnd[0]").Text, $SAP_FREE_SESSION_REGEX) Then
+      LogDebug("RESTORING_ITEMS_OVERVIEW")
+      $session.StartTransaction("VA03")
+      ExecuteItemOverview($order)
+    EndIf
 
     ; Find all characteristics
     $configTblId = $configTblId1

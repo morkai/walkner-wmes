@@ -54,7 +54,7 @@ EndFunc
 
 Func AssertControl($control, $id)
   If Not IsObj($control) Then
-    LogDebug("CURRENT_SCREEN=" & $session.findById("wnd[0]").Title)
+    LogDebug("CURRENT_SCREEN=" & $session.findById("wnd[0]").Text)
     LogDebug("ERROR=CONTROL_NOT_FOUND=" & $id)
     LogError("INVALID_SCREEN", $ERR_INVALID_SCREEN)
   EndIf
