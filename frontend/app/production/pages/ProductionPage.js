@@ -984,7 +984,7 @@ define([
         this.model.startTimedAutoDowntime(incomingAutoDowntime.reason, incomingAutoDowntime.duration);
       }
 
-      if (downtime && downtime.get('auto') && downtime.getDuration() >= duration * 60 * 1000)
+      if (duration && downtime && downtime.get('auto') && downtime.getDuration() >= duration * 60 * 1000)
       {
         this.model.endDowntime();
       }
