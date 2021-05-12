@@ -31,6 +31,18 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      this.once('afterRender', () =>
+      {
+        if (!this.model.lines.length)
+        {
+          this.$id('mrps').select2('focus');
+          this.$id('mrps').select2('open');
+        }
+      });
+    },
+
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());

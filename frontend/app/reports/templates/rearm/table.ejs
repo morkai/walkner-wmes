@@ -1,60 +1,84 @@
+<div class="table-responsive">
 <table class="table table-bordered table-condensed table-hover table-striped reports-rearm-table">
   <thead>
   <tr>
-    <th class="is-min"><%- t('rearm:column:orderNo') %></th>
+    <th class="reports-rearm-table-line">
+      <span class="reports-rearm-table-line"><%= line %></span>
+      <%- t('rearm:column:orderNo') %>
+    </th>
     <th class="is-min"><%- t('rearm:column:mrp') %></th>
-    <th class="is-min"><%- t('rearm:column:shift') %></th>
-    <th><%- t('rearm:column:startedAt') %></th>
-    <th><%- t('rearm:column:finishedAt') %></th>
-    <th><%- t('rearm:column:firstAt') %></th>
-    <th><%- t('rearm:column:lastAt') %></th>
-    <th><%- t('rearm:column:avgTaktTime') %></th>
-    <th><%- t('rearm:column:quantityDone') %></th>
-    <th><%- t('rearm:column:efficiency') %></th>
-    <th><%- t('rearm:column:idle') %></th>
-    <th><%- t('rearm:column:downtime') %></th>
-    <th><%- t('rearm:column:breaks') %></th>
-    <th class="is-min" title="<%- t('rearm:title:metric0') %>"><%- t('rearm:column:metric0') %></th>
-    <th class="is-min" title="<%- t('rearm:title:metric1') %>"><%- t('rearm:column:metric1') %></th>
-    <th class="is-min" title="<%- t('rearm:title:metric2') %>"><%- t('rearm:column:metric2') %></th>
-    <th class="is-min" title="<%- t('rearm:title:metric3') %>"><%- t('rearm:column:metric3') %></th>
+    <th style="width: 102px"><%- t('rearm:column:shift') %></th>
+    <% [
+      'startedAt', 'finishedAt',
+      'firstAt', 'lastAt',
+      'sapTaktTime', 'avgTaktTime', 'medTaktTime',
+      'quantityDone', 'workerCount', 'efficiency',
+      'idle'
+    ].forEach(k => { %>
+    <th><%- t(`rearm:column:${k}`) %></th>
+    <% }) %>
+    <% downtimeColumns.forEach(c => { %>
+    <th title="<%= c.description %>"><%= c.column %></th>
+    <% }) %>
+    <% metricColumns.forEach(c => { %>
+    <th title="<%= c.description %>"><%= c.column %></th>
+    <% }) %>
     <th></th>
   </tr>
   </thead>
   <tbody>
   <% orders.forEach(function(order, i) { %>
   <tr class="<%- orders[i + 1] && order.shiftAt !== orders[i + 1].shiftAt ? 'is-eos' : '' %>">
-    <td class="is-min"><%- order.orderNo %></td>
+    <td class="is-min">
+      <% if (canViewSapOrder) { %>
+        <a href="#orders/<%- order.orderNo %>" target="_blank"><%- order.orderNo %></a>
+      <% } else { %>
+        <%- order.orderNo %>
+      <% } %>
+    </td>
     <td class="is-min"><%= order.mrp %></td>
-    <td class="is-min"><%- t('core', 'SHIFT', {date: time.format(order.shiftAt, 'L'), shift: order.shiftNo}) %></td>
-    <td class="is-min"><%- order.startedAt ? time.format(order.startedAt, 'HH:mm:ss') : '' %></td>
-    <td class="is-min"><%- order.finishedAt ? time.format(order.finishedAt, 'HH:mm:ss') : '' %></td>
-    <td class="is-min"><%- time.format(order.firstAt, 'HH:mm:ss') %></td>
-    <td class="is-min"><%- time.format(order.lastAt, 'HH:mm:ss') %></td>
-    <td class="is-min"><%= order.avgTaktTime ? time.toString(order.avgTaktTime, true, false) : '' %></td>
+    <td class="text-nowrap">
+      <% var shift = t('core', 'SHIFT', {date: time.format(order.shiftAt, 'L'), shift: order.shiftNo}) %>
+      <% if (canViewProdData && order.prodShift) { %>
+        <a href="#prodShifts/<%- order.prodShift %>" target="_blank"><%- shift %></a>
+      <% } else { %>
+        <%- shift %>
+      <% } %>
+    </td>
+    <td class="is-min text-center">
+      <% var startedAt = order.startedAt ? time.format(order.startedAt, 'HH:mm:ss') : '' %>
+      <% if (canViewProdData && order.prodShiftOrder) { %>
+        <a href="#prodShiftOrders/<%- order.prodShiftOrder %>" target="_blank"><%- startedAt %></a>
+      <% } else { %>
+        <%- startedAt %>
+      <% } %>
+    </td>
+    <td class="is-min text-center">
+      <% var finishedAt = order.finishedAt ? time.format(order.finishedAt, 'HH:mm:ss') : '' %>
+      <% if (canViewProdData && order.prodShiftOrder) { %>
+        <a href="#prodShiftOrders/<%- order.prodShiftOrder %>" target="_blank"><%- finishedAt %></a>
+      <% } else { %>
+        <%- finishedAt %>
+      <% } %>
+    </td>
+    <td class="is-min text-center"><%- time.format(order.firstAt, 'HH:mm:ss') %></td>
+    <td class="is-min text-center"><%- time.format(order.lastAt, 'HH:mm:ss') %></td>
+    <td class="is-min text-right"><%= order.sapTaktTime %></td>
+    <td class="is-min text-right <%- order.avgTaktTime > order.sapTaktTime ? 'is-low' : 'is-high' %>"><%= order.avgTaktTime %></td>
+    <td class="is-min text-right <%- order.medTaktTime > order.sapTaktTime ? 'is-low' : 'is-high' %>"><%= order.medTaktTime %></td>
     <td class="is-min text-right"><%- order.quantityDone.toLocaleString() %></td>
-    <td class="is-min text-right">
-      <% if (order.efficiency) { %>
-        <%- order.efficiency %>%
-      <% } %>
-    </td>
-    <td class="is-min"><%= order.idle ? time.toString(order.idle, true, false) : '' %></td>
-    <td class="is-min"><%= order.downtime ? time.toString(order.downtime, true, false) : '' %></td>
-    <td class="is-min"><%= order.breaks ? time.toString(order.breaks, true, false) : '' %></td>
-    <td class="is-min"><%= order.metric0 ? time.toString(order.metric0, true, false) : '' %></td>
-    <td class="is-min"><%= order.metric1 ? time.toString(order.metric1, true, false) : '' %></td>
-    <td class="is-min text-right">
-      <% if (order.metric2 !== null) { %>
-      <%- order.metric2 < 0 ? '-' : '+' %><%- time.toString(Math.abs(order.metric2), true, false) %>
-      <% } %>
-    </td>
-    <td class="is-min text-right">
-      <% if (order.metric3 !== null) { %>
-      <%- order.metric3 < 0 ? '-' : '+' %><%- time.toString(Math.abs(order.metric3), true, false) %>
-      <% } %>
-    </td>
+    <td class="is-min text-right"><%- order.workerCount.toLocaleString() %></td>
+    <td class="is-min text-right <%- order.efficiency >= 100 ? 'is-high' : order.efficiency >= 90 ? 'is-mid' : 'is-low' %>"><% if (order.efficiency) { %><%- order.efficiency %>%<% } %></td>
+    <td class="is-min text-right <%- order.idle ? '' : 'is-zero' %>"><%- order.idle.toLocaleString() %></td>
+    <% downtimeColumns.forEach((c, i) => { %>
+    <td class="is-min text-right <%- order.downtimes[i] ? '' : 'is-zero' %>"><%- order.downtimes[i].toLocaleString() %></td>
+    <% }) %>
+    <% metricColumns.forEach((c, i) => { %>
+    <td class="is-min text-right <%- order.metrics[i] ? '' : 'is-zero' %>"><%- order.metrics[i].toLocaleString() %></td>
+    <% }) %>
     <td></td>
   </tr>
   <% }) %>
   </tbody>
 </table>
+</div>

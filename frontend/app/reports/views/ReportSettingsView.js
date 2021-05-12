@@ -10,7 +10,9 @@ define([
   'app/data/delayReasons',
   'app/data/orderStatuses',
   'app/settings/views/SettingsView',
-  'app/reports/templates/settings'
+  'app/reports/templates/settings',
+  'app/reports/templates/settings/rearmDowntimeRow',
+  'app/reports/templates/settings/rearmMetricRow'
 ], function(
   _,
   user,
@@ -21,7 +23,9 @@ define([
   delayReasons,
   orderStatuses,
   SettingsView,
-  template
+  template,
+  rearmDowntimeRowTemplate,
+  rearmMetricRowTemplate
 ) {
   'use strict';
 
@@ -55,6 +59,84 @@ define([
 
         this.updateSetting('reports.downtimesInAors.aors', aors);
         this.toggleDowntimesInAors(aors);
+      },
+      'click .btn[data-rearm-action$=".moveUp"]': function(e)
+      {
+        const setting = 'rearm.' + e.currentTarget.dataset.rearmAction.split('.')[0];
+        const {variable} = this.$(e.currentTarget).closest('tr')[0].dataset;
+        const columns = [...this.model.getValue(setting, [])];
+        const oldI = columns.findIndex(c => c.variable === variable);
+
+        if (oldI === -1)
+        {
+          return;
+        }
+
+        if (oldI === 0)
+        {
+          columns.push(columns.shift());
+        }
+        else
+        {
+          columns.splice(oldI - 1, 0, columns.splice(oldI, 1)[0]);
+        }
+
+        this.updateRearmColumnsSetting(setting, columns);
+      },
+      'click .btn[data-rearm-action$=".moveDown"]': function(e)
+      {
+        const setting = 'rearm.' + e.currentTarget.dataset.rearmAction.split('.')[0];
+        const {variable} = this.$(e.currentTarget).closest('tr')[0].dataset;
+        const columns = [...this.model.getValue(setting, [])];
+        const oldI = columns.findIndex(c => c.variable === variable);
+
+        if (oldI === -1)
+        {
+          return;
+        }
+
+        if (oldI === columns.length - 1)
+        {
+          columns.unshift(columns.pop());
+        }
+        else
+        {
+          columns.splice(oldI + 1, 0, columns.splice(oldI, 1)[0]);
+        }
+
+        this.updateRearmColumnsSetting(setting, columns);
+      },
+      'click .btn[data-rearm-action$=".delete"]': function(e)
+      {
+        const setting = 'rearm.' + e.currentTarget.dataset.rearmAction.split('.')[0];
+        const {variable} = this.$(e.currentTarget).closest('tr')[0].dataset;
+        const columns = this.model.getValue(setting, []).filter(c => c.variable !== variable);
+
+        this.updateRearmColumnsSetting(setting, columns);
+      },
+      'click .btn[data-rearm-action="downtimeColumns.edit"]': function(e)
+      {
+        this.updateSelectedRearmDowntimeColumn(this.$(e.currentTarget).closest('tr')[0].dataset.variable);
+      },
+      'click #-rearm-downtimeColumns-submit': function()
+      {
+        this.saveSelectedRearmDowntimeColumn();
+      },
+      'click #-rearm-downtimeColumns-reset': function()
+      {
+        this.resetSelectedRearmDowntimeColumn();
+      },
+      'click .btn[data-rearm-action="metricColumns.edit"]': function(e)
+      {
+        this.updateSelectedRearmMetricColumn(this.$(e.currentTarget).closest('tr')[0].dataset.variable);
+      },
+      'click #-rearm-metricColumns-submit': function()
+      {
+        this.saveSelectedRearmMetricColumn();
+      },
+      'click #-rearm-metricColumns-reset': function()
+      {
+        this.resetSelectedRearmMetricColumn();
       }
     }, SettingsView.prototype.events),
 
@@ -195,6 +277,7 @@ define([
 
       this.setUpLeanSettings();
       this.setUpClipSettings();
+      this.setUpRearmSettings();
 
       this.onSettingsChange(this.settings.get('reports.downtimesInAors.statuses'));
       this.onSettingsChange(this.settings.get('reports.clip.ignoredMrps'));
@@ -213,6 +296,22 @@ define([
 
     updateSettingField: function(setting)
     {
+      if (setting.id === 'reports.rearm.downtimeColumns')
+      {
+        this.renderRearmDowntimeColumns();
+        this.updateSelectedRearmDowntimeColumn();
+
+        return;
+      }
+
+      if (setting.id === 'reports.rearm.metricColumns')
+      {
+        this.renderRearmMetricColumns();
+        this.updateSelectedRearmMetricColumn();
+
+        return;
+      }
+
       var $el = this.$('input[name="' + setting.id + '"]');
 
       if (setting.id === 'reports.clip.ignoredMrps')
@@ -469,6 +568,246 @@ define([
       });
 
       return result;
+    },
+
+    setUpRearmSettings: function()
+    {
+      this.$id('rearm-downtimeColumns-reasons').select2({
+        width: '100%',
+        multiple: true,
+        allowClear: true,
+        data: downtimeReasons.map(idAndLabel)
+      });
+
+      this.renderRearmDowntimeColumns();
+      this.renderRearmMetricColumns();
+    },
+
+    renderRearmDowntimeColumns: function()
+    {
+      let html = '';
+
+      this.model.getValue('rearm.downtimeColumns', []).forEach(c =>
+      {
+        html += this.renderPartialHtml(rearmDowntimeRowTemplate, {
+          row: {
+            ...c,
+            reasons: c.reasons.map(id => downtimeReasons.getLabel(id))
+          }
+        });
+      });
+
+      this.$id('rearm-downtimeColumns-table').html(html);
+
+      this.updateAvailRearmVars();
+    },
+
+    resetSelectedRearmDowntimeColumn: function()
+    {
+      this.$id('rearm-downtimeColumns-variable').val('');
+      this.$id('rearm-downtimeColumns-column').val('');
+      this.$id('rearm-downtimeColumns-description').val('');
+      this.$('input[name="rearm-downtimeColumns-exclude"][value="false"]').prop('checked', true);
+      this.$id('rearm-downtimeColumns-reasons').select2('val', []);
+    },
+
+    updateSelectedRearmDowntimeColumn: function(variable)
+    {
+      if (!variable)
+      {
+        variable = this.$id('rearm-downtimeColumns-variable').val();
+      }
+
+      if (!variable)
+      {
+        return;
+      }
+
+      const column = this.model.getValue('rearm.downtimeColumns', []).find(c => c.variable === variable);
+
+      if (!column)
+      {
+        return;
+      }
+
+      this.$id('rearm-downtimeColumns-variable').val(column.variable);
+      this.$id('rearm-downtimeColumns-column').val(column.column);
+      this.$id('rearm-downtimeColumns-description').val(column.description);
+      this.$(`input[name="rearm-downtimeColumns-exclude"][value="${column.exclude}"]`).prop('checked', true);
+      this.$id('rearm-downtimeColumns-reasons').select2('val', column.reasons);
+    },
+
+    saveSelectedRearmDowntimeColumn: function()
+    {
+      const $variable = this.$id('rearm-downtimeColumns-variable');
+      const $column = this.$id('rearm-downtimeColumns-column');
+      const $description = this.$id('rearm-downtimeColumns-description');
+      const $exclude = this.$(`input[name="rearm-downtimeColumns-exclude"]:checked`);
+      const $reasons = this.$id('rearm-downtimeColumns-reasons');
+      const column = {
+        variable: $variable.val().trim(),
+        column: $column.val().trim(),
+        description: $description.val().trim(),
+        exclude: !!$exclude.length && $exclude.val() === 'true',
+        reasons: $reasons.select2('val')
+      };
+
+      if (!column.variable || !/^[a-zA-Z][a-zA-Z0-9_]*$/.test(column.variable))
+      {
+        $variable.focus();
+
+        return;
+      }
+
+      if (!column.column)
+      {
+        column.column = column.variable;
+      }
+
+      const columns = [...this.model.getValue('rearm.downtimeColumns', [])];
+      const i = columns.findIndex(c => c.variable === column.variable);
+
+      if (i === -1)
+      {
+        columns.push(column);
+      }
+      else
+      {
+        columns[i] = column;
+      }
+
+      this.updateRearmColumnsSetting('rearm.downtimeColumns', columns);
+    },
+
+    renderRearmMetricColumns: function()
+    {
+      let html = '';
+
+      this.model.getValue('rearm.metricColumns', []).forEach(c =>
+      {
+        html += this.renderPartialHtml(rearmMetricRowTemplate, {
+          row: c
+        });
+      });
+
+      this.$id('rearm-metricColumns-table').html(html);
+
+      this.updateAvailRearmVars();
+    },
+
+    resetSelectedRearmMetricColumn: function()
+    {
+      this.$id('rearm-metricColumns-variable').val('');
+      this.$id('rearm-metricColumns-column').val('');
+      this.$id('rearm-metricColumns-description').val('');
+      this.$id('rearm-metricColumns-formula').val('');
+    },
+
+    updateSelectedRearmMetricColumn: function(variable)
+    {
+      if (!variable)
+      {
+        variable = this.$id('rearm-metricColumns-variable').val();
+      }
+
+      if (!variable)
+      {
+        return;
+      }
+
+      const column = this.model.getValue('rearm.metricColumns', []).find(c => c.variable === variable);
+
+      if (!column)
+      {
+        return;
+      }
+
+      this.$id('rearm-metricColumns-variable').val(column.variable);
+      this.$id('rearm-metricColumns-column').val(column.column);
+      this.$id('rearm-metricColumns-description').val(column.description);
+      this.$id('rearm-metricColumns-formula').val(column.formula);
+    },
+
+    saveSelectedRearmMetricColumn: function()
+    {
+      const $variable = this.$id('rearm-metricColumns-variable');
+      const $column = this.$id('rearm-metricColumns-column');
+      const $description = this.$id('rearm-metricColumns-description');
+      const $formula = this.$id('rearm-metricColumns-formula');
+      const column = {
+        variable: $variable.val().trim(),
+        column: $column.val().trim(),
+        description: $description.val().trim(),
+        formula: $formula.val().trim()
+      };
+
+      if (!column.variable || !/^[a-zA-Z][a-zA-Z0-9_]*$/.test(column.variable))
+      {
+        $variable.focus();
+
+        return;
+      }
+
+      if (!column.column)
+      {
+        column.column = column.variable;
+      }
+
+      if (!column.formula)
+      {
+        column.formula = '0';
+      }
+
+      const columns = [...this.model.getValue('rearm.metricColumns', [])];
+      const i = columns.findIndex(c => c.variable === column.variable);
+
+      if (i === -1)
+      {
+        columns.push(column);
+      }
+      else
+      {
+        columns[i] = column;
+      }
+
+      this.updateRearmColumnsSetting('rearm.metricColumns', columns);
+    },
+
+    updateRearmColumnsSetting: function(setting, newValue)
+    {
+      const $fields = this.$(`.panel-body[data-subtab="${setting.split('.').pop()}"]`)
+        .find('button, input, textarea')
+        .prop('disabled', true);
+
+      this.updateSetting(`reports.${setting}`, newValue).always(() =>
+      {
+        $fields.prop('disabled', false);
+      });
+    },
+
+    updateAvailRearmVars: function()
+    {
+      const vars = {
+        IDLE: 1,
+        TT_SAP: 1,
+        TT_AVG: 1,
+        TT_MED: 1,
+        FIRST_AT: 1,
+        LAST_AT: 1,
+        PREV_AT: 1,
+        STARTED_AT: 1,
+        FINISHED_AT: 1,
+        QTY_DONE: 1,
+        WORKER_COUNT: 1,
+        EFF: 1,
+        EFF_COEFF: 1,
+        LABOR_TIME: 1
+      };
+
+      this.model.getValue('rearm.downtimeColumns', []).forEach(c => vars[c.variable] = 1);
+      this.model.getValue('rearm.metricColumns', []).forEach(c => vars[c.variable] = 1);
+
+      this.$id('rearm-availVars').html(Object.keys(vars).map(v => `<code>${v}</code>`).join(', '));
     }
 
   });

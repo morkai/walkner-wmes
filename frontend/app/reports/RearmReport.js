@@ -40,15 +40,15 @@ define([
       this.on('change:report', this.onReportChange);
 
       this.set('report', {
+        options: {},
+        settings: {},
         lines: []
       });
     },
 
     onReportChange: function()
     {
-      var report = this.get('report');
-
-      this.lines.reset(report.lines);
+      this.lines.reset(this.get('report').lines);
     },
 
     fetch: function(options)
@@ -67,7 +67,7 @@ define([
         ])
       );
 
-      Object.keys(options.data).forEach(function(key)
+      Object.keys(options.data).forEach(key =>
       {
         if (Array.isArray(options.data[key]))
         {
@@ -88,48 +88,49 @@ define([
 
     parse: function(report)
     {
-      var shiftNos = {};
+      const shiftNos = {};
 
       report.lines.forEach(function(line)
       {
         line.orders = line.orders.map(function(o)
         {
-          var shiftAt = o[4];
-          var shiftNo = shiftNos[shiftAt];
+          const shiftAt = o[6];
+          let shiftNo = shiftNos[shiftAt];
 
           if (!shiftNo)
           {
             shiftNo = shiftNos[shiftAt] = getShiftStartInfo(shiftAt).no;
           }
 
-          var c = 5;
+          let c = 0;
 
           return {
             line: line._id,
-            orderNo: o[0],
-            mrp: o[1],
-            firstAt: o[2],
-            lastAt: o[3],
-            shiftAt: shiftAt,
+            prodShift: o[c++],
+            prodShiftOrder: o[c++],
+            orderNo: o[c++],
+            mrp: o[c++],
+            firstAt: o[c++],
+            lastAt: o[c++],
+            shiftAt: o[c++],
             shiftNo: shiftNo,
             startedAt: o[c++],
             finishedAt: o[c++],
+            sapTaktTime: o[c++],
             avgTaktTime: o[c++],
+            medTaktTime: o[c++],
             quantityDone: o[c++],
+            workerCount: o[c++],
             efficiency: o[c++],
             idle: o[c++],
-            downtime: o[c++],
-            breaks: o[c++],
-            metric0: o[c++],
-            metric1: o[c++],
-            metric2: o[c++],
-            metric3: o[c++]
+            downtimes: o[c++],
+            metrics: o[c++]
           };
         });
       });
 
       return {
-        report: report
+        report
       };
     }
 
@@ -137,7 +138,7 @@ define([
 
     fromQuery: function(query)
     {
-      var attrs = {
+      const attrs = {
         from: +query.from || 0,
         to: +query.to || 0
       };
@@ -150,7 +151,7 @@ define([
 
       [
         'mrps'
-      ].forEach(function(prop)
+      ].forEach(prop =>
       {
         attrs[prop] = _.isEmpty(query[prop]) ? [] : query[prop].split(',');
       });

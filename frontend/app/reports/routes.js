@@ -106,11 +106,6 @@ define([
 
   router.map('/reports/rearm', auth('REARM'), function(req)
   {
-    loadReportPage('Rearm', req);
-  });
-
-  router.map('/reports/rearm', auth('REARM'), function(req)
-  {
     viewport.loadPage(
       [
         'app/reports/RearmReport',
@@ -121,7 +116,8 @@ define([
       function(Report, ReportPage)
       {
         return new ReportPage({
-          model: Report.fromQuery(req.query)
+          model: Report.fromQuery(req.query),
+          autoLoad: req.queryString !== ''
         });
       }
     );

@@ -16,9 +16,10 @@
       ['hr', [5]],
       ['wh', [6]],
       ['downtimesInAors', [7]],
-      ['lean', [8]]
+      ['lean', [8]],
+      ['rearm', ['REARM']]
     ].forEach(function(tab) { %>
-    <a class="list-group-item" href="#reports;settings?tab=<%- tab[0] %>" data-tab="<%- tab[0] %>" data-privileges="<%- tab[1].join(',') %>"><%- t('reports', 'settings:tab:' + tab[0]) %></a>
+    <a class="list-group-item" href="#reports;settings?tab=<%- tab[0] %>" data-tab="<%- tab[0] %>" data-privileges="<%- tab[1].join(',') %>"><%- t('settings:tab:' + tab[0]) %></a>
     <% }) %>
   </div>
   <div class="panel panel-primary">
@@ -38,5 +39,6 @@
     <% include settings/wh.ejs %>
     <% include settings/downtimesInAors.ejs %>
     <% include settings/lean.ejs %>
+    <% include settings/rearm.ejs %>
   </div>
 </form>

@@ -2,11 +2,13 @@
 
 define([
   'jquery',
+  'app/user',
   'app/core/View',
   'app/reports/templates/rearm/table',
   'jquery.stickytableheaders'
 ], function(
   $,
+  currentUser,
   View,
   template
 ) {
@@ -23,8 +25,15 @@ define([
 
     getTemplateData: function()
     {
+      const settings = this.model.get('report').settings;
+
       return {
-        orders: this.line.get('orders')
+        line: this.line.id,
+        orders: this.line.get('orders'),
+        downtimeColumns: settings.downtimeColumns || [],
+        metricColumns: settings.metricColumns || [],
+        canViewSapOrder: currentUser.isAllowedTo('ORDERS:VIEW'),
+        canViewProdData: currentUser.isAllowedTo('PROD_DATA:VIEW')
       };
     },
 
@@ -32,14 +41,15 @@ define([
     {
       this.on('afterRender', () =>
       {
-        this.$el.stickyTableHeaders({
-          fixedOffset: $('.navbar-fixed-top')
+        this.$('.table').stickyTableHeaders({
+          fixedOffset: $('.navbar-fixed-top'),
+          scrollableAreaX: this.$el
         });
       });
 
       this.on('beforeRender remove', () =>
       {
-        this.$el.stickyTableHeaders('destroy');
+        this.$('.table').stickyTableHeaders('destroy');
       });
     }
 

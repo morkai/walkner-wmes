@@ -1,0 +1,99 @@
+<div class="panel-body has-subtabs" data-tab="rearm">
+  <div class="settings reports-settings">
+    <div class="list-group">
+      <% [
+        'downtimeColumns',
+        'metricColumns'
+      ].forEach(function(subtab) { %>
+      <a class="list-group-item" href="#reports;settings?tab=rearm&subtab=<%- subtab %>" data-tab="rearm" data-subtab="<%- subtab %>"><%- t(`rearm:settings:tab:${subtab}`) %></a>
+      <% }) %>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-body" data-subtab="downtimeColumns">
+        <table class="table table-bordered table-condensed table-hover">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('rearm:settings:downtimeColumns:variable') %></th>
+            <th class="is-min"><%- t('rearm:settings:downtimeColumns:column') %></th>
+            <th><%- t('rearm:settings:downtimeColumns:reasons') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('rearm-downtimeColumns-table') %>"></tbody>
+        </table>
+        <div class="form-group">
+          <label for="<%- id('rearm-downtimeColumns-variable') %>"><%- t('rearm:settings:downtimeColumns:variable') %></label>
+          <input id="<%- id('rearm-downtimeColumns-variable') %>" class="form-control text-fixed" type="text" required maxlength="50" pattern="^[a-zA-Z][a-zA-Z0-9_]*$">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('rearm-downtimeColumns-column') %>"><%- t('rearm:settings:downtimeColumns:column') %></label>
+          <input id="<%- id('rearm-downtimeColumns-column') %>" class="form-control" type="text" required maxlength="100">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('rearm-downtimeColumns-description') %>"><%- t('rearm:settings:downtimeColumns:description') %></label>
+          <textarea id="<%- id('rearm-downtimeColumns-description') %>" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <div class="radio">
+            <label class="control-label">
+              <input name="rearm-downtimeColumns-exclude" type="radio" value="false">
+              <%- t('rearm:settings:downtimeColumns:include') %>
+            </label>
+          </div>
+          <div class="radio">
+            <label class="control-label">
+              <input name="rearm-downtimeColumns-exclude" type="radio" value="true">
+              <%- t('rearm:settings:downtimeColumns:exclude') %>
+            </label>
+          </div>
+          <input id="<%- id('rearm-downtimeColumns-reasons') %>" type="text">
+        </div>
+        <button id="<%- id('rearm-downtimeColumns-submit') %>" type="button" class="btn btn-primary">
+          <i class="fa fa-save"></i><span><%- t('rearm:settings:downtimeColumns:submit') %></span>
+        </button>
+        <button id="<%- id('rearm-downtimeColumns-reset') %>" type="button" class="btn btn-default">
+          <i class="fa fa-eraser"></i><span><%- t('rearm:settings:downtimeColumns:reset') %></span>
+        </button>
+      </div>
+      <div class="panel-body" data-subtab="metricColumns">
+        <table class="table table-bordered table-condensed table-hover">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('rearm:settings:metricColumns:variable') %></th>
+            <th class="is-min"><%- t('rearm:settings:metricColumns:column') %></th>
+            <th><%- t('rearm:settings:metricColumns:formula') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- id('rearm-metricColumns-table') %>"></tbody>
+        </table>
+        <div class="form-group">
+          <label for="<%- id('rearm-metricColumns-variable') %>"><%- t('rearm:settings:metricColumns:variable') %></label>
+          <input id="<%- id('rearm-metricColumns-variable') %>" class="form-control text-fixed" type="text" required maxlength="50" pattern="^[a-zA-Z][a-zA-Z0-9_]*$">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('rearm-metricColumns-column') %>"><%- t('rearm:settings:metricColumns:column') %></label>
+          <input id="<%- id('rearm-metricColumns-column') %>" class="form-control" type="text" required maxlength="100">
+        </div>
+        <div class="form-group">
+          <label for="<%- id('rearm-metricColumns-description') %>"><%- t('rearm:settings:metricColumns:description') %></label>
+          <textarea id="<%- id('rearm-metricColumns-description') %>" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="<%- id('rearm-metricColumns-formula') %>"><%- t('rearm:settings:metricColumns:formula') %></label>
+          <textarea id="<%- id('rearm-metricColumns-formula') %>" class="form-control text-fixed" rows="3"></textarea>
+        </div>
+        <p style="margin-top: 10px">
+          <%- t('rearm:settings:availVars') %>
+          <span id="<%- id('rearm-availVars') %>"></span>
+        </p>
+        <button id="<%- id('rearm-metricColumns-submit') %>" type="button" class="btn btn-primary">
+          <i class="fa fa-save"></i><span><%- t('rearm:settings:metricColumns:submit') %></span>
+        </button>
+        <button id="<%- id('rearm-metricColumns-reset') %>" type="button" class="btn btn-default">
+          <i class="fa fa-eraser"></i><span><%- t('rearm:settings:metricColumns:reset') %></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

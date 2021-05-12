@@ -106,6 +106,11 @@ define([
         return this.prepareObjectIdValue(newValue);
       }
 
+      if (/DowntimeReasons$/.test(id))
+      {
+        return newValue === '' ? [] : newValue.split(',');
+      }
+
       if (/downtimesInAors.aors$/.test(id))
       {
         return this.prepareDowntimeAorsValue(newValue);
@@ -131,12 +136,17 @@ define([
         return this.prepareClipValue(id, newValue);
       }
 
+      if (/\.rearm\./.test(id))
+      {
+        return this.prepareRearmValue(id, newValue);
+      }
+
       return this.prepare100PercentValue(newValue);
     },
 
     prepareLeanValue: function(id, newValue)
     {
-      if (/(DowntimeReasons|ProdTasks|ProdFlows)$/.test(id))
+      if (/(ProdTasks|ProdFlows)$/.test(id))
       {
         return newValue === '' ? [] : newValue.split(',');
       }
@@ -202,6 +212,14 @@ define([
       }
 
       return undefined;
+    },
+
+    prepareRearmValue: function(id, newValue)
+    {
+      if (/(downtime|metric)Columns$/.test(id))
+      {
+        return Array.isArray(newValue) ? newValue : [];
+      }
     },
 
     prepare100PercentValue: function(value)

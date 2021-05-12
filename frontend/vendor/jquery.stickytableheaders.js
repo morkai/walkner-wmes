@@ -98,22 +98,33 @@
 		};
 
 		base.bind = function(){
-			base.$scrollableAreaX.on('scroll.' + name + base.id, function()
+			var onScrollX = function()
 			{
 				base.setPositionValues();
-			});
-
-			base.$scrollableAreaY.on('scroll.' + name + base.id, function()
+			};
+			var onScrollY = function(e)
 			{
 				base.setPositionValues();
 				base.toggleHeaders();
-			});
-
-			base.$resizableArea.on('resize.' + name + base.id, function()
+			};
+			var onResize = function()
 			{
 				base.toggleHeaders();
 				base.updateWidth();
-			});
+			};
+
+			if (typeof _ !== 'undefined' && _.throttle)
+			{
+				onScrollX = _.throttle(onScrollX, 1000 / 30);
+				onScrollY = _.throttle(onScrollY, 1000 / 30);
+				onResize = _.throttle(onResize, 1000 / 30);
+			}
+
+			base.$scrollableAreaX.on('scroll.' + name + base.id, onScrollX);
+
+			base.$scrollableAreaY.on('scroll.' + name + base.id, onScrollY);
+
+			base.$resizableArea.on('resize.' + name + base.id, onResize);
 		};
 
 		base.unbind = function(){
@@ -157,7 +168,7 @@
 						'margin-top': 0,
 						'left': newLeft,
 						'z-index': 1 // #18: opacity bug
-					});
+					}).addClass('is-sticky');
 					base.isSticky = true;
 					base.leftOffset = newLeft;
 					base.topOffset = newTopOffset;
@@ -166,7 +177,7 @@
 					// make sure the width is correct: the user might have resized the browser while in static mode
 					base.updateWidth();
 				} else if (base.isSticky) {
-					base.$originalHeader.css('position', 'static');
+					base.$originalHeader.css('position', 'static').removeClass('is-sticky');
 					base.$clonedHeader.css('display', 'none');
 					base.isSticky = false;
 					base.resetWidth($("td,th", base.$clonedHeader), $("td,th", base.$originalHeader));

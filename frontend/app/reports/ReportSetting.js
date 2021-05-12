@@ -11,6 +11,8 @@ define([
 
     urlRoot: '/reports/settings',
 
+    nlsDomain: 'reports',
+
     getType: function()
     {
       if (/color$/.test(this.id))

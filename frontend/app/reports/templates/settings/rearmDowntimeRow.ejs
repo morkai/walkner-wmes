@@ -1,0 +1,16 @@
+<tr data-variable="<%- row.variable %>">
+  <td class="is-min text-fixed"><%- row.variable %></td>
+  <td class="is-min"><%= row.column %></td>
+  <td>
+    <%- t(`rearm:settings:downtimeColumns:${row.exclude ? 'exclude' : 'include'}`) %>
+    <%= row.reasons.join('; ') %>
+  </td>
+  <td class="actions">
+    <div class="actions-group">
+      <button data-rearm-action="downtimeColumns.moveUp" class="btn btn-default" type="button"><i class="fa fa-arrow-up"></i></button>
+      <button data-rearm-action="downtimeColumns.moveDown" class="btn btn-default" type="button"><i class="fa fa-arrow-down"></i></button>
+      <button data-rearm-action="downtimeColumns.edit" class="btn btn-default" type="button"><i class="fa fa-edit"></i></button>
+      <button data-rearm-action="downtimeColumns.delete" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+    </div>
+  </td>
+</tr>

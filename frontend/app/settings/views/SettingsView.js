@@ -455,7 +455,7 @@ define([
 
       viewport.msg.saving();
 
-      view.settings.update(settingId, settingValue).always(function()
+      return view.settings.update(settingId, settingValue).always(function()
       {
         --view.inProgress[settingId];
 
