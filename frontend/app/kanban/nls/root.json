@@ -152,6 +152,7 @@
     "builder:submit": "Add new print queue",
     "builder:remove": "Remove CCN",
     "builder:clear": "Clear all",
+    "builder:newStorageBin": "Use the new storage bin",
 
     "import:components:title": "Importing components",
     "import:components:file": "File to import",

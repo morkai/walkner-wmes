@@ -6,6 +6,10 @@
       <i class="fa fa-ellipsis-v"></i>
       <%- helpers.t('builder:title') %>
     </span>
+    <label class="kanban-builder-newStorageBin">
+      <input id="<%- idPrefix %>-newStorageBin" type="checkbox" <%- newStorageBin ? 'checked' : '' %>>
+      <span><%- helpers.t('builder:newStorageBin') %></span>
+    </label>
     <a id="<%- idPrefix %>-hide" class="btn btn-link kanban-hide"><i class="fa fa-times"></i></a>
   </div>
   <table class="kanban-builder-thead">

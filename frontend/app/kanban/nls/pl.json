@@ -151,6 +151,7 @@
   "builder:submit": "Dodaj nową kolejkę drukowania",
   "builder:remove": "Usuń CCN",
   "builder:clear": "Wyczyść wszystko",
+  "builder:newStorageBin": "Użyj nowej lokalizacji magazynowej",
 
   "import:components:title": "Importowanie danych komponentów",
   "import:components:file": "Plik do importu",
