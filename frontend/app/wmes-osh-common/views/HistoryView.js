@@ -298,6 +298,7 @@ define([
         case 'priority':
         case 'status':
         case 'kind':
+        case 'division':
         case 'workplace':
         case 'department':
         case 'building':
