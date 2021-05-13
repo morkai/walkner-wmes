@@ -290,6 +290,7 @@ define([
         case 'suggestion':
         case 'solution':
         case 'companyName':
+        case 'description':
           return value.length <= 43 ? value : {
             more: value,
             toString: () => `${value.substr(0, 40)}...`
