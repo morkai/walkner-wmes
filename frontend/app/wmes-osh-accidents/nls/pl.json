@@ -25,7 +25,7 @@
   "details:eventDate:format": "LL, LT",
 
   "FORM:subtitle": "Wypadek",
-  "FORM:ACTION:add": "Dodaj nowy wypadek",
+  "FORM:ACTION:add": "Dodaj wypadek",
   "FORM:placeholder:noWorkplace": "Wybierz zakład...",
   "FORM:placeholder:noDepartment": "Wybierz wydział...",
   "FORM:placeholder:noBuilding": "Wybierz budynek...",
