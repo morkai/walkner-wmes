@@ -801,7 +801,9 @@ define([
         WORKER_COUNT: 1,
         EFF: 1,
         EFF_COEFF: 1,
-        LABOR_TIME: 1
+        LABOR_TIME: 1,
+        IDX_OVERALL: 1,
+        IDX_SHIFT: 1
       };
 
       this.model.getValue('rearm.downtimeColumns', []).forEach(c => vars[c.variable] = 1);
