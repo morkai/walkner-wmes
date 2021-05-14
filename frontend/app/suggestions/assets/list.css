@@ -12,6 +12,9 @@
   max-width: 55%;
   z-index: 1039;
 }
+.suggestions-list-popover-opinions .panel {
+  margin-bottom: 0!important;
+}
 .suggestions-list-popover-opinions > .popover-content {
   padding: 0;
 }
