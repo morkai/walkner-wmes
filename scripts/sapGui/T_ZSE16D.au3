@@ -59,6 +59,10 @@ If $CmdLine[0] > 0 And Mod($CmdLine[0], 2) = 0 Then
   Next
 EndIf
 
+If Not $layout Then
+  $layout = "WMES_" & $table
+EndIf
+
 LogDebug("T_ZSE16D")
 LogDebug("--output-path=" & $outputPath)
 LogDebug("--output-file=" & $outputFile)
@@ -89,7 +93,7 @@ Else
 
   ; Set layout
   If $layout <> "" Then
-    $session.FindById("wnd[0]/usr/ctxtGD-VARIANT").Text = $table
+    $session.FindById("wnd[0]/usr/ctxtGD-VARIANT").Text = $layout
     $session.FindById("wnd[0]").SendVKey(0)
   EndIf
 EndIf
