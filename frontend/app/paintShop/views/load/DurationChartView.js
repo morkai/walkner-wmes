@@ -23,11 +23,13 @@ define([
     {
       this.chart = null;
       this.isLoading = false;
+      this.invisibleSeries = [];
 
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:groups', this.render);
+      this.listenTo(this.model, 'change:groups change:load', _.debounce(this.render.bind(this), 1));
+      this.listenTo(this.model, 'legendToggled', this.onLegendToggled);
     },
 
     destroy: function()
@@ -70,6 +72,8 @@ define([
 
     createChart: function()
     {
+      var view = this;
+
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
@@ -109,34 +113,63 @@ define([
         tooltip: {
           shared: true,
           valueDecimals: 0,
-          headerFormatter: formatTooltipHeader.bind(this)
+          headerFormatter: formatTooltipHeader.bind(this),
+          extraRowsProvider: (points, rows) =>
+          {
+            var avg = rows.find(row => row.point.series.userOptions.id === 'avg');
+            var count = rows.find(row => row.point.series.userOptions.id === 'count');
+
+            rows = [];
+
+            if (avg)
+            {
+              rows.push(avg, {
+                point: null,
+                color: 'transparent',
+                name: this.t('load:report:duration:min'),
+                suffix: 's',
+                decimals: 0,
+                value: avg.point.data.min
+              }, {
+                point: null,
+                color: 'transparent',
+                name: this.t('load:report:duration:max'),
+                suffix: 's',
+                decimals: 0,
+                value: avg.point.data.max
+              });
+            }
+
+            if (count)
+            {
+              rows.push(count);
+            }
+
+            return rows;
+          }
         },
         legend: {
           enabled: true
         },
-        series: this.serializeSeries()
+        series: this.serializeSeries(),
+        plotOptions: {
+          series: {
+            events: {
+              legendItemClick: function()
+              {
+                view.model.trigger('legendToggled', this.userOptions.id, !this.visible);
+
+                return false;
+              }
+            }
+          }
+        }
       });
     },
 
     serializeSeries: function()
     {
       var data = this.serializeChartData();
-
-      if (this.model.get('interval') === 'none')
-      {
-        return [{
-          id: 'actual',
-          name: this.t('load:report:duration:actual'),
-          data: data.actual,
-          type: 'column',
-          color: '#0af',
-          yAxis: 0,
-          tooltip: {
-            valueSuffix: 's'
-          },
-          turboThreshold: 1501
-        }];
-      }
 
       return [{
         id: 'avg',
@@ -148,13 +181,15 @@ define([
         tooltip: {
           valueSuffix: 's'
         },
-        turboThreshold: 1501
+        turboThreshold: 1501,
+        visible: !this.invisibleSeries.includes('avg')
       }, {
         id: 'count',
         name: this.t('load:report:duration:count'),
         data: data.count,
         type: 'line',
         color: '#000',
+        lineWidth: data.count.length > 30 ? 1 : 2,
         yAxis: 1,
         tooltip: {
           valueSuffix: this.t('reports', 'quantitySuffix')
@@ -167,7 +202,8 @@ define([
             }
           }
         },
-        turboThreshold: 1501
+        turboThreshold: 1501,
+        visible: !this.invisibleSeries.includes('count')
       }];
     },
 
@@ -176,20 +212,21 @@ define([
       var view = this;
       var counter = view.options.counter;
       var data = {
-        actual: [],
         avg: [],
         count: []
       };
 
-      if (view.model.get('interval') === 'none')
+      if (view.model.get('interval') === 'min')
       {
-        data.actual = view.model.get('load')[counter].map(function(d)
+        view.model.get('load')[counter].forEach(function(d)
         {
-          return {
-            x: d[0],
-            y: d[1],
-            color: view.settings.getLoadStatus(d[1]).color
-          };
+          data.avg.push({
+            x: d.key,
+            y: d.avg,
+            color: view.settings.getLoadStatus(d.avg).color,
+            data: d
+          });
+          data.count.push([d.key, d.count]);
         });
       }
       else
@@ -201,7 +238,8 @@ define([
           data.avg.push({
             x: g.key,
             y: c.avg,
-            color: view.settings.getLoadStatus(c.avg).color
+            color: view.settings.getLoadStatus(c.avg).color,
+            data: c
           });
           data.count.push([g.key, c.count]);
         });
@@ -212,6 +250,8 @@ define([
 
     updateChart: function()
     {
+      this.invisibleSeries = this.chart.series.filter(s => !s.visible).map(s => s.userOptions.id);
+
       this.chart.destroy();
       this.createChart();
     },
@@ -243,6 +283,36 @@ define([
       if (this.chart)
       {
         this.chart.hideLoading();
+      }
+    },
+
+    onLegendToggled: function(seriesId, visible)
+    {
+      console.log(seriesId, visible);
+      if (!this.chart)
+      {
+        return;
+      }
+
+      var series = this.chart.series.find(s => s.userOptions.id === seriesId);
+
+      if (!series)
+      {
+        return;
+      }
+
+      if (series.visible === visible)
+      {
+        return;
+      }
+
+      if (visible)
+      {
+        series.show();
+      }
+      else
+      {
+        series.hide();
       }
     }
 

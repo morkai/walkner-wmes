@@ -30,6 +30,10 @@ define([
         this.changeFilter();
 
         return false;
+      },
+      'change input[name="interval"]': function()
+      {
+        this.toggleBucketSize();
       }
     },
 
@@ -38,6 +42,7 @@ define([
       js2form(this.el, this.serializeFormData());
 
       buttonGroup.toggle(this.$id('interval'));
+      this.toggleBucketSize();
     },
 
     serializeFormData: function()
@@ -48,6 +53,7 @@ define([
 
       return {
         interval: model.get('interval'),
+        bucketSize: model.get('bucketSize'),
         'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
         'to-date': to ? time.format(to, 'YYYY-MM-DD') : ''
       };
@@ -59,18 +65,9 @@ define([
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
-        interval: buttonGroup.getValue(this.$id('interval'))
+        interval: this.getInterval(),
+        bucketSize: parseInt(this.$id('bucketSize').val(), 10) || 5
       };
-
-      if (query.interval === 'none')
-      {
-        if (!query.from)
-        {
-          query.from = getShiftStartInfo(Date.now()).moment.startOf('day').valueOf();
-        }
-
-        query.to = time.getMoment(query.from).add(1, 'days').valueOf();
-      }
 
       if (query.from && query.to && query.to <= query.from)
       {
@@ -89,6 +86,16 @@ define([
 
       this.model.set(query);
       this.model.trigger('filtered');
+    },
+
+    getInterval: function()
+    {
+      return buttonGroup.getValue(this.$id('interval'));
+    },
+
+    toggleBucketSize: function()
+    {
+      this.$id('bucketSize').prop('disabled', this.getInterval() !== 'min');
     }
 
   });

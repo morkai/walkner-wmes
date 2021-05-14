@@ -85,6 +85,7 @@
     "tooltipHeaderFormat:day": "LL",
     "tooltipHeaderFormat:shift": "LL[, {shift} shift]",
     "tooltipHeaderFormat:hour": "LLL",
+    "tooltipHeaderFormat:min": "LL LT",
     "tooltipHeaderFormat:none": "LL LTS",
 
     "tooltipHeaderFormat:short:year": "YYYY",
@@ -94,6 +95,7 @@
     "tooltipHeaderFormat:short:day": "L",
     "tooltipHeaderFormat:short:shift": "L[, {shift}]",
     "tooltipHeaderFormat:short:hour": "L LT",
+    "tooltipHeaderFormat:short:min": "l LT",
     "tooltipHeaderFormat:short:none": "l LTS",
 
     "x:year": "YYYY",
@@ -103,6 +105,7 @@
     "x:day": "D.M",
     "x:shift": "D.M[ {shift}]",
     "x:hour": "D.M HH:mm",
+    "x:min": "HH:mm",
     "x:none": "HH:mm:ss",
 
     "filter:mode": "Mode",
@@ -119,6 +122,7 @@
     "filter:interval:day": "day",
     "filter:interval:shift": "shift",
     "filter:interval:hour": "hour",
+    "filter:interval:min": "min",
     "filter:interval:title:none": "",
     "filter:interval:title:year": "Year",
     "filter:interval:title:quarter": "Quarter",
@@ -127,6 +131,7 @@
     "filter:interval:title:day": "Day",
     "filter:interval:title:shift": "Shift",
     "filter:interval:title:hour": "Hour",
+    "filter:interval:title:min": "Minutes",
     "filter:subdivisionType": "Subdivision type",
     "filter:subdivisionType:prod": "Assembly",
     "filter:subdivisionType:assembly": "Assembly",

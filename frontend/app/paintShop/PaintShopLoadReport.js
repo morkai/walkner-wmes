@@ -29,6 +29,7 @@ define([
         from: moment.valueOf(),
         to: moment.add(2, 'weeks').valueOf(),
         interval: 'day',
+        bucketSize: 5,
         reasonLabels: {},
         load: {},
         groups: [],
@@ -45,7 +46,7 @@ define([
 
       options.data = _.assign(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'bucketSize'])
       );
 
       return Model.prototype.fetch.call(this, options);
@@ -56,7 +57,8 @@ define([
       return '/paintShop/load/report'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
-        + '&interval=' + this.get('interval');
+        + '&interval=' + this.get('interval')
+        + '&bucketSize=' + this.get('bucketSize');
     },
 
     parse: function(res)
@@ -189,6 +191,11 @@ define([
       if (query.interval)
       {
         attrs.interval = query.interval;
+      }
+
+      if (query.bucketSize)
+      {
+        attrs.bucketSize = query.bucketSize;
       }
 
       return new this(attrs);

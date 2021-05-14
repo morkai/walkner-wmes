@@ -82,8 +82,20 @@ define([
 
     createChart: function()
     {
-      var metric = this.options.metric;
-      var series = this.serializeChartSeries();
+      const metric = this.options.metric;
+      const series = this.serializeChartSeries();
+      const xAxis = {};
+
+      if (this.model.get('interval') === 'min')
+      {
+        xAxis.type = 'category';
+        xAxis.categories = this.serializeCategories();
+      }
+      else
+      {
+        xAxis.type = 'datetime';
+        xAxis.labels = formatXAxis.labels(this);
+      }
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -114,10 +126,7 @@ define([
         },
         title: false,
         noData: {},
-        xAxis: {
-          type: 'datetime',
-          labels: formatXAxis.labels(this)
-        },
+        xAxis,
         yAxis: {
           title: false,
           min: 0,
@@ -127,7 +136,7 @@ define([
         tooltip: {
           shared: true,
           valueDecimals: this.options.metric === 'losses' ? 1 : 0,
-          headerFormatter: formatTooltipHeader.bind(this),
+          headerFormatter: xAxis.type === 'datetime' ? formatTooltipHeader.bind(this) : undefined,
           valueFormatter: function(point)
           {
             if (point.options.seconds)
@@ -166,19 +175,61 @@ define([
       }));
     },
 
+    serializeCategories: function()
+    {
+      const rows = this.model.get(this.options.metric)[this.options.counter].rows;
+      const categories = [];
+
+      for (let i = 0, l = Math.min(15, rows.length); i < l; ++i)
+      {
+        const row = rows[i];
+
+        if (row.id !== 'total')
+        {
+          categories.push(row.label || this.t(`report:series:${row.id}`));
+        }
+      }
+
+      return categories;
+    },
+
     serializeChartSeries: function()
     {
-      var view = this;
-      var series = view.model.get(view.options.metric)[view.options.counter].series;
+      const {rows, series} = this.model.get(this.options.metric)[this.options.counter];
 
-      return Object.keys(series).map(function(seriesId)
+      if (this.model.get('interval') === 'min')
       {
-        var serie = series[seriesId];
-
-        return _.defaults(serie, {
-          id: seriesId,
+        const s = {
+          id: this.options.metric,
           type: 'column',
-          name: serie.name || view.t('report:series:' + seriesId),
+          name: this.t(`load:report:series:${this.options.metric}`),
+          data: []
+        };
+
+        for (let i = 0, l = Math.min(15, rows.length); i < l; ++i)
+        {
+          const row = rows[i];
+
+          if (row.id !== 'total')
+          {
+            s.data.push({
+              y: row.abs,
+              color: row.color
+            });
+          }
+        }
+
+        return [s];
+      }
+
+      return Object.keys(series).map(id =>
+      {
+        var s = series[id];
+
+        return _.defaults(s, {
+          id,
+          type: 'column',
+          name: s.name || this.t(`report:series:${id}`),
           data: []
         });
       });

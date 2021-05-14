@@ -84,6 +84,7 @@
   "tooltipHeaderFormat:day": "LL",
   "tooltipHeaderFormat:shift": "LL[, {shift} zmiana]",
   "tooltipHeaderFormat:hour": "LLL",
+  "tooltipHeaderFormat:min": "LL LT",
   "tooltipHeaderFormat:none": "LL LTS",
 
   "tooltipHeaderFormat:short:year": "YYYY",
@@ -93,6 +94,7 @@
   "tooltipHeaderFormat:short:day": "L",
   "tooltipHeaderFormat:short:shift": "L[, {shift}]",
   "tooltipHeaderFormat:short:hour": "L LT",
+  "tooltipHeaderFormat:short:min": "l LT",
   "tooltipHeaderFormat:short:none": "l LTS",
 
   "x:year": "YYYY",
@@ -102,6 +104,7 @@
   "x:day": "D.M",
   "x:shift": "D.M[ {shift}]",
   "x:hour": "D.M HH:mm",
+  "x:min": "HH:mm",
   "x:none": "HH:mm:ss",
 
   "filter:mode": "Tryb",
@@ -118,6 +121,7 @@
   "filter:interval:day": "dzień",
   "filter:interval:shift": "zm",
   "filter:interval:hour": "godz",
+  "filter:interval:min": "min",
   "filter:interval:title:none": "",
   "filter:interval:title:year": "Rok",
   "filter:interval:title:quarter": "Kwartał",
@@ -126,6 +130,7 @@
   "filter:interval:title:day": "Dzień",
   "filter:interval:title:shift": "Zmiana",
   "filter:interval:title:hour": "Godzina",
+  "filter:interval:title:min": "Minuty",
   "filter:subdivisionType": "Typy działów",
   "filter:subdivisionType:prod": "Montaż",
   "filter:subdivisionType:assembly": "Montaż",

@@ -236,7 +236,12 @@ define([
 
         if (tooltipOptions.extraRowsProvider)
         {
-          tooltipOptions.extraRowsProvider(points, rows);
+          var newRows = tooltipOptions.extraRowsProvider(points, rows);
+
+          if (Array.isArray(newRows))
+          {
+            rows = newRows;
+          }
         }
 
         return Highcharts.formatTableTooltip(header, rows);

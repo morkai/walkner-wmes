@@ -164,6 +164,16 @@ input[type="radio"].filter-inLabel {
   color: hotpink;
   cursor: pointer;
 }
+.filter-interval {
+  display: flex;
+}
+.filter-interval .form-control[type="number"] {
+  margin-left: -1px;
+  width: 70px;
+}
+.filter-interval .form-control[type="number"]:focus {
+  z-index: 1;
+}
 @media (max-width: 767px) {
   .filter-container > .well {
     align-items: flex-start;
