@@ -96,7 +96,12 @@
   bottom: -1px;
   right: -1px;
 }
-th.mor-is-editable .btn {
+.mor-is-editable.mor-is-common > .btn-group {
+  bottom: unset;
+  top: -33px;
+}
+th.mor-is-editable .btn,
+.mor-is-editable.mor-is-common .btn {
   height: 32px;
 }
 .is-editing .mor-is-editable:hover > .btn-group {
