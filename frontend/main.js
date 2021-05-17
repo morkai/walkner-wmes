@@ -97,6 +97,11 @@
       headers['X-WMES-STATION'] = window.WMES_STATION;
     }
 
+    if (window.socket && window.socket.getId)
+    {
+      headers['X-WMES-SOCKET'] = window.socket.getId();
+    }
+
     return headers;
   }
 

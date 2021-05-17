@@ -1,5 +1,6 @@
 .idea
 /node_modules
+/node_modules_tmp
 /node_modules_min
 /node_modules_dev
 /node_modules_prod

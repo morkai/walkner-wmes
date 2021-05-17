@@ -326,7 +326,7 @@ define([
         page.setUpLayout(layout);
       }
 
-      if (_.isObject(page.view))
+      if (_.isObject(page.view) && _.isEmpty(page.views))
       {
         page.setView(page.view);
       }

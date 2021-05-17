@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/broker',
   'app/core/Viewport'
 ], function(
+  _,
   broker,
   Viewport
 ) {
@@ -54,6 +56,8 @@ define([
         break;
     }
   });
+
+  window.addEventListener('resize', _.debounce(broker.publish.bind(broker, 'viewport.resized'), 1000 / 30));
 
   window.viewport = viewport;
 
