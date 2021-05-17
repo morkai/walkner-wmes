@@ -1,15 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'underscore',
   '../i18n',
   '../time',
+  '../user',
   '../core/Model',
   './dictionaries'
 ], function(
-  _,
   t,
   time,
+  currentUser,
   Model,
   dictionaries
 ) {
@@ -38,7 +38,17 @@ define([
 
       if (t.has(this.nlsDomain, 'error:' + obj.error))
       {
-        obj.error = t(this.nlsDomain, 'error:' + obj.error);
+        var suffix = '';
+
+        if (obj.error === 'NO_PAINT' && currentUser.isAllowedTo('DUMMY_PAINT:MANAGE'))
+        {
+          suffix = ' <a href="javascript:void(0)" data-action="addPaint">'
+            + '<i class="fa fa-plus"></i> '
+            + t(this.nlsDomain, 'addPaint:action')
+            + '</a>';
+        }
+
+        obj.error = t(this.nlsDomain, 'error:' + obj.error) + suffix;
       }
 
       var code = dictionaries.codes.get(obj.dummyNc12);

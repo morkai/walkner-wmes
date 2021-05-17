@@ -21,7 +21,8 @@ define([
         'app/wmes-dummyPaint-orders/dictionaries',
         'app/wmes-dummyPaint-orders/DpOrderCollection',
         'app/wmes-dummyPaint-orders/pages/ListPage',
-        'i18n!app/nls/wmes-dummyPaint-orders'
+        'i18n!app/nls/wmes-dummyPaint-orders',
+        'css!app/wmes-dummyPaint-orders/assets/main'
       ],
       function(dictionaries, DpOrderCollection, ListPage)
       {

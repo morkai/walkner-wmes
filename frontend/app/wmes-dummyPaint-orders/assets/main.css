@@ -1,0 +1,10 @@
+.dp-paints-form-dialog .modal-body {
+  padding: 0;
+}
+.dp-paints-form-dialog .panel {
+  margin-bottom: 0;
+  border: none;
+}
+.dp-paints-form-dialog .panel-heading {
+  display: none;
+}

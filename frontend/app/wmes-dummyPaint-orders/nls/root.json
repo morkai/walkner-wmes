@@ -76,11 +76,19 @@
     "error:NO_PAINT_FAMILY": "Paint family not found.",
     "error:NO_PAINT_CODE": "No paint code.",
     "error:NO_PAINT": "Paint not found.",
+    "error:NO_PAINT:exists": "",
     "error:NOT_VERIFIED": "Unverified.",
     "error:NOT_CHANGED": "Unchanged.",
     "error:NO_PFAM_CONFIG": "No PFAM characteristic.",
     "error:NO_CLR_CONFIG": "No CLR characteristic.",
-    "error:NO_PAINT_CODE_CONFIG": "No paint code characteristic (RAL)."
+    "error:NO_PAINT_CODE_CONFIG": "No paint code characteristic (RAL).",
+    "error:CANCELLED": "Job was cancelled.",
+
+    "addPaint:action": "Add new paint",
+    "addPaint:exists": "Paint has already been added.",
+    "addPaint:success": "Paint has been added successfully.",
+    "addPaint:title": "New paint form",
+    "addPaint:submit": "Save new paint"
   },
   "pl": true
 }
