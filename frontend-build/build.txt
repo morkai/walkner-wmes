@@ -958,6 +958,10 @@ app/wmes-drilling/assets/userPicker.css
 ----------------
 app/wmes-drilling/assets/userPicker.css
 
+app/wmes-dummyPaint-orders/assets/main.css
+----------------
+app/wmes-dummyPaint-orders/assets/main.css
+
 app/wmes-fap-entries/assets/addForm.css
 ----------------
 app/wmes-fap-entries/assets/addForm.css
