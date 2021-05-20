@@ -4,11 +4,13 @@ define([
   'underscore',
   'jquery',
   'app/core/View',
+  'app/core/util/decimalSeparator',
   'app/production/templates/vkb'
 ], function(
   _,
   $,
   View,
+  decimalSeparator,
   template
 ) {
   'use strict';
@@ -72,7 +74,8 @@ define([
     {
       return {
         mode: this.mode,
-        extended: this.extended
+        extended: this.extended,
+        decimalSeparator: decimalSeparator
       };
     },
 

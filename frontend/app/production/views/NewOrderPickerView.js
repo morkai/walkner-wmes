@@ -396,6 +396,8 @@ define([
         this.$id('operationGroup').find('div').html(
           this.buildOrderOperationList(pso.get('orderData'), pso.get('operationNo'))
         );
+
+        viewport.adjustDialogBackdrop();
       }
       else
       {
@@ -441,6 +443,8 @@ define([
 
         this.updateNewWorkerCount(next.workerCount);
 
+        viewport.adjustDialogBackdrop();
+
         return;
       }
 
@@ -472,7 +476,7 @@ define([
       this.handleOrderChange(function()
       {
         view.$id('operationGroup').find('[data-operation="' + input.operationNo + '"]').click();
-        view.$id('newWorkerCount').val(input.workerCount);
+        view.$id('newWorkerCount').val(input.workerCount.toLocaleString());
       });
     },
 
@@ -651,7 +655,7 @@ define([
       if (!this.options.correctingOrder && this.model.hasOrder())
       {
         this.model.changeQuantityDone(this.parseInt('quantityDone'));
-        this.model.changeWorkerCount(this.parseInt('workerCount'));
+        this.model.changeWorkerCount(this.parseFloat('workerCount'));
       }
 
       if (this.options.correctingOrder)
@@ -660,7 +664,7 @@ define([
       }
       else
       {
-        this.model.changeOrder(orderInfo, operationNo, parseInt(this.$id('newWorkerCount').val(), 10));
+        this.model.changeOrder(orderInfo, operationNo, this.parseFloat('newWorkerCount'));
       }
 
       this.closeDialog();
@@ -669,6 +673,13 @@ define([
     parseInt: function(field)
     {
       var value = parseInt(this.$id(field).val(), 10);
+
+      return isNaN(value) || value < 0 ? 0 : value;
+    },
+
+    parseFloat: function(field)
+    {
+      var value = Math.round(parseFloat(this.$id(field).val().replace(',', '.')) * 10) / 10;
 
       return isNaN(value) || value < 0 ? 0 : value;
     },
@@ -825,6 +836,8 @@ define([
         {
           view.options.vkb.reposition();
         }
+
+        viewport.adjustDialogBackdrop();
       });
 
       view.searchReq.always(function()

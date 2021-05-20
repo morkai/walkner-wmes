@@ -36,6 +36,13 @@ define([
     filterList: [],
     filterMap: {},
 
+    localTopics: {
+      'viewport.resized': function()
+      {
+        this.repositionResetButton();
+      }
+    },
+
     events: {
 
       'submit': function()
@@ -52,6 +59,16 @@ define([
         e.preventDefault();
 
         this.showFilter(e.currentTarget.dataset.filter);
+      },
+
+      'click #-reset': 'resetFilters',
+
+      'keydown input, select': function(e)
+      {
+        if (e.key === 'Escape')
+        {
+          this.resetFilter(this.$(e.target));
+        }
       }
 
     },
@@ -75,7 +92,8 @@ define([
         renderButton: function(templateData)
         {
           return view.renderPartialHtml(filterButtonTemplate, _.assign({
-            filters: _.result(view, 'filterList')
+            filters: _.result(view, 'filterList'),
+            reset: false
           }, templateData));
         }
       });
@@ -96,6 +114,8 @@ define([
       this.formData = this.serializeQueryToForm();
 
       js2form(this.el, this.formData);
+
+      this.$resetFilter = this.$id('reset');
 
       if (_.result(this, 'filterList').length)
       {
@@ -127,6 +147,25 @@ define([
       this.$toggleFilter.find('.fa')
         .removeClass('fa-caret-up fa-caret-down')
         .addClass('fa-caret-' + (this.collapsed ? 'down' : 'up'));
+
+      this.repositionResetButton();
+    },
+
+    repositionResetButton: function()
+    {
+      if (!this.$resetFilter.length)
+      {
+        return;
+      }
+
+      if (window.innerWidth < 768)
+      {
+        this.$resetFilter.insertBefore(this.$toggleFilter).toggleClass('hidden', this.collapsed);
+      }
+      else
+      {
+        this.$resetFilter.insertAfter(this.$('.btn[type="submit"]')).removeClass('hidden');
+      }
     },
 
     toggleFilters: function()
@@ -350,6 +389,26 @@ define([
     unescapeRegExp: function(string)
     {
       return util.unescapeRegExp(string, true);
+    },
+
+    resetFilters: function()
+    {
+      var view = this;
+
+      view.$('.form-group').each(function()
+      {
+        view.resetFilter($(this).find('input, select').first());
+      });
+
+      view.$('button[type="submit"]').click();
+    },
+
+    resetFilter: function($el) // eslint-disable-line no-unused-vars
+    {
+      if ($el.prop('name') === 'limit')
+      {
+        $el.val(_.result(this.model, 'getDefaultPageLimit', 20));
+      }
     }
 
   });

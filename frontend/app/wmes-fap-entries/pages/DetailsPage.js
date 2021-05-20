@@ -9,7 +9,8 @@ define([
   'app/core/util/onModelDeleted',
   'app/core/util/pageActions',
   '../dictionaries',
-  '../views/DetailsView'
+  '../views/DetailsView',
+  'i18n!app/nls/wmes-fap-entries'
 ], function(
   _,
   $,
@@ -118,7 +119,7 @@ define([
         entry.fetch();
       });
 
-      var idIsRid = parseInt(entry.id, 10) < 9999999;
+      var idIsRid = entry.id.length !== 24;
 
       page.listenToOnce(entry, 'sync', function()
       {

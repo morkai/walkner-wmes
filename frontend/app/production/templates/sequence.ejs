@@ -1,28 +1,37 @@
 <div class="list production-sequence-list">
   <div class="table-responsive">
-    <table class="table table-bordered table-hover table-condensed">
+    <table class="table table-bordered table-hover table-condensed table-striped">
       <thead>
       <tr>
         <th class="is-min"><%- t('sequence:shift') %></th>
         <th class="is-min"><%- t('sequence:order') %></th>
+        <th class="is-min"><%- t('sequence:name') %></th>
         <th colspan="3"><%- t('sequence:quantity') %></th>
-        <th></th>
+        <th><%- t('sequence:faps') %></th>
       </tr>
       </thead>
       <tbody>
       <% if (!rows.length) { %>
       <tr>
-        <td colspan="6"><%- t('sequence:empty') %></td>
+        <td colspan="7"><%- t('sequence:empty') %></td>
       </tr>
       <% } %>
-      <% rows.forEach(function(row) { %>
+      <% rows.forEach(function(row, i) { %>
       <tr class="<%- row.className %>">
         <td class="is-min"><%- row.shift %></td>
-        <td class="is-min"><%- row.order %></td>
+        <td class="is-min">
+          <a href="javascript:void(0)" data-order="<%- i %>"><%- row.order %></a>
+        </td>
+        <td class="is-min"><%- row.name %></td>
         <td class="is-min text-right" style="border-right: none"><%- row.quantityDone %></td>
         <td class="is-min" style="border-left: none; border-right: none">/</td>
         <td class="is-min text-right" style="border-left: none"><%- row.quantityTodo %></td>
-        <td></td>
+        <td>
+          <% row.faps.forEach(function(fap, i) { %>
+          <% if (i > 0) { %>▪<% } %>
+          <a href="javascript:void(0)" title="<%= fap.problem %>" data-fap="<%- fap._id %>" style="text-decoration: <%- fap.status === 'finished' ? 'line-through' : 'none' %>"><%- fap.rid %></a>
+          <% }) %>
+        </td>
       </tr>
       <% }) %>
       </tbody>

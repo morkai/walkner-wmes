@@ -33,7 +33,7 @@ define([
       {
         e.preventDefault();
 
-        var newValue = this.parseInt('value');
+        var newValue = this[this.options.float ? 'parseFloat' : 'parseInt']('value');
 
         if (newValue !== this.options.getValue())
         {
@@ -61,9 +61,11 @@ define([
     {
       return {
         property: this.options.property,
-        value: this.options.value,
+        value: (this.options.value || 0).toLocaleString(),
         min: this.options.min || 0,
-        max: this.options.max
+        max: this.options.max,
+        pattern: this.options.pattern || '',
+        float: this.options.float
       };
     },
 
@@ -75,6 +77,13 @@ define([
     },
 
     closeDialog: function() {},
+
+    parseFloat: function(field)
+    {
+      var value = Math.round(parseFloat(this.$id(field).val().replace(',', '.')) * 10) / 10;
+
+      return isNaN(value) || value < 0 ? 0 : value;
+    },
 
     parseInt: function(field)
     {
@@ -99,7 +108,7 @@ define([
       }
 
       var min = parseInt(el.getAttribute('min'), 10) || 0;
-      var val = parseInt(el.value, 10) || 0;
+      var val = this[this.options.float ? 'parseFloat' : 'parseInt']('value');
       var err = '';
 
       if (val < min)

@@ -2,11 +2,19 @@
 
 define([
   'underscore',
+  'jquery',
+  'app/viewport',
   'app/core/View',
+  'app/wmes-fap-entries/Entry',
+  'app/wmes-fap-entries/pages/DetailsPage',
   'app/production/templates/sequence'
 ], function(
   _,
+  $,
+  viewport,
   View,
+  FapEntry,
+  FapEntryDetailsPage,
   template
 ) {
   'use strict';
@@ -15,13 +23,49 @@ define([
 
     template: template,
 
+    events: {
+
+      'click a[data-order]': function(e)
+      {
+        var todoOrder = this.model.execution.get('todoOrders')[e.currentTarget.dataset.order];
+
+        this.model.trigger('newOrderRequested', todoOrder);
+      },
+
+      'click a[data-fap]': function(e)
+      {
+        viewport.msg.loading();
+
+        var page = new FapEntryDetailsPage({
+          dialogClassName: 'production-fapEntry-dialog',
+          model: new FapEntry({_id: e.currentTarget.dataset.fap})
+        });
+
+        page.load($.when)
+          .fail(function()
+          {
+            viewport.msg.loadingFailed();
+          })
+          .done(function()
+          {
+            viewport.msg.loaded();
+
+            page.setView(page.view);
+
+            viewport.showDialog(page);
+          });
+      }
+
+    },
+
     remoteTopics: function()
     {
       var topics = {};
 
       if (this.model.prodLine)
       {
-        topics['old.wh.problems.' + this.model.prodLine.id + '.*'] = 'onProblem';
+        topics['old.wh.problems.' + this.model.prodLine.id + '.*'] = 'onWhProblem';
+        topics['production.fapEntries.updated'] = 'onFapUpdated';
       }
 
       return topics;
@@ -29,12 +73,12 @@ define([
 
     initialize: function()
     {
-      var render = _.debounce(this.render.bind(this), 1);
+      this.scheduleRender = _.debounce(this.render.bind(this), 1);
 
       this.once('afterRender', function()
       {
-        this.listenTo(this.model.execution, 'change', render);
-        this.listenTo(this.model.prodShiftOrder, 'change', render);
+        this.listenTo(this.model.execution, 'change', this.scheduleRender);
+        this.listenTo(this.model.prodShiftOrder, 'change', this.scheduleRender);
       });
     },
 
@@ -92,8 +136,10 @@ define([
           className: 'default',
           shift: view.t('core', 'SHIFT:' + o.shift),
           order: o.orderId,
+          name: o.productName,
           quantityDone: quantityDone,
-          quantityTodo: quantityTodo
+          quantityTodo: quantityTodo,
+          faps: o.fapEntries
         };
 
         if (key === currentPsoKey)
@@ -144,7 +190,7 @@ define([
       }
     },
 
-    onProblem: function(problem)
+    onWhProblem: function(problem)
     {
       if (!problem.order || problem.state === null)
       {
@@ -194,6 +240,77 @@ define([
       {
         view.reloadReq = null;
       });
+    },
+
+    onFapUpdated: function(update)
+    {
+      (update.added || []).forEach(this.addFapEntry, this);
+      (update.deleted || []).forEach(this.deleteFapEntry, this);
+      (update.updated || []).forEach(this.updateFapEntry, this);
+    },
+
+    addFapEntry: function(fapEntry)
+    {
+      var changed = false;
+
+      (this.model.execution.get('todoOrders') || []).forEach(function(o)
+      {
+        if (o.orderId !== fapEntry.orderNo)
+        {
+          return;
+        }
+
+        o.fapEntries.push(fapEntry);
+
+        changed = true;
+      });
+
+      if (changed)
+      {
+        this.scheduleRender();
+      }
+    },
+
+    deleteFapEntry: function(fapEntry)
+    {
+      var changed = false;
+
+      (this.model.execution.get('todoOrders') || []).forEach(function(o)
+      {
+        var oldCount = o.fapEntries.length;
+
+        o.fapEntries = o.fapEntries.filter(function(f) { return f._id !== fapEntry._id; });
+
+        changed = changed || oldCount !== o.fapEntries.length;
+      });
+
+      if (changed)
+      {
+        this.scheduleRender();
+      }
+    },
+
+    updateFapEntry: function(fapEntry)
+    {
+      var changed = false;
+
+      (this.model.execution.get('todoOrders') || []).forEach(function(o)
+      {
+        o.fapEntries.forEach(function(f)
+        {
+          if (f._id === fapEntry._id)
+          {
+            Object.assign(f, fapEntry);
+
+            changed = true;
+          }
+        });
+      });
+
+      if (changed)
+      {
+        this.scheduleRender();
+      }
     }
 
   });

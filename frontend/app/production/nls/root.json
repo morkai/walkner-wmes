@@ -10,6 +10,8 @@
     "msg:shiftChange": "New shift!",
     "msg:locked": "Production line was deactivated!",
 
+    "userLabel": "Operator",
+
     "controls:dashboard": "Go to dashboard",
     "controls:lock": "Lock the line",
     "controls:unlock": "Unlock the line",
@@ -366,7 +368,9 @@
 
     "sequence:shift": "Shift",
     "sequence:order": "Order",
+    "sequence:name": "Product name",
     "sequence:quantity": "Quantity",
+    "sequence:faps": "Problems",
     "sequence:empty": "No data.",
 
     "settings:tab:operator": "Operator",

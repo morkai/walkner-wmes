@@ -1,7 +1,7 @@
 <form class="production-propertyEditorDialog">
   <div class="form-group">
     <label for="<%- id('value') %>"><%- t('propertyEditorDialog:label:' + property) %></label>
-    <input id="<%- id('value') %>" class="form-control small is-embedded" type="text" autocomplete="new-password" value="<%- value %>" min="<%- min %>" max="<%- max %>" data-vkb="numeric">
+    <input id="<%- id('value') %>" class="form-control small is-embedded" type="text" autocomplete="new-password" value="<%- value %>" min="<%- min %>" max="<%- max %>" data-vkb="numeric <%- float ? 'decimal' : '' %>">
   </div>
   <div class="form-actions">
     <button id="<%- id('submit') %>" class="btn btn-lg btn-primary" type="submit"><%- t('propertyEditorDialog:yes') %></button>

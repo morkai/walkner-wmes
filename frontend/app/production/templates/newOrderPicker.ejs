@@ -13,7 +13,7 @@
   </div>
   <div class="form-group">
     <label for="<%- id('workerCount') %>"><%- t('newOrderPicker:workerCount') %></label>
-    <input id="<%- id('workerCount') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>" pattern="^[0-9]{1,2}$" data-ignore-key="1" data-vkb="numeric">
+    <input id="<%- id('workerCount') %>" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount.toLocaleString() %>" min="1" max="<%- maxWorkerCount %>" pattern="^[0-9]{1,2}([,.][0-9]{1})?$" data-ignore-key="1" data-vkb="numeric decimal">
   </div>
   <div id="<%- id('ft') %>" class="hidden" style="margin-bottom: 15px">
     <p class="message message-inline message-error"><%- t('ft:warning') %></p>
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group">
       <label for="<%- id('newWorkerCount') %>"><%- t('newOrderPicker:newWorkerCount') %></label>
-      <input id="<%- id('newWorkerCount') %>" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" maxlength="2" min="1" max="15" data-ignore-key="1" data-vkb="numeric" required>
+      <input id="<%- id('newWorkerCount') %>" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" maxlength="3" min="1" max="15" pattern="^[0-9]{1,2}([,.][0-9]{1})?$" data-ignore-key="1" data-vkb="numeric decimal" required>
     </div>
   </div>
   <% } %>

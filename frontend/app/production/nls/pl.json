@@ -9,6 +9,8 @@
   "msg:shiftChange": "Nowa zmiana!",
   "msg:locked": "Linia produkcyjna została dezaktywowana!",
 
+  "userLabel": "Operator",
+
   "controls:dashboard": "Przejdź do pulpitu",
   "controls:lock": "Dezaktywuj linię",
   "controls:unlock": "Aktywuj linię",
@@ -361,9 +363,11 @@
   "componentLabels:error:PRINTER_NOT_FOUND": "Nie znaleziono drukarki.",
   "componentLabels:error:INVALID_PRINTER": "Nieprawidłowa drukarka.",
 
-  "sequence:shift": "Zmiana",
+  "sequence:shift": "Zm.",
   "sequence:order": "Zlecenie",
+  "sequence:name": "Nazwa wyrobu",
   "sequence:quantity": "Ilość",
+  "sequence:faps": "Problemy",
   "sequence:empty": "Brak danych.",
 
   "settings:tab:operator": "Formatka operatora",

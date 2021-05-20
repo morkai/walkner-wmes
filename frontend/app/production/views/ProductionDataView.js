@@ -206,7 +206,7 @@ define([
       }
       else if (this.model.isLocked())
       {
-        html = typeof workerCount === 'number' ? workerCount : '-';
+        html = typeof workerCount === 'number' ? workerCount.toLocaleString() : '-';
       }
       else
       {
@@ -215,7 +215,7 @@ define([
         if (workerCount > 0)
         {
           label = 'property:workerCount:change:data';
-          html += workerCount + ' ';
+          html += workerCount.toLocaleString() + ' ';
         }
 
         html += '<button class="btn btn-link">' + t('production', label) + '</button>';
@@ -766,6 +766,7 @@ define([
             model: view.model,
             vkb: view.options.vkb,
             property: 'workerCount',
+            float: true,
             value: pso.getWorkerCountForEdit(),
             min: 1,
             max: pso.getMaxWorkerCount(),
@@ -778,7 +779,7 @@ define([
               view.model.changeWorkerCount(newValue);
             }
           }),
-          t('production', 'propertyEditorDialog:title:workerCount')
+          view.t('propertyEditorDialog:title:workerCount')
         );
       }
 

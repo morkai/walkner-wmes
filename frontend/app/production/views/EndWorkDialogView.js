@@ -92,7 +92,7 @@ define([
 
         var newQuantitiesDone = this.parseInt('quantitiesDone');
         var newQuantityDone = this.parseInt('quantityDone');
-        var newWorkerCount = this.parseInt('workerCount');
+        var newWorkerCount = this.parseFloat('workerCount');
 
         this.model.changeCurrentQuantitiesDone(newQuantitiesDone);
 
@@ -254,6 +254,13 @@ define([
     },
 
     closeDialog: function() {},
+
+    parseFloat: function(field)
+    {
+      var value = Math.round(parseFloat(this.$id(field).val().replace(',', '.')) * 10) / 10;
+
+      return isNaN(value) || value < 0 ? 0 : value;
+    },
 
     parseInt: function(field)
     {

@@ -694,6 +694,7 @@ define([
         url: '/fap/entries/' + entry.id,
         data: JSON.stringify({
           socketId: socket.getId(),
+          userLabel: user.getLabel(),
           data: data
         })
       });

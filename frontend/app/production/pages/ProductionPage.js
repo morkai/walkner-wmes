@@ -153,6 +153,8 @@ define([
 
     initialize: function()
     {
+      user.getLabel = t.bound('production', 'userLabel');
+
       this.delayProductionJoin = this.delayProductionJoin.bind(this);
       this.onBeforeUnload = this.onBeforeUnload.bind(this);
       this.onWindowResize = _.debounce(this.onWindowResize.bind(this), 33);

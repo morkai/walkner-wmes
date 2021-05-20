@@ -144,6 +144,7 @@ define([
       obj.taktTimeSap = this.getTaktTime();
       obj.taktTime = this.getActualTaktTime();
       obj.taktTimeEff = this.getTaktTimeEfficiency();
+      obj.workerCount = obj.workerCount.toLocaleString();
       obj.workerCountSap = this.getWorkerCountSap();
       obj.eff = 0;
       obj.efficiency = '';
