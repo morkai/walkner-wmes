@@ -44,6 +44,8 @@
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:attachments": "Załączniki",
   "PROPERTY:orders.orderNo": "Zlecenie",
+  "PROPERTY:orders.productCode": "12NC wyrobu",
+  "PROPERTY:orders.productName": "Nazwa wyrobu",
   "PROPERTY:orders.releasedBy": "Dopuszczający",
   "PROPERTY:orders.releasedAt": "Czas dopuszczenia",
   "PROPERTY:orders.validFrom": "Obowiązuje od",

@@ -13,6 +13,8 @@
     <thead>
     <tr>
       <th class="is-min"><%- t('PROPERTY:orders.orderNo') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.productCode') %></th>
+      <th class="is-min"><%- t('PROPERTY:orders.productName') %></th>
       <th class="is-min"><%- t('PROPERTY:orders.validFrom') %></th>
       <th class="is-min"><%- t('PROPERTY:orders.validTo') %></th>
       <th class="is-min"><%- t('PROPERTY:orders.releasedAt') %></th>
@@ -26,10 +28,14 @@
     <tr class="<%- order.valid ? 'default' : 'danger' %> <%- invalidOnly && order.valid ? 'hidden' : '' %>">
       <% if (order.orderNo === '000000000') { %>
       <td class="is-min"><%- t('orders:all') %></td>
+      <td class="is-min"></td>
+      <td class="is-min"></td>
       <td class="is-min"><%- order.validFrom %></td>
       <td class="is-min"><%- order.validTo %></td>
       <% } else { %>
       <td class="is-min text-mono"><a href="#orders/<%- order.orderNo %>" target="_blank"><%- order.orderNo %></a></td>
+      <td class="is-min"><%- order.productCode %></td>
+      <td class="is-min"><%- order.productName %></td>
       <td class="is-min"></td>
       <td class="is-min"></td>
       <% } %>

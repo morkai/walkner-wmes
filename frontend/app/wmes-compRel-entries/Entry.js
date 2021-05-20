@@ -420,6 +420,8 @@ define([
           return {
             _id: order._id,
             orderNo: order.orderNo,
+            productCode: order.productCode || '',
+            productName: order.productName || '',
             releasedAt: releasedAt,
             releasedAtText: time.format(releasedAt, 'L HH:mm'),
             releasedBy: userInfoTemplate({userInfo: order.releasedBy, noIp: true}),

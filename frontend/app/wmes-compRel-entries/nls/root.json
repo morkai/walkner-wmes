@@ -45,6 +45,8 @@
     "PROPERTY:comment": "Comment",
     "PROPERTY:attachments": "Attachments",
     "PROPERTY:orders.orderNo": "Order",
+    "PROPERTY:orders.productCode": "Product 12NC",
+    "PROPERTY:orders.productName": "Product name",
     "PROPERTY:orders.releasedBy": "Released by",
     "PROPERTY:orders.releasedAt": "Released at",
     "PROPERTY:orders.validFrom": "Valid from",
