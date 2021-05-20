@@ -135,9 +135,12 @@
 .planning-mrp-list-item.is-incomplete {
   background-color: #fcf8e3;
 }
-.planning-mrp-list-item.is-unplanned,
-.planning-mrp-list-item.is-sequence-nok {
+.planning-mrp-list-item.is-unplanned {
   background-color: #fbf2c0;
+  border-color: #999;
+}
+.planning-mrp-list-item.is-sequence-nok {
+  background-color: #f9daf9;
   border-color: #999;
 }
 .planning-mrp-list-item.is-completed,

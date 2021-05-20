@@ -16,9 +16,13 @@
 .planning-darker .planning-mrp-list-item.is-incomplete {
   background-color: #fe9;
 }
-.planning-darker .planning-mrp-list-item.is-unplanned,
-.planning-darker .planning-mrp-list-item.is-sequence-nok {
+.planning-darker .planning-mrp-list-item.is-unplanned {
   background-color: #ffe555;
+  border-color: #555;
+}
+.planning-darker .planning-mrp-list-item.is-sequence-nok {
+  background-color: #af00af;
+  color: #fff;
   border-color: #555;
 }
 .planning-darker .planning-mrp-list-item.is-completed,
