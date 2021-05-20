@@ -80,7 +80,7 @@
   "error:NO_PFAM_CONFIG": "Brak charakterystyki PFAM.",
   "error:NO_CLR_CONFIG": "Brak charakterystyki CLR.",
   "error:NO_PAINT_CODE_CONFIG": "Brak charakterystyki kodu farby (RAL).",
-  "error:CANCELLED": "Zadanie zostało anulowane.",
+  "error:CANCELLED": "Zadanie zostało anulowane. Spróbuj ponownie.",
 
   "addPaint:action": "Dodaj nową farbę",
   "addPaint:exists": "Farba została już dodana.",
