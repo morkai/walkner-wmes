@@ -730,7 +730,7 @@ define([
         allowClear: true,
         placeholder: ' ',
         dropdownCssClass: 'is-bigdrop',
-        multiple: true,
+        multiple: this.options.editMode && this.model.get('categories').length > 1,
         data: _.values(map),
         formatResult: formatResultWithDescription
       });
@@ -1294,7 +1294,7 @@ define([
 
     toggleResolutions: function()
     {
-      var kaizenEvent = this.$id('categories').select2('data').some(function(item) { return item.id === 'KI'; });
+      var kaizenEvent = this.$id('categories').val().split(',').includes('KI');
       var dialog = viewport.currentDialog === this;
 
       this.$id('resolutionsGroup').toggleClass('hidden', !kaizenEvent || dialog);
