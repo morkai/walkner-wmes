@@ -1,17 +1,49 @@
-<tr>
-  <td><input type="text" name="coordSections[<%- i %>].section" value="<%- coordSection.section %>" required></td>
-  <td><input type="text" name="coordSections[<%- i %>].funcs" value="<%- coordSection.funcs.join(',') %>"></td>
-  <td>
+<div class="kaizen-coordSections-section">
+  <button type="button" class="btn btn-default" data-action="removeCoordSection"><i class="fa fa-times"></i></button>
+  <div class="form-group">
+    <label for="<%- id(`section${i}`) %>" class="control-label"><%- t('coordSections:section') %></label>
+    <input id="<%- id(`section${i}`) %>" type="text" name="coordSections[<%- i %>].section" value="<%- coordSection.section %>" required>
+  </div>
+  <div class="form-group">
+    <div class="radio">
+      <label class="control-label">
+        <input type="radio" name="coordSections[<%- i %>].excludeSections" value="false" <%- coordSection.excludeSections ? '' : 'checked' %>>
+        <%- t('coordSections:filterSections:include') %>
+      </label>
+    </div>
+    <div class="radio">
+      <label class="control-label">
+        <input type="radio" name="coordSections[<%- i %>].excludeSections" value="true" <%- coordSection.excludeSections ? 'checked' : '' %>>
+        <%- t('coordSections:filterSections:exclude') %>
+      </label>
+    </div>
+    <input type="text" name="coordSections[<%- i %>].filterSections" value="<%- coordSection.filterSections.join(',') %>">
+  </div>
+  <div class="form-group">
+    <div class="checkbox">
+      <label class="control-label">
+        <input type="checkbox" name="coordSections[<%- i %>].coordinators" value="true" <%- coordSection.coordinators ? 'checked' : '' %>>
+        <%- t('coordSections:coordinators') %>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- id(`funcs${i}`) %>" class="control-label"><%- t('coordSections:funcs') %></label>
+    <input id="<%- id(`funcs${i}`) %>" type="text" name="coordSections[<%- i %>].funcs" value="<%- coordSection.funcs.join(',') %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- id(`section${i}`) %>" class="control-label"><%- t('coordSections:mor') %></label>
     <% ['none', 'mrp', 'all'].forEach(function(mor) { %>
-      <label class="radio-inline">
+    <div class="radio">
+      <label>
         <input type="radio" name="coordSections[<%- i %>].mor" value="<%- mor %>" <%- coordSection.mor === mor ? 'checked' : '' %>>
         <%- t('coordSections:mor:' + mor) %>
       </label>
-    <% }) %>
-  </td>
-  <td class="actions">
-    <div class="actions-group">
-      <button type="button" class="btn btn-default" data-action="removeCoordSection"><i class="fa fa-times"></i></button>
     </div>
-  </td>
-</tr>
+    <% }) %>
+  </div>
+  <div class="form-group">
+    <label for="<%- id(`users${i}`) %>" class="control-label"><%- t('coordSections:users') %></label>
+    <input id="<%- id(`users${i}`) %>" type="text" name="coordSections[<%- i %>].users">
+  </div>
+</div>

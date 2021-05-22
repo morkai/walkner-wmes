@@ -146,7 +146,6 @@
   "FORM:ERROR:upload": "Nie udało się załadować załączników.",
   "FORM:ERROR:date": "Podana data nie może się różnić o więcej niż {days} dni od aktualnej daty.",
   "FORM:ERROR:ownerConfirmer": "{prop, select, suggestionOwners{Osoba wnioskująca} kaizenOwners{Osoba wykonująca} other{Osoba}} nie może być koordynatorem.",
-  "FORM:ERROR:sectionCoord": "Dział zatwierdzający nie może być równocześnie działem koordynującym.",
   "FORM:ERROR:tooManyOwners": "Można wybrać maksymalnie {max} {max, plural, few{osoby} one{osobę} other{osób}}.",
   "FORM:ERROR:tooManyTotalOwners": "Można wybrać maksymalnie {max} {max, plural, few{różne osoby} one{osobę} other{różnych osób}} w całym zgłoszeniu.",
   "FORM:ERROR:tooManyFiles": "Za jednym razem można dodać maksymalnie {max} {max, plural, few{załączniki} one{załącznik} other{załączników}}.",

@@ -13,10 +13,18 @@
 
   "coordSections:empty": "Nie zdefiniowano żadnych działów koordynujących.",
   "coordSections:add": "Dodaj dział",
-  "coordSections:section": "Dział",
+  "coordSections:section": "Dział koordynujący",
+  "coordSections:filterSections": "Działy zgłaszające",
+  "coordSections:filterSections:include": "Tylko działy zgłaszające:",
+  "coordSections:filterSections:exclude": "Oprócz działów zgłaszających:",
+  "coordSections:coordinators": "Koordynatorzy działu",
   "coordSections:funcs": "Funkcje",
   "coordSections:mor": "Matryca odpowiedzialności",
   "coordSections:mor:none": "Ignoruj",
   "coordSections:mor:all": "Wszyscy",
-  "coordSections:mor:mrp": "Ogranicz do MRP"
+  "coordSections:mor:mrp": "Ogranicz do MRP",
+  "coordSections:users": "Użytkownicy",
+  "coordSections:_section": "Dział zgłaszający",
+  "coordSections:_confirmer": "Koordynator Kaizen",
+  "coordSections:_superior": "Przełożony zgłaszającego"
 }

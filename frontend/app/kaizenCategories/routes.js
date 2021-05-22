@@ -54,16 +54,16 @@ define([
         'app/core/pages/DetailsPage',
         'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategory',
-        'app/kaizenCategories/templates/details',
+        'app/kaizenCategories/views/DetailsView',
         nls
       ],
-      function(DetailsPage, dictionaries, KaizenCategory, detailsTemplate)
+      function(DetailsPage, dictionaries, KaizenCategory, DetailsView)
       {
         return dictionaries.bind(new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          model: new KaizenCategory({_id: req.params.id}),
-          detailsTemplate: detailsTemplate
+          DetailsView: DetailsView,
+          model: new KaizenCategory({_id: req.params.id})
         }));
       }
     );
@@ -76,15 +76,14 @@ define([
         'app/core/pages/AddFormPage',
         'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategory',
-        'app/kaizenCategories/views/KaizenCategoryFormView',
+        'app/kaizenCategories/views/FormView',
         nls
       ],
-      function(AddFormPage, dictionaries, KaizenCategory, KaizenCategoryFormView)
+      function(AddFormPage, dictionaries, KaizenCategory, FormView)
       {
         return dictionaries.bind(new AddFormPage({
-          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          FormView: KaizenCategoryFormView,
+          FormView: FormView,
           model: new KaizenCategory()
         }));
       }
@@ -98,15 +97,14 @@ define([
         'app/core/pages/EditFormPage',
         'app/kaizenOrders/dictionaries',
         'app/kaizenCategories/KaizenCategory',
-        'app/kaizenCategories/views/KaizenCategoryFormView',
+        'app/kaizenCategories/views/FormView',
         nls
       ],
-      function(EditFormPage, dictionaries, KaizenCategory, KaizenCategoryFormView)
+      function(EditFormPage, dictionaries, KaizenCategory, FormView)
       {
         return dictionaries.bind(new EditFormPage({
-          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          FormView: KaizenCategoryFormView,
+          FormView: FormView,
           model: new KaizenCategory({_id: req.params.id})
         }));
       }

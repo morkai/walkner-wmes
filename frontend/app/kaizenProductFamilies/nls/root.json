@@ -9,16 +9,7 @@
     "PROPERTY:position": "Position",
     "PROPERTY:owners": "Owners",
     "PROPERTY:mrps": "MRP",
-    "PROPERTY:coordSections": "Coordinating sections",
-
-    "coordSections:empty": "No coordinating sections were defined yet.",
-    "coordSections:add": "Add section",
-    "coordSections:section": "Section",
-    "coordSections:funcs": "Function",
-    "coordSections:mor": "Matrix of responsibility",
-    "coordSections:mor:none": "None",
-    "coordSections:mor:all": "All",
-    "coordSections:mor:mrp": "MRP"
+    "PROPERTY:coordSections": "Coordinating sections"
   },
   "pl": true
 }

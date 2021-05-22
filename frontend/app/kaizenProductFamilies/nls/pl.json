@@ -8,14 +8,5 @@
   "PROPERTY:position": "Pozycja",
   "PROPERTY:owners": "Właściciele",
   "PROPERTY:mrps": "MRP",
-  "PROPERTY:coordSections": "Działy koordynujące",
-
-  "coordSections:empty": "Nie zdefiniowano żadnych działów koordynujących.",
-  "coordSections:add": "Dodaj dział",
-  "coordSections:section": "Dział",
-  "coordSections:funcs": "Funkcje",
-  "coordSections:mor": "Matryca odpowiedzialności",
-  "coordSections:mor:none": "Ignoruj",
-  "coordSections:mor:all": "Wszyscy",
-  "coordSections:mor:mrp": "Ogranicz do MRP"
+  "PROPERTY:coordSections": "Działy koordynujące"
 }

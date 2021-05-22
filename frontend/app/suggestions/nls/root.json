@@ -137,7 +137,6 @@
     "FORM:ERROR:upload": "Failed to upload the attachments.",
     "FORM:ERROR:date": "The specified date cannot differ from the current date by more than {days} days.",
     "FORM:ERROR:ownerConfirmer": "Owner cannot also be the Confirmer.",
-    "FORM:ERROR:sectionCoord": "Department cannot also be a coordinating department.",
     "FORM:ERROR:tooManyOwners": "Only {max} {max, plural, one{Owner} other{Owners}} can be specified.",
     "FORM:ERROR:tooManyTotalOwners": "Only {max} {max, plural, one{Owner} other{different Owners}} can be specified in total.",
     "FORM:ERROR:tooManyFiles": "Maximum of {max} {max, plural, one{attachment} other{attachments}} can be added at once.",

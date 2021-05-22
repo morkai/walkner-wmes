@@ -15,11 +15,19 @@
     "coordSections:empty": "No coordinating sections were defined yet.",
     "coordSections:add": "Add section",
     "coordSections:section": "Section",
+    "coordSections:filterSections": "Issuer departments",
+    "coordSections:filterSections:include": "Specified issuer departments:",
+    "coordSections:filterSections:exclude": "Except issuer departments:",
+    "coordSections:coordinators": "Department coordinators",
     "coordSections:funcs": "Function",
     "coordSections:mor": "Matrix of responsibility",
     "coordSections:mor:none": "None",
     "coordSections:mor:all": "All",
-    "coordSections:mor:mrp": "MRP"
+    "coordSections:mor:mrp": "MRP",
+    "coordSections:users": "Users",
+    "coordSections:_section": "Issuer's department",
+    "coordSections:_confirmer": "Kaizen coordinator",
+    "coordSections:_superior": "Issuer's superior"
   },
   "pl": true
 }

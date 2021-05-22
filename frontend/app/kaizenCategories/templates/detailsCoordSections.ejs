@@ -1,0 +1,58 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><%- t('kaizenCategories', 'PROPERTY:coordSections') %></div>
+  <% if (!coordSections.length) { %>
+  <div class="panel-body">
+    <p><%- t('kaizenCategories', 'coordSections:empty') %></p>
+  </div>
+  <% } else { %>
+  <div class="panel-body kaizen-coordSections">
+    <% coordSections.forEach((coordSection, i) => { %>
+    <div class="kaizen-coordSections-section">
+      <div class="form-group">
+        <label class="control-label"><%- t('kaizenCategories', 'coordSections:section') %></label>
+        <p class="form-control-static"><%= coordSection.section %></p>
+      </div>
+      <% if (coordSection.filterSections.length) { %>
+      <div class="form-group">
+        <label class="control-label"><%- t('kaizenCategories', `coordSections:filterSections:${coordSection.exclude ? 'exclude' : 'include'}`) %></label>
+        <ul>
+          <% coordSection.filterSections.forEach(s => { %>
+          <li><%= s %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+      <div class="form-group">
+        <label class="control-label">
+          <i class="fa <%- coordSection.coordinators ? 'fa-check' : 'fa-times' %>"></i><span><%- t('kaizenCategories', 'coordSections:coordinators') %></span>
+        </label>
+      </div>
+      <% if (coordSection.funcs.length) { %>
+      <div class="form-group">
+        <label class="control-label"><%- t('kaizenCategories', 'coordSections:funcs') %></label>
+        <ul>
+          <% coordSection.funcs.forEach(f => { %>
+            <li><%= f %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- t('kaizenCategories', 'coordSections:mor') %></label>
+        <p class="form-control-static"><%- t('kaizenCategories', `coordSections:mor:${coordSection.mor}`) %></p>
+      </div>
+      <% } %>
+      <% if (coordSection.users.length) { %>
+      <div class="form-group">
+        <label class="control-label"><%- t('kaizenCategories', 'coordSections:users') %></label>
+        <ul>
+          <% coordSection.users.forEach(u => { %>
+          <li><%- u %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+    </div>
+    <% }) %>
+  </div>
+  <% } %>
+</div>

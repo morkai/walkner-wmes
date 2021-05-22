@@ -53,16 +53,16 @@ define([
         'app/core/pages/DetailsPage',
         'app/kaizenOrders/dictionaries',
         'app/kaizenProductFamilies/KaizenProductFamily',
-        'app/kaizenProductFamilies/templates/details',
+        'app/kaizenProductFamilies/views/DetailsView',
         nls
       ],
-      function(DetailsPage, dictionaries, KaizenProductFamily, detailsTemplate)
+      function(DetailsPage, dictionaries, KaizenProductFamily, DetailsView)
       {
         return dictionaries.bind(new DetailsPage({
           pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          model: new KaizenProductFamily({_id: req.params.id}),
-          detailsTemplate: detailsTemplate
+          DetailsView: DetailsView,
+          model: new KaizenProductFamily({_id: req.params.id})
         }));
       }
     );
@@ -75,15 +75,14 @@ define([
         'app/core/pages/AddFormPage',
         'app/kaizenOrders/dictionaries',
         'app/kaizenProductFamilies/KaizenProductFamily',
-        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView',
+        'app/kaizenProductFamilies/views/FormView',
         nls
       ],
-      function(AddFormPage, dictionaries, KaizenProductFamily, KaizenProductFamilyFormView)
+      function(AddFormPage, dictionaries, KaizenProductFamily, FormView)
       {
         return dictionaries.bind(new AddFormPage({
-          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          FormView: KaizenProductFamilyFormView,
+          FormView: FormView,
           model: new KaizenProductFamily()
         }));
       }
@@ -97,15 +96,14 @@ define([
         'app/core/pages/EditFormPage',
         'app/kaizenOrders/dictionaries',
         'app/kaizenProductFamilies/KaizenProductFamily',
-        'app/kaizenProductFamilies/views/KaizenProductFamilyFormView',
+        'app/kaizenProductFamilies/views/FormView',
         nls
       ],
-      function(EditFormPage, dictionaries, KaizenProductFamily, KaizenProductFamilyFormView)
+      function(EditFormPage, dictionaries, KaizenProductFamily, FormView)
       {
         return dictionaries.bind(new EditFormPage({
-          pageClassName: 'page-max-flex',
           baseBreadcrumb: true,
-          FormView: KaizenProductFamilyFormView,
+          FormView: FormView,
           model: new KaizenProductFamily({_id: req.params.id})
         }));
       }

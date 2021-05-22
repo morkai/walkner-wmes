@@ -105,7 +105,6 @@ define([
       'change [name="section"]': function()
       {
         this.setUpConfirmerSelect2();
-        this.checkSectionValidity();
       },
 
       'change [name="categories"]': function()
@@ -207,11 +206,6 @@ define([
         }
 
         this.setUpCoordSectionSelect2();
-      },
-
-      'change #-coordSections': function()
-      {
-        this.checkSectionValidity();
       },
 
       'click .btn[data-value="removeCoordSection"]': function(e)
@@ -399,28 +393,6 @@ define([
           max: maxOverall
         }));
       }
-    },
-
-    checkSectionValidity: function()
-    {
-      var $section = this.$id('section');
-      var $coordSections = this.$id('coordSections');
-      var sectionId = $section.val();
-      var error = false;
-
-      if (sectionId)
-      {
-        if (this.options.editMode)
-        {
-          error = $coordSections.find('tr[data-id="' + sectionId + '"]').length !== 0;
-        }
-        else
-        {
-          error = _.some($coordSections.select2('data'), function(d) { return d.id === sectionId; });
-        }
-      }
-
-      $section[0].setCustomValidity(error ? this.t('FORM:ERROR:sectionCoord') : '');
     },
 
     submitRequest: function($submitEl, formData)
@@ -1009,8 +981,6 @@ define([
       });
 
       $coordSection.select2(data.length === 0 || !this.canManageCoordinators() ? 'disable' : 'enable');
-
-      this.checkSectionValidity();
     },
 
     addCoordSection: function(coordSection)

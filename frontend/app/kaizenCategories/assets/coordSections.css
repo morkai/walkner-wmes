@@ -1,0 +1,31 @@
+.kaizen-coordSections-form {
+  margin-top: 15px;
+}
+.kaizen-coordSections {
+  display: flex;
+  padding: 0;
+  overflow-x: scroll;
+  border: 1px solid #ddd;
+}
+.kaizen-coordSections-details .kaizen-coordSections {
+  border: none;
+}
+.kaizen-coordSections + .btn[data-action="addCoordSection"] {
+  margin-top: -1px;
+}
+.kaizen-coordSections-section {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 15px;
+  border-right: 1px solid #ddd;
+}
+.kaizen-coordSections-section .btn[data-action="removeCoordSection"] {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+}
+.kaizen-coordSections-section ul {
+  margin: 0;
+  padding-left: 0;
+  list-style-position: inside;
+}
