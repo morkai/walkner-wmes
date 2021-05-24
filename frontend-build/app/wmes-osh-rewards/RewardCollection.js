@@ -1,0 +1,1 @@
+define(["../core/Collection","./Reward"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-createdAt)&limit(-1337)"})});

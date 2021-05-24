@@ -1,0 +1,1 @@
+define(["app/router","app/viewport","app/user","./RewardCollection","./pages/ListPage","i18n!app/nls/wmes-osh-rewards"],function(e,n,r,s,a){"use strict";const o=r.auth("USER");e.map("/osh/rewards",o,function(e){n.showPage(new a({collection:new s(null,{rqlQuery:e.rql})}))})});
