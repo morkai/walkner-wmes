@@ -2,19 +2,14 @@
 
 define([
   'underscore',
+  'utf8',
   'h5.pubsub/MessageBroker',
   'app/broker',
   'app/socket'
 ],
-/**
- * @param {underscore} _
- * @param {function(new:h5.pubsub.MessageBroker)} MessageBroker
- * @param {h5.pubsub.Broker} broker
- * @param {Socket} socket
- * @returns {h5.pubsub.Broker}
- */
 function(
   _,
+  utf8,
   MessageBroker,
   broker,
   socket
@@ -102,9 +97,25 @@ function(
   {
     meta.remote = true;
 
-    if (meta.json && typeof message === 'string')
+    try
     {
-      message = JSON.parse(message);
+      if (meta.binary && message instanceof ArrayBuffer)
+      {
+        message = utf8.decode(String.fromCharCode.apply(null, new Uint8Array(message)));
+      }
+
+      if (meta.json && typeof message === 'string')
+      {
+        message = JSON.parse(message);
+      }
+    }
+    catch (err)
+    {
+      return console.error('[pubsub] Failed to parse remote message:', {
+        topic: topic,
+        message: message,
+        meta: meta
+      });
     }
 
     pubsub.publish(topic, message, meta);

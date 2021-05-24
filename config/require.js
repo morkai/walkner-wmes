@@ -51,7 +51,8 @@ exports.paths = {
   'autolinker': 'vendor/autolinker',
   'getCaretCoordinates': 'vendor/getCaretCoordinates',
   'viewerjs': 'vendor/viewerjs/viewer',
-  'jsplumb': 'vendor/jsplumb'
+  'jsplumb': 'vendor/jsplumb',
+  'utf8': 'vendor/utf8'
 };
 
 exports.shim = {
@@ -90,6 +91,9 @@ exports.shim = {
   },
   'jsplumb': {
     exports: 'jsPlumb'
+  },
+  'utf8': {
+    exports: 'utf8'
   }
 };
 
