@@ -90,7 +90,17 @@ define([
           formData.status = [];
         }
 
-        formData.status.push('kom');
+        const kom = Array.isArray(term.args[1]) ? term.args[1] : [term.args[1]];
+
+        if (kom.includes(1))
+        {
+          formData.status.push('nom');
+        }
+
+        if (kom.includes(2))
+        {
+          formData.status.push('kom');
+        }
       },
       'creator.id': (propertyName, term, formData) =>
       {
@@ -132,7 +142,7 @@ define([
     getTemplateData: function()
     {
       return {
-        statuses: dictionaries.statuses.kaizen.concat('kom').map(status => ({
+        statuses: dictionaries.statuses.kaizen.concat('nom', 'kom').map(status => ({
           value: status,
           label: dictionaries.getLabel('status', status)
         })),
@@ -157,13 +167,17 @@ define([
       if (status && status.length)
       {
         const statuses = [];
-        let kom = false;
+        const kom = [];
 
         status.forEach(s =>
         {
-          if (s === 'kom')
+          if (s === 'nom')
           {
-            kom = true;
+            kom.push(1);
+          }
+          else if (s === 'kom')
+          {
+            kom.push(2);
           }
           else
           {
@@ -180,9 +194,13 @@ define([
           selector.push({name: 'in', args: ['status', statuses]});
         }
 
-        if (kom)
+        if (kom.length === 1)
         {
-          selector.push({name: 'eq', args: ['kom', kom]});
+          selector.push({name: 'eq', args: ['kom', kom[0]]});
+        }
+        else if (kom.length > 1)
+        {
+          selector.push({name: 'in', args: ['kom', kom]});
         }
       }
 

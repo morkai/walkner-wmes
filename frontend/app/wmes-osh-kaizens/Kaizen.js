@@ -11,6 +11,12 @@ define([
 ) {
   'use strict';
 
+  const KOM_ICONS = {
+    0: '',
+    1: 'fa-star',
+    2: 'fa-trophy'
+  };
+
   const Kaizen = Entry.extend({
 
     urlRoot: '/osh/kaizens',
@@ -33,13 +39,23 @@ define([
       return ['before', 'after', 'other'];
     },
 
+    serialize: function()
+    {
+      const obj = Entry.prototype.serialize.apply(this, arguments);
+
+      obj.komIcon = KOM_ICONS[obj.kom];
+      obj.reward = (Math.round(obj.reward * 100) / 100).toLocaleString('pl', {style: 'currency', currency: 'PLN'});
+
+      return obj;
+    },
+
     serializeRow: function()
     {
       const obj = Entry.prototype.serializeRow.apply(this, arguments);
 
-      if (obj.kom)
+      if (obj.komIcon)
       {
-        obj.status += ` <i class="fa fa-trophy" title="${t(this.nlsDomain, 'PROPERTY:kom')}"></i>`;
+        obj.status += ` <i class="fa ${obj.komIcon}" title="${t(this.nlsDomain, `kom:${obj.kom}`)}"></i>`;
       }
 
       return obj;
@@ -54,7 +70,8 @@ define([
       'division', 'workplace', 'department', 'building', 'location', 'station',
       'kind', 'kaizenCategory'
     ],
-    DESC_PROPS: ['kind', 'kaizenCategory']
+    DESC_PROPS: ['kind', 'kaizenCategory'],
+    KOM_ICONS
 
   });
 

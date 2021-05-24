@@ -27,8 +27,8 @@
   "navbar:reports": "Raporty",
   "navbar:reports:metrics": "Wskaźniki",
   "navbar:reports:engagement": "Zaangażowanie",
-  "navbar:reports:gratification": "Wynagrodzenie",
   "navbar:reports:observers": "Obserwatorzy",
+  "navbar:reports:rewards": "Wynagrodzenie",
   "navbar:reports:count/nearMiss": "Ilość ZPW",
   "navbar:reports:count/kaizen": "Ilość kaizenów",
   "navbar:reports:count/action": "Ilość akcji",
@@ -65,7 +65,12 @@
   "status:finished": "Zakończone",
   "status:paused": "Wstrzymane",
   "status:cancelled": "Anulowane",
+  "status:nom": "Nominacja",
   "status:kom": "Kaizen miesiąca",
+
+  "kom:0": "Nie",
+  "kom:1": "Nominacja",
+  "kom:2": "Tak",
 
   "orgUnit:divisions": "Dywizje",
   "orgUnit:division": "Dywizja",

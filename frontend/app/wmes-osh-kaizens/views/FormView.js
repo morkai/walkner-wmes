@@ -208,6 +208,18 @@ define([
         this.$id('save').click();
 
         setTimeout(() => this.newStatus = null, 1);
+      },
+
+      'change input[name="kom"]': function(e)
+      {
+        if (e.target.checked)
+        {
+          this.$(`input[name="kom"][value="${e.target.value === '1' ? 2 : 1}"]`).prop('checked', false);
+        }
+
+        this.updateRewardPlaceholder();
+
+        this.$id('reward').val('').focus();
       }
 
     }, FormView.prototype.events),
@@ -224,7 +236,8 @@ define([
           paused: Kaizen.can.paused(this.model),
           cancelled: Kaizen.can.cancelled(this.model)
         },
-        relation: this.options.relation
+        relation: this.options.relation,
+        komIcons: Kaizen.KOM_ICONS
       };
     },
 
@@ -235,6 +248,11 @@ define([
       if (formData.plannedAt)
       {
         formData.plannedAt = time.utc.format(formData.plannedAt, 'YYYY-MM-DD');
+      }
+
+      if (!formData.reward)
+      {
+        formData.reward = '';
       }
 
       delete formData.coordinators;
@@ -301,6 +319,25 @@ define([
         formData.kind = parseInt(formData.kind, 10);
       }
 
+      if (this.$('input[name="kom"]').length)
+      {
+        formData.kom = parseInt(formData.kom, 10) || 0;
+
+        if (formData.reward >= 0)
+        {
+          formData.reward = (Math.round(parseFloat(formData.reward) * 100) / 100);
+        }
+        else
+        {
+          formData.reward = this.getDefaultRewardAmount();
+        }
+      }
+      else
+      {
+        formData.kom = 0;
+        formData.reward = 0;
+      }
+
       return formData;
     },
 
@@ -318,6 +355,7 @@ define([
       this.setUpKaizenCategorySelect2();
       this.setUpImplementersSelect2();
       this.toggleKind();
+      this.updateRewardPlaceholder();
     },
 
     setUpUserWorkplaceSelect2: function()
@@ -889,6 +927,32 @@ define([
       }
 
       $kinds.prop('disabled', !Kaizen.can.editKind(this.model, this.options.editMode));
+    },
+
+    updateRewardPlaceholder: function()
+    {
+      this.$id('reward').attr('placeholder', this.getDefaultRewardAmount().toLocaleString());
+    },
+
+    getDefaultRewardAmount: function()
+    {
+      const kom = this.$('input[name="kom"]:checked').val();
+      const setting = kom === '1' ? 'nom' : kom === '2' ? 'kom' : 'default';
+      const amount = dictionaries.settings.getValue(`rewards.kaizens.${setting}`, 0);
+
+      return amount;
+    },
+
+    getFailureText: function(jqXhr)
+    {
+      const {code} = jqXhr.responseJSON && jqXhr.responseJSON.error || {};
+
+      if (this.t.has(`FORM:ERROR:${code}`))
+      {
+        return this.t(`FORM:ERROR:${code}`);
+      }
+
+      return FormView.prototype.getFailureText.apply(this, arguments);
     },
 
     getSaveOptions: function()

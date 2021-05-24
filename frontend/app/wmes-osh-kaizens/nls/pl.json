@@ -29,11 +29,15 @@
   "PROPERTY:suggestion": "Propozycja rozwiązania",
   "PROPERTY:solution": "Wdrożone usprawnienia",
   "PROPERTY:kom": "Kaizen miesiąca",
+  "PROPERTY:reward": "Wynagrodzenie",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:attachments": "Załączniki",
   "PROPERTY:attachments.before": "Zdjęcia przed",
   "PROPERTY:attachments.after": "Zdjęcia po",
   "PROPERTY:relations": "Powiązania",
+
+  "kom:1": "Nominacja do Kaizen Miesiąca",
+  "kom:2": "Kaizen Miesiąca",
 
   "filter:user": "Użytkownik",
   "filter:user:mine": "Moje zgłoszenia",
@@ -67,5 +71,6 @@
   "FORM:attachments:before:add": "Zdjęcia przed",
   "FORM:attachments:before:edit": "Nowe zdjęcia stanu przed",
   "FORM:attachments:after": "Nowe zdjęcia stanu po",
-  "FORM:attachments:other": "Inne załączniki"
+  "FORM:attachments:other": "Inne załączniki",
+  "FORM:ERROR:REWARD_PAID": "Nie można zmienić wypłaconego wynagrodzenia."
 }

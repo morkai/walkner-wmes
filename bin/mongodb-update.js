@@ -37,3 +37,15 @@ function fixCoordSections(d)
     }
   });
 }
+
+db.oshkaizens.find({reward: {$exists: false}}).forEach(d =>
+{
+  if (typeof d.kom === 'boolean')
+  {
+    d.kom = d.kom ? 1 : 0;
+  }
+
+  d.reward = 0;
+
+  db.oshkaizens.updateOne({_id: d._id}, {$set: {kom: d.kom, reward: d.reward}});
+});

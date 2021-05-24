@@ -22,7 +22,7 @@ define([
         args: ['month', time.getMoment().format('YYYY-MM')]
       });
     }
-    else
+    else if (options.dateProperty !== false)
     {
       args.push(
         {
@@ -78,6 +78,11 @@ define([
       }
 
       args.push({name: 'eq', args: [prop, currentUser.data.oshWorkplace]});
+    }
+
+    if (options.extraTerms)
+    {
+      options.extraTerms(args);
     }
 
     return rql.Query.fromObject({

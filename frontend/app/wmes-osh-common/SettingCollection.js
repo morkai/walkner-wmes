@@ -19,14 +19,9 @@ define([
 
     prepareValue: function(id, newValue) // eslint-disable-line no-unused-vars
     {
-      if (/(obs.*?PerDep|minEngagement|SafeObs)/.test(id))
+      if (/rewards/.test(id))
       {
-        return this.prepareNumericValue(newValue, 0, 100, 0);
-      }
-
-      if (/minObsCards/.test(id))
-      {
-        return this.prepareNumericValue(newValue, 0, 1000, 0);
+        return Math.round(this.prepareFloatValue(newValue, 0, 1000, 0) * 100) / 100;
       }
     },
 

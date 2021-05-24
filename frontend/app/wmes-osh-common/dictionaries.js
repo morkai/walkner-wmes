@@ -145,6 +145,10 @@ define([
     reasonCategories: new ReasonCategoryCollection(),
     rootCauseCategories: new RootCauseCategoryCollection(),
     kaizenCategories: new KaizenCategoryCollection(),
+    currencyFormatter: new Intl.NumberFormat('pl', {
+      style: 'currency',
+      currency: 'PLN'
+    }),
     loaded: false,
     load: function()
     {

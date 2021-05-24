@@ -134,31 +134,37 @@
               name: 'suggestion',
               type: 'textarea',
               label: 'PROPERTY:',
-              groupClassName: 'col-lg-4',
               required: true,
+              groupClassName: 'col-lg-4',
               rows: 4
             }) %>
           </div>
           <% if (editMode) { %>
             <div class="row">
-              <div class="col-lg-12 form-group">
-                <%- helpers.formGroup({
-                  name: 'solution',
-                  type: 'textarea',
-                  label: 'PROPERTY:',
-                  rows: 4
-                }) %>
-              </div>
+              <%- helpers.formGroup({
+                name: 'solution',
+                type: 'textarea',
+                label: 'PROPERTY:',
+                groupClassName: 'col-lg-12',
+                rows: 4
+              }) %>
             </div>
           <% } %>
           <% if (model.status === 'verification' || model.status === 'finished') { %>
             <div class="row">
-              <div class="col-lg-4 form-group">
+              <div class="col-lg-12 form-group">
+                <label for="<%- id('reward') %>" class="control-label"><%- t('PROPERTY:reward') %></label>
+                <% [1, 2].forEach(kom => { %>
                 <div class="checkbox">
-                  <label class="control-label">
-                    <input type="checkbox" name="kom" value="true">
-                    <%- t('PROPERTY:kom') %>
+                  <label>
+                    <input type="checkbox" name="kom" value="<%- kom %>">
+                    <%- t(`kom:${kom}`) %> <i class="fa <%- komIcons[kom] %>"></i>
                   </label>
+                </div>
+                <% }) %>
+                <div class="input-group" style="width: 143px; margin-top: 5px">
+                  <input id="<%- id('reward') %>" name="reward" class="form-control text-right" type="number" min="0" max="1000" step="0.01">
+                  <span class="input-group-addon">PLN</span>
                 </div>
               </div>
             </div>

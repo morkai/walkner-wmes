@@ -1,0 +1,35 @@
+<form autocomplete="off">
+  <table class="table table-condensed table-bordered table-hover">
+    <thead>
+    <tr>
+      <th class="is-min"><input id="<%- id('toggle') %>" type="checkbox" checked></th>
+      <th><%- t('rewards:payout:employee') %></th>
+      <th class="is-min"><%- t('rewards:payout:count') %></th>
+      <th class="is-min"><%- t('rewards:payout:amount') %></th>
+    </tr>
+    </thead>
+    <% if (payouts.length) { %>
+    <tfoot>
+      <tr>
+        <td colspan="2"></td>
+        <td id="<%- id('totalCount') %>" class="is-min is-number"><%- totals.count %></td>
+        <td id="<%- id('totalAmount') %>" class="is-min is-number"><%- currencyFormatter.format(totals.amount) %></td>
+      </tr>
+    </tfoot>
+    <% } %>
+    <tbody>
+    <% payouts.forEach(payout => { %>
+    <tr>
+      <td class="is-min"><input type="checkbox" name="users[]" value="<%- payout.recipient.id %>" checked></td>
+      <td><%- payout.userInfo %></td>
+      <td class="is-min is-number"><%- payout.payout[0].toLocaleString() %></td>
+      <td class="is-min is-number"><%- currencyFormatter.format(payout.payout[1]) %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+  <div class="form-actions">
+    <button id="<%- id('submit') %>" class="btn btn-primary" type="submit"><i class="fa fa-money"></i><span><%- t('rewards:payout:submit') %></span></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

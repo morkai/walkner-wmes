@@ -1,5 +1,6 @@
 @import "./dataTable.css";
 @import "./metrics.css";
+@import "./rewards.css";
 
 .osh-report > h3 {
   clear: left;
@@ -62,6 +63,9 @@
 
 .osh-report .is-invalid {
   color: #E00;
+}
+.osh-report .is-valid {
+  color: #5cb85c;
 }
 .osh-report .is-zero {
   color: #BBB;

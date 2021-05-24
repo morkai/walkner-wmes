@@ -1,0 +1,20 @@
+{
+  "BREADCRUMB:browse": "Nagrody",
+
+  "PROPERTY:rid": "Zgłoszenie",
+  "PROPERTY:status": "Status",
+  "PROPERTY:recipient": "Pracownik",
+  "PROPERTY:subject": "Temat zgłoszenia",
+  "PROPERTY:createdAt": "Czas przyznania",
+  "PROPERTY:creator": "Przyznana przez",
+  "PROPERTY:amount": "Kwota",
+  "PROPERTY:paidAt": "Czas wypłaty",
+  "PROPERTY:payer": "Wypłacona przez",
+
+  "status:earned": "Wszystkie",
+  "status:paid": "Wypłacone",
+  "status:unpaid": "Niewypłacone",
+
+  "filter:employee": "Pracownik",
+  "filter:leader": "Lider brygady"
+}

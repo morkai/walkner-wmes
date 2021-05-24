@@ -1,29 +1,28 @@
 <form class="settings reports-settings">
   <div class="list-group">
     <% [
-      'engagement',
-      'observers'
+      'rewards'
     ].forEach(function(tab) { %>
       <a class="list-group-item" href="#osh/reports;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t(`settings:tab:${tab}`) %></a>
     <% }) %>
   </div>
   <div class="panel panel-primary">
-    <div class="panel-body" data-tab="engagement">
+    <div class="panel-body" data-tab="rewards">
       <div class="form-group">
-        <label for="<%- id('minEngagement') %>"><%- t('settings:minEngagement') %></label>
-        <input id="<%- id('minEngagement') %>" class="form-control" name="osh.minEngagement" type="number" min="0" max="100" step="1">
-      </div>
-    </div>
-    <div class="panel-body" data-tab="observers">
-      <div class="form-group">
-        <label for="<%- id('minObsCards') %>"><%- t('settings:minObsCards') %></label>
-        <input id="<%- id('minObsCards') %>" class="form-control" name="osh.minObsCards" type="number" min="0" max="1000" step="1">
-      </div>
-      <% ['observersPerDepartment', 'obsCardsPerDepartment', 'minSafeObs', 'maxSafeObs'].forEach(prop => { %>
-        <div class="form-group">
-          <label for="<%- id(prop) %>"><%- t(`settings:${prop}`) %></label>
-          <input id="<%- id(prop) %>" class="form-control" name="osh.<%- prop %>" type="number" min="0" max="100" step="1">
+        <label for="<%- id('rewards-minPayout') %>"><%- t('settings:rewards:minPayout') %></label>
+        <div class="input-group" style="width: 143px">
+          <input id="<%- id('rewards-minPayout') %>" class="form-control text-right" name="osh.rewards.minPayout" type="number" min="0" max="1000000" step="1">
+          <span class="input-group-addon">PLN</span>
         </div>
+      </div>
+      <% ['default', 'nom', 'kom'].forEach(type => { %>
+      <div class="form-group">
+        <label for="<%- id(`rewards-kaizens-${type}`) %>"><%- t(`settings:rewards:kaizens:${type}`) %></label>
+        <div class="input-group" style="width: 143px">
+          <input id="<%- id(`rewards-kaizens-${type}`) %>" class="form-control text-right" name="osh.rewards.kaizens.<%- type %>" type="number" min="0" max="1000000" step="1">
+          <span class="input-group-addon">PLN</span>
+        </div>
+      </div>
       <% }) %>
     </div>
   </div>

@@ -1,0 +1,51 @@
+<div class="list is-colored">
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+      <th class="is-min" rowspan="2"><%- t('rewards:employee') %></th>
+      <th class="is-min text-center" colspan="<%- metrics.length %>"><%- t('rewards:count') %></th>
+      <th class="is-min text-center" colspan="<%- metrics.length %>"><%- t('rewards:amount') %></th>
+      <th class="is-min" rowspan="2"><%- t('rewards:lastCreatedAt') %></th>
+      <th class="is-min" rowspan="2"><%- t('rewards:lastPaidAt') %></th>
+      <th rowspan="2"></th>
+    </tr>
+    <tr>
+      <% metrics.forEach(metric => { %>
+      <th class="is-min text-center"><%- t(`rewards:${metric}`) %></th>
+      <% }) %>
+      <% metrics.forEach(metric => { %>
+      <th class="is-min text-center"><%- t(`rewards:${metric}`) %></th>
+      <% }) %>
+    </tr>
+    </thead>
+    <tbody>
+      <% if (loading) { %>
+      <tr>
+        <td colspan="<%- 1 + metrics.length * 2 + 3 %>"><i class="fa fa-spinner fa-spin"></i></td>
+      </tr>
+      <% } else { %>
+      <% if (!rows.length) { %>
+      <tr>
+        <td colspan="<%- 1 + metrics.length * 2 + 3 %>"><%- t('core', 'LIST:NO_DATA') %></td>
+      </tr>
+      <% } %>
+      <% rows.forEach(row => { %>
+      <tr class="<%- row.payout[1] >= minPayout ? 'success' : '' %>">
+        <td class="is-min"><%- row.userInfo %></td>
+        <% metrics.forEach(metric => { %>
+        <td class="is-min is-number"><%- row[metric][0].toLocaleString() %></td>
+        <% }) %>
+        <% metrics.forEach(metric => { %>
+        <td class="is-min is-number"><%- currencyFormatter.format(row[metric][1]) %></td>
+        <% }) %>
+        <td class="is-min"><%- row.lastCreatedAt ? time.format(row.lastCreatedAt, 'LLLL') : '' %></td>
+        <td class="is-min"><%- row.lastPaidAt ? time.format(row.lastPaidAt, 'LLLL') : '' %></td>
+        <td></td>
+      </tr>
+      <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+</div>

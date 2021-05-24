@@ -256,11 +256,6 @@ define([
         return '-';
       }
 
-      if (value === 0)
-      {
-        return 0;
-      }
-
       if (typeof value === 'boolean')
       {
         return this.t('core', 'BOOL:' + value);
@@ -409,7 +404,18 @@ define([
           }, label.length <= 43 ? label : `${label.substring(0, 40)}...`);
         }
 
+        case 'kom':
+          return this.t(`kom:${value}`);
+
+        case 'reward':
+          return dictionaries.currencyFormatter.format(value);
+
         default:
+          if (value === 0)
+          {
+            return '0';
+          }
+
           return value || '';
       }
     },

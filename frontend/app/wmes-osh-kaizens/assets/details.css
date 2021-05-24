@@ -10,6 +10,12 @@
   text-transform: uppercase;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   text-shadow: 0 0 3px #daa520;
+  text-align: center;
+}
+.osh-kaizens-details-kom[data-kom="1"] {
+  background: #c0c0c0;
+  border-color: #a0a0a0;
+  text-shadow: 0 0 3px #a0a0a0;
 }
 .osh-kaizens-details-kom > span {
   margin: 0 15px;

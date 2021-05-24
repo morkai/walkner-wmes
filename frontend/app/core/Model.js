@@ -167,6 +167,29 @@ define([
     isSynced: function()
     {
       return this.currentReadRequest === null || (!!this.collection && !!this.collection.get(this));
+    },
+
+    findRqlTerm: function(prop, name)
+    {
+      if (!this.rqlQuery)
+      {
+        return null;
+      }
+
+      return _.find(this.rqlQuery.selector.args, function(term)
+      {
+        if (term.args[0] !== prop)
+        {
+          return false;
+        }
+
+        if (Array.isArray(name))
+        {
+          return name.indexOf(term.name) !== -1;
+        }
+
+        return !name || term.name === name;
+      });
     }
 
   });

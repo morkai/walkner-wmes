@@ -1,0 +1,34 @@
+<form class="well filter-form osh-report-filter" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('status') %>" class="control-label"><%- t('rewards:status') %></label>
+    <select id="<%- id('status') %>" name="status" class="form-control">
+      <% ['earned', 'paid', 'unpaid', 'payout'].forEach(status => { %>
+      <option value="<%- status %>"><%- t(`rewards:status:${status}`) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div id="<%- id('paidAtGroup') %>" class="form-group">
+    <label for="<%- id('paidAt') %>" class="control-label"><%- t('rewards:paidAt') %></label>
+    <input id="<%- id('paidAt') %>" name="paidAt" class="form-control" type="month" placeholder="<%- t('core', 'placeholder:month') %>">
+  </div>
+  <div class="form-group">
+    <label class="control-label">
+      <input type="radio" name="mode" value="employee" class="filter-inLabel">
+      <span><%- t('filter:employee') %></span>
+    </label>
+    <input id="<%- id('employee') %>" name="employee" type="text">
+  </div>
+  <div class="form-group">
+    <label class="control-label">
+      <input type="radio" name="mode" value="leader" class="filter-inLabel">
+      <span><%- t('filter:leader') %></span>
+    </label>
+    <input id="<%- id('leader') %>" name="leader" type="text">
+  </div>
+  <% if (showOrgUnitFilter) { %>
+  <div id="<%- id('orgUnit') %>" class="form-group"></div>
+  <% } %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>

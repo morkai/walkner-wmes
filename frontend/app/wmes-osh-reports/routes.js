@@ -8,10 +8,12 @@ define([
   './ObserversReport',
   './EngagementReport',
   './MetricsReport',
+  './RewardsReport',
   './pages/CountReportPage',
   './pages/ObserversReportPage',
   './pages/EngagementReportPage',
   './pages/MetricsReportPage',
+  './pages/RewardsReportPage',
   'i18n!app/nls/reports',
   'i18n!app/nls/wmes-osh-reports'
 ], function(
@@ -22,10 +24,12 @@ define([
   ObserversReport,
   EngagementReport,
   MetricsReport,
+  RewardReport,
   CountReportPage,
   ObserversReportPage,
   EngagementReportPage,
-  MetricsReportPage
+  MetricsReportPage,
+  RewardsReportPage
 ) {
   'use strict';
 
@@ -74,6 +78,15 @@ define([
   {
     viewport.showPage(new MetricsReportPage({
       model: new MetricsReport({}, {
+        rqlQuery: req.rql
+      })
+    }));
+  });
+
+  router.map('/osh/reports/rewards', canView, req =>
+  {
+    viewport.showPage(new RewardsReportPage({
+      model: new RewardReport({}, {
         rqlQuery: req.rql
       })
     }));
