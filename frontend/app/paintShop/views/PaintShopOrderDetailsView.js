@@ -9,8 +9,10 @@ define([
   'app/core/View',
   'app/core/util/uuid',
   'app/core/util/getShiftStartInfo',
+  'app/core/util/resultTips',
   'app/paintShop/PaintShopEventCollection',
   'app/paintShop/templates/orderDetails',
+  'app/paintShop/templates/orderActions',
   'app/paintShop/templates/orderChanges',
   'app/paintShop/templates/orderChange',
   'app/paintShop/templates/queueOrder',
@@ -26,8 +28,10 @@ define([
   View,
   uuid,
   getShiftStartInfo,
+  resultTips,
   PaintShopEventCollection,
   orderDetailsTemplate,
+  orderActionsTemplate,
   orderChangesTemplate,
   orderChangeTemplate,
   queueOrderTemplate,
@@ -143,6 +147,7 @@ define([
     {
       this.vkb = this.options.vkb;
       this.psEvents = PaintShopEventCollection.forOrder(this.model.id);
+      this.disabledActions = false;
 
       this.listenTo(this.psEvents, 'add', this.onEventAdded);
       this.listenTo(this.orders, 'change', this.onChange);
@@ -188,6 +193,7 @@ define([
       return {
         order: order,
         fillerHeight: this.calcFillerHeight(),
+        renderOrderActions: this.renderPartialHtml.bind(this, orderActionsTemplate),
         renderQueueOrder: queueOrderTemplate,
         renderWhOrders: whOrdersTemplate,
         canAct: this.canAct(),
@@ -313,6 +319,8 @@ define([
 
     toggleActions: function()
     {
+      this.$id('actions').find('.btn').prop('disabled', this.disabledActions);
+
       var disabled = _.some(this.model.serialize().childOrders, function(childOrder)
       {
         return childOrder.drilling && childOrder.drilling !== 'finished';
@@ -406,6 +414,17 @@ define([
         return;
       }
 
+      var autoWorkOrders = false;
+
+      if (action === 'finish' && (!data.qtyDone || data.qtyDone >= this.model.get('qty')))
+      {
+        var oldCount = this.model.get('workOrders').length;
+
+        data.workOrders = this.completeWorkOrders();
+
+        autoWorkOrders = data.workOrders.length > oldCount;
+      }
+
       var $actions = view.$('.btn').prop('disabled', true);
 
       view.act(action, comment, data)
@@ -419,6 +438,10 @@ define([
           {
             $comment.val('');
             $actions.prop('disabled', false);
+          }
+          else if (autoWorkOrders)
+          {
+            view.showAutoWorkOrdersMessage();
           }
           else
           {
@@ -455,8 +478,12 @@ define([
         return;
       }
 
+      var orderData = order.serialize();
+      var $order = this.$('.paintShop-order');
+      var oldStatus = $order[0].dataset.status;
+      var newStatus = orderData.status;
       var html = this.renderPartialHtml(queueOrderTemplate, {
-        order: order.serialize(),
+        order: orderData,
         visible: true,
         first: false,
         last: false,
@@ -469,6 +496,13 @@ define([
       });
 
       this.$('.paintShop-order').replaceWith(html);
+
+      if (newStatus !== oldStatus)
+      {
+        this.$id('actions').html(this.renderPartialHtml(orderActionsTemplate, {
+          order: orderData
+        }));
+      }
 
       this.toggleActions();
 
@@ -842,6 +876,105 @@ define([
         {
           view.hideWorkOrderEditor();
         });
+    },
+
+    completeWorkOrders: function()
+    {
+      var childOrders = this.model.get('childOrders');
+      var workOrders = this.model.get('workOrders');
+      var completeWorkOrders = {};
+      var creator = user.getInfo();
+      var workers = [this.orders.user || creator];
+      var createdAt = new Date();
+      var shift = getShiftStartInfo(createdAt).moment.toDate();
+
+      childOrders.forEach(function(childOrder)
+      {
+        completeWorkOrders[childOrder.order] = [];
+
+        childOrder.paintList.forEach(function()
+        {
+          completeWorkOrders[childOrder.order].push({
+            _id: uuid(),
+            createdAt: createdAt,
+            creator: creator,
+            childOrder: childOrder.order,
+            qtyDone: childOrder.qty,
+            shift: shift,
+            workers: workers
+          });
+        });
+      });
+
+      workOrders.forEach(function(workOrder)
+      {
+        var complete = completeWorkOrders[workOrder.childOrder];
+
+        if (!complete)
+        {
+          return;
+        }
+
+        var qtyRemaining = workOrder.qtyDone;
+
+        while (qtyRemaining && complete.length)
+        {
+          var completeWorkOrder = complete[0];
+
+          if (qtyRemaining === completeWorkOrder.qtyDone)
+          {
+            qtyRemaining = 0;
+            complete.shift();
+          }
+          else if (qtyRemaining < completeWorkOrder.qtyDone)
+          {
+            completeWorkOrder.qtyDone -= qtyRemaining;
+            qtyRemaining = 0;
+          }
+          else
+          {
+            qtyRemaining -= completeWorkOrder.qtyDone;
+            complete.shift();
+          }
+        }
+      });
+
+      var newWorkOrders = [].concat(workOrders);
+
+      _.forEach(completeWorkOrders, function(workOrders)
+      {
+        workOrders.forEach(function(workOrder)
+        {
+          newWorkOrders.push(workOrder);
+        });
+      });
+
+      return newWorkOrders;
+    },
+
+    showAutoWorkOrdersMessage: function()
+    {
+      var view = this;
+
+      view.disabledActions = true;
+      view.toggleActions();
+
+      var btn = view.$('.paintShop-orderDetails-actions').children().first()[0];
+
+      resultTips.show({
+        el: btn,
+        type: 'info',
+        time: 1500,
+        text: this.t('autoWorkOrders'),
+        offsetTop: -30,
+        className: 'paintShop-orderDetails-resultTip'
+      });
+
+      view.timers.enableActions = setTimeout(function()
+      {
+        view.disabledActions = false;
+        view.toggleActions();
+      }, 1500);
     }
 
   });

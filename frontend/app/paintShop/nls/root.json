@@ -209,7 +209,9 @@
     "printPage:printed": "Printed on {time} by {user} with WMES.",
 
     "workOrderEditor:shift": "Production shift",
-    "workOrderEditor:qtyDone": "Quantity done"
+    "workOrderEditor:qtyDone": "Quantity done",
+
+    "autoWorkOrders": "Added missing work orders."
   },
   "pl": true
 }

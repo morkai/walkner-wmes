@@ -211,5 +211,7 @@
   "printPage:printed": "Wydrukowano w {time} przez {user} za pomocą systemu WMES.",
 
   "workOrderEditor:shift": "Zmiana produkcyjna",
-  "workOrderEditor:qtyDone": "Ilość zrobiona"
+  "workOrderEditor:qtyDone": "Ilość zrobiona",
+
+  "autoWorkOrders": "Dodano brakujące zlecenia pracy."
 }
