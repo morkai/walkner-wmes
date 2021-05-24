@@ -176,7 +176,7 @@ define([
       }
       else
       {
-        const data = setUpUserSelect2.userToData({...currentUser.data});
+        const data = setUpUserSelect2.userToData(Object.assign({}, currentUser.data));
 
         this.$id('leader').select2('data', data).select2('enable', false);
         this.$id('employee').select2('data', data).select2('enable', false);
