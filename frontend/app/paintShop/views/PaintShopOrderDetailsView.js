@@ -227,10 +227,9 @@ define([
       if (this.options.height === 0)
       {
         this.options.height = this.$('tbody')[0].clientHeight;
-
-        this.resizeFiller();
       }
 
+      this.resizeFiller();
       this.renderChanges();
       this.reloadChanges();
       this.toggleActions();
@@ -364,16 +363,15 @@ define([
 
     calcFillerHeight: function()
     {
-      var height = window.innerHeight
-        - 30 * 2 // Margins
-        - 25
-        - 75
-        - this.options.height // PS order details
-        - 24 // WH orders header
-        - 25 * this.model.serialize().whOrders.length
-        - 19 * this.model.get('workOrders').length;
+      if (this.isRendered())
+      {
+        return window.innerHeight
+          - 30 * 2
+          - $('.modal-content').outerHeight()
+          + this.$id('filler')[0].clientHeight;
+      }
 
-      return Math.max(height, 0);
+      return 0;
     },
 
     calcChangesHeight: function()
@@ -505,6 +503,7 @@ define([
       }
 
       this.toggleActions();
+      this.resizeFiller();
 
       viewport.adjustDialogBackdrop();
     },
@@ -966,7 +965,7 @@ define([
         type: 'info',
         time: 1500,
         text: this.t('autoWorkOrders'),
-        offsetTop: -30,
+        offsetTop: (5 + 72 + 32 + 10) * -1,
         className: 'paintShop-orderDetails-resultTip'
       });
 
