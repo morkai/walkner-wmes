@@ -2,10 +2,12 @@
 
 define([
   'app/time',
+  'app/orgUnits/util/changeWarning',
   'app/core/views/FormView',
   'app/divisions/templates/form'
 ], function(
   time,
+  changeWarning,
   FormView,
   formTemplate
 ) {
@@ -23,6 +25,8 @@ define([
       {
         this.$id('_id').attr('disabled', true);
       }
+
+      changeWarning(this);
     },
 
     serializeToForm: function()

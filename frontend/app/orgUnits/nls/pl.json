@@ -3,5 +3,7 @@
   "picker:any": "Dowolne",
   "picker:dialog:title": "Jednostki organizacyjne",
   "picker:dialog:submit": "Wybierz",
-  "picker:dialog:deactivated": "Dezaktywowane"
+  "picker:dialog:deactivated": "Dezaktywowane",
+
+  "changeWarning": "UWAGA! Zmiany w strukturze organizacyjnej mogą spowodować chwilowe spowolnienie systemu. Zaleca się dokonywanie zmian poza godzinami szczytu."
 }

@@ -3,11 +3,13 @@
 define([
   'app/time',
   'app/orgUnits/views/OrgUnitDropdownsView',
+  'app/orgUnits/util/changeWarning',
   'app/core/views/FormView',
   'app/prodFlows/templates/form'
 ], function(
   time,
   OrgUnitDropdownsView,
+  changeWarning,
   FormView,
   formTemplate
 ) {
@@ -43,6 +45,8 @@ define([
         oudv.$id('division').select2('enable', addMode);
         oudv.$id('subdivision').select2('enable', addMode);
       });
+
+      changeWarning(this);
     },
 
     serializeToForm: function()

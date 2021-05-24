@@ -3,11 +3,13 @@
 define([
   'app/time',
   'app/orgUnits/views/OrgUnitDropdownsView',
+  'app/orgUnits/util/changeWarning',
   'app/core/views/FormView',
   'app/prodLines/templates/form'
 ], function(
   time,
   OrgUnitDropdownsView,
+  changeWarning,
   FormView,
   formTemplate
 ) {
@@ -37,7 +39,7 @@ define([
 
       if (editMode)
       {
-        this.$('.form-control[name=_id]').attr('readonly', true);
+        this.$('.form-control[name="_id"]').attr('readonly', true);
       }
 
       var oudv = this.orgUnitDropdownsView;
@@ -48,6 +50,8 @@ define([
         oudv.$id('division').select2('enable', !editMode);
         oudv.$id('subdivision').select2('enable', !editMode);
       });
+
+      changeWarning(this);
     },
 
     serializeToForm: function()

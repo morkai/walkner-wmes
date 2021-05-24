@@ -4,7 +4,9 @@
     "picker:any": "Any",
     "picker:dialog:title": "Organizational units",
     "picker:dialog:submit": "Choose",
-    "picker:dialog:deactivated": "Deactivated"
+    "picker:dialog:deactivated": "Deactivated",
+
+    "changeWarning": "WARNING! Changes to the organizational structure may incur a brief system slowdown. It is advised to make changes outside the working hours."
   },
   "pl": true
 }

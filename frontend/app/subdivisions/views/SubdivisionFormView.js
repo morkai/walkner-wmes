@@ -7,6 +7,7 @@ define([
   'app/data/aors',
   'app/data/downtimeReasons',
   'app/orgUnits/views/OrgUnitDropdownsView',
+  'app/orgUnits/util/changeWarning',
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
   'app/subdivisions/templates/form',
@@ -18,6 +19,7 @@ define([
   aors,
   downtimeReasons,
   OrgUnitDropdownsView,
+  changeWarning,
   FormView,
   idAndLabel,
   template,
@@ -184,6 +186,8 @@ define([
       });
 
       this.model.get('autoDowntimes').forEach(this.addAutoDowntime, this);
+
+      changeWarning(this);
     },
 
     serializeToForm: function()

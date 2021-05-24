@@ -4,12 +4,14 @@ define([
   'app/time',
   'app/data/mrpControllers',
   'app/orgUnits/views/OrgUnitDropdownsView',
+  'app/orgUnits/util/changeWarning',
   'app/core/views/FormView',
   'app/mrpControllers/templates/form'
 ], function(
   time,
   mrpControllers,
   OrgUnitDropdownsView,
+  changeWarning,
   FormView,
   formTemplate
 ) {
@@ -68,6 +70,8 @@ define([
         oudv.$id('division').select2('enable', !editMode);
         oudv.$id('subdivision').select2('enable', !editMode);
       });
+
+      changeWarning(this);
     },
 
     serializeToForm: function()
