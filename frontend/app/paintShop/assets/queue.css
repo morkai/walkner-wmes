@@ -55,6 +55,12 @@
 .paintShop-order-childOrder.is-workOrder > td {
   padding-top: 0;
 }
+.paintShop-order-childOrder.is-workOrder.is-first > td {
+  padding-top: 5px;
+}
+.is-notes + .is-workOrder.is-first > td {
+  padding-top: 0;
+}
 .paintShop-order-component {
   background-color: #fff;
 }

@@ -120,7 +120,7 @@
   <% } %>
   <% if (details) { %>
   <% childOrder.workOrders.forEach(function(workOrder, workOrderI) { %>
-  <tr class="paintShop-properties paintShop-order-childOrder is-workOrder <%- workOrderI === childOrder.workOrders.length - 1 ? 'is-last' : '' %>" data-child-order-index="<%- i %>" data-work-order-id="<%- workOrder._id %>">
+  <tr class="paintShop-properties paintShop-order-childOrder is-workOrder <%- workOrderI === 0 ? 'is-first' : '' %> <%- workOrderI === childOrder.workOrders.length - 1 ? 'is-last' : '' %>" data-child-order-index="<%- i %>" data-work-order-id="<%- workOrder._id %>">
     <td class="paintShop-property"><%- workOrder.shiftText %></td>
     <td class="paintShop-property" data-property="qty"><%- workOrder.qtyDone.toLocaleString() %></td>
     <td class="paintShop-property">PCE</td>
