@@ -80,6 +80,7 @@
   "error:NO_PFAM_CONFIG": "Brak charakterystyki PFAM.",
   "error:NO_CLR_CONFIG": "Brak charakterystyki CLR.",
   "error:NO_PAINT_CODE_CONFIG": "Brak charakterystyki kodu farby (RAL).",
+  "error:ITEM_NOT_FOUND": "Nie znaleziono pozycji zlecenia sprzedaży (VA03).",
   "error:CANCELLED": "Zadanie zostało anulowane. Spróbuj ponownie.",
 
   "addPaint:action": "Dodaj nową farbę",
