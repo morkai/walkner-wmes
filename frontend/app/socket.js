@@ -14,13 +14,25 @@ function(
 ) {
   'use strict';
 
+  var query = {};
+
+  if (window.ArrayBuffer && window.Uint8Array)
+  {
+    query.binary = '1';
+  }
+
+  if (window.WMES_GET_COMMON_HEADERS)
+  {
+    Object.assign(query, window.WMES_GET_COMMON_HEADERS());// eslint-disable-line new-cap
+  }
+
   var socket = new Socket(sio({
     path: '/sio',
     transports: ['websocket'],
     timeout: 10000,
     reconnectionDelay: 500,
     autoConnect: false,
-    query: window.WMES_GET_COMMON_HEADERS ? window.WMES_GET_COMMON_HEADERS() : {} // eslint-disable-line new-cap
+    query: query
   }));
 
   var wasConnected = false;
