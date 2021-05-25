@@ -492,6 +492,11 @@ define([
         return;
       }
 
+      if (setCart.changed.reason !== undefined && Object.keys(setCart.changed).length === 1)
+      {
+        return;
+      }
+
       var setCarts = this.setCarts;
       var status = setCart.get('status');
 
@@ -520,6 +525,11 @@ define([
 
     isPendingSetCart: function(setCart)
     {
+      if (!setCart)
+      {
+        return false;
+      }
+
       var status = setCart.get('status');
 
       if (status === 'completing')
