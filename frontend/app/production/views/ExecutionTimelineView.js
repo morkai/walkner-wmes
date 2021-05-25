@@ -209,6 +209,12 @@ define([
       }
 
       var $item = this.$('.production-timeline-item[data-type="' + type + '"][data-id="' + lastI + '"]');
+
+      if (!$item.length)
+      {
+        return;
+      }
+
       var duration = Date.now() - last.startedAt;
       var width = duration / SHIFT_DURATION * 100;
 

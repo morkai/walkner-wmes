@@ -355,6 +355,11 @@ define([
 
     onWindowKeyDown: function(e)
     {
+      if (!e.key)
+      {
+        return;
+      }
+
       var key = e.key.toLowerCase();
 
       if (key === 'escape')

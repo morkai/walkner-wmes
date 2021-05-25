@@ -153,7 +153,7 @@ define([
 
     repositionResetButton: function()
     {
-      if (!this.$resetFilter.length)
+      if (!this.$resetFilter || !this.$resetFilter.length)
       {
         return;
       }
