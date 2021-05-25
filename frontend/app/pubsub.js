@@ -93,32 +93,30 @@ function(
     }
   });
 
-  socket.on('pubsub.message', function(topic, message, meta)
+  socket.on('pubsub.message', function(message)
   {
-    meta.remote = true;
-
     try
     {
-      if (meta.binary && message instanceof ArrayBuffer)
+      if (message instanceof ArrayBuffer)
       {
         message = utf8.decode(String.fromCharCode.apply(null, new Uint8Array(message)));
       }
 
-      if (meta.json && typeof message === 'string')
+      if (typeof message === 'string')
       {
         message = JSON.parse(message);
       }
+
+      message[2].remote = true;
     }
     catch (err)
     {
       return console.error('[pubsub] Failed to parse remote message:', {
-        topic: topic,
-        message: message,
-        meta: meta
+        message: message
       });
     }
 
-    pubsub.publish(topic, message, meta);
+    pubsub.publish(message[0], message[1], message[2]);
   });
 
   function onSocketSubscribe(topics, err, notAllowedTopics)
