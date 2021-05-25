@@ -21,21 +21,22 @@ define([
   ProdDowntimeCollection,
   ProdDowntimeListView,
   ProdDowntimeFilterView,
-  listPageTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: listPageTemplate,
+    template: template,
 
     layoutName: 'page',
 
     pageId: 'prodDowntimeList',
 
-    breadcrumbs: [
-      t.bound('prodDowntimes', 'BREADCRUMB:browse')
-    ],
+    breadcrumbs: function()
+    {
+      return [this.t('BREADCRUMB:browse')];
+    },
 
     actions: function(layout)
     {
@@ -43,13 +44,13 @@ define([
         pageActions.jump(this, this.collection),
         pageActions.export(layout, this, this.collection),
         {
-          label: t.bound('prodDowntimes', 'PAGE_ACTION:settings'),
+          label: this.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'PROD_DATA:MANAGE',
           href: '#prodDowntimes;settings'
         },
         {
-          label: t.bound('prodDowntimes', 'PAGE_ACTION:alerts'),
+          label: this.t('PAGE_ACTION:alerts'),
           icon: 'bell',
           privileges: 'PROD_DOWNTIME_ALERTS:VIEW',
           href: '#prodDowntimeAlerts'
@@ -62,8 +63,8 @@ define([
       this.defineModels();
       this.defineViews();
 
-      this.setView('.filter-container', this.filterView);
-      this.setView('.list-container', this.listView);
+      this.setView('#-filter', this.filterView);
+      this.setView('#-list', this.listView);
     },
 
     destroy: function()
@@ -81,7 +82,8 @@ define([
     {
       this.listView = new ProdDowntimeListView({
         collection: this.collection,
-        settings: this.settings
+        settings: this.settings,
+        orderColumn: true
       });
 
       this.filterView = new ProdDowntimeFilterView({

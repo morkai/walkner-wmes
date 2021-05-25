@@ -61,13 +61,14 @@ define([
     {
       return [
         {id: 'rid', className: 'is-min'},
-        {id: 'orderMrp', tdClassName: 'is-min', label: t.bound('prodDowntimes', 'PROPERTY:mrpControllers')},
+        {id: 'orderMrp', tdClassName: 'is-min'},
         {id: 'prodFlow', className: 'is-overflow w275', titleProperty: 'prodFlowText'},
-        {id: 'aor', className: 'is-overflow w275'},
+        {id: 'aor', className: 'is-overflow w225'},
         {id: 'prodLine', className: 'is-overflow w125'},
+        this.options.orderColumn ? {id: 'orderId', tdClassName: 'is-min'} : null,
         'reason',
-        this.options.shiftColumn ? {id: 'shift', tdClassName: 'is-min', valueProperty: 'prodShiftText'} : null,
-        {id: 'startedAt', tdClassName: 'is-min'},
+        {id: 'shift', tdClassName: 'is-min', valueProperty: 'prodShiftText'},
+        {id: 'startedAt', tdClassName: 'is-min', valueProperty: 'startedAtTime'},
         {id: 'duration', tdClassName: 'is-min'}
       ];
     },
@@ -81,16 +82,27 @@ define([
         maxAorChanges: this.settings.getValue('maxAorChanges') || Number.MAX_VALUE,
         productFamily: true
       };
+      var canViewOrders = user.isAllowedTo('ORDERS:VIEW');
       var canViewProdData = user.isAllowedTo('PROD_DATA:VIEW');
 
       return this.collection.map(function(model)
       {
         var row = decorateProdDowntime(model, options);
 
-        if (canViewProdData && view.options.shiftColumn && row.prodShiftOrder)
+        if (canViewOrders && view.options.orderColumn && !row.mechOrder)
         {
-          row.startedAt = '<a href="#prodShiftOrders/' + (row.prodShiftOrder._id || row.prodShiftOrder) + '">'
-            + row.startedAt + '</a>';
+          row.orderId = '<a href="#orders/' + row.orderId + '">' + row.orderId + '</a>';
+        }
+
+        if (canViewProdData && row.prodShiftOrder)
+        {
+          row.startedAtTime = '<a href="#prodShiftOrders/' + (row.prodShiftOrder._id || row.prodShiftOrder) + '">'
+            + row.startedAtTime + '</a>';
+        }
+
+        if (row.autoIcon)
+        {
+          row.startedAtTime += ' ' + row.autoIcon;
         }
 
         return row;

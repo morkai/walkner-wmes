@@ -115,7 +115,9 @@
     "comments:spigot:initial": "Scanned a valid Spigot component: {name} ({nc12})",
     "comments:spigot:final": "Confirmed a valid Spigot component: {name} ({nc12})",
 
-    "details:orderMrp": "(in SAP: {mrp})"
+    "details:orderMrp": "(in SAP: {mrp})",
+
+    "auto": "Downtime started automatically"
   },
   "pl": true
 }

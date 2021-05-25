@@ -67,7 +67,19 @@ define([
 
     obj.duration = prodDowntime.getDurationString(options && options.currentTime);
 
+    obj.startedAt = Date.parse(obj.startedAt);
+    obj.startedAtDate = time.format(obj.startedAt, 'L');
+    obj.startedAtTime = time.format(obj.startedAt, 'LTS');
     obj.startedAt = time.format(obj.startedAt, longDateFormat);
+
+    obj.autoIcon = obj.auto
+      ? ('<i class="fa fa-clock-o" title="' + t('prodDowntimes', 'auto') + '"></i>')
+      : '';
+
+    if (obj.autoIcon)
+    {
+      obj.startedAt += ' ' + obj.autoIcon;
+    }
 
     obj.finishedAt = obj.finishedAt
       ? time.format(obj.finishedAt, longDateFormat)
