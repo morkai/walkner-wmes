@@ -33,7 +33,13 @@
       <td class="is-min"><%- order.validFrom %></td>
       <td class="is-min"><%- order.validTo %></td>
       <% } else { %>
-      <td class="is-min text-mono"><a href="#orders/<%- order.orderNo %>" target="_blank"><%- order.orderNo %></a></td>
+      <td class="is-min text-mono">
+        <% if (order.productCode) { %>
+        <a href="#orders/<%- order.orderNo %>" target="_blank"><%- order.orderNo %></a>
+        <% } else { %>
+        <%- order.orderNo %>
+        <% } %>
+      </td>
       <td class="is-min"><%- order.productCode %></td>
       <td class="is-min"><%- order.productName %></td>
       <td class="is-min"></td>

@@ -73,28 +73,6 @@ define([
         pageActions.exportXlsx('/compRel/entries;export.xlsx?_id=' + this.model.id + '&mode=orders');
 
         this.timers.enableExport = setTimeout(function() { e.currentTarget.disabled = false; }, 3000);
-      },
-
-      'click a[target="_blank"]': function(e)
-      {
-        e.target.style.cursor = 'wait';
-
-        var req = this.ajax({
-          type: 'HEAD',
-          url: e.target.href.replace('#', '/')
-        });
-
-        req.fail(function()
-        {
-          e.target.parentNode.textContent = e.target.textContent;
-        });
-
-        req.done(function()
-        {
-          window.open(e.target.href, '_blank');
-        });
-
-        return false;
       }
 
     },
