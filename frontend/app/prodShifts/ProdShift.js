@@ -1458,6 +1458,7 @@ define([
         return;
       }
 
+      var prevAuto = !!prevDowntime.get('auto');
       var prevReason = prevDowntime.get('reason');
       var psoId = this.prodShiftOrder.id;
       var alreadyStarted = {};
@@ -1479,7 +1480,7 @@ define([
           return;
         }
 
-        if (autoDowntime.when === 'always')
+        if (prevAuto && autoDowntime.when === 'always')
         {
           always.push(autoDowntime);
         }
