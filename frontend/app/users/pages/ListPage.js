@@ -7,12 +7,11 @@ define([
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
-  'app/core/View',
+  'app/core/pages/FilteredListPage',
   'app/data/loadedModules',
   '../UserCollection',
-  '../views/UserFilterView',
-  '../views/UserListView',
-  'app/core/templates/listPage'
+  '../views/FilterView',
+  '../views/ListView'
 ], function(
   require,
   $,
@@ -20,31 +19,23 @@ define([
   viewport,
   bindLoadingMessage,
   pageActions,
-  View,
+  FilteredListPage,
   loadedModules,
   UserCollection,
-  UserFilterView,
-  UserListView,
-  listPageTemplate
+  FilterView,
+  ListView
 ) {
   'use strict';
 
-  return View.extend({
+  return FilteredListPage.extend({
 
-    template: listPageTemplate,
-
-    layoutName: 'page',
-
-    pageId: 'collection',
+    FilterView: FilterView,
+    ListView: ListView,
 
     remoteTopics: {
       'users.synced': 'onSynced',
       'users.syncFailed': 'onSyncFailed'
     },
-
-    breadcrumbs: [
-      t.bound('users', 'BREADCRUMB:browse')
-    ],
 
     actions: function()
     {
@@ -75,54 +66,14 @@ define([
 
     initialize: function()
     {
+      FilteredListPage.prototype.initialize.apply(this, arguments);
+
       if (loadedModules.isLoaded('wmes-osh'))
       {
         require('app/wmes-osh-common/dictionaries').bind(this);
       }
 
       this.$syncAction = null;
-
-      this.defineModels();
-      this.defineViews();
-
-      this.setView('#-filter', this.filterView);
-      this.setView('#-list', this.listView);
-    },
-
-    defineModels: function()
-    {
-      this.collection = bindLoadingMessage(
-        new UserCollection(null, {rqlQuery: this.options.rql}), this
-      );
-    },
-
-    defineViews: function()
-    {
-      this.filterView = new UserFilterView({
-        model: this.collection
-      });
-
-      this.listView = new UserListView({collection: this.collection});
-
-      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
-    },
-
-    load: function(when)
-    {
-      return when(this.collection.fetch({reset: true}));
-    },
-
-    refreshList: function(newRqlQuery)
-    {
-      this.collection.rqlQuery = newRqlQuery;
-
-      this.listView.refreshCollectionNow();
-
-      this.broker.publish('router.navigate', {
-        url: this.collection.genClientUrl() + '?' + newRqlQuery,
-        trigger: false,
-        replace: true
-      });
     },
 
     syncUsers: function()

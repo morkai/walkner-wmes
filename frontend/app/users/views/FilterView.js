@@ -23,26 +23,52 @@ define([
   idAndLabel,
   FilterView,
   setUpUserSelect2,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    filterList: function()
+    {
+      var filters = [
+        'login',
+        'personnelId',
+        'company',
+        'prodFunction',
+        'privileges'
+      ];
+
+      if (loadedModules.isLoaded('wmes-osh'))
+      {
+        filters.push('orgUnit');
+      }
+
+      filters.push('limit');
+
+      return filters;
+    },
+    filterMap: {
+      lastName: 'searchName',
+      oshWorkplace: 'orgUnit',
+      oshDepartment: 'orgUnit'
+    },
+
+    template: template,
 
     termToForm: {
-      'personnelId': function(propertyName, term, formData)
+      'login': function(propertyName, term, formData)
       {
         formData[propertyName] = this.unescapeRegExp(term.args[1]).replace(/^\^/, '');
       },
-      'prodFunction': function(propertyName, term, formData)
+      'searchName': 'login',
+      'card': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
-      'company': 'prodFunction',
-      'login': 'personnelId',
-      'searchName': 'personnelId'
+      'personnelId': 'card',
+      'company': 'card',
+      'prodFunction': 'card'
     },
 
     initialize: function()
@@ -105,10 +131,9 @@ define([
         selector.push({name: 'regex', args: ['searchName', '^' + searchName]});
       }
 
-      this.serializeRegexTerm(selector, 'personnelId', null, undefined, false, true);
       this.serializeRegexTerm(selector, 'login', null, null, true, true);
 
-      ['company', 'prodFunction', 'privileges'].forEach(p =>
+      ['personnelId', 'company', 'prodFunction', 'privileges', 'card'].forEach(p =>
       {
         var v = this.$id(p).val() || '';
 

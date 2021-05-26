@@ -9,6 +9,7 @@ define([
   '../core/View',
   '../core/util/showDeleteFormPage',
   './User',
+  './UserCollection',
   './pages/LogInFormPage',
   './util/userInfoPopover',
   'i18n!app/nls/users'
@@ -21,6 +22,7 @@ define([
   View,
   showDeleteFormPage,
   User,
+  UserCollection,
   LogInFormPage
 ) {
   'use strict';
@@ -43,9 +45,9 @@ define([
 
   router.map('/users;settings', user.auth('USERS:MANAGE'), function(req)
   {
-    viewport.loadPage(['app/users/pages/UserSettingsPage'], function(UserSettingsPage)
+    viewport.loadPage(['app/users/pages/SettingsPage'], function(SettingsPage)
     {
-      return new UserSettingsPage({
+      return new SettingsPage({
         initialTab: req.query.tab
       });
     });
@@ -53,9 +55,11 @@ define([
 
   router.map('/users', canView, function(req)
   {
-    viewport.loadPage(['app/users/pages/UserListPage'], function(UserListPage)
+    viewport.loadPage(['app/users/pages/ListPage'], function(ListPage)
     {
-      return new UserListPage({rql: req.rql});
+      return new ListPage({
+        collection: new UserCollection(null, {rqlQuery: req.rql})
+      });
     });
   });
 
@@ -74,15 +78,12 @@ define([
     },
     function(req)
     {
-      viewport.loadPage(
-        ['app/users/pages/UserDetailsPage'],
-        function(UserDetailsPage)
-        {
-          return new UserDetailsPage({
-            model: new User({_id: req.params.id})
-          });
-        }
-      );
+      viewport.loadPage(['app/users/pages/DetailsPage'], function(DetailsPage)
+      {
+        return new DetailsPage({
+          model: new User({_id: req.params.id})
+        });
+      });
     }
   );
 
@@ -90,29 +91,23 @@ define([
     '/account',
     function()
     {
-      viewport.loadPage(
-        ['app/users/pages/UserDetailsPage'],
-        function(UserDetailsPage)
-        {
-          return new UserDetailsPage({
-            model: new User({_id: user.data._id})
-          });
-        }
-      );
+      viewport.loadPage(['app/users/pages/DetailsPage'], function(DetailsPage)
+      {
+        return new DetailsPage({
+          model: new User({_id: user.data._id})
+        });
+      });
     }
   );
 
   router.map('/users;add', canManage, function()
   {
-    viewport.loadPage(
-      ['app/users/pages/UserAddFormPage'],
-      function(UserAddFormPage)
-      {
-        return new UserAddFormPage({
-          model: new User()
-        });
-      }
-    );
+    viewport.loadPage(['app/users/pages/AddFormPage'], function(AddFormPage)
+    {
+      return new AddFormPage({
+        model: new User()
+      });
+    });
   });
 
   router.map(
@@ -130,15 +125,12 @@ define([
     },
     function(req)
     {
-      viewport.loadPage(
-        ['app/users/pages/UserEditFormPage'],
-        function(UserEditFormPage)
-        {
-          return new UserEditFormPage({
-            model: new User({_id: req.params.id})
-          });
-        }
-      );
+      viewport.loadPage(['app/users/pages/EditFormPage'], function(EditFormPage)
+      {
+        return new EditFormPage({
+          model: new User({_id: req.params.id})
+        });
+      });
     }
   );
 

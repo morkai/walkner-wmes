@@ -1,17 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../UserSettingCollection',
-  '../views/UserSettingsView'
+  '../views/SettingsView'
 ], function(
-  t,
   bindLoadingMessage,
   View,
   UserSettingCollection,
-  UserSettingsView
+  SettingsView
 ) {
   'use strict';
 
@@ -23,10 +21,10 @@ define([
     {
       return [
         {
-          label: t.bound('users', 'BREADCRUMB:browse'),
+          label: this.t('BREADCRUMB:browse'),
           href: '#users'
         },
-        t.bound('users', 'BREADCRUMB:settings')
+        this.t('BREADCRUMB:settings')
       ];
     },
 
@@ -43,7 +41,7 @@ define([
 
     defineViews: function()
     {
-      this.view = new UserSettingsView({
+      this.view = new SettingsView({
         initialTab: this.options.initialTab,
         settings: this.model
       });

@@ -8,7 +8,7 @@ define([
   'app/core/pages/DetailsPage',
   'app/core/views/DialogView',
   'app/data/loadedModules',
-  '../views/UserDetailsView',
+  '../views/DetailsView',
   'app/users/templates/anonymizeDialog'
 ], function(
   require,
@@ -18,14 +18,14 @@ define([
   DetailsPage,
   DialogView,
   loadedModules,
-  UserDetailsView,
+  DetailsView,
   anonymizeDialogTemplate
 ) {
   'use strict';
 
   return DetailsPage.extend({
 
-    DetailsView: UserDetailsView,
+    DetailsView: DetailsView,
 
     breadcrumbs: function()
     {

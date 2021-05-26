@@ -2,7 +2,7 @@
   "BREADCRUMB:browse": "Użytkownicy",
   "BREADCRUMB:myAccount": "Moje konto",
   "BREADCRUMB:settings": "Ustawienia",
-  "breadcrumbs:logIn": "Logowanie do systemu",
+  "BREADCRUMB:logIn": "Logowanie do systemu",
 
   "MSG:SYNCED": "Użytkownicy zostali zsynchronizowani.",
   "MSG:SYNC_FAILURE": "Synchronizacja użytkowników nie powiodła się.",
@@ -50,6 +50,8 @@
   "PROPERTY:apiKey": "Klucz API",
   "PROPERTY:oshWorkplace": "Zakład",
   "PROPERTY:oshDepartment": "Wydział",
+
+  "LIST:COLUMN:active": "Aktywny?",
 
   "active:true": "Tak",
   "active:false": "Nie",

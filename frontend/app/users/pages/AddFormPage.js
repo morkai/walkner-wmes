@@ -4,18 +4,18 @@ define([
   'require',
   'app/core/pages/AddFormPage',
   'app/data/loadedModules',
-  '../views/UserFormView'
+  '../views/FormView'
 ], function(
   require,
   AddFormPage,
   loadedModules,
-  UserFormView
+  FormView
 ) {
   'use strict';
 
   return AddFormPage.extend({
 
-    FormView: UserFormView,
+    FormView: FormView,
 
     initialize: function()
     {

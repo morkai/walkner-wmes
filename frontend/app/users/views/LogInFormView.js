@@ -2,23 +2,21 @@
 
 define([
   'app/user',
-  'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/users/templates/logInForm',
   'i18n!app/nls/users'
 ], function(
-  user,
-  t,
+  currentUser,
   viewport,
   View,
-  logInFormTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: logInFormTemplate,
+    template: template,
 
     events: {
       'submit': 'submitForm',
@@ -101,15 +99,17 @@ define([
 
     submitForm: function()
     {
-      if (!this.$submit.hasClass('btn-primary'))
+      var view = this;
+
+      if (!view.$submit.hasClass('btn-primary'))
       {
         return false;
       }
 
       var data = {
-        login: this.$id('login').val(),
-        password: this.$id('password').val(),
-        socketId: this.socket.getId()
+        login: view.$id('login').val(),
+        password: view.$id('password').val(),
+        socketId: view.socket.getId()
       };
 
       if (!data.login.length || !data.password.length)
@@ -119,27 +119,25 @@ define([
 
       if (this.resetting)
       {
-        data.subject = t('users', 'LOG_IN_FORM:RESET:SUBJECT', {
-          APP_NAME: t('core', 'APP_NAME')
+        data.subject = view.t('LOG_IN_FORM:RESET:SUBJECT', {
+          APP_NAME: view.t('core', 'APP_NAME')
         });
-        data.text = t('users', 'LOG_IN_FORM:RESET:TEXT', {
-          APP_NAME: t('core', 'APP_NAME'),
+        data.text = view.t('LOG_IN_FORM:RESET:TEXT', {
+          APP_NAME: view.t('core', 'APP_NAME'),
           appUrl: window.location.origin,
           resetUrl: window.location.origin + '/resetPassword/{REQUEST_ID}'
         });
       }
 
-      this.$el.addClass('logInForm-loading');
-      this.$submit.prop('disabled', true);
-      this.$('.btn-link').prop('disabled', true);
+      view.$el.addClass('logInForm-loading');
+      view.$submit.prop('disabled', true);
+      view.$('.btn-link').prop('disabled', true);
 
-      var req = this.ajax({
+      var req = view.ajax({
         type: 'POST',
-        url: this.el.action,
+        url: view.el.action,
         data: JSON.stringify(data)
       });
-
-      var view = this;
 
       req.done(function()
       {
@@ -153,7 +151,7 @@ define([
           viewport.msg.show({
             type: 'info',
             time: 5000,
-            text: t('users', 'LOG_IN_FORM:RESET:MSG:SUCCESS')
+            text: view.t('LOG_IN_FORM:RESET:MSG:SUCCESS')
           });
         }
         else
@@ -168,7 +166,7 @@ define([
 
         if (error.code === 'UNSAFE_PASSWORD')
         {
-          view.switchToReset(t('users', 'LOG_IN_FORM:UNSAFE_PASSWORD'));
+          view.switchToReset(view.t('LOG_IN_FORM:UNSAFE_PASSWORD'));
 
           return;
         }
@@ -178,12 +176,12 @@ define([
           view.$submit.removeClass('btn-primary').addClass('btn-danger');
         }
 
-        if (t.has('users', 'LOG_IN_FORM:MSG:' + error.code))
+        if (view.t.has('LOG_IN_FORM:MSG:' + error.code))
         {
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('users', 'LOG_IN_FORM:MSG:' + error.code)
+            text: view.t('LOG_IN_FORM:MSG:' + error.code)
           });
         }
         else if (view.resetting)
@@ -191,7 +189,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('users', 'LOG_IN_FORM:RESET:MSG:FAILURE')
+            text: view.t('LOG_IN_FORM:RESET:MSG:FAILURE')
           });
         }
       });
@@ -233,7 +231,7 @@ define([
 
       if (this.resetting && this.$id('password').val() !== this.$id('password2').val())
       {
-        error = t('users', 'LOG_IN_FORM:PASSWORD_MISMATCH');
+        error = this.t('LOG_IN_FORM:PASSWORD_MISMATCH');
       }
 
       this.$id('password2')[0].setCustomValidity(error);
@@ -245,10 +243,10 @@ define([
       this.$id('loginLink').hide();
       this.$id('resetLink').show();
       this.$id('login').select();
-      this.$id('password').val('').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:PASSWORD'));
+      this.$id('password').val('').attr('placeholder', this.t('LOG_IN_FORM:LABEL:PASSWORD'));
       this.$id('password2').val('').prop('required', false);
       this.$id('password2-container').addClass('hidden');
-      this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:LOG_IN'));
+      this.$('.logInForm-submit-label').text(this.t('LOG_IN_FORM:SUBMIT:LOG_IN'));
 
       this.resetting = false;
 
@@ -261,10 +259,10 @@ define([
       this.$id('resetLink').hide();
       this.$id('loginLink').show();
       this.$id('login').select();
-      this.$id('password').val('').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:NEW_PASSWORD'));
+      this.$id('password').val('').attr('placeholder', this.t('LOG_IN_FORM:LABEL:NEW_PASSWORD'));
       this.$id('password2').val('').prop('required', true);
       this.$id('password2-container').removeClass('hidden');
-      this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:RESET'));
+      this.$('.logInForm-submit-label').text(this.t('LOG_IN_FORM:SUBMIT:RESET'));
 
       this.resetting = true;
 
@@ -273,7 +271,7 @@ define([
 
     onModeSwitch: function(message)
     {
-      this.$title.text(this.resetting ? t('users', 'LOG_IN_FORM:TITLE:RESET') : this.originalTitle);
+      this.$title.text(this.resetting ? this.t('LOG_IN_FORM:TITLE:RESET') : this.originalTitle);
       this.$submit.removeClass('btn-danger').addClass('btn-primary');
 
       if (message)

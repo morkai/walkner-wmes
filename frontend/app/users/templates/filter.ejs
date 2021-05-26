@@ -1,29 +1,22 @@
 <form class="well filter-form" autocomplete="off">
-  <div class="form-group">
+  <div class="form-group" data-filter="login">
+    <label for="<%- id('login') %>"><%- t('PROPERTY:login') %></label>
+    <input id="<%- id('login') %>" class="form-control" name="login" type="text" style="width: 150px">
+  </div>
+  <div class="form-group" data-filter="searchName">
+    <label for="<%- id('searchName') %>"><%- t('PROPERTY:lastName') %></label>
+    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text" style="width: 150px">
+  </div>
+  <div class="form-group" data-filter="personnelId">
     <label for="<%- id('personnelId') %>"><%- t('PROPERTY:personnelId') %></label>
     <input id="<%- id('personnelId') %>" class="form-control" name="personnelId" type="text" style="width: 100px">
   </div>
-  <div class="form-group">
-    <label for="<%- id('login') %>"><%- t('PROPERTY:login') %></label>
-    <input id="<%- id('login') %>" class="form-control" name="login" type="text">
+  <div class="form-group" data-filter="card">
+    <label for="<%- id('card') %>"><%- t('PROPERTY:card') %></label>
+    <input id="<%- id('card') %>" class="form-control" name="card" type="text" style="width: 100px">
   </div>
-  <div class="form-group">
-    <label for="<%- id('searchName') %>"><%- t('PROPERTY:lastName') %></label>
-    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text">
-  </div>
-  <% if (companies.length) { %>
-    <div class="form-group">
-      <label for="<%- id('company') %>"><%- t('PROPERTY:company') %></label>
-      <select id="<%- id('company') %>" name="company">
-        <option></option>
-        <% companies.forEach(function(company) { %>
-        <option value="<%= company.id %>"><%= company.text %></option>
-        <% }) %>
-      </select>
-    </div>
-  <% } %>
   <% if (prodFunctions.length) { %>
-    <div class="form-group">
+    <div class="form-group" data-filter="prodFunction">
       <label for="<%- id('prodFunction') %>"><%- t('PROPERTY:prodFunction') %></label>
       <select id="<%- id('prodFunction') %>" name="prodFunction">
         <option></option>
@@ -33,8 +26,19 @@
       </select>
     </div>
   <% } %>
+  <% if (companies.length) { %>
+    <div class="form-group" data-filter="company">
+      <label for="<%- id('company') %>"><%- t('PROPERTY:company') %></label>
+      <select id="<%- id('company') %>" name="company">
+        <option></option>
+        <% companies.forEach(function(company) { %>
+        <option value="<%= company.id %>"><%= company.text %></option>
+        <% }) %>
+      </select>
+    </div>
+  <% } %>
   <% if (privileges.length) { %>
-    <div class="form-group">
+    <div class="form-group" data-filter="privileges">
       <label for="<%- id('privileges') %>"><%- t('PROPERTY:privileges') %></label>
       <select id="<%- id('privileges') %>" name="privileges">
         <option></option>
@@ -45,10 +49,10 @@
     </div>
   <% } %>
   <% if (orgUnit) { %>
-    <div id="<%- id('orgUnit') %>" class="form-group"></div>
+    <div id="<%- id('orgUnit') %>" class="form-group" data-filter="orgUnit"></div>
   <% } %>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('filter:submit') %></span></button>
+    <%- renderButton() %>
   </div>
 </form>

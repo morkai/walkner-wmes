@@ -5,23 +5,23 @@ define([
   'app/user',
   'app/core/pages/EditFormPage',
   'app/data/loadedModules',
-  '../views/UserFormView'
+  '../views/FormView'
 ], function(
   require,
-  user,
+  currentUser,
   EditFormPage,
   loadedModules,
-  UserFormView
+  FormView
 ) {
   'use strict';
 
   return EditFormPage.extend({
 
-    FormView: UserFormView,
+    FormView: FormView,
 
     breadcrumbs: function()
     {
-      if (user.isAllowedTo('USERS:VIEW'))
+      if (currentUser.isAllowedTo('USERS:VIEW'))
       {
         return EditFormPage.prototype.breadcrumbs.call(this);
       }
