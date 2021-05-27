@@ -4,14 +4,12 @@ define([
   'app/time',
   'app/user',
   '../core/Collection',
-  './FteLeaderEntry',
-  './FteWhEntry'
+  './FteLeaderEntry'
 ], function(
   time,
   user,
   Collection,
-  FteLeaderEntry,
-  FteWhEntry
+  FteLeaderEntry
 ) {
   'use strict';
 
@@ -32,7 +30,7 @@ define([
         }]
       };
 
-      if (userDivision && userDivision.get('type') !== 'prod' && userDivision.id !== FteWhEntry.WH_DIVISION)
+      if (userDivision && userDivision.get('type') === 'other')
       {
         selector.args.push({
           name: 'eq',

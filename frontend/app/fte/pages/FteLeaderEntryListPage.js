@@ -100,10 +100,10 @@ define([
 
           if (page.collection.TYPE === 'wh')
           {
-            return division.id === FteWhEntry.WH_DIVISION;
+            return division.get('type') === 'dist';
           }
 
-          return division.get('type') !== 'prod' && division.id !== FteWhEntry.WH_DIVISION;
+          return division.get('type') === 'other';
         }
       });
 

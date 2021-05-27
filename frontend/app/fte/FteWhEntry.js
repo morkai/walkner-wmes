@@ -19,9 +19,5 @@ define([
 
     privilegePrefix: 'FTE:WH'
 
-  }, {
-
-    WH_DIVISION: 'LD'
-
   });
 });

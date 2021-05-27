@@ -266,7 +266,9 @@ define([
         }
       }
 
-      if (modelType === 'fteLeader' && changeRequest.get('division') === FteWhEntry.WH_DIVISION)
+      var division = orgUnits.getByTypeAndId('division', changeRequest.get('division'));
+
+      if (modelType === 'fteLeader' && division && division.get('type') === 'dist')
       {
         modelType = 'fteWh';
       }

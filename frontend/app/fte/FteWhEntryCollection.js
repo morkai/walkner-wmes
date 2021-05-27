@@ -30,7 +30,7 @@ define([
         }]
       };
 
-      if (userDivision && userDivision.id === FteWhEntry.WH_DIVISION)
+      if (userDivision && userDivision.get('type') === 'wh')
       {
         selector.args.push({
           name: 'eq',
