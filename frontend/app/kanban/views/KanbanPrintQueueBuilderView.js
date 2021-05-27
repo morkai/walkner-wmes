@@ -571,10 +571,12 @@ define([
           var fromIndex = lineIndex * entry.kanbanQtyUser;
           var toIndex = lineIndex * entry.kanbanQtyUser + entry.kanbanQtyUser;
           var storageBin = entry.storageBin;
+          var componentQty = entry.componentQty;
 
-          if (newStorageBin && entry.newStorageBin)
+          if (newStorageBin)
           {
-            storageBin = entry.newStorageBin;
+            storageBin = entry.kanbanStorageBin || '';
+            componentQty = entry.componentQtyJit;
           }
 
           jobs.push({
@@ -588,7 +590,7 @@ define([
               description: entry.description,
               supplyArea: entry.supplyArea,
               family: entry.family,
-              componentQty: entry.componentQty,
+              componentQty: componentQty,
               unit: entry.unit,
               storageBin: storageBin,
               minBinQty: entry.minBinQty,

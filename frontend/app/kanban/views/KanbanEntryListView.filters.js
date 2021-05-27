@@ -235,6 +235,7 @@ define([
     storingPosition: 'text',
     kanbanQtyUser: 'numeric',
     componentQty: 'numeric',
+    componentQtyJit: 'numeric',
     kanbanId: 'text',
     kanbanIdCount: 'numeric',
     lineCount: 'numeric',

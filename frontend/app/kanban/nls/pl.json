@@ -58,6 +58,8 @@
   "column:kanbanQtyUser:title": "Liczba kanbanów na linię montażową",
   "column:componentQty": "Liczba komponentów<br>w kanbanie",
   "column:componentQty:title": "Liczba komponentów w kanbanie",
+  "column:componentQtyJit": "Liczba komponentów<br>w kanbanie (JIT)",
+  "column:componentQtyJit:title": "Liczba komponentów w kanbanie (JIT)",
   "column:storageBin": "Lokalizacja<br>magazynowa",
   "column:storageBin:title": "Lokalizacja magazynowa",
   "column:kanbanStorageBin": "Lokalizacja<br>kanban",
@@ -151,7 +153,7 @@
   "builder:submit": "Dodaj nową kolejkę drukowania",
   "builder:remove": "Usuń CCN",
   "builder:clear": "Wyczyść wszystko",
-  "builder:newStorageBin": "Użyj nowej lokalizacji magazynowej",
+  "builder:newStorageBin": "Użyj lokalizacji kanban",
 
   "import:components:title": "Importowanie danych komponentów",
   "import:components:file": "Plik do importu",

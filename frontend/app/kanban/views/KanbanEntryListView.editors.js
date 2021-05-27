@@ -285,6 +285,11 @@ define([
         this.afterEdit();
       },
 
+      componentQtyJit: function(cell)
+      {
+        this.editors.input.call(this, cell, '99999.99'.length, '^[0-9]{1,5}([,.][0-9]{1,2})?$');
+      },
+
       workstations: function(cell)
       {
         this.editors.input.call(this, cell, 3, '^([0-9]|[1-9][0-9]|[0-9](\.|,)5)$');
@@ -373,6 +378,7 @@ define([
       },
 
       kind: 'contextMenu',
+      componentQtyJit: 'input',
       workstations: 'input',
       locations: 'input',
       comment: 'textArea'

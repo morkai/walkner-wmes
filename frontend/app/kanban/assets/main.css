@@ -227,7 +227,8 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="kanbanQtyUser"] {
   width: 50px;
 }
-.kanban-td[data-column-id="componentQty"] {
+.kanban-td[data-column-id="componentQty"],
+.kanban-td[data-column-id="componentQtyJit"] {
   width: 50px;
 }
 .kanban-td[data-column-id="storageBin"] {
@@ -375,6 +376,9 @@ tr:hover > .kanban-is-invalid,
 }
 .kanban-editor-form[data-column-id="workCenter"] {
   width: 90px;
+}
+.kanban-editor-form[data-column-id="componentQtyJit"] {
+  width: 55px;
 }
 .kanban-editor-form[data-column-id="container"] {
   width: 86px;

@@ -161,7 +161,40 @@ define([
       type: 'integer',
       width: 9,
       rotated: true,
-      tdClassName: invalidFifoTdClassName
+      tdClassName: invalidFifoTdClassName,
+      renderValue: function(value)
+      {
+        return value === 0 ? '' : this.exportValue(value);
+      },
+      exportValue: function(value)
+      {
+        return value.toLocaleString().replace(/\s+/g, '');
+      }
+    },
+    componentQtyJit: {
+      type: 'integer',
+      width: 9,
+      rotated: true,
+      tdClassName: function()
+      {
+        return this.state.auth.manage || this.state.auth.processEngineer ? 'kanban-is-editable' : '';
+      },
+      renderValue: function(value)
+      {
+        return value === 0 ? '' : this.exportValue(value);
+      },
+      editorValue: function(value)
+      {
+        return value.toLocaleString().replace(/\s+/g, '');
+      },
+      exportValue: function(value)
+      {
+        return this.editorValue(value);
+      },
+      parseValue: function(value)
+      {
+        return Math.min(99999, Math.max(0, parseNumber(value)));
+      }
     },
     storageBin: {
       width: 10,
