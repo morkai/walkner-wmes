@@ -1,11 +1,11 @@
 <form class="well filter-form" autocomplete="off">
   <div class="form-group" data-filter="login">
     <label for="<%- id('login') %>"><%- t('PROPERTY:login') %></label>
-    <input id="<%- id('login') %>" class="form-control" name="login" type="text" style="width: 150px">
+    <input id="<%- id('login') %>" class="form-control" name="login" type="text" style="width: 125px">
   </div>
   <div class="form-group" data-filter="searchName">
     <label for="<%- id('searchName') %>"><%- t('PROPERTY:lastName') %></label>
-    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text" style="width: 150px">
+    <input id="<%- id('searchName') %>" class="form-control" name="searchName" type="text" style="width: 125px">
   </div>
   <div class="form-group" data-filter="personnelId">
     <label for="<%- id('personnelId') %>"><%- t('PROPERTY:personnelId') %></label>
@@ -43,6 +43,13 @@
   <% if (oshOrgUnit) { %>
     <div id="<%- id('oshOrgUnit') %>" class="form-group" data-filter="oshOrgUnit"></div>
   <% } %>
+  <div class="form-group" data-filter="active">
+    <label class="control-label"><%- t('LIST:COLUMN:active') %></label>
+    <div id="<%- id('active') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default"><input type="radio" name="active" value="true"> <%- t('core', 'BOOL:true') %></label>
+      <label class="btn btn-default"><input type="radio" name="active" value="false"> <%- t('core', 'BOOL:false') %></label>
+    </div>
+  </div>
   <% if (privileges.length) { %>
     <div class="form-group" data-filter="privileges">
       <label for="<%- id('privileges') %>"><%- t('PROPERTY:privileges') %></label>

@@ -13,7 +13,7 @@ define([
 
     model: User,
 
-    rqlQuery: '&sort(+lastName,+firstName)&limit(-1337)'
+    rqlQuery: '&sort(searchName)&limit(-1337)'
 
   });
 });

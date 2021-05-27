@@ -53,7 +53,11 @@ define([
         thClassName: 'is-filter',
         visible: loadedModules.isLoaded('wmes-osh')
       },
-      {id: 'active', className: 'is-min'},
+      {
+        id: 'active',
+        className: 'is-min',
+        thClassName: 'is-filter'
+      },
       '-'
     ]
 

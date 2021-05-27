@@ -216,11 +216,18 @@ define([
 
     showFilter: function(filter)
     {
-      this.$('.form-group[data-filter="' + (this.filterMap[filter] || filter) + '"]')
+      var $group = this.$('.form-group[data-filter="' + (this.filterMap[filter] || filter) + '"]');
+
+      $group
         .removeClass('hidden')
         .find('input, select')
         .first()
         .focus();
+
+      if ($group.find('.orgUnits-picker').length)
+      {
+        $group.find('.btn').click();
+      }
     },
 
     serializeQueryToForm: function()

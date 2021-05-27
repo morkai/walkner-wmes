@@ -41,6 +41,7 @@ define([
         loadedModules.isLoaded('prodFunctions') ? 'prodFunction' : null,
         loadedModules.isLoaded('orgUnits') ? 'prodOrgUnit' : null,
         loadedModules.isLoaded('wmes-osh') ? 'oshOrgUnit' : null,
+        'active',
         user.isAllowedTo('USERS:MANAGE') ? 'privileges' : null,
         'limit'
       ].filter(f => !!f);
@@ -65,8 +66,24 @@ define([
       },
       'personnelId': 'card',
       'company': 'card',
-      'prodFunction': 'card'
+      'prodFunction': 'card',
+      'active': 'card'
     },
+
+    events: Object.assign({
+
+      'click #-active .btn': function(e)
+      {
+        if (e.currentTarget.classList.contains('active'))
+        {
+          setTimeout(() =>
+          {
+            this.$(e.currentTarget).removeClass('active').find('input').prop('checked', false);
+          }, 1);
+        }
+      }
+
+    }, FilterView.prototype.events),
 
     initialize: function()
     {
@@ -112,22 +129,31 @@ define([
         width: '250px',
         allowClear: true
       });
+
+      this.toggleButtonGroup('active');
     },
 
     serializeFormToQuery: function(selector)
     {
-      var searchName = setUpUserSelect2.transliterate(this.$id('searchName').val());
+      const searchName = setUpUserSelect2.transliterate(this.$id('searchName').val());
 
       if (searchName.length)
       {
-        selector.push({name: 'regex', args: ['searchName', '^' + searchName]});
+        selector.push({name: 'regex', args: ['searchName', `^${searchName}`]});
       }
 
       this.serializeRegexTerm(selector, 'login', null, null, true, true);
 
+      const active = this.getButtonGroupValue('active', null);
+
+      if (active !== null)
+      {
+        selector.push({name: 'eq', args: ['active', active === 'true']});
+      }
+
       ['personnelId', 'company', 'prodFunction', 'privileges', 'card'].forEach(p =>
       {
-        var v = this.$id(p).val() || '';
+        const v = this.$id(p).val() || '';
 
         if (v.length)
         {
