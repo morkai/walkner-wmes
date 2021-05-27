@@ -10,6 +10,7 @@ define([
   'app/data/privileges',
   'app/core/util/idAndLabel',
   'app/core/views/FilterView',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/users/util/setUpUserSelect2',
   'app/users/templates/filter'
 ], function(
@@ -22,6 +23,7 @@ define([
   privileges,
   idAndLabel,
   FilterView,
+  OrgUnitPickerView,
   setUpUserSelect2,
   template
 ) {
@@ -31,27 +33,22 @@ define([
 
     filterList: function()
     {
-      var filters = [
+      return [
         'login',
         'personnelId',
-        'company',
-        'prodFunction',
-        'privileges'
-      ];
-
-      if (loadedModules.isLoaded('wmes-osh'))
-      {
-        filters.push('orgUnit');
-      }
-
-      filters.push('limit');
-
-      return filters;
+        'card',
+        loadedModules.isLoaded('companies') ? 'company' : null,
+        loadedModules.isLoaded('prodFunctions') ? 'prodFunction' : null,
+        loadedModules.isLoaded('orgUnits') ? 'prodOrgUnit' : null,
+        loadedModules.isLoaded('wmes-osh') ? 'oshOrgUnit' : null,
+        user.isAllowedTo('USERS:MANAGE') ? 'privileges' : null,
+        'limit'
+      ].filter(f => !!f);
     },
     filterMap: {
       lastName: 'searchName',
-      oshWorkplace: 'orgUnit',
-      oshDepartment: 'orgUnit'
+      oshWorkplace: 'oshOrgUnit',
+      oshDepartment: 'oshOrgUnit'
     },
 
     template: template,
@@ -75,20 +72,14 @@ define([
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
+      if (loadedModules.isLoaded('orgUnits'))
+      {
+        this.setUpProdOrgUnit();
+      }
+
       if (loadedModules.isLoaded('wmes-osh'))
       {
-        const OrgUnitPickerFilterView = require('app/wmes-osh-common/views/OrgUnitPickerFilterView');
-
-        this.setView('#-orgUnit', new OrgUnitPickerFilterView({
-          filterView: this,
-          emptyLabel: this.t('PROPERTY:orgUnit'),
-          orgUnitTerms: {
-            'oshDivision': 'division',
-            'oshWorkplace': 'workplace',
-            'oshDepartment': 'department'
-          },
-          orgUnitTypes: ['division', 'workplace', 'department']
-        }));
+        this.setUpOshOrgUnit();
       }
     },
 
@@ -97,8 +88,9 @@ define([
       return {
         prodFunctions: loadedModules.isLoaded('prodFunctions') ? prodFunctions.map(idAndLabel) : [],
         companies: loadedModules.isLoaded('companies') ? companies.map(idAndLabel) : [],
-        privileges: !user.isAllowedTo('USERS:MANAGE') ? [] : privileges,
-        orgUnit: loadedModules.isLoaded('wmes-osh')
+        privileges: user.isAllowedTo('USERS:MANAGE') ? privileges : [],
+        prodOrgUnit: loadedModules.isLoaded('orgUnits'),
+        oshOrgUnit: loadedModules.isLoaded('wmes-osh')
       };
     },
 
@@ -142,6 +134,31 @@ define([
           selector.push({name: 'eq', args: [p, v]});
         }
       });
+    },
+
+    setUpProdOrgUnit: function()
+    {
+      this.setView('#-prodOrgUnit', new OrgUnitPickerView({
+        filterView: this,
+        orgUnitTypes: ['division', 'subdivision'],
+        divisionFilter: () => true
+      }));
+    },
+
+    setUpOshOrgUnit: function()
+    {
+      const OrgUnitPickerFilterView = require('app/wmes-osh-common/views/OrgUnitPickerFilterView');
+
+      this.setView('#-oshOrgUnit', new OrgUnitPickerFilterView({
+        filterView: this,
+        emptyLabel: this.t('PROPERTY:orgUnit'),
+        orgUnitTerms: {
+          'oshDivision': 'division',
+          'oshWorkplace': 'workplace',
+          'oshDepartment': 'department'
+        },
+        orgUnitTypes: ['division', 'workplace', 'department']
+      }));
     }
 
   });

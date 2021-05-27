@@ -37,6 +37,12 @@
       </select>
     </div>
   <% } %>
+  <% if (prodOrgUnit) { %>
+    <div id="<%- id('prodOrgUnit') %>" class="form-group" data-filter="prodOrgUnit"></div>
+  <% } %>
+  <% if (oshOrgUnit) { %>
+    <div id="<%- id('oshOrgUnit') %>" class="form-group" data-filter="oshOrgUnit"></div>
+  <% } %>
   <% if (privileges.length) { %>
     <div class="form-group" data-filter="privileges">
       <label for="<%- id('privileges') %>"><%- t('PROPERTY:privileges') %></label>
@@ -47,9 +53,6 @@
         <% }) %>
       </select>
     </div>
-  <% } %>
-  <% if (orgUnit) { %>
-    <div id="<%- id('orgUnit') %>" class="form-group" data-filter="orgUnit"></div>
   <% } %>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

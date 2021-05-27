@@ -129,6 +129,7 @@ define([
     setUpOrgUnitSelect2: function(type)
     {
       var deactivated = localStorage.getItem('WMES:OrgUnitPicker:deactivated') === '1';
+      var filterDivision = this.createDivisionFilter();
       var filterSubdivision = this.createSubdivisionFilter();
       var data = orgUnits
         .getAllByType(type)
@@ -138,7 +139,7 @@ define([
         })
         .map(function(orgUnit)
         {
-          if (type === 'division' && orgUnit.get('type') !== 'prod')
+          if (!filterDivision(orgUnit) || !filterSubdivision(orgUnit))
           {
             return null;
           }
@@ -148,11 +149,6 @@ define([
 
           if (type === 'subdivision')
           {
-            if (orgUnit.get('type') === 'storage')
-            {
-              return null;
-            }
-
             text = orgUnit.get('division') + ' > ' + orgUnit.getLabel();
           }
           else if (type === 'mrpControllers')
@@ -163,11 +159,6 @@ define([
           else
           {
             text = orgUnit.getLabel();
-          }
-
-          if (type !== 'division' && !filterSubdivision(orgUnit))
-          {
-            return null;
           }
 
           return {
@@ -211,11 +202,11 @@ define([
     {
       var subdivisionFilter = this.model.subdivisionFilter;
 
-      if (Array.isArray(subdivisionFilter))
+      if (Array.isArray(subdivisionFilter) && subdivisionFilter.length)
       {
-        return function(prodLine)
+        return function(orgUnit)
         {
-          var subdivision = prodLine.getSubdivision();
+          var subdivision = orgUnit.getSubdivision();
           var subdivisionType = subdivision && subdivision.get('type');
 
           return subdivisionFilter.indexOf(subdivisionType) !== -1;
@@ -228,6 +219,34 @@ define([
       }
 
       return function() { return true; };
+    },
+
+    createDivisionFilter: function()
+    {
+      var divisionFilter = this.model.divisionFilter;
+
+      if (Array.isArray(divisionFilter) && divisionFilter.length)
+      {
+        return function(orgUnit)
+        {
+          var division = orgUnits.getDivisionFor(orgUnit);
+          var divisionType = division && division.get('type');
+
+          return divisionFilter.indexOf(divisionType) !== -1;
+        };
+      }
+
+      if (typeof divisionFilter === 'function')
+      {
+        return divisionFilter;
+      }
+
+      return function(orgUnit)
+      {
+        var division = orgUnits.getDivisionFor(orgUnit);
+
+        return !!division && division.get('type') === 'prod';
+      };
     }
 
   });

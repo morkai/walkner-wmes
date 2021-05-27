@@ -43,6 +43,7 @@ define([
       {
         var dialogView = new OrgUnitPickerDialogView({
           model: {
+            divisionFilter: this.options.divisionFilter,
             subdivisionFilter: this.options.subdivisionFilter,
             resolveLabel: this.resolveLabel.bind(this),
             orgUnitTypes: this.options.orgUnitTypes,
@@ -158,15 +159,15 @@ define([
           return;
         }
 
-        if (!array && (term.name === 'eq' || term.name === 'in'))
-        {
-          type = termToType[term.args[0]];
-          units = Array.isArray(term.args[1]) ? term.args[1] : [term.args[1]];
-        }
-        else if (array && term.name === 'orgUnit')
+        if (array && term.name === 'orgUnit')
         {
           units = [].concat(term.args);
           type = termToType[units.shift()];
+        }
+        else if (term.name === 'eq' || term.name === 'in')
+        {
+          type = termToType[term.args[0]];
+          units = Array.isArray(term.args[1]) ? term.args[1] : [term.args[1]];
         }
       });
 

@@ -21,8 +21,8 @@ define([
       {id: 'login', className: 'is-min', thClassName: 'is-filter'},
       {id: 'lastName', className: 'is-min', thClassName: 'is-filter'},
       {id: 'firstName', className: 'is-min'},
-      {id: 'personnelId', className: 'is-min', thClassName: 'is-filter'},
-      {id: 'card', className: 'is-min', thClassName: 'is-filter'},
+      {id: 'personnelId', className: 'is-min', thClassName: 'is-filter', tdClassName: 'text-fixed'},
+      {id: 'card', className: 'is-min', thClassName: 'is-filter', tdClassName: 'text-fixed'},
       {
         id: 'prodFunction',
         className: 'is-min',
@@ -36,8 +36,9 @@ define([
         visible: loadedModules.isLoaded('companies')
       },
       {
-        id: 'orgUnit',
+        id: 'prodOrgUnit',
         className: 'is-min',
+        thClassName: 'is-filter',
         visible: loadedModules.isLoaded('orgUnits')
       },
       {

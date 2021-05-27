@@ -139,12 +139,12 @@ define([
 
         if (orgUnitModel)
         {
-          obj.orgUnit = renderOrgUnitPath(orgUnitModel, false, false);
+          obj.prodOrgUnit = renderOrgUnitPath(orgUnitModel, false, false);
         }
       }
       else
       {
-        obj.orgUnit = '';
+        obj.prodOrgUnit = '';
       }
 
       if (obj.vendor)
@@ -165,6 +165,11 @@ define([
     serializeRow: function()
     {
       var obj = this.serialize();
+
+      if (!this.get('active'))
+      {
+        obj.className = 'danger';
+      }
 
       if (loadedModules.isLoaded('wmes-osh'))
       {
