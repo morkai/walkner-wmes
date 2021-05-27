@@ -443,6 +443,11 @@ define([
       {
         var owners = view.$id(type + 'Owners').select2('data');
 
+        if (!owners)
+        {
+          owners = [];
+        }
+
         if (!Array.isArray(owners))
         {
           owners = [owners];
