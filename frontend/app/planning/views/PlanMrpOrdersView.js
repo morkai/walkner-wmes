@@ -110,7 +110,7 @@ define([
     },
 
     localTopics: {
-      'planning.windowResized': 'resize',
+      'viewport.resized': 'resize',
       'planning.escapePressed': function()
       {
         this.hidePreview();

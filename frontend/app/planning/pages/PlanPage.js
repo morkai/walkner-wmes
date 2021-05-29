@@ -377,7 +377,6 @@ define([
         .on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
 
       $(window)
-        .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
         .on('keydown.' + page.idPrefix, page.onWindowKeyDown.bind(page))
         .on('keyup.' + page.idPrefix, page.onWindowKeyUp.bind(page));
     },
@@ -848,14 +847,6 @@ define([
       }
 
       this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
-    },
-
-    onWindowResize: function(e)
-    {
-      if (this.broker)
-      {
-        this.broker.publish('planning.windowResized', e);
-      }
     },
 
     onWindowKeyDown: function(e)

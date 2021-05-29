@@ -69,11 +69,8 @@ define([
     },
 
     localTopics: {
-      'planning.windowResized': 'resize',
-      'planning.escapePressed': function()
-      {
-        this.hideMenu();
-      }
+      'viewport.resized': 'resize',
+      'planning.escapePressed': 'hideMenu'
     },
 
     initialize: function()

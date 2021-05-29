@@ -2,22 +2,26 @@
 
 define([
   'underscore',
+  'jquery',
   'select2',
   'Sortable',
   'app/viewport',
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/core/util/resultTips',
-  'app/planning/templates/linesOrderGroupPriorityDialog'
+  'app/planning/templates/linesOrderGroupPriorityDialog',
+  'app/planning/templates/linesOrderGroupPriorityGroup'
 ], function(
   _,
+  $,
   select2,
   Sortable,
   viewport,
   View,
   idAndLabel,
   resultTips,
-  template
+  template,
+  groupTemplate
 ) {
   'use strict';
 
@@ -26,6 +30,8 @@ define([
     template: template,
 
     modelProperty: 'plan',
+
+    dialogClassName: 'planning-orderGroupPriority-dialog',
 
     events: {
 
@@ -43,21 +49,106 @@ define([
 
       'click a[data-action="copy"]': function(e)
       {
-        this.copyData = this.$(e.target).closest('.form-group').find('input').select2('data');
+        this.copyData = this.$(e.target)
+          .closest('.planning-orderGroupPriority-line')
+          .find('.planning-orderGroupPriority-groups')
+          .html();
 
         resultTips.showCopied({e: e});
       },
 
       'click a[data-action="paste"]': function(e)
       {
-        this.$(e.target).closest('.form-group').find('input').select2('data', this.copyData).trigger('change');
+        this.$(e.target)
+          .closest('.planning-orderGroupPriority-line')
+          .find('.planning-orderGroupPriority-groups')
+          .html(this.copyData);
+      },
+
+      'click a[data-action="remove"]': function(e)
+      {
+        const $group = this.$(e.target).closest('.planning-orderGroupPriority-group');
+
+        $group.fadeOut('fast', () =>
+        {
+          $group.remove();
+          this.setUpNewGroupSelect2();
+        });
+      },
+
+      'click .planning-orderGroupPriority-line': function(e)
+      {
+        this.selectLine(e.currentTarget.dataset.lineId);
+      },
+
+      'mouseenter .planning-orderGroupPriority-group': function(e)
+      {
+        const groupEl = e.currentTarget;
+        const {groupId} = groupEl.dataset;
+        const lines = new Set();
+
+        this.$(`.planning-orderGroupPriority-group[data-group-id="${groupId}"]`).each((i, g) =>
+        {
+          lines.add(g.parentNode.parentNode.dataset.lineId);
+
+          if (g === groupEl)
+          {
+            return;
+          }
+
+          g.classList.add('is-same');
+
+          g.parentNode.scrollTop = (g.offsetTop - g.parentNode.offsetTop)
+            - (g.parentNode.offsetHeight / 2);
+        });
+
+        this.updateTitleLines(
+          groupEl.querySelector('.planning-orderGroupPriority-group-name').innerText,
+          Array.from(lines).sort((a, b) => a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true}))
+        );
+      },
+
+      'mouseleave .planning-orderGroupPriority-group': function()
+      {
+        this.$(`.is-same`).removeClass('is-same');
+
+        this.updateTitleLines('', []);
+      },
+
+      'change #-newGroup': function(e)
+      {
+        const $group = this.renderPartial(groupTemplate, {
+          group: {
+            id: e.added.id,
+            label: e.added.text
+          }
+        });
+        const $groups = this.$(`.planning-orderGroupPriority-line[data-line-id="${this.selectedLine}"]`)
+          .find('.planning-orderGroupPriority-groups')
+          .append($group);
+
+        $groups[0].scrollTop = $groups[0].scrollHeight;
+
+        $group.addClass('highlight');
+
+        this.setUpNewGroupSelect2();
+      },
+
+      'change #-matchingMrps': function()
+      {
+        this.setUpNewGroupSelect2();
       }
 
     },
 
+    localTopics: {
+      'viewport.resized': 'resize'
+    },
+
     initialize: function()
     {
-      this.copyData = [];
+      this.copyData = '';
+      this.selectedLine = '';
     },
 
     destroy: function()
@@ -67,7 +158,7 @@ define([
 
     destroySortables: function()
     {
-      this.$('input[data-line-id]').each((i, el) =>
+      this.$('.planning-orderGroupPriority-groups').each((i, el) =>
       {
         const $el = this.$(el);
 
@@ -78,14 +169,21 @@ define([
 
     getTemplateData: function()
     {
-      var view = this;
-
       return {
-        lines: view.mrp.getSortedLines().map(function(line)
+        renderGroup: this.renderPartialHtml.bind(this, groupTemplate),
+        lines: this.mrp.getSortedLines().map(line =>
         {
           return {
             _id: line.id,
-            orderGroupPriority: (line.settings.get('orderGroupPriority') || []).join(',')
+            orderGroupPriority: (line.settings.get('orderGroupPriority') || []).map(id =>
+            {
+              const orderGroup = this.orderGroups.get(id);
+
+              return {
+                id,
+                label: orderGroup ? orderGroup.getLabel() : null
+              };
+            }).filter(g => !!g.label)
           };
         })
       };
@@ -93,28 +191,68 @@ define([
 
     afterRender: function()
     {
-      this.$('input[data-line-id]').each((i, el) =>
+      this.$('.planning-orderGroupPriority-groups').each((i, el) =>
       {
-        this.setUpOrderGroupPriority(this.$(el));
+        this.setUpSortable(this.$(el));
       });
+
+      this.$('.planning-orderGroupPriority-line').first().click();
     },
 
-    setUpOrderGroupPriority: function($orderGroupPriority)
+    setUpSortable: function($groups)
     {
-      const mrpPriority = this.mrp.lines.get($orderGroupPriority[0].dataset.lineId).settings.get('mrpPriority');
-      const data = this.orderGroups.map(g =>
-      {
-        const mrps = g.get('mrp') || [];
+      const sortable = new Sortable($groups[0], {
+        draggable: '.planning-orderGroupPriority-group',
+        handle: 'i',
+        filter: 'a',
+        onStart: e =>
+        {
+          this.selectLine(e.item.parentNode.parentNode.dataset.lineId);
+          this.$el.addClass('sortable-dragging');
+        },
+        onEnd: e =>
+        {
+          this.$el.removeClass('sortable-dragging');
 
-        return {
-          id: g.id,
-          text: g.getLabel(),
-          mrps,
-          search: (g.getLabel() + ' ' + mrps.join(' ')).trim().toUpperCase(),
-          hasLineMrps: _.intersection(mrps, mrpPriority).length > 0,
-          model: g
-        };
+          // Force redraw without moving the cursor
+          e.item.offsetHeight; // eslint-disable-line no-unused-expressions
+        }
       });
+
+      $groups.data('sortable', sortable);
+    },
+
+    setUpNewGroupSelect2: function()
+    {
+      if (!this.selectedLine)
+      {
+        return;
+      }
+
+      const selectedGroups = new Set();
+
+      this.$(`.planning-orderGroupPriority-line[data-line-id="${this.selectedLine}"]`)
+        .find('.planning-orderGroupPriority-group')
+        .each((i, g) => selectedGroups.add(g.dataset.groupId));
+
+      const mrpPriority = this.mrp.lines.get(this.selectedLine).settings.get('mrpPriority');
+      const matchingMrps = this.$id('matchingMrps').prop('checked');
+      const data = this.orderGroups
+        .filter(g => !selectedGroups.has(g.id))
+        .map(g =>
+        {
+          const mrps = g.get('mrp') || [];
+
+          return {
+            id: g.id,
+            text: g.getLabel(),
+            mrps,
+            search: (g.getLabel() + ' ' + mrps.join(' ')).trim().toUpperCase(),
+            hasLineMrps: mrps.length === 0 || _.intersection(mrps, mrpPriority).length > 0,
+            model: g
+          };
+        })
+        .filter(g => !matchingMrps || g.hasLineMrps);
 
       data.sort((a, b) =>
       {
@@ -141,10 +279,10 @@ define([
         return 1;
       });
 
-      $orderGroupPriority.select2({
-        allowClear: true,
-        multiple: true,
+      this.$id('newGroup').val('').select2({
+        width: '600px',
         data,
+        placeholder: this.t('lines:menu:orderGroupPriority:newGroup', {line: this.selectedLine}),
         matcher: (term, text, item) => item.search.includes(term.toUpperCase()),
         formatResult: (item, $container, query, e) =>
         {
@@ -167,28 +305,6 @@ define([
           return html.join('');
         }
       });
-
-      let sortable = $orderGroupPriority.data('sortable');
-
-      if (sortable)
-      {
-        sortable.destroy();
-      }
-
-      sortable = new Sortable($orderGroupPriority.select2('container').find('.select2-choices')[0], {
-        draggable: '.select2-search-choice',
-        filter: '.select2-search-choice-close',
-        onStart: () =>
-        {
-          $orderGroupPriority.select2('onSortStart');
-        },
-        onEnd: () =>
-        {
-          $orderGroupPriority.select2('onSortEnd').select2('focus');
-        }
-      });
-
-      $orderGroupPriority.data('sortable', sortable);
     },
 
     submitForm: function()
@@ -197,7 +313,7 @@ define([
       const $spinner = $submit.find('.fa-spinner').removeClass('hidden');
       const settings = this.plan.settings;
 
-      this.$('input[data-line-id]').each((i, el) =>
+      this.$('.planning-orderGroupPriority-line').each((i, el) =>
       {
         const lineSettings = settings.lines.get(el.dataset.lineId);
 
@@ -206,7 +322,10 @@ define([
           return;
         }
 
-        const newValue = el.value.split(',').filter(v => !!v.length);
+        const newValue = this.$(el)
+          .find('.planning-orderGroupPriority-group')
+          .map((i, el) => el.dataset.groupId)
+          .get();
 
         lineSettings.set('orderGroupPriority', newValue);
       });
@@ -232,9 +351,54 @@ define([
       });
     },
 
-    onDialogShown: function()
+    onDialogShowing: function()
     {
-      this.$id('line').select2('focus');
+      this.resize();
+    },
+
+    resize: function()
+    {
+      const height = window.innerHeight
+        - 20 // Margin
+        - 30 // Padding
+        - 55 // Header
+        - 65 // Footer
+        - 2
+      ;
+
+      this.$id('lines')[0].style.height = height + 'px';
+
+      viewport.adjustDialogBackdrop();
+    },
+
+    updateTitleLines: function(group, lines)
+    {
+      const $title = $('.modal-title');
+      let $lines = $title.find('.planning-orderGroupPriority-title-lines');
+
+      if (!$lines.length)
+      {
+        $lines = $('<span class="planning-orderGroupPriority-title-lines"></span>').appendTo($title);
+      }
+
+      const text = lines.length ? `<b>${_.escape(group)}</b><br>${_.escape(lines.join(' ▪ '))}` : '';
+
+      $lines.html(text);
+    },
+
+    selectLine: function(selectedLine)
+    {
+      if (this.selectedLine === selectedLine)
+      {
+        return;
+      }
+
+      this.selectedLine = selectedLine;
+
+      this.$('.is-selected').removeClass('is-selected');
+      this.$(`.planning-orderGroupPriority-line[data-line-id="${selectedLine}"]`).addClass('is-selected');
+
+      this.setUpNewGroupSelect2();
     }
 
   });

@@ -686,3 +686,100 @@
 tr.planning-sortable-ghost {
   outline: 2px solid #0af;
 }
+
+.planning-orderGroupPriority-dialog .modal-dialog {
+  width: auto;
+  margin: 10px;
+}
+.planning-orderGroupPriority-lines {
+  display: flex;
+  overflow-x: scroll;
+}
+.planning-orderGroupPriority-line {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.planning-orderGroupPriority-line.is-selected {
+  background: #d9edf7;
+}
+.planning-orderGroupPriority-line-name {
+  display: flex;
+  margin-left: 10px;
+}
+.planning-orderGroupPriority-groups {
+  flex: 1 1 auto;
+  border-right: 1px solid #ddd;
+  overflow-y: scroll;
+  min-width: 200px;
+}
+.planning-orderGroupPriority-line:last-child .planning-orderGroupPriority-groups {
+  border-right: none;
+}
+.planning-orderGroupPriority-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: inherit;
+}
+.planning-orderGroupPriority-group-move {
+  padding-left: 10px;
+  padding-right: 4px;
+  display: none;
+  flex: 0;
+  cursor: grab;
+}
+.planning-orderGroupPriority-group-name {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  padding: 0 26px 0 10px;
+}
+.planning-orderGroupPriority-group.is-same {
+  background: #eee;
+}
+.planning-orderGroupPriority-group:hover {
+  background: #ffffd6;
+}
+.planning-orderGroupPriority-group:hover .planning-orderGroupPriority-group-move {
+  display: block;
+}
+.planning-orderGroupPriority-group:hover .planning-orderGroupPriority-group-name {
+  padding: 0 10px 0 0;
+}
+.planning-orderGroupPriority-group a[data-action="remove"] {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 10px;
+  background: inherit;
+}
+.is-selected .planning-orderGroupPriority-group:hover a[data-action="remove"] {
+  display: block;
+}
+.sortable-dragging {
+  cursor: grabbing;
+}
+.sortable-dragging .planning-orderGroupPriority-group {
+  background: inherit!important;
+}
+.sortable-dragging .planning-orderGroupPriority-group.is-same {
+  background: #fff!important;
+}
+.sortable-dragging .planning-orderGroupPriority-group-move,
+.sortable-dragging a[data-action="remove"] {
+  display: none!important;
+}
+.sortable-dragging .planning-orderGroupPriority-group-name {
+  padding: 0 26px 0 10px!important;
+}
+.planning-orderGroupPriority-groups .sortable-ghost {
+  background: #ffffa6!important;
+}
+.planning-orderGroupPriority-title-lines {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  overflow: visible;
+  font-size: 14px;
+}

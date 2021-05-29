@@ -1,21 +1,33 @@
 <form>
-  <% lines.forEach((line, i) => { %>
-    <div class="form-group settings-select2-long">
-      <div style="display: flex">
+  <div id="<%- id('lines') %>" class="planning-orderGroupPriority-lines">
+    <% lines.forEach((line, i) => { %>
+    <div class="planning-orderGroupPriority-line" data-line-id="<%= line._id %>">
+      <div class="planning-orderGroupPriority-line-name">
         <label for="<%- id(`line-${i}`) %>" class="control-label"><%= line._id %></label>
         <div style="margin-left: auto">
           <a href="javascript:void(0)" data-action="copy" style="margin-right: 5px" title="<%- t('lines:menu:orderGroupPriority:copy') %>"><i class="fa fa-copy"></i></a>
           <a href="javascript:void(0)" data-action="paste" title="<%- t('lines:menu:orderGroupPriority:paste') %>"><i class="fa fa-paste"></i></a>
         </div>
       </div>
-      <input id="<%- id(`line-${i}`) %>" data-line-id="<%= line._id %>" value="<%- line.orderGroupPriority %>">
+      <div class="planning-orderGroupPriority-groups">
+        <% line.orderGroupPriority.forEach(group => { %>
+        <%- renderGroup({group}) %>
+        <% }) %>
+      </div>
     </div>
-  <% }) %>
-  <div class="form-actions">
+    <% }) %>
+  </div>
+  <div class="form-actions" style="display: flex; align-items: center">
     <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>
       <span><%- t('lines:menu:orderPriority:submit') %></span>
     </button>
-    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+    <button type="button" class="cancel btn btn-link" style="margin-left: 7px"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+    <label style="margin-left: auto; margin-right: 15px;">
+      <input id="<%- id('matchingMrps') %>" type="checkbox" checked> <%- t('lines:menu:orderGroupPriority:matchingMrps') %>
+    </label>
+    <div>
+      <input id="<%- id('newGroup') %>" type="text">
+    </div>
   </div>
 </form>

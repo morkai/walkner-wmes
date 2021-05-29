@@ -155,6 +155,8 @@
   "lines:menu:orderGroupPriority:submit": "Ustaw priorytety grup zleceń",
   "lines:menu:orderGroupPriority:copy": "Kopiuj grupy",
   "lines:menu:orderGroupPriority:paste": "Wklej grupy",
+  "lines:menu:orderGroupPriority:newGroup": "Dodaj grupę do linii {line}",
+  "lines:menu:orderGroupPriority:matchingMrps": "Tylko pasujące MRP",
   "lines:menu:freezeOrders": "Zamroź zlecenia",
   "lines:menu:freezeOrders:title": "Zamrażanie zleceń",
   "lines:menu:freezeOrders:line": "Linia",
