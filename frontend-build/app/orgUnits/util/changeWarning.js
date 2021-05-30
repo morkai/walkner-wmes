@@ -1,0 +1,1 @@
+define(["app/i18n","app/time","i18n!app/nls/orgUnits"],function(n,e){"use strict";return function(i){var s=e.getMoment(),a=s.hours(),t=s.hours(),r=s.day();!(a>23||a>=22&&t>=15||a<5||a<=5&&t<=45||(0===r||6===r))&&i.$(".panel-body").prepend('<div class="message message-inline message-warning" style="margin-bottom: 15px">'+n("orgUnits","changeWarning")+"</div>")}});

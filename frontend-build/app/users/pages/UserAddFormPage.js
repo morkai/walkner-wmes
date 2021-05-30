@@ -1,1 +1,0 @@
-define(["require","app/core/pages/AddFormPage","app/data/loadedModules","../views/UserFormView"],function(e,i,o,s){"use strict";return i.extend({FormView:s,initialize:function(){i.prototype.initialize.apply(this,arguments),o.isLoaded("wmes-osh")&&e("app/wmes-osh-common/dictionaries").bind(this)}})});
