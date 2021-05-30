@@ -365,10 +365,12 @@ define([
     {
       if (this.isRendered())
       {
+        var filler = this.$id('filler')[0];
+
         return window.innerHeight
           - 30 * 2
           - $('.modal-content').outerHeight()
-          + this.$id('filler')[0].clientHeight;
+          + (filler ? filler.clientHeight : 0);
       }
 
       return 0;
