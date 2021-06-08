@@ -187,7 +187,7 @@ define([
       manage: user.isAllowedTo('KANBAN:MANAGE'),
       processEngineer: user.isAllowedTo('FN:process-engineer'),
       leader: user.isAllowedTo('FN:leader', 'FN:master'),
-      whman: user.isAllowedTo('FN:whman', 'FN:prod_whman', 'FN:in_whman')
+      whman: user.isAllowedTo('FN:whman', 'FN:wh')
     };
   }
 

@@ -76,7 +76,7 @@ define([
 
       if (!attrs.ok)
       {
-        return user.isAllowedTo('QI:SPECIALIST', 'FN:master', 'FN:leader', 'FN:prod_whman')
+        return user.isAllowedTo('QI:SPECIALIST', 'FN:master', 'FN:leader', 'FN:wh')
           || this.isInspector()
           || this.isNokOwner()
           || this.isLeader()
@@ -127,7 +127,7 @@ define([
     {
       if (editMode)
       {
-        return user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE', 'FN:master', 'FN:leader', 'FN:prod_whman')
+        return user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE', 'FN:master', 'FN:leader', 'FN:wh')
           || this.isNokOwner()
           || this.isLeader()
           || this.isCorrector();

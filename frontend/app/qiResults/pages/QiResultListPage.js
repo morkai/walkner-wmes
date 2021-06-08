@@ -38,7 +38,7 @@ define([
           template: function() { return page.renderPartialHtml(addPageActionsTemplate); },
           privileges: function()
           {
-            return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE', 'FN:leader', 'FN:prod_whman');
+            return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE', 'FN:leader', 'FN:wh');
           }
         },
         {

@@ -23,8 +23,8 @@ define([
 
   var css = 'css!app/qiResults/assets/main';
   var nls = 'i18n!app/nls/qiResults';
-  var canView = user.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager', 'FN:prod_whman');
-  var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE', 'FN:leader', 'FN:prod_whman');
+  var canView = user.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager', 'FN:wh');
+  var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE', 'FN:leader', 'FN:wh');
   var canEdit = user.auth('USER');
 
   router.map('/qi/reports/count', canView, function(req)
@@ -176,7 +176,7 @@ define([
         {
           inspector = user.getInfo();
         }
-        else if (user.isAllowedTo('FN:leader', 'FN:prod_whman'))
+        else if (user.isAllowedTo('FN:leader', 'FN:wh'))
         {
           leader = user.getInfo();
         }

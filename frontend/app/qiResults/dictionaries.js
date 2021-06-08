@@ -59,7 +59,7 @@ define([
       rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=master'
     }),
     leaders: new UserCollection(null, {
-      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=in=(leader,prod_whman)'
+      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=in=(leader,wh)'
     }),
     whman: new UserCollection(null, {
       rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=regex=whman'
@@ -218,7 +218,7 @@ define([
 
     var counter = dictionaries.counter;
     var inspector = user.data.privileges.indexOf('QI:INSPECTOR') !== -1;
-    var leader = user.data.prodFunction === 'leader' || user.data.prodFunction === 'prod_whman';
+    var leader = user.data.prodFunction === 'leader' || user.data.prodFunction === 'wh';
 
     $counter
       .toggleClass('success', counter.actual >= counter.required)
