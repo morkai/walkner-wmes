@@ -123,11 +123,17 @@ define([
           return;
         }
 
+        const prev = !!result.length && result[result.length - 1];
+        const continuation = {
+          prev: prev && prev.pso.nextLinePso === pso ? prev.continuation : null,
+          timeOk: false
+        };
+
         result.push({
           pso,
           quantityDone: pso.attributes.quantityDone,
           startedAt: Date.parse(pso.attributes.startedAt),
-          continuation: !!result.length && result[result.length - 1].pso.nextLinePso === pso
+          continuation
         });
       });
 
@@ -219,9 +225,12 @@ define([
           execution.quantityDoneOnShift += o.quantityDone;
         }
 
+        o.continuation.timeOk = (o.startedAt >= fromTime && o.startedAt <= toTime)
+          || (!!o.continuation.prev && o.continuation.prev.timeOk);
+
         if (!cache[o.pso.id]
           && execution.plannedQuantityDone < qtyPlan
-          && ((o.startedAt >= fromTime && o.startedAt <= toTime) || o.continuation))
+          && o.continuation.timeOk)
         {
           cache[o.pso.id] = true;
 
