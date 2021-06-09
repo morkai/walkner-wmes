@@ -179,6 +179,7 @@
   "settings:planning:mspPaints:help": "Lista farb w grupie MSP.",
   "settings:planning:unpaintedMrps": "Niemalowane MRP",
   "settings:planning:unpaintedMrps:help": "Lista MRP zleceń, które nie będą ignorowane nawet wtedy, gdy nie mają ani jednej farby.",
+  "settings:load:counter": "Licznik",
   "settings:load:statuses": "Statusy",
   "settings:load:statuses:from": "Od [s]",
   "settings:load:statuses:to": "Do [s]",

@@ -25,11 +25,6 @@ define([
       this.listenTo(this.settings, 'change', this.render);
     },
 
-    destroy: function()
-    {
-
-    },
-
     afterRender: function()
     {
       clearInterval(this.timers.update);
@@ -45,10 +40,9 @@ define([
       this.$id('current-icon').find('.fa').removeClass().addClass('fa fa-' + current.icon);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         current: this.serializeCurrent(),
         stats: this.serializeStats()
       };
@@ -57,6 +51,7 @@ define([
     serializeStats: function()
     {
       var view = this;
+      var counter = view.stats.get('counter');
 
       return ['1h', 'shift', '8h', '1d', '7d', '30d'].map(function(id)
       {
@@ -67,12 +62,13 @@ define([
           id: id,
           count: stat.sum,
           duration: duration
-        }, view.settings.getLoadStatus(duration));
+        }, view.settings.getLoadStatus(counter, duration));
       });
     },
 
     serializeCurrent: function()
     {
+      var counter = this.stats.get('counter');
       var last = this.stats.get('last');
       var duration = last
         ? Math.max(0, Math.min(999, Math.floor((Date.now() - Date.parse(last._id.ts)) / 1000))).toString()
@@ -80,18 +76,19 @@ define([
 
       return _.assign(
         {duration: duration},
-        this.settings.getLoadStatus(duration)
+        this.settings.getLoadStatus(counter, duration)
       );
     },
 
     serializeLast: function()
     {
+      var counter = this.stats.get('counter');
       var last = this.stats.get('last');
       var duration = last ? last.d : 0;
 
       return _.assign(
         {count: 1, duration: duration || '?'},
-        this.settings.getLoadStatus(duration)
+        this.settings.getLoadStatus(counter, duration)
       );
     }
 

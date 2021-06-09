@@ -223,7 +223,7 @@ define([
           data.avg.push({
             x: d.key,
             y: d.avg,
-            color: view.settings.getLoadStatus(d.avg).color,
+            color: view.settings.getLoadStatus(counter, d.avg).color,
             data: d
           });
           data.count.push([d.key, d.count]);
@@ -238,7 +238,7 @@ define([
           data.avg.push({
             x: g.key,
             y: c.avg,
-            color: view.settings.getLoadStatus(c.avg).color,
+            color: view.settings.getLoadStatus(counter, c.avg).color,
             data: c
           });
           data.count.push([g.key, c.count]);

@@ -16,7 +16,7 @@ define([
   orgUnits,
   SettingsView,
   setUpMrpSelect2,
-  renderLoadStatusRow,
+  loadStatusRowTemplate,
   template
 ) {
   'use strict';
@@ -71,18 +71,27 @@ define([
         });
 
         this.scheduleLoadStatusesSave();
+      },
+      'change #-load-counter': function()
+      {
+        if (this.timers.saveLoadStatuses)
+        {
+          this.saveLoadStatuses();
+        }
+
+        this.setUpLoadStatuses();
       }
     }, SettingsView.prototype.events),
 
     destroy: function()
     {
-      SettingsView.prototype.destroy.apply(this, arguments);
-
-      if (this.saveLoadStatusesTimer)
+      if (this.timers.saveLoadStatuses)
       {
-        clearTimeout(this.saveLoadStatusesTimer);
+        clearTimeout(this.timers.saveLoadStatuses);
         this.saveLoadStatuses();
       }
+
+      SettingsView.prototype.destroy.apply(this, arguments);
     },
 
     afterRender: function()
@@ -122,21 +131,25 @@ define([
 
     setUpLoadStatuses: function()
     {
-      this.$id('load-statuses').find('.colorpicker-component').each(function()
-      {
-        $(this).colorpicker('destroy');
-      });
+      this.$id('load-statuses').find('.colorpicker-component').each((i, el) => $(el).colorpicker('destroy'));
       this.$id('load-statuses').empty();
 
-      (this.settings.getValue('load.statuses') || []).forEach(this.addLoadStatus, this);
+      const counter = this.getLoadCounter();
+
+      this.$id('load-addStatus').prop('disabled', !counter);
+      this.$id('load-delayedDuration')
+          .prop('disabled', !counter)
+          .prop('name', `paintShop.load.delayedDuration.${counter}`)
+          .val(this.settings.getValue(`load.delayedDuration.${counter}`, 0));
+
+      this.settings.getValue(`load.statuses.${counter}`, []).forEach(this.addLoadStatus, this);
     },
 
-    addLoadStatus: function(loadStatus)
+    addLoadStatus: function(status)
     {
-      var $row = $(renderLoadStatusRow({
-        idPrefix: this.idPrefix,
-        status: loadStatus
-      }));
+      const $row = this.renderPartial(loadStatusRowTemplate, {
+        status
+      });
 
       this.$id('load-statuses').append($row);
 
@@ -145,10 +158,11 @@ define([
 
     scheduleLoadStatusesSave: function()
     {
-      clearTimeout(this.saveLoadStatusesTimer);
+      clearTimeout(this.timers.saveLoadStatuses);
 
       this.lastLoadStatuses = this.serializeLoadStatuses();
-      this.saveLoadStatusesTimer = setTimeout(this.saveLoadStatuses.bind(this), 3333);
+      this.lastLoadCounter = this.getLoadCounter();
+      this.timers.saveLoadStatuses = setTimeout(this.saveLoadStatuses.bind(this), 1337);
     },
 
     serializeLoadStatuses: function()
@@ -179,19 +193,34 @@ define([
 
     saveLoadStatuses: function()
     {
-      var value = this.serializeLoadStatuses() || this.lastLoadStatuses;
+      clearTimeout(this.timers.saveLoadStatuses);
+      this.timers.saveLoadStatuses = null;
 
+      let counter = this.getLoadCounter();
+      let value = this.serializeLoadStatuses();
+
+      if (!value)
+      {
+        counter = this.lastLoadCounter;
+        value = this.lastLoadStatuses;
+      }
+
+      this.lastLoadCounter = 0;
       this.lastLoadStatuses = null;
-      this.saveLoadStatusesTimer = null;
 
-      this.updateSetting('paintShop.load.statuses', value);
+      if (!counter || !value)
+      {
+        return;
+      }
+
+      this.updateSetting(`paintShop.load.statuses.${counter}`, value);
     },
 
     shouldAutoUpdateSettingField: function(setting)
     {
       return setting.id !== 'paintShop.workCenters'
         && setting.id !== 'paintShop.mspPaints'
-        && setting.id !== 'paintShop.load.statuses';
+        && !setting.id.startsWith('paintShop.load.statuses');
     },
 
     updateSettingField: function(setting)
@@ -203,19 +232,18 @@ define([
 
       if (setting.id === 'paintShop.workCenters')
       {
-        return this.$id('planning-workCenters').select2('data', setting.getValue().map(function(v)
-        {
-          return {
-            id: v,
-            text: v
-          };
-        }));
+        return this.$id('planning-workCenters').select2('data', setting.getValue().map(id => ({id, text: id})));
       }
 
-      if (setting.id === 'paintShop.load.statuses')
+      if (setting.id.startsWith('paintShop.load.statuses'))
       {
         return this.setUpLoadStatuses();
       }
+    },
+
+    getLoadCounter: function()
+    {
+      return +this.$id('load-counter').val() || 0;
     }
 
   });

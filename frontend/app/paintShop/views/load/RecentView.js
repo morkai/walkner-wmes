@@ -37,7 +37,11 @@ define([
           view.reset();
           view.render();
         });
-        view.listenTo(view.recent, 'change', view.render);
+        view.listenTo(view.recent, 'change', function()
+        {
+          view.reset();
+          view.render();
+        });
         view.listenTo(view.recent, 'update', view.update);
 
         $(window).on('resize', view.resize.bind(view));
@@ -68,8 +72,10 @@ define([
 
     reset: function()
     {
-      this.maxDuration = ([].concat(this.settings.getValue('load.statuses'))
-        .sort(function(a, b) { return b.from - a.from; })[0] || {from: 100}).from;
+      const counter = this.recent.get('counter');
+
+      this.maxDuration = ([].concat(this.settings.getValue(`load.statuses.${counter}`))
+        .sort((a, b) => b.from - a.from)[0] || {from: 100}).from;
 
       this.colorCache = {};
     },
@@ -128,7 +134,7 @@ define([
 
       if (!color)
       {
-        color = this.colorCache[d] = this.settings.getLoadStatus(d).color;
+        color = this.colorCache[d] = this.settings.getLoadStatus(this.recent.get('counter'), d).color;
       }
 
       var padding = 0;

@@ -21,12 +21,7 @@ define([
 
     topicSuffix: 'paintShop.**',
 
-    getValue: function(suffix)
-    {
-      var setting = this.get('paintShop.' + suffix);
-
-      return setting ? setting.getValue() : null;
-    },
+    idPrefix: 'paintShop.',
 
     prepareValue: function(id, newValue)
     {
@@ -35,19 +30,19 @@ define([
         return newValue.split(',').filter(function(v) { return v.length > 0; });
       }
 
-      if (/load.statuses$/.test(id))
+      if (/load.statuses.[0-9]+$/.test(id))
       {
         return newValue;
+      }
+
+      if (/load.delayedDuration.[0-9]+$/.test(id))
+      {
+        return this.prepareNumericValue(newValue, 0, 28800, 0);
       }
 
       if (/documents$/.test(id))
       {
         return this.prepareDocumentsValue(newValue);
-      }
-
-      if (/delayedDuration$/.test(id))
-      {
-        return this.prepareNumericValue(newValue, 0, 28800, 0);
       }
     },
 
@@ -101,11 +96,11 @@ define([
       return lines.join('\n');
     },
 
-    getLoadStatus: function(d)
+    getLoadStatus: function(counter, d)
     {
       return _.find(
-        this.getValue('load.statuses'),
-        function(status) { return d >= status.from && (!status.to || d < status.to); }
+        this.getValue(`load.statuses.${counter}`, []),
+        status => d >= status.from && (!status.to || d < status.to)
       ) || {
         from: 0,
         to: 0,

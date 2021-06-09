@@ -25,6 +25,15 @@
       </div>
     </div>
     <div class="panel-body" data-tab="load">
+      <div class="form-group">
+        <label for="<%- id('load-counter') %>"><%- t('settings:load:counter') %></label>
+        <select id="<%- id('load-counter') %>" class="form-control" style="width: auto">
+          <option value="0" selected></option>
+          <% [1, 2, 3].forEach(c => { %>
+          <option value="<%- c %>"><%- t(`load:counters:${c}`) %></option>
+          <% }) %>
+        </select>
+      </div>
       <label><%- t('settings:load:statuses') %></label>
       <table class="table table-condensed table-with-tfoot">
         <thead>
@@ -47,7 +56,7 @@
       <div class="form-group">
         <label for="<%- id('load-delayedDuration') %>"><%- t('settings:load:delayedDuration') %></label>
         <span class="help-block"><%- t('settings:load:delayedDuration:help') %></span>
-        <input id="<%- id('load-delayedDuration') %>" name="paintShop.load.delayedDuration" class="form-control" type="number" data-setting>
+        <input id="<%- id('load-delayedDuration') %>" name="paintShop.load.delayedDuration.0" class="form-control" type="number" data-setting disabled>
       </div>
     </div>
   </div>

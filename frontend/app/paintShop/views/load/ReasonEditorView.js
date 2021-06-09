@@ -234,7 +234,7 @@ define([
     buildLoadsRql: function()
     {
       var now = Date.now();
-      var delayedDuration = this.settings.getValue('load.delayedDuration', 200) * 1000;
+      var delayedDuration = this.settings.getValue(`load.delayedDuration.${this.model.counter}`, 28800) * 1000;
       var timeWindow = 30 * 60 * 1000;
       var shiftInfo = getShiftStartInfo(now);
       var from = shiftInfo.startTime;
