@@ -1,4 +1,5 @@
 .fap-attachments {
+  position: relative;
   margin-top: 11px;
   border-bottom: 1px solid #ddd;
 }
