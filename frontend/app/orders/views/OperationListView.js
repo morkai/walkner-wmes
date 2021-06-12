@@ -26,30 +26,26 @@ define([
     laborTime: 'sapLaborTime'
   };
 
-  function formatNumericProperty(obj, prop)
+  function formatNumericProperty(v)
   {
-    if (obj[prop])
+    if (!v)
     {
-      obj[prop] = (Math.round(obj[prop] * 1000) / 1000).toLocaleString();
-
-      var parts = obj[prop].split(decimalSeparator);
-
-      if (!parts[1])
-      {
-        parts[1] = '';
-      }
-
-      while (parts[1].length < 3)
-      {
-        parts[1] += '0';
-      }
-
-      obj[prop] = parts.join(decimalSeparator);
+      return '';
     }
-    else
+
+    var parts = (Math.round(v * 1000) / 1000).toLocaleString().split(decimalSeparator);
+
+    if (!parts[1])
     {
-      obj[prop] = '';
+      parts[1] = '';
     }
+
+    while (parts[1].length < 3)
+    {
+      parts[1] += '0';
+    }
+
+    return parts.join(decimalSeparator);
   }
 
   return View.extend({
@@ -186,13 +182,7 @@ define([
 
     serializeOperations: function()
     {
-      var summedTimes = {};
-
-      _.forEach(this.options.summedTimes, function(v, k)
-      {
-        summedTimes[k] = (Math.round(v * 1000) / 1000).toLocaleString();
-      });
-
+      var summedTimes = this.options.summedTimes || {};
       var qtyDone = this.model.get('qtyDone') || {byOperation: {}};
       var qtyMax = this.model.get('qtyMax') || {};
 
@@ -224,12 +214,9 @@ define([
           {
             var sapKey = TIME_PROPS[key];
 
-            formatNumericProperty(op, key);
-            formatNumericProperty(op, sapKey);
-
-            op.times.actual[key] = op[key];
-            op.times.sap[key] = op[sapKey];
-            op.times.summed[key] = summedTimes[key];
+            op.times.actual[key] = formatNumericProperty(op[key]);
+            op.times.sap[key] = formatNumericProperty(op[sapKey]);
+            op.times.summed[key] = formatNumericProperty(summedTimes[key]);
           });
 
           return op;
