@@ -1,4 +1,5 @@
 #Region
+#AutoIt3Wrapper_UseX64=n
 #AutoIt3Wrapper_Change2CUI=y
 #EndRegion
 
@@ -154,10 +155,13 @@ For $i = 1 To $items[0] Step 1
 
         $session.FindById("wnd[0]").sendVKey(0)
 
-        $modalId = "wnd[1]"
-        $modal = $session.FindById($modalId)
+        While 1
+          $modal = $session.FindById("wnd[1]")
 
-        If IsObj($modal) Then
+          If Not IsObj($modal) Then
+            ExitLoop
+          EndIf
+
           $modalText = ReadAllText($modal, " ")
 
           If $phased = "1" And StringInStr($modalText, "To Be Phased Out") Then
@@ -171,10 +175,10 @@ For $i = 1 To $items[0] Step 1
             $modal.Close()
             ; Check if we're back at the initial screen
             If IsObj($session.FindById("wnd[0]/usr/ctxtCAUFVD-AUFNR")) Then
-              ExitLoop
+              ExitLoop 2
             EndIf
           EndIf
-        EndIf
+        WEnd
 
         $sbarId = "wnd[0]/sbar"
         $sbar = $session.FindById($sbarId)
