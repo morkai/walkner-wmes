@@ -206,6 +206,11 @@ define([
       {
         return function(orgUnit)
         {
+          if (!orgUnit.getSubdivision)
+          {
+            return true;
+          }
+
           var subdivision = orgUnit.getSubdivision();
           var subdivisionType = subdivision && subdivision.get('type');
 
