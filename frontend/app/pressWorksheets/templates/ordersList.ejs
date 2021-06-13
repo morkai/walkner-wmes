@@ -32,7 +32,7 @@
   <tr>
     <td colspan="<%- extended ? 14 : 11 %>"></td>
     <td class="is-min is-number"><%- worksheet.machineManHours.toLocaleString() %></td>
-    <td colspan="<%- losses ? 2 : 1 %>"></td>
+    <td colspan="<%- typeof losses !== 'undefined' && losses ? 2 : 1 %>"></td>
   </tr>
   </tfoot>
   <% } %>
@@ -115,7 +115,7 @@
     </tr>
     <% if (order.notes) { %>
     <tr class="pressWorksheets-orders-notes <%- i % 2 !== 0 ? '' : 'is-odd' %>">
-      <td colspan="<%- (extended ? 14 : 11) + (losses ? 2 : 1) %>"><%= order.notes %></td>
+      <td colspan="<%- (extended ? 14 : 11) + (typeof losses !== 'undefined' && losses ? 2 : 1) %>"><%= order.notes %></td>
     </tr>
     <% } %>
     <% }) %>
