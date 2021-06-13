@@ -1,1 +1,0 @@
-define(["app/nls/locale/pl"],function(n){return{"BREADCRUMB:base":function(n){return"Inspekcja Jakości"},"BREADCRUMB:browse":function(n){return"Statusy akcji"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Nazwa"},"PROPERTY:position":function(n){return"Pozycja"}}});

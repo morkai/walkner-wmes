@@ -2333,7 +2333,6 @@ app/qiKinds/routes.js
 app/qiErrorCategories/routes.js
 app/qiFaults/routes.js
 app/qiStandards/routes.js
-app/qiActionStatuses/routes.js
 app/pscs/routes.js
 app/mor/pages/MorPage.js
 app/nls/mor.js
@@ -3415,7 +3414,6 @@ app/qiKinds/routes.js
 app/qiErrorCategories/routes.js
 app/qiFaults/routes.js
 app/qiStandards/routes.js
-app/qiActionStatuses/routes.js
 app/pscs/routes.js
 app/mor/pages/MorPage.js
 app/nls/mor.js

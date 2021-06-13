@@ -6,7 +6,7 @@
   "updater": {
     "wmes": {
       "backend": 684,
-      "frontend": 841,
+      "frontend": 842,
       "reports": 155,
       "attachments": 3,
       "importer-sap": 73,
@@ -102,7 +102,7 @@
     "methods": "^1.1.2",
     "moment": "^2.29.1",
     "mongodb": "3.6.5",
-    "mongoose": "^5.12.3",
+    "mongoose": "5.12.12",
     "mongoose-plugin-autoinc-fix": "^1.2.1",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
