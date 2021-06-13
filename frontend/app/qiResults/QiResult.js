@@ -37,9 +37,11 @@ define([
     return _.map(correctiveActions, function(action)
     {
       return {
-        status: dictionaries ? dictionaries.getLabel('actionStatus', action.status) : action.status,
+        kind: action.kind,
+        rid: action.rid,
+        status: t('qiResults', 'actionStatus:' + action.status),
         when: time.format(action.when, 'LL'),
-        who: action.who.map(function(u) { return u.label; }).join(', '),
+        who: action.who.map(renderUserInfo).join(', '),
         what: action.what.trim()
       };
     });
@@ -299,7 +301,7 @@ define([
         {
           var correctiveAction = closestCorrectiveActions.shift().action;
 
-          if (correctiveAction.status !== 'finished')
+          if (correctiveAction.status !== 'finished' && correctiveAction.status !== 'cancelled')
           {
             bestCorrectiveAction = correctiveAction;
 
@@ -308,9 +310,7 @@ define([
         }
       }
 
-      var result = dictionaries
-        ? dictionaries.getLabel('actionStatus', bestCorrectiveAction.status)
-        : bestCorrectiveAction.status;
+      var result = t('qiResults', 'actionStatus:' + bestCorrectiveAction.status);
 
       if (bestCorrectiveAction.when)
       {

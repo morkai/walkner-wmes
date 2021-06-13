@@ -243,7 +243,6 @@
     "NAVBAR:QI:errorCategories": "Error categories",
     "NAVBAR:QI:faults": "Faults",
     "NAVBAR:QI:standards": "Standards",
-    "NAVBAR:QI:actionStatuses": "Action statuses",
 
     "NAVBAR:SEARCH:help": "Search by order no, 12NC or date.",
     "NAVBAR:SEARCH:empty": "No results.",

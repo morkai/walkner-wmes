@@ -220,15 +220,17 @@ define([
 
     afterRender: function()
     {
-      FilterView.prototype.afterRender.call(this);
+      var view = this;
 
-      this.toggleButtonGroup('result');
+      FilterView.prototype.afterRender.call(view);
 
-      this.$id('filters').select2({
+      view.toggleButtonGroup('result');
+
+      view.$id('filters').select2({
         width: '175px'
       });
 
-      this.$id('productFamily').select2({
+      view.$id('productFamily').select2({
         width: '200px',
         allowClear: true,
         multiple: true,
@@ -236,7 +238,7 @@ define([
         data: dictionaries.productFamilies.map(function(d) { return {id: d, text: d}; })
       });
 
-      this.$id('division').select2({
+      view.$id('division').select2({
         width: '80px',
         allowClear: true,
         placeholder: ' ',
@@ -248,7 +250,7 @@ define([
           .map(idAndLabel)
       });
 
-      this.$id('line').select2({
+      view.$id('line').select2({
         width: '175px',
         multiple: true,
         allowClear: true,
@@ -258,21 +260,21 @@ define([
           .map(idAndLabel)
       });
 
-      this.$id('kind').select2({
+      view.$id('kind').select2({
         width: '200px',
         allowClear: true,
         placeholder: ' ',
         data: dictionaries.kinds.map(idAndLabel)
       });
 
-      this.$id('errorCategory').select2({
+      view.$id('errorCategory').select2({
         width: '140px',
         allowClear: true,
         placeholder: ' ',
         data: dictionaries.errorCategories.map(idAndLabel)
       });
 
-      this.$id('faultCode').select2({
+      view.$id('faultCode').select2({
         width: '195px',
         allowClear: true,
         multiple: true,
@@ -280,14 +282,20 @@ define([
         data: dictionaries.faults.map(idAndLabel)
       });
 
-      this.$id('status').select2({
+      view.$id('status').select2({
         width: '125px',
         allowClear: true,
         placeholder: ' ',
-        data: dictionaries.actionStatuses.map(idAndLabel)
+        data: dictionaries.actionStatuses.map(function(s)
+        {
+          return {
+            id: s,
+            text: view.t('actionStatus:' + s)
+          };
+        })
       });
 
-      this.$id('inspector').select2({
+      view.$id('inspector').select2({
         width: '230px',
         multiple: true,
         allowClear: true,
@@ -295,7 +303,7 @@ define([
         data: dictionaries.inspectors.map(idAndLabel)
       });
 
-      this.$id('nokOwner').select2({
+      view.$id('nokOwner').select2({
         width: '230px',
         multiple: true,
         allowClear: true,
@@ -303,7 +311,7 @@ define([
         data: dictionaries.masters.map(idAndLabel)
       });
 
-      this.$id('leader').select2({
+      view.$id('leader').select2({
         width: '230px',
         multiple: true,
         allowClear: true,
@@ -311,8 +319,8 @@ define([
         data: dictionaries.leaders.map(idAndLabel)
       });
 
-      setUpUserSelect2(this.$id('coach'), {
-        view: this,
+      setUpUserSelect2(view.$id('coach'), {
+        view: view,
         width: '230px',
         multiple: true,
         allowClear: true,
@@ -320,8 +328,8 @@ define([
         noPersonnelId: true
       });
 
-      setUpUserSelect2(this.$id('operator'), {
-        view: this,
+      setUpUserSelect2(view.$id('operator'), {
+        view: view,
         width: '230px',
         multiple: true,
         allowClear: true,

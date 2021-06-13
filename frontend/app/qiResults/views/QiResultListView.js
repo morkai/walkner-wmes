@@ -19,7 +19,7 @@ define([
   html2pdf,
   PrinterPickerView,
   qiDictionaries,
-  renderCorrectiveActionsTable
+  correctiveActionsTableTemplate
 ) {
   'use strict';
 
@@ -197,7 +197,7 @@ define([
 
             if (correctiveActions && correctiveActions.length)
             {
-              return view.renderPartialHtml(renderCorrectiveActionsTable, {
+              return view.renderPartialHtml(correctiveActionsTableTemplate, {
                 bordered: false,
                 correctiveActions: model.serializeCorrectiveActions(qiDictionaries)
               });

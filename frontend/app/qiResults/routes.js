@@ -165,7 +165,9 @@ define([
         'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultAddFormPage',
         css,
-        nls
+        nls,
+        'css!app/suggestions/assets/main',
+        'i18n!app/nls/suggestions'
       ],
       function(QiResult, QiResultAddFormPage)
       {
@@ -205,7 +207,9 @@ define([
         'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultEditFormPage',
         css,
-        nls
+        nls,
+        'css!app/suggestions/assets/main',
+        'i18n!app/nls/suggestions'
       ],
       function(QiResult, QiResultEditFormPage)
       {

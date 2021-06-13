@@ -1,18 +1,34 @@
 <tr>
-  <td class="is-min"><%- action.no %></td>
   <td class="is-min">
-    <select class="form-control" name="correctiveActions[<%- action.i %>].status" <%- canChangeStatus ? '' : 'disabled' %>>
-      <% statuses.forEach(function(status) { %>
-      <option value="<%- status.id %>" <%- status.id === action.status ? 'selected' : '' %>><%= status.text %></option>
-      <% }) %>
-    </select>
+    <%- action.no %>
+    <input name="correctiveActions[<%- action.i %>].kind" type="hidden" value="<%- action.kind %>">
+    <input name="correctiveActions[<%- action.i %>].rid" type="hidden" value="<%- action.rid %>">
+  </td>
+  <td class="is-min">
+    <% if (action.kind === 'kz') { %>
+      <input type="hidden" name="correctiveActions[<%- action.i %>].status" value="<%- action.status %>">
+      <%- t('actionStatus:' + action.status) %>
+    <% } else { %>
+      <select class="form-control" name="correctiveActions[<%- action.i %>].status" <%- canChangeStatus ? '' : 'disabled' %>>
+        <% statuses.forEach(function(status) { %>
+        <option value="<%- status.id %>" <%- status.id === action.status ? 'selected' : '' %>><%= status.text %></option>
+        <% }) %>
+      </select>
+    <% } %>
   </td>
   <td><input class="form-control" name="correctiveActions[<%- action.i %>].when" type="date" min="2016-01-01" value="<%- action.when ? time.format(action.when, 'YYYY-MM-DD') : '' %>" <%- canChangeWhen ? '' : 'disabled' %>></td>
-  <td><input name="correctiveActions[<%- action.i %>].who" type="text" autocomplete="new-password" <%- canChangeWho ? '' : 'disabled' %>></td>
-  <td><textarea class="form-control" name="correctiveActions[<%- action.i %>].what" type="text" autocomplete="new-password" rows="1" <%- canChangeWhat ? '' : 'disabled' %>><%= action.what %></textarea></td>
+  <td><input name="correctiveActions[<%- action.i %>].who" type="text" <%- canChangeWho ? '' : 'disabled' %>></td>
+  <td>
+    <% if (action.kind === 'kz') { %>
+      <input type="hidden" name="correctiveActions[<%- action.i %>].what" value="<%= action.what %>">
+      <a href="#suggestions/<%- action.rid %>" target="_blank">#<%- action.rid %>: <%= action.what %></a>
+    <% } else { %>
+      <textarea class="form-control" name="correctiveActions[<%- action.i %>].what" type="text" rows="1" <%- canChangeWhat ? '' : 'disabled' %>><%= action.what %></textarea>
+    <% } %>
+  </td>
   <td class="is-min">
     <% if (canRemove) { %>
-    <button class="btn btn-default" name="removeAction" type="button"><i class="fa fa-remove"></i>
+      <button class="btn btn-default" name="removeAction" type="button"><i class="fa fa-remove"></i>
     <% } %>
   </button>
   </td>

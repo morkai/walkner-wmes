@@ -30,18 +30,18 @@
         </div>
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-nc12" class="control-label"><span data-source="prod"><%- t('PROPERTY:nc12:prod') %></span><span data-source="wh"><%- t('PROPERTY:nc12:wh') %></span></label>
-          <input id="<%- idPrefix %>-nc12" name="nc12" class="form-control" type="text" autocomplete="new-password" required readonly>
+          <input id="<%- idPrefix %>-nc12" name="nc12" class="form-control" type="text" required readonly>
         </div>
         <div class="col-lg-2 form-group" data-source="prod">
           <label for="<%- idPrefix %>-productFamily" class="control-label"><%- t('PROPERTY:productFamily') %></label>
-          <input id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" type="text" autocomplete="new-password" required readonly pattern="^[A-Z0-9]{6}$">
+          <input id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" type="text" required readonly pattern="^[A-Z0-9]{6}$">
         </div>
         <div class="col-lg-6 form-group">
           <label for="<%- idPrefix %>-productName" class="control-label">
             <span data-source="prod"><%- t('PROPERTY:productName:prod') %></span>
             <span data-source="wh"><%- t('PROPERTY:productName:wh') %></span>
           </label>
-          <input id="<%- idPrefix %>-productName" name="productName" class="form-control" type="text" autocomplete="new-password" required readonly>
+          <input id="<%- idPrefix %>-productName" name="productName" class="form-control" type="text" required readonly>
         </div>
       </div>
       <div class="row">
@@ -144,7 +144,7 @@
         <% } %>
         <div class="col-lg-2 form-group" data-source="prod">
           <label for="<%- idPrefix %>-serialNumbers" class="control-label"><%- t('PROPERTY:serialNumbers') %></label>
-          <input id="<%- idPrefix %>-serialNumbers" name="serialNumbers" class="form-control" type="text" autocomplete="new-password" data-role="inspector">
+          <input id="<%- idPrefix %>-serialNumbers" name="serialNumbers" class="form-control" type="text" data-role="inspector">
         </div>
       </div>
       <div class="form-group">
@@ -262,7 +262,8 @@
       </div>
       <% } %>
       <% if (canEditActions) { %>
-      <div class="table-responsive">
+      <label class="control-label"><%- t('PROPERTY:correctiveActions') %></label>
+      <div class="table-responsive" style="margin-bottom: 7px">
         <table class="table table-bordered table-condensed qiResults-form-correctiveActions">
           <thead>
           <tr>
@@ -274,25 +275,34 @@
             <th></th>
           </tr>
           </thead>
-          <tbody id="<%- idPrefix %>-actions"></tbody>
+          <tbody id="<%- id('actions') %>"></tbody>
         </table>
       </div>
       <% if (canAddActions) { %>
-      <button id="<%- idPrefix %>-addAction" class="btn btn-default" type="button">
-        <i class="fa fa-plus"></i><span><%- t('correctiveActions:add') %></span>
-      </button>
+      <div style="display: flex">
+        <button id="<%- id('addStdAction') %>" class="btn btn-default" type="button">
+          <i class="fa fa-plus"></i><span><%- t('correctiveActions:add:std') %></span>
+        </button>
+        <div class="input-group" style="width: 180px; margin-left: 7px">
+          <input id="<%- id('kzActionRid') %>" type="text" class="form-control" placeholder="<%- t('correctiveActions:add:kz:placeholder') %>" pattern="^[0-9]+$">
+          <span class="input-group-btn">
+          <button id="<%- id('linkKzAction') %>" class="btn btn-default" type="button" title="<%- t('correctiveActions:add:kz:link') %>"><i class="fa fa-link"></i></button>
+          <button id="<%- id('addKzAction') %>" class="btn btn-default" type="button" title="<%- t('correctiveActions:add:kz:add') %>"><i class="fa fa-plus"></i></button>
+        </span>
+        </div>
+      </div>
       <% } %>
       <% } %>
       <% } %>
       <% if (editMode) { %>
       <div class="form-group qiResults-form-comment">
-        <label for="<%- idPrefix %>-comment" class="control-label"><%- t('PROPERTY:comment') %></label>
-        <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>
+        <label for="<%- id('comment') %>" class="control-label"><%- t('PROPERTY:comment') %></label>
+        <textarea id="<%- id('comment') %>" class="form-control" name="comment" rows="3"></textarea>
       </div>
       <% } %>
     </div>
     <div class="panel-footer">
-      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <button id="<%- id('submit') %>" type="submit" class="btn btn-primary">
         <i class="fa fa-spinner fa-spin hidden"></i>
         <span><%- formActionText %></span>
       </button>

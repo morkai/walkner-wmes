@@ -83,7 +83,6 @@ define([
   './qiErrorCategories/routes',
   './qiFaults/routes',
   './qiStandards/routes',
-  './qiActionStatuses/routes',
   './pscs/routes',
   './mor/routes',
   './planning/routes',

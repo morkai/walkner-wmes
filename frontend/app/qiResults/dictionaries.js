@@ -12,8 +12,7 @@ define([
   '../qiKinds/QiKindCollection',
   '../qiErrorCategories/QiErrorCategoryCollection',
   '../qiFaults/QiFaultCollection',
-  '../qiStandards/QiStandardCollection',
-  '../qiActionStatuses/QiActionStatusCollection'
+  '../qiStandards/QiStandardCollection'
 ], function(
   _,
   $,
@@ -26,8 +25,7 @@ define([
   QiKindCollection,
   QiErrorCategoryCollection,
   QiFaultCollection,
-  QiStandardCollection,
-  QiActionStatusCollection
+  QiStandardCollection
 ) {
   'use strict';
 
@@ -35,15 +33,13 @@ define([
     'kinds',
     'errorCategories',
     'faults',
-    'standards',
-    'actionStatuses'
+    'standards'
   ];
   var PROP_TO_DICT = {
     kind: 'kinds',
     errorCategory: 'errorCategories',
     faultCode: 'faults',
-    standard: 'standards',
-    actionStatus: 'actionStatuses'
+    standard: 'standards'
   };
 
   var req = null;
@@ -65,6 +61,7 @@ define([
       rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=regex=whman'
     }),
     productFamilies: [],
+    actionStatuses: ['inProgress', 'finished', 'cancelled'],
     settings: settings.acquire(),
     counter: {
       actual: 0,
@@ -74,7 +71,6 @@ define([
     errorCategories: new QiErrorCategoryCollection(),
     faults: new QiFaultCollection(),
     standards: new QiStandardCollection(),
-    actionStatuses: new QiActionStatusCollection(),
     loaded: false,
     load: function()
     {

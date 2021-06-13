@@ -11,7 +11,7 @@ define([
   DetailsView,
   qiDictionaries,
   template,
-  renderCorrectiveActionsTable
+  correctiveActionsTableTemplate
 ) {
   'use strict';
 
@@ -22,7 +22,7 @@ define([
     serialize: function()
     {
       return _.assign(DetailsView.prototype.serialize.call(this), {
-        renderCorrectiveActionsTable: renderCorrectiveActionsTable
+        renderCorrectiveActionsTable: this.renderPartialHtml.bind(this, correctiveActionsTableTemplate)
       });
     },
 

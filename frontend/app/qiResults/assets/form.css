@@ -8,8 +8,9 @@
   width: auto;
 }
 .qiResults-form textarea[name$="what"] {
-  height: calc(100% + 14px);
   min-width: 300px;
+  min-height: 34px;
+  resize: vertical;
 }
 .qiResults-form .message-inline {
   margin-bottom: 15px;
@@ -33,6 +34,16 @@
 }
 .qiResults-form-rootCause + .qiResults-form-rootCause {
   margin-top: 5px;
+}
+.qiResults-form-suggestion-dialog .modal-dialog {
+  width: auto;
+  margin: 10px;
+}
+.qiResults-form-suggestion-dialog .modal-body {
+  padding: 0;
+}
+.qiResults-form-suggestion-dialog .panel-primary {
+  margin-bottom: 0;
 }
 @media (max-width: 1200px) {
   .qiResults-form textarea[name="faultDescription"] {

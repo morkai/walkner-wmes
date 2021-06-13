@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/user',
+  'app/viewport',
   'app/data/orgUnits',
   'app/data/localStorage',
   'app/core/util/buttonGroup',
@@ -13,6 +14,9 @@ define([
   'app/core/util/getInputLabel',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
+  'app/kaizenOrders/dictionaries',
+  'app/suggestions/Suggestion',
+  'app/suggestions/views/SuggestionFormView',
   'app/qiResults/dictionaries',
   '../QiResult',
   'app/qiResults/templates/form',
@@ -23,6 +27,7 @@ define([
   t,
   time,
   user,
+  viewport,
   orgUnits,
   localStorage,
   buttonGroup,
@@ -30,6 +35,9 @@ define([
   getInputLabel,
   FormView,
   setUpUserSelect2,
+  kzDictionaries,
+  Suggestion,
+  SuggestionFormView,
   qiDictionaries,
   QiResult,
   formTemplate,
@@ -88,7 +96,7 @@ define([
       {
         this.toggleRequireInspector();
       },
-      'click #-addAction': 'addEmptyAction',
+      'click #-addStdAction': 'addStdAction',
       'click [name="removeAction"]': function(e)
       {
         var view = this;
@@ -223,7 +231,28 @@ define([
               .text(view.t('FORM:rootCause:label', {n: i + 1, total: $labels.length}));
           });
         });
-      }
+      },
+
+      'input textarea[name$=".what"]': function(e)
+      {
+        this.resizeTextArea(e.target);
+      },
+
+      'keydown #-kzActionRid': function(e)
+      {
+        if (e.key === 'Enter')
+        {
+          this.$id('linkKzAction').click();
+
+          return false;
+        }
+      },
+      'input #-kzActionRid': function()
+      {
+        this.$id('kzActionRid')[0].setCustomValidity('');
+      },
+      'click #-linkKzAction': 'linkKzAction',
+      'click #-addKzAction': 'addKzAction'
 
     }, FormView.prototype.events),
 
@@ -253,6 +282,16 @@ define([
           this.model.set({errorCategory: errorCategory.id}, {silent: true});
         }
       });
+    },
+
+    destroy: function()
+    {
+      FormView.prototype.destroy.apply(this, arguments);
+
+      if (kzDictionaries.loaded)
+      {
+        kzDictionaries.unload();
+      }
     },
 
     serializeModel: function()
@@ -545,16 +584,20 @@ define([
           return;
         }
 
+        var kind = this.querySelector('[name$="kind"]').value;
+        var rid = +this.querySelector('[name$="rid"]').value;
+
+        if (kind !== 'std' && rid === 0)
+        {
+          return;
+        }
+
         formData.correctiveActions.push({
+          kind: kind,
+          rid: rid,
           what: what,
           when: when.isValid() ? when.toDate() : null,
-          who: _.map($(this.querySelector('[name$="who"]')).select2('data'), function(user)
-          {
-            return {
-              id: user.id,
-              label: user.text
-            };
-          }),
+          who: setUpUserSelect2.getUserInfo($(this.querySelector('[name$="who"]'))),
           status: this.querySelector('[name$="status"]').value
         });
       });
@@ -591,16 +634,7 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
-      var correctiveActions = this.model.get('correctiveActions');
-
-      if (_.isEmpty(correctiveActions))
-      {
-        this.addEmptyAction();
-      }
-      else
-      {
-        _.forEach(this.model.get('correctiveActions'), this.addAction, this);
-      }
+      _.forEach(this.model.get('correctiveActions'), this.addAction, this);
 
       this.setUpInspectorSelect2();
       this.setUpMasterSelect2();
@@ -985,10 +1019,12 @@ define([
       view.findOrderReq = req;
     },
 
-    addEmptyAction: function()
+    addStdAction: function()
     {
       this.addAction({
-        status: 'new',
+        kind: 'std',
+        rid: 0,
+        status: 'inProgress',
         when: '',
         who: [],
         what: ''
@@ -997,34 +1033,45 @@ define([
 
     addAction: function(action)
     {
-      if (!this.statuses)
+      var view = this;
+
+      if (!view.statuses)
       {
-        this.statuses = qiDictionaries.actionStatuses.map(idAndLabel);
+        view.statuses = qiDictionaries.actionStatuses.map(function(s)
+        {
+          return {
+            id: s,
+            text: view.t('actionStatus:' + s)
+          };
+        });
       }
 
-      var $actions = this.$id('actions');
+      var $actions = view.$id('actions');
 
-      action.i = this.actions++;
+      action.i = view.actions++;
       action.no = $actions.children().length + 1;
 
+      var std = action.kind === 'std';
       var canManage = user.isAllowedTo('QI:RESULTS:MANAGE', 'QI:SPECIALIST');
-      var isNokOwner = this.model.isNokOwner();
-      var isResultLeader = this.model.isLeader();
+      var isNokOwner = view.model.isNokOwner();
+      var isResultLeader = view.model.isLeader();
       var isShiftLeader = user.isAllowedTo('FN:master', 'FN:leader');
       var isCorrector = _.some(action.who, function(who) { return who.id === user.data._id; });
 
-      $actions.append(correctiveActionFormRowTemplate({
-        statuses: this.statuses,
+      var $action = view.renderPartial(correctiveActionFormRowTemplate, {
+        statuses: view.statuses,
         action: action,
-        canChangeStatus: canManage,
+        canChangeStatus: std && canManage,
         canChangeWhen: canManage || isNokOwner || isResultLeader || isCorrector || isShiftLeader,
-        canChangeWho: canManage || isNokOwner || isShiftLeader,
+        canChangeWho: std && (canManage || isNokOwner || isShiftLeader),
         canChangeWhat: canManage || isNokOwner || isResultLeader || isCorrector || isShiftLeader,
-        canRemove: canManage || (isNokOwner && action.status === 'new')
-      }));
+        canRemove: canManage
+      });
 
-      var $who = setUpUserSelect2($actions.children().last().find('[name$="who"]'), {
-        width: '300px',
+      $actions.append($action);
+
+      var $who = setUpUserSelect2($action.find('[name$="who"]'), {
+        width: '350px',
         allowClear: true,
         multiple: true,
         textFormatter: function(user, name) { return name; }
@@ -1037,6 +1084,8 @@ define([
           text: user.label
         };
       }));
+
+      view.resizeTextArea($action.find('[name$="what"]')[0]);
     },
 
     recountActions: function()
@@ -1279,6 +1328,170 @@ define([
           placeholder: ' ',
           allowClear: true
         });
+      }
+    },
+
+    resizeTextArea: function(el)
+    {
+      if (!el)
+      {
+        return;
+      }
+
+      var $ghost = this.$id('textAreaGhost');
+
+      if (!$ghost.length)
+      {
+        $ghost = $('<div class="form-control"></div>')
+          .attr('id', this.idPrefix + '-textAreaGhost')
+          .css({
+            position: 'absolute',
+            top: '0',
+            left: '-9999px',
+            whiteSpace: 'pre-wrap',
+            height: 'auto'
+          })
+          .appendTo(this.el);
+      }
+
+      $ghost[0].style.width = el.offsetWidth + 'px';
+      $ghost[0].innerHTML = el.value.endsWith('\n') ? (el.value + 'x') : el.value;
+
+      el.style.height = Math.min(114, Math.max(34, $ghost[0].offsetHeight)) + 'px';
+    },
+
+    linkKzAction: function()
+    {
+      var view = this;
+      var $rid = view.$id('kzActionRid');
+
+      if ($rid.prop('disabled'))
+      {
+        return;
+      }
+
+      if (!$rid[0].validity.valid)
+      {
+        return $rid[0].reportValidity();
+      }
+
+      var rid = parseInt($rid.val(), 10);
+
+      if (!(rid > 0))
+      {
+        return $rid.select();
+      }
+
+      if (view.$('input[name$=".rid"][value="' + rid + '"]').length)
+      {
+        $rid.val('').focus();
+
+        return;
+      }
+
+      viewport.msg.loading();
+
+      $rid.prop('disabled', true);
+
+      var req = view.ajax({
+        url: '/suggestions/' + $rid.val()
+      });
+
+      req.fail(function()
+      {
+        if (req.status !== 404)
+        {
+          return viewport.msg.loadingFailed();
+        }
+
+        viewport.msg.loaded();
+
+        $rid[0].setCustomValidity(view.t('correctiveActions:notFound'));
+
+        setTimeout(function() { $rid[0].reportValidity(); }, 1);
+      });
+
+      req.done(function(suggestion)
+      {
+        $rid.val('');
+
+        viewport.msg.loaded();
+
+        view.addAction({
+          kind: 'kz',
+          rid: suggestion.rid,
+          status: suggestion.status,
+          when: '',
+          who: suggestion.kaizenOwners,
+          what: suggestion.subject
+        });
+      });
+
+      req.always(function()
+      {
+        $rid.prop('disabled', false);
+      });
+    },
+
+    addKzAction: function()
+    {
+      var view = this;
+      var $btn = view.$id('addKzAction').prop('disabled', true);
+
+      if (kzDictionaries.loaded)
+      {
+        showDialog();
+      }
+      else
+      {
+        viewport.msg.loading();
+
+        kzDictionaries.load()
+          .done(function()
+          {
+            viewport.msg.loaded();
+            showDialog();
+          })
+          .fail(function()
+          {
+            viewport.msg.loadingFailed();
+            $btn.prop('disabled', false);
+          });
+      }
+
+      function showDialog()
+      {
+        var suggestion = new Suggestion();
+        var dialogView = new SuggestionFormView({
+          dialogClassName: 'qiResults-form-suggestion-dialog',
+          editMode: false,
+          model: suggestion,
+          formMethod: 'POST',
+          formAction: suggestion.url(),
+          formActionText: view.t('correctiveActions:add:kz:submit'),
+          failureText: t('core', 'FORM:ERROR:addFailure'),
+          panelTitleText: view.t('correctiveActions:add:kz:title'),
+          handleSuccess: function()
+          {
+            viewport.closeDialog();
+
+            view.addAction({
+              kind: 'kz',
+              rid: suggestion.get('rid'),
+              status: suggestion.get('status'),
+              when: '',
+              who: suggestion.get('kaizenOwners'),
+              what: suggestion.get('subject')
+            });
+          }
+        });
+
+        view.listenTo(dialogView, 'dialog:hidden', function()
+        {
+          $btn.prop('disabled', false);
+        });
+
+        viewport.showDialog(dialogView);
       }
     }
 
