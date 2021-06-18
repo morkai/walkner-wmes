@@ -309,8 +309,6 @@ define([
       var analyzers = this.get('analyzers') || [];
       var analyzer = _.some(analyzers, function(u) { return user.data._id === u.id; });
       var mainAnalyzer = analyzer && analyzers[0].id === user.data._id;
-      var subdivisionType = this.get('subdivisionType');
-      var wh = subdivisionType === 'wh';
       var status = this.get('status');
       var pending = status === 'pending';
       var started = status === 'started';
@@ -318,7 +316,7 @@ define([
       var analysisNeed = this.get('analysisNeed');
       var analysisDone = this.get('analysisDone');
       var mainAnalyzerAuth = !pending && analysisNeed && !analysisDone && (manage || procEng || master);
-      var solver = manage || procEng || whEng || designer || master || leader || (wh && whman);
+      var solver = manage || procEng || whEng || designer || master || leader || whman;
       var category = dictionaries.settings.canChangeCategory();
 
       return {
@@ -329,12 +327,12 @@ define([
         observers: loggedIn,
         restart: manage,
         status: solver,
-        level: !finished && (solver || manager || whman),
+        level: !finished && (solver || manager),
         solution: solver,
-        problem: started && (manage || procEng || designer || master || leader),
+        problem: started && solver,
         category: manage || category,
         subCategory: manage || category,
-        subdivisionType: manage || procEng || designer || master || leader,
+        subdivisionType: solver,
         componentCode: started && (manage || procEng),
         orderNo: started && (manage || procEng),
         lines: started && (manage || procEng),
@@ -345,10 +343,8 @@ define([
         analyzers: (analyzers.length || mainAnalyzerAuth)
           && !pending && analysisNeed && !analysisDone
           && (manage || procEng || master || mainAnalyzer),
-        why5: !pending && analysisNeed && !analysisDone
-          && (manage || procEng || master || leader || analyzer),
-        solutionSteps: !pending && analysisNeed && !analysisDone
-          && (manage || procEng || master || leader || analyzer)
+        why5: !pending && analysisNeed && !analysisDone && (solver || analyzer),
+        solutionSteps: !pending && analysisNeed && !analysisDone && (solver || analyzer)
       };
     },
 
