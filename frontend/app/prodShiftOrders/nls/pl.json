@@ -15,6 +15,7 @@
   "filter:product": "Wyrób",
   "filter:bom": "Komponenty",
   "filter:mrp": "Kontroler MRP zlecenia",
+  "filter:mechOrder": "Karta pracy",
   "filter:submit": "Filtruj",
 
   "FORM:ACTION:add": "Dodaj zlecenie",
@@ -55,13 +56,14 @@
   "PROPERTY:pressWorksheet": "Karta pracy",
   "PROPERTY:efficiency": "Wydajność",
   "PROPERTY:product": "Wyrób",
+  "PROPERTY:planOrderGroup": "Grupa zlecenia",
 
   "LIST:COLUMN:mrpControllers": "MRP",
   "LIST:COLUMN:prodLine": "Linia",
   "LIST:COLUMN:startedAt": "Czas<br>rozp.",
   "LIST:COLUMN:duration": "Czas<br>trwania",
-  "LIST:COLUMN:quantityDone": "Ilość<br>wykonana",
-  "LIST:COLUMN:workerCount": "Ilość<br>osób",
+  "LIST:COLUMN:quantityDone": "Ilość",
+  "LIST:COLUMN:workerCount": "Osoby",
   "LIST:COLUMN:efficiency": "Wyd%",
 
   "losses:reason": "Powód",

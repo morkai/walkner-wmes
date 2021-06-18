@@ -34,6 +34,7 @@ define([
       'bom',
       'mrp',
       'orgUnit',
+      'mechOrder',
       'limit'
     ],
     filterMap: {
@@ -81,7 +82,8 @@ define([
       type: null,
       shift: 0,
       orderId: '',
-      bom: ''
+      bom: '',
+      mechOrder: false
     },
 
     termToForm: {
@@ -142,7 +144,8 @@ define([
       'shift': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
-      }
+      },
+      'mechOrder': 'shift'
     },
 
     initialize: function()
@@ -159,6 +162,7 @@ define([
       FilterView.prototype.afterRender.apply(this, arguments);
 
       this.toggleButtonGroup('shift');
+      this.toggleButtonGroup('mechOrder');
 
       setUpMrpSelect2(this.$id('mrp'), {own: true, view: this});
     },
@@ -314,12 +318,17 @@ define([
         selector.push({name: 'in', args: ['orderData.mrp', mrp.split(',')]});
       }
 
-      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
+      var shift = parseInt(this.$('input[name="shift"]:checked').val(), 10);
 
       if (shift)
       {
         selector.push({name: 'eq', args: ['shift', shift]});
       }
+
+      selector.push({name: 'eq', args: [
+        'mechOrder',
+        this.$('input[name="mechOrder"]:checked').val() === 'true'
+      ]});
     },
 
     showFilter: function(filter)
@@ -332,6 +341,16 @@ define([
       }
 
       FilterView.prototype.showFilter.apply(this, arguments);
+    },
+
+    filterHasValue: function(filter)
+    {
+      if (filter === 'mechOrder')
+      {
+        return this.getButtonGroupValue(filter) === 'true';
+      }
+
+      return FilterView.prototype.filterHasValue.apply(this, arguments);
     }
 
   });

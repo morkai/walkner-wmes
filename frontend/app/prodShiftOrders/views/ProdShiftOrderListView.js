@@ -40,6 +40,9 @@ define([
 
     serializeColumns: function()
     {
+      var mechOrderTerm = this.collection.findRqlTerm('mechOrder', 'eq');
+      var prodOrder = !mechOrderTerm || !mechOrderTerm.args[1];
+
       return [
         {
           id: 'mrpControllers',
@@ -49,7 +52,12 @@ define([
         },
         {id: 'prodFlow', className: 'is-overflow w200', thClassName: 'is-filter'},
         {id: 'prodLine', className: 'is-overflow w100', thClassName: 'is-filter'},
-        {id: 'orderId', className: 'is-min', thClassName: 'is-filter'},
+        {
+          id: 'orderId',
+          className: 'is-min',
+          thClassName: 'is-filter',
+          visible: prodOrder
+        },
         {id: 'product', className: 'is-overflow w450', thClassName: 'is-filter'},
         {id: 'operation', titleProperty: 'operationName', className: 'is-overflow w175'},
         {id: 'prodShift', className: 'is-min', width: '105px', thClassName: 'is-filter'},
@@ -57,7 +65,8 @@ define([
         {id: 'duration', className: 'is-min'},
         {id: 'quantityDone', className: 'is-min is-number'},
         {id: 'workerCount', className: 'is-min is-number'},
-        (user.isAllowedTo('PROD_DATA:VIEW:EFF') ? {id: 'efficiency', className: 'is-min is-number'} : null),
+        {id: 'efficiency', className: 'is-min is-number', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF')},
+        {id: 'planOrderGroup', className: 'is-min', visible: prodOrder},
         '-'
       ];
     },

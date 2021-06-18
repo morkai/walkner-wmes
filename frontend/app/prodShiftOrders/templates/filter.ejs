@@ -3,11 +3,11 @@
     idPrefix: idPrefix,
     property: 'startedAt',
     startHour: 6,
-    labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
+    labels: {text: t('PROPERTY:startedAt'), ranges: true}
   }) %>
   <div class="form-group" data-filter="shift">
     <label><%- t('core', 'filter:shift') %></label>
-    <div id="<%- idPrefix %>-shift" class="btn-group filter-btn-group" data-toggle="buttons">
+    <div id="<%- id('shift') %>" class="btn-group filter-btn-group" data-toggle="buttons">
       <% [0, 1, 2, 3].forEach(function(shift) { %>
       <label class="btn btn-default">
         <input type="radio" name="shift" value="<%- shift || '' %>"> <%- t('core', 'SHIFT:' + shift) %>
@@ -16,22 +16,32 @@
     </div>
   </div>
   <div class="form-group" data-filter="orderId">
-    <label for="<%- idPrefix %>-orderId"><%- helpers.t('filter:orderId') %></label>
-    <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" autocomplete="new-password">
+    <label for="<%- id('orderId') %>"><%- t('filter:orderId') %></label>
+    <input id="<%- id('orderId') %>" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" autocomplete="new-password">
   </div>
   <div class="form-group" data-filter="product">
-    <label for="<%- idPrefix %>-product"><%- helpers.t('filter:product') %></label>
-    <input id="<%- idPrefix %>-product" class="form-control" name="product" type="text" autocomplete="new-password">
+    <label for="<%- id('product') %>"><%- t('filter:product') %></label>
+    <input id="<%- id('product') %>" class="form-control" name="product" type="text" autocomplete="new-password">
   </div>
   <div class="form-group" data-filter="bom">
-    <label for="<%- idPrefix %>-bom"><%- helpers.t('filter:bom') %></label>
-    <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text" autocomplete="new-password">
+    <label for="<%- id('bom') %>"><%- t('filter:bom') %></label>
+    <input id="<%- id('bom') %>" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text" autocomplete="new-password">
   </div>
   <div class="form-group" data-filter="mrp">
-    <label for="<%- idPrefix %>-mrp"><%- helpers.t('filter:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
+    <label for="<%- id('mrp') %>"><%- t('filter:mrp') %></label>
+    <input id="<%- id('mrp') %>" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
-  <div id="<%- idPrefix %>-orgUnit" class="form-group" data-filter="orgUnit"></div>
+  <div id="<%- id('') %>-orgUnit" class="form-group" data-filter="orgUnit"></div>
+  <div class="form-group" data-filter="mechOrder">
+    <label><%- t('filter:mechOrder') %></label>
+    <div id="<%- id('mechOrder') %>" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% [true, false].forEach(function(v) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="mechOrder" value="<%- v %>"> <%- t('core', 'BOOL:' + v) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
     <%- renderButton() %>

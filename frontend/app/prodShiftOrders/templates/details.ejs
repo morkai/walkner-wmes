@@ -41,7 +41,8 @@
               return value;
             }
           },
-          {id: 'efficiency', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF')}
+          {id: 'efficiency', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF')},
+          {id: 'planOrderGroup', visible: !model.mechOrder}
         ]) %>
       </div>
       <div class="col-md-4">

@@ -28,7 +28,8 @@ define([
     rqlQuery: function(rql)
     {
       var selector = [
-        {name: 'ge', args: ['startedAt', time.getMoment().subtract(1, 'months').valueOf()]}
+        {name: 'ge', args: ['startedAt', time.getMoment().subtract(2, 'weeks').valueOf()]},
+        {name: 'eq', args: ['mechOrder', false]}
       ];
 
       limitOrgUnits(selector, {
@@ -37,8 +38,6 @@ define([
 
       return rql.Query.fromObject({
         fields: {
-          creator: 0,
-          losses: 0,
           'orderData.bom': 0,
           'orderData.documents': 0
         },

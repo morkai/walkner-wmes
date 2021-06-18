@@ -120,12 +120,7 @@ define([
           obj.operation += ': ' + obj.operationName;
         }
 
-        obj.product = obj.productName;
-
-        if (obj.orderData.nc12 && obj.orderData.nc12 !== obj.orderId)
-        {
-          obj.product = obj.orderData.nc12 + ': ' + obj.product;
-        }
+        obj.planOrderGroup = obj.orderData.planOrderGroup && obj.orderData.planOrderGroup.name || '';
       }
       else
       {
@@ -133,11 +128,22 @@ define([
         obj.operationName = '';
         obj.order = obj.orderId;
         obj.operation = obj.operationNo;
+        obj.planOrderGroup = '';
       }
 
-      if (options.orderUrl && user.isAllowedTo('ORDERS:VIEW'))
+      if (user.isAllowedTo('ORDERS:VIEW'))
       {
         obj.orderUrl = '#' + (obj.mechOrder ? 'mechOrders' : 'orders') + '/' + encodeURIComponent(obj.orderId);
+      }
+
+      if (obj.mechOrder)
+      {
+        obj.product = obj.orderId + ': ' + obj.productName;
+        obj.orderId = '';
+      }
+      else
+      {
+        obj.product = (obj.orderData && obj.orderData.nc12 ? (obj.orderData.nc12 + ': ') : '') + obj.productName;
       }
 
       obj.taktTimeOk = this.isTaktTimeOk();
@@ -198,6 +204,11 @@ define([
       else
       {
         row.mrpControllersText = row.mrpControllers;
+      }
+
+      if (row.orderUrl)
+      {
+        row.orderId = '<a href="' + row.orderUrl + '">' + row.orderId + '</a>';
       }
 
       return row;

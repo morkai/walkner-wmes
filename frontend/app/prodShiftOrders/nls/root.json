@@ -28,6 +28,7 @@
     "filter:product": "Product",
     "filter:bom": "Components",
     "filter:mrp": "Order MRP",
+    "filter:mechOrder": "Worksheet",
     "filter:submit": "Filter orders",
 
     "PROPERTY:mrpControllers": "MRP Controller",
@@ -56,6 +57,7 @@
     "PROPERTY:pressWorksheet": "Worksheet",
     "PROPERTY:efficiency": "Efficiency",
     "PROPERTY:product": "Product",
+    "PROPERTY:planOrderGroup": "Order group",
 
     "LIST:COLUMN:mrpControllers": "MRP",
     "LIST:COLUMN:prodLine": "Line",
