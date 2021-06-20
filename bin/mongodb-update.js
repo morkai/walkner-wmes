@@ -3,20 +3,16 @@
 
 'use strict';
 
-db.qiresults.find({ok: false}, {correctiveActions: 1}).forEach(d =>
+db.prodshiftorders.find({
+  startedAt: {$gt: new Date(Date.now() - 2 * 30 * 24 * 3600 * 1000)},
+  'orderData.planOrderGroups': {$exists: true}
+}, {prodLine: 1, orderData: 1}).forEach(pso =>
 {
-  d.correctiveActions.forEach(a =>
-  {
-    a.kind = 'std';
-    a.rid = 0;
-
-    if (a.status === 'new')
+  db.prodshiftorders.updateOne(
+    {_id: pso._id},
     {
-      a.status = 'inProgress';
+      $set: {'orderData.planOrderGroup': pso.orderData.planOrderGroups[pso.prodLine] || null},
+      $unset: {'orderData.planOrderGroups': 1}
     }
-  });
-
-  db.qiresults.updateOne({_id: d._id}, {$set: {correctiveActions: d.correctiveActions}});
+  );
 });
-
-db.qiresults.createIndex({'correctiveActions.rid': 1});
