@@ -631,7 +631,7 @@ define([
     {
       if (keys[i - 1])
       {
-        part = keys[i - i] + '/' + part;
+        part = keys[i - 1] + '/' + part;
       }
 
       keys.push(part);
