@@ -34,7 +34,6 @@ define([
       'bom',
       'mrp',
       'orgUnit',
-      'mechOrder',
       'limit'
     ],
     filterMap: {
@@ -83,7 +82,7 @@ define([
       shift: 0,
       orderId: '',
       bom: '',
-      mechOrder: false
+      mechOrder: [1, 0]
     },
 
     termToForm: {
@@ -145,7 +144,10 @@ define([
       {
         formData[propertyName] = term.args[1];
       },
-      'mechOrder': 'shift'
+      'mechOrder': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1] === true ? [1] : term.args[1] === false ? [0] : [1, 0];
+      }
     },
 
     initialize: function()
@@ -325,10 +327,17 @@ define([
         selector.push({name: 'eq', args: ['shift', shift]});
       }
 
-      selector.push({name: 'eq', args: [
-        'mechOrder',
-        this.$('input[name="mechOrder"]:checked').val() === 'true'
-      ]});
+      var mechOrder = this.getButtonGroupValue('mechOrder');
+
+      if (mechOrder.length === 0 || mechOrder.length === 2)
+      {
+        this.$('input[name="mechOrder"]').prop('checked', true);
+        this.toggleButtonGroup('mechOrder');
+      }
+      else
+      {
+        selector.push({name: 'eq', args: ['mechOrder', mechOrder[0] === '1']});
+      }
     },
 
     showFilter: function(filter)

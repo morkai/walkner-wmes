@@ -35,9 +35,9 @@
   <div class="form-group" data-filter="mechOrder">
     <label><%- t('filter:mechOrder') %></label>
     <div id="<%- id('mechOrder') %>" class="btn-group filter-btn-group" data-toggle="buttons">
-      <% [true, false].forEach(function(v) { %>
+      <% [1, 0].forEach(function(v) { %>
       <label class="btn btn-default">
-        <input type="radio" name="mechOrder" value="<%- v %>"> <%- t('core', 'BOOL:' + v) %>
+        <input type="checkbox" name="mechOrder[]" value="<%- v %>"> <%- t('core', 'BOOL:' + !!v) %>
       </label>
       <% }) %>
     </div>
