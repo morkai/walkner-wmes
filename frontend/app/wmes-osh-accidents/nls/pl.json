@@ -26,10 +26,6 @@
 
   "FORM:subtitle": "Wypadek",
   "FORM:ACTION:add": "Dodaj wypadek",
-  "FORM:placeholder:noWorkplace": "Wybierz zakład...",
-  "FORM:placeholder:noDepartment": "Wybierz wydział...",
-  "FORM:placeholder:noBuilding": "Wybierz budynek...",
-  "FORM:placeholder:noLocation": "Wybierz obszar...",
   "FORM:eventTime:placeholder": "gg:mm",
   "FORM:eventTime:title": "Czas wystąpienia zdarzenia"
 }

@@ -61,11 +61,6 @@
 
   "FORM:subtitle": "Kaizen",
   "FORM:ACTION:add": "Zgłoś kaizena",
-  "FORM:placeholder:noUserWorkplace": "Wybierz zakład zgłaszający...",
-  "FORM:placeholder:noWorkplace": "Wybierz zakład...",
-  "FORM:placeholder:noDepartment": "Wybierz wydział...",
-  "FORM:placeholder:noBuilding": "Wybierz budynek...",
-  "FORM:placeholder:noLocation": "Wybierz obszar...",
   "FORM:creator": "Osoba zgłaszająca",
   "FORM:plannedAt": "Planowany termin zakończenia",
   "FORM:attachments:before:add": "Zdjęcia przed",

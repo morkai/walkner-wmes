@@ -48,6 +48,13 @@
             </div>
             <div class="row">
               <%- helpers.formGroup({
+                name: 'division',
+                type: 'select2',
+                label: 'PROPERTY:',
+                required: true,
+                groupClassName: 'col-lg-4'
+              }) %>
+              <%- helpers.formGroup({
                 name: 'workplace',
                 type: 'select2',
                 label: 'PROPERTY:',

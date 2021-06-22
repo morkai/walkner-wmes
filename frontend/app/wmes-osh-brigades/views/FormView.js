@@ -205,7 +205,7 @@ define([
 
       $input.select2({
         width: '100%',
-        placeholder: currentWorkplaceId ? ' ' : this.t('FORM:placeholder:noWorkplace'),
+        placeholder: currentWorkplaceId ? ' ' : this.t('wmes-osh-common', 'FORM:placeholder:noWorkplace'),
         data
       });
 

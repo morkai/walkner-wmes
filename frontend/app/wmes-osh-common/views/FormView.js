@@ -4,12 +4,16 @@ define([
   'underscore',
   'jquery',
   'app/viewport',
-  'app/core/views/FormView'
+  'app/user',
+  'app/core/views/FormView',
+  '../dictionaries'
 ], function(
   _,
   $,
   viewport,
-  FormView
+  currentUser,
+  FormView,
+  dictionaries
 ) {
   'use strict';
 
@@ -36,6 +40,41 @@ define([
       'change': function()
       {
         this.dirty = true;
+      },
+
+      'change #-division': function()
+      {
+        this.$id('workplace').val('');
+        this.setUpWorkplaceSelect2();
+        this.$id('workplace').trigger('change');
+      },
+
+      'change #-workplace': function()
+      {
+        this.$id('department').val('');
+        this.setUpDepartmentSelect2();
+        this.$id('department').trigger('change');
+      },
+
+      'change #-department': function()
+      {
+        this.$id('building').val('');
+        this.setUpBuildingSelect2();
+        this.$id('building').trigger('change');
+      },
+
+      'change #-building': function()
+      {
+        this.$id('location').val('');
+        this.setUpLocationSelect2();
+        this.$id('location').trigger('change');
+      },
+
+      'change #-location': function()
+      {
+        this.$id('station').val('');
+
+        this.setUpStationSelect2();
       }
 
     }, FormView.prototype.events),
@@ -105,6 +144,515 @@ define([
       }
 
       return e.originalEvent.returnValue = this.t('wmes-osh-common', 'FORM:unsaved');
+    },
+
+    setUpUserWorkplaceSelect2: function()
+    {
+      const $input = this.$id('userWorkplace');
+
+      if (this.options.editMode)
+      {
+        const currentId = this.model.get('creator').oshWorkplace;
+        const current = dictionaries.workplaces.get(currentId);
+
+        $input.val(currentId).select2({
+          width: '100%',
+          placeholder: ' ',
+          data: !current ? [] : [{
+            id: currentId,
+            text: current ? current.getLabel({long: true}) : `?${currentId}?`,
+            model: current
+          }]
+        });
+
+        $input.select2('enable', false);
+
+        return;
+      }
+
+      $input
+        .prop('required', true)
+        .closest('.form-group')
+        .addClass('has-required-select2')
+        .find('.control-label')
+        .addClass('is-required');
+
+      let current = dictionaries.workplaces.get(+$input.val());
+
+      if (current)
+      {
+        current = {
+          id: current.id,
+          text: current.getLabel({long: true}),
+          model: current
+        };
+      }
+
+      const map = {};
+
+      dictionaries.workplaces.forEach(model =>
+      {
+        if (!model.get('active'))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (current && !map[current.id])
+      {
+        map[current.id] = current;
+      }
+
+      $input.select2({
+        width: '100%',
+        data: Object.values(map).sort((a, b) => a.text.localeCompare(b.text))
+      });
+
+      const userWorkplace = dictionaries.workplaces.get(currentUser.data.oshWorkplace);
+
+      if (this.options.editMode && current)
+      {
+        $input.select2('enable', false).select2('data', current);
+
+        return;
+      }
+
+      if (userWorkplace)
+      {
+        $input.select2('enable', false).select2('data', {
+          id: userWorkplace.id,
+          text: userWorkplace.getLabel({long: true}),
+          model: userWorkplace
+        });
+
+        return;
+      }
+
+      $input.select2('enable', true);
+    },
+
+    setUpUserDepartmentSelect2: function()
+    {
+      const $input = this.$id('userDepartment');
+
+      if (this.options.editMode)
+      {
+        const currentId = this.model.get('creator').oshDepartment;
+        const current = dictionaries.departments.get(currentId);
+
+        $input.val(currentId).select2({
+          width: '100%',
+          placeholder: ' ',
+          data: !current ? [] : [{
+            id: currentId,
+            text: current ? current.getLabel({long: true}) : `?${currentId}?`,
+            model: current
+          }]
+        });
+
+        $input.select2('enable', false);
+
+        return;
+      }
+
+      const currentWorkplaceId = +this.$id('userWorkplace').val();
+      let currentDepartment = dictionaries.departments.get(+$input.val());
+
+      if (currentDepartment)
+      {
+        currentDepartment = {
+          id: currentDepartment.id,
+          text: currentDepartment.getLabel({long: true}),
+          model: currentDepartment
+        };
+      }
+
+      const map = {};
+
+      dictionaries.departments.forEach(model =>
+      {
+        if (!model.get('active') || model.get('workplace') !== currentWorkplaceId)
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (currentDepartment
+        && !map[currentDepartment.id]
+        && currentDepartment.model.get('workplace') === currentWorkplaceId)
+      {
+        map[currentDepartment.id] = currentDepartment;
+      }
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+      let placeholder = ' ';
+      let enabled = true;
+
+      if (!currentWorkplaceId && data.length === 0)
+      {
+        placeholder = this.t('wmes-osh-common', 'FORM:placeholder:noUserWorkplace');
+        enabled = false;
+      }
+
+      $input.select2({
+        width: '100%',
+        placeholder,
+        data
+      });
+
+      const userDepartment = dictionaries.departments.get(currentUser.data.oshDepartment);
+
+      if (this.options.editMode && currentDepartment)
+      {
+        $input.select2('enable', false).select2('data', currentDepartment);
+
+        return;
+      }
+
+      if (userDepartment)
+      {
+        $input.select2('enable', false).select2('data', {
+          id: userDepartment.id,
+          text: userDepartment.getLabel({long: true}),
+          model: userDepartment
+        });
+
+        return;
+      }
+
+      $input.select2('enable', enabled);
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+      else if (!map[$input.val()])
+      {
+        $input.select2('data', null).val('');
+      }
+    },
+
+    setUpDivisionSelect2: function()
+    {
+      const $input = this.$id('division');
+
+      if (!$input.val() && currentUser.data.oshDivision && !this.options.editMode)
+      {
+        $input.val(currentUser.data.oshDivision);
+      }
+
+      let currentDivision = dictionaries.divisions.get(+$input.val());
+
+      if (currentDivision)
+      {
+        currentDivision = {
+          id: currentDivision.id,
+          text: currentDivision.getLabel({long: true}),
+          model: currentDivision
+        };
+      }
+
+      const map = {};
+
+      dictionaries.divisions.forEach(model =>
+      {
+        if (!model.get('active'))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (currentDivision && !map[currentDivision.id])
+      {
+        map[currentDivision.id] = currentDivision;
+      }
+
+      $input.select2({
+        width: '100%',
+        allowClear: !$input.prop('required'),
+        data: Object.values(map).sort((a, b) => a.text.localeCompare(b.text))
+      });
+
+      $input.select2(
+        'enable',
+        !this.options.editMode || this.model.constructor.can.manage() || this.model.isCoordinator()
+      );
+    },
+
+    setUpWorkplaceSelect2: function()
+    {
+      const $input = this.$id('workplace');
+
+      if (!$input.val() && currentUser.data.oshWorkplace && !this.options.editMode)
+      {
+        $input.val(currentUser.data.oshWorkplace);
+      }
+
+      let currentWorkplace = dictionaries.workplaces.get(+$input.val());
+
+      if (currentWorkplace)
+      {
+        currentWorkplace = {
+          id: currentWorkplace.id,
+          text: currentWorkplace.getLabel({long: true}),
+          model: currentWorkplace
+        };
+      }
+
+      const currentDivisionId = +this.$id('division').val();
+      const map = {};
+
+      dictionaries.workplaces.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasDivision(currentDivisionId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (currentWorkplace && !map[currentWorkplace.id])
+      {
+        map[currentWorkplace.id] = currentWorkplace;
+      }
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentDivisionId ? ' ' : this.t('wmes-osh-common', 'FORM:placeholder:noDivision'),
+        allowClear: !$input.prop('required'),
+        data
+      });
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+      else if (!map[$input.val()])
+      {
+        $input.val('').select2('data', null);
+      }
+
+      $input.select2(
+        'enable',
+        !!currentDivisionId
+        && (!this.options.editMode || this.model.constructor.can.manage() || this.model.isCoordinator())
+      );
+    },
+
+    setUpDepartmentSelect2: function()
+    {
+      const $input = this.$id('department');
+
+      if (!$input.val() && currentUser.data.oshDepartment && !this.options.editMode)
+      {
+        $input.val(currentUser.data.oshDepartment);
+      }
+
+      let currentDepartment = dictionaries.departments.get(+$input.val());
+
+      if (currentDepartment)
+      {
+        currentDepartment = {
+          id: currentDepartment.id,
+          text: currentDepartment.getLabel({long: true}),
+          model: currentDepartment
+        };
+      }
+
+      const currentWorkplaceId = +this.$id('workplace').val();
+      const map = {};
+
+      dictionaries.departments.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasWorkplace(currentWorkplaceId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      if (currentDepartment && !map[currentDepartment.id])
+      {
+        map[currentDepartment.id] = currentDepartment;
+      }
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentWorkplaceId ? ' ' : this.t('wmes-osh-common', 'FORM:placeholder:noWorkplace'),
+        allowClear: !$input.prop('required'),
+        data
+      });
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+      else if (!map[$input.val()])
+      {
+        $input.val('').select2('data', null);
+      }
+
+      $input.select2(
+        'enable',
+        !!currentWorkplaceId
+        && (!this.options.editMode || this.model.constructor.can.manage() || this.model.isCoordinator())
+      );
+    },
+
+    setUpBuildingSelect2: function(selectFirst)
+    {
+      const $input = this.$id('building');
+      const currentDepartmentId = +this.$id('department').val();
+      const map = {};
+
+      dictionaries.buildings.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasDepartment(currentDepartmentId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentDepartmentId ? ' ' : this.t('wmes-osh-common', 'FORM:placeholder:noDepartment'),
+        allowClear: !$input.prop('required'),
+        data
+      });
+
+      if (selectFirst !== false && data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+
+      $input.select2(
+        'enable',
+        !!currentDepartmentId
+        && (!this.options.editMode || this.model.constructor.can.manage() || this.model.isCoordinator())
+      );
+    },
+
+    setUpLocationSelect2: function()
+    {
+      const $input = this.$id('location');
+      const currentBuildingId = +this.$id('building').val();
+      const map = {};
+
+      dictionaries.locations.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasBuilding(currentBuildingId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentBuildingId ? ' ' : this.t('wmes-osh-common', 'FORM:placeholder:noBuilding'),
+        allowClear: !$input.prop('required'),
+        data
+      });
+
+      if (data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+
+      $input.select2(
+        'enable',
+        !!currentBuildingId
+        && (!this.options.editMode || this.model.constructor.can.manage() || this.model.isCoordinator())
+      );
+    },
+
+    setUpStationSelect2: function()
+    {
+      const $input = this.$id('station');
+      const currentLocationId = +this.$id('location').val();
+      const map = {};
+
+      dictionaries.stations.forEach(model =>
+      {
+        if (!model.get('active') || !model.hasLocation(currentLocationId))
+        {
+          return;
+        }
+
+        map[model.id] = {
+          id: model.id,
+          text: model.getLabel({long: true}),
+          model
+        };
+      });
+
+      const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
+
+      $input.select2({
+        width: '100%',
+        placeholder: currentLocationId ? ' ' : this.t('wmes-osh-common', 'FORM:placeholder:noLocation'),
+        allowClear: true,
+        data
+      });
+
+      if (!this.options.editMode && data.length === 1)
+      {
+        $input.select2('data', data[0]);
+      }
+
+      $input.select2(
+        'enable',
+        data.length > 0
+        && !!currentLocationId
+        && (!this.options.editMode || this.model.constructor.can.manage() || this.model.isCoordinator())
+      );
     }
 
   });

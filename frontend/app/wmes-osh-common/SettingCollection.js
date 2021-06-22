@@ -19,6 +19,11 @@ define([
 
     prepareValue: function(id, newValue) // eslint-disable-line no-unused-vars
     {
+      if (/ignoredUsers$/.test(id))
+      {
+        return Array.isArray(newValue) ? newValue : [];
+      }
+
       if (/rewards/.test(id))
       {
         return Math.round(this.prepareFloatValue(newValue, 0, 1000, 0) * 100) / 100;
@@ -27,6 +32,11 @@ define([
 
     prepareFormValue: function(id, value)
     {
+      if (/ignoredUsers$/.test(id))
+      {
+        return value.map(u => u.id).join(',');
+      }
+
       return value;
     }
 

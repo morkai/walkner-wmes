@@ -82,11 +82,6 @@
 
   "FORM:ACTION:add": "Dodaj kartę obserwacji",
   "FRM:ERROR:empty": "Opisz przynajmniej jedną obserwację zachowań lub warunków pracy.",
-  "FORM:placeholder:noUserWorkplace": "Wybierz zakład obserwatora...",
-  "FORM:placeholder:noWorkplace": "Wybierz zakład...",
-  "FORM:placeholder:noDepartment": "Wybierz wydział...",
-  "FORM:placeholder:noBuilding": "Wybierz budynek...",
-  "FORM:placeholder:noLocation": "Wybierz obszar...",
   "FORM:company:label": "Osoba obserwowana zatrudniona przez",
   "FORM:company:name": "Nazwa firmy",
   "FORM:company:other": "Inna firma...",

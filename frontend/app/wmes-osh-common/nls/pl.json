@@ -151,6 +151,12 @@
   "FORM:ACTION:cancelled": "Anuluj",
   "FORM:ACTION:cancel:add": "Anuluj dodawanie",
   "FORM:ACTION:cancel:edit": "Odrzuć zmiany",
+  "FORM:placeholder:noUserWorkplace": "Wybierz zakład zgłaszający...",
+  "FORM:placeholder:noDivision": "Wybierz dywizję...",
+  "FORM:placeholder:noWorkplace": "Wybierz zakład...",
+  "FORM:placeholder:noDepartment": "Wybierz wydział...",
+  "FORM:placeholder:noBuilding": "Wybierz budynek...",
+  "FORM:placeholder:noLocation": "Wybierz obszar...",
   "FORM:unsaved": "Wprowadzone zmiany nie zostaną zapisane.",
 
   "orgUnitPicker:filter:label": "Jednostki organizacyjne",

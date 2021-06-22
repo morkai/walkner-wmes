@@ -69,11 +69,6 @@
 
   "FORM:subtitle": "Zdarzenie Potencjalnie Wypadkowe",
   "FORM:ACTION:add": "Zgłoś ZPW",
-  "FORM:placeholder:noUserWorkplace": "Wybierz zakład zgłaszający...",
-  "FORM:placeholder:noWorkplace": "Wybierz zakład...",
-  "FORM:placeholder:noDepartment": "Wybierz wydział...",
-  "FORM:placeholder:noBuilding": "Wybierz budynek...",
-  "FORM:placeholder:noLocation": "Wybierz obszar...",
   "FORM:placeholder:noEventCategory": "Wybierz kategorię zdarzenia...",
   "FORM:creator": "Osoba zgłaszająca",
   "FORM:eventTime:placeholder": "gg:mm",
