@@ -107,21 +107,28 @@ define([
         this.setUpStationSelect2();
       },
 
-      'change input[name="kind"]': function()
+      'change input[name="kind[]"]': function()
       {
+        const oldEventCategory = this.$id('eventCategory').val() || null;
+        const oldReasonCategory = this.$id('reasonCategory').val() || null;
+
         this.$id('eventCategory').val('');
         this.$id('reasonCategory').val('');
 
-        this.setUpEventCategorySelect2();
-        this.setUpReasonCategorySelect2();
+        this.setUpEventCategorySelect2(oldEventCategory);
+        this.setUpReasonCategorySelect2(oldReasonCategory);
         this.togglePriority();
+
+        this.$('input[name="kind[]"]').first()[0].required = !this.$('input[name="kind[]"]:checked').length;
       },
 
       'change #-eventCategory': function()
       {
+        const oldReasonCategory = this.$id('reasonCategory').val() || null;
+
         this.$id('reasonCategory').val('');
 
-        this.setUpReasonCategorySelect2();
+        this.setUpReasonCategorySelect2(oldReasonCategory);
         this.toggleActionResolution();
       },
 
@@ -359,6 +366,18 @@ define([
       };
     },
 
+    getKinds: function()
+    {
+      const $kinds = this.$('input[name="kind[]"]');
+
+      if ($kinds.length)
+      {
+        return $kinds.filter(':checked').get().map(el => +el.value);
+      }
+
+      return this.model.get('kind') || [];
+    },
+
     getResolutionTypes: function()
     {
       if (!this.options.editMode)
@@ -529,9 +548,9 @@ define([
 
       formData.resolution = resolution;
 
-      if (formData.kind)
+      if (Array.isArray(formData.kind))
       {
-        formData.kind = parseInt(formData.kind, 10);
+        formData.kind = formData.kind.map(id => +id);
       }
 
       return formData;
@@ -1051,15 +1070,15 @@ define([
       });
     },
 
-    setUpEventCategorySelect2: function()
+    setUpEventCategorySelect2: function(oldId)
     {
       const $input = this.$id('eventCategory');
-      const kind = this.$('input[name="kind"]:checked').val();
+      const kinds = this.getKinds();
       const map = {};
 
       dictionaries.eventCategories.forEach(model =>
       {
-        if (!model.get('active') || !model.hasKind(kind))
+        if (!model.get('active') || !model.hasKind(kinds))
         {
           return;
         }
@@ -1084,7 +1103,7 @@ define([
             text: `?${currentId}?`
           };
         }
-        else if (currentModel.hasKind(kind))
+        else if (currentModel.hasKind(kinds))
         {
           map[currentId] = {
             id: currentId,
@@ -1106,13 +1125,17 @@ define([
         formatResult: formatResultWithDescription.bind(null, 'text', 'description')
       });
 
-      if (data.length === 1)
+      if (oldId && map[oldId])
+      {
+        $input.val(oldId).select2('data', map[oldId]);
+      }
+      else if (data.length === 1)
       {
         $input.val(data[0].id).select2('data', data[0]);
       }
     },
 
-    setUpReasonCategorySelect2: function()
+    setUpReasonCategorySelect2: function(oldId)
     {
       const $input = this.$id('reasonCategory');
       const eventCategory = this.$id('eventCategory').val() || null;
@@ -1174,6 +1197,11 @@ define([
       });
 
       $input.select2('enable', data.length !== 0);
+
+      if (oldId && map[oldId])
+      {
+        $input.val(oldId).select2('data', map[oldId]);
+      }
     },
 
     setUpResolution: function()
@@ -1257,7 +1285,7 @@ define([
 
     toggleKind: function()
     {
-      const $kinds = this.$('input[name="kind"]');
+      const $kinds = this.$('input[name="kind[]"]');
 
       if ($kinds.length && !$kinds.filter(':checked').length)
       {
@@ -1270,14 +1298,13 @@ define([
     togglePriority: function()
     {
       const $priorities = this.$('input[name="priority"]');
-      const kind = dictionaries.kinds.get(+this.$('input[name="kind"]:checked').val() || this.model.get('kind'));
-      const type = kind ? kind.get('type') : null;
+      const types = this.getKinds().map(id => dictionaries.kinds.get(id)).map(kind => kind ? kind.get('type') : null);
       const enabled = this.options.editMode && (this.model.isCoordinator() || NearMiss.can.manage());
       let value = +$priorities.filter(':checked').val();
 
       if (!this.options.editMode)
       {
-        if (type === 'osh')
+        if (types.includes('osh'))
         {
           value = 3;
         }

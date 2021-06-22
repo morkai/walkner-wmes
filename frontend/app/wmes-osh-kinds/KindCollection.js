@@ -20,7 +20,7 @@ define([
       return this
         .filter(kind =>
         {
-          if (kind.id === current)
+          if (kind.id === current || (Array.isArray(current) && current.includes(kind.id)))
           {
             return true;
           }

@@ -3,16 +3,36 @@
 
 'use strict';
 
-db.prodshiftorders.find({
-  startedAt: {$gt: new Date(Date.now() - 2 * 30 * 24 * 3600 * 1000)},
-  'orderData.planOrderGroups': {$exists: true}
-}, {prodLine: 1, orderData: 1}).forEach(pso =>
+fixKinds('oshnearmisses');
+fixKinds('oshkaizens');
+fixKinds('oshactions');
+
+function fixKinds(col)
 {
-  db.prodshiftorders.updateOne(
-    {_id: pso._id},
+  db[col].find({kind: {$type: 'number'}}, {kind: 1, changes: 1}).forEach(d => fixKind(d, col));
+}
+
+function fixKind(d, col)
+{
+  d.kind = [d.kind];
+
+  d.changes.forEach(c =>
+  {
+    if (!c.data.kind)
     {
-      $set: {'orderData.planOrderGroup': pso.orderData.planOrderGroups[pso.prodLine] || null},
-      $unset: {'orderData.planOrderGroups': 1}
+      return;
     }
-  );
-});
+
+    if (c.data.kind[0])
+    {
+      c.data.kind[0] = [c.data.kind[0]];
+    }
+
+    if (c.data.kind[1])
+    {
+      c.data.kind[1] = [c.data.kind[1]];
+    }
+  });
+
+  db[col].updateOne({_id: d._id}, {$set: {kind: d.kind, changes: d.changes}});
+}

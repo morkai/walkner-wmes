@@ -80,18 +80,26 @@ define([
       return obj;
     },
 
-    hasKind: function(id)
+    hasKind: function(kind)
     {
-      id = parseInt(id, 10);
-
-      if (!id)
+      if (!kind)
       {
         return false;
       }
 
       const kinds = this.get('kinds');
 
-      return kinds.length === 0 || kinds.includes(id);
+      if (kinds.length === 0)
+      {
+        return true;
+      }
+
+      if (Array.isArray(kind))
+      {
+        return kind.some(id => kinds.includes(id));
+      }
+
+      return kinds.includes(kind);
     }
 
   });

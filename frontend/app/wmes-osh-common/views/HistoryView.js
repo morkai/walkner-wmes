@@ -303,6 +303,7 @@ define([
         case 'eventCategory':
         case 'reasonCategory':
         case 'company':
+        case 'activityKind':
         {
           const long = _.escape(dictionaries.getLabel(property, value, {long: true}));
           const short = _.escape(dictionaries.getLabel(property, value, {long: false}));

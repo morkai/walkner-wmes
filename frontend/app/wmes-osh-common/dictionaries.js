@@ -237,6 +237,23 @@ define([
         return String(id);
       }
 
+      if (Array.isArray(id))
+      {
+        return id
+          .map(id =>
+          {
+            const model = dictionary.get(id);
+
+            if (!model)
+            {
+              return String(id);
+            }
+
+            return model.getLabel(options);
+          })
+          .join('; ');
+      }
+
       const model = dictionary.get(id);
 
       if (!model)
@@ -256,6 +273,24 @@ define([
       if (!dictionary || Array.isArray(dictionary))
       {
         return '';
+      }
+
+      if (Array.isArray(id))
+      {
+        return id
+          .map(id =>
+          {
+            const model = dictionary.get(id);
+
+            if (!model)
+            {
+              return '';
+            }
+
+            return model.get('description') || '';
+          })
+          .filter(description => !!description)
+          .join('; ');
       }
 
       const model = dictionary.get(id);

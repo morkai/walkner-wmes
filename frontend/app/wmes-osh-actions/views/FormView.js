@@ -92,12 +92,16 @@ define([
         this.setUpStationSelect2();
       },
 
-      'change input[name="kind"]': function()
+      'change input[name="kind[]"]': function()
       {
+        const oldActivityKind = this.$id('activityKind').val();
+
         this.$id('activityKind').val('');
 
-        this.setUpActivityKindSelect2();
+        this.setUpActivityKindSelect2(oldActivityKind);
         this.toggleActivityKind();
+
+        this.$('input[name="kind[]"]').first()[0].required = !this.$('input[name="kind[]"]:checked').length;
       },
 
       'change #-activityKind': function()
@@ -307,6 +311,18 @@ define([
       };
     },
 
+    getKinds: function()
+    {
+      const $kinds = this.$('input[name="kind[]"]');
+
+      if ($kinds.length)
+      {
+        return $kinds.filter(':checked').get().map(el => +el.value);
+      }
+
+      return this.model.get('kind') || [];
+    },
+
     serializeRootCauses: function()
     {
       const rootCauses = this.model.get('rootCauses');
@@ -470,9 +486,9 @@ define([
         formData.status = 'finished';
       }
 
-      if (formData.kind)
+      if (Array.isArray(formData.kind))
       {
-        formData.kind = parseInt(formData.kind, 10);
+        formData.kind = formData.kind.map(id => +id);
       }
 
       return formData;
@@ -930,10 +946,10 @@ define([
       );
     },
 
-    setUpActivityKindSelect2: function()
+    setUpActivityKindSelect2: function(oldId)
     {
       const $input = this.$id('activityKind');
-      const kind = +this.$('input[name="kind"]:checked').val() || this.model.get('kind');
+      const kinds = this.getKinds();
       const map = {};
       const anyType = this.options.editMode
         || Action.can.manage()
@@ -952,7 +968,7 @@ define([
         }
         else
         {
-          if (!model.get('active') || !model.hasKind(kind))
+          if (!model.get('active') || !model.hasKind(kinds))
           {
             return;
           }
@@ -991,7 +1007,7 @@ define([
             text: `?${currentId}?`
           };
         }
-        else if (currentModel.hasKind(kind))
+        else if (currentModel.hasKind(kinds))
         {
           map[currentId] = {
             id: currentId,
@@ -1013,7 +1029,11 @@ define([
         formatResult: formatResultWithDescription.bind(null, 'text', 'description')
       });
 
-      if (data.length === 1)
+      if (oldId && map[oldId])
+      {
+        $input.val(oldId).select2('data', map[oldId]);
+      }
+      else if (data.length === 1)
       {
         $input.val(data[0].id).select2('data', data[0]);
       }
@@ -1120,7 +1140,7 @@ define([
 
     toggleKind: function()
     {
-      const $kinds = this.$('input[name="kind"]');
+      const $kinds = this.$('input[name="kind[]"]');
 
       if ($kinds.length && !$kinds.filter(':checked').length)
       {

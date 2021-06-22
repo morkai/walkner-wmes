@@ -82,11 +82,15 @@ define([
         this.setUpStationSelect2();
       },
 
-      'change input[name="kind"]': function()
+      'change input[name="kind[]"]': function()
       {
+        const oldKaizenCategory = this.$id('kaizenCategory').val() || null;
+
         this.$id('kaizenCategory').val('');
 
-        this.setUpKaizenCategorySelect2();
+        this.setUpKaizenCategorySelect2(oldKaizenCategory);
+
+        this.$('input[name="kind[]"]').first()[0].required = !this.$('input[name="kind[]"]:checked').length;
       },
 
       'change input[type="file"][data-max]': function(e)
@@ -224,6 +228,18 @@ define([
 
     }, FormView.prototype.events),
 
+    getKinds: function()
+    {
+      const $kinds = this.$('input[name="kind[]"]');
+
+      if ($kinds.length)
+      {
+        return $kinds.filter(':checked').get().map(el => +el.value);
+      }
+
+      return this.model.get('kind') || [];
+    },
+
     getTemplateData: function()
     {
       return {
@@ -314,9 +330,9 @@ define([
         delete formData.plannedAt;
       }
 
-      if (formData.kind)
+      if (Array.isArray(formData.kind))
       {
-        formData.kind = parseInt(formData.kind, 10);
+        formData.kind = formData.kind.map(id => +id);
       }
 
       if (this.$('input[name="kom"]').length)
@@ -796,15 +812,15 @@ define([
       );
     },
 
-    setUpKaizenCategorySelect2: function()
+    setUpKaizenCategorySelect2: function(oldId)
     {
       const $input = this.$id('kaizenCategory');
-      const kind = +this.$('input[name="kind"]:checked').val() || this.model.get('kind');
+      const kinds = this.getKinds();
       const map = {};
 
       dictionaries.kaizenCategories.forEach(model =>
       {
-        if (!model.get('active') || !model.hasKind(kind))
+        if (!model.get('active') || !model.hasKind(kinds))
         {
           return;
         }
@@ -829,7 +845,7 @@ define([
             text: `?${currentId}?`
           };
         }
-        else if (currentModel.hasKind(kind))
+        else if (currentModel.hasKind(kinds))
         {
           map[currentId] = {
             id: currentId,
@@ -851,7 +867,11 @@ define([
         formatResult: formatResultWithDescription.bind(null, 'text', 'description')
       });
 
-      if (data.length === 1)
+      if (oldId && map[oldId])
+      {
+        $input.val(oldId).select2('data', map[oldId]);
+      }
+      else if (data.length === 1)
       {
         $input.val(data[0].id).select2('data', data[0]);
       }
@@ -919,7 +939,7 @@ define([
 
     toggleKind: function()
     {
-      const $kinds = this.$('input[name="kind"]');
+      const $kinds = this.$('input[name="kind[]"]');
 
       if ($kinds.length && !$kinds.filter(':checked').length)
       {

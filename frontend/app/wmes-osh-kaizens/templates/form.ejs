@@ -37,11 +37,11 @@
         <div class="panel-body has-lastElementRow">
           <% if (!relation || !model.kind) { %>
             <div class="form-group">
-              <label class="control-label"><%- t('PROPERTY:kind') %></label>
+              <label class="control-label is-required"><%- t('PROPERTY:kind') %></label>
               <br>
               <% kinds.forEach(option => { %>
-              <label class="radio-inline" title="<%= option.title %>">
-                <input name="kind" type="radio" value="<%- option.value %>">
+              <label class="checkbox-inline" title="<%= option.title %>">
+                <input name="kind[]" type="checkbox" value="<%- option.value %>">
                 <%= option.label %>
               </label>
               <% }) %>
