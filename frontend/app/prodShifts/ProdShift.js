@@ -626,10 +626,42 @@ define([
 
       this.execution.startOrder(this.prodShiftOrder);
 
+      // Don't autostart downtimes at the start of the third shift because of COVID shifts
+      if (!prevOrderNo && this.isCrossShiftContinuation())
+      {
+        return;
+      }
+
       if (prevOrderNo !== this.prodShiftOrder.get('orderId'))
       {
         this.autoStartDowntime();
       }
+    },
+
+    isCrossShiftContinuation: function()
+    {
+      var h = new Date().getHours();
+
+      if (h < 22 || h > 22)
+      {
+        return false;
+      }
+
+      var doneOrders = this.execution.get('doneOrders');
+      var currOrder = doneOrders[doneOrders.length - 1];
+      var prevOrder = doneOrders[doneOrders.length - 2];
+
+      if (!prevOrder)
+      {
+        return false;
+      }
+
+      if (getShiftStartInfo(currOrder.startedAt).startTime > getShiftStartInfo(prevOrder.startedAt))
+      {
+        return false;
+      }
+
+      return currOrder.orderId === prevOrder.orderId;
     },
 
     correctOrder: function(orderInfo, operationNo)
