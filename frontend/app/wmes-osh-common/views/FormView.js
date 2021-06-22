@@ -347,13 +347,14 @@ define([
     setUpDivisionSelect2: function()
     {
       const $input = this.$id('division');
+      const currentId = +$input.val();
 
-      if (!$input.val() && currentUser.data.oshDivision && !this.options.editMode)
+      if (!currentId && currentUser.data.oshDivision && !this.options.editMode)
       {
         $input.val(currentUser.data.oshDivision);
       }
 
-      let currentDivision = dictionaries.divisions.get(+$input.val());
+      let currentDivision = dictionaries.divisions.get(currentId);
 
       if (currentDivision)
       {
@@ -361,6 +362,13 @@ define([
           id: currentDivision.id,
           text: currentDivision.getLabel({long: true}),
           model: currentDivision
+        };
+      }
+      else if (currentId)
+      {
+        currentDivision = {
+          id: currentId,
+          text: `?${currentId}?`
         };
       }
 
@@ -400,13 +408,14 @@ define([
     setUpWorkplaceSelect2: function()
     {
       const $input = this.$id('workplace');
+      const currentId = +$input.val();
 
-      if (!$input.val() && currentUser.data.oshWorkplace && !this.options.editMode)
+      if (!currentId && currentUser.data.oshWorkplace && !this.options.editMode)
       {
         $input.val(currentUser.data.oshWorkplace);
       }
 
-      let currentWorkplace = dictionaries.workplaces.get(+$input.val());
+      let currentWorkplace = dictionaries.workplaces.get(currentId);
 
       if (currentWorkplace)
       {
@@ -414,6 +423,13 @@ define([
           id: currentWorkplace.id,
           text: currentWorkplace.getLabel({long: true}),
           model: currentWorkplace
+        };
+      }
+      else if (currentId)
+      {
+        currentWorkplace = {
+          id: currentId,
+          text: `?${currentId}?`
         };
       }
 
@@ -467,13 +483,14 @@ define([
     setUpDepartmentSelect2: function()
     {
       const $input = this.$id('department');
+      const currentId = +$input.val();
 
-      if (!$input.val() && currentUser.data.oshDepartment && !this.options.editMode)
+      if (!currentId && currentUser.data.oshDepartment && !this.options.editMode)
       {
         $input.val(currentUser.data.oshDepartment);
       }
 
-      let currentDepartment = dictionaries.departments.get(+$input.val());
+      let currentDepartment = dictionaries.departments.get(currentId);
 
       if (currentDepartment)
       {
@@ -481,6 +498,13 @@ define([
           id: currentDepartment.id,
           text: currentDepartment.getLabel({long: true}),
           model: currentDepartment
+        };
+      }
+      else if (currentId)
+      {
+        currentDepartment = {
+          id: currentId,
+          text: `?${currentId}?`
         };
       }
 
@@ -534,6 +558,26 @@ define([
     setUpBuildingSelect2: function(selectFirst)
     {
       const $input = this.$id('building');
+      const currentId = +$input.val();
+
+      let currentBuilding = dictionaries.buildings.get(currentId);
+
+      if (currentBuilding)
+      {
+        currentBuilding = {
+          id: currentBuilding.id,
+          text: currentBuilding.getLabel({long: true}),
+          model: currentBuilding
+        };
+      }
+      else if (currentId)
+      {
+        currentBuilding = {
+          id: currentId,
+          text: `?${currentId}?`
+        };
+      }
+
       const currentDepartmentId = +this.$id('department').val();
       const map = {};
 
@@ -550,6 +594,11 @@ define([
           model
         };
       });
+
+      if (currentBuilding && !map[currentBuilding.id])
+      {
+        map[currentBuilding.id] = currentBuilding;
+      }
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
 
@@ -575,6 +624,26 @@ define([
     setUpLocationSelect2: function()
     {
       const $input = this.$id('location');
+      const currentId = +$input.val();
+
+      let currentLocation = dictionaries.locations.get(currentId);
+
+      if (currentLocation)
+      {
+        currentLocation = {
+          id: currentLocation.id,
+          text: currentLocation.getLabel({long: true}),
+          model: currentLocation
+        };
+      }
+      else if (currentId)
+      {
+        currentLocation = {
+          id: currentId,
+          text: `?${currentId}?`
+        };
+      }
+
       const currentBuildingId = +this.$id('building').val();
       const map = {};
 
@@ -591,6 +660,11 @@ define([
           model
         };
       });
+
+      if (currentLocation && !map[currentLocation.id])
+      {
+        map[currentLocation.id] = currentLocation;
+      }
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
 
@@ -616,6 +690,26 @@ define([
     setUpStationSelect2: function()
     {
       const $input = this.$id('station');
+      const currentId = +$input.val();
+
+      let currentStation = dictionaries.stations.get(currentId);
+
+      if (currentStation)
+      {
+        currentStation = {
+          id: currentStation.id,
+          text: currentStation.getLabel({long: true}),
+          model: currentStation
+        };
+      }
+      else if (currentId)
+      {
+        currentStation = {
+          id: currentId,
+          text: `?${currentId}?`
+        };
+      }
+
       const currentLocationId = +this.$id('location').val();
       const map = {};
 
@@ -632,6 +726,11 @@ define([
           model
         };
       });
+
+      if (currentStation && !map[currentStation.id])
+      {
+        map[currentStation.id] = currentStation;
+      }
 
       const data = Object.values(map).sort((a, b) => a.text.localeCompare(b.text));
 
