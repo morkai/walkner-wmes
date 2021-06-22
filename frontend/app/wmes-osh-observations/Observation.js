@@ -100,7 +100,7 @@ define([
 
     add: function()
     {
-      return (this.can || this).manage() || currentUser.isAllowedTo('OSH:OBSERVER');
+      return currentUser.isLoggedIn();
     },
 
     edit: function(model)

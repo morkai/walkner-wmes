@@ -4,7 +4,7 @@
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li class="navbar-with-button"><a href="#osh/observations"><%- t('wmes-osh-common', 'navbar:entries:all') %></a><button class="btn btn-default" data-href="#osh/observations;add" data-privilege="OSH:OBSERVATIONS:MANAGE OSH:OBSERVER"><i class="fa fa-plus"></i></button></li>
+    <li class="navbar-with-button"><a href="#osh/observations"><%- t('wmes-osh-common', 'navbar:entries:all') %></a><button class="btn btn-default" data-href="#osh/observations;add" data-privilege="USER"><i class="fa fa-plus"></i></button></li>
     <li><a href="#osh/observations?exclude(changes)&sort(-createdAt)&limit(-1337)&status=inProgress"><%- t('wmes-osh-common', 'navbar:entries:open') %></a></li>
     <li><a href="#osh/observations?exclude(changes)&sort(-createdAt)&limit(-1337)&users.user.id=mine"><%- t('wmes-osh-common', 'navbar:entries:mine') %></a></li>
     <li><a href="#osh/observations?exclude(changes)&sort(-createdAt)&limit(-1337)&users.user.id=unseen"><%- t('wmes-osh-common', 'navbar:entries:unseen') %></a></li>
