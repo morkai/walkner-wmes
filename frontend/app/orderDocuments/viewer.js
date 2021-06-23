@@ -636,14 +636,31 @@ function showComponentLabel(e)
       return;
     }
 
-    var label = best.label;
+    var description = best.label;
+    var code = best.code || '';
+    var length = /wire.*?L[-=]?[0-9]{1,4}/i.test(description)
+      ? (description.match(/L[-=]?([0-9]{1,4})/)[1] + 'mm')
+      : '';
+    var html = '<div id="componentLabel-mark"></div><div id="componentLabel-line1">' + description + '</div>';
 
-    if (/wire.*?L-?[0-9]{1,4}/i.test(label))
+    if (code || length)
     {
-      label = label.match(/L-?([0-9]{1,4})/)[1] + 'mm';
+      html += '<div id="componentLabel-line2">';
+
+      if (code)
+      {
+        html += '<div id="componentLabel-code">' + code + '</div>';
+      }
+
+      if (length)
+      {
+        html += '<div id="componentLabel-length">' + length + '</div>';
+      }
+
+      html += '</div>';
     }
 
-    el.innerHTML = label;
+    el.innerHTML = html;
 
     componentLabel = best;
 
@@ -671,6 +688,14 @@ function adjustComponentLabel()
   el.style.display = '';
 
   var rect = el.getBoundingClientRect();
+  var w = componentLabel.w + 6;
 
-  el.style.marginLeft = (componentLabel.w + 6) * ratio + (rect.width / 2 * -1) + 'px';
+  el.style.marginLeft = w * ratio + (rect.width / 2 * -1) + 'px';
+
+  var markEl = document.getElementById('componentLabel-mark');
+
+  markEl.style.width = (w * 2 * ratio) + 'px';
+  markEl.style.height = (componentLabel.h * 2 * ratio) + 'px';
+  markEl.style.marginTop = (componentLabel.h * 2 * ratio * -1) + 'px';
+  markEl.style.marginLeft = (w * ratio * -1) + 'px';
 }

@@ -506,7 +506,7 @@ define([
 
           documentMarks.forEach(function(mark)
           {
-            marks.push(Object.assign({label: component.name}, mark));
+            marks.push(Object.assign({label: component.name, code: component.nc12}, mark));
           });
         });
 

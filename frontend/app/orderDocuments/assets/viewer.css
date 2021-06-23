@@ -158,3 +158,20 @@ body {
   z-index: 2017;
   pointer-events: none;
 }
+#componentLabel-mark {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  background: rgba(255, 255, 0, 0.5);
+}
+#componentLabel-line2 {
+  display: flex;
+  margin-top: 0.15em;
+}
+#componentLabel-code {
+  margin-right: 1em;
+  font-family: monospace;
+}
+#componentLabel-length {
+  margin-left: auto;
+}
