@@ -6,35 +6,39 @@
     startHour: 6,
     setTime: false,
     labels: {
-      text: helpers.t('PROPERTY:scheduledStartDate'),
+      text: t('PROPERTY:scheduledStartDate'),
       ranges: '+days:+0+1_-1+0_+1+2_-7+0_+0+7'
     }
   }) %>
-  <div class="form-group">
+  <div class="form-group" data-filter="id">
     <div class="filter-radioLabels">
       <% ['_id', 'nc12', 'bom.nc12', 'documents.nc15'].forEach(function(type) { %>
       <label>
         <input name="idType" type="radio" value="<%- type %>">
-        <%- helpers.t('filter:id:' + type) %>
+        <%- t('filter:id:' + type) %>
       </label>
       <% }) %>
     </div>
-    <input id="<%- idPrefix %>-id" class="form-control" name="id" type="text" autocomplete="new-password" maxlength="15">
+    <input id="<%- id('id') %>" class="form-control" name="id" type="text">
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-mrp"><%- helpers.t('PROPERTY:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password">
+  <div class="form-group" data-filter="mrp">
+    <label for="<%- id('mrp') %>"><%- t('PROPERTY:mrp') %></label>
+    <input id="<%- id('mrp') %>" name="mrp" type="text">
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-statusesIn"><%- helpers.t('filter:statuses:in') %></label>
-    <input id="<%- idPrefix %>-statusesIn" name="statusesIn" type="text" autocomplete="new-password">
+  <div class="form-group" data-filter="delayReason">
+    <label for="<%- id('delayReason') %>"><%- t('PROPERTY:delayReason') %></label>
+    <input id="<%- id('delayReason') %>" name="delayReason" type="text">
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-statusesNin"><%- helpers.t('filter:statuses:nin') %></label>
-    <input id="<%- idPrefix %>-statusesNin" name="statusesNin" type="text" autocomplete="new-password">
+  <div class="form-group" data-filter="statusesIn">
+    <label for="<%- id('statusesIn') %>"><%- t('filter:statusesIn') %></label>
+    <input id="<%- id('statusesIn') %>" name="statusesIn" type="text">
+  </div>
+  <div class="form-group" data-filter="statusesNin">
+    <label for="<%- id('statusesNin') %>"><%- t('filter:statusesNin') %></label>
+    <input id="<%- id('statusesNin') %>" name="statusesNin" type="text">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
+    <%- renderButton() %>
   </div>
 </form>

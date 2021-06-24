@@ -150,8 +150,8 @@
     "filter:id:product": "Product",
     "filter:id:component": "Component",
     "filter:id:document": "Document",
-    "filter:statuses:in": "Required statuses",
-    "filter:statuses:nin": "Ignored statuses",
+    "filter:statusesIn": "Required statuses",
+    "filter:statusesNin": "Ignored statuses",
     "filter:submit": "Filter orders",
 
     "details:showMoreLink": "Show more order details",

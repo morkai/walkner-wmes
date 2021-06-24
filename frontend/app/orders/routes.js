@@ -4,6 +4,7 @@ define([
   '../router',
   '../viewport',
   '../user',
+  './OrderCollection',
   './pages/OrderListPage',
   'app/orders/pages/OrderDetailsPage',
   'css!app/orders/assets/main',
@@ -12,6 +13,7 @@ define([
   router,
   viewport,
   user,
+  OrderCollection,
   OrderListPage,
   OrderDetailsPage
 ) {
@@ -22,7 +24,9 @@ define([
 
   router.map('/orders', canView, function(req)
   {
-    viewport.showPage(new OrderListPage({rql: req.rql}));
+    viewport.showPage(new OrderListPage({
+      collection: new OrderCollection(null, {rqlQuery: req.rql})
+    }));
   });
 
   router.map('/orders/:id', function(req)

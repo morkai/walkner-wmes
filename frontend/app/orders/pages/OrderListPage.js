@@ -1,43 +1,29 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/viewport',
   'app/core/util/pageActions',
   'app/core/util/bindLoadingMessage',
-  'app/core/View',
+  'app/core/pages/FilteredListPage',
   'app/delayReasons/storage',
   '../OrderCollection',
   '../views/OrderListView',
   '../views/OrderFilterView',
-  '../views/OpenOrdersPrintView',
-  'app/core/templates/listPage'
+  '../views/OpenOrdersPrintView'
 ], function(
-  t,
   viewport,
   pageActions,
   bindLoadingMessage,
-  View,
+  FilteredListPage,
   delayReasonsStorage,
   OrderCollection,
   OrderListView,
   OrderFilterView,
-  OpenOrdersPrintView,
-  listPageTemplate
+  OpenOrdersPrintView
 ) {
   'use strict';
 
-  return View.extend({
-
-    template: listPageTemplate,
-
-    layoutName: 'page',
-
-    pageId: 'orderList',
-
-    breadcrumbs: [
-      t.bound('orders', 'BREADCRUMB:browse')
-    ],
+  return FilteredListPage.extend({
 
     actions: function(layout)
     {
@@ -76,15 +62,6 @@ define([
       ];
     },
 
-    initialize: function()
-    {
-      this.defineModels();
-      this.defineViews();
-
-      this.setView('.filter-container', this.filterView);
-      this.setView('.list-container', this.listView);
-    },
-
     destroy: function()
     {
       delayReasonsStorage.release();
@@ -92,28 +69,25 @@ define([
 
     defineModels: function()
     {
-      this.collection = bindLoadingMessage(
-        new OrderCollection(null, {rqlQuery: this.options.rql}), this
-      );
+      FilteredListPage.prototype.defineModels.apply(this, arguments);
 
       this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
     },
 
-    defineViews: function()
+    createFilterView: function()
     {
-      this.filterView = new OrderFilterView({
-        model: {
-          nlsDomain: this.collection.getNlsDomain(),
-          rqlQuery: this.collection.rqlQuery
-        }
+      return new OrderFilterView({
+        model: this.collection,
+        delayReasons: this.delayReasons
       });
+    },
 
-      this.listView = new OrderListView({
+    createListView: function()
+    {
+      return new OrderListView({
         collection: this.collection,
         delayReasons: this.delayReasons
       });
-
-      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
@@ -127,20 +101,6 @@ define([
     afterRender: function()
     {
       delayReasonsStorage.acquire();
-    },
-
-    refreshList: function(newRqlQuery)
-    {
-      this.collection.rqlQuery = newRqlQuery;
-
-      this.listView.refreshCollectionNow();
-
-      this.broker.publish('router.navigate', {
-        url: this.collection.genClientUrl() + '?' + newRqlQuery,
-        trigger: false,
-        replace: true
-      });
     }
-
   });
 });

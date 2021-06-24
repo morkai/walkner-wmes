@@ -64,8 +64,8 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: '_id', className: 'is-min'},
-        {id: 'nc12', className: 'is-min'},
+        {id: '_id', className: 'is-min', thClassName: 'is-filter'},
+        {id: 'nc12', className: 'is-min', thClassName: 'is-filter'},
         {
           id: 'name',
           titleProperty: function(row)
@@ -105,13 +105,18 @@ define([
             return name.join(' ');
           }
         },
-        {id: 'mrp', className: 'is-min'},
+        {id: 'mrp', className: 'is-min', thClassName: 'is-filter'},
         {id: 'qtys', className: 'is-min is-number'},
         {id: 'sapCreatedAt', valueProperty: 'sapCreatedAtText', className: 'is-min'},
-        {id: 'scheduledStartDate', valueProperty: 'scheduledStartDateText', className: 'is-min'},
-        {id: 'delayReason', className: 'is-min'},
+        {
+          id: 'scheduledStartDate',
+          valueProperty: 'scheduledStartDateText',
+          className: 'is-min',
+          thClassName: 'is-filter'
+        },
+        {id: 'delayReason', className: 'is-min', thClassName: 'is-filter'},
         {id: 'm4', className: 'is-min'},
-        {id: 'statuses', valueProperty: 'statusLabels'}
+        {id: 'statuses', valueProperty: 'statusLabels', thClassName: 'is-filter'}
       ];
     },
 

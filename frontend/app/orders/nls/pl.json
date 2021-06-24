@@ -150,8 +150,8 @@
   "filter:id:nc12": "Wyrób",
   "filter:id:bom.nc12": "Komponent",
   "filter:id:documents.nc15": "Dokument",
-  "filter:statuses:in": "Wymagane statusy",
-  "filter:statuses:nin": "Ignorowane statusy",
+  "filter:statusesIn": "Wymagane statusy",
+  "filter:statusesNin": "Ignorowane statusy",
   "filter:submit": "Filtruj zlecenia",
 
   "details:showMoreLink": "Pokaż więcej szczegołów zlecenia",

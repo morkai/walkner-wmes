@@ -32,16 +32,29 @@ define([
     defaultFormData: {
       id: '',
       idType: '_id',
-      nc12: '',
       mrp: '',
-      statuses: ''
+      statusesIn: '',
+      statusesNin: ''
+    },
+
+    filterList: [
+      'mrp',
+      'delayReason',
+      'statusesIn',
+      'statusesNin',
+      'limit'
+    ],
+
+    filterMap: {
+      '_id': 'id',
+      'nc12': 'id'
     },
 
     termToForm: {
       'scheduledStartDate': dateTimeRange.rqlToForm,
       '_id': function(propertyName, term, formData)
       {
-        formData.id = term.args[1];
+        formData.id = Array.isArray(term.args[1]) ? term.args[1].join(' ') : term.args[1];
         formData.idType = propertyName;
       },
       'nc12': '_id',
@@ -50,6 +63,10 @@ define([
       'mrp': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1].join(',');
+      },
+      'delayReason': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.args[1];
       },
       'statuses': function(propertyName, term, formData)
       {
@@ -62,6 +79,13 @@ define([
       FilterView.prototype.afterRender.call(this);
 
       setUpMrpSelect2(this.$id('mrp'), {own: true, view: this});
+
+      this.$id('delayReason').select2({
+        width: '250px',
+        allowClear: true,
+        placeholder: ' ',
+        data: this.delayReasons.map(idAndLabel)
+      });
 
       this.$id('statusesIn').select2({
         width: '200px',
@@ -78,9 +102,15 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var id = this.$id('id').val().trim();
+      var id = this.$id('id')
+        .val()
+        .trim()
+        .toUpperCase()
+        .split(/[^A-Z0-9]+/)
+        .filter(function(v) { return /^([A-Z0-9]{7}|[0-9]{9}|[0-9]{12}|[0-9]{15})$/.test(v); });
       var idType = this.$('input[name="idType"]:checked').val();
       var mrp = this.$id('mrp').val();
+      var delayReason = this.$id('delayReason').val();
       var statusesIn = this.$id('statusesIn').val();
       var statusesNin = this.$id('statusesNin').val();
 
@@ -88,12 +118,17 @@ define([
 
       if (id.length)
       {
-        selector.push({name: 'eq', args: [idType, id]});
+        selector.push({name: 'in', args: [idType, id]});
       }
 
       if (mrp.length)
       {
         selector.push({name: 'in', args: ['mrp', mrp.split(',')]});
+      }
+
+      if (delayReason.length)
+      {
+        selector.push({name: 'eq', args: ['delayReason', delayReason]});
       }
 
       if (statusesIn.length)
@@ -105,6 +140,27 @@ define([
       {
         selector.push({name: 'nin', args: ['statuses', statusesNin.split(',')]});
       }
+    },
+
+    showFilter: function(filter)
+    {
+      if (filter === 'statuses')
+      {
+        this.showFilter('statusesNin');
+        this.showFilter('statusesIn');
+
+        return;
+      }
+
+      if (filter === '_id' || filter === 'nc12')
+      {
+        this.$('input[name="idType"][value="' + filter + '"]').click();
+        this.$id('id').focus();
+
+        return;
+      }
+
+      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });
