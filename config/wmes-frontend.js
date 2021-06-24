@@ -105,7 +105,6 @@ exports.modules = [
   'wmes-luma2-frontend',
   'wmes-snf',
   'wmes-trw',
-  'wmes-luca-frontend',
   'wmes-drilling',
   'wmes-wiring',
   'wmes-ct-frontend',
