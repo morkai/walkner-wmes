@@ -1,0 +1,25 @@
+<table id="<%- id('quickUsers') %>" class="table table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th class="is-min"><%- t('quickUsers:label') %></th>
+      <th><%- t('quickUsers:funcs') %></th>
+      <th><%- t('quickUsers:users') %></th>
+      <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% quickUsers.forEach(u => { %>
+  <tr data-id="<%- u._id %>">
+    <td class="is-min"><%= u.label %></td>
+    <td><%= u.funcs %></td>
+    <td><%- u.users %></td>
+    <td class="actions">
+      <div class="actions-group">
+        <button data-action="editQuickUser" class="btn btn-default" type="button"><i class="fa fa-edit"></i></button>
+        <button data-action="removeQuickUser" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
+      </div>
+    </td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

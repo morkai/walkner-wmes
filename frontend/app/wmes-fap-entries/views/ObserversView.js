@@ -2,12 +2,14 @@
 
 define([
   'underscore',
+  'app/viewport',
   'app/core/View',
   'app/users/util/setUpUserSelect2',
   '../dictionaries',
   'app/wmes-fap-entries/templates/observers'
 ], function(
   _,
+  viewport,
   View,
   setUpUserSelect2,
   dictionaries,
@@ -35,10 +37,18 @@ define([
       {
         e.preventDefault();
 
-        this.addObserver({
-          id: e.currentTarget.dataset.quickAdd,
-          label: e.currentTarget.textContent.trim()
-        });
+        var id = e.currentTarget.dataset.quickAdd;
+        var quickUsers = dictionaries.settings.getValue('quickUsers', []);
+        var qu = quickUsers.find(function(qu) { return qu._id === id; });
+
+        if (qu.funcs.length)
+        {
+          this.loadQuickUsers(qu);
+        }
+        else if (qu.users.length)
+        {
+          this.addQuickUsers(qu.users);
+        }
       }
 
     },
@@ -80,6 +90,74 @@ define([
       }
 
       this.updateQuickAdd();
+    },
+
+    loadQuickUsers: function(qu)
+    {
+      var view = this;
+
+      viewport.msg.loading();
+
+      var req = view.ajax({
+        url: '/users?select(firstName,lastName,login)&prodFunction=in=(' + qu.funcs.join(',') + ')&limit(100)'
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.loadingFailed();
+      });
+
+      req.done(function(res)
+      {
+        viewport.msg.loaded();
+
+        var newUsers = {};
+
+        qu.users.forEach(function(u) { newUsers[u.id] = u; });
+
+        (res.collection || []).forEach(function(u)
+        {
+          newUsers[u._id] = {
+            id: u._id,
+            label: u.lastName || u.firstName
+              ? (u.lastName + ' ' + u.firstName).trim()
+              : (u.name || u.login || u._id)
+          };
+        });
+
+        view.addQuickUsers(Object.values(newUsers));
+      });
+    },
+
+    addQuickUsers: function(users)
+    {
+      var observers = {};
+
+      this.model.get('observers').forEach(function(o)
+      {
+        observers[o.user.id] = true;
+      });
+
+      var subscribers = {};
+
+      users.forEach(function(u)
+      {
+        if (observers[u.id] || subscribers[u.id])
+        {
+          return;
+        }
+
+        subscribers[u.id] = u;
+      });
+
+      subscribers = Object.values(subscribers);
+
+      if (!subscribers.length)
+      {
+        return;
+      }
+
+      this.model.change('subscribers', subscribers, null);
     },
 
     addObserver: function(subscriber)
@@ -160,14 +238,9 @@ define([
 
       var html = '';
 
-      dictionaries.settings.getValue('quickUsers', []).forEach(function(u)
+      dictionaries.settings.getValue('quickUsers', []).forEach(function(qu)
       {
-        if (observers[u.id])
-        {
-          return;
-        }
-
-        html += '<li><a href="#" data-quick-add="' + u.id + '">' + _.escape(u.label) + '</a></li>';
+        html += '<li><a href="#" data-quick-add="' + qu._id + '">' + _.escape(qu.label) + '</a></li>';
       });
 
       this.$id('quickAdd').find('ul').html(html);

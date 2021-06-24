@@ -119,9 +119,16 @@
   "settings:general:categoryFunctions": "Funkcje zmiany kategorii",
   "settings:general:quickUsers": "Użytkownicy dostępni w menu szybkiego dodawania",
 
+  "quickUsers:add": "Dodaj nową pozycję",
+  "quickUsers:submit": "Zapisz",
+  "quickUsers:label": "Etykieta",
+  "quickUsers:funcs": "Funkcje",
+  "quickUsers:users": "Użytkownicy",
+
   "navbar:dictionaries": "Słowniki",
   "navbar:categories": "Kategorie",
   "navbar:subCategories": "Podkategorie",
+  "navbar:settings": "Ustawienia",
   "navbar:button": "FAP",
   "navbar:unseen": "Nieprzeczytane",
   "navbar:add": "Dodaj FAP",

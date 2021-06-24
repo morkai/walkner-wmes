@@ -1,22 +1,23 @@
 <div class="navbar-right fap-navbar">
   <div class="fap-navbarBtn">
-    <a id="<%- idPrefix %>-unseen" href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=unseen" class="btn btn-warning fap-navbarBtn-unseen" title="<%- helpers.t('navbar:unseen') %>">?</a>
+    <a id="<%- id('unseen') %>" href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=unseen" class="btn btn-warning fap-navbarBtn-unseen" title="<%- t('navbar:unseen') %>">?</a>
     <div class="dropdown">
-      <button id="<%- idPrefix %>-menu" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><%- helpers.t('navbar:button') %></button>
+      <button id="<%- id('menu') %>" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><%- t('navbar:button') %></button>
       <ul class="dropdown-menu dropdown-menu-left">
         <% browseEntriesLinks.forEach(function(link) { %>
-        <li class="navbar-with-button"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)<%- link.rql %>"><%- helpers.t('navbar:' + link.label) %></a><button class="btn btn-default" data-href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=<%- user.data._id %><%- link.rql %>" title="<%- helpers.t('navbar:mine') %>"><i class="fa fa-user"></i></button></li>
+        <li class="navbar-with-button"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)<%- link.rql %>"><%- t('navbar:' + link.label) %></a><button class="btn btn-default" data-href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=<%- user.data._id %><%- link.rql %>" title="<%- t('navbar:mine') %>"><i class="fa fa-user"></i></button></li>
         <% }) %>
-        <li><a href="#fap/reports/count"><%- helpers.t('navbar:reports:count') %></a>
+        <li><a href="#fap/reports/count"><%- t('navbar:reports:count') %></a>
         <% if (user.isAllowedTo('FAP:MANAGE')) { %>
         <li class="divider"></li>
-        <li class="dropdown-header"><%- helpers.t('navbar:dictionaries') %>
-          <li><a href="#fap/categories"><%- helpers.t('navbar:categories') %></a>
-          <li><a href="#fap/subCategories"><%- helpers.t('navbar:subCategories') %></a>
+        <li class="dropdown-header"><%- t('navbar:dictionaries') %>
+          <li><a href="#fap/categories"><%- t('navbar:categories') %></a>
+          <li><a href="#fap/subCategories"><%- t('navbar:subCategories') %></a>
+          <li><a href="#fap/settings"><%- t('navbar:settings') %></a>
         <% } %>
       </ul>
     </div>
-    <button id="<%- idPrefix %>-add" type="button" class="btn btn-warning fap-navbarBtn-add" title="<%- helpers.t('navbar:add') %>"><i class="fa fa-plus"></i></button>
-    <div id="<%- idPrefix %>-addForm"></div>
+    <button id="<%- id('add') %>" type="button" class="btn btn-warning fap-navbarBtn-add" title="<%- t('navbar:add') %>"><i class="fa fa-plus"></i></button>
+    <div id="<%- id('addForm') %>"></div>
   </div>
 </div>

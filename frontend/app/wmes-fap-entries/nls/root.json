@@ -114,9 +114,17 @@
     "settings:general:categoryFunctions": "Functions allowing category changes",
     "settings:general:quickUsers": "Users available in the quick add menu",
 
+
+    "quickUsers:add": "Add new option",
+    "quickUsers:submit": "Save",
+    "quickUsers:label": "Label",
+    "quickUsers:funcs": "Functions",
+    "quickUsers:users": "Users",
+
     "navbar:dictionaries": "Dictionaries",
     "navbar:categories": "Categories",
     "navbar:subCategories": "Subcategories",
+    "navbar:settings": "Settings",
     "navbar:button": "FAP",
     "navbar:unseen": "Unread",
     "navbar:add": "Add a new FAP",

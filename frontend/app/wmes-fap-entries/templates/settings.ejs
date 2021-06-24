@@ -15,7 +15,10 @@
       </div>
       <div class="form-group">
         <label for="<%- id('quickUsers') %>"><%- t('settings:general:quickUsers') %></label>
-        <input id="<%- id('quickUsers') %>" name="fap.quickUsers" type="text" data-setting>
+        <div id="<%- id('quickUsers') %>"></div>
+        <button id="<%- id('addQuickUser') %>" class="btn btn-default" type="button" style="margin-top: -5px">
+          <i class="fa fa-plus"></i><span><%- t('quickUsers:add') %></span>
+        </button>
       </div>
     </div>
   </div>
