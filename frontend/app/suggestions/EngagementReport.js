@@ -65,14 +65,7 @@ define([
 
       _.forEach(report.groups, function(group, groupKey)
       {
-        var totals = {
-          nearMisses: 0,
-          osh: 0,
-          suggestions: 0,
-          observations: 0,
-          minutes: 0,
-          audits: 0,
-          talks: 0,
+        var totals = Object.assign(group.TOTAL, {
           total: 0,
           users: {
             nearMisses: 0,
@@ -84,20 +77,15 @@ define([
             talks: 0,
             total: 0
           }
-        };
+        });
+
+        delete group.TOTAL;
 
         group = {
           key: +groupKey,
           totals: totals,
           users: _.map(group, function(user, userKey)
           {
-            totals.nearMisses += user.nearMisses;
-            totals.osh += user.osh;
-            totals.suggestions += user.suggestions;
-            totals.observations += user.observations;
-            totals.minutes += user.minutes;
-            totals.audits += user.audits;
-            totals.talks += user.talks;
             totals.users.nearMisses += user.nearMisses ? 1 : 0;
             totals.users.osh += user.osh ? 1 : 0;
             totals.users.suggestions += user.suggestions ? 1 : 0;

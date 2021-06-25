@@ -23,6 +23,8 @@ define([
 
   return FormView.extend({
 
+    dialogClassName: 'suggestions-accept-dialog',
+
     template: template,
 
     events: _.assign({
@@ -61,40 +63,76 @@ define([
         {
           this.submitForm();
         }
+      },
+
+      'change #-kaizenOwners-1': function(e)
+      {
+        this.toggleRequired(this.$id('kaizenSuperiors-1'), !!e.currentTarget.value);
       }
 
     }, FormView.prototype.events),
 
     afterRender: function()
     {
-      FormView.prototype.afterRender.apply(this, arguments);
+      var view = this;
 
-      this.setUpKaizenOwnersSelect2();
-    },
+      FormView.prototype.afterRender.apply(view, arguments);
 
-    setUpKaizenOwnersSelect2: function()
-    {
-      var $kaizenOwners = setUpUserSelect2(this.$id('kaizenOwners'), {
-        multiple: true,
-        activeOnly: true,
-        noPersonnelId: true,
-        maximumSelectionSize: 2
-      });
-
-      var kaizenOwners = this.model.get('kaizenOwners');
+      var kaizenOwners = [].concat(view.model.get('kaizenOwners'));
+      var kaizenSuperiors = [].concat(view.model.get('kaizenSuperiors'));
 
       if (!Array.isArray(kaizenOwners) || kaizenOwners.length === 0)
       {
-        kaizenOwners = this.model.get('suggestionOwners');
+        kaizenOwners = [].concat(view.model.get('suggestionOwners'));
+        kaizenSuperiors = [].concat(view.model.get('suggestionSuperiors'));
       }
 
-      $kaizenOwners.select2('data', kaizenOwners.map(function(o)
+      while (kaizenOwners.length < 2)
       {
-        return {
-          id: o.id,
-          text: o.label
-        };
-      }));
+        kaizenOwners.push(null);
+        kaizenSuperiors.push(null);
+      }
+
+      kaizenOwners.forEach(function(owner, i)
+      {
+        var $owner = setUpUserSelect2(view.$id('kaizenOwners-' + i), {
+          activeOnly: true,
+          noPersonnelId: true,
+          currentUserInfo: owner
+        });
+
+        view.toggleRequired($owner, i === 0);
+
+        var $superior = setUpUserSelect2(view.$id('kaizenSuperiors-' + i), {
+          activeOnly: true,
+          noPersonnelId: true,
+          currentUserInfo: kaizenSuperiors[i],
+          rqlQueryDecorator: function(rqlQuery)
+          {
+            var superiorFuncs = kaizenDictionaries.settings.getValue('superiorFuncs');
+
+            if (Array.isArray(superiorFuncs) && superiorFuncs.length)
+            {
+              rqlQuery.selector.args.push({
+                name: 'in',
+                args: ['prodFunction', superiorFuncs]
+              });
+            }
+          }
+        });
+
+        view.toggleRequired($superior, !!owner);
+      });
+    },
+
+    toggleRequired: function($input, required)
+    {
+      $input
+        .prop('required', required)
+        .closest('.form-group')
+        .toggleClass('has-required-select2', required)
+        .find('.control-label')
+        .toggleClass('is-required', required);
     },
 
     serializeToForm: function()
@@ -106,12 +144,29 @@ define([
 
     serializeForm: function(formData)
     {
+      var view = this;
+      var owners = [];
+      var superiors = [];
+
+      view.$('input[name^="kaizenOwners"]').each(function(i)
+      {
+        var owner = setUpUserSelect2.getUserInfo(view.$(this));
+        var superior = setUpUserSelect2.getUserInfo(view.$id('kaizenSuperiors-' + i));
+
+        if (!owner || !superior)
+        {
+          return;
+        }
+
+        owners.push(owner);
+        superiors.push(superior);
+      });
+
       return {
         status: this.status,
-        kaizenOwners: this.status === 'inProgress'
-          ? setUpUserSelect2.getUserInfo(this.$id('kaizenOwners'))
-          : [],
-        kaizenStartDate: this.status === 'inProgress' ? time.getMoment().startOf('day').toISOString() : null,
+        kaizenOwners: owners,
+        kaizenSuperiors: superiors,
+        kaizenStartDate: view.status === 'inProgress' ? time.getMoment().startOf('day').toISOString() : null,
         kaizenFinishDate: null,
         comment: formData.comment
       };
@@ -138,40 +193,34 @@ define([
 
     checkKaizenOwnersValidity: function()
     {
+      var view = this;
       var max = 3;
-      var $kaizenOwners = this.$id('kaizenOwners');
       var error = '';
+      var owners = {};
 
-      if (this.status === 'inProgress')
+      view.model.get('suggestionOwners').forEach(function(owner)
       {
-        if ($kaizenOwners.val() === '')
+        owners[owner.id] = 1;
+      });
+
+      view.$('input[name^="kaizenOwners"]').each(function()
+      {
+        var owner = setUpUserSelect2.getUserInfo(view.$(this));
+
+        if (owner)
         {
-          error = this.t('accept:kaizenOwners:required');
+          owners[owner.id] = 1;
         }
-        else
-        {
-          var owners = {};
+      });
 
-          this.model.get('suggestionOwners').forEach(function(owner)
-          {
-            owners[owner.id] = 1;
-          });
+      var count = Object.keys(owners).length;
 
-          $kaizenOwners.select2('data').forEach(function(owner)
-          {
-            owners[owner.id] = 1;
-          });
-
-          var count = Object.keys(owners).length;
-
-          if (count > max)
-          {
-            error = this.t('FORM:ERROR:tooManyTotalOwners', {max: max});
-          }
-        }
+      if (count > max)
+      {
+        error = view.t('FORM:owners:tooMany:overall', {max: max});
       }
 
-      $kaizenOwners[0].setCustomValidity(error);
+      view.$id('kaizenOwners-0')[0].setCustomValidity(error);
     }
 
   });

@@ -10,7 +10,7 @@
         <% attachments.forEach(attachment => { %>
         <div class="suggestions-attachment" data-id="<%- attachment._id %>" title="<%= attachment.name %>">
           <% if (attachment.image) { %>
-          <a class="suggestions-attachment-img" href="<%- attachment.url %>" style="background-image: url('<%- attachment.url %>?min=1')"></a>
+          <a class="suggestions-attachment-img" href="<%- attachment.url %>" style="background-image: url('<%- attachment.url %>&min=1')"></a>
           <% } else { %>
           <a class="suggestions-attachment-icon" href="<%- attachment.url %>" target="_blank">
             <i class="fa <%- attachment.icon %>"></i>

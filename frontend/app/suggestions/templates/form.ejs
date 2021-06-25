@@ -15,23 +15,19 @@
       </div>
       <div class="form-group">
         <label for="<%- id('subject') %>" class="control-label is-required"><%- t('PROPERTY:subject') %></label>
-        <input id="<%- id('subject') %>" class="form-control" type="text" autocomplete="new-password" name="subject" required placeholder="<%- t('FORM:help:subject') %>">
+        <input id="<%- id('subject') %>" class="form-control" type="text" name="subject" required placeholder="<%- t('FORM:help:subject') %>">
       </div>
       <div class="row">
         <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- id('section') %>" class="control-label is-required"><%- t('PROPERTY:section') %></label>
-          <input id="<%- id('section') %>" type="text" autocomplete="new-password" name="section" required placeholder="<%- t('FORM:help:section') %>">
+          <input id="<%- id('section') %>" type="text" name="section" required placeholder="<%- t('FORM:help:section') %>">
         </div>
-        <div class="form-group col-lg-4 has-required-select2">
+        <div class="form-group col-lg-8 has-required-select2">
           <label for="<%- id('confirmer') %>" class="control-label is-required is-required-first-child" style="display: flex">
             <span><%- t('PROPERTY:confirmer') %></span>
             <a id="<%- id('confirmer-other') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('FORM:confirmer:other') %></a>
           </label>
-          <input id="<%- id('confirmer') %>" type="text" autocomplete="new-password" name="confirmer" required>
-        </div>
-        <div class="form-group col-lg-4 has-required-select2">
-          <label for="<%- id('superior') %>" class="control-label is-required"><%- t('PROPERTY:superior') %></label>
-          <input id="<%- id('superior') %>" type="text" autocomplete="new-password" name="superior" required>
+          <input id="<%- id('confirmer') %>" type="text" name="confirmer" required>
         </div>
       </div>
       <% if (editMode) { %>
@@ -57,16 +53,25 @@
       <div id="<%- id('panel-suggestion') %>" class="panel panel-warning suggestions-form-typePanel">
         <div class="panel-heading"><%- t('type:suggestion') %></div>
         <div id="<%- id('suggestionPanelBody') %>" class="panel-body has-lastElementRow">
+          <% if (editMode) { %>
+          <% for (var i = 0; i < 2; ++i) { %>
           <div class="row">
-            <div class="col-lg-6 form-group has-required-select2">
-              <label for="<%- id('suggestionOwners') %>" class="control-label is-required"><%- t('PROPERTY:suggestionOwners') %></label>
-              <input id="<%- id('suggestionOwners') %>" type="text" autocomplete="new-password" name="suggestionOwners" required>
+            <div class="col-lg-4 form-group <%- i ? '' : 'has-required-select2' %>">
+              <label for="<%- id('suggestionOwners-' + i) %>" class="control-label <%- i ? '' : 'is-required' %>"><%- t('FORM:owners:suggestion') %></label>
+              <input id="<%- id('suggestionOwners-' + i) %>" type="text" name="suggestionOwners[<%- i %>]" <%- i ? '' : 'required' %>>
             </div>
-            <div class="col-lg-6 form-group has-required-select2">
-              <label for="<%- id('suggestedKaizenOwners') %>" class="control-label is-required"><%- t('PROPERTY:kaizenOwners') %></label>
-              <input id="<%- id('suggestedKaizenOwners') %>" type="text" autocomplete="new-password" name="suggestedKaizenOwners" required>
+            <div class="col-lg-4 form-group <%- i ? '' : 'has-required-select2' %>">
+              <label for="<%- id('suggestionSuperiors-' + i) %>" class="control-label <%- i ? '' : 'is-required' %>"><%- t('PROPERTY:superior') %></label>
+              <input id="<%- id('suggestionSuperiors-' + i) %>" type="text" name="suggestionSuperiors[<%- i %>]" <%- i ? '' : 'required' %>>
             </div>
           </div>
+          <% } %>
+          <% } else { %>
+          <div id="<%- id('owners') %>"></div>
+          <button id="<%- id('addOwner') %>" class="btn btn-default" type="button" style="margin-top: -5px; margin-bottom: 15px;">
+            <i class="fa fa-plus"></i><span><%- t('FORM:owners:add') %></span>
+          </button>
+          <% } %>
           <div class="row">
             <div class="col-lg-2 form-group has-required-select2">
               <label for="<%- id('date') %>" class="control-label is-required"><%- t('PROPERTY:date') %></label>
@@ -76,15 +81,15 @@
           <div class="row">
             <div class="col-lg-8 form-group has-required-select2">
               <label for="<%- id('categories') %>" class="control-label is-required"><%- t('PROPERTY:categories') %></label>
-              <input id="<%- id('categories') %>" type="text" autocomplete="new-password" name="categories" required>
+              <input id="<%- id('categories') %>" type="text" name="categories" required>
             </div>
             <div class="col-lg-4 form-group">
               <label for="<%- id('productFamily') %>" class="control-label is-required-first-child" style="display: flex">
                 <span><%- t('PROPERTY:productFamily') %></span>
                 <a id="<%- id('productFamily-other') %>" href="javascript:void(0)" style="margin-left: auto"><%- t('FORM:productFamily:other') %></a>
               </label>
-              <input id="<%- id('productFamily') %>" type="text" autocomplete="new-password" name="productFamily">
-              <input id="<%- id('kaizenEvent') %>" class="form-control hidden" type="text" autocomplete="new-password" name="kaizenEvent" placeholder="<%- t('FORM:productFamily:kaizenEvent') %>">
+              <input id="<%- id('productFamily') %>" type="text" name="productFamily">
+              <input id="<%- id('kaizenEvent') %>" class="form-control hidden" type="text" name="kaizenEvent" placeholder="<%- t('FORM:productFamily:kaizenEvent') %>">
             </div>
           </div>
           <div class="row">
@@ -106,10 +111,20 @@
       <div id="<%- id('panel-kaizen') %>" class="panel panel-success suggestions-form-typePanel">
         <div class="panel-heading"><%- t('type:kaizen') %></div>
         <div class="panel-body has-lastElementRow">
-          <div id="<%- id('kaizenOwnersFormGroup') %>" class="form-group has-required-select2">
-            <label for="<%- id('kaizenOwners') %>" class="control-label is-required"><%- t('PROPERTY:kaizenOwners') %></label>
-            <input id="<%- id('kaizenOwners') %>" type="text" autocomplete="new-password" name="kaizenOwners">
+          <% if (editMode) { %>
+          <% for (var i = 0; i < 2; ++i) { %>
+          <div class="row">
+            <div class="col-lg-4 form-group has-required-select2">
+              <label for="<%- id('kaizenOwners-' + i) %>" class="control-label <%- i ? '' : 'is-required' %>"><%- t('FORM:owners:kaizen') %></label>
+              <input id="<%- id('kaizenOwners-' + i) %>" type="text" name="kaizenOwners[<%- i %>]" <%- i ? '' : 'required' %>>
+            </div>
+            <div class="col-lg-4 form-group <%- i ? '' : 'has-required-select2' %>">
+              <label for="<%- id('kaizenSuperiors-' + i) %>" class="control-label <%- i ? '' : 'is-required' %>"><%- t('PROPERTY:superior') %></label>
+              <input id="<%- id('kaizenSuperiors-' + i) %>" type="text" name="kaizenSuperiors[<%- i %>]" <%- i ? '' : 'required' %>>
+            </div>
           </div>
+          <% } %>
+          <% } %>
           <div class="row">
             <div class="form-group col-lg-2">
               <label for="<%- id('kaizenStartDate') %>" class="control-label is-requiredToFinish"><%- t('PROPERTY:kaizenStartDate') %></label>
@@ -182,7 +197,7 @@
       </div>
       <div class="form-group">
         <label for="<%- id('subscribers') %>" class="control-label"><%- t('PROPERTY:subscribers') %></label>
-        <input id="<%- id('subscribers') %>" type="text" autocomplete="new-password" name="subscribers">
+        <input id="<%- id('subscribers') %>" type="text" name="subscribers">
         <p class="help-block"><%- t('FORM:help:subscribers') %></p>
       </div>
       <% if (editMode) { %>

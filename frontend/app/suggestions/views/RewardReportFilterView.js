@@ -54,15 +54,6 @@ define([
 
       $superior.select2('enable', this.canChangeSuperior());
 
-      this.$id('sections').select2({
-        width: '350px',
-        allowClear: true,
-        multiple: true,
-        data: kaizenDictionaries.sections
-          .filter(function(section) { return section.get('active'); })
-          .map(idAndLabel)
-      });
-
       this.$('.is-expandable').expandableSelect();
     },
 
@@ -73,8 +64,7 @@ define([
       return {
         month: model.get('month'),
         confirmer: model.get('confirmer'),
-        superior: model.get('superior'),
-        sections: model.get('sections').join(',')
+        superior: model.get('superior')
       };
     },
 
@@ -83,8 +73,7 @@ define([
       var query = {
         month: this.$id('month').val(),
         confirmer: this.$id('confirmer').val(),
-        superior: this.$id('superior').val(),
-        sections: this.$id('sections').val().split(',').filter(function(v) { return !!v; })
+        superior: this.$id('superior').val()
       };
 
       this.model.set(query);

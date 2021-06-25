@@ -2,7 +2,6 @@
 
 define([
   'underscore',
-  'app/i18n',
   'app/highcharts',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
@@ -12,7 +11,6 @@ define([
   'app/suggestions/templates/tableAndChart'
 ], function(
   _,
-  t,
   Highcharts,
   View,
   formatTooltipHeader,
@@ -92,10 +90,10 @@ define([
           spacing: [10, 1, 1, 0]
         },
         exporting: {
-          filename: t.bound('suggestions', 'report:filenames:' + metric),
+          filename: this.t('report:filenames:' + metric),
           chartOptions: {
             title: {
-              text: t.bound('suggestions', 'report:title:' + metric)
+              text: this.t('report:title:' + metric)
             },
             legend: {
               enabled: true
@@ -133,7 +131,8 @@ define([
             borderWidth: 0,
             dataLabels: {
               enabled: series.length && series.length * series[0].data.length <= 35
-            }
+            },
+            stacking: 'normal'
           }
         },
         series: series

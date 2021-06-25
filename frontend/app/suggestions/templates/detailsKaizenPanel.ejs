@@ -1,15 +1,15 @@
-<div class="col-md-<%- kaizenColumnSize %>">
+<div class="col-md-6">
   <div class="panel panel-success">
     <div class="panel-heading"><%- helpers.t('type:kaizen') %></div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenOwners ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenOwners') %></div>
+          <div class="prop-name <%- model.changed.kaizenOwners || model.changed.kaizenSuperiors ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenOwners') %></div>
           <div class="prop-value">
             <% if (model.kaizenOwners.length) { %>
             <ul>
-              <% model.kaizenOwners.forEach(function(owner) { %>
-              <li><%- owner %></li>
+              <% model.kaizenOwners.forEach(function(owner, i) { %>
+              <li><%- owner %> (<%- t('details:superior') %>: <%- model.kaizenSuperiors[i] %>)</li>
               <% }) %>
             </ul>
             <% } else { %>

@@ -27,7 +27,6 @@ define([
         month: null,
         confirmer: null,
         superior: null,
-        sections: [],
         users: []
       };
     },
@@ -41,9 +40,8 @@ define([
 
       options.data = _.assign(
         options.data || {},
-        _.pick(this.attributes, ['month', 'confirmer', 'superior', 'sections'])
+        _.pick(this.attributes, ['month', 'confirmer', 'superior'])
       );
-      options.data.sections = options.data.sections.join(',');
 
       return Model.prototype.fetch.call(this, options);
     },
@@ -53,8 +51,7 @@ define([
       return '/suggestions/reports/reward'
         + '?month=' + this.get('month')
         + '&confirmer=' + this.get('confirmer')
-        + '&superior=' + this.get('superior')
-        + '&sections=' + this.get('sections');
+        + '&superior=' + this.get('superior');
     },
 
     parse: function(report)
@@ -111,8 +108,7 @@ define([
       return new this({
         month: query.month || time.getMoment().startOf('month').subtract(1, 'months').format('YYYY-MM'),
         confirmer: query.confirmer || null,
-        superior: query.superior,
-        sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+        superior: query.superior
       });
     }
 

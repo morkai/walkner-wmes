@@ -1,30 +1,18 @@
-<div class="col-md-<%- suggestionColumnSize %>">
+<div class="col-md-6">
   <div class="panel panel-warning">
     <div class="panel-heading"><%- t('type:suggestion') %></div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name <%- model.changed.suggestionOwners ? 'is-changed' : '' %>"><%- t('PROPERTY:suggestionOwners') %></div>
+          <div class="prop-name <%- model.changed.suggestionOwners || model.changed.suggestionSuperiors ? 'is-changed' : '' %>"><%- t('PROPERTY:suggestionOwners') %></div>
           <div class="prop-value">
             <ul>
-              <% model.suggestionOwners.forEach(function(owner) { %>
-              <li><%- owner %></li>
+              <% model.suggestionOwners.forEach(function(owner, i) { %>
+              <li><%- owner %> (<%- t('details:superior') %>: <%- model.suggestionSuperiors[i] %>)</li>
               <% }) %>
             </ul>
           </div>
         </div>
-        <% if (!showKaizenPanel) { %>
-        <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenOwners ? 'is-changed' : '' %>"><%- t('PROPERTY:kaizenOwners') %></div>
-          <div class="prop-value">
-            <ul>
-              <% model.kaizenOwners.forEach(function(owner) { %>
-              <li><%- owner %></li>
-              <% }) %>
-            </ul>
-          </div>
-        </div>
-        <% } %>
         <div class="prop">
           <div class="prop-name <%- model.changed.date ? 'is-changed' : '' %>"><%- t('PROPERTY:date') %></div>
           <div class="prop-value"><%- model.date || '-' %></div>

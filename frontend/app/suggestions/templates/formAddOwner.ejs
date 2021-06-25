@@ -1,0 +1,25 @@
+<div class="row suggestions-form-owner">
+  <div class="col-lg-4 form-group">
+    <div class="checkbox-inline">
+      <label class="control-label">
+        <input type="checkbox" name="owners[<%- i %>].role" value="suggestion" checked>
+        <%- t('FORM:owners:suggestion') %>
+      </label>
+    </div>
+    <div class="checkbox-inline">
+      <label class="control-label">
+        <input type="checkbox" name="owners[<%- i %>].role" value="kaizen" checked>
+        <%- t('FORM:owners:kaizen') %>
+      </label>
+    </div>
+    <input type="text" name="owners[<%- i %>].user">
+  </div>
+  <div class="col-lg-4 form-group">
+    <label for="<%- id('superior-' + i) %>" class="control-label"><%- t('PROPERTY:superior') %></label>
+    <input id="<%- id('superior-' + i) %>" type="text" name="owners[<%- i %>].superior">
+  </div>
+  <div class="col-lg-4 form-group">
+    <label class="control-label">&nbsp;</label>
+    <button data-action="removeOwner" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
+  </div>
+</div>

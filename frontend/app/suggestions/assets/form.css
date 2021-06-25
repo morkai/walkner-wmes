@@ -66,3 +66,13 @@
 .suggestions-form-dialog .panel-primary {
   margin: 0;
 }
+.suggestions-form-owner .control-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.suggestions-form-owner .form-group:last-child .control-label {
+  display: block;
+}
+.suggestions-form-owner:only-child .form-group:last-child {
+  display: none;
+}

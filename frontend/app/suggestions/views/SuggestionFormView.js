@@ -17,13 +17,14 @@ define([
   '../Suggestion',
   'app/suggestions/templates/form',
   'app/suggestions/templates/formCoordSectionRow',
-  'app/suggestions/templates/formResolutionRow'
+  'app/suggestions/templates/formResolutionRow',
+  'app/suggestions/templates/formAddOwner'
 ], function(
   _,
   $,
   t,
   time,
-  user,
+  currentUser,
   viewport,
   buttonGroup,
   idAndLabel,
@@ -35,7 +36,8 @@ define([
   Suggestion,
   template,
   coordSectionRowTemplate,
-  resolutionRowTemplate
+  resolutionRowTemplate,
+  addOwnerTemplate
 ) {
   'use strict';
 
@@ -96,10 +98,8 @@ define([
 
       'change [name="status"]': function()
       {
-        this.togglePanels();
         this.toggleRequiredToFinishFlags();
         this.setUpCoordSectionSelect2();
-        this.checkOwnerValidity();
       },
 
       'change [name="section"]': function()
@@ -141,7 +141,7 @@ define([
           return;
         }
 
-        if (!user.isAllowedTo('SUGGESTIONS:MANAGE') && daysAbs > 60)
+        if (!currentUser.isAllowedTo('SUGGESTIONS:MANAGE') && daysAbs > 60)
         {
           e.target.setCustomValidity(this.t('FORM:ERROR:date', {days: 60}));
         }
@@ -187,14 +187,10 @@ define([
         this.$id('confirmer').select2('focus');
       },
 
-      'change #-confirmer': 'checkOwnerValidity',
-      'change #-suggestionOwners': function()
+      'change #-confirmer': function()
       {
-        this.$id('suggestedKaizenOwners').select2('data', this.$id('suggestionOwners').select2('data'));
         this.checkOwnerValidity();
       },
-      'change #-kaizenOwners': 'checkOwnerValidity',
-      'change #-suggestedKaizenOwners': 'checkOwnerValidity',
 
       'change #-coordSection': function(e)
       {
@@ -257,6 +253,45 @@ define([
         var $tr = this.$(e.currentTarget).closest('tr');
 
         $tr.fadeOut('fast', function() { $tr.remove(); });
+      },
+
+      'change input[name$=".user"], input[name*="Owners"]': function(e)
+      {
+        var $user = this.$(e.currentTarget);
+
+        this.updateUsersSuperior($user);
+        this.toggleUsersRequired($user);
+        this.checkOwnerValidity();
+      },
+
+      'change input[name$=".role"]': function()
+      {
+        this.checkOwnerValidity();
+      },
+
+      'change input[name*="superior"]': function()
+      {
+        this.checkOwnerValidity();
+      },
+
+      'click #-addOwner': function()
+      {
+        this.addOwner();
+
+        this.$id('addOwner').prop('disabled', this.$id('owners')[0].childElementCount === 3);
+      },
+
+      'click .btn[data-action="removeOwner"]': function(e)
+      {
+        var view = this;
+        var $owner = view.$(e.currentTarget).closest('.suggestions-form-owner');
+
+        $owner.fadeOut('fast', function()
+        {
+          $owner.remove();
+          view.$id('addOwner').prop('disabled', view.$id('owners')[0].childElementCount === 3);
+          view.checkOwnerValidity();
+        });
       }
 
     }, FormView.prototype.events),
@@ -268,6 +303,7 @@ define([
       this.productFamilyObservers = {};
       this.otherConfirmer = false;
       this.resolutionI = 0;
+      this.addOwnerI = 0;
 
       this.listenTo(kaizenDictionaries.sections, 'add remove change', this.onSectionUpdated);
     },
@@ -337,62 +373,107 @@ define([
       var view = this;
       var $confirmer = view.$id('confirmer');
       var confirmer = $confirmer.select2('data');
-      var totalOwners = {};
+      var owners = {
+        total: {},
+        suggestion: {},
+        kaizen: {}
+      };
       var maxPerType = 2;
       var maxOverall = 3;
-      var $owners = [
-        view.$id('suggestionOwners')
-      ];
+      var $suggestion;
+      var $kaizen;
 
-      if (view.$id('panel-kaizen').hasClass('hidden'))
+      if (this.options.editMode)
       {
-        $owners.push(view.$id('suggestedKaizenOwners'));
+        ['suggestion', 'kaizen'].forEach(function(kind)
+        {
+          for (var i = 0; i < 2; ++i)
+          {
+            var ownerId = view.$id(kind + 'Owners-' + i).val();
+
+            if (!ownerId)
+            {
+              continue;
+            }
+
+            owners[kind][ownerId] = 1;
+            owners.total[ownerId] = 1;
+
+            var $superior = view.$id(kind + 'Superiors-' + i);
+
+            $superior[0].setCustomValidity(
+              $superior.val() === ownerId ? view.t('FORM:owners:superior') : ''
+            );
+          }
+        });
+
+        $suggestion = view.$id('suggestionOwners-0');
+        $kaizen = view.$id('kaizenOwners-0');
+
+        view.$id('kaizenOwners-1')[0].setCustomValidity(
+          Object.keys(owners.total).length > maxOverall
+            ? view.t('FORM:owners:tooMany:overall', {max: maxOverall})
+            : ''
+        );
       }
       else
       {
-        $owners.push(view.$id('kaizenOwners'));
-      }
-
-      $owners.forEach(function($owners)
-      {
-        if (!$owners.length)
+        view.$('.suggestions-form-owner').each(function(i, ownerEl)
         {
-          return;
-        }
+          var $owner = view.$(ownerEl);
+          var ownerId = $owner.find('input[name$=".user"]').val();
 
-        var owners = $owners.select2('data');
-        var error = '';
-        var data = {};
-
-        if (confirmer && _.some(owners, function(owner) { return owner.id === confirmer.id; }))
-        {
-          error = 'FORM:ERROR:ownerConfirmer';
-          data.prop = $owners[0].name;
-        }
-
-        if (!error && owners.length > maxPerType)
-        {
-          error = 'FORM:ERROR:tooManyOwners';
-          data.max = maxPerType;
-        }
-
-        if (!error)
-        {
-          owners.forEach(function(owner)
+          if (!ownerId)
           {
-            totalOwners[owner.id] = 1;
-          });
-        }
+            return;
+          }
 
-        $owners[0].setCustomValidity(error ? view.t(error, data) : '');
-      });
+          if ($owner.find('input[value="suggestion"]:checked').length)
+          {
+            owners.suggestion[ownerId] = 1;
+            owners.total[ownerId] = 1;
+          }
 
-      if (Object.keys(totalOwners).length > 3)
-      {
-        view.$id('suggestionOwners')[0].setCustomValidity(view.t('FORM:ERROR:tooManyTotalOwners', {
-          max: maxOverall
-        }));
+          if ($owner.find('input[value="kaizen"]:checked').length)
+          {
+            owners.kaizen[ownerId] = 1;
+            owners.total[ownerId] = 1;
+          }
+
+          var $superior = $owner.find('input[name$=".superior"]');
+
+          $superior[0].setCustomValidity(
+            $superior.val() === ownerId ? view.t('FORM:owners:superior') : ''
+          );
+        });
+
+        var $owners = this.$id('owners');
+
+        $suggestion = $owners.find('input[value="suggestion"]').first();
+        $kaizen = $owners.find('input[value="kaizen"]').first();
+
+        $owners.find('input[name$=".user"]').first()[0].setCustomValidity(
+          Object.keys(owners.total).length > maxOverall
+            ? view.t('FORM:owners:tooMany:overall', {max: maxOverall})
+            : ''
+        );
       }
+
+      $suggestion[0].setCustomValidity(
+        Object.keys(owners.suggestion).length > maxPerType
+          ? view.t('FORM:owners:tooMany:suggestion', {max: maxPerType})
+          : ''
+      );
+      $kaizen[0].setCustomValidity(
+        Object.keys(owners.kaizen).length > maxPerType
+          ? view.t('FORM:owners:tooMany:kaizen', {max: maxPerType})
+          : ''
+      );
+      this.$id('confirmer')[0].setCustomValidity(
+        !confirmer || !owners.total[confirmer.id] ? '' : view.t('FORM:owners:confirmer', {
+          kind: owners.suggestion[confirmer.id] ? 'suggestion' : 'kaizen'
+        })
+      );
     },
 
     submitRequest: function($submitEl, formData)
@@ -484,7 +565,6 @@ define([
         }
       });
 
-      formData.suggestedKaizenOwners = formData.kaizenOwners;
       formData.categories = _.isEmpty(formData.categories) ? '' : formData.categories.join(',');
       formData.subscribers = '';
 
@@ -497,20 +577,19 @@ define([
       delete formData.observers;
       delete formData.attachments;
       delete formData.changes;
+      delete formData.suggestionOwners;
+      delete formData.kaizenOwners;
 
       return formData;
     },
 
     serializeForm: function(formData)
     {
+      var view = this;
+
       formData.categories = formData.categories.split(',');
       formData.confirmer = setUpUserSelect2.getUserInfo(this.$id('confirmer'));
-      formData.superior = setUpUserSelect2.getUserInfo(this.$id('superior'));
-      formData.suggestionOwners = this.serializeOwners('suggestion');
-      formData.kaizenOwners = formData.status === 'new' || formData.status === 'accepted'
-        ? this.serializeOwners('suggestedKaizen')
-        : this.serializeOwners('kaizen');
-      formData.subscribers = this.$id('subscribers').select2('data').map(function(subscriber)
+      formData.subscribers = view.$id('subscribers').select2('data').map(function(subscriber)
       {
         return {
           id: subscriber.id,
@@ -525,17 +604,17 @@ define([
         formData[property] = dateMoment.isValid() ? dateMoment.toISOString() : null;
       });
 
-      if (this.options.editMode)
+      if (view.options.editMode)
       {
         var oldCoordSections = {};
         var newCoordSections = {};
 
-        this.model.get('coordSections').forEach(function(coordSection)
+        view.model.get('coordSections').forEach(function(coordSection)
         {
           oldCoordSections[coordSection._id] = coordSection;
         });
 
-        this.$id('coordSections').find('tr').each(function()
+        view.$id('coordSections').find('tr').each(function()
         {
           var id = this.dataset.id;
           var section = kaizenDictionaries.sections.get(id);
@@ -551,10 +630,68 @@ define([
         });
 
         formData.coordSections = _.values(newCoordSections);
+
+        formData.suggestionSuperiors = [];
+        formData.suggestionOwners = [];
+        formData.kaizenSuperiors = [];
+        formData.kaizenOwners = [];
+
+        ['suggestion', 'kaizen'].forEach(function(kind)
+        {
+          for (var i = 0; i < 2; ++i)
+          {
+            var superior = setUpUserSelect2.getUserInfo(view.$id(kind + 'Superiors-' + i));
+            var owner = setUpUserSelect2.getUserInfo(view.$id(kind + 'Owners-' + i));
+
+            if (!superior || !owner)
+            {
+              continue;
+            }
+
+            if (i === 1 && formData[kind + 'Owners'][0].id === owner.id)
+            {
+              continue;
+            }
+
+            formData[kind + 'Superiors'].push(superior);
+            formData[kind + 'Owners'].push(owner);
+          }
+        });
       }
       else
       {
         formData.coordSections = [];
+
+        formData.suggestionSuperiors = [];
+        formData.suggestionOwners = [];
+        formData.kaizenSuperiors = [];
+        formData.kaizenOwners = [];
+
+        view.$('.suggestions-form-owner').each(function()
+        {
+          var $owner = view.$(this);
+          var superior = setUpUserSelect2.getUserInfo($owner.find('input[name$=".superior"]'));
+          var owner = setUpUserSelect2.getUserInfo($owner.find('input[name$=".user"]'));
+
+          if (!superior || !owner)
+          {
+            return;
+          }
+
+          if ($owner.find('input[value="suggestion"]:checked').length
+            && !formData.suggestionOwners.some(function(o) { return o.id === owner.id; }))
+          {
+            formData.suggestionSuperiors.push(superior);
+            formData.suggestionOwners.push(owner);
+          }
+
+          if ($owner.find('input[value="kaizen"]:checked').length
+            && !formData.kaizenOwners.some(function(o) { return o.id === owner.id; }))
+          {
+            formData.kaizenSuperiors.push(superior);
+            formData.kaizenOwners.push(owner);
+          }
+        });
       }
 
       if (formData.status === 'kom')
@@ -567,7 +704,7 @@ define([
         formData.kom = false;
       }
 
-      if (this.$id('resolutionsGroup').hasClass('hidden'))
+      if (view.$id('resolutionsGroup').hasClass('hidden'))
       {
         formData.resolutions = [];
       }
@@ -618,8 +755,7 @@ define([
       this.setUpCategorySelect2();
       this.setUpProductFamily();
       this.setUpConfirmerSelect2();
-      this.setUpSuperiorSelect2();
-      this.setUpOwnerSelect2();
+      this.setUpOwners();
 
       if (this.options.editMode)
       {
@@ -775,7 +911,7 @@ define([
         .prop('disabled', false)
         .attr('placeholder', null);
 
-      if (confirmersList.length && (user.isAllowedTo('SUGGESTIONS:MANAGE') || this.model.isConfirmer()))
+      if (confirmersList.length && (currentUser.isAllowedTo('SUGGESTIONS:MANAGE') || this.model.isConfirmer()))
       {
         $other
           .text(this.t('FORM:confirmer:' + (this.otherConfirmer ? 'list' : 'other')))
@@ -838,13 +974,167 @@ define([
       }
     },
 
-    setUpSuperiorSelect2: function()
+    setUpOwners: function()
     {
-      var $superior = this.$id('superior');
+      if (this.options.editMode)
+      {
+        this.setUpEditOwners();
+      }
+      else
+      {
+        this.setUpAddOwners();
+      }
+    },
 
-      setUpUserSelect2($superior, {
-        width: '100%',
-        allowClear: false,
+    setUpAddOwners: function()
+    {
+      this.addOwner();
+
+      if (!currentUser.isLoggedIn())
+      {
+        return;
+      }
+
+      var $user = this.$id('owners').find('input[name$=".user"]');
+      var user = currentUser.getInfo();
+
+      $user.select2('data', {
+        id: user.id,
+        text: user.label
+      });
+
+      this.updateUsersSuperior($user, true);
+      this.toggleUsersRequired($user);
+    },
+
+    setUpEditOwners: function()
+    {
+      var view = this;
+
+      ['suggestion', 'kaizen'].forEach(function(kind)
+      {
+        var owners = view.model.get(kind + 'Owners');
+        var superiors = view.model.get(kind + 'Superiors');
+
+        for (var i = 0; i < 2; ++i)
+        {
+          var $owner = view.$id(kind + 'Owners-' + i);
+
+          view.setUpOwnerUserSelect2($owner, {
+            currentUserInfo: owners[i]
+          });
+          view.setUpOwnerSuperiorSelect2(view.$id(kind + 'Superiors-' + i), {
+            currentUserInfo: superiors[i]
+          });
+
+          if (owners[i])
+          {
+            view.toggleUsersRequired($owner);
+          }
+        }
+      });
+    },
+
+    updateUsersSuperior: function($user, updateSection)
+    {
+      var view = this;
+      var userId = $user.val();
+
+      if (!userId)
+      {
+        return;
+      }
+
+      var req = this.ajax({
+        url: '/suggestions'
+          + '?select(suggestionOwners,kaizenOwners,suggestionSuperiors,kaizenSuperiors,section,confirmer)'
+          + '&sort(-_id)&limit(1)'
+          + '&owners.id=' + userId
+      });
+
+      req.done(function(res)
+      {
+        if (!res.totalCount)
+        {
+          return;
+        }
+
+        var s = res.collection[0];
+        var i = s.suggestionOwners.findIndex(function(u) { return u.id === userId; });
+        var superior = null;
+
+        if (i === -1)
+        {
+          i = s.kaizenOwners.findIndex(function(u) { return u.id === userId; });
+
+          if (i !== -1)
+          {
+            superior = s.kaizenSuperiors[i];
+          }
+        }
+        else
+        {
+          superior = s.suggestionSuperiors[i];
+        }
+
+        $user
+          .closest('.row')
+          .find('input[name*="uperior"]')
+          .select2('data', !superior ? null : {
+            id: superior.id,
+            text: superior.label
+          });
+
+        if (!updateSection)
+        {
+          return;
+        }
+
+        view.$id('section').select2('val', s.section).trigger('change');
+        view.$id('confirmer').select2('data', {
+          id: s.confirmer.id,
+          text: s.confirmer.label
+        });
+      });
+    },
+
+    toggleUsersRequired: function($user)
+    {
+      var required = !!$user.val();
+
+      $user
+        .closest('.row')
+        .find('input[name*="uperior"]')
+        .prop('required', required)
+        .closest('.form-group')
+        .toggleClass('has-required-select2', required)
+        .find('.control-label')
+        .toggleClass('is-required', required);
+    },
+
+    addOwner: function()
+    {
+      var $row = this.renderPartial(addOwnerTemplate, {
+        i: this.addOwnerI++
+      });
+
+      this.$id('owners').append($row);
+
+      this.setUpOwnerUserSelect2($row.find('input[name$=".user"]'));
+      this.setUpOwnerSuperiorSelect2($row.find('input[name$=".superior"]'));
+    },
+
+    setUpOwnerUserSelect2: function($user, options)
+    {
+      setUpUserSelect2($user, Object.assign({
+        activeOnly: true,
+        noPersonnelId: true
+      }, options));
+    },
+
+    setUpOwnerSuperiorSelect2: function($superior, options)
+    {
+      setUpUserSelect2($superior, Object.assign({
         activeOnly: true,
         noPersonnelId: true,
         rqlQueryDecorator: function(rqlQuery)
@@ -859,82 +1149,7 @@ define([
             });
           }
         }
-      });
-
-      var superior = this.model.get('superior');
-
-      if (superior)
-      {
-        $superior.select2('data', {
-          id: superior.id,
-          text: superior.label,
-          user: superior
-        });
-      }
-    },
-
-    setUpOwnerSelect2: function()
-    {
-      var isEditMode = this.options.editMode;
-      var activeOnly = !isEditMode;
-      var model = this.model;
-      var currentUser = null;
-
-      if (this.options.operator)
-      {
-        currentUser = this.options.operator;
-      }
-      else if (user.isLoggedIn())
-      {
-        currentUser = {
-          id: user.data._id,
-          text: user.getLabel()
-        };
-      }
-
-      setUpUserSelect2(this.$id('suggestionOwners'), {
-        multiple: true,
-        noPersonnelId: true,
-        activeOnly: activeOnly,
-        maximumSelectionSize: 2
-      }).select2('data', prepareOwners('suggestion'));
-
-      setUpUserSelect2(this.$id('suggestedKaizenOwners'), {
-        multiple: true,
-        noPersonnelId: true,
-        activeOnly: activeOnly,
-        maximumSelectionSize: 2
-      }).select2('data', prepareOwners('kaizen'));
-
-      setUpUserSelect2(this.$id('kaizenOwners'), {
-        multiple: true,
-        noPersonnelId: true,
-        activeOnly: activeOnly,
-        maximumSelectionSize: 2
-      }).select2('data', prepareOwners('kaizen'));
-
-      function prepareOwners(type)
-      {
-        if (!isEditMode)
-        {
-          return currentUser ? [currentUser] : [];
-        }
-
-        var owners = model.get(type + 'Owners');
-
-        if (!Array.isArray(owners) || !owners.length)
-        {
-          return [];
-        }
-
-        return owners.map(function(owner)
-        {
-          return {
-            id: owner.id,
-            text: owner.label
-          };
-        });
-      }
+      }, options));
     },
 
     setUpCoordSectionsSelect2: function()
@@ -1147,9 +1362,7 @@ define([
 
     isKaizenAvailable: function()
     {
-      var status = buttonGroup.getValue(this.$id('status'));
-
-      return status !== 'new' && status !== 'accepted';
+      return this.options.editMode;
     },
 
     togglePanels: function()

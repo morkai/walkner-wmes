@@ -130,4 +130,7 @@
   .suggestions-complete-dialog .modal-dialog {
     width: 800px;
   }
+  .suggestions-accept-dialog .modal-dialog {
+    width: 650px;
+  }
 }

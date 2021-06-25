@@ -21,7 +21,7 @@ define([
 
   var DATE_PROPERTIES = ['date', 'kaizenStartDate', 'kaizenFinishDate'];
   var TIME_PROPERTIES = ['createdAt', 'updatedAt', 'confirmedAt', 'finishedAt'];
-  var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer', 'superior'];
+  var USER_INFO_PROPERTIES = ['creator', 'updater', 'confirmer', 'suggestionSuperiors', 'kaizenSuperiors'];
   var OWNER_PROPERTIES = ['suggestionOwners', 'kaizenOwners'];
   var OPINION_STATUS_ICONS = {
     pending: 'fa-question',
@@ -98,7 +98,14 @@ define([
 
       USER_INFO_PROPERTIES.forEach(function(userInfoProperty)
       {
-        obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty], noIp: true});
+        if (Array.isArray(obj[userInfoProperty]))
+        {
+          obj[userInfoProperty] = obj[userInfoProperty].map(function(u) { return renderUserInfo(u, {noIp: true}); });
+        }
+        else
+        {
+          obj[userInfoProperty] = renderUserInfo(obj[userInfoProperty], {noIp: true});
+        }
       });
 
       OWNER_PROPERTIES.forEach(function(ownerProperty)

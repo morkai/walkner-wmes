@@ -225,7 +225,9 @@ define([
           return renderUserInfo({userInfo: value});
 
         case 'suggestionOwners':
+        case 'suggestionSuperiors':
         case 'kaizenOwners':
+        case 'kaizenSuperiors':
           return value.map(function(owner) { return (owner.label || '').replace(/\s*\(.*?\)/, ''); }).join(', ');
 
         case 'status':

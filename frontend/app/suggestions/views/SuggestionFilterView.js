@@ -75,7 +75,7 @@ define([
         formData.user = term.args[1];
       },
       'confirmer.id': 'owners.id',
-      'superior.id': 'owners.id',
+      'superiors.id': 'owners.id',
       'suggestionOwners.id': 'owners.id',
       'kaizenOwners.id': 'owners.id',
       'observers.user.id': function(propertyName, term, formData)
@@ -196,7 +196,7 @@ define([
         'unseen',
         'others',
         'confirmer',
-        'superior',
+        'superiors',
         'owners',
         'suggestionOwners',
         'kaizenOwners'

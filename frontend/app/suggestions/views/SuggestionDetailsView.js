@@ -17,18 +17,6 @@ define([
 
     template: template,
 
-    getTemplateData: function()
-    {
-      var status = this.model.get('status');
-      var showKaizenPanel = status !== 'new' && status !== 'accepted';
-
-      return {
-        showKaizenPanel: showKaizenPanel,
-        suggestionColumnSize: showKaizenPanel ? 6 : 12,
-        kaizenColumnSize: showKaizenPanel ? 6 : 0
-      };
-    },
-
     afterRender: function()
     {
       var view = this;
