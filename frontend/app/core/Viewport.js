@@ -194,7 +194,7 @@ define([
     var requests = [];
     var priorityRequests = [];
     var normalRequests = [];
-    var moduleRequests = [];
+    var moduleRequests = _.result(page, 'requiredModules') || [];
 
     page.trigger('beforeLoad', page, requests);
 

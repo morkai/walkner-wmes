@@ -90,13 +90,14 @@ define([
       this.listenTo(this.model, 'filtered', this.onFiltered);
     },
 
+    requiredModules: [
+      'app/dataTables',
+      'datatables-fixedcolumns'
+    ],
+
     load: function(when)
     {
-      return when(
-        'app/dataTables',
-        'datatables-fixedcolumns',
-        this.model.fetch()
-      );
+      return when(this.model.fetch());
     },
 
     onFiltered: function()
