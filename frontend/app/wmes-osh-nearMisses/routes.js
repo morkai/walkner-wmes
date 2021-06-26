@@ -8,15 +8,14 @@ define([
   'app/core/util/showDeleteFormPage',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/pages/ListPage',
-  'app/wmes-osh-common/pages/DetailsPage',
   'app/wmes-osh-common/pages/AddFormPage',
   'app/wmes-osh-common/pages/EditFormPage',
   './NearMiss',
   './NearMissCollection',
+  './pages/DetailsPage',
   './views/FilterView',
   './views/ListView',
   './views/FormView',
-  'app/wmes-osh-nearMisses/templates/props',
   'i18n!app/nls/wmes-osh-nearMisses',
   'i18n!app/nls/wmes-osh-kaizens'
 ], function(
@@ -27,15 +26,14 @@ define([
   showDeleteFormPage,
   dictionaries,
   ListPage,
-  DetailsPage,
   AddFormPage,
   EditFormPage,
   NearMiss,
   NearMissCollection,
+  DetailsPage,
   FilterView,
   ListView,
-  FormView,
-  propsTemplate
+  FormView
 ) {
   'use strict';
 
@@ -55,7 +53,6 @@ define([
   router.map('/osh/nearMisses/:id', canView, req =>
   {
     viewport.showPage(new DetailsPage({
-      propsTemplate,
       model: new NearMiss({_id: +req.params.id || req.params.id})
     }));
   });

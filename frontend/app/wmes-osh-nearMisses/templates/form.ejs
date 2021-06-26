@@ -15,8 +15,10 @@
         name: 'subject',
         label: 'PROPERTY:',
         required: true,
-        maxLength: 150
+        maxLength: 150,
+        hidden: hidden.subject
       }) %>
+      <% if (!hidden.creator) { %>
       <div class="row">
         <%- helpers.formGroup({
           name: 'creator',
@@ -40,9 +42,11 @@
           groupClassName: 'col-lg-4'
         }) %>
       </div>
+      <% } %>
       <div class="panel panel-danger">
         <div class="panel-heading"><%- t('FORM:subtitle') %></div>
         <div class="panel-body has-lastElementRow">
+          <% if (!hidden.kind) { %>
           <div class="form-group">
             <label class="control-label is-required"><%- t('PROPERTY:kind') %></label>
             <br>
@@ -53,7 +57,8 @@
             </label>
             <% }) %>
           </div>
-          <% if (!relation) { %>
+          <% } %>
+          <% if (!relation && !hidden.orgUnits) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'division',
@@ -100,6 +105,7 @@
             }) %>
           </div>
           <% } %>
+          <% if (!hidden.eventDate) { %>
           <div class="form-group">
             <label for="<%- id('eventDate') %>" class="control-label is-required"><%- t('PROPERTY:eventDate') %></label>
             <div class="form-group-datetime">
@@ -107,6 +113,8 @@
               <input id="<%- id('eventTime') %>" class="form-control" name="eventTime" type="time" placeholder="<%- t('FORM:eventTime:placeholder') %>" title="<%- t('FORM:eventTime:title') %>">
             </div>
           </div>
+          <% } %>
+          <% if (!hidden.categories) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'eventCategory',
@@ -122,6 +130,8 @@
               groupClassName: 'col-lg-4'
             }) %>
           </div>
+          <% } %>
+          <% if (!hidden.descriptions) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'problem',
@@ -146,6 +156,7 @@
               rows: 4
             }) %>
           </div>
+          <% } %>
           <div class="row">
             <% if (editMode) { %>
               <%- helpers.formGroup({
@@ -184,7 +195,7 @@
             </div>
           </div>
           <% if (resolutionTypes.length) { %>
-            <div class="row">
+            <div id="<%- id('resolutionRow') %>" class="row">
               <div class="col-lg-4 form-group">
                 <label class="control-label <%- model.status === 'new' ? '' : 'is-required' %>"><%- t('PROPERTY:resolution') %></label>
                 <% resolutionTypes.forEach(type => { %>
@@ -216,7 +227,8 @@
           type: 'file',
           label: 'PROPERTY:',
           accept: '.txt,.pdf,.docx,.xlsx,.png,.jpeg,.jpg,.tiff,.webp,.mp4',
-          multiple: true
+          multiple: true,
+          visible: !hidden.attachments
         }) %>
         <%- helpers.formGroup({
           name: 'comment',
@@ -230,7 +242,8 @@
           type: 'file',
           label: 'PROPERTY:photos',
           accept: '.png,.jpeg,.jpg,.tiff,.webp',
-          multiple: true
+          multiple: true,
+          visible: !hidden.attachments
         }) %>
       <% } %>
     </div>

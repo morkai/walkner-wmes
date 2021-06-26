@@ -19,6 +19,11 @@ define([
       options = {name: options};
     }
 
+    if (options.visible === false || options.hidden)
+    {
+      return '';
+    }
+
     if (!options.name && options.id)
     {
       options.name = options.id;

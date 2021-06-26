@@ -33,7 +33,7 @@ function(
     var view = this;
 
     view.idPrefix = _.uniqueId('v');
-    view.options = options || {};
+    view.options = _.assign({}, view.options, options);
     view.timers = {};
     view.promises = [];
 
@@ -66,7 +66,7 @@ function(
       }
     });
 
-    Layout.call(view, options);
+    Layout.call(view, view.options);
 
     util.subscribeTopics(view, 'broker', view.localTopics, true);
 

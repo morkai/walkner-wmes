@@ -118,7 +118,7 @@ define([
 
     onLinkClick: function(e)
     {
-      if (!this.dirty || e.button !== 0)
+      if (!this.dirty || e.button !== 0 || viewport.currentDialog === this)
       {
         return;
       }
@@ -138,7 +138,7 @@ define([
 
     onWindowBeforeUnload: function(e)
     {
-      if (!this.dirty)
+      if (!this.dirty || viewport.currentDialog === this)
       {
         return;
       }
@@ -149,6 +149,11 @@ define([
     setUpUserWorkplaceSelect2: function()
     {
       const $input = this.$id('userWorkplace');
+
+      if (!$input.length)
+      {
+        return;
+      }
 
       if (this.options.editMode)
       {
@@ -240,6 +245,11 @@ define([
     setUpUserDepartmentSelect2: function()
     {
       const $input = this.$id('userDepartment');
+
+      if (!$input.length)
+      {
+        return;
+      }
 
       if (this.options.editMode)
       {
@@ -347,6 +357,12 @@ define([
     setUpDivisionSelect2: function()
     {
       const $input = this.$id('division');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const currentId = +$input.val();
 
       if (!currentId && currentUser.data.oshDivision && !this.options.editMode)
@@ -408,6 +424,12 @@ define([
     setUpWorkplaceSelect2: function()
     {
       const $input = this.$id('workplace');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const currentId = +$input.val();
 
       if (!currentId && currentUser.data.oshWorkplace && !this.options.editMode)
@@ -483,6 +505,12 @@ define([
     setUpDepartmentSelect2: function()
     {
       const $input = this.$id('department');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const currentId = +$input.val();
 
       if (!currentId && currentUser.data.oshDepartment && !this.options.editMode)
@@ -558,6 +586,12 @@ define([
     setUpBuildingSelect2: function(selectFirst)
     {
       const $input = this.$id('building');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const currentId = +$input.val();
 
       let currentBuilding = dictionaries.buildings.get(currentId);
@@ -624,6 +658,12 @@ define([
     setUpLocationSelect2: function()
     {
       const $input = this.$id('location');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const currentId = +$input.val();
 
       let currentLocation = dictionaries.locations.get(currentId);
@@ -690,6 +730,12 @@ define([
     setUpStationSelect2: function()
     {
       const $input = this.$id('station');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const currentId = +$input.val();
 
       let currentStation = dictionaries.stations.get(currentId);

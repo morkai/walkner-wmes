@@ -105,11 +105,13 @@
             <div class="form-group col-lg-12">
               <div style="display: flex">
                 <label for="<%- id('participants') %>" class="control-label is-required"><%- t('PROPERTY:participants') %></label>
+                <% if (showParticipantFinder) { %>
                 <div style="margin-left: auto">
                   <a id="<%- id('showParticipantFinder') %>" href="javascript:void(0)" style="text-decoration: none">
                     <i class="fa fa-plus"></i><span><%- t('participantFinder:action') %></span>
                   </a>
                 </div>
+                <% } %>
               </div>
               <input id="<%- id('participants') %>" name="participants" type="text" required>
             </div>

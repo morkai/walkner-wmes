@@ -84,5 +84,8 @@
   "FORM:resolution:failure": "Sprawdzanie zgłoszenia nie powiodło się.",
   "FORM:resolution:title:kaizen": "Dodawanie nowego kaizena",
   "FORM:resolution:title:action": "Dodawanie nowej akcji",
-  "FORM:resolution:required": "Rodzaj działań korygujących jest wymagany."
+  "FORM:resolution:required": "Rodzaj działań korygujących jest wymagany.",
+
+  "nextStep:inProgress:action": "Do realizacji",
+  "nextStep:inProgress:title": "Akceptacja ZPW do realizacji"
 }

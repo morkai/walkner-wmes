@@ -267,7 +267,8 @@ define([
           cancelled: Action.can.cancelled(this.model)
         },
         relation: !!this.relation,
-        rootCauses: this.serializeRootCauses()
+        rootCauses: this.serializeRootCauses(),
+        showParticipantFinder: viewport.currentDialog !== this
       };
     },
 

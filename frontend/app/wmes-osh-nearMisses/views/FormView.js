@@ -60,6 +60,18 @@ define([
         this.toggleImplement();
       },
 
+      'change #-implementer': function()
+      {
+        const $plannedAt = this.$id('plannedAt');
+
+        if (!$plannedAt.length || $plannedAt.val())
+        {
+          return;
+        }
+
+        $plannedAt.val(time.getMoment().add(2, 'weeks').format('YYYY-MM-DD'));
+      },
+
       'change #-userWorkplace': function()
       {
         this.$id('userDepartment').val('');
@@ -322,7 +334,8 @@ define([
           editResolutionType: NearMiss.can.editResolutionType(this.model),
           editResolutionId: NearMiss.can.editResolutionId(this.model)
         },
-        relation: this.options.relation
+        relation: this.options.relation,
+        hidden: this.options.hidden || {}
       };
     },
 
@@ -417,11 +430,16 @@ define([
         formData.status = this.newStatus;
       }
 
-      const userWorkplace = this.$id('userWorkplace').select2('data');
+      const $userWorkplace = this.$id('userWorkplace');
 
-      formData.userDivision = userWorkplace.model.get('division');
-      formData.userWorkplace = userWorkplace.id;
-      formData.userDepartment = this.$id('userDepartment').select2('data').id;
+      if ($userWorkplace.length)
+      {
+        const userWorkplace = $userWorkplace.select2('data');
+
+        formData.userDivision = userWorkplace.model.get('division');
+        formData.userWorkplace = userWorkplace.id;
+        formData.userDepartment = this.$id('userDepartment').select2('data').id;
+      }
 
       const relation = this.options.relation;
 
@@ -433,7 +451,7 @@ define([
           type: relation.getModelType()
         };
       }
-      else
+      else if (this.$id('workplace').length)
       {
         const workplace = this.$id('workplace').select2('data');
 
@@ -445,23 +463,41 @@ define([
         formData.station = parseInt(this.$id('station').val(), 10) || 0;
       }
 
-      formData.eventDate = time.utc.getMoment(
-        `${formData.eventDate} ${formData.eventTime || '00:00'}:00`,
-        'YYYY-MM-DD HH:mm:ss'
-      ).toISOString();
+      if (formData.eventDate)
+      {
+        formData.eventDate = time.utc.getMoment(
+          `${formData.eventDate} ${formData.eventTime || '00:00'}:00`,
+          'YYYY-MM-DD HH:mm:ss'
+        ).toISOString();
+      }
 
       delete formData.eventTime;
 
       const eventCategory = dictionaries.eventCategories.get(formData.eventCategory);
+
+      if (eventCategory)
+      {
+        formData.eventCategory = eventCategory.id;
+        formData.materialLoss = eventCategory.get('materialLoss');
+      }
+
       const reasonCategory = dictionaries.reasonCategories.get(formData.reasonCategory);
 
-      formData.eventCategory = eventCategory.id;
-      formData.reasonCategory = reasonCategory ? reasonCategory.id : null;
-      formData.materialLoss = eventCategory.get('materialLoss');
+      if (reasonCategory)
+      {
+        formData.reasonCategory = reasonCategory ? reasonCategory.id : null;
+      }
+      else
+      {
+        delete formData.reasonCategory;
+      }
 
       if (this.options.editMode)
       {
-        formData.implementer = setUpUserSelect2.getUserInfo(this.$id('implementer'));
+        if (this.$id('implementer').length)
+        {
+          formData.implementer = setUpUserSelect2.getUserInfo(this.$id('implementer'));
+        }
       }
       else
       {
@@ -471,7 +507,7 @@ define([
         formData.selfImplement = undefined;
       }
 
-      if (this.$id('plannedAt').prop('disabled'))
+      if (!this.$id('plannedAt').length || this.$id('plannedAt').prop('disabled'))
       {
         delete formData.plannedAt;
       }
@@ -489,28 +525,41 @@ define([
         formData.priority = +formData.priority;
       }
 
-      const resolution = this.model.get('resolution') || {
-        _id: 0,
-        rid: '',
-        type: 'unspecified'
-      };
-
-      if (NearMiss.can.editResolutionType(this.model))
+      if (this.$id('resolutionRow').length)
       {
-        resolution.type = this.getResolutionType();
-      }
+        const resolution = this.model.get('resolution') || {
+          _id: 0,
+          rid: '',
+          type: 'unspecified'
+        };
 
-      if (NearMiss.can.editResolutionId(this.model))
-      {
-        resolution._id = this.resolution._id;
-        resolution.rid = this.resolution.rid;
-      }
+        if (NearMiss.can.editResolutionType(this.model))
+        {
+          resolution.type = this.getResolutionType();
+        }
 
-      formData.resolution = resolution;
+        if (NearMiss.can.editResolutionId(this.model))
+        {
+          resolution._id = this.resolution._id;
+          resolution.rid = this.resolution.rid;
+        }
+
+        formData.resolution = resolution;
+      }
 
       if (Array.isArray(formData.kind))
       {
         formData.kind = formData.kind.map(id => +id);
+      }
+
+      if (!formData.reason && this.$id('reason').length)
+      {
+        formData.reason = '';
+      }
+
+      if (!formData.suggestion && this.$id('suggestion').length)
+      {
+        formData.suggestion = '';
       }
 
       return formData;
@@ -550,7 +599,14 @@ define([
 
     setUpImplementerSelect2: function()
     {
-      setUpUserSelect2(this.$id('implementer'), {
+      const $input = this.$id('implementer');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
+      setUpUserSelect2($input, {
         width: '100%',
         noPersonnelId: true,
         userInfoDecorators: [userInfoDecorator],
@@ -561,6 +617,12 @@ define([
     setUpEventCategorySelect2: function(oldId)
     {
       const $input = this.$id('eventCategory');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const kinds = this.getKinds();
       const map = {};
 
@@ -626,6 +688,12 @@ define([
     setUpReasonCategorySelect2: function(oldId)
     {
       const $input = this.$id('reasonCategory');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const eventCategory = this.$id('eventCategory').val() || null;
       const map = {};
 
@@ -739,7 +807,10 @@ define([
         return;
       }
 
-      const eventCategory = dictionaries.eventCategories.get(+this.$id('eventCategory').val());
+      const $eventCategory = this.$id('eventCategory');
+      const eventCategory = dictionaries.eventCategories.get(
+        $eventCategory.length ? +this.$id('eventCategory').val() : this.model.get('eventCategory')
+      );
       let label = this.t('resolution:desc:action');
 
       if (eventCategory && eventCategory.get('activityKind'))
@@ -775,7 +846,12 @@ define([
     {
       const $kinds = this.$('input[name="kind[]"]');
 
-      if ($kinds.length && !$kinds.filter(':checked').length)
+      if (!$kinds.length)
+      {
+        return;
+      }
+
+      if (!$kinds.filter(':checked').length)
       {
         $kinds.first().click();
       }
@@ -786,6 +862,12 @@ define([
     togglePriority: function()
     {
       const $priorities = this.$('input[name="priority"]');
+
+      if (!$priorities.length)
+      {
+        return;
+      }
+
       const types = this.getKinds().map(id => dictionaries.kinds.get(id)).map(kind => kind ? kind.get('type') : null);
       const enabled = this.options.editMode && (this.model.isCoordinator() || NearMiss.can.manage());
       let value = +$priorities.filter(':checked').val();
@@ -843,6 +925,11 @@ define([
       if ($implementer.length)
       {
         $implementer.select2('enable', canManage || isCoordinator);
+      }
+
+      if (!$plannedAt.length)
+      {
+        return;
       }
 
       if (this.options.editMode)
@@ -1109,7 +1196,9 @@ define([
     {
       if (!this.el.checkValidity())
       {
-        return this.$id('save').click();
+        this.$id('save').click();
+
+        return;
       }
 
       const formData = Object.assign(this.model.toJSON(), this.getFormData());
@@ -1182,6 +1271,8 @@ define([
 
         viewport.closeDialog();
       };
+
+      return dialogView;
     },
 
     onDocumentClick: function(e)
