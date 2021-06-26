@@ -55,6 +55,7 @@ define([
       const observer = this.model.getObserver();
 
       return {
+        hidden: !this.model.get('resolutions'),
         resolutions: this.serializeResolutions(),
         unseen: observer.notify && (observer.changes.all || observer.changes.resolutions)
       };

@@ -1,5 +1,10 @@
-<div class="panel panel-success is-colored osh-details-panel osh-details-actions-resolutions <%- resolutions.length ? '' : 'hidden' %>">
+<div class="panel panel-success is-colored osh-details-panel osh-details-actions-resolutions <%- hidden ? 'hidden' : '' %>">
   <div class="panel-heading"><%- t('PROPERTY:resolutions') %></div>
+  <% if (!resolutions.length) { %>
+  <div class="panel-body">
+    <p><i><%- t('resolutions:empty') %></i></p>
+  </div>
+  <% } else { %>
   <div class="table-responsive">
   <table class="table table-bordered table-condensed table-hover <%- unseen ? 'osh-unseen' : '' %>">
     <thead>
@@ -24,4 +29,5 @@
     </tbody>
   </table>
   </div>
+  <% } %>
 </div>

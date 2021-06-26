@@ -66,6 +66,7 @@
 
   "resolutions:title:kaizen": "Dodawanie nowego kaizena",
   "resolutions:title:action": "Dodawanie nowej akcji",
+  "resolutions:empty": "Nie zdefiniowano jeszcze żadnych rozwiązań.",
   "resolutions:rid": "ID",
   "resolutions:status": "Status",
   "resolutions:subject": "Temat",
