@@ -221,8 +221,9 @@ function(
   $body.on('click', 'label[for]', function(e)
   {
     var $el = $('#' + e.currentTarget.htmlFor);
+    var select2 = $el.data('select2');
 
-    if ($el.data('select2') && !$el.parent().hasClass('has-required-select2'))
+    if (select2 && select2.isInterfaceEnabled() && !$el.parent().hasClass('has-required-select2'))
     {
       $el.select2('focus');
     }
