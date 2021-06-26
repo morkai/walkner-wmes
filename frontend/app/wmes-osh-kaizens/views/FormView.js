@@ -213,7 +213,8 @@ define([
           cancelled: Kaizen.can.cancelled(this.model)
         },
         relation: this.options.relation,
-        komIcons: Kaizen.KOM_ICONS
+        komIcons: Kaizen.KOM_ICONS,
+        hidden: this.options.hidden || {}
       };
     },
 
@@ -246,12 +247,23 @@ define([
         formData.status = this.newStatus;
       }
 
-      const userWorkplace = this.$id('userWorkplace').select2('data');
+      const $userWorkplace = this.$id('userWorkplace');
 
-      formData.userDivision = userWorkplace.model.get('division');
-      formData.userWorkplace = userWorkplace.id;
-      formData.userDepartment = this.$id('userDepartment').select2('data').id;
-      formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
+      if ($userWorkplace.length)
+      {
+        const userWorkplace = $userWorkplace.select2('data');
+
+        formData.userDivision = userWorkplace.model.get('division');
+        formData.userWorkplace = userWorkplace.id;
+        formData.userDepartment = this.$id('userDepartment').select2('data').id;
+      }
+
+      const $implementers = this.$id('implementers');
+
+      if ($implementers.length)
+      {
+        formData.implementers = setUpUserSelect2.getUserInfo($implementers);
+      }
 
       const relation = this.options.relation;
 
@@ -263,7 +275,7 @@ define([
           type: relation.getModelType()
         };
       }
-      else
+      else if (this.$id('workplace').length)
       {
         const workplace = this.$id('workplace').select2('data');
 
@@ -275,7 +287,12 @@ define([
         formData.station = parseInt(this.$id('station').val(), 10) || 0;
       }
 
-      formData.kaizenCategory = this.$id('kaizenCategory').select2('data').id;
+      const $kaizenCategory = this.$id('kaizenCategory');
+
+      if ($kaizenCategory.length)
+      {
+        formData.kaizenCategory = $kaizenCategory.select2('data').id;
+      }
 
       const $plannedAt = this.$id('plannedAt');
 
@@ -338,6 +355,12 @@ define([
     setUpKaizenCategorySelect2: function(oldId)
     {
       const $input = this.$id('kaizenCategory');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const kinds = this.getKinds();
       const map = {};
 
@@ -402,8 +425,12 @@ define([
 
     setUpImplementersSelect2: function()
     {
-      const privileged = this.model.isCoordinator() || Kaizen.can.manage();
       const $input = this.$id('implementers');
+
+      if (!$input.length)
+      {
+        return;
+      }
 
       setUpUserSelect2($input, {
         width: '100%',
@@ -413,6 +440,7 @@ define([
         userInfoDecorators: [userInfoDecorator]
       });
 
+      const privileged = this.model.isCoordinator() || Kaizen.can.manage();
       const data = [];
 
       if (this.options.editMode)
@@ -464,7 +492,12 @@ define([
     {
       const $kinds = this.$('input[name="kind[]"]');
 
-      if ($kinds.length && !$kinds.filter(':checked').length)
+      if (!$kinds.length)
+      {
+        return;
+      }
+
+      if (!$kinds.filter(':checked').length)
       {
         $kinds.first().click();
       }

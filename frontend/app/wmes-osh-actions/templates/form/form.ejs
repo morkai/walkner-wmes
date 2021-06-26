@@ -7,9 +7,11 @@
         name: 'subject',
         label: 'PROPERTY:',
         required: true,
-        maxLength: 150
+        maxLength: 150,
+        visible: !hidden.subject
       }) %>
       <div class="row">
+        <% if (!hidden.creator) { %>
         <%- helpers.formGroup({
           name: 'creator',
           type: 'static',
@@ -31,67 +33,71 @@
           required: true,
           groupClassName: 'col-lg-4'
         }) %>
+        <% } %>
       </div>
       <div class="panel panel-info">
         <div class="panel-heading"><%- t('FORM:subtitle') %></div>
         <div class="panel-body has-lastElementRow">
-          <% if (!relation) { %>
-            <div class="form-group">
-              <label class="control-label is-required"><%- t('PROPERTY:kind') %></label>
-              <br>
-              <% kinds.forEach(option => { %>
-              <label class="checkbox-inline" title="<%= option.title %>">
-                <input name="kind[]" type="checkbox" value="<%- option.value %>">
-                <%= option.label %>
-              </label>
-              <% }) %>
-            </div>
-            <div class="row">
-              <%- helpers.formGroup({
-                name: 'division',
-                type: 'select2',
-                label: 'PROPERTY:',
-                required: true,
-                groupClassName: 'col-lg-4'
-              }) %>
-              <%- helpers.formGroup({
-                name: 'workplace',
-                type: 'select2',
-                label: 'PROPERTY:',
-                required: true,
-                groupClassName: 'col-lg-4'
-              }) %>
-              <%- helpers.formGroup({
-                name: 'department',
-                type: 'select2',
-                label: 'PROPERTY:',
-                required: true,
-                groupClassName: 'col-lg-4'
-              }) %>
-            </div>
-            <div class="row">
-              <%- helpers.formGroup({
-                name: 'building',
-                type: 'select2',
-                label: 'PROPERTY:',
-                required: true,
-                groupClassName: 'col-lg-4'
-              }) %>
-              <%- helpers.formGroup({
-                name: 'location',
-                type: 'select2',
-                label: 'PROPERTY:',
-                required: true,
-                groupClassName: 'col-lg-4'
-              }) %>
-              <%- helpers.formGroup({
-                name: 'station',
-                type: 'select2',
-                label: 'PROPERTY:',
-                groupClassName: 'col-lg-4'
-              }) %>
-            </div>
+          <% if (!relation && !hidden.kind) { %>
+          <div class="form-group">
+            <label class="control-label is-required"><%- t('PROPERTY:kind') %></label>
+            <br>
+            <% kinds.forEach(option => { %>
+            <label class="checkbox-inline" title="<%= option.title %>">
+              <input name="kind[]" type="checkbox" value="<%- option.value %>">
+              <%= option.label %>
+            </label>
+            <% }) %>
+          </div>
           <% } %>
+          <% if (!hidden.orgUnits) { %>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'division',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'workplace',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'department',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <div class="row">
+            <%- helpers.formGroup({
+              name: 'building',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'location',
+              type: 'select2',
+              label: 'PROPERTY:',
+              required: true,
+              groupClassName: 'col-lg-4'
+            }) %>
+            <%- helpers.formGroup({
+              name: 'station',
+              type: 'select2',
+              label: 'PROPERTY:',
+              groupClassName: 'col-lg-4'
+            }) %>
+          </div>
+          <% } %>
+          <% if (!hidden.categories) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'activityKind',
@@ -101,6 +107,7 @@
               groupClassName: 'col-lg-4'
             }) %>
           </div>
+          <% } %>
           <div class="row hidden">
             <div class="form-group col-lg-12">
               <div style="display: flex">
@@ -116,6 +123,7 @@
               <input id="<%- id('participants') %>" name="participants" type="text" required>
             </div>
           </div>
+          <% if (!hidden.implementers) { %>
           <div class="row hidden">
             <%- helpers.formGroup({
               name: 'implementers',
@@ -132,6 +140,8 @@
               labelClassName: 'is-required'
             }) %>
           </div>
+          <% } %>
+          <% if (!hidden.descriptions) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'problem',
@@ -155,6 +165,7 @@
               rows: 4
             }) %>
           </div>
+          <% } %>
           <div id="<%- id('rootCausesGroup') %>" class="osh-actions-form-rootCauses-group hidden">
             <label class="control-label is-required"><%- t('PROPERTY:rootCauses') %></label>
             <div id="<%- id('rootCauses') %>" class="osh-actions-form-rootCauses">

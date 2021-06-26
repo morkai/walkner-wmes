@@ -268,7 +268,8 @@ define([
         },
         relation: !!this.relation,
         rootCauses: this.serializeRootCauses(),
-        showParticipantFinder: viewport.currentDialog !== this
+        showParticipantFinder: viewport.currentDialog !== this,
+        hidden: this.options.hidden || {}
       };
     },
 
@@ -352,18 +353,24 @@ define([
     serializeForm: function(formData)
     {
       const features = this.getActivityFeatures();
-      const userWorkplace = this.$id('userWorkplace').select2('data');
 
-      formData.userDivision = userWorkplace.model.get('division');
-      formData.userWorkplace = userWorkplace.id;
-      formData.userDepartment = this.$id('userDepartment').select2('data').id;
-      formData.activityKind = this.$id('activityKind').select2('data').id;
+      const $userWorkplace = this.$id('userWorkplace');
+
+      if ($userWorkplace.length)
+      {
+        const userWorkplace = $userWorkplace.select2('data');
+
+        formData.userDivision = userWorkplace.model.get('division');
+        formData.userWorkplace = userWorkplace.id;
+        formData.userDepartment = this.$id('userDepartment').select2('data').id;
+        formData.activityKind = this.$id('activityKind').select2('data').id;
+      }
 
       if (this.relation)
       {
         formData.relation = this.relation.getRelation();
       }
-      else
+      else if (this.$id('workplace').length)
       {
         const workplace = this.$id('workplace').select2('data');
 
@@ -424,8 +431,12 @@ define([
       if (features.implementers)
       {
         formData.status = this.newStatus || this.model.get('status') || 'new';
-        formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
-        formData.plannedAt = time.utc.getMoment(this.$id('plannedAt').val(), 'YYYY-MM-DD').toISOString();
+
+        if (this.$id('implementers').length)
+        {
+          formData.implementers = setUpUserSelect2.getUserInfo(this.$id('implementers'));
+          formData.plannedAt = time.utc.getMoment(this.$id('plannedAt').val(), 'YYYY-MM-DD').toISOString();
+        }
       }
       else
       {
@@ -483,6 +494,12 @@ define([
     setUpActivityKindSelect2: function(oldId)
     {
       const $input = this.$id('activityKind');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const kinds = this.getKinds();
       const map = {};
       const anyType = this.options.editMode
@@ -576,6 +593,12 @@ define([
     setUpImplementersSelect2: function()
     {
       const $input = this.$id('implementers');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
       const privileged = this.model.isCoordinator() || Action.can.manage();
 
       setUpUserSelect2($input, {
@@ -635,7 +658,14 @@ define([
 
     setUpParticipantsSelect2: function()
     {
-      setUpUserSelect2(this.$id('participants'), {
+      const $input = this.$id('participants');
+
+      if (!$input.length)
+      {
+        return;
+      }
+
+      setUpUserSelect2($input, {
         width: '100%',
         multiple: true,
         userInfoDecorators: [userInfoDecorator],
@@ -647,6 +677,11 @@ define([
     setUpRootCauseCategoryPopover: function()
     {
       const $rootCauses = this.$id('rootCauses');
+
+      if (!$rootCauses.length)
+      {
+        return;
+      }
 
       $rootCauses.popover({
         selector: '.control-label',
@@ -686,7 +721,10 @@ define([
 
     getActivityFeatures: function()
     {
-      const activityKind = dictionaries.activityKinds.get(+this.$id('activityKind').val());
+      const $activityKind = this.$id('activityKind');
+      const activityKind = dictionaries.activityKinds.get(
+        $activityKind.length ? +$activityKind.val() : this.model.get('activityKind')
+      );
       const features = {
         resolution: 'none',
         participants: false,

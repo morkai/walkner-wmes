@@ -90,5 +90,10 @@
   "participantFinder:selectAll": "zaznacz",
   "participantFinder:remove": "usuń odznaczonych",
   "participantFinder:noBrigade": "Nie znaleziono brygady dla danego lidera.",
-  "participantFinder:noDepartment": "Nie znaleziono użytkowników w wybranym wydziale."
+  "participantFinder:noDepartment": "Nie znaleziono użytkowników w wybranym wydziale.",
+
+  "nextStep:inProgress:action": "Do realizacji",
+  "nextStep:verification:action": "Do weryfikacji",
+  "nextStep:verification:title": "Realizacja akcji",
+  "nextStep:finished:action": "Zakończ"
 }

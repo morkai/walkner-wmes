@@ -494,7 +494,7 @@ define([
 
           case 'finished':
             return model.isCoordinator()
-              && (Date.now() - Date.parse(model.get('finishedAt'))) < (7 * 24 * 3600 * 1000);
+              && (Date.now() - Date.parse(model.get('finishedAt'))) < (35 * 24 * 3600 * 1000);
 
           default:
             return false;

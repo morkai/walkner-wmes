@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/viewport',
   'app/wmes-osh-common/pages/DetailsPage',
   '../NearMiss',
   '../views/InProgressFormView',
   'app/wmes-osh-nearMisses/templates/props'
 ], function(
+  $,
   viewport,
   DetailsPage,
   NearMiss,
@@ -43,8 +45,10 @@ define([
       return null;
     },
 
-    handleInProgressAction: function()
+    handleInProgressAction: function(e)
     {
+      const $btn = $(e.target).closest('.btn').prop('disabled', true);
+
       if (this.model.get('implementer')
         && this.model.get('plannedAt')
         && this.model.get('resolution').type !== 'unspecified')
@@ -61,12 +65,16 @@ define([
 
         req.done(() => viewport.msg.saved());
 
+        req.always(() => $btn.prop('disabled', false));
+
         return;
       }
 
       const dialogView = new InProgressFormView({
         model: new NearMiss(JSON.parse(JSON.stringify(this.model.attributes)))
       });
+
+      dialogView.once('dialog:hidden', () => $btn.prop('disabled', false));
 
       viewport.showDialog(dialogView, this.t('nextStep:inProgress:title'));
     }

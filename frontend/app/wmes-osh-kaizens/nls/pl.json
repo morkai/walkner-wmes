@@ -67,5 +67,10 @@
   "FORM:attachments:before:edit": "Nowe zdjęcia stanu przed",
   "FORM:attachments:after": "Nowe zdjęcia stanu po",
   "FORM:attachments:other": "Inne załączniki",
-  "FORM:ERROR:REWARD_PAID": "Nie można zmienić wypłaconego wynagrodzenia."
+  "FORM:ERROR:REWARD_PAID": "Nie można zmienić wypłaconego wynagrodzenia.",
+
+  "nextStep:inProgress:action": "Do realizacji",
+  "nextStep:verification:action": "Do weryfikacji",
+  "nextStep:verification:title": "Realizacja kaizena",
+  "nextStep:finished:action": "Zakończ"
 }

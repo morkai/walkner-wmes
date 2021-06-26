@@ -7,8 +7,10 @@
         name: 'subject',
         label: 'PROPERTY:',
         required: true,
-        maxLength: 150
+        maxLength: 150,
+        visible: !hidden.subject
       }) %>
+      <% if (!hidden.creator) { %>
       <div class="row">
         <%- helpers.formGroup({
           name: 'creator',
@@ -32,10 +34,11 @@
           groupClassName: 'col-lg-4'
         }) %>
       </div>
+      <% } %>
       <div class="panel panel-success">
         <div class="panel-heading"><%- t('FORM:subtitle') %></div>
         <div class="panel-body has-lastElementRow">
-          <% if (!relation || !model.kind) { %>
+          <% if (!hidden.kind && (!relation || !model.kind)) { %>
             <div class="form-group">
               <label class="control-label is-required"><%- t('PROPERTY:kind') %></label>
               <br>
@@ -47,7 +50,7 @@
               <% }) %>
             </div>
           <% } %>
-          <% if (!relation) { %>
+          <% if (!relation && !hidden.orgUnits) { %>
             <div class="row">
               <%- helpers.formGroup({
                 name: 'division',
@@ -92,6 +95,7 @@
               }) %>
             </div>
           <% } %>
+          <% if (!hidden.categories) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'kaizenCategory',
@@ -101,6 +105,8 @@
               groupClassName: 'col-lg-4'
             }) %>
           </div>
+          <% } %>
+          <% if (!hidden.implementers) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'implementers',
@@ -119,6 +125,8 @@
               }) %>
             <% } %>
           </div>
+          <% } %>
+          <% if (!hidden.descriptions) { %>
           <div class="row">
             <%- helpers.formGroup({
               name: 'problem',
@@ -144,6 +152,7 @@
               rows: 4
             }) %>
           </div>
+          <% } %>
           <% if (editMode) { %>
             <div class="row">
               <%- helpers.formGroup({

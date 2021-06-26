@@ -10,7 +10,7 @@
         <% attachments.forEach(attachment => { %>
         <div class="osh-attachment" data-id="<%- attachment._id %>" title="<%= attachment.name %>">
           <% if (attachment.image) { %>
-          <a class="osh-attachment-img" href="<%- attachment.url %>" style="background-image: url('<%- attachment.url %>?min=1')"></a>
+          <a class="osh-attachment-img" href="<%- attachment.url %>" style="background-image: url('<%- attachment.url %>&min=1')"></a>
           <% } else { %>
           <a class="osh-attachment-icon" href="<%- attachment.url %>" target="_blank">
             <i class="fa <%- attachment.icon %>"></i>
