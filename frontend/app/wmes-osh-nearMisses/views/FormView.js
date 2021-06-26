@@ -851,7 +851,15 @@ define([
       }
       else
       {
-        $plannedAt.val('').prop('disabled', !$selfImplement.prop('checked'));
+        const enabled = $selfImplement.prop('checked');
+
+        $plannedAt
+          .val(enabled ? time.getMoment().startOf('day').add(14, 'days').format('YYYY-MM-DD') : '')
+          .prop('disabled', !enabled)
+          .prop('required', enabled)
+          .closest('.form-group')
+          .find('.control-label')
+          .toggleClass('is-required', enabled);
       }
     },
 
