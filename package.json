@@ -5,9 +5,9 @@
   "version": "0.161.0",
   "updater": {
     "wmes": {
-      "backend": 684,
-      "frontend": 844,
-      "reports": 155,
+      "backend": 685,
+      "frontend": 845,
+      "reports": 156,
       "attachments": 3,
       "importer-sap": 73,
       "importer-results": 12,
@@ -30,7 +30,8 @@
       "luca": 7,
       "drilling": 14,
       "wiring": 8,
-      "ct": 17
+      "ct": 17,
+      "gft": 2
     },
     "pos": {
       "backend": 90,
