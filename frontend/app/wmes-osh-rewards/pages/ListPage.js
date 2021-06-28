@@ -4,26 +4,23 @@ define([
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   'app/wmes-osh-common/dictionaries',
-  '../views/FilterView',
-  '../views/ListView'
+  '../views/FilterView'
 ], function(
   FilteredListPage,
   pageActions,
   dictionaries,
-  FilterView,
-  ListView
+  FilterView
 ) {
   'use strict';
 
   return FilteredListPage.extend({
 
     FilterView,
-    ListView,
 
-    className: 'is-colored',
+    listClassName: 'is-colored',
 
     columns: [
-      {id: 'rid', className: 'is-min'},
+      {id: 'rid', className: 'is-min', tdClassName: 'text-mono'},
       {id: 'recipient', className: 'is-min'},
       {id: 'subject', className: 'is-overflow w300'},
       {id: 'amount', className: 'is-min', tdClassName: 'text-right'},
@@ -33,6 +30,18 @@ define([
       {id: 'payer', className: 'is-min'},
       '-'
     ],
+
+    breadcrumbs: function()
+    {
+      return [
+        this.t('BREADCRUMB:reports'),
+        {
+          href: '#osh/reports/rewards',
+          label: this.t('BREADCRUMB:base')
+        },
+        this.t('BREADCRUMB:browse')
+      ];
+    },
 
     actions: function(layout)
     {
@@ -54,6 +63,13 @@ define([
     load: function(when)
     {
       return when(dictionaries.load());
+    },
+
+    getListViewOptions: function()
+    {
+      return Object.assign(FilteredListPage.prototype.getListViewOptions.apply(this, arguments), {
+        crudTopics: 'updated'
+      });
     }
 
   });

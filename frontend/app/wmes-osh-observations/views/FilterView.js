@@ -64,6 +64,7 @@ define([
     termToForm: {
       'createdAt': dateTimeRange.rqlToForm,
       'finishedAt': dateTimeRange.rqlToForm,
+      'date': dateTimeRange.rqlToForm,
       'workplace': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];

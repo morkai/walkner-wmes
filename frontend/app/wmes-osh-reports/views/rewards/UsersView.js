@@ -58,7 +58,7 @@ define([
 
       rows.forEach(row =>
       {
-        row.userInfo = userInfoTemplate(row.recipient);
+        row.userInfo = userInfoTemplate(row.recipient, {noIp: true});
       });
 
       return rows;

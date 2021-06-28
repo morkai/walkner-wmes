@@ -10,10 +10,11 @@
   <%- forms.dateTimeRange({
     idPrefix,
     hidden: true,
-    labels: ['createdAt', 'eventDate', 'startedAt', 'finishedAt'].map(value => ({
+    labels: ['eventDate', 'createdAt', 'startedAt', 'finishedAt'].map(value => ({
       text: t(`PROPERTY:${value}`),
       ranges: true,
-      value
+      value,
+      utc: value === 'eventDate'
     }))
   }) %>
   <div class="form-group" style="min-width: 280px">

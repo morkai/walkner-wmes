@@ -48,7 +48,7 @@ define([
     {
       const obj = Entry.prototype.serializeRow.apply(this, arguments);
 
-      obj.date = time.utc.format(obj.date, 'L, H');
+      obj.date = time.utc.format(obj.date, 'L LT');
 
       return obj;
     },

@@ -38,9 +38,23 @@ define([
         obj.className = 'success';
       }
 
-      obj.rid = `<a href="#osh/kaizens/${obj.rid}">${obj.rid}</a>`;
+      if (obj.type === 'observation')
+      {
+        const match = obj.rid.match(/^O-([0-9]{4})-M000([0-9]{2})$/);
+        const month = time.utc.getMoment(`${match[1]}-${match[2]}-01`, 'YYYY-MM-DD');
+        const url = `#osh/observations?exclude(changes)&sort(-date)&limit(-1337)`
+          + `&date=ge=${month.valueOf()}`
+          + `&date=lt=${month.add(1, 'months').valueOf()}`
+          + `&creator.id=${obj.creator.id}`;
 
-      obj.recipient = userInfoTemplate(obj.recipient);
+        obj.rid = `<a href="${url}">${obj.rid}</a>`;
+      }
+      else if (obj.type === 'kaizen')
+      {
+        obj.rid = `<a href="#osh/kaizens/${obj.rid}">${obj.rid}</a>`;
+      }
+
+      obj.recipient = userInfoTemplate(obj.recipient, {noIp: true});
       obj.creator = userInfoTemplate(obj.creator);
       obj.payer = userInfoTemplate(obj.payer);
 

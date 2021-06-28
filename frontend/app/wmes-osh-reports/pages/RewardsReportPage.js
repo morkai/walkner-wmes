@@ -48,10 +48,16 @@ define([
         icon: 'money',
         label: this.t('rewards:payout:pageAction'),
         privilege: 'OSH:REWARDS:MANAGE',
-        disabled: !this.model.hasAnyPayouts(),
-        callback: this.showPayoutDialog.bind(this)
+        callback: this.showPayoutDialog.bind(this),
+        disabled: true
       }, {
-        icon: 'list',
+        icon: 'dollar',
+        label: this.t('rewards:payouts:pageAction'),
+        href: '#osh/rewards/payouts',
+        privilege: 'OSH:REWARDS:MANAGE',
+        disabled: true
+      }, {
+        icon: 'trophy',
         label: this.t('rewards:list:pageAction'),
         href: '#osh/rewards'
       }, {
@@ -132,7 +138,8 @@ define([
     {
       const payouts = this.model.getPayouts();
 
-      if (!payouts.length)
+      // TODO
+      if (1 || !payouts.length)
       {
         return;
       }

@@ -61,11 +61,6 @@ define([
       {
         formData.status = term.args[1] ? 'paid' : 'unpaid';
       },
-      'leader': (propertyName, term, formData) =>
-      {
-        formData[propertyName] = term.args[1];
-        formData.mode = 'leader';
-      },
       'employee': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.args[1];
@@ -144,11 +139,6 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
-      setUpUserSelect2(this.$id('leader'), {
-        view: this,
-        width: '300px'
-      });
-
       setUpUserSelect2(this.$id('employee'), {
         view: this,
         width: '300px'
@@ -171,14 +161,12 @@ define([
       if (Reward.can.viewAll())
       {
         this.orgUnitPickerView.toggle(mode === 'orgUnit');
-        this.$id('leader').select2('enable', mode === 'leader');
         this.$id('employee').select2('enable', mode === 'employee');
       }
       else
       {
         const data = setUpUserSelect2.userToData(Object.assign({}, currentUser.data));
 
-        this.$id('leader').select2('data', data).select2('enable', false);
         this.$id('employee').select2('data', data).select2('enable', false);
       }
     }

@@ -280,7 +280,8 @@ define([
         text: label.text || t('core', 'dateTimeRange:label:' + templateData.type),
         dropdown: prepareDropdown(label),
         value: label.value || null,
-        ranges: prepareRanges(label)
+        ranges: prepareRanges(label),
+        utc: label.utc == null ? options.utc : (label.utc ? 1 : 0)
       };
     });
 
@@ -422,11 +423,14 @@ define([
   render.serialize = function(view)
   {
     var $container = view.$('.dateTimeRange');
-    var type = $container[0].dataset.type;
+    var $input = $container.find('.dateTimeRange-label-input:checked');
+    var property = $input.length ? $input.val() : $container[0].dataset.property;
+    var dataset = Object.assign({}, $container[0].dataset, $input.prop('dataset'));
+    var type = dataset.type;
     var dateFormat = DATE_FORMATS[type];
-    var utc = $container[0].dataset.utc === '1';
-    var setTime = $container[0].dataset.setTime === '1';
-    var startHour = $container[0].dataset.startHour;
+    var utc = dataset.utc === '1';
+    var setTime = dataset.setTime === '1';
+    var startHour = dataset.startHour;
     var $fromDate = $container.find('input[name="from-date"]');
     var $fromTime = $container.find('input[name="from-time"]');
     var $toDate = $container.find('input[name="to-date"]');
@@ -509,10 +513,9 @@ define([
       $toTime.val(toMoment.format('HH:mm:ss'));
     }
 
-    var $input = $container.find('.dateTimeRange-label-input:checked');
 
     return {
-      property: $input.length ? $input.val() : $container[0].dataset.property,
+      property: property,
       from: fromMoment,
       to: toMoment
     };
@@ -559,9 +562,10 @@ define([
     var view = this;
     var $dtr = view.$('.dateTimeRange');
     var labelProperty = $dtr.find('.dateTimeRange-label-input').first().prop('name');
-    var dataset = $dtr[0].dataset;
-    var dateFormat = DATE_FORMATS[dataset.type];
-    var utc = dataset.utc === '1';
+    var dtrDataset = $dtr[0].dataset;
+    var lblDataset = view.$id(labelProperty + '-' + propertyName).prop('dataset') || {};
+    var dateFormat = DATE_FORMATS[lblDataset.type || dtrDataset.type];
+    var utc = lblDataset.utc == null ? (dtrDataset.utc === '1') : (lblDataset.utc === '1');
     var moment = (utc ? time.utc : time).getMoment(term.args[1]);
     var dir;
 

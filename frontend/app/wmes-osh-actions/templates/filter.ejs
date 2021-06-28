@@ -13,7 +13,8 @@
     labels: ['createdAt', 'startedAt', 'implementedAt', 'plannedAt', 'finishedAt'].map(value => ({
       text: t(`PROPERTY:${value}`),
       ranges: true,
-      value
+      value,
+      utc: value === 'plannedAt'
     }))
   }) %>
   <div class="form-group" style="min-width: 280px">

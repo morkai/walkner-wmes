@@ -33,6 +33,8 @@ define([
 
     refreshDelay: 5000,
 
+    crudTopics: 'separate',
+
     remoteTopics: function()
     {
       var topics = {};
@@ -40,9 +42,16 @@ define([
 
       if (topicPrefix)
       {
-        topics[topicPrefix + '.added'] = 'onModelAdded';
-        topics[topicPrefix + '.edited'] = 'onModelEdited';
-        topics[topicPrefix + '.deleted'] = 'onModelDeleted';
+        if (this.crudTopics === 'separate')
+        {
+          topics[topicPrefix + '.added'] = 'onModelAdded';
+          topics[topicPrefix + '.edited'] = 'onModelEdited';
+          topics[topicPrefix + '.deleted'] = 'onModelDeleted';
+        }
+        else if (this.crudTopics === 'updated')
+        {
+          topics[topicPrefix + '.updated'] = 'onModelsUpdated';
+        }
       }
 
       return topics;
@@ -444,6 +453,31 @@ define([
       this.$('.list-item[data-id="' + model.id + '"]').addClass('is-deleted');
 
       this.refreshCollection(model);
+    },
+
+    onModelsUpdated: function(message)
+    {
+      if (!message)
+      {
+        return;
+      }
+
+      var view = this;
+
+      (message.deleted || []).forEach(function(model)
+      {
+        view.onModelDeleted({model: model, user: message.user});
+      });
+
+      (message.added || []).forEach(function(model)
+      {
+        view.onModelAdded({model: model, user: message.user});
+      });
+
+      (message.updated || []).forEach(function(model)
+      {
+        view.onModelEdited({model: model, user: message.user});
+      });
     },
 
     onReset: function()

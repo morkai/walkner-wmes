@@ -15,8 +15,9 @@
           <span class="input-group-addon">PLN</span>
         </div>
       </div>
+      <div class="form-row">
       <% ['default', 'nom', 'kom'].forEach(type => { %>
-      <div class="form-group">
+      <div class="form-group" style="width: 165px">
         <label for="<%- id(`rewards-kaizens-${type}`) %>"><%- t(`settings:rewards:kaizens:${type}`) %></label>
         <div class="input-group" style="width: 143px">
           <input id="<%- id(`rewards-kaizens-${type}`) %>" class="form-control text-right" name="osh.rewards.kaizens.<%- type %>" type="number" min="0" max="1000000" step="1">
@@ -24,6 +25,26 @@
         </div>
       </div>
       <% }) %>
+      </div>
+      <% ['user', 'observer'].forEach(type => { %>
+      <div class="form-row">
+        <div class="form-group" style="width: 165px">
+          <label for="<%- id(`rewards-observations-${type}`) %>"><%- t(`settings:rewards:observations:${type}`) %></label>
+          <div class="input-group" style="width: 143px">
+            <input id="<%- id(`rewards-observations-${type}`) %>" class="form-control text-right" name="osh.rewards.observations.<%- type %>" type="number" min="0" max="1000000" step="1">
+            <span class="input-group-addon">PLN</span>
+          </div>
+        </div>
+        <div class="form-group" style="width: 165px">
+          <label for="<%- id(`rewards-observations-${type}Min`) %>"><%- t(`settings:rewards:observations:${type}Min`) %></label>
+          <input id="<%- id(`rewards-observations-${type}Min`) %>" class="form-control text-right" name="osh.rewards.observations.<%- type %>Min" type="number" min="1" max="100" step="1">
+        </div>
+      </div>
+      <% }) %>
+      <div class="form-group">
+        <label for="<%- id('rewards-ignoredUsers') %>"><%- t('settings:rewards:ignoredUsers') %></label>
+        <input id="<%- id('rewards-ignoredUsers') %>" name="osh.rewards.ignoredUsers" type="text">
+      </div>
     </div>
   </div>
 </form>

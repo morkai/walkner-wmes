@@ -4,6 +4,9 @@
     <thead>
     <tr>
       <th class="is-min" rowspan="2"><%- t('rewards:employee') %></th>
+      <th class="is-min" rowspan="2"><%- t('rewards:personnelId') %></th>
+      <th class="is-min" rowspan="2"><%- t('rewards:company') %></th>
+      <th class="is-min" rowspan="2"><%- t('rewards:department') %></th>
       <th class="is-min text-center" colspan="<%- metrics.length %>"><%- t('rewards:count') %></th>
       <th class="is-min text-center" colspan="<%- metrics.length %>"><%- t('rewards:amount') %></th>
       <th class="is-min" rowspan="2"><%- t('rewards:lastCreatedAt') %></th>
@@ -22,17 +25,20 @@
     <tbody>
       <% if (loading) { %>
       <tr>
-        <td colspan="<%- 1 + metrics.length * 2 + 3 %>"><i class="fa fa-spinner fa-spin"></i></td>
+        <td colspan="<%- 4 + metrics.length * 2 + 3 %>"><i class="fa fa-spinner fa-spin"></i></td>
       </tr>
       <% } else { %>
       <% if (!rows.length) { %>
       <tr>
-        <td colspan="<%- 1 + metrics.length * 2 + 3 %>"><%- t('core', 'LIST:NO_DATA') %></td>
+        <td colspan="<%- 4 + metrics.length * 2 + 3 %>"><%- t('core', 'LIST:NO_DATA') %></td>
       </tr>
       <% } %>
       <% rows.forEach(row => { %>
       <tr class="<%- row.payout[1] >= minPayout ? 'success' : '' %>">
         <td class="is-min"><%- row.userInfo %></td>
+        <td class="is-min"><%= row.recipient.personnelId %></td>
+        <td class="is-min"><%= row.recipient.company %></td>
+        <td class="is-min"><%= row.recipient.department %></td>
         <% metrics.forEach(metric => { %>
         <td class="is-min is-number"><%- row[metric][0].toLocaleString() %></td>
         <% }) %>
