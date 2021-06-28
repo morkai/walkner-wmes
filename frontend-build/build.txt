@@ -2936,7 +2936,6 @@ app/wmes-osh-rewards/Reward.js
 app/wmes-osh-rewards/RewardCollection.js
 app/wmes-osh-rewards/templates/filter.js
 app/wmes-osh-rewards/views/FilterView.js
-app/wmes-osh-rewards/views/ListView.js
 app/wmes-osh-rewards/pages/ListPage.js
 app/nls/wmes-osh-rewards.js
 app/nls/pl/wmes-osh-rewards.js
