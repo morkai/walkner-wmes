@@ -226,7 +226,7 @@ define([
       function findSupplyAreas(supplyAreaIds)
       {
         var req = view.ajax({
-          url: '/kanban/supplyAreas?_id=in=(' + supplyAreaIds + ')'
+          url: '/kanban/supplyAreas?name=in=(' + supplyAreaIds + ')'
         });
 
         req.fail(view.failQuickPrint.bind(view));

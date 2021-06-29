@@ -100,7 +100,7 @@ define([
       if (entry.storageBin)
       {
         entry.storageBinRow = entry.storageBin.substr(1, 1);
-        entry.markerColor = options.settings.getRowColor(entry.storageBinRow);
+        entry.markerColor = options.settings && options.settings.getRowColor(entry.storageBinRow) || null;
       }
       else
       {
@@ -111,7 +111,7 @@ define([
       if (entry.newStorageBin)
       {
         entry.newStorageBinRow = entry.newStorageBin.substr(1, 1);
-        entry.newMarkerColor = options.settings.getRowColor(entry.newStorageBinRow);
+        entry.newMarkerColor = options.settings && options.settings.getRowColor(entry.newStorageBinRow) || null;
       }
       else
       {
