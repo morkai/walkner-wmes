@@ -54,14 +54,16 @@ define([
 
     serializeRows: function()
     {
-      const rows = this.model.get('users');
+      const companies = this.model.get('companies');
+      const users = this.model.get('users');
 
-      rows.forEach(row =>
+      users.forEach(row =>
       {
+        row.company = companies[row.recipient.company] || row.recipient.company;
         row.userInfo = userInfoTemplate(row.recipient, {noIp: true});
       });
 
-      return rows;
+      return users;
     }
 
   });

@@ -35,6 +35,11 @@ define([
 
     }, FilterView.prototype.events),
 
+    defaultFormData: {
+      type: ['kaizen', 'observation'],
+      company: ''
+    },
+
     termToForm: {
       'division': (propertyName, term, formData) =>
       {
@@ -42,15 +47,20 @@ define([
       },
       'workplace': 'division',
       'department': 'division',
-      'status': (propertyName, term, formData) =>
+      'type': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.args[1];
       },
-      'paidAt': 'status',
+      'status': 'type',
+      'paidAt': 'type',
       'employee': (propertyName, term, formData) =>
       {
         formData[propertyName] = term.args[1];
         formData.mode = 'employee';
+      },
+      'company': (propertyName, term, formData) =>
+      {
+        formData[propertyName] = term.args[1].join(',');
       }
     },
 
@@ -108,6 +118,20 @@ define([
           selector.push({name: 'eq', args: [mode, currentUser.data._id]});
         }
       }
+
+      const type = this.$id('type').val() || [];
+
+      if (type.length && type.length !== this.$id('type')[0].length)
+      {
+        selector.push({name: 'in', args: ['type', type]});
+      }
+
+      const company = this.$id('company').select2('data');
+
+      if (company.length)
+      {
+        selector.push({name: 'in', args: ['company', company.map(c => c.id)]});
+      }
     },
 
     getTemplateData: function()
@@ -121,13 +145,26 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
+      this.$('.is-expandable').expandableSelect();
+
       setUpUserSelect2(this.$id('employee'), {
         view: this,
         width: '300px'
       });
 
+      this.setUpCompanySelect2();
       this.toggleMode();
       this.toggleDate();
+    },
+
+    setUpCompanySelect2: function()
+    {
+      this.$id('company').select2({
+        width: '300px',
+        multiple: true,
+        placeholder: ' ',
+        data: dictionaries.settings.getValue('rewards.companies', [])
+      });
     },
 
     toggleMode: function()

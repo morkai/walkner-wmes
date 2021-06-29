@@ -9,8 +9,6 @@
       <th class="is-min" rowspan="2"><%- t('rewards:department') %></th>
       <th class="is-min text-center" colspan="<%- metrics.length %>"><%- t('rewards:count') %></th>
       <th class="is-min text-center" colspan="<%- metrics.length %>"><%- t('rewards:amount') %></th>
-      <th class="is-min" rowspan="2"><%- t('rewards:lastCreatedAt') %></th>
-      <th class="is-min" rowspan="2"><%- t('rewards:lastPaidAt') %></th>
       <th rowspan="2"></th>
     </tr>
     <tr>
@@ -37,7 +35,7 @@
       <tr class="<%- row.payout[1] >= minPayout ? 'success' : '' %>">
         <td class="is-min"><%- row.userInfo %></td>
         <td class="is-min"><%= row.recipient.personnelId %></td>
-        <td class="is-min"><%= row.recipient.company %></td>
+        <td class="is-min"><%= row.company %></td>
         <td class="is-min"><%= row.recipient.department %></td>
         <% metrics.forEach(metric => { %>
         <td class="is-min is-number"><%- row[metric][0].toLocaleString() %></td>
@@ -45,8 +43,6 @@
         <% metrics.forEach(metric => { %>
         <td class="is-min is-number"><%- currencyFormatter.format(row[metric][1]) %></td>
         <% }) %>
-        <td class="is-min"><%- row.lastCreatedAt ? time.format(row.lastCreatedAt, 'LLLL') : '' %></td>
-        <td class="is-min"><%- row.lastPaidAt ? time.format(row.lastPaidAt, 'LLLL') : '' %></td>
         <td></td>
       </tr>
       <% }) %>

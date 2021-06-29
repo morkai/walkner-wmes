@@ -35,21 +35,21 @@ define([
       SettingsView.prototype.afterRender.apply(this, arguments);
 
       this.setUpIgnoredUsers();
+      this.updateCompaniesRows();
     },
 
     setUpIgnoredUsers: function()
     {
-      const $ignoredUsers = setUpUserSelect2(this.$id('rewards-ignoredUsers'), {
+      setUpUserSelect2(this.$id('rewards-ignoredUsers'), {
         view: this,
-        multiple: true
+        multiple: true,
+        currentUserInfo: this.settings.getValue('rewards.ignoredUsers', [])
       });
-
-
     },
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      if (/ignoredUsers$/.test(setting.id))
+      if (setting.id.includes('rewards.ignoredUsers'))
       {
         return false;
       }
@@ -59,10 +59,30 @@ define([
 
     updateSettingField: function(setting)
     {
-      this.$id('rewards-ignoredUsers').select2('data', setting.getValue().map(u =>({
-        id: u.id,
-        text: u.label
-      })));
+      if (setting.id.includes('rewards.ignoredUsers'))
+      {
+        this.$id('rewards-ignoredUsers').select2('data', setting.getValue().map(u =>({
+          id: u.id,
+          text: u.label
+        })));
+      }
+    },
+
+    onSettingsChange: function(setting)
+    {
+      SettingsView.prototype.onSettingsChange.apply(this, arguments);
+
+      if (setting.id.includes('rewards.companies'))
+      {
+        this.updateCompaniesRows();
+      }
+    },
+
+    updateCompaniesRows: function()
+    {
+      const rows = Math.max(10, this.settings.getValue('rewards.companies', []).length + 1);
+
+      this.$id('rewards-companies').prop('rows', rows);
     }
 
   });

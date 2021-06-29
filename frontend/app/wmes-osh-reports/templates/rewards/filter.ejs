@@ -1,5 +1,13 @@
 <form class="well filter-form osh-report-filter" autocomplete="off">
   <div class="form-group">
+    <label for="<%- id('type') %>" class="control-label"><%- t('rewards:type') %></label>
+    <select id="<%- id('type') %>" name="type[]" class="form-control is-expandable" multiple size="1">
+      <% ['kaizen', 'observation'].forEach(type => { %>
+      <option value="<%- type %>"><%- t(`rewards:type:${type}`) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
     <label for="<%- id('status') %>" class="control-label"><%- t('rewards:status') %></label>
     <select id="<%- id('status') %>" name="status" class="form-control">
       <% ['earned', 'paid', 'unpaid', 'payout'].forEach(status => { %>
@@ -21,6 +29,10 @@
   <% if (showOrgUnitFilter) { %>
   <div id="<%- id('orgUnit') %>" class="form-group"></div>
   <% } %>
+  <div class="form-group">
+    <label for="<%- id('company') %>" class="control-label"><%- t('rewards:company') %></label>
+    <input id="<%- id('company') %>" name="company" type="text">
+  </div>
   <div class="form-group filter-actions">
     <%- renderButton() %>
   </div>

@@ -39,7 +39,9 @@ define([
         dateProperty: false,
         extraTerms: terms =>
         {
-          terms.push({name: 'eq', args: ['status', 'payout']});
+          terms.push(
+            {name: 'eq', args: ['status', 'payout']}
+          );
         }
       });
 
