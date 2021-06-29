@@ -32,8 +32,7 @@ define([
       {
         id: 'company',
         className: 'is-min',
-        thClassName: 'is-filter',
-        visible: loadedModules.isLoaded('companies')
+        thClassName: loadedModules.isLoaded('companies') ? 'is-filter' : ''
       },
       {
         id: 'prodOrgUnit',

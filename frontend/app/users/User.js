@@ -190,6 +190,11 @@ define([
         }
       }
 
+      if (!obj.company && obj.syncData.company)
+      {
+        obj.company = `<em>${obj.syncData.company}</em>`;
+      }
+
       return obj;
     },
 
