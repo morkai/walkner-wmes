@@ -93,11 +93,12 @@ define([
             totals.users.minutes += user.minutes ? 1 : 0;
             totals.users.audits += user.audits ? 1 : 0;
             totals.users.talks += user.talks ? 1 : 0;
-            totals.users.total += 1;
 
             user.total = 0;
 
             incTotal(user);
+
+            totals.users.total += user.total ? 1 : 0;
 
             return {
               name: report.users[userKey] || userKey,
