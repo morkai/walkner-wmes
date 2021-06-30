@@ -10,21 +10,23 @@
       <table class="table table-bordered table-condensed table-hover">
         <thead>
         <tr>
-          <th class="is-min"><%- helpers.t('job:_id') %></th>
-          <th class="is-min"><%- helpers.t('job:line') %></th>
-          <th class="is-min"><%- helpers.t('job:ccn') %></th>
-          <th class="is-min"><%- helpers.t('job:nc12') %></th>
-          <th class="is-min"><%- helpers.t('job:description') %></th>
-          <th class="is-min"><%- helpers.t('job:storageBin') %></th>
+          <th class="is-min"><%- t('job:_id') %></th>
+          <th class="is-min"><%- t('job:line') %></th>
+          <th class="is-min"><%- t('job:ccn') %></th>
+          <th class="is-min"><%- t('job:nc12') %></th>
+          <th class="is-min"><%- t('job:description') %></th>
+          <th class="is-min"><%- t('job:storageBin') %></th>
           <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
-          <th class="is-min"><%- helpers.t('layout:' + layout) %></th>
+          <th class="is-min"><%- t('layout:' + layout) %></th>
           <% }) %>
-          <th class="is-min"><%- helpers.t('job:kanbanId') %></th>
+          <th class="is-min"><%- t('job:kanbanId') %></th>
+          <% if (queue.jobs.length) { %>
           <% queue.jobs[0].data.workstations.forEach(function(_, i) { %>
-          <th class="is-min"><%- helpers.t('job:workstation:short', {n: i + 1}) %></th>
+          <th class="is-min"><%- t('job:workstation:short', {n: i + 1}) %></th>
           <% }) %>
+          <% } %>
           <% if (user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE')) { %>
-          <th class="actions"><%- helpers.t('core', 'LIST:COLUMN:actions') %></th>
+          <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
           <% } %>
           <th></th>
         </tr>
