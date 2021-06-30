@@ -8,6 +8,7 @@ define([
   'app/time',
   'app/viewport',
   'app/core/View',
+  'app/core/util/padString',
   'app/factoryLayout/templates/canvas',
   'app/factoryLayout/templates/popover'
 ], function(
@@ -18,6 +19,7 @@ define([
   time,
   viewport,
   View,
+  padString,
   template,
   popoverTemplate
 ) {
@@ -1041,7 +1043,7 @@ define([
         maxLength = 3;
       }
 
-      return value === -1 ? '?'.padStart(maxLength, '?') : value.toString().padStart(maxLength, ' ');
+      return value === -1 ? padString.start('?', maxLength, '?') : padString.start(value.toString(), maxLength, ' ');
     },
 
     handleClick: function()
