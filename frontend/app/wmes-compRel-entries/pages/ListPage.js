@@ -30,7 +30,7 @@ define([
           layout: layout,
           page: page,
           collection: page.collection,
-          privilege: false,
+          privileges: false,
           template: exportActionTemplate
         }),
         pageActions.add(page.collection),

@@ -41,7 +41,7 @@ define([
         layout: layout,
         page: this,
         collection: this.exportCollection,
-        privilege: false,
+        privileges: false,
         label: t('reports', 'PAGE_ACTION:1:export'),
         callback: this.onExportClick.bind(this)
       }));

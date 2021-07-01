@@ -61,7 +61,7 @@ define([
         layout: layout,
         page: this,
         collection: this.orders,
-        privilege: false,
+        privileges: false,
         label: this.t('PAGE_ACTION:2:export')
       }));
 
