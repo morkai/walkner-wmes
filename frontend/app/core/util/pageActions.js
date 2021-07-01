@@ -266,7 +266,7 @@ define([
       return {
         id: 'export',
         template: template,
-        privileges: resolvePrivileges('view', options.collection, options.privilege, 'VIEW'),
+        privileges: resolvePrivileges('view', options.collection, options.privileges, 'VIEW'),
         callback: options.callback,
         afterRender: afterRender
       };
