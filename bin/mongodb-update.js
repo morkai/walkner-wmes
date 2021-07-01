@@ -3,5 +3,8 @@
 
 'use strict';
 
-db.oshrewards.updateMany({type: {$exists: false}}, {$set: {type: 'kaizen'}});
-db.oshrewards.updateMany({count: {$exists: false}}, {$set: {count: 1}});
+db.oshpayouts.createIndex({createdAt: -1});
+db.oshpayouts.createIndex({types: 1, createdAt: -1});
+db.oshpayouts.createIndex({'recipients.id': 1, createdAt: -1});
+db.oshpayouts.createIndex({'companies.id': 1, createdAt: -1});
+db.oshpayouts.createIndex({'recipients.entries': 1});

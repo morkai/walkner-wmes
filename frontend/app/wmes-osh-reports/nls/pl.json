@@ -311,7 +311,8 @@
   "rewards:payouts:pageAction": "Wypłaty",
   "rewards:payout:pageAction": "Wypłać nagrody",
   "rewards:payout:title": "Wypłata nagród",
-  "rewards:payout:submit": "Zapisz wybrane wypłaty",
+  "rewards:payout:submit": "Zapisz wypłatę",
+  "rewards:payout:description": "Opis wypłaty",
   "rewards:payout:employee": "Pracownik",
   "rewards:payout:count": "Ilość zgłoszeń",
   "rewards:payout:amount": "Kwota wypłaty"

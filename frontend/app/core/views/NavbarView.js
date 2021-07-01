@@ -593,9 +593,13 @@ define([
       return [''];
     }
 
-    var navPath = liEl.dataset.navPath;
+    var navPaths = liEl.dataset.navPath;
 
-    if (!navPath)
+    if (navPaths)
+    {
+      navPaths = navPaths.split(' ');
+    }
+    else
     {
       var href = aEl.getAttribute('href');
 
@@ -604,17 +608,27 @@ define([
         return [''];
       }
 
-      navPath = href.substring(1);
+      navPaths = [href.substring(1)];
     }
 
-    var matches = navPath.match(/^([a-zA-Z0-9\/\-_]+)/);
+    var keys = [];
 
-    if (!matches)
+    navPaths.forEach(function(navPath)
     {
-      return [''];
+      var matches = navPath.match(/^([a-zA-Z0-9\/\-_]+)/);
+
+      if (matches)
+      {
+        keys = keys.concat(this.getNavItemKeysFromPath(matches[1]));
+      }
+    }, this);
+
+    if (!keys.length)
+    {
+      keys.push('');
     }
 
-    return this.getNavItemKeysFromPath(matches[1]);
+    return keys;
   };
 
   /**

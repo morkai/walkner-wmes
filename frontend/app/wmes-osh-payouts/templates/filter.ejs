@@ -1,0 +1,27 @@
+<form class="well filter-form osh-report-filter" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('types') %>" class="control-label"><%- t('PROPERTY:types') %></label>
+    <select id="<%- id('types') %>" name="types[]" class="form-control is-expandable" multiple size="1">
+      <% ['kaizen', 'observation'].forEach(type => { %>
+      <option value="<%- type %>"><%- t(`type:${type}`) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <%- forms.dateTimeRange({
+    idPrefix,
+    property: 'createdAt',
+    labels: {text: t('PROPERTY:createdAt'), ranges: true}
+  }) %>
+  <div class="form-group">
+    <label for="<%- id('recipient') %>" class="control-label"><%- t('filter:recipient') %></label>
+    <input id="<%- id('recipient') %>" name="recipient" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('companies') %>" class="control-label"><%- t('PROPERTY:companies') %></label>
+    <input id="<%- id('companies') %>" name="companies" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <%- renderButton() %>
+  </div>
+</form>

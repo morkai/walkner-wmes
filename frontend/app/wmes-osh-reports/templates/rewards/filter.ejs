@@ -26,13 +26,13 @@
     </label>
     <input id="<%- id('employee') %>" name="employee" type="text">
   </div>
-  <% if (showOrgUnitFilter) { %>
+  <% if (canViewAll) { %>
   <div id="<%- id('orgUnit') %>" class="form-group"></div>
-  <% } %>
   <div class="form-group">
     <label for="<%- id('company') %>" class="control-label"><%- t('rewards:company') %></label>
     <input id="<%- id('company') %>" name="company" type="text">
   </div>
+  <% } %>
   <div class="form-group filter-actions">
     <%- renderButton() %>
   </div>

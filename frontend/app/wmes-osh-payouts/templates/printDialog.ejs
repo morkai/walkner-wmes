@@ -1,0 +1,27 @@
+<form>
+  <div class="form-row">
+    <div class="form-group" style="margin-bottom: 0">
+      <label for="<%- id('year') %>" class="control-label"><%- t('printDialog:year') %></label>
+      <input id="<%- id('year') %>" name="year" type="number" class="form-control" value="<%- year %>" min="2021" max="<%- time.getMoment().format('YYYY') %>">
+    </div>
+    <div class="form-group">
+      <div style="display: flex; margin-bottom: 5px;">
+        <div class="radio">
+          <label class="control-label">
+            <input type="radio" name="periodType" value="month"> <%- t('printDialog:month') %>
+          </label>
+        </div>
+        <div class="radio" style="margin: 0 0 0 10px">
+          <label class="control-label">
+            <input type="radio" name="periodType" value="quarter"> <%- t('printDialog:quarter') %>
+          </label>
+        </div>
+      </div>
+      <input id="<%- id('period') %>" name="period" type="number" class="form-control" min="1" max="12" required>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('printDialog:submit') %></button>
+    <button type="button" class="btn btn-link cancel"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

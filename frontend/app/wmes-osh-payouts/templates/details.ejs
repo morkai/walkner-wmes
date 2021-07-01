@@ -1,0 +1,85 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'description',
+        'createdAt',
+        '!creator',
+        {id: '!types', value: types =>
+        {
+          if (types.length === 1)
+          {
+            return t(`type:${types[0]}`);
+          }
+
+          return `<ul><li>${types.map(type => t(`type:${type}`)).join('<li>')}</ul>`;
+        }},
+        {id: '!companies', value: companies =>
+        {
+          if (companies.length === 1)
+          {
+            return _.escape(companies[0].label);
+          }
+
+          return `<ul><li>${companies.map(company => _.escape(company.label)).join('<li>')}</ul>`;
+        }}
+      ]) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- t('PROPERTY:recipients') %></div>
+    <table class="table table-bordered table-condensed table-striped table-hover">
+      <thead>
+      <tr>
+        <th class="is-min text-center" rowspan="2"><%- t('PROPERTY:no') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:recipients.personnelId') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:recipients.label') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:recipients.company') %></th>
+        <th class="is-min" rowspan="2"><%- t('PROPERTY:recipients.department') %></th>
+        <th class="is-min text-center" colspan="3"><%- t('PROPERTY:count') %></th>
+        <th class="is-min text-center" colspan="3"><%- t('PROPERTY:amount') %></th>
+        <th rowspan="2"></th>
+      </tr>
+      <tr>
+        <th class="is-min text-center"><%- t('type:kaizen') %></th>
+        <th class="is-min text-center"><%- t('type:observation') %></th>
+        <th class="is-min text-center"><%- t('type:total') %></th>
+        <th class="is-min text-center"><%- t('type:kaizen') %></th>
+        <th class="is-min text-center"><%- t('type:observation') %></th>
+        <th class="is-min text-center"><%- t('type:total') %></th>
+      </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td colspan="5"></td>
+          <td class="is-min is-number"><%= model.count.kaizen.toLocaleString() %></td>
+          <td class="is-min is-number"><%= model.count.observation.toLocaleString() %></td>
+          <td class="is-min is-number"><%= model.count.total.toLocaleString() %></td>
+          <td class="is-min is-number"><%= currencyFormatter.format(model.amount.kaizen) %></td>
+          <td class="is-min is-number"><%= currencyFormatter.format(model.amount.observation) %></td>
+          <td class="is-min is-number"><%= currencyFormatter.format(model.amount.total) %></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+      <% model.recipients.forEach((recipient, i) =>  { %>
+        <tr>
+          <td class="is-min text-right"><%- i + 1 %>.</td>
+          <td class="is-min text-mono text-center"><%= recipient.personnelId %></td>
+          <td class="is-min"><%= recipient.label %></td>
+          <td class="is-min"><%= recipient.company.text %></td>
+          <td class="is-min"><%= recipient.department %></td>
+          <td class="is-min is-number"><%= recipient.count.kaizen.toLocaleString() %></td>
+          <td class="is-min is-number"><%= recipient.count.observation.toLocaleString() %></td>
+          <td class="is-min is-number"><%= recipient.count.total.toLocaleString() %></td>
+          <td class="is-min is-number"><%= currencyFormatter.format(recipient.amount.kaizen) %></td>
+          <td class="is-min is-number"><%= currencyFormatter.format(recipient.amount.observation) %></td>
+          <td class="is-min is-number"><%= currencyFormatter.format(recipient.amount.total) %></td>
+          <td></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

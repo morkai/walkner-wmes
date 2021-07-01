@@ -39,6 +39,7 @@ define([
   './wmes-osh-observations/routes',
   './wmes-osh-accidents/routes',
   './wmes-osh-rewards/routes',
+  './wmes-osh-payouts/routes',
   './wmes-osh-reports/routes'
 ], function()
 {

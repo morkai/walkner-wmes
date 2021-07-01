@@ -27,36 +27,24 @@ define([
 
         this.$id('submit').prop('disabled', true);
 
-        const selected = new Set();
-
-        this.$('input[name="users[]"]:checked').each((i, el) => selected.add(el.value));
-
-        if (!selected.size)
-        {
-          viewport.closeDialog();
-
-          return;
-        }
-
         viewport.msg.saving();
 
         const payouts = [];
 
-        this.model.payouts.forEach(payout =>
+        this.payouts.forEach(payout =>
         {
-          if (selected.has(payout.recipient.id))
-          {
-            payouts.push({
-              recipient: payout.recipient.id,
-              entries: payout.unpaid
-            });
-          }
+          payouts.push({
+            recipient: payout.recipient,
+            entries: payout.unpaid
+          });
         });
 
         const req = this.ajax({
           method: 'POST',
-          url: '/osh/rewards;payout',
+          url: '/osh/payouts',
           data: JSON.stringify({
+            description: this.$id('description').val().trim(),
+            options: this.model.get('options'),
             payouts
           })
         });
@@ -68,75 +56,57 @@ define([
           this.$id('submit').prop('disabled', false);
         });
 
-        req.done(() =>
+        req.done(payout =>
         {
           viewport.msg.saved();
           viewport.closeDialog();
 
-          this.trigger('saved');
+          this.trigger('saved', payout);
         });
-      },
-
-      'change input[name="users[]"]': function()
-      {
-        this.updateTotals();
-      },
-
-      'change #-toggle': function(e)
-      {
-        this.$('tbody').find('input').prop('checked', e.target.checked);
-
-        this.updateTotals();
       }
 
+    },
+
+    initialize: function()
+    {
+      this.payouts = this.model.getPayouts();
     },
 
     getTemplateData: function()
     {
       return {
         currencyFormatter: dictionaries.currencyFormatter,
-        payouts: this.model.payouts,
-        totals: this.calcTotals(false)
+        payouts: this.payouts,
+        options: this.serializeOptions(),
+        totals: this.calcTotals()
       };
     },
 
-    getSelected: function()
+    serializeOptions: function()
     {
-      const selected = new Set();
+      const companies = this.model.get('companies');
+      const options = this.model.get('options');
 
-      this.$('input[name="users[]"]:checked').each((i, el) => selected.add(el.value));
-
-      return selected;
+      return {
+        type: options.type,
+        company: options.company.map(id => companies[id] || id)
+      };
     },
 
-    calcTotals: function(selectedOnly)
+    calcTotals: function()
     {
       const totals = {
         count: 0,
         amount: 0
       };
-      const selected = selectedOnly ? this.getSelected() : null;
 
-      this.model.payouts.forEach(p =>
+      this.payouts.forEach(p =>
       {
-        if (selected && !selected.has(p.recipient.id))
-        {
-          return;
-        }
-
         totals.count += p.payout[0];
         totals.amount += p.payout[1];
       });
 
       return totals;
-    },
-
-    updateTotals: function()
-    {
-      const totals = this.calcTotals(true);
-
-      this.$id('totalCount').text(totals.count.toLocaleString());
-      this.$id('totalAmount').text(dictionaries.currencyFormatter.format(totals.amount));
     }
 
   });

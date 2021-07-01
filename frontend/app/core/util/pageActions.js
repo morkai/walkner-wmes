@@ -207,7 +207,7 @@ define([
         layout: layout,
         page: page,
         collection: collection || (page && page.collection) || null,
-        privilege: privilege,
+        privileges: privilege,
         maxCount: 60000
       };
 

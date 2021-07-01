@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>&nbsp;</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      line-height: 1;
+      font-size: 12px;
+      text-rendering: optimizeLegibility;
+      -webkit-text-rendering: optimizeLegibility;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+    }
+    .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    .page {
+      margin: 0 auto;
+      page-break-inside: avoid;
+      text-align: left;
+    }
+    .page + .page {
+      page-break-before: always;
+    }
+    .header {
+      border-bottom: 1px solid #000;
+      padding-bottom: 10px;
+    }
+    .header-title {
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .header-extra {
+      float: right;
+    }
+    .header-extra th {
+      text-align: right;
+    }
+    .header-extra td {
+      padding-left: 6px;
+      text-align: right;
+    }
+    .header-extra tr:first-child > th,
+    .header-extra tr:first-child > td {
+      padding-bottom: 3px;
+    }
+    .props {
+      width: 100%;
+    }
+    .props th {
+      padding-top: 6px;
+      width: 85px;
+      white-space: nowrap;
+      text-align: left;
+      font-weight: normal;
+      vertical-align: bottom;
+    }
+    .props td {
+      padding-top: 6px;
+      padding-left: 6px;
+      vertical-align: bottom;
+    }
+    .payout-extra {
+      margin-top: 4px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #000;
+    }
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+    .list {
+      width: 100%;
+    }
+    .list th,
+    .list td {
+      width: 1px;
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+    .list .expand {
+      width: auto;
+    }
+    .list td {
+      padding-top: 6px;
+    }
+    .list th:last-child,
+    .list td:last-child {
+      padding-right: 0;
+    }
+    table .right {
+      text-align: right;
+    }
+    .list .integer {
+      padding-right: 0;
+    }
+    .recipients {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<% payout.pages.forEach(function(page) { %>
+<div class="page">
+  <div class="header clearfix">
+    <div class="header-extra">
+      <table>
+        <tbody>
+        <tr>
+          <th>Strona:</th>
+          <td><%- page.no %> / <%- payout.pages.length %></td>
+        </tr>
+        <tr>
+          <th>Data wydruku:</th>
+          <td><%- dateCreated %></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="header-title">WNIOSEK O WYPŁATĘ NAGRODY PIENIĘŻNEJ</div>
+  </div>
+  <% if (page.no === 1) { %>
+  <div class="payout-extra">
+    <table class="props">
+      <tbody>
+      <tr>
+        <th>Typ zgłoszeń:</th>
+        <td><%- payout.types %></td>
+      </tr>
+      <tr>
+        <th>Firma:</th>
+        <td><%- payout.companies %></td>
+      </tr>
+      <tr>
+        <th>Okres:</th>
+        <td><%- payout.period %></td>
+      </tr>
+      <tr>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+  <% if (page.recipients.length) { %>
+  <div class="recipients">
+    <table class="list">
+      <thead>
+      <tr>
+        <th>LP.</th>
+        <th>NR KADROWY</th>
+        <th>NAZWISKO I IMIĘ</th>
+        <th class="expand">DZIAŁ</th>
+        <th>KWOTA NETTO</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% page.recipients.forEach(function(recipient) { %>
+      <tr>
+        <td><%- recipient.no %>.</td>
+        <td><%- recipient.personnelId %></td>
+        <td><%= recipient.label %></td>
+        <td class="expand"><%= recipient.department %></td>
+        <td class="right"><%- recipient.amount %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+<% }) %>
+</body>
+</html>

@@ -21,6 +21,7 @@
     "PAGE_ACTION:edit": "Edit",
     "PAGE_ACTION:delete": "Delete",
     "PAGE_ACTION:filter": "Filter",
+    "PAGE_ACTION:print": "Print",
     "PAGE_ACTION:import": "Import",
     "PAGE_ACTION:export": "Export",
     "PAGE_ACTION:export:csv": "Export to CSV",

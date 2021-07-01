@@ -35,7 +35,7 @@
       <tr class="<%- row.payout[1] >= minPayout ? 'success' : '' %>">
         <td class="is-min"><%- row.userInfo %></td>
         <td class="is-min"><%= row.recipient.personnelId %></td>
-        <td class="is-min"><%= row.company %></td>
+        <td class="is-min"><%= row.company.text %></td>
         <td class="is-min"><%= row.recipient.department %></td>
         <% metrics.forEach(metric => { %>
         <td class="is-min is-number"><%- row[metric][0].toLocaleString() %></td>

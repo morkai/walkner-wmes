@@ -6,7 +6,8 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/views/OrgUnitPickerFilterView',
-  'app/wmes-osh-reports/templates/rewards/filter'
+  'app/wmes-osh-reports/templates/rewards/filter',
+  'app/core/util/ExpandableSelect'
 ], function(
   currentUser,
   FilterView,
@@ -137,7 +138,7 @@ define([
     getTemplateData: function()
     {
       return {
-        showOrgUnitFilter: this.canViewAll()
+        canViewAll: this.canViewAll()
       };
     },
 

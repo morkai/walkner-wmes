@@ -41,7 +41,7 @@ define([
     {
       if (typeof printer === 'string' && /^[a-f0-9]{24}$/.test(printer))
       {
-        printInPrinter(msg, printer, res.hash);
+        printInPrinter(msg, options, printer, res.hash);
       }
       else
       {
@@ -57,6 +57,13 @@ define([
         time: 2500,
         text: t('core', 'html2pdf:failure')
       });
+
+      broker.publish('html2pdf.completed');
+
+      if (options.done)
+      {
+        options.done();
+      }
     });
   };
 
@@ -106,9 +113,14 @@ define([
     }
 
     broker.publish('html2pdf.completed');
+
+    if (options.done)
+    {
+      options.done();
+    }
   }
 
-  function printInPrinter(msg, printer, hash)
+  function printInPrinter(msg, options, printer, hash)
   {
     viewport.msg.hide(msg);
 
@@ -149,6 +161,11 @@ define([
     req.always(function()
     {
       broker.publish('html2pdf.completed');
+
+      if (options.done)
+      {
+        options.done();
+      }
     });
   }
 });

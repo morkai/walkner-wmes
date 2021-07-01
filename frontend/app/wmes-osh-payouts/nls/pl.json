@@ -1,0 +1,48 @@
+{
+  "BREADCRUMB:reports": "Raporty",
+  "BREADCRUMB:base": "Wynagrodzenie",
+  "BREADCRUMB:browse": "Wypłaty",
+  "BREADCRUMB:details": "Wypłata",
+
+  "PROPERTY:no": "Lp.",
+  "PROPERTY:createdAt": "Czas wypłaty",
+  "PROPERTY:creator": "Wypłacona przez",
+  "PROPERTY:types": "Typ",
+  "PROPERTY:companies": "Firma",
+  "PROPERTY:description": "Opis",
+  "PROPERTY:recipients": "Odbiorcy",
+  "PROPERTY:recipients.personnelId": "Nr kadrowy",
+  "PROPERTY:recipients.label": "Nazwisko i imię",
+  "PROPERTY:recipients.company": "Firma",
+  "PROPERTY:recipients.department": "Dział",
+  "PROPERTY:count": "Zgłoszenia",
+  "PROPERTY:amount": "Kwota",
+
+  "type:kaizen": "Kaizen",
+  "type:observation": "Obserwacje",
+  "type:total": "Suma",
+
+  "amount:total": "suma",
+  "amount:kaizen": "kaizeny",
+  "amount:observation": "obserwacje",
+
+  "count:total": "{count} {count, plural, one{zgłoszenie} few{zgłoszenia} other{zgłoszeń}}",
+  "count:kaizen": "{count} {count, plural, one{kaizen} few{kaizeny} other{kaizenów}}",
+  "count:observation": "{count} {count, plural, one{obserwacja} few{obserwacje} other{obserwacji}}",
+
+  "filter:recipient": "Odbiorca",
+
+  "printDialog:title": "Drukowanie wniosku wypłaty",
+  "printDialog:submit": "Generuj wydruk",
+  "printDialog:docNo": "Nr protokołu",
+  "printDialog:docVersion": "Wydanie",
+  "printDialog:description": "Tytuł",
+  "printDialog:description:default": "Wniosek o wypłacenie nagrody pieniężnej za zrealizowane zgłoszenia",
+  "printDialog:description:kaizen": "Wniosek o wypłacenie nagrody pieniężnej za zrealizowane usprawnienia Kaizen",
+  "printDialog:description:observation": "Wniosek o wypłacenie nagrody pieniężnej za przeprowadzone obserwacje",
+  "printDialog:year": "Rok",
+  "printDialog:quarter": "Kwartał",
+  "printDialog:month": "Miesiąc",
+  "printDialog:period:quarter": "{quarter} kwartał {year}",
+  "printDialog:period:month": "{month} {year}"
+}

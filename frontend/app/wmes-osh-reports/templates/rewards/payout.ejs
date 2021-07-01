@@ -1,14 +1,35 @@
 <form autocomplete="off">
+  <div class="form-group">
+    <label for="<%- id('description') %>" class="control-label"><%- t('rewards:payout:description') %></label>
+    <input id="<%- id('description') %>" name="description" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="<%- id('type') %>" class="control-label"><%- t('rewards:type') %></label>
+    <ul>
+      <% options.type.forEach(type => { %>
+      <li><%= t(`rewards:type:${type}`) %></li>
+      <% }) %>
+    </ul>
+  </div>
+  <% if (options.company.length) { %>
+  <div class="form-group">
+    <label for="<%- id('type') %>" class="control-label"><%- t('rewards:company') %></label>
+    <ul>
+      <% options.company.forEach(company => { %>
+      <li><%= company %></li>
+      <% }) %>
+    </ul>
+  </div>
+  <% } %>
   <table class="table table-condensed table-bordered table-hover">
     <thead>
     <tr>
-      <th class="is-min"><input id="<%- id('toggle') %>" type="checkbox" checked></th>
+      <th class="is-min">#</th>
       <th><%- t('rewards:payout:employee') %></th>
       <th class="is-min"><%- t('rewards:payout:count') %></th>
       <th class="is-min"><%- t('rewards:payout:amount') %></th>
     </tr>
     </thead>
-    <% if (payouts.length) { %>
     <tfoot>
       <tr>
         <td colspan="2"></td>
@@ -16,12 +37,11 @@
         <td id="<%- id('totalAmount') %>" class="is-min is-number"><%- currencyFormatter.format(totals.amount) %></td>
       </tr>
     </tfoot>
-    <% } %>
     <tbody>
-    <% payouts.forEach(payout => { %>
+    <% payouts.forEach((payout, i) => { %>
     <tr>
-      <td class="is-min"><input type="checkbox" name="users[]" value="<%- payout.recipient.id %>" checked></td>
-      <td><%- payout.userInfo %></td>
+      <td class="is-min text-right"><%- i + 1 %>.</td>
+      <td><%- payout.recipient.label %></td>
       <td class="is-min is-number"><%- payout.payout[0].toLocaleString() %></td>
       <td class="is-min is-number"><%- currencyFormatter.format(payout.payout[1]) %></td>
     </tr>
@@ -29,7 +49,7 @@
     </tbody>
   </table>
   <div class="form-actions">
-    <button id="<%- id('submit') %>" class="btn btn-primary" type="submit"><i class="fa fa-money"></i><span><%- t('rewards:payout:submit') %></span></button>
+    <button id="<%- id('submit') %>" class="btn btn-primary" type="submit"><%- t('rewards:payout:submit') %></button>
     <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
 </form>

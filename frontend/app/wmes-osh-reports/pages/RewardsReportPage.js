@@ -47,15 +47,14 @@ define([
       return [{
         icon: 'money',
         label: this.t('rewards:payout:pageAction'),
-        privilege: 'OSH:REWARDS:MANAGE',
         callback: this.showPayoutDialog.bind(this),
-        disabled: true
+        privileges: 'OSH:REWARDS:MANAGE',
+        disabled: !this.model.hasAnyPayouts()
       }, {
         icon: 'dollar',
         label: this.t('rewards:payouts:pageAction'),
-        href: '#osh/rewards/payouts',
-        privilege: 'OSH:REWARDS:MANAGE',
-        disabled: true
+        href: '#osh/payouts',
+        privileges: 'OSH:REPORTS:MANAGE'
       }, {
         icon: 'trophy',
         label: this.t('rewards:list:pageAction'),
@@ -64,7 +63,7 @@ define([
         icon: 'cogs',
         label: this.t('settings:pageAction'),
         href: '#osh/reports;settings?tab=rewards',
-        privilege: 'OSH:REPORTS:MANAGE'
+        privileges: 'OSH:REPORTS:MANAGE'
       }];
     },
 
@@ -138,21 +137,22 @@ define([
     {
       const payouts = this.model.getPayouts();
 
-      // TODO
-      if (1 || !payouts.length)
+      if (!payouts.length)
       {
         return;
       }
 
       const dialogView = new PayoutView({
-        model: {
-          payouts
-        }
+        model: this.model
       });
 
-      this.listenToOnce(dialogView, 'saved', () =>
+      this.listenToOnce(dialogView, 'saved', payout =>
       {
-        this.filterView.$id('submit').click();
+        this.broker.publish('router.navigate', {
+          url: `/osh/payouts/${payout._id}`,
+          trigger: true,
+          replace: false
+        });
       });
 
       viewport.showDialog(dialogView, this.t('rewards:payout:title'));

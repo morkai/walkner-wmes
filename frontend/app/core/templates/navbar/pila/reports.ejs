@@ -4,17 +4,13 @@
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <% [
-        'metrics',
-        'engagement',
-        'observers',
-        'rewards',
-        'count/nearMiss',
-        'count/kaizen',
-        'count/action',
-        'count/observation'
-      ].forEach(report => { %>
-    <li><a href="#osh/reports/<%- report %>"><%- t('wmes-osh-common', `navbar:reports:${report}`) %></a>
-    <% }) %>
+    <li><a href="#osh/reports/metrics"><%- t('wmes-osh-common', `navbar:reports:metrics`) %></a>
+    <li><a href="#osh/reports/engagement"><%- t('wmes-osh-common', `navbar:reports:engagement`) %></a>
+    <li><a href="#osh/reports/observers"><%- t('wmes-osh-common', `navbar:reports:observers`) %></a>
+    <li data-nav-path="osh/reports/rewards osh/rewards osh/payouts"><a href="#osh/reports/rewards"><%- t('wmes-osh-common', `navbar:reports:rewards`) %></a>
+    <li><a href="#osh/reports/count/nearMiss"><%- t('wmes-osh-common', `navbar:reports:count/nearMiss`) %></a>
+    <li><a href="#osh/reports/count/kaizen"><%- t('wmes-osh-common', `navbar:reports:count/kaizen`) %></a>
+    <li><a href="#osh/reports/count/action"><%- t('wmes-osh-common', `navbar:reports:count/action`) %></a>
+    <li><a href="#osh/reports/count/observation"><%- t('wmes-osh-common', `navbar:reports:count/observation`) %></a>
     <li data-privilege="OSH:ACCIDENTS:VIEW"><a href="#osh/reports/count/accident"><%- t('wmes-osh-common', `navbar:reports:count/accident`) %></a>
   </ul>
