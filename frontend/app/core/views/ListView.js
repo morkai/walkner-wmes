@@ -443,7 +443,7 @@ define([
       }
 
       var Model = this.collection.model;
-      var model = new Model(message.model || message);
+      var model = new Model(message.model || message, {parse: true});
 
       if (!model.id)
       {
