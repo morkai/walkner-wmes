@@ -44,7 +44,8 @@ define([
     defaultFormData: function()
     {
       return {
-        dateFilter: 'createdAt'
+        dateFilter: 'createdAt',
+        type: ['kaizen', 'observation']
       };
     },
 
@@ -65,6 +66,10 @@ define([
       {
         formData[propertyName] = term.args[1];
         formData.mode = 'employee';
+      },
+      'type': (propertyName, term, formData) =>
+      {
+        formData[propertyName] = term.args[1];
       }
     },
 
@@ -126,6 +131,13 @@ define([
           selector.push({name: 'eq', args: [mode, currentUser.data._id]});
         }
       }
+
+      const type = this.$id('type').val() || [];
+
+      if (type.length && type.length !== this.$id('type')[0].length)
+      {
+        selector.push({name: 'in', args: ['type', type]});
+      }
     },
 
     getTemplateData: function()
@@ -138,6 +150,8 @@ define([
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
+
+      this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('employee'), {
         view: this,
