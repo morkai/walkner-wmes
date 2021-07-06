@@ -22,7 +22,7 @@ define([
     columns: [
       {id: 'rid', className: 'is-min', tdClassName: 'text-mono'},
       {id: 'recipient', className: 'is-min'},
-      {id: 'subject', className: 'is-overflow w300'},
+      {id: 'subject', className: 'is-overflow w350'},
       {id: 'amount', className: 'is-min', tdClassName: 'text-right'},
       {id: 'createdAt', className: 'is-min'},
       {id: 'creator', className: 'is-min'},
