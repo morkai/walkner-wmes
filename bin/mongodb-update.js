@@ -3,8 +3,5 @@
 
 'use strict';
 
-db.oshpayouts.createIndex({createdAt: -1});
-db.oshpayouts.createIndex({types: 1, createdAt: -1});
-db.oshpayouts.createIndex({'recipients.id': 1, createdAt: -1});
-db.oshpayouts.createIndex({'companies.id': 1, createdAt: -1});
-db.oshpayouts.createIndex({'recipients.entries': 1});
+db.settings.updateOne({_id: 'users.presence.lastRecord'}, {$set: {value: 850000}});
+db.settings.updateOne({_id: 'users.presence.hardware'}, {$set: {value: "10089:1 Brama główna 1\n10082:1 Brama główna 2\n10079:1 Bramka uchylna na portierni"}});
