@@ -25,35 +25,27 @@ define([
 
     labelAttribute: '_id',
 
-    defaults: {
-      name: null,
-      mrp: null,
-      materialNorm: null,
-      operations: null,
-      importTs: null
+    parse: function(res)
+    {
+      res.operations = new OperationCollection(res.operations);
+
+      return res;
     },
 
-    parse: function(data, xhr)
+    serialize: function()
     {
-      data = Model.prototype.parse.call(this, data, xhr);
+      var obj = this.toJSON();
 
-      data.operations = new OperationCollection(data.operations);
-
-      return data;
-    },
-
-    toJSON: function()
-    {
-      var order = Model.prototype.toJSON.call(this);
-
-      if (order.importTs)
+      if (obj.importTs)
       {
-        order.importTs = time.format(order.importTs, 'L, LTS');
+        obj.importTs = time.format(obj.importTs, 'L, LTS');
       }
 
-      order.operations = order.operations === null ? [] : order.operations.toJSON();
+      obj.materialNorm = (obj.materialNorm || 0).toLocaleString();
 
-      return order;
+      obj.operations = obj.operations ? obj.operations.toJSON() : [];
+
+      return obj;
     }
 
   });

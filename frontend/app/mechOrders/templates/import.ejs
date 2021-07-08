@@ -1,10 +1,29 @@
 <form class="mechOrders-import">
   <div class="form-group">
-    <label for="<%- idPrefix %>-file"><%- t('mechOrders', 'import:file') %></label>
-    <input id="<%- idPrefix %>-file" name="mechOrders" class="form-control" type="file" autofocus>
+    <label for="<%- id('file') %>"><%- t('import:file') %></label>
+    <input id="<%- id('file') %>" name="mechOrders" class="form-control" type="file" accept=".csv">
   </div>
+  <p>
+    Plik musi mieć rozszerzenie <code>.csv</code>.
+    Kolumny muszą być oddzielone średnikiem <code>;</code>.
+    Kolejność kolumn ma znaczenie:
+  </p>
+  <ol>
+    <li>12NC</li>
+    <li>Nazwa wyrobu</li>
+    <li>Nr operacji</li>
+    <li>WorkCenter operacji</li>
+    <li>Nazwa operacji</li>
+    <li>-</li>
+    <li>Czas Machine Setup</li>
+    <li>Czas Labor Setup</li>
+    <li>Czas Machine</li>
+    <li>Czas Labor</li>
+    <li>Norma materiałowa</li>
+    <li>Kontroler MRP</li>
+  </ol>
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary"><%- t('mechOrders', 'import:submit') %></button>
-    <button type="button" class="cancel btn btn-link"><%- t('mechOrders', 'import:cancel') %></button>
+    <button type="submit" class="btn btn-primary"><%- t('import:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('import:cancel') %></button>
   </div>
 </form>

@@ -31,54 +31,53 @@ define([
       'mechOrders.synced': 'refreshCollection',
       'mechOrders.edited': function(message)
       {
-        var data = message.model;
-        var mechOrder = this.collection.get(data._id);
+        const data = message.model;
+        const mechOrder = this.collection.get(data._id);
 
         if (mechOrder && data.mrp !== mechOrder.get('mrp'))
         {
           mechOrder.set('mrp', data.mrp);
 
-          this.$('.list-item[data-id=' + mechOrder.id + '] > td[data-id=mrp]').html(
+          this.$(`.list-item[data-id="${mechOrder.id}"] > td[data-id="mrp"]`).html(
             this.prepareMrpCell(data.mrp)
           );
         }
       }
     },
 
-    events: _.assign(ListView.prototype.events, {
+    events: Object.assign({
+
       'click .mechOrders-editMrp': 'showMrpEditor'
-    }),
+
+    }, ListView.prototype.events),
 
     columns: [
-      {id: '_id', className: 'is-min text-fixed'},
+      {id: '_id', className: 'is-min', tdClassName: 'text-fixed'},
       {id: 'name', className: 'is-min'},
       {id: 'mrp', className: 'is-min'},
-      {id: 'materialNorm', className: 'is-min is-number'},
+      {id: 'materialNorm', className: 'is-min', tdClassName: 'is-number'},
       '-'
     ],
 
     serializeActions: function()
     {
-      var collection = this.collection;
-
-      return function(row)
+      return row =>
       {
-        return [ListView.actions.viewDetails(collection.get(row._id))];
+        return [ListView.actions.viewDetails(this.collection.get(row._id))];
       };
     },
 
     serializeRows: function()
     {
-      var view = this;
-      var canManage = user.isAllowedTo('ORDERS:MANAGE');
+      const canManage = user.isAllowedTo('ORDERS:MANAGE');
 
-      return this.collection.map(function(mechOrder)
+      return this.collection.map(mechOrder =>
       {
-        var row = mechOrder.toJSON();
+        var row = mechOrder.serialize();
 
         if (canManage)
         {
-          row.mrp = view.prepareMrpCell(row.mrp);
+          row.mrp = this.prepareMrpCell(row.mrp);
         }
 
         return row;
@@ -87,7 +86,7 @@ define([
 
     prepareMrpCell: function(mrp)
     {
-      var html = '';
+      let html = '';
 
       if (mrp)
       {
@@ -95,7 +94,7 @@ define([
       }
 
       html += ' <button class="btn btn-link mechOrders-editMrp">'
-        + t('mechOrders', 'list:mrp:' + (mrp ? 'edit' : 'set'))
+        + this.t(`list:mrp:${mrp ? 'edit' : 'set'}`)
         + '</button>';
 
       return html;
@@ -103,18 +102,16 @@ define([
 
     showMrpEditor: function(e)
     {
-      var $td = this.$(e.target).closest('td');
-      var mechOrder = this.collection.get($td.parent().attr('data-id'));
-      var view = this;
-
-      var $input = $('<input type="text" autocomplete="new-password">');
+      const $td = this.$(e.target).closest('td');
+      const mechOrder = this.collection.get($td.parent().attr('data-id'));
+      const $input = $('<input type="text" autocomplete="off">');
 
       $td.empty().append($input);
 
       $input.select2({
         allowClear: true,
-        placeholder: t('mechOrders', 'list:mrp:placeholder'),
-        data: mrpControllers.map(function(mrpController)
+        placeholder: this.t('list:mrp:placeholder'),
+        data: mrpControllers.map(mrpController =>
         {
           return {
             id: mrpController.id,
@@ -123,18 +120,18 @@ define([
         })
       });
 
-      $input.on('change', function(e)
+      $input.on('change', e =>
       {
-        var newMrp = e.val.length ? e.val : null;
+        const newMrp = e.val.length ? e.val : null;
 
         if (newMrp === mechOrder.get('mrp'))
         {
-          return $td.html(view.prepareMrpCell(newMrp));
+          return $td.html(this.prepareMrpCell(newMrp));
         }
 
-        $td.html('<i class="fa fa-spinner fa-spin"></i><span>' + newMrp + '</span>');
+        $td.html(`<i class="fa fa-spinner fa-spin"></i><span>${newMrp}</span>`);
 
-        view.updateMrp(mechOrder, newMrp, $td);
+        this.updateMrp(mechOrder, newMrp, $td);
 
         $td.parent().next('tr').find('.mechOrders-editMrp').focus();
       });
@@ -144,26 +141,25 @@ define([
 
     updateMrp: function(mechOrder, newMrp, $td)
     {
-      var oldMrp = mechOrder.get('mrp');
-      var startTime = Date.now();
-      var req = this.promised(mechOrder.save('mrp', newMrp, {patch: true}));
-      var view = this;
+      const oldMrp = mechOrder.get('mrp');
+      const startTime = Date.now();
+      const req = this.promised(mechOrder.save('mrp', newMrp, {patch: true}));
 
-      req.then(function()
+      req.then(() =>
       {
-        view.delay(500, startTime, function() { $td.html(view.prepareMrpCell(newMrp)); });
+        this.delay(500, startTime, () => $td.html(this.prepareMrpCell(newMrp)));
       });
 
-      req.fail(function()
+      req.fail(() =>
       {
         mechOrder.set('mrp', oldMrp);
 
-        $td.html(view.prepareMrpCell(oldMrp));
+        $td.html(this.prepareMrpCell(oldMrp));
 
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('mechOrders', 'list:mrp:failure', {
+          text: this.t('list:mrp:failure', {
             nc12: mechOrder.id
           })
         });

@@ -1,21 +1,21 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/viewport',
   'app/core/View',
   'app/mechOrders/templates/import'
 ], function(
-  t,
   viewport,
   View,
-  importTemplate
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: importTemplate,
+    template,
+
+    nlsDomain: 'mechOrders',
 
     events: {
       'submit': 'upload'
@@ -32,41 +32,37 @@ define([
     {
       e.preventDefault();
 
-      var $submit = this.$('[type=submit]').attr('disabled', true);
+      const $submit = this.$('[type="submit"]').attr('disabled', true);
 
-      var formData = new FormData(this.el);
-
-      var req = this.ajax({
+      const req = this.ajax({
         type: 'POST',
         url: '/mechOrders;import',
-        data: formData,
+        data: new FormData(this.el),
         processData: false,
         contentType: false
       });
 
-      var closeDialog = this.closeDialog;
-
-      req.then(function()
+      req.then(() =>
       {
         viewport.msg.show({
           type: 'info',
           time: 2500,
-          text: t('mechOrders', 'import:msg:success')
+          text: this.t('import:msg:success')
         });
 
-        closeDialog();
+        this.closeDialog();
       });
 
-      req.fail(function()
+      req.fail(() =>
       {
         viewport.msg.show({
           type: 'error',
           time: 5000,
-          text: t('mechOrders', 'import:msg:failure')
+          text: this.t('import:msg:failure')
         });
       });
 
-      req.always(function()
+      req.always(() =>
       {
         $submit.attr('disabled', false);
       });
