@@ -225,20 +225,17 @@ define([
     }
   };
 
+  broker.subscribe('socket.connected', function()
+  {
+    if (dictionaries.loaded)
+    {
+      dictionaries.loaded = false;
+      dictionaries.load();
+    }
+  });
+
   broker.subscribe('user.reloaded', function()
   {
-    if (kaizenSeenSub)
-    {
-      kaizenSeenSub.cancel();
-      kaizenSeenSub = null;
-    }
-
-    if (suggestionSeenSub)
-    {
-      suggestionSeenSub.cancel();
-      suggestionSeenSub = null;
-    }
-
     subToSeenMessages();
   });
 
@@ -263,6 +260,18 @@ define([
 
   function subToSeenMessages()
   {
+    if (kaizenSeenSub)
+    {
+      kaizenSeenSub.cancel();
+      kaizenSeenSub = null;
+    }
+
+    if (suggestionSeenSub)
+    {
+      suggestionSeenSub.cancel();
+      suggestionSeenSub = null;
+    }
+
     if (pubsubSandbox)
     {
       kaizenSeenSub = pubsubSandbox.subscribe('kaizen.orders.seen.' + currentUser.data._id, handleKaizenSeenMessage);
