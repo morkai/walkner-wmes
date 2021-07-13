@@ -75,6 +75,11 @@ define([
 
       'click .osh-observations-form-radio': function(e)
       {
+        if (e.target.tagName === 'INPUT')
+        {
+          return;
+        }
+
         const $radio = this.$(e.currentTarget).find('input');
 
         $radio.prop('checked', !$radio.prop('checked')).trigger('change');

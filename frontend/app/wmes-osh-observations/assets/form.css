@@ -50,9 +50,12 @@
   right: -1px;
   bottom: -1px;
   display: flex;
-  opacity: 0.1;
 }
-.osh-observations-form-category:hover .osh-observations-form-actions {
+.osh-observations-form-actions > .btn {
+  opacity: 0.25;
+}
+.osh-observations-form-actions > .btn:focus,
+.osh-observations-form-category:hover .osh-observations-form-actions > .btn {
   opacity: 1;
 }
 .osh-observations-form-actions > .btn {
