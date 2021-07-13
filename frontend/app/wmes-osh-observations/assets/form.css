@@ -5,12 +5,23 @@
  font-weight: bold;
 }
 .osh-observations-form-textarea {
+  position: relative;
   width: 285px;
   min-width: 285px;
 }
 .osh-observations-form-textarea > textarea {
   resize: none;
   height: 40px;
+}
+@media (min-width: 1680px) {
+  .osh-observations-form-textarea > textarea:focus {
+    position: absolute;
+    z-index: 3;
+    top: 5px;
+    left: 5px;
+    width: 559px;
+    height: 114px;
+  }
 }
 .osh-observations-form-radio {
   cursor: pointer;
