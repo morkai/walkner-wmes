@@ -84,8 +84,8 @@ define([
         topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onSubdivisionAutoDowntime';
         topics['production.autoDowntimes.' + prodLineId] = 'onLineAutoDowntime';
         topics['production.taktTime.snChecked.' + prodLineId] = 'onSnChecked';
-        topics['isaRequests.created.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
-        topics['isaRequests.updated.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
+        topics['isa.requests.created.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
+        topics['isa.requests.updated.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
         topics['orders.updated.*'] = 'onOrderUpdated';
       }
 
@@ -146,7 +146,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        t('production', 'breadcrumbs:base'),
+        this.t('breadcrumbs:base'),
         this.model.getLabel()
       ];
     },
@@ -403,12 +403,17 @@ define([
         page.checkSpigot();
       });
 
+      page.listenTo(model, 'message:show', function(message)
+      {
+        page.onMessageRequested({message: message});
+      });
+
       page.listenTo(model.prodShiftOrder, 'change:mechOrder', function()
       {
         page.$el.toggleClass('is-mechOrder', model.prodShiftOrder.isMechOrder());
       });
 
-      this.listenTo(model.settings, 'reset change', this.toggleTaktTimeView);
+      page.listenTo(model.settings, 'reset change', this.toggleTaktTimeView);
 
       page.listenTo(page.downtimesView, 'corroborated', function()
       {
@@ -1047,7 +1052,15 @@ define([
 
       scanInfo.sapTaktTime = typeof sapTaktTime === 'number' ? sapTaktTime : 0;
 
-      if (state !== 'working')
+      if (snManager.contains(scanInfo._id))
+      {
+        error = 'ALREADY_USED';
+      }
+      else if (snManager.isExtraPsnEnabled())
+      {
+        logEntry = snManager.createDynamicLogEntry(scanInfo);
+      }
+      else if (state !== 'working')
       {
         error = 'INVALID_STATE:' + state;
       }
@@ -1061,10 +1074,6 @@ define([
         {
           error = 'INVALID_ORDER';
         }
-      }
-      else if (snManager.contains(scanInfo._id))
-      {
-        error = 'ALREADY_USED';
       }
 
       if (error)
@@ -1120,20 +1129,38 @@ define([
       if (this.timers.hideMessage)
       {
         clearTimeout(this.timers.hideMessage);
+        this.timers.hideMessage = null;
       }
 
-      this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), message.time || 60000);
+      if (message.time >= 0)
+      {
+        this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), message.time || 60000);
+      }
+
+      var $message = this.$id('message');
+
+      if ($message.data('message'))
+      {
+        this.model.trigger('message:hidden', $message.data('message'));
+      }
+
+      var $outer = this.$id('message-outer');
+
+      $outer.css('marginTop', '');
 
       this.$id('message-inner')
         .html(html);
 
-      this.$id('message')
+      $message
+        .data('message', message)
         .attr('data-type', message.type || 'info')
-        .css({marginTop: ''})
-        .removeClass('hidden')
-        .css({marginTop: (this.$id('message-outer').outerHeight() / 2 * -1) + 'px'});
+        .removeClass('hidden');
+
+      $outer.css('marginTop', ($outer.outerHeight() / 2 * -1) + 'px');
 
       document.body.click();
+
+      this.model.trigger('message:shown', message);
     },
 
     hideMessage: function()
@@ -1144,7 +1171,15 @@ define([
         this.timers.hideMessage = null;
       }
 
-      this.$id('message').addClass('hidden');
+      var $message = this.$id('message');
+      var message = $message.data('message');
+
+      $message.removeData('message').addClass('hidden');
+
+      if (message)
+      {
+        this.model.trigger('message:hidden', message);
+      }
     }
 
   });

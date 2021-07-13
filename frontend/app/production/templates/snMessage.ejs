@@ -1,11 +1,15 @@
 <div id="snMessage" class="production-snMessage hidden">
-  <p id="snMessage-text" class="production-snMessage-text">Lorem ipsum dolor sit amet...</p>
-  <div class="production-snMessage-props">
-    <% ['scannedValue', 'orderNo', 'serialNo'].forEach(function(prop) { %>
-      <p class="production-snMessage-prop">
-        <span class="production-snMessage-prop-name"><%- t('snMessage:' + prop) %></span>
-        <span id="snMessage-<%- prop %>" class="production-snMessage-prop-value">?</span>
-      </p>
-    <% }) %>
+  <div class="production-snMessage-outer">
+    <div class="production-snMessage-inner">
+      <p id="snMessage-text" class="production-snMessage-text"></p>
+      <div class="production-snMessage-props">
+        <% ['scannedValue', 'orderNo', 'serialNo'].forEach(function(prop) { %>
+        <p class="production-snMessage-prop">
+          <span class="production-snMessage-prop-name"><%- t('production', 'snMessage:' + prop) %></span>
+          <span id="snMessage-<%- prop %>" class="production-snMessage-prop-value">?</span>
+        </p>
+        <% }) %>
+      </div>
+    </div>
   </div>
 </div>

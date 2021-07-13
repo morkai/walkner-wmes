@@ -80,3 +80,9 @@
     margin-bottom: 6px;
   }
 }
+.is-embedded.modal-open .embedded-actions.embedded-right {
+  right: 17px;
+}
+.is-embedded.modal-open .production-controls {
+  margin-right: 17px;
+}

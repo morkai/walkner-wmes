@@ -40,6 +40,7 @@ define([
     time: 0
   };
   var scanInfoQueue = null;
+  var extraPsn = false;
 
   function handleScanBuffer(buffer)
   {
@@ -160,6 +161,11 @@ define([
         return;
       }
 
+      if (!scanInfo)
+      {
+        scanInfo = {_id: ''};
+      }
+
       var $message = $('#snMessage');
 
       if (!$message.length)
@@ -200,9 +206,10 @@ define([
         .toggleClass('hidden', noSerialNo);
 
       $message
-        .css({top: '50%', marginTop: '-80px'})
-        .removeClass('hidden is-success is-error is-warning')
+        .removeClass('hidden is-info is-success is-error is-warning')
         .addClass('is-' + severity);
+
+      document.body.classList.add('production-snMessage-active');
 
       if (this.view.timers.hideSnMessage)
       {
@@ -226,6 +233,8 @@ define([
       this.view.timers.hideSnMessage = null;
 
       $('#snMessage').addClass('hidden');
+
+      document.body.classList.remove('production-snMessage-active');
     },
     createDynamicLogEntry: function(scanInfo)
     {
@@ -241,6 +250,7 @@ define([
       };
 
       scanInfo.sapTaktTime = -1;
+      scanInfo.extraPsn = extraPsn;
 
       return logEntry;
     },
@@ -469,7 +479,7 @@ define([
             return;
           }
 
-          if (updateModel)
+          if (updateModel && logEntry._id)
           {
             logEntry.data.error = 'SERVER_FAILURE';
 
@@ -524,7 +534,7 @@ define([
               snManager.add(res.serialNumber);
             }
 
-            if (updateModel)
+            if (updateModel && logEntry._id)
             {
               logEntry.data.error = res.result;
 
@@ -591,6 +601,14 @@ define([
 
         viewport.showDialog(dialogView, t('production', 'bomChecker:title'));
       }
+    },
+    isExtraPsnEnabled: function()
+    {
+      return extraPsn;
+    },
+    toggleExtraPsn: function()
+    {
+      extraPsn = !extraPsn;
     }
   };
 });

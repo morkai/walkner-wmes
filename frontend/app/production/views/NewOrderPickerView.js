@@ -863,6 +863,11 @@ define([
 
       _.forEach(orderPickerHelpers.prepareOperations(order.operations), function(op)
       {
+        if (!op.name)
+        {
+          return;
+        }
+
         var className = 'btn btn-lg btn-default ' + (op.no === active ? 'active' : '');
 
         html += '<button type="button" class="' + className + '" data-operation="' + op.no + '">'

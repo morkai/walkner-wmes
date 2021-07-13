@@ -29,7 +29,7 @@ define([
 
     clientUrl: '#production;settings',
 
-    template: template,
+    template,
 
     events: _.assign({
       'change input[data-setting]': function(e)
@@ -278,13 +278,20 @@ define([
         placeholder: this.t('settings:lineAutoDowntimes:groups:placeholder'),
         data: (this.settings.getValue('lineAutoDowntimes') || []).map(lineAutoDowntime =>
         {
+          const lines = lineAutoDowntime.lines.join(', ');
+
           return {
             id: lineAutoDowntime.id,
             text: lineAutoDowntime.name,
-            lines: lineAutoDowntime.lines.join(', ')
+            lines,
+            search: (lineAutoDowntime.name.toUpperCase() + ' ' + lines.toUpperCase()).replace(/[^A-Z0-9]+/g, '')
           };
         }),
-        formatResult: formatResultWithDescription.bind(null, 'text', 'lines')
+        formatResult: formatResultWithDescription.bind(null, 'text', 'lines'),
+        matcher: (term, text, item) =>
+        {
+          return item.search.includes(term.toUpperCase().replace(/[^A-Z0-9]+/g, ''));
+        }
       });
 
       if (this.selectedAutoDowntimeGroup)

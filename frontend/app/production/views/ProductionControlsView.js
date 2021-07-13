@@ -8,6 +8,7 @@ define([
   'app/core/util/embedded',
   'app/mor/Mor',
   'app/mor/views/MorView',
+  '../snManager',
   './UnlockDialogView',
   './LockDialogView',
   './ComponentLabelsDialogView',
@@ -20,6 +21,7 @@ define([
   embedded,
   Mor,
   MorView,
+  snManager,
   UnlockDialogView,
   LockDialogView,
   ComponentLabelsDialogView,
@@ -74,6 +76,7 @@ define([
     events: {
       'click #-mor': 'showMor',
       'click #-componentLabels': 'showComponentLabels',
+      'click #-extraPsn': 'toggleExtraPsn',
       'click a.production-controls-addNearMiss': 'addNearMiss',
       'click a.production-controls-addSuggestion': 'addSuggestion',
       'click a.production-controls-addObservation': 'addObservation',
@@ -126,6 +129,7 @@ define([
     initialize: function()
     {
       this.mor = null;
+      this.extraPsn = false;
     },
 
     afterRender: function()
@@ -285,6 +289,22 @@ define([
       });
 
       viewport.showDialog(dialogView, this.t('componentLabels:title'));
+    },
+
+    toggleExtraPsn: function()
+    {
+      snManager.toggleExtraPsn();
+
+      this.model.trigger('message:show', {
+        type: 'info',
+        text: this.t('snMessage:extraPsn:scan'),
+        time: -1
+      });
+
+      this.listenToOnce(this.model, 'message:hidden', function()
+      {
+        snManager.toggleExtraPsn();
+      });
     }
 
   });

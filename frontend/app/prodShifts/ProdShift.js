@@ -920,29 +920,34 @@ define([
 
     updateTaktTime: function(data)
     {
-      snManager.add(data.serialNumber);
+      var sn = data.serialNumber;
 
-      var quantitiesDone = this.get('quantitiesDone');
+      snManager.add(sn);
 
-      if (!quantitiesDone)
+      if (data.hourlyQuantityDone)
       {
-        quantitiesDone = this.attributes.quantitiesDone = [
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0},
-          {planned: 0, actual: 0}
-        ];
+        var quantitiesDone = this.get('quantitiesDone');
+
+        if (!quantitiesDone)
+        {
+          quantitiesDone = this.attributes.quantitiesDone = [
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0},
+            {planned: 0, actual: 0}
+          ];
+        }
+
+        quantitiesDone[data.hourlyQuantityDone.index].actual = data.hourlyQuantityDone.value;
+
+        this.trigger('change:quantitiesDone', this, quantitiesDone, {});
       }
 
-      quantitiesDone[data.hourlyQuantityDone.index].actual = data.hourlyQuantityDone.value;
-
-      this.trigger('change:quantitiesDone', this, quantitiesDone, {});
-
-      if (!data.serialNumber.prodShiftOrder || data.serialNumber.prodShiftOrder === this.prodShiftOrder.id)
+      if (data.quantityDone >= 0 && (!sn.prodShiftOrder || sn.prodShiftOrder === this.prodShiftOrder.id))
       {
         this.prodShiftOrder.set({
           quantityDone: data.quantityDone,

@@ -63,32 +63,48 @@
   position: fixed;
   top: 0;
   left: 0;
-  padding: 15px 0;
-  width: 100%;
-  background: #EEE;
-  background: linear-gradient(to right, #fff, #f0ad4e, #fff);
-  border-top: 1px solid #f0ad4e;
-  border-bottom: 1px solid #f0ad4e;
-  color: #fff;
-  line-height: 1;
-  box-shadow: 0 24px 64px #333;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .5);
   z-index: 1041;
 }
-.production-snMessage.is-error {
-  background: linear-gradient(to right, #fff, #d9534f, #fff);
-  border-color: #d43f3a;
+.production-snMessage-outer {
+  position: fixed;
+  display: flex;
+  top: 50%;
+  left: 0;
+  padding: 15px 0;
+  margin-top: -90px;
+  width: 100%;
+  min-height: 180px;
+  background-color: #0af;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  text-align: center;
   color: #fff;
+  line-height: 1;
+  box-shadow: 0 0 200px #333;
 }
-.production-snMessage.is-success {
-  background: linear-gradient(to right, #fff, #5cb85c, #fff);
-  border-color: #5cb85c;
-  color: #fff;
+.production-snMessage.is-warning .production-snMessage-outer {
+  background-color: #f0ad4e;
 }
-.production-snMessage-text {
+.production-snMessage.is-error .production-snMessage-outer {
+  background-color: #d9534f;
+}
+.production-snMessage.is-success .production-snMessage-outer {
+  background-color: #5cb85c;
+}
+.production-snMessage-inner {
   margin: auto;
-  width: 550px;
+  width: 700px;
   font-size: 36px;
   text-align: center;
+  text-shadow: 1px 1px 1px #333;
+}
+
+.modal-open .production-snMessage {
+  right: 17px;
+  width: auto;
 }
 .production-snMessage-props {
   display: flex;

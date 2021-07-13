@@ -27,6 +27,7 @@
     "controls:msg:popup": "The popup window has been blocked.",
     "controls:mor": "Matrix of responsibility",
     "controls:componentLabels": "Component label printing",
+    "controls:extraPsn": "Extra serial number scanning",
 
     "unlockDialog:title:unlock": "Production line activation",
     "unlockDialog:title:lock": "Production line deactivation",
@@ -296,10 +297,13 @@
     "snMessage:OFFLINE": "Failed to connect to the server.",
     "snMessage:SHIFT_NOT_FOUND": "Line shift not found.",
     "snMessage:ORDER_NOT_FOUND": "Line order not found.",
+    "snMessage:SAP_ORDER_NOT_FOUND": "Production order not found.",
     "snMessage:STANDARD_LABEL": "The virtual SN cannot be used in this order.",
     "snMessage:SUCCESS": "Serial number successfully registered.",
     "snMessage:MAX_TOTAL": "Order completed.",
     "snMessage:MAX_LINE": "Line order completed.",
+    "snMessage:ORDER_NO_REQUIRED": "Order no in the serial no is required.",
+    "snMessage:extraPsn:scan": "Scan additional serial number...",
 
     "bomChecker:title": "Checking components",
     "bomChecker:message:todo": "Scan the component label.",

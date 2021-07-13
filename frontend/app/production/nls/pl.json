@@ -26,6 +26,7 @@
   "controls:msg:popup": "Wyskakujące okienko zostało zablokowane.",
   "controls:mor": "Matryca odpowiedzialności",
   "controls:componentLabels": "Drukowanie etykiet komponentów",
+  "controls:extraPsn": "Doskanowywanie numerów seryjnych",
 
   "unlockDialog:title:unlock": "Aktywacja Formatki operatora",
   "unlockDialog:title:lock": "Dezaktywacja Formatki operatora",
@@ -293,10 +294,13 @@
   "snMessage:OFFLINE": "Błąd połączenia z serwerem.",
   "snMessage:SHIFT_NOT_FOUND": "Nie znaleziono zmiany z linii.",
   "snMessage:ORDER_NOT_FOUND": "Nie znaleziono zlecenia z linii.",
+  "snMessage:SAP_ORDER_NOT_FOUND": "Nie znaleziono zlecenia produkcyjnego.",
   "snMessage:STANDARD_LABEL": "Nie można używać wirtualnego numeru seryjnego w tym zleceniu.",
   "snMessage:SUCCESS": "Numer seryjny został pomyślnie zarejestrowany.",
   "snMessage:MAX_TOTAL": "Wykonano już wszystkie sztuki w zleceniu.",
   "snMessage:MAX_LINE": "Wykonano już wszystkie sztuki zaplanowane dla linii.",
+  "snMessage:ORDER_NO_REQUIRED": "Nr zlecenia w nr seryjnym jest wymagany.",
+  "snMessage:extraPsn:scan": "Zeskanuj dodatkowy numer seryjny...",
 
   "bomChecker:title": "Sprawdzanie komponentów",
   "bomChecker:message:todo": "Zeskanuj etykietę komponentu.",

@@ -2,9 +2,11 @@
 
 define([
   '../time',
+  '../user',
   '../core/Model'
 ], function(
   time,
+  user,
   Model
 ) {
   'use strict';
@@ -26,10 +28,12 @@ define([
       var o = this.toJSON();
 
       o.className = o.taktTime > o.sapTaktTime * 1000 ? 'warning' : 'success';
-      o.orderNo = '<a href="#prodShiftOrders/' + o.prodShiftOrder + '">' + o.orderNo + '</a>';
+      o.orderNo = o.prodShiftOrder && user.isAllowedTo('PROD_DATA:VIEW')
+        ? `<a href="#prodShiftOrders/${o.prodShiftOrder}">${o.orderNo}</a>`
+        : o.orderNo;
       o.scannedAt = time.format(o.scannedAt, 'L, LTS');
       o.iptAt = o.iptAt ? time.format(o.iptAt, 'L, LTS') : null;
-      o.taktTime = time.toString(Math.round(o.taktTime / 1000));
+      o.taktTime = o.taktTime ? time.toString(Math.round(o.taktTime / 1000)) : '';
       o.iptTaktTime = o.iptTaktTime ? time.toString(Math.round(o.iptTaktTime / 1000)) : '';
       o.sapTaktTime = o.sapTaktTime ? time.toString(o.sapTaktTime) : '';
       o.bom = !Array.isArray(o.bom) ? '' : o.bom.map(function(v) { return v.split(':')[0]; }).join(', ');
