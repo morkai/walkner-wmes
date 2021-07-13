@@ -153,7 +153,7 @@
             }) %>
           </div>
           <% } %>
-          <% if (editMode) { %>
+          <% if (editMode && model.status !== 'new') { %>
             <div class="row">
               <%- helpers.formGroup({
                 name: 'solution',
