@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'app/viewport',
+  'app/wmes-osh-common/dictionaries',
   'app/wmes-osh-common/pages/DetailsPage',
   'app/wmes-osh-common/views/AttachmentsView',
   'app/wmes-osh-common/views/PanelView',
@@ -15,6 +16,7 @@ define([
   _,
   $,
   viewport,
+  dictionaries,
   DetailsPage,
   AttachmentsView,
   PanelView,
@@ -206,7 +208,10 @@ define([
       const req = this.ajax({
         method: 'PATCH',
         url: this.model.url(),
-        data: JSON.stringify({status: 'finished'})
+        data: JSON.stringify({
+          status: 'finished',
+          reward: dictionaries.settings.getValue('rewards.kaizens.default', 0)
+        })
       });
 
       req.fail(() => viewport.msg.savingFailed());
