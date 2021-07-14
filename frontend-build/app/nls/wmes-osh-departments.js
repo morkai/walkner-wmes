@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(n){return{root:{},pl:!0}});
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMB:browse":function(n){return"Departments"},"PROPERTY:active":function(n){return"Active?"},"PROPERTY:workplace":function(n){return"Workplace"},"PROPERTY:shortName":function(n){return"Short name"},"PROPERTY:longName":function(n){return"Long name"},"PROPERTY:coordinators":function(n){return"Coordinators"},"PROPERTY:syncPatterns":function(n){return"User matching patterns"}},pl:!0}});
