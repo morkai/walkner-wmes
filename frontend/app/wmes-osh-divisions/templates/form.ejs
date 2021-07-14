@@ -21,18 +21,6 @@
         required: true,
         maxLength: 200
       }) %>
-      <%- helpers.formGroup({
-        name: 'minEngagement',
-        label: 'PROPERTY:',
-        type: 'number', min: 0, max: 100,
-        inputStyle: {width: '75px'}
-      }) %>
-      <%- helpers.formGroup({
-        name: 'minObservers',
-        label: 'PROPERTY:',
-        type: 'number', min: 0, max: 100,
-        inputStyle: {width: '75px'}
-      }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

@@ -1,6 +1,34 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Accidents",
 
+    "PROPERTY:rid": "ID",
+    "PROPERTY:status": "Status",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:coordinators": "Coordinators",
+    "PROPERTY:division": "Division",
+    "PROPERTY:workplace": "Workplace",
+    "PROPERTY:department": "Department",
+    "PROPERTY:building": "Building",
+    "PROPERTY:location": "Area",
+    "PROPERTY:station": "Workstation",
+    "PROPERTY:locationPath": "Event location",
+    "PROPERTY:eventDate": "Event date",
+    "PROPERTY:subject": "Subject",
+    "PROPERTY:description": "Description",
+    "PROPERTY:comment": "Comment",
+    "PROPERTY:attachments": "Attachments",
+
+    "details:general": "General info",
+    "details:users": "Users",
+    "details:extra": "Additional info",
+    "details:eventDate:format": "LL, LT",
+
+    "FORM:subtitle": "Accident",
+    "FORM:ACTION:add": "Add accident",
+    "FORM:eventTime:placeholder": "hh:mm",
+    "FORM:eventTime:title": "Time of the event"
   },
   "pl": true
 }

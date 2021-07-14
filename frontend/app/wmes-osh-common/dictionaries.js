@@ -78,7 +78,8 @@ define([
     nearMiss: 'Z',
     kaizen: 'K',
     action: 'A',
-    observation: 'O'
+    observation: 'O',
+    accident: 'W'
   };
   const PREFIX_TO_TYPE = {
     Z: 'nearMiss',

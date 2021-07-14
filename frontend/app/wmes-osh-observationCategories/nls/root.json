@@ -1,6 +1,11 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Observation categories",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description"
   },
   "pl": true
 }

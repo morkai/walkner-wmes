@@ -1,6 +1,51 @@
 {
   "root": {
+    "BREADCRUMB:reports": "Reports",
+    "BREADCRUMB:base": "Remuneration",
+    "BREADCRUMB:browse": "Payouts",
+    "BREADCRUMB:details": "Payout",
 
+    "PROPERTY:no": "#",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:types": "Type",
+    "PROPERTY:companies": "Company",
+    "PROPERTY:description": "Description",
+    "PROPERTY:recipients": "Recipients",
+    "PROPERTY:recipients.personnelId": "Personnel ID",
+    "PROPERTY:recipients.label": "Employee",
+    "PROPERTY:recipients.company": "Company",
+    "PROPERTY:recipients.department": "Department",
+    "PROPERTY:count": "Count",
+    "PROPERTY:amount": "Amount",
+
+    "type:kaizen": "Kaizens",
+    "type:observation": "Observations",
+    "type:total": "Total",
+
+    "amount:total": "total",
+    "amount:kaizen": "kaizens",
+    "amount:observation": "observations",
+
+    "count:total": "{count} {count, plural, one{entry} other{entries}}",
+    "count:kaizen": "{count} {count, plural, one{kaizen} other{kaizens}}",
+    "count:observation": "{count} {count, plural, one{observation} other{observations}}",
+
+    "filter:recipient": "Recipient",
+
+    "printDialog:title": "Printing the payout application",
+    "printDialog:submit": "Generate the print",
+    "printDialog:docNo": "Protocol no",
+    "printDialog:docVersion": "Version",
+    "printDialog:description": "Title",
+    "printDialog:description:default": "Application for a payout of rewards for the completed entries",
+    "printDialog:description:kaizen": "Application for a payout of rewards for the completed kaizens",
+    "printDialog:description:observation": "Application for a payout of rewards for the conducted observations",
+    "printDialog:year": "Year",
+    "printDialog:quarter": "Quarter",
+    "printDialog:month": "Month",
+    "printDialog:period:quarter": "{quarter} quarter {year}",
+    "printDialog:period:month": "{month} {year}"
   },
   "pl": true
 }

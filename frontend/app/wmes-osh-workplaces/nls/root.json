@@ -1,6 +1,11 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Workplaces",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:division": "Division",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name"
   },
   "pl": true
 }

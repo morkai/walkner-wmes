@@ -1,6 +1,12 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Companies",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:external": "External?",
+    "PROPERTY:employer": "Employer?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name"
   },
   "pl": true
 }

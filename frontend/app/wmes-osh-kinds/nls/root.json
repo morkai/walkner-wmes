@@ -1,6 +1,15 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Entry kinds",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:type": "Kind type",
+    "PROPERTY:entryTypes": "Entry types",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description",
+    "PROPERTY:coordinators": "Coordinators",
+    "PROPERTY:position": "Position"
   },
   "pl": true
 }

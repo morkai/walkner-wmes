@@ -1,6 +1,12 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Event reason categories",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:eventCategories": "Event categories",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description"
   },
   "pl": true
 }

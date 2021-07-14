@@ -1,6 +1,22 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Employment",
 
+    "PROPERTY:month": "Month",
+    "PROPERTY:internal": "Internal",
+    "PROPERTY:external": "External",
+    "PROPERTY:absent": "Absent",
+    "PROPERTY:total": "Total",
+    "PROPERTY:observers": "Observers",
+    "PROPERTY:locked": "Locked?",
+
+    "FORM:recount": "Recount employment and observers based on the current version of the user database",
+    "FORM:locked": "Lock automatic recount at the end of the month",
+
+    "observerEditor:title": "Observer editor",
+    "observerEditor:submit": "Assign observers",
+    "observerEditor:orgUnit": "Organizational unit",
+    "observerEditor:users": "Observers"
   },
   "pl": true
 }

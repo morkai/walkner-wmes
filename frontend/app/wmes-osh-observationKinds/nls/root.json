@@ -1,6 +1,20 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Observation kinds",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description",
+    "PROPERTY:behaviors": "Behaviors",
+    "PROPERTY:workConditions": "Work conditions",
+    "PROPERTY:category": "Category",
+    "PROPERTY:position": "Position",
+
+    "FORM:categories:up": "Move up",
+    "FORM:categories:down": "Move down",
+    "FORM:categories:remove": "Remove category",
+    "FORM:categories:add": "Add category..."
   },
   "pl": true
 }

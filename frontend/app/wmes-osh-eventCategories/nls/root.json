@@ -1,6 +1,16 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Event categories",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:kinds": "Entry kinds",
+    "PROPERTY:materialLoss": "Material loss?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description",
+    "PROPERTY:activityKind": "Activity kind",
+
+    "FORM:help:activityKind": "Selecting the specified Event category in a Near miss will force the specified Activity kind of an action added as Corrective action."
   },
   "pl": true
 }

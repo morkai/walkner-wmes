@@ -12,7 +12,7 @@
   "settings:rewards:observations:user": "Nagroda za obserwacje użytkownika",
   "settings:rewards:observations:observerMin": "Próg obserwacji obserwatora",
   "settings:rewards:observations:observer": "Nagroda za obserwacje obserwatora",
-  "settings:rewards:ignoredUsers": "Ignorowani użytkownicy",
+  "settings:rewards:ignoredUsers": "Użytkownicy ignorowani podczas wypłaty",
   "settings:rewards:companies": "Firmy",
 
   "filter:orgUnit": "Jednostka organizacyjna",

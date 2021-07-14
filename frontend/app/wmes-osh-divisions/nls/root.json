@@ -1,6 +1,10 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Divisions",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name"
   },
   "pl": true
 }

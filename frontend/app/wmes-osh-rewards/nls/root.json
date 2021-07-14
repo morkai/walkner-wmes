@@ -1,6 +1,25 @@
 {
   "root": {
+    "BREADCRUMB:reports": "Reports",
+    "BREADCRUMB:base": "Remuneration",
+    "BREADCRUMB:browse": "Rewards",
 
+    "PROPERTY:rid": "Entry",
+    "PROPERTY:status": "Status",
+    "PROPERTY:recipient": "Recipient",
+    "PROPERTY:subject": "Subject",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:amount": "Amount",
+    "PROPERTY:paidAt": "Paid at",
+    "PROPERTY:payer": "Payer",
+
+    "status:earned": "Earned",
+    "status:paid": "Paid",
+    "status:unpaid": "Unpaid",
+
+    "filter:employee": "Employee",
+    "filter:leader": "Leader"
   },
   "pl": true
 }

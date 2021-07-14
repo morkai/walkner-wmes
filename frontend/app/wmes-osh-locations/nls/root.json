@@ -1,6 +1,12 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Areas",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:buildings": "Building",
+    "PROPERTY:coordinators": "Coordinators"
   },
   "pl": true
 }

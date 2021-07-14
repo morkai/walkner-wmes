@@ -1,6 +1,27 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Targets",
 
+    "PROPERTY:month": "Month",
+    "PROPERTY:minActiveUsers": "Min. engage-ment [%]",
+    "PROPERTY:minObservers": "Min. observers [%]",
+    "PROPERTY:minObsCardsPerObserver": "Observations per observer",
+    "PROPERTY:minSafeObs": "Min. safe observations [%]",
+    "PROPERTY:maxSafeObs": "Max. safe observations [%]",
+    "PROPERTY:ipr": "IPR",
+    "PROPERTY:ips": "IPS [%]",
+    "PROPERTY:trc": "TRC",
+    "PROPERTY:contact": "Contact",
+
+    "FORM:copy:specific": "Copy target...",
+    "FORM:copy:all": "Copy targets...",
+    "FORM:copy:department": "...to department",
+    "FORM:copy:workplace": "...to workplace",
+    "FORM:copy:division": "...to division",
+    "FORM:copy:overall": "...to all divisions",
+    "FORM:copy:clipboard": "...to clipboard",
+    "FORM:paste:single": "Paste target...",
+    "FORM:paste:multi": "Paste targets..."
   },
   "pl": true
 }

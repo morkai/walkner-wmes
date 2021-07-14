@@ -1,6 +1,11 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Workstations",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:location": "Area"
   },
   "pl": true
 }

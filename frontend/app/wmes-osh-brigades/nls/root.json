@@ -1,6 +1,18 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Brigades",
 
+    "PROPERTY:date": "Month",
+    "PROPERTY:shift": "Shift",
+    "PROPERTY:leader": "Leader",
+    "PROPERTY:workplace": "Workplace",
+    "PROPERTY:department": "Department",
+    "PROPERTY:members": "Members",
+
+    "shift:1": "A",
+    "shift:2": "B",
+    "shift:3": "C",
+    "shift:4": "D"
   },
   "pl": true
 }

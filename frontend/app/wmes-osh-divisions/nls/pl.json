@@ -3,7 +3,5 @@
 
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:shortName": "Krótka nazwa",
-  "PROPERTY:longName": "Długa nazwa",
-  "PROPERTY:minEngagement": "Min. stosunek ilości zaangażowanych do zatrudnienia [%]",
-  "PROPERTY:minObservers": "Min. stosunek ilości obserwatorów do zatrudnienia [%]"
+  "PROPERTY:longName": "Długa nazwa"
 }

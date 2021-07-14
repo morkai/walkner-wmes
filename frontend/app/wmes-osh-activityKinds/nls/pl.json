@@ -19,6 +19,6 @@
   "FORM:help:participants": "Określa czy pole Uczestnicy ma być dostępne.",
   "FORM:help:rootCauses": "Określa czy Analiza przyczyn źródłowych ma być dostępna.",
   "FORM:help:resolution:none": "Nowe zgłoszenie Akcji zostanie zapisane od razu ze statusem Zakończone.",
-  "FORM:help:resolution:implementers": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Nowe. Akcja zostanie zakończona po zaakceptowaniu, realizacji oraz weryfikacji. Pola Uczestnicy oraz Planowany termin realizacji są dostępne.",
+  "FORM:help:resolution:implementers": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Nowe. Akcja zostanie zakończona po zaakceptowaniu, realizacji oraz weryfikacji. Pola Realizatorzy oraz Planowany termin realizacji są dostępne.",
   "FORM:help:resolution:resolutions": "Nowa zgłoszenie Akcji zostanie zapisane ze statusem Realizacja. Do akcji trzeba przypisać inne akcje i/lub kaizeny. Akcja zostanie zakończona jak wszystkie przypisane do niej zgłoszenia zostaną zakończone."
 }

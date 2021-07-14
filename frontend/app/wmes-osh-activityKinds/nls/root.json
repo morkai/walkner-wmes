@@ -1,6 +1,27 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Activity kinds",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:kinds": "Entry kinds",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description",
+    "PROPERTY:allowedTypes": "Allowed entry types",
+    "PROPERTY:participants": "Participants",
+    "PROPERTY:rootCauses": "Root causes",
+    "PROPERTY:resolution": "Resolution",
+
+    "resolution:none": "None",
+    "resolution:implementers": "Implementers",
+    "resolution:resolutions": "Resolutions",
+
+    "FORM:help:allowedTypes": "Determines whether the activity kind can be selected by a normal user when the action is being created from other entry types.",
+    "FORM:help:participants": "Determines whether the Participants field should be available.",
+    "FORM:help:rootCauses": "Determines whether the Root casues fields should be available.",
+    "FORM:help:resolution:none": "New Action will be immediately saved with the Finished status.",
+    "FORM:help:resolution:implementers": "New Action will be saved the New status. The action will be finished after it's accepted, resolved and verified. Implementers and Planned finish date fields will be available.",
+    "FORM:help:resolution:resolutions": "New Action will be saved with the In progress status. Additional actions and/or kaizens should be linked to the action. The action will be finished after all linked entries will be finished."
   },
   "pl": true
 }

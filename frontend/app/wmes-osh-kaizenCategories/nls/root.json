@@ -1,6 +1,12 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Kaizen categories",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:kinds": "Entry kinds",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description"
   },
   "pl": true
 }

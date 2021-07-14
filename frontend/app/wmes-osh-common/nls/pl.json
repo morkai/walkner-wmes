@@ -43,6 +43,7 @@
   "navbar:search:kaizen": "kaizen",
   "navbar:search:action": "akcja",
   "navbar:search:observation": "obserwacja",
+  "navbar:search:accident": "wypadek",
 
   "type:nearMiss": "ZPW",
   "type:kaizen": "Kaizen",

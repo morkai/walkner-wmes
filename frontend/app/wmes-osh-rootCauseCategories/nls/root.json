@@ -1,6 +1,12 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Root cause categories",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:position": "Position",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:description": "Description"
   },
   "pl": true
 }

@@ -1,6 +1,13 @@
 {
   "root": {
+    "BREADCRUMB:browse": "Departments",
 
+    "PROPERTY:active": "Active?",
+    "PROPERTY:workplace": "Workplace",
+    "PROPERTY:shortName": "Short name",
+    "PROPERTY:longName": "Long name",
+    "PROPERTY:coordinators": "Coordinators",
+    "PROPERTY:syncPatterns": "User matching patterns"
   },
   "pl": true
 }
